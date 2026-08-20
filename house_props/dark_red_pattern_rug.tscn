@@ -1,0 +1,62 @@
+[gd_scene load_steps=7 format=3]
+
+[sub_resource type="StandardMaterial3D" id="RedBase"]
+albedo_color = Color(0.19, 0.018, 0.025, 1)
+roughness = 0.97
+[sub_resource type="StandardMaterial3D" id="RedPattern"]
+albedo_color = Color(0.39, 0.055, 0.06, 1)
+roughness = 0.95
+[sub_resource type="StandardMaterial3D" id="GoldPattern"]
+albedo_color = Color(0.46, 0.31, 0.13, 1)
+roughness = 0.92
+[sub_resource type="BoxMesh" id="RugBase"]
+material = SubResource("RedBase")
+size = Vector3(3.8, 0.025, 2.35)
+[sub_resource type="BoxMesh" id="BorderLong"]
+material = SubResource("GoldPattern")
+size = Vector3(3.55, 0.012, 0.075)
+[sub_resource type="BoxMesh" id="BorderShort"]
+material = SubResource("GoldPattern")
+size = Vector3(0.075, 0.012, 2.1)
+
+[node name="DarkRedPatternRug" type="Node3D"]
+editor_description = "Alfombra rojo oscuro con doble borde y motivos geométricos clásicos."
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.013, 0)
+mesh = SubResource("RugBase")
+[node name="BorderTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.031, -1.02)
+mesh = SubResource("BorderLong")
+[node name="BorderBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.031, 1.02)
+mesh = SubResource("BorderLong")
+[node name="BorderLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-1.65, 0.031, 0)
+mesh = SubResource("BorderShort")
+[node name="BorderRight" type="MeshInstance3D" parent="."]
+position = Vector3(1.65, 0.031, 0)
+mesh = SubResource("BorderShort")
+[node name="InnerField" type="CSGBox3D" parent="."]
+position = Vector3(0, 0.033, 0)
+size = Vector3(3.05, 0.009, 1.55)
+material = SubResource("RedPattern")
+[node name="CenterDiamond" type="CSGBox3D" parent="."]
+position = Vector3(0, 0.043, 0)
+rotation = Vector3(0, 0.785398, 0)
+size = Vector3(0.72, 0.012, 0.72)
+material = SubResource("GoldPattern")
+[node name="CenterInset" type="CSGBox3D" parent="."]
+position = Vector3(0, 0.051, 0)
+rotation = Vector3(0, 0.785398, 0)
+size = Vector3(0.48, 0.01, 0.48)
+material = SubResource("RedBase")
+[node name="LeftDiamond" type="CSGBox3D" parent="."]
+position = Vector3(-1.05, 0.043, 0)
+rotation = Vector3(0, 0.785398, 0)
+size = Vector3(0.42, 0.012, 0.42)
+material = SubResource("GoldPattern")
+[node name="RightDiamond" type="CSGBox3D" parent="."]
+position = Vector3(1.05, 0.043, 0)
+rotation = Vector3(0, 0.785398, 0)
+size = Vector3(0.42, 0.012, 0.42)
+material = SubResource("GoldPattern")

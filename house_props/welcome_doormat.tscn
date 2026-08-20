@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://c2nb5lm0lxt3s"]
+
+[ext_resource type="FontFile" uid="uid://b60wwt30lnp8h" path="res://assets/fonts/PressStart2P-Regular.ttf" id="1_font"]
+
+[sub_resource type="StandardMaterial3D" id="MatCoir"]
+albedo_color = Color(0.26, 0.145, 0.065, 1)
+
+[sub_resource type="BoxMesh" id="MatMesh"]
+material = SubResource("MatCoir")
+size = Vector3(1.45, 0.035, 0.76)
+
+[sub_resource type="StandardMaterial3D" id="EdgeMat"]
+albedo_color = Color(0.105, 0.052, 0.022, 1)
+
+[node name="WelcomeDoormat" type="Node3D" unique_id=1632593374]
+editor_description = "Felpudo de entrada con texto WELCOME. Mueve el nodo raíz para recolocarlo."
+
+[node name="Mat" type="MeshInstance3D" parent="." unique_id=454299313]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.018, 0)
+mesh = SubResource("MatMesh")
+
+[node name="TopEdge" type="CSGBox3D" parent="." unique_id=2058226622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, -0.345)
+size = Vector3(1.38, 0.018, 0.035)
+material = SubResource("EdgeMat")
+
+[node name="BottomEdge" type="CSGBox3D" parent="." unique_id=891862141]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0.345)
+size = Vector3(1.38, 0.018, 0.035)
+material = SubResource("EdgeMat")
+
+[node name="WelcomeText" type="Label3D" parent="." unique_id=1666388557]
+transform = Transform3D(0.80889934, 0, 0, 0, 3.899897e-07, 0.9999999, 0, -1.2423359, 3.1391642e-07, 0, 0.042, 0.02)
+pixel_size = 0.006
+modulate = Color(0.09, 0.045, 0.018, 1)
+outline_modulate = Color(0.36, 0.22, 0.1, 0.25)
+text = "WELCOME"
+font = ExtResource("1_font")
+font_size = 40
+outline_size = 3

@@ -6,6 +6,10 @@ extends CharacterBody3D
 @export var prone_speed := 0.8
 @export var acceleration := 10.0
 @export var mouse_sensitivity := 0.0022
+@export var zoom_min_fov := 35.0
+@export var zoom_max_fov := 95.0
+@export var zoom_step := 5.0
+@export var zoom_smoothing := 9.0
 @export_range(1.0, 89.0, 1.0) var max_look_angle := 85.0
 @export var bob_frequency := 7.0
 @export var bob_vertical_amount := 0.06
@@ -78,6 +82,7 @@ var _jump_start_head_y := 0.65
 var _held_item: StringName = &""
 var _flashlight_holstered := false
 var _flashlight_was_on := true
+var _zoom_fov_target := 75.0
 
 const ThrownCanScene := preload("res://thrown_can.tscn")
 const ThrownBottleScene := preload("res://thrown_bottle.tscn")
@@ -92,6 +97,7 @@ func _ready() -> void:
 	_stamina_fill_style = stamina_bar.get_theme_stylebox("fill").duplicate() as StyleBoxFlat
 	stamina_bar.add_theme_stylebox_override("fill", _stamina_fill_style)
 	camera.make_current()
+	_zoom_fov_target = clampf(camera.fov, zoom_min_fov, zoom_max_fov)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
@@ -122,10 +128,11 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		var mouse_motion := event as InputEventMouseMotion
 		_is_aiming_hand = Input.is_key_pressed(KEY_ALT)
+		var zoom_sensitivity_scale := clampf(camera.fov / 75.0, 0.42, 1.2)
 		# Normal camera look remains active even while Alt controls the hand.
-		rotate_y(-mouse_motion.screen_relative.x * mouse_sensitivity)
+		rotate_y(-mouse_motion.screen_relative.x * mouse_sensitivity * zoom_sensitivity_scale)
 		_look_pitch = clampf(
-			_look_pitch - mouse_motion.screen_relative.y * mouse_sensitivity,
+			_look_pitch - mouse_motion.screen_relative.y * mouse_sensitivity * zoom_sensitivity_scale,
 			deg_to_rad(-max_look_angle), deg_to_rad(max_look_angle)
 		)
 
@@ -148,6 +155,16 @@ func _input(event: InputEvent) -> void:
 
 	if event is InputEventMouseButton:
 		var mouse_button := event as InputEventMouseButton
+		if mouse_button.pressed and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			var wheel_amount := maxf(mouse_button.factor, 1.0) * zoom_step
+			if mouse_button.button_index == MOUSE_BUTTON_WHEEL_UP:
+				_zoom_fov_target = clampf(_zoom_fov_target - wheel_amount, zoom_min_fov, zoom_max_fov)
+				get_viewport().set_input_as_handled()
+				return
+			if mouse_button.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				_zoom_fov_target = clampf(_zoom_fov_target + wheel_amount, zoom_min_fov, zoom_max_fov)
+				get_viewport().set_input_as_handled()
+				return
 		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and not _flashlight_holstered:
 			flashlight.visible = not flashlight.visible
 			get_viewport().set_input_as_handled()
@@ -221,7 +238,11 @@ func _physics_process(delta: float) -> void:
 	_update_interaction_prompt()
 	_update_camera_motion(delta, input_vector, is_sprinting)
 	_update_stamina_ui(delta, previous_stamina, is_sprinting)
-	camera.fov = lerpf(camera.fov, 80.0 if is_sprinting else 75.0, minf(delta * 5.0, 1.0))
+	var zoom_ratio := inverse_lerp(zoom_min_fov, zoom_max_fov, _zoom_fov_target)
+	var sprint_fov_bonus := lerpf(1.0, 5.0, zoom_ratio) if is_sprinting else 0.0
+	var desired_fov := _zoom_fov_target + sprint_fov_bonus
+	var zoom_weight := 1.0 - exp(-zoom_smoothing * delta)
+	camera.fov = lerpf(camera.fov, desired_fov, zoom_weight)
 
 
 func _update_camera_motion(delta: float, input_vector: Vector2, is_sprinting: bool) -> void:

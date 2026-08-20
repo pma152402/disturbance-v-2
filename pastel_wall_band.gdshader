@@ -1,19 +1,25 @@
 shader_type spatial;
 render_mode diffuse_burley, specular_schlick_ggx;
 
-uniform vec3 upper_white : source_color = vec3(0.94, 0.94, 0.94);
-uniform vec3 lower_pastel_blue : source_color = vec3(0.14, 0.39, 0.64);
-uniform vec3 border_blue : source_color = vec3(0.025, 0.12, 0.28);
+uniform vec3 upper_white : source_color = vec3(0.96, 0.955, 0.94);
+uniform vec3 lower_pastel_blue : source_color = vec3(0.89, 0.885, 0.86);
+uniform vec3 lower_stripe_blue : source_color = vec3(0.80, 0.795, 0.77);
+uniform vec3 border_blue : source_color = vec3(0.85, 0.84, 0.81);
+uniform float stripe_width = 0.32;
 uniform float border_width = 0.075;
 uniform float ground_band_top = 1.38;
 uniform float upper_floor_start = 4.1;
 uniform float upper_band_top = 5.48;
 
 varying float world_height;
+varying float stripe_coordinate;
 
 
 void vertex() {
-	world_height = (MODEL_MATRIX * vec4(VERTEX, 1.0)).y;
+	vec3 world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	vec3 world_normal = normalize(MODEL_NORMAL_MATRIX * NORMAL);
+	world_height = world_position.y;
+	stripe_coordinate = abs(world_normal.z) > abs(world_normal.x) ? world_position.x : world_position.z;
 }
 
 
@@ -25,7 +31,10 @@ void fragment() {
 	if (ground_border || upper_border) {
 		ALBEDO = border_blue;
 	} else {
-		ALBEDO = (ground_blue || upper_blue) ? lower_pastel_blue : upper_white;
+		bool striped_section = ground_blue || upper_blue;
+		float stripe = mod(floor((stripe_coordinate + 100.0) / stripe_width), 2.0);
+		vec3 striped_color = mix(lower_pastel_blue, lower_stripe_blue, stripe);
+		ALBEDO = striped_section ? striped_color : upper_white;
 	}
 	ROUGHNESS = 0.92;
 }

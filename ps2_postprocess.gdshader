@@ -7,7 +7,7 @@ uniform float noise_strength : hint_range(0.0, 0.25, 0.005) = 0.025;
 uniform float chromatic_aberration : hint_range(0.0, 9.0, 0.1) = 1.2;
 uniform float scanline_strength : hint_range(0.0, 0.6, 0.01) = 0.09;
 uniform float fisheye_strength : hint_range(0.0, 0.03, 0.001) = 0.007;
-uniform float vignette_strength : hint_range(0.0, 0.95, 0.01) = 0.88;
+uniform float vignette_strength : hint_range(0.0, 0.98, 0.01) = 0.94;
 uniform float vignette_inner : hint_range(0.0, 0.6, 0.01) = 0.07;
 uniform float vignette_outer : hint_range(0.2, 1.2, 0.01) = 0.47;
 
@@ -77,7 +77,7 @@ void fragment() {
 	centered.x *= SCREEN_PIXEL_SIZE.y / SCREEN_PIXEL_SIZE.x;
 	float vignette = smoothstep(vignette_inner, vignette_outer, length(centered));
 	float outside_lens = step(0.0, -uv.x) + step(1.0, uv.x) + step(0.0, -uv.y) + step(1.0, uv.y);
-	limited *= 0.88;
+	limited *= 0.82;
 	vec3 minimum_edge_light = vec3(0.002, 0.0022, 0.002) * vignette;
 	limited = max(limited * (1.0 - vignette * vignette_strength), minimum_edge_light);
 	limited *= 1.0 - clamp(outside_lens, 0.0, 1.0);
