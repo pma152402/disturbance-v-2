@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Alfombra2.png" id="1_t666a"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_af16c"]
+resource_name = "Carpet_02"
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+albedo_texture = ExtResource("1_t666a")
+texture_filter = 0
+metadata/_gltf_primary_texture_coord = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_hcv3h"]
+_surfaces = [{
+"aabb": AABB(-3.3214426, 0, -1.7755194, 6.682519, 1e-05, 3.5510373),
+"format": 34896613377,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 1, 0, 2, 0, 0, 0, 3, 0, 1, 0),
+"name": "Carpet_02",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 254, 255, 0, 0, 254, 255, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_kf803"]
+resource_name = "Abandoned_House_Plane_029"
+_surfaces = [{
+"aabb": AABB(-3.3214426, 0, -1.7755194, 6.682519, 1e-05, 3.5510373),
+"attribute_data": PackedByteArray(188, 0, 234, 249, 66, 255, 20, 6, 66, 255, 234, 249, 188, 0, 20, 6),
+"format": 34896613399,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 1, 0, 2, 0, 0, 0, 3, 0, 1, 0),
+"material": SubResource("StandardMaterial3D_af16c"),
+"name": "Carpet_02",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 254, 255, 255, 191, 254, 255, 0, 0, 0, 0, 255, 191, 255, 255, 0, 0, 255, 255, 255, 191, 0, 0, 0, 0, 0, 0, 255, 191, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127)
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_hcv3h")
+
+[node name="Rug" type="Node3D" unique_id=695547394]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=326987246]
+transform = Transform3D(-0.63252723, 0, -2.0610355e-07, 0, 0.63252723, 0, 2.0610355e-07, 0, -0.63252723, 0, 0, 0)
+mesh = SubResource("ArrayMesh_kf803")

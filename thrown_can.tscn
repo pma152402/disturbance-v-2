@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://can_visual.tscn" id="1_visual"]
+
+[sub_resource type="CylinderShape3D" id="Shape_can"]
+radius = 0.1
+height = 0.23
+
+[sub_resource type="PhysicsMaterial" id="Physics_can"]
+friction = 0.48
+bounce = 0.28
+
+[node name="ThrownCan" type="RigidBody3D"]
+mass = 0.12
+physics_material_override = SubResource("Physics_can")
+continuous_cd = 1
+collision_layer = 1
+collision_mask = 1
+
+[node name="CanVisual" parent="." instance=ExtResource("1_visual")]
+position = Vector3(0, -0.115, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_can")

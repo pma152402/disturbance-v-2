@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="ArrayMesh" path="res://stairwell_guardrail_short_mesh.tres" id="1_mesh"]
+[ext_resource type="ConcavePolygonShape3D" path="res://stairwell_guardrail_short_collision.tres" id="2_collision"]
+[ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera4.jpg" id="3_wood"]
+
+[sub_resource type="StandardMaterial3D" id="Material_short_wood"]
+resource_local_to_scene = true
+albedo_color = Color(0.52, 0.35, 0.2, 1)
+albedo_texture = ExtResource("3_wood")
+roughness = 0.88
+cull_mode = 2
+uv1_scale = Vector3(1.4, 1.4, 1.4)
+uv1_triplanar = true
+uv1_world_triplanar = true
+texture_filter = 0
+
+[node name="GuardrailShort" type="StaticBody3D"]
+editor_description = "Lado corto independiente. Muevelo y rotalo como una sola pieza."
+collision_layer = 1
+collision_mask = 1
+
+[node name="Visual" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_mesh")
+material_override = SubResource("Material_short_wood")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+shape = ExtResource("2_collision")

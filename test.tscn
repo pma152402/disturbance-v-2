@@ -1,0 +1,146 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="PackedScene" path="res://player/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://house_baked.tscn" id="2_house"]
+[ext_resource type="Shader" path="res://ps2_postprocess.gdshader" id="3_shader"]
+[ext_resource type="PackedScene" path="res://rainy_weather.tscn" id="4_weather"]
+[ext_resource type="Texture2D" path="res://assets/environment/storm_landscape_panorama.png" id="5_storm_panorama"]
+[ext_resource type="PackedScene" path="res://exterior_environment.tscn" id="6_exterior"]
+[ext_resource type="Script" path="res://found_footage_overlay.gd" id="7_footage_overlay"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_storm"]
+panorama = ExtResource("5_storm_panorama")
+energy_multiplier = 0.72
+
+[sub_resource type="Sky" id="Sky_storm"]
+radiance_size = 3
+sky_material = SubResource("PanoramaSkyMaterial_storm")
+
+[sub_resource type="Environment" id="Environment_house"]
+background_mode = 2
+sky = SubResource("Sky_storm")
+background_energy_multiplier = 0.72
+ambient_light_source = 3
+ambient_light_color = Color(0.24, 0.29, 0.36, 1)
+ambient_light_energy = 0.22
+reflected_light_source = 2
+tonemap_mode = 2
+fog_enabled = true
+fog_light_color = Color(0.018, 0.021, 0.028, 1)
+fog_light_energy = 0.08
+fog_density = 0.11
+fog_sky_affect = 0.72
+
+[sub_resource type="ShaderMaterial" id="Material_ps2"]
+shader = ExtResource("3_shader")
+
+[sub_resource type="SystemFont" id="SystemFont_camcorder"]
+font_names = PackedStringArray("Consolas", "Courier New", "monospace")
+font_weight = 700
+
+[node name="ThreeStoreyHouse" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_house")
+
+[node name="House" parent="." instance=ExtResource("2_house")]
+
+[node name="Weather" parent="." instance=ExtResource("4_weather")]
+
+[node name="ExteriorEnvironment" parent="." instance=ExtResource("6_exterior")]
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+position = Vector3(0, 1, 8.5)
+
+[node name="PS2PostProcess" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="ScreenFilter" type="ColorRect" parent="PS2PostProcess"]
+material = SubResource("Material_ps2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CameraHUD" type="Control" parent="PS2PostProcess"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("7_footage_overlay")
+
+[node name="Recording" type="Label" parent="PS2PostProcess/CameraHUD"]
+offset_left = 38.0
+offset_top = 28.0
+offset_right = 180.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(0.94, 0.13, 0.1, 0.94)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = SubResource("SystemFont_camcorder")
+theme_override_font_sizes/font_size = 25
+text = "● REC"
+
+[node name="TapeMode" type="Label" parent="PS2PostProcess/CameraHUD"]
+offset_left = 40.0
+offset_top = 66.0
+offset_right = 220.0
+offset_bottom = 94.0
+theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.86)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = SubResource("SystemFont_camcorder")
+theme_override_font_sizes/font_size = 17
+text = "CAM 01   SP"
+
+[node name="Battery" type="Label" parent="PS2PostProcess/CameraHUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -214.0
+offset_top = 30.0
+offset_right = -38.0
+offset_bottom = 60.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.86)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = SubResource("SystemFont_camcorder")
+theme_override_font_sizes/font_size = 17
+text = "BAT [|||]"
+horizontal_alignment = 2
+
+[node name="Timestamp" type="Label" parent="PS2PostProcess/CameraHUD"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -410.0
+offset_top = -68.0
+offset_right = -38.0
+offset_bottom = -30.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.9, 0.93, 0.86, 0.92)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = SubResource("SystemFont_camcorder")
+theme_override_font_sizes/font_size = 23
+text = "20/08/2026  00:00:00"
+horizontal_alignment = 2
+
+[editable path="House"]
+
+[editable path="Weather"]

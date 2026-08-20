@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="ArrayMesh" path="res://ps2_objects/Bottles/Bottle_1.obj" id="1_bottle"]
+[ext_resource type="Texture2D" path="res://ps2_objects/Bottles/Bottles.png" id="2_texture"]
+
+[sub_resource type="StandardMaterial3D" id="Material_bottle"]
+albedo_texture = ExtResource("2_texture")
+texture_filter = 0
+roughness = 0.82
+
+[node name="BottleVisual" type="Node3D"]
+
+[node name="Bottle" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_bottle")
+material_override = SubResource("Material_bottle")
+cast_shadow = 1

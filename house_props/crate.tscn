@@ -1,0 +1,55 @@
+[gd_scene format=4]
+
+[ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Carton.jpg" id="1_sy73i"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vanjn"]
+resource_name = "Carton"
+cull_mode = 2
+albedo_texture = ExtResource("1_sy73i")
+texture_filter = 0
+metadata/_gltf_primary_texture_coord = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_okdjc"]
+_surfaces = [{
+"aabb": AABB(-1.7692984, -1, -1.1978014, 3.5385969, 2, 2.3956017),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAACAAEAAwAEAAEABQAAAAIAAwAAAAUABAAGAAIABQACAAYAAwAHAAQAAwAFAAcABwAGAAQABwAFAAYA"),
+"name": "Carton",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP//AAAAAP//AAAAAAAA/////wAAAAAAAAAAAAD/////AAAAAP//AAD//wAA////////AAD//wAAAAAAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_61lwh"]
+resource_name = "Abandoned_House_Cube_354"
+_surfaces = [{
+"aabb": AABB(-1.7692984, -1, -1.1978014, 3.5385969, 2, 2.3956017),
+"attribute_data": PackedByteArray("nKPOf8X0BOHF9M5/nKME4ZyjnWjF9DX4xfSdaJyjNficowThxfTOf8X0BOGco85/nKM1+MX0nWjF9DX4nKOdaMz8nWiVmzX4zPw1+JWbnWiE+Vzz3p52bYT5dm3enlzz"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": SubResource("StandardMaterial3D_vanjn"),
+"name": "Carton",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP//qioAAP//AACqKgAA/////6oqAAAAAAAAqioAAAAAAAAAAP////8AAAAAAAD//wAAAAD//wAAAAAAAP//AAAAAFTV////////VNX/////AABU1f//AAD//1TV//8AAP///78AAP//////v/////////+/AAAAAP///78AAAAAAACqKv//AAD//6oq//8AAAAAqioAAAAA//+qKv////8AAFTVAAD/////VNUAAP//AABU1f///////1TVVNVU1VTVVNVU1VTVVNVU1f+//7//v/+//7//v/+//7+qKqoqqiqqKqoqqiqqKqoq/////////////////////1RVVFVVVVRVVVVUVVRVVFVU1aoqVNWqKlTVqipU1aoq")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_okdjc")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gw0d5"]
+size = Vector3(0.8486394, 0.4796473, 0.57452226)
+
+[node name="Crate" type="StaticBody3D" unique_id=1523679856]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1942712396]
+transform = Transform3D(-0.23982365, 0, -7.814445e-08, 0, 0.23982365, 0, 7.814445e-08, 0, -0.23982365, 0, 0.23982365, 0)
+mesh = SubResource("ArrayMesh_61lwh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=550802074]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23982365, 1.1920929e-07)
+shape = SubResource("BoxShape3D_gw0d5")

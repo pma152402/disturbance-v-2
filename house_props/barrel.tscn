@@ -1,0 +1,57 @@
+[gd_scene format=4]
+
+[ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Barril.jpg" id="1_i8m86"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5trtc"]
+resource_name = "Material"
+cull_mode = 2
+albedo_texture = ExtResource("1_i8m86")
+texture_filter = 0
+metadata/_gltf_primary_texture_coord = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_lji4i"]
+_surfaces = [{
+"aabb": AABB(-0.9749279, -1, -1, 1.9498558, 2, 1.9009688),
+"format": 34896613377,
+"index_count": 72,
+"index_data": PackedByteArray("CAABAAkACAAKAAEACwAJAAEACgALAAEAAAAIAAkAAAAKAAgAAAAJAAIACgAFAAsADAAAAAIADAAKAAAACQANAAIADAACAA0AAwAJAAsABQADAAsACQADAA0ACgAEAAUACgAMAAQABQAEAAMABwAMAA0ABAAMAAcABwANAAYABAAHAAYADQADAAYABAAGAAMA"),
+"lods": [1.031776, PackedByteArray("AAABAAIAAwACAAEABQADAAEAAAAFAAEAAgADAAYAAAACAAYABQAEAAMABQAAAAQABAAGAAMABwAAAAYABAAAAAcABAAHAAYA"), 1.6186938, PackedByteArray("AAABAAIAAwACAAEAAAACAAMABAADAAEABAAAAAMAAAAEAAEA")],
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 14,
+"vertex_data": PackedByteArray("WhkAALQyAACk5v//tDIAAFoZ//+0MgAA9rj/////AAD2uAAA//8AAP//AAChpAAACEf/////AAAIRwAA//8AAP9/AAAAAAAA/3///wAAAACk5gAAtDIAAP////+hpAAAAAAAAKGkAAAAAP//oaQAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_b7bgv"]
+resource_name = "Abandoned_House_Cylinder_021"
+_surfaces = [{
+"aabb": AABB(-0.9749279, -1, -1, 1.9498558, 2, 1.9009688),
+"attribute_data": PackedByteArray("Q5Jn/nNKlwFDkpYB/P2XAfz9aP6iAmj+ogKXAYybqPlaToc2pLGHNhTalgGKJmf+FNpo/nJkqPmMm6j5Wk6HNnJkqPnnvdGiW25n/ltulwFzSmf+iiaXASy2Z/4stpYB573Rov9/VgYXQtGipLGHNv9/VgYXQtGi"),
+"format": 34896613399,
+"index_count": 72,
+"index_data": PackedByteArray("EgABABMAEgAUAAEAAAASABMAFAAVAAEAAAATAAIAFAALABUACwAGABUACwAFAAYAFgAAAAIAFgACABcADAAWABcADAAXAAoABAAMAAoABAAKAAMAGAAZAAkABwAZABgAGQAHABoAGgAHAA0AGQAaAAgADwAbABwAHQAbAA8AGwAdAA4ADgAdABAAGwAOABEA"),
+"lods": [1.031776, PackedByteArray("AAABAAIAAAACAAoAAAALAAEACwAGAAEACwAFAAYADAAAAAoABAAMAAoABAAKAAMABwAIAAkACAAHAA0ADgAPABAAEQAPAA4A"), 1.6186938, PackedByteArray("AAABAAIAAAACAAMABAAAAAMAAAAFAAEABQAGAAEABwAIAAkA")],
+"material": SubResource("StandardMaterial3D_5trtc"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 30,
+"vertex_data": PackedByteArray("WhkAALQybduk5v//tDJt21oZ//+0Mm3b9rj/////SJL2uAAA//9Ikva4AAD//0iS9rj/////SJL2uP//////v1oZ//+0Mv+/pOb//7Qy/78IR/////9Ikv//AAChpNq2CEcAAP//SJIIR///////v/a4AAD///8/WhkAALQy/z8IRwAA////P///AAChpP8//38AAAAA////f///AAD//6TmAAC0Mm3b/////6Gk2rYAAAAAoaTatgAA//+hpNq2/////6Gk/7//f///AAD/vwAA//+hpP+/pOYAALQy/z//fwAAAAD/PwAAAAChpP8//3////9/AAD/f/7//38AAP9/AAD/fwAA/38AAP///3////9/////f/9//v//fwAA/3///////38AAP9/AAD/fwAA/38AAP9//3////9//v//fwAA/38AAP9//v//f///////f////3////9/AAD/fwAA/38AAP9/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_lji4i")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cxlxl"]
+size = Vector3(0.8654382, 0.9666579, 0.87882864)
+
+[node name="Barrel" type="StaticBody3D" unique_id=580479782]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1560258304]
+transform = Transform3D(0.08952651, 0, -0.3634328, 0, 0.48332894, 0, 0.3634328, 0, 0.08952651, 0, 0.48332894, 0)
+mesh = SubResource("ArrayMesh_b7bgv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1513690345]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.017995596, 0.48332894, -0.0044329464)
+shape = SubResource("BoxShape3D_cxlxl")

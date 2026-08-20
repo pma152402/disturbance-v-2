@@ -1,0 +1,49 @@
+[gd_scene format=4]
+
+[ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Puerta.jpg" id="1_v3ear"]
+
+[sub_resource type="Shader" id="Shader_door_lit"]
+code = "shader_type spatial;\nrender_mode cull_disabled;\n\nuniform sampler2D door_texture : source_color, filter_nearest;\n\nvoid fragment() {\n\tvec3 original = texture(door_texture, UV).rgb;\n\tALBEDO = mix(sqrt(original), vec3(0.42, 0.25, 0.12), 0.14);\n\tROUGHNESS = 0.86;\n\tNORMAL = FRONT_FACING ? NORMAL : -NORMAL;\n}\n"
+
+[sub_resource type="ShaderMaterial" id="StandardMaterial3D_nte1v"]
+resource_name = "Puerta_Iluminable"
+shader = SubResource("Shader_door_lit")
+shader_parameter/door_texture = ExtResource("1_v3ear")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_11k71"]
+_surfaces = [{
+"aabb": AABB(-0.8799031, -0.9787757, -0.022534259, 0.8743541, 2.1310139, 0.045068517),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAQADAAIAAAAEAAEAAgADAAUAAgAFAAAAAAAGAAQAAAAFAAYABAAHAAEAAQAHAAMABAAGAAcABQADAAcABQAHAAYA"),
+"name": "Puerta",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP//AAD//wAAAAAAAAAAAAAAAAAAAAD//wAAAAD//wAA//8AAAAA/////wAA////////AAD/////AAAAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_xuyx2"]
+resource_name = "Abandoned_House_Plane_066"
+_surfaces = [{
+"aabb": AABB(-0.8799031, -0.9787757, -0.022534259, 0.8743541, 2.1310139, 0.045068517),
+"attribute_data": PackedByteArray("///GwGd/Cr7//wq+Z3/GwP//xsBnfwq+Z3/GwP//Cr4Dw///YrzRfmK8//8Dw9F+Yrz//wPD0X4Dw///YrzRfmd//////9F+/////2d/0X7/////Z3/Rfmd//////9F+"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": SubResource("StandardMaterial3D_nte1v"),
+"name": "Puerta",
+"primitive": 3,
+"uv_scale": Vector4(2.0093336, 2.01859, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP///////wAAAAD//wAAAAAAAP////8AAP////8AAP////8AAP////8AAAAA////////AAAAAP//AAAAAP//AAD//wAA/////wAAAAD//wAAAAAAAP///////wAAAAAAAAAA/78AAP//////vwAAAAD///+/AAD//wAA/7///wAAAAD//wAA//8AAP//AAAAAAAA////////AAD//wAAAAD//wAA////////AAD//wAA//8AAAAA/////wAA/3//P/9//z//f/8//3//P/9//7//f/+//3//v/9//7//v/9//7//f/+//3//v/9//3////9/////f////3////9/////f////3////9/////f/9//3//f/9//3//f/9/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_11k71")
+
+[node name="Door" type="Node3D" unique_id=1030427082]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=2087759402]
+transform = Transform3D(-1.0937274, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9787757, 0)
+mesh = SubResource("ArrayMesh_xuyx2")
