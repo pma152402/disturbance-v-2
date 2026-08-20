@@ -1,4 +1,4 @@
-[gd_resource type="ArrayMesh" format=4]
+[gd_resource type="ArrayMesh" format=4 uid="uid://bu5qfk2bou2ya"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ky6md"]
 cull_mode = 2

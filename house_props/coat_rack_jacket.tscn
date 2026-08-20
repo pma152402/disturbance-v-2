@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://c4vmvl3v6a8el"]
+
+[sub_resource type="StandardMaterial3D" id="Wood"]
+albedo_color = Color(0.19, 0.08, 0.025, 1)
+roughness = 0.88
+
+[sub_resource type="CylinderMesh" id="BaseMesh"]
+material = SubResource("Wood")
+top_radius = 0.28
+bottom_radius = 0.38
+height = 0.11
+radial_segments = 16
+
+[sub_resource type="CylinderMesh" id="PoleMesh"]
+material = SubResource("Wood")
+top_radius = 0.042
+bottom_radius = 0.058
+height = 2.05
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="HookMesh"]
+material = SubResource("Wood")
+top_radius = 0.025
+bottom_radius = 0.04
+height = 0.52
+radial_segments = 9
+
+[sub_resource type="CylinderShape3D" id="RackShape"]
+height = 2.15
+radius = 0.2
+
+[node name="StandingThreeHookCoatRack" type="StaticBody3D" unique_id=2042859294]
+editor_description = "Perchero de pie con tres brazos iguales inclinados hacia arriba."
+
+[node name="CircularBase" type="MeshInstance3D" parent="." unique_id=1593650945]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, 0)
+mesh = SubResource("BaseMesh")
+
+[node name="CentralPole" type="MeshInstance3D" parent="." unique_id=349360590]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08, 0)
+mesh = SubResource("PoleMesh")
+
+[node name="HookCluster" type="Node3D" parent="." unique_id=1676922667]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.82, 0)
+
+[node name="UpHookFront" type="MeshInstance3D" parent="HookCluster" unique_id=2001213515]
+transform = Transform3D(1, 0, 0, 0, 0.78070694, 0.6248973, 0, -0.6248973, 0.78070694, 0, 0.2, -0.16)
+mesh = SubResource("HookMesh")
+
+[node name="UpHookBackLeft" type="MeshInstance3D" parent="HookCluster" unique_id=60617767]
+transform = Transform3D(0.83419824, -0.551463, 0.0013745725, 0.5207325, 0.78688693, -0.33112913, 0.1815238, 0.27694312, 0.9435845, -0.139, 0.19999993, 0.08)
+mesh = SubResource("HookMesh")
+
+[node name="UpHookBackRight" type="MeshInstance3D" parent="HookCluster" unique_id=2098594040]
+transform = Transform3D(0.82249224, 0.5663552, 0.052423805, -0.5207325, 0.78688693, -0.33112913, -0.22878826, 0.2450524, 0.9421281, 0.139, 0.19999993, 0.08)
+mesh = SubResource("HookMesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1816720862]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.075, 0)
+shape = SubResource("RackShape")

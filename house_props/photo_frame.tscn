@@ -1,0 +1,62 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://house_props/photo_frame.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="Material_placeholder"]
+albedo_color = Color(0.16, 0.13, 0.1, 1)
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="Material_backing"]
+albedo_color = Color(0.075, 0.048, 0.028, 1)
+roughness = 0.96
+
+[sub_resource type="QuadMesh" id="Mesh_photo"]
+material = SubResource("Material_placeholder")
+size = Vector2(1.6, 0.9)
+
+[sub_resource type="BoxMesh" id="Mesh_frame_horizontal"]
+size = Vector3(1.92, 0.14, 0.12)
+
+[sub_resource type="BoxMesh" id="Mesh_frame_vertical"]
+size = Vector3(0.14, 1.18, 0.12)
+
+[sub_resource type="BoxShape3D" id="Shape_frame"]
+size = Vector3(1.92, 1.18, 0.12)
+
+[node name="PhotoFrame" type="Node3D"]
+editor_description = "Cuadro reutilizable. Arrastra una imagen a Photo Texture en el Inspector."
+script = ExtResource("1_script")
+
+[node name="Backing" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, -0.045)
+mesh = SubResource("Mesh_frame_horizontal")
+scale = Vector3(1, 8.42, 0.5)
+material_override = SubResource("Material_backing")
+
+[node name="Image" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0.022)
+mesh = SubResource("Mesh_photo")
+
+[node name="Frame" type="Node3D" parent="."]
+
+[node name="Top" type="MeshInstance3D" parent="Frame"]
+position = Vector3(0, 0.52, 0)
+mesh = SubResource("Mesh_frame_horizontal")
+
+[node name="Bottom" type="MeshInstance3D" parent="Frame"]
+position = Vector3(0, -0.52, 0)
+mesh = SubResource("Mesh_frame_horizontal")
+
+[node name="Left" type="MeshInstance3D" parent="Frame"]
+position = Vector3(-0.89, 0, 0)
+mesh = SubResource("Mesh_frame_vertical")
+
+[node name="Right" type="MeshInstance3D" parent="Frame"]
+position = Vector3(0.89, 0, 0)
+mesh = SubResource("Mesh_frame_vertical")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(0, 0, -0.01)
+shape = SubResource("Shape_frame")

@@ -1,0 +1,58 @@
+[gd_scene load_steps=10 format=3]
+[sub_resource type="StandardMaterial3D" id="Material_case"]
+albedo_color = Color(0.28, 0.285, 0.28, 1)
+roughness = 0.86
+[sub_resource type="StandardMaterial3D" id="Material_screen"]
+albedo_color = Color(0.17, 0.19, 0.185, 1)
+metallic = 0.12
+roughness = 0.3
+[sub_resource type="StandardMaterial3D" id="Material_dark"]
+albedo_color = Color(0.055, 0.052, 0.047, 1)
+roughness = 0.8
+[sub_resource type="BoxMesh" id="Mesh_front_case"]
+material = SubResource("Material_case")
+size = Vector3(1.62, 1.2, 0.28)
+[sub_resource type="BoxMesh" id="Mesh_rear_case"]
+material = SubResource("Material_case")
+size = Vector3(1.25, 0.94, 0.62)
+[sub_resource type="BoxMesh" id="Mesh_screen"]
+material = SubResource("Material_screen")
+size = Vector3(1.18, 0.9, 0.035)
+[sub_resource type="CylinderMesh" id="Mesh_dial"]
+material = SubResource("Material_dark")
+top_radius = 0.065
+bottom_radius = 0.065
+height = 0.055
+radial_segments = 9
+[sub_resource type="BoxMesh" id="Mesh_foot"]
+material = SubResource("Material_dark")
+size = Vector3(0.3, 0.07, 0.24)
+[sub_resource type="BoxShape3D" id="Shape_tv"]
+size = Vector3(1.62, 1.27, 0.9)
+[node name="SmallGreyTubeTV" type="StaticBody3D"]
+editor_description = "Tele de tubo pequena reconstruida: gris, pantalla casi cuadrada y carcasa profunda escalonada."
+[node name="FrontCase" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_front_case")
+[node name="DeepRearCase" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.02, 0.4)
+mesh = SubResource("Mesh_rear_case")
+[node name="SquareGreyScreen" type="MeshInstance3D" parent="."]
+position = Vector3(-0.1, 0.02, -0.16)
+mesh = SubResource("Mesh_screen")
+[node name="UpperDial" type="MeshInstance3D" parent="."]
+position = Vector3(0.67, 0.2, -0.17)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_dial")
+[node name="LowerDial" type="MeshInstance3D" parent="."]
+position = Vector3(0.67, -0.04, -0.17)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_dial")
+[node name="LeftFoot" type="MeshInstance3D" parent="."]
+position = Vector3(-0.48, -0.635, 0.08)
+mesh = SubResource("Mesh_foot")
+[node name="RightFoot" type="MeshInstance3D" parent="."]
+position = Vector3(0.48, -0.635, 0.08)
+mesh = SubResource("Mesh_foot")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, -0.015, 0.25)
+shape = SubResource("Shape_tv")

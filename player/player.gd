@@ -50,7 +50,7 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var interaction_ray: RayCast3D = $Head/Camera3D/InteractionRay
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
 @onready var stamina_bar: ProgressBar = $StaminaUI/StaminaBar
-@onready var interaction_prompt: Label = $StaminaUI/InteractionPrompt
+@onready var interaction_prompt: Label = $InteractionUI/InteractionPrompt
 
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 var _camera_rest_position: Vector3
@@ -174,6 +174,7 @@ func _physics_process(delta: float) -> void:
 	_update_jump(delta)
 
 	var input_vector := Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
+	_update_auto_prone(input_vector)
 	if (
 		Input.is_action_just_pressed(&"sprint")
 		and _stance == Stance.CROUCHED
@@ -353,6 +354,12 @@ func _throw_held_item() -> void:
 func _request_stance(target_stance: Stance) -> void:
 	if _stance_transition_timer > 0.0 or target_stance == _stance:
 		return
+	# Never expand the player's collider into a table, ceiling or other low obstacle.
+	if (
+		_get_stance_values(target_stance).y > _get_stance_values(_stance).y
+		and not _stance_fits_at(target_stance, Vector3.ZERO)
+	):
+		return
 	if not _try_spend_stamina(_get_stance_stamina_cost(target_stance)):
 		return
 	_pending_stance = target_stance
@@ -364,6 +371,40 @@ func _request_stance(target_stance: Stance) -> void:
 	var capsule := collision_shape.shape as CapsuleShape3D
 	_stance_start_values = Vector3(head.position.y, capsule.height, collision_shape.position.y)
 	_stance_target_values = _get_stance_values(target_stance)
+
+
+func _update_auto_prone(input_vector: Vector2) -> void:
+	if (
+		_stance != Stance.CROUCHED
+		or _stance_transition_timer > 0.0
+		or not Input.is_key_pressed(KEY_CTRL)
+		or input_vector.length_squared() <= 0.01
+	):
+		return
+	var local_direction := Vector3(input_vector.x, 0.0, input_vector.y).normalized()
+	var world_direction := (transform.basis * local_direction).normalized()
+	var look_ahead := world_direction * 0.52
+	if (
+		not _stance_fits_at(Stance.CROUCHED, look_ahead)
+		and _stance_fits_at(Stance.PRONE, look_ahead)
+	):
+		_request_stance(Stance.PRONE)
+
+
+func _stance_fits_at(target_stance: Stance, world_offset: Vector3) -> bool:
+	var values := _get_stance_values(target_stance)
+	var current_capsule := collision_shape.shape as CapsuleShape3D
+	var test_capsule := CapsuleShape3D.new()
+	test_capsule.radius = current_capsule.radius
+	test_capsule.height = values.y
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = test_capsule
+	query.transform = Transform3D(global_basis, global_position + world_offset + global_basis * Vector3(0.0, values.z, 0.0))
+	query.collision_mask = collision_mask
+	query.collide_with_areas = false
+	query.collide_with_bodies = true
+	query.exclude = [get_rid()]
+	return get_world_3d().direct_space_state.intersect_shape(query, 1).is_empty()
 
 
 func _update_stance_transition(delta: float) -> void:

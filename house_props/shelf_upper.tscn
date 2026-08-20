@@ -1,0 +1,21 @@
+[gd_scene load_steps=6 format=3]
+[ext_resource type="Mesh" path="res://house_props/shelf_mesh.tres" id="1_mesh"]
+[ext_resource type="Shader" path="res://house_props/shelf_clip.gdshader" id="2_shader"]
+[ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera2.jpg" id="3_wood"]
+[sub_resource type="ShaderMaterial" id="Material_upper"]
+shader = ExtResource("2_shader")
+shader_parameter/wood_texture = ExtResource("3_wood")
+shader_parameter/split_height = 0.03
+shader_parameter/keep_upper = true
+[sub_resource type="BoxShape3D" id="Shape_upper"]
+size = Vector3(0.6493754, 1.0637362, 2.5800729)
+[node name="ShelfUpper" type="StaticBody3D"]
+editor_description = "Mitad superior independiente del mueble KitchenShelf."
+[node name="Mesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.0313249, 0)
+scale = Vector3(0.95842826, 0.95842826, 0.95842826)
+mesh = ExtResource("1_mesh")
+material_override = SubResource("Material_upper")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(-0.11720881, 1.5956043, 0.02879858)
+shape = SubResource("Shape_upper")

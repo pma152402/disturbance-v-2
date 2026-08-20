@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3]
+[sub_resource type="StandardMaterial3D" id="Material_fabric"]
+albedo_color = Color(0.34, 0.095, 0.075, 1)
+roughness = 1.0
+[sub_resource type="StandardMaterial3D" id="Material_seam"]
+albedo_color = Color(0.19, 0.045, 0.035, 1)
+roughness = 1.0
+[sub_resource type="SphereMesh" id="Mesh_cushion"]
+material = SubResource("Material_fabric")
+radius = 0.5
+height = 1.0
+radial_segments = 12
+rings = 7
+[sub_resource type="TorusMesh" id="Mesh_seam"]
+material = SubResource("Material_seam")
+inner_radius = 0.36
+outer_radius = 0.385
+rings = 12
+ring_segments = 6
+[sub_resource type="BoxShape3D" id="Shape_cushion"]
+size = Vector3(0.78, 0.2, 0.62)
+[node name="FloorCushion" type="StaticBody3D"]
+editor_description = "Cojin decorativo de suelo reutilizable."
+[node name="Cushion" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.11, 0)
+scale = Vector3(0.82, 0.2, 0.66)
+mesh = SubResource("Mesh_cushion")
+[node name="Seam" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.115, 0)
+scale = Vector3(1, 0.72, 0.78)
+mesh = SubResource("Mesh_seam")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.1, 0)
+shape = SubResource("Shape_cushion")

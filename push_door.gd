@@ -15,7 +15,7 @@ func get_interaction_key() -> Key:
 
 
 func get_interaction_text(_player: Node) -> String:
-	return "F  Cerrar puerta" if _is_open else "F  Abrir puerta"
+	return "F  CERRAR PUERTA" if _is_open else "F  ABRIR PUERTA"
 
 
 func interact(player: Node) -> bool:

@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3]
+[sub_resource type="StandardMaterial3D" id="Material_stem"]
+albedo_color = Color(0.08, 0.28, 0.105, 1)
+roughness = 0.9
+[sub_resource type="StandardMaterial3D" id="Material_petal"]
+albedo_color = Color(0.68, 0.018, 0.025, 1)
+roughness = 0.78
+[sub_resource type="CylinderMesh" id="Mesh_stem"]
+material = SubResource("Material_stem")
+top_radius = 0.018
+bottom_radius = 0.023
+height = 0.72
+radial_segments = 7
+[sub_resource type="SphereMesh" id="Mesh_petal"]
+material = SubResource("Material_petal")
+radius = 0.095
+height = 0.16
+radial_segments = 8
+rings = 4
+[sub_resource type="BoxMesh" id="Mesh_leaf"]
+material = SubResource("Material_stem")
+size = Vector3(0.14, 0.018, 0.065)
+[node name="RedFlower" type="Node3D"]
+editor_description = "Flor roja decorativa reutilizable."
+[node name="Stem" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.36, 0)
+mesh = SubResource("Mesh_stem")
+[node name="LeafLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.07, 0.35, 0)
+rotation = Vector3(0, 0, -0.42)
+mesh = SubResource("Mesh_leaf")
+[node name="LeafRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.075, 0.5, 0.01)
+rotation = Vector3(0.1, 0, 0.48)
+mesh = SubResource("Mesh_leaf")
+[node name="FlowerBall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.77, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+mesh = SubResource("Mesh_petal")

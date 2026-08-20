@@ -71,8 +71,11 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_o651l")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_iixgv"]
-size = Vector3(1.6570089, 0.8885402, 2.535083)
+[sub_resource type="BoxShape3D" id="BoxShape3D_tabletop"]
+size = Vector3(1.6570089, 0.14, 2.535083)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_table_leg"]
+size = Vector3(0.14, 0.75, 0.14)
 
 [node name="Table" type="StaticBody3D" unique_id=2046591139]
 
@@ -80,6 +83,22 @@ size = Vector3(1.6570089, 0.8885402, 2.535083)
 transform = Transform3D(0, 0, 1.0000001, 0, 1.0000001, 0, -1.0000001, 0, 0, 0, 0.75407654, 0)
 mesh = SubResource("ArrayMesh_ch50b")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1925949121]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4442701, -0.0051920414)
-shape = SubResource("BoxShape3D_iixgv")
+[node name="TabletopCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.82, 0)
+shape = SubResource("BoxShape3D_tabletop")
+
+[node name="FrontLeftLegCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-0.69, 0.375, -1.13)
+shape = SubResource("BoxShape3D_table_leg")
+
+[node name="FrontRightLegCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0.69, 0.375, -1.13)
+shape = SubResource("BoxShape3D_table_leg")
+
+[node name="BackLeftLegCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-0.69, 0.375, 1.13)
+shape = SubResource("BoxShape3D_table_leg")
+
+[node name="BackRightLegCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0.69, 0.375, 1.13)
+shape = SubResource("BoxShape3D_table_leg")

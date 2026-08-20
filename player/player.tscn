@@ -1,10 +1,11 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://player/player.gd" id="1_player"]
 [ext_resource type="ArrayMesh" path="res://ps2_objects/Flashlight/Flashlight.obj" id="2_flashlight_mesh"]
 [ext_resource type="Texture2D" path="res://ps2_objects/Flashlight/Flashlight.png" id="3_flashlight_texture"]
 [ext_resource type="PackedScene" path="res://can_visual.tscn" id="4_can_visual"]
 [ext_resource type="PackedScene" path="res://bottle_visual.tscn" id="5_bottle_visual"]
+[ext_resource type="FontFile" path="res://assets/fonts/PressStart2P-Regular.ttf" id="6_pixel_font"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.34
@@ -170,23 +171,30 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_stamina_fill")
 value = 100.0
 show_percentage = false
 
-[node name="InteractionPrompt" type="Label" parent="StaminaUI"]
+[node name="InteractionUI" type="CanvasLayer" parent="."]
+layer = 101
+
+[node name="InteractionPrompt" type="Label" parent="InteractionUI"]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -130.0
+offset_left = -310.0
 offset_top = 76.0
-offset_right = 130.0
-offset_bottom = 103.0
+offset_right = 310.0
+offset_bottom = 121.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_colors/font_color = Color(0.92, 0.92, 0.86, 0.92)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
-theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.9)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.02, 0.96)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_pixel_font")
+theme_override_font_sizes/font_size = 12
 text = "F  COGER OBJETO"
 horizontal_alignment = 1

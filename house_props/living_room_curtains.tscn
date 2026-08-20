@@ -1,0 +1,167 @@
+[gd_scene load_steps=10 format=3]
+
+[sub_resource type="StandardMaterial3D" id="RedVelvet"]
+albedo_color = Color(0.29, 0.025, 0.035, 1)
+metallic_specular = 0.18
+roughness = 0.92
+[sub_resource type="StandardMaterial3D" id="RedHighlight"]
+albedo_color = Color(0.48, 0.055, 0.065, 1)
+metallic_specular = 0.2
+roughness = 0.88
+[sub_resource type="StandardMaterial3D" id="RedShadow"]
+albedo_color = Color(0.115, 0.008, 0.014, 1)
+roughness = 1.0
+[sub_resource type="StandardMaterial3D" id="DarkWood"]
+albedo_color = Color(0.095, 0.035, 0.018, 1)
+roughness = 0.82
+[sub_resource type="CylinderMesh" id="Rod"]
+material = SubResource("DarkWood")
+top_radius = 0.04
+bottom_radius = 0.04
+height = 3.35
+radial_segments = 12
+[sub_resource type="SphereMesh" id="Finial"]
+material = SubResource("DarkWood")
+radius = 0.095
+height = 0.19
+radial_segments = 12
+rings = 7
+[sub_resource type="CylinderMesh" id="PleatRed"]
+material = SubResource("RedVelvet")
+top_radius = 0.13
+bottom_radius = 0.16
+height = 1.0
+radial_segments = 8
+[sub_resource type="CylinderMesh" id="PleatLight"]
+material = SubResource("RedHighlight")
+top_radius = 0.105
+bottom_radius = 0.135
+height = 1.0
+radial_segments = 8
+[sub_resource type="CylinderMesh" id="Tie"]
+material = SubResource("RedShadow")
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.62
+radial_segments = 10
+
+[node name="LivingRoomCurtains" type="Node3D"]
+editor_description = "Cortinas rojas recogidas: cenefa superior unida, triángulos amplios hacia dentro y colas finas."
+[node name="CurtainRod" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.78, 0.08)
+rotation = Vector3(0, 0, 1.570796)
+mesh = SubResource("Rod")
+[node name="LeftFinial" type="MeshInstance3D" parent="."]
+position = Vector3(-1.77, 2.78, 0.08)
+mesh = SubResource("Finial")
+[node name="RightFinial" type="MeshInstance3D" parent="."]
+position = Vector3(1.77, 2.78, 0.08)
+mesh = SubResource("Finial")
+[node name="TopSwagLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.810, 2.520, 0.02)
+rotation = Vector3(0, 0, -1.6936)
+scale = Vector3(1, 1.632, 0.88)
+mesh = SubResource("PleatRed")
+[node name="TopSwagLeftHighlight" type="MeshInstance3D" parent="."]
+position = Vector3(-0.795, 2.480, -0.045)
+rotation = Vector3(0, 0, -1.6894)
+scale = Vector3(1, 1.521, 0.8)
+mesh = SubResource("PleatLight")
+[node name="TopSwagRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.810, 2.520, 0.02)
+rotation = Vector3(0, 0, -1.4480)
+scale = Vector3(1, 1.632, 0.88)
+mesh = SubResource("PleatRed")
+[node name="TopSwagRightHighlight" type="MeshInstance3D" parent="."]
+position = Vector3(0.795, 2.480, -0.045)
+rotation = Vector3(0, 0, -1.4522)
+scale = Vector3(1, 1.521, 0.8)
+mesh = SubResource("PleatLight")
+[node name="LeftUpperPleat1" type="MeshInstance3D" parent="."]
+position = Vector3(-1.350, 1.920, 0)
+rotation = Vector3(0, 0, -2.7309)
+scale = Vector3(1, 1.352, 0.72)
+mesh = SubResource("PleatRed")
+[node name="LeftUpperPleat2" type="MeshInstance3D" parent="."]
+position = Vector3(-1.165, 1.920, -0.035)
+rotation = Vector3(0, 0, -3.0053)
+scale = Vector3(1, 1.252, 0.72)
+mesh = SubResource("PleatLight")
+[node name="LeftUpperPleat3" type="MeshInstance3D" parent="."]
+position = Vector3(-0.980, 1.920, 0)
+rotation = Vector3(0, 0, 2.9817)
+scale = Vector3(1, 1.256, 0.72)
+mesh = SubResource("PleatRed")
+[node name="LeftUpperPleat4" type="MeshInstance3D" parent="."]
+position = Vector3(-0.795, 1.920, -0.035)
+rotation = Vector3(0, 0, 2.7107)
+scale = Vector3(1, 1.365, 0.72)
+mesh = SubResource("PleatLight")
+[node name="LeftUpperPleat5" type="MeshInstance3D" parent="."]
+position = Vector3(-0.610, 1.920, 0)
+rotation = Vector3(0, 0, 2.4930)
+scale = Vector3(1, 1.556, 0.72)
+mesh = SubResource("PleatRed")
+[node name="RightUpperPleat1" type="MeshInstance3D" parent="."]
+position = Vector3(1.350, 1.920, 0)
+rotation = Vector3(0, 0, 2.7309)
+scale = Vector3(1, 1.352, 0.72)
+mesh = SubResource("PleatRed")
+[node name="RightUpperPleat2" type="MeshInstance3D" parent="."]
+position = Vector3(1.165, 1.920, -0.035)
+rotation = Vector3(0, 0, 3.0053)
+scale = Vector3(1, 1.252, 0.72)
+mesh = SubResource("PleatLight")
+[node name="RightUpperPleat3" type="MeshInstance3D" parent="."]
+position = Vector3(0.980, 1.920, 0)
+rotation = Vector3(0, 0, -2.9817)
+scale = Vector3(1, 1.256, 0.72)
+mesh = SubResource("PleatRed")
+[node name="RightUpperPleat4" type="MeshInstance3D" parent="."]
+position = Vector3(0.795, 1.920, -0.035)
+rotation = Vector3(0, 0, -2.7107)
+scale = Vector3(1, 1.365, 0.72)
+mesh = SubResource("PleatLight")
+[node name="RightUpperPleat5" type="MeshInstance3D" parent="."]
+position = Vector3(0.610, 1.920, 0)
+rotation = Vector3(0, 0, -2.4930)
+scale = Vector3(1, 1.556, 0.72)
+mesh = SubResource("PleatRed")
+[node name="LeftLowerPleat1" type="MeshInstance3D" parent="."]
+position = Vector3(-1.190, 0.700, 0)
+rotation = Vector3(0, 0, 2.9603)
+scale = Vector3(1, 1.220, 0.62)
+mesh = SubResource("PleatRed")
+[node name="LeftLowerPleat2" type="MeshInstance3D" parent="."]
+position = Vector3(-1.080, 0.700, -0.035)
+rotation = Vector3(0, 0, -3.1416)
+scale = Vector3(1, 1.200, 0.62)
+mesh = SubResource("PleatLight")
+[node name="LeftLowerPleat3" type="MeshInstance3D" parent="."]
+position = Vector3(-0.970, 0.700, 0)
+rotation = Vector3(0, 0, -2.9603)
+scale = Vector3(1, 1.220, 0.62)
+mesh = SubResource("PleatRed")
+[node name="RightLowerPleat1" type="MeshInstance3D" parent="."]
+position = Vector3(1.190, 0.700, 0)
+rotation = Vector3(0, 0, -2.9603)
+scale = Vector3(1, 1.220, 0.62)
+mesh = SubResource("PleatRed")
+[node name="RightLowerPleat2" type="MeshInstance3D" parent="."]
+position = Vector3(1.080, 0.700, -0.035)
+rotation = Vector3(0, 0, -3.1416)
+scale = Vector3(1, 1.200, 0.62)
+mesh = SubResource("PleatLight")
+[node name="RightLowerPleat3" type="MeshInstance3D" parent="."]
+position = Vector3(0.970, 0.700, 0)
+rotation = Vector3(0, 0, 2.9603)
+scale = Vector3(1, 1.220, 0.62)
+mesh = SubResource("PleatRed")
+[node name="LeftTie" type="MeshInstance3D" parent="."]
+position = Vector3(-1.08, 1.30, -0.08)
+rotation = Vector3(0, 0, 1.570796)
+mesh = SubResource("Tie")
+[node name="RightTie" type="MeshInstance3D" parent="."]
+position = Vector3(1.08, 1.30, -0.08)
+rotation = Vector3(0, 0, 1.570796)
+mesh = SubResource("Tie")

@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera4.jpg" id="1_wood"]
+
+[sub_resource type="StandardMaterial3D" id="Material_wood"]
+albedo_color = Color(0.27, 0.135, 0.055, 1)
+albedo_texture = ExtResource("1_wood")
+roughness = 0.93
+uv1_triplanar = true
+uv1_world_triplanar = true
+texture_filter = 0
+
+[sub_resource type="BoxMesh" id="Mesh_shelf"]
+material = SubResource("Material_wood")
+size = Vector3(1.55, 0.1, 0.38)
+
+[sub_resource type="BoxShape3D" id="Shape_shelf"]
+size = Vector3(1.55, 0.1, 0.38)
+
+[sub_resource type="ConvexPolygonShape3D" id="Shape_support"]
+points = PackedVector3Array(-0.15, 0.15, -0.06, 0.15, 0.15, -0.06, 0.15, -0.15, -0.06, -0.15, 0.15, 0.06, 0.15, 0.15, 0.06, 0.15, -0.15, 0.06)
+
+[node name="HangingShelf" type="StaticBody3D"]
+editor_description = "Estanteria de pared reutilizable: tabla superior y dos soportes independientes."
+
+[node name="TopBoard" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_shelf")
+
+[node name="TopBoardCollision" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_shelf")
+
+[node name="LeftSupport" type="CSGPolygon3D" parent="."]
+position = Vector3(-0.55, -0.2, -0.02)
+rotation = Vector3(0, 1.5708, 0)
+polygon = PackedVector2Array(-0.15, 0.15, 0.15, 0.15, 0.15, -0.15)
+depth = 0.12
+material = SubResource("Material_wood")
+
+[node name="LeftSupportCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-0.55, -0.2, -0.02)
+rotation = Vector3(0, 1.5708, 0)
+shape = SubResource("Shape_support")
+
+[node name="RightSupport" type="CSGPolygon3D" parent="."]
+position = Vector3(0.55, -0.2, -0.02)
+rotation = Vector3(0, 1.5708, 0)
+polygon = PackedVector2Array(-0.15, 0.15, 0.15, 0.15, 0.15, -0.15)
+depth = 0.12
+material = SubResource("Material_wood")
+
+[node name="RightSupportCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0.55, -0.2, -0.02)
+rotation = Vector3(0, 1.5708, 0)
+shape = SubResource("Shape_support")

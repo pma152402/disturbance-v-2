@@ -1,0 +1,107 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://house_props/grandma_ceiling_lamp.gd" id="1_controller"]
+[ext_resource type="Script" path="res://flickering_light.gd" id="2_flicker"]
+
+[sub_resource type="StandardMaterial3D" id="Brass"]
+albedo_color = Color(0.29, 0.19, 0.065, 1)
+metallic = 0.55
+roughness = 0.48
+[sub_resource type="StandardMaterial3D" id="CreamGlass"]
+transparency = 1
+albedo_color = Color(0.91, 0.78, 0.53, 0.84)
+roughness = 0.42
+[sub_resource type="StandardMaterial3D" id="BulbGlow"]
+albedo_color = Color(1, 0.82, 0.5, 1)
+roughness = 0.35
+emission_enabled = true
+emission = Color(1, 0.58, 0.22, 1)
+emission_energy_multiplier = 2.2
+[sub_resource type="StandardMaterial3D" id="BrownTrim"]
+albedo_color = Color(0.18, 0.065, 0.022, 1)
+roughness = 0.8
+[sub_resource type="CylinderMesh" id="Canopy"]
+material = SubResource("Brass")
+top_radius = 0.19
+bottom_radius = 0.27
+height = 0.11
+radial_segments = 16
+[sub_resource type="CylinderMesh" id="Cord"]
+material = SubResource("BrownTrim")
+top_radius = 0.018
+bottom_radius = 0.018
+height = 0.46
+radial_segments = 8
+[sub_resource type="CylinderMesh" id="Socket"]
+material = SubResource("Brass")
+top_radius = 0.09
+bottom_radius = 0.12
+height = 0.18
+radial_segments = 12
+[sub_resource type="CylinderMesh" id="Shade"]
+material = SubResource("CreamGlass")
+top_radius = 0.20
+bottom_radius = 0.58
+height = 0.38
+radial_segments = 16
+[sub_resource type="TorusMesh" id="ShadeTrim"]
+material = SubResource("BrownTrim")
+inner_radius = 0.53
+outer_radius = 0.60
+rings = 16
+ring_segments = 8
+[sub_resource type="SphereMesh" id="Bulb"]
+material = SubResource("BulbGlow")
+radius = 0.13
+height = 0.26
+radial_segments = 12
+rings = 7
+
+[node name="GrandmaCeilingLamp" type="Node3D" groups=["living_room_ceiling_lamp"]]
+editor_description = "Lámpara colgante antigua con pantalla crema, latón envejecido y borde marrón."
+script = ExtResource("1_controller")
+[node name="CeilingCanopy" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.055, 0)
+mesh = SubResource("Canopy")
+[node name="HangingCord" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.32, 0)
+mesh = SubResource("Cord")
+[node name="BrassSocket" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.60, 0)
+mesh = SubResource("Socket")
+[node name="GlassShade" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.78, 0)
+mesh = SubResource("Shade")
+[node name="DecorativeLowerTrim" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.97, 0)
+mesh = SubResource("ShadeTrim")
+[node name="WarmBulb" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.83, 0)
+mesh = SubResource("Bulb")
+[node name="GentleWarmGlow" type="OmniLight3D" parent="."]
+position = Vector3(0, -0.92, 0)
+script = ExtResource("2_flicker")
+light_color = Color(1, 0.68, 0.35, 1)
+light_energy = 4.2
+omni_range = 8.0
+omni_attenuation = 1.35
+shadow_enabled = true
+base_energy = 4.2
+flicker_speed = 3.2
+flicker_strength = 0.12
+blackout_min_duration = 0.08
+blackout_max_duration = 0.18
+fixture_path = NodePath("../WarmBulb")
+
+[node name="DownwardHalo" type="SpotLight3D" parent="."]
+position = Vector3(0, -0.9, 0)
+rotation = Vector3(-1.570796, 0, 0)
+light_color = Color(1, 0.72, 0.42, 1)
+light_energy = 3.2
+shadow_enabled = true
+shadow_bias = 0.035
+shadow_normal_bias = 1.2
+shadow_blur = 2.5
+spot_range = 9.0
+spot_attenuation = 0.52
+spot_angle = 48.0

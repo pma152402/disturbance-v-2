@@ -1,0 +1,141 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://house_props/wall_clock.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="Material_wood"]
+albedo_color = Color(0.19, 0.075, 0.025, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Material_face"]
+albedo_color = Color(0.72, 0.69, 0.58, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="Material_dark"]
+albedo_color = Color(0.035, 0.028, 0.022, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="Material_second"]
+albedo_color = Color(0.42, 0.035, 0.025, 1)
+roughness = 0.8
+
+[sub_resource type="CylinderMesh" id="Mesh_frame"]
+material = SubResource("Material_wood")
+top_radius = 0.5
+bottom_radius = 0.5
+height = 0.1
+radial_segments = 24
+
+[sub_resource type="CylinderMesh" id="Mesh_face"]
+material = SubResource("Material_face")
+top_radius = 0.42
+bottom_radius = 0.42
+height = 0.105
+radial_segments = 24
+
+[sub_resource type="BoxMesh" id="Mesh_tick"]
+material = SubResource("Material_dark")
+size = Vector3(0.026, 0.075, 0.018)
+
+[sub_resource type="BoxMesh" id="Mesh_hour_hand"]
+material = SubResource("Material_dark")
+size = Vector3(0.045, 0.22, 0.025)
+
+[sub_resource type="BoxMesh" id="Mesh_minute_hand"]
+material = SubResource("Material_dark")
+size = Vector3(0.028, 0.31, 0.022)
+
+[sub_resource type="BoxMesh" id="Mesh_second_hand"]
+material = SubResource("Material_second")
+size = Vector3(0.012, 0.34, 0.018)
+
+[sub_resource type="SphereMesh" id="Mesh_pin"]
+material = SubResource("Material_wood")
+radius = 0.045
+height = 0.09
+radial_segments = 10
+rings = 5
+
+[node name="WallClock" type="Node3D"]
+editor_description = "Reloj de pared funcional sincronizado con la hora del sistema."
+script = ExtResource("1_script")
+
+[node name="WoodenFrame" type="MeshInstance3D" parent="."]
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_frame")
+
+[node name="ClockFace" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0.012)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_face")
+
+[node name="Marks" type="Node3D" parent="."]
+
+[node name="Mark12" type="MeshInstance3D" parent="Marks"]
+position = Vector3(0, 0.35, 0.075)
+mesh = SubResource("Mesh_tick")
+[node name="Mark1" type="MeshInstance3D" parent="Marks"]
+position = Vector3(0.175, 0.303, 0.075)
+rotation = Vector3(0, 0, -0.523599)
+mesh = SubResource("Mesh_tick")
+[node name="Mark2" type="MeshInstance3D" parent="Marks"]
+position = Vector3(0.303, 0.175, 0.075)
+rotation = Vector3(0, 0, -1.0472)
+mesh = SubResource("Mesh_tick")
+[node name="Mark3" type="MeshInstance3D" parent="Marks"]
+position = Vector3(0.35, 0, 0.075)
+rotation = Vector3(0, 0, -1.5708)
+mesh = SubResource("Mesh_tick")
+[node name="Mark4" type="MeshInstance3D" parent="Marks"]
+position = Vector3(0.303, -0.175, 0.075)
+rotation = Vector3(0, 0, -2.0944)
+mesh = SubResource("Mesh_tick")
+[node name="Mark5" type="MeshInstance3D" parent="Marks"]
+position = Vector3(0.175, -0.303, 0.075)
+rotation = Vector3(0, 0, -2.61799)
+mesh = SubResource("Mesh_tick")
+[node name="Mark6" type="MeshInstance3D" parent="Marks"]
+position = Vector3(0, -0.35, 0.075)
+rotation = Vector3(0, 0, 3.14159)
+mesh = SubResource("Mesh_tick")
+[node name="Mark7" type="MeshInstance3D" parent="Marks"]
+position = Vector3(-0.175, -0.303, 0.075)
+rotation = Vector3(0, 0, 2.61799)
+mesh = SubResource("Mesh_tick")
+[node name="Mark8" type="MeshInstance3D" parent="Marks"]
+position = Vector3(-0.303, -0.175, 0.075)
+rotation = Vector3(0, 0, 2.0944)
+mesh = SubResource("Mesh_tick")
+[node name="Mark9" type="MeshInstance3D" parent="Marks"]
+position = Vector3(-0.35, 0, 0.075)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("Mesh_tick")
+[node name="Mark10" type="MeshInstance3D" parent="Marks"]
+position = Vector3(-0.303, 0.175, 0.075)
+rotation = Vector3(0, 0, 1.0472)
+mesh = SubResource("Mesh_tick")
+[node name="Mark11" type="MeshInstance3D" parent="Marks"]
+position = Vector3(-0.175, 0.303, 0.075)
+rotation = Vector3(0, 0, 0.523599)
+mesh = SubResource("Mesh_tick")
+
+[node name="Hands" type="Node3D" parent="."]
+position = Vector3(0, 0, 0.096)
+
+[node name="HourHand" type="Node3D" parent="Hands"]
+[node name="Mesh" type="MeshInstance3D" parent="Hands/HourHand"]
+position = Vector3(0, 0.095, 0)
+mesh = SubResource("Mesh_hour_hand")
+
+[node name="MinuteHand" type="Node3D" parent="Hands"]
+[node name="Mesh" type="MeshInstance3D" parent="Hands/MinuteHand"]
+position = Vector3(0, 0.135, 0.012)
+mesh = SubResource("Mesh_minute_hand")
+
+[node name="SecondHand" type="Node3D" parent="Hands"]
+[node name="Mesh" type="MeshInstance3D" parent="Hands/SecondHand"]
+position = Vector3(0, 0.145, 0.024)
+mesh = SubResource("Mesh_second_hand")
+
+[node name="CenterPin" type="MeshInstance3D" parent="Hands"]
+position = Vector3(0, 0, 0.045)
+mesh = SubResource("Mesh_pin")

@@ -1,6 +1,5 @@
-res://exterior_trees_multimesh.tres
-res://exterior_environment.gd
-res://ps2_postprocess.gdshader
+res://house_props/wall_light_switch.gd
 res://house_baked.tscn
-res://player/player.gd
-res://rainy_weather.gd
+res://push_door.gd
+res://wall_band_applier.gd
+res://pastel_wall_band.gdshader
