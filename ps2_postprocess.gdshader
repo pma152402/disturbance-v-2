@@ -3,13 +3,13 @@ shader_type canvas_item;
 uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_nearest;
 uniform float pixel_size : hint_range(1.0, 24.0, 1.0) = 8.0;
 uniform float color_levels : hint_range(5.0, 64.0, 1.0) = 24.0;
-uniform float noise_strength : hint_range(0.0, 0.25, 0.005) = 0.035;
-uniform float chromatic_aberration : hint_range(0.0, 9.0, 0.1) = 2.0;
-uniform float scanline_strength : hint_range(0.0, 0.6, 0.01) = 0.12;
+uniform float noise_strength : hint_range(0.0, 0.25, 0.005) = 0.025;
+uniform float chromatic_aberration : hint_range(0.0, 9.0, 0.1) = 1.2;
+uniform float scanline_strength : hint_range(0.0, 0.6, 0.01) = 0.09;
 uniform float fisheye_strength : hint_range(0.0, 0.03, 0.001) = 0.007;
-uniform float vignette_strength : hint_range(0.0, 0.95, 0.01) = 0.52;
-uniform float vignette_inner : hint_range(0.0, 0.6, 0.01) = 0.12;
-uniform float vignette_outer : hint_range(0.2, 1.2, 0.01) = 0.54;
+uniform float vignette_strength : hint_range(0.0, 0.95, 0.01) = 0.88;
+uniform float vignette_inner : hint_range(0.0, 0.6, 0.01) = 0.07;
+uniform float vignette_outer : hint_range(0.2, 1.2, 0.01) = 0.47;
 
 float hash21(vec2 value) {
 	return fract(sin(dot(value, vec2(12.9898, 78.233))) * 43758.5453);
@@ -47,7 +47,7 @@ void fragment() {
 	source.b = texture(screen_texture, clamp(uv - rgb_offset, vec2(0.0), vec2(1.0))).b;
 	vec3 readable_source = texture(screen_texture, clamp(uv, vec2(0.0), vec2(1.0))).rgb;
 	source = mix(readable_source, source, 0.45);
-	float edge_blur = smoothstep(0.18, 1.15, lens_radius) * 0.42;
+	float edge_blur = smoothstep(0.18, 1.15, lens_radius) * 0.24;
 	vec3 soft_sample = texture(screen_texture, clamp(uv + vec2(block.x * 1.5, block.y), vec2(0.0), vec2(1.0))).rgb;
 	source = mix(source, soft_sample, edge_blur);
 
@@ -77,7 +77,8 @@ void fragment() {
 	centered.x *= SCREEN_PIXEL_SIZE.y / SCREEN_PIXEL_SIZE.x;
 	float vignette = smoothstep(vignette_inner, vignette_outer, length(centered));
 	float outside_lens = step(0.0, -uv.x) + step(1.0, uv.x) + step(0.0, -uv.y) + step(1.0, uv.y);
-	vec3 minimum_edge_light = vec3(0.012, 0.014, 0.012) * vignette;
+	limited *= 0.88;
+	vec3 minimum_edge_light = vec3(0.002, 0.0022, 0.002) * vignette;
 	limited = max(limited * (1.0 - vignette * vignette_strength), minimum_edge_light);
 	limited *= 1.0 - clamp(outside_lens, 0.0, 1.0);
 	COLOR = vec4(limited, 1.0);

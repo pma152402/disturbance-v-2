@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://player/player.gd" id="1_player"]
 [ext_resource type="ArrayMesh" path="res://ps2_objects/Flashlight/Flashlight.obj" id="2_flashlight_mesh"]
@@ -22,9 +22,20 @@ size = Vector3(0.68, 1.55, 0.48)
 albedo_color = Color(0.12, 0.13, 0.16, 1)
 roughness = 0.95
 
-[sub_resource type="BoxMesh" id="BoxMesh_hand"]
+[sub_resource type="CylinderMesh" id="BoxMesh_hand"]
 material = SubResource("StandardMaterial3D_hand")
-size = Vector3(0.17, 0.15, 0.72)
+top_radius = 0.055
+bottom_radius = 0.065
+height = 0.72
+radial_segments = 8
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_hand"]
+material = SubResource("StandardMaterial3D_hand")
+radius = 0.105
+height = 0.21
+radial_segments = 10
+rings = 6
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_flashlight"]
 albedo_texture = ExtResource("3_flashlight_texture")
@@ -81,10 +92,15 @@ collide_with_bodies = true
 [node name="HandRig" type="Node3D" parent="Head/Camera3D"]
 
 [node name="Hand" type="MeshInstance3D" parent="Head/Camera3D/HandRig"]
-position = Vector3(0.25, -0.22, -0.17)
-rotation = Vector3(-0.12, -0.08, -0.08)
+position = Vector3(0.25, -0.195, -0.02)
+rotation = Vector3(-1.48, -0.08, -0.08)
 mesh = SubResource("BoxMesh_hand")
-cast_shadow = 1
+cast_shadow = 0
+
+[node name="HandBall" type="MeshInstance3D" parent="Head/Camera3D/HandRig"]
+position = Vector3(0.25, -0.17, -0.29)
+mesh = SubResource("SphereMesh_hand")
+cast_shadow = 0
 
 [node name="FlashlightBody" type="MeshInstance3D" parent="Head/Camera3D/HandRig"]
 position = Vector3(0.25, -0.15, -0.29)
@@ -92,7 +108,7 @@ rotation = Vector3(-1.5708, 0, 0)
 scale = Vector3(0.72, 0.72, 0.72)
 mesh = ExtResource("2_flashlight_mesh")
 material_override = SubResource("StandardMaterial3D_flashlight")
-cast_shadow = 1
+cast_shadow = 0
 
 [node name="Flashlight" type="SpotLight3D" parent="Head/Camera3D/HandRig"]
 position = Vector3(0.25, -0.155, -0.52)
@@ -110,11 +126,16 @@ spot_angle = 29.0
 
 [node name="LeftHand" type="MeshInstance3D" parent="Head/Camera3D/LeftHandRig"]
 visible = false
-position = Vector3(-0.31, -0.32, -0.08)
-rotation = Vector3(-0.12, 0.08, 0.08)
+position = Vector3(-0.31, -0.46, -0.09)
+rotation = Vector3(-0.78, 0.08, 0.08)
 scale = Vector3(0.62, 0.62, 0.62)
 mesh = SubResource("BoxMesh_hand")
-cast_shadow = 1
+cast_shadow = 0
+
+[node name="HandBall" type="MeshInstance3D" parent="Head/Camera3D/LeftHandRig/LeftHand"]
+position = Vector3(0, 0.34, 0)
+mesh = SubResource("SphereMesh_hand")
+cast_shadow = 0
 
 [node name="HeldCan" parent="Head/Camera3D/LeftHandRig" instance=ExtResource("4_can_visual")]
 visible = false

@@ -2,8 +2,8 @@ extends Node3D
 
 @export var minimum_lightning_delay := 3.0
 @export var maximum_lightning_delay := 8.0
-@export var outdoor_light_energy := 0.52
-@export var indoor_street_light_energy := 0.24
+@export var outdoor_light_energy := 0.43
+@export var indoor_street_light_energy := 0.16
 @export var lightning_outdoor_boost := 4.8
 @export var lightning_indoor_boost := 11.0
 

@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-@export var move_speed := 2.8
+@export var move_speed := 1.4
 @export var sprint_speed := 4.8
 @export var crouch_speed := 1.55
 @export var prone_speed := 0.8
@@ -12,8 +12,8 @@ extends CharacterBody3D
 @export var bob_horizontal_amount := 0.032
 @export var bob_roll_degrees := 0.9
 @export var sprint_bob_multiplier := 1.52
-@export var lean_distance := 0.24
-@export var lean_angle_degrees := 8.0
+@export var lean_distance := 0.48
+@export var lean_angle_degrees := 16.0
 @export var lean_speed := 7.0
 @export var max_stamina := 100.0
 @export var stamina_drain_per_second := 5.5
