@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=3]
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.22, 0.24, 0.23, 1)
+metallic = 0.7
+roughness = 0.62
+[sub_resource type="StandardMaterial3D" id="rust"]
+albedo_color = Color(0.32, 0.115, 0.035, 1)
+roughness = 0.94
+[sub_resource type="BoxMesh" id="box"]
+[sub_resource type="BoxShape3D" id="collision_shape"]
+size = Vector3(1.55, 2.25, 0.62)
+[node name="StandingMetalShelving" type="StaticBody3D"]
+editor_description = "Armario abierto de estantes metalicos de pie, sin puertas, con oxido localizado."
+[node name="LeftPost" type="MeshInstance3D" parent="."]
+position = Vector3(-0.72, 1.1, 0)
+scale = Vector3(0.07, 2.2, 0.07)
+mesh = SubResource("box")
+material_override = SubResource("metal")
+[node name="RightPost" type="MeshInstance3D" parent="."]
+position = Vector3(0.72, 1.1, 0)
+scale = Vector3(0.07, 2.2, 0.07)
+mesh = SubResource("box")
+material_override = SubResource("metal")
+[node name="RearLeftPost" type="MeshInstance3D" parent="."]
+position = Vector3(-0.72, 1.1, 0.42)
+scale = Vector3(0.07, 2.2, 0.07)
+mesh = SubResource("box")
+material_override = SubResource("rust")
+[node name="RearRightPost" type="MeshInstance3D" parent="."]
+position = Vector3(0.72, 1.1, 0.42)
+scale = Vector3(0.07, 2.2, 0.07)
+mesh = SubResource("box")
+material_override = SubResource("metal")
+[node name="ShelfBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.15, 0.21)
+scale = Vector3(1.5, 0.07, 0.55)
+mesh = SubResource("box")
+material_override = SubResource("metal")
+[node name="ShelfLow" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.72, 0.21)
+scale = Vector3(1.5, 0.07, 0.55)
+mesh = SubResource("box")
+material_override = SubResource("metal")
+[node name="ShelfMiddle" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.3, 0.21)
+scale = Vector3(1.5, 0.07, 0.55)
+mesh = SubResource("box")
+material_override = SubResource("metal")
+[node name="ShelfTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.9, 0.21)
+scale = Vector3(1.5, 0.07, 0.55)
+mesh = SubResource("box")
+material_override = SubResource("metal")
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.1, 0.21)
+shape = SubResource("collision_shape")

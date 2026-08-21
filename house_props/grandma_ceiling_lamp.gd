@@ -4,7 +4,11 @@ extends Node3D
 @onready var downward_halo: SpotLight3D = $DownwardHalo
 @onready var glowing_bulb: MeshInstance3D = $WarmBulb
 
-var is_on := true
+var is_on := false
+
+
+func _ready() -> void:
+	set_lamp_enabled(false)
 
 
 func _process(_delta: float) -> void:

@@ -1,0 +1,69 @@
+[gd_scene load_steps=8 format=3]
+
+[sub_resource type="StandardMaterial3D" id="cloth"]
+albedo_color = Color(0.57, 0.5, 0.4, 1)
+roughness = 0.96
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.17, 0.075, 0.025, 1)
+roughness = 0.9
+[sub_resource type="CylinderMesh" id="cylinder"]
+top_radius = 0.5
+bottom_radius = 0.5
+height = 1.0
+radial_segments = 10
+[sub_resource type="SphereMesh" id="sphere"]
+radius = 0.5
+height = 1.0
+radial_segments = 12
+rings = 6
+[sub_resource type="BoxMesh" id="box"]
+[sub_resource type="CylinderMesh" id="base"]
+top_radius = 0.38
+bottom_radius = 0.48
+height = 0.09
+radial_segments = 14
+[sub_resource type="CapsuleShape3D" id="collision_shape"]
+radius = 0.42
+height = 1.9
+
+[node name="OldDressMannequin" type="StaticBody3D"]
+editor_description = "Maniqui antiguo de costura con torso de tela, brazos articulados y peana de madera."
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.045, 0)
+mesh = SubResource("base")
+material_override = SubResource("wood")
+[node name="Stand" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.72, 0)
+scale = Vector3(0.055, 1.35, 0.055)
+mesh = SubResource("cylinder")
+material_override = SubResource("wood")
+[node name="Torso" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.55, 0)
+scale = Vector3(0.48, 0.72, 0.28)
+mesh = SubResource("sphere")
+material_override = SubResource("cloth")
+[node name="Waist" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.15, 0)
+scale = Vector3(0.28, 0.28, 0.22)
+mesh = SubResource("sphere")
+material_override = SubResource("cloth")
+[node name="Neck" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.98, 0)
+scale = Vector3(0.11, 0.2, 0.11)
+mesh = SubResource("cylinder")
+material_override = SubResource("wood")
+[node name="LeftArm" type="MeshInstance3D" parent="."]
+position = Vector3(-0.46, 1.48, 0)
+rotation = Vector3(0, 0, -0.16)
+scale = Vector3(0.075, 0.75, 0.075)
+mesh = SubResource("cylinder")
+material_override = SubResource("wood")
+[node name="RightArm" type="MeshInstance3D" parent="."]
+position = Vector3(0.46, 1.48, 0)
+rotation = Vector3(0, 0, 0.16)
+scale = Vector3(0.075, 0.75, 0.075)
+mesh = SubResource("cylinder")
+material_override = SubResource("wood")
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.05, 0)
+shape = SubResource("collision_shape")

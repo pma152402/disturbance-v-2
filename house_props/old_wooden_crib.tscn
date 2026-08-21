@@ -1,0 +1,61 @@
+[gd_scene load_steps=5 format=3]
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.32, 0.17, 0.07, 1)
+roughness = 0.9
+[sub_resource type="StandardMaterial3D" id="mattress"]
+albedo_color = Color(0.58, 0.54, 0.42, 1)
+roughness = 1.0
+[sub_resource type="BoxMesh" id="box"]
+[sub_resource type="BoxShape3D" id="collision_shape"]
+size = Vector3(1.65, 1.35, 1.0)
+[node name="OldWoodenCrib" type="StaticBody3D"]
+editor_description = "Cuna antigua de madera con barrotes, cabeceros altos y colchon envejecido."
+[node name="Mattress" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.55, 0)
+scale = Vector3(1.35, 0.16, 0.7)
+mesh = SubResource("box")
+material_override = SubResource("mattress")
+[node name="LeftEnd" type="MeshInstance3D" parent="."]
+position = Vector3(-0.76, 0.85, 0)
+scale = Vector3(0.1, 1.25, 0.9)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="RightEnd" type="MeshInstance3D" parent="."]
+position = Vector3(0.76, 0.85, 0)
+scale = Vector3(0.1, 1.25, 0.9)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="FrontRailTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.13, -0.4)
+scale = Vector3(1.5, 0.09, 0.09)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="BackRailTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.13, 0.4)
+scale = Vector3(1.5, 0.09, 0.09)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="FrontBars" type="Node3D" parent="."]
+[node name="Bar1" type="MeshInstance3D" parent="FrontBars"]
+position = Vector3(-0.5, 0.82, -0.4)
+scale = Vector3(0.045, 0.58, 0.045)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="Bar2" type="MeshInstance3D" parent="FrontBars"]
+position = Vector3(-0.17, 0.82, -0.4)
+scale = Vector3(0.045, 0.58, 0.045)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="Bar3" type="MeshInstance3D" parent="FrontBars"]
+position = Vector3(0.17, 0.82, -0.4)
+scale = Vector3(0.045, 0.58, 0.045)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="Bar4" type="MeshInstance3D" parent="FrontBars"]
+position = Vector3(0.5, 0.82, -0.4)
+scale = Vector3(0.045, 0.58, 0.045)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.68, 0)
+shape = SubResource("collision_shape")

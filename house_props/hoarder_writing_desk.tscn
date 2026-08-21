@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3]
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.24, 0.105, 0.035, 1)
+roughness = 0.88
+[sub_resource type="StandardMaterial3D" id="brass"]
+albedo_color = Color(0.48, 0.3, 0.07, 1)
+metallic = 0.55
+roughness = 0.4
+[sub_resource type="BoxMesh" id="box"]
+[sub_resource type="BoxShape3D" id="collision_shape"]
+size = Vector3(1.65, 0.9, 0.72)
+[node name="HoarderWritingDesk" type="StaticBody3D"]
+editor_description = "Escritorio de madera gastada con cajonera lateral, travesano y tiradores."
+[node name="Top" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.82, 0)
+scale = Vector3(1.65, 0.12, 0.72)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="BackPanel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.48, 0.31)
+scale = Vector3(1.5, 0.62, 0.08)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="LeftLeg" type="MeshInstance3D" parent="."]
+position = Vector3(-0.7, 0.4, 0)
+scale = Vector3(0.12, 0.8, 0.12)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="RightCabinet" type="MeshInstance3D" parent="."]
+position = Vector3(0.58, 0.4, 0)
+scale = Vector3(0.48, 0.78, 0.62)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="DrawerTop" type="MeshInstance3D" parent="."]
+position = Vector3(0.58, 0.65, -0.325)
+scale = Vector3(0.4, 0.2, 0.035)
+mesh = SubResource("box")
+material_override = SubResource("brass")
+[node name="DrawerBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0.58, 0.35, -0.325)
+scale = Vector3(0.4, 0.22, 0.035)
+mesh = SubResource("box")
+material_override = SubResource("brass")
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.45, 0)
+shape = SubResource("collision_shape")

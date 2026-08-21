@@ -1,0 +1,167 @@
+[gd_scene format=3 uid="uid://dc4rxm4ikli7i"]
+
+[sub_resource type="StandardMaterial3D" id="leather"]
+albedo_color = Color(0.19, 0.045, 0.025, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="box"]
+
+[sub_resource type="StandardMaterial3D" id="paper"]
+albedo_color = Color(0.62, 0.55, 0.4, 1)
+
+[sub_resource type="StandardMaterial3D" id="gold"]
+albedo_color = Color(0.5, 0.29, 0.06, 1)
+metallic = 0.68
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="ink"]
+albedo_color = Color(0.075, 0.045, 0.025, 1)
+
+[sub_resource type="CylinderMesh" id="cylinder"]
+height = 1.0
+radial_segments = 12
+
+[sub_resource type="StandardMaterial3D" id="cone"]
+albedo_color = Color(0.52, 0.17, 0.025, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="glass"]
+transparency = 1
+albedo_color = Color(0.18, 0.3, 0.25, 0.65)
+roughness = 0.28
+
+[node name="HoarderRitualClutter" type="Node3D" unique_id=582813920]
+editor_description = "Parafernalia de acumulador: Biblia abierta, caliz, cono viejo, papeles y frascos."
+
+[node name="OpenBible" type="Node3D" parent="." unique_id=2082582357]
+
+[node name="Cover" type="MeshInstance3D" parent="OpenBible" unique_id=544609605]
+transform = Transform3D(0.72, 0, 0, 0, 0.05, 0, 0, 0, 0.46, 0, 0.035, 0)
+material_override = SubResource("leather")
+mesh = SubResource("box")
+
+[node name="LeftPages" type="MeshInstance3D" parent="OpenBible" unique_id=1313794855]
+transform = Transform3D(0.33830142, 0.0034941698, 0, -0.033943363, 0.034825146, 0, 0, 0, 0.42, -0.19, 0.085, -0.01)
+material_override = SubResource("paper")
+mesh = SubResource("box")
+
+[node name="RightPages" type="MeshInstance3D" parent="OpenBible" unique_id=1518030689]
+transform = Transform3D(0.33830142, -0.0034941698, 0, 0.033943363, 0.034825146, 0, 0, 0, 0.42, 0.19, 0.085, -0.01)
+material_override = SubResource("paper")
+mesh = SubResource("box")
+
+[node name="Spine" type="MeshInstance3D" parent="OpenBible" unique_id=1911260253]
+transform = Transform3D(0.035, 0, 0, 0, 0.05, 0, 0, 0, 0.43, 0, 0.105, 0)
+material_override = SubResource("gold")
+mesh = SubResource("box")
+
+[node name="PageLinesLeft" type="MeshInstance3D" parent="OpenBible" unique_id=480422128]
+transform = Transform3D(0.24, 0, 0, 0, 0.008, 0, 0, 0, 0.025, -0.19, 0.11, -0.018859453)
+material_override = SubResource("ink")
+mesh = SubResource("box")
+
+[node name="PageLinesLeft2" type="MeshInstance3D" parent="OpenBible" unique_id=976055953]
+transform = Transform3D(0.11075765, 0, 0, 0, 0.008, 0, 0, 0, 0.025, -0.177107, 0.11, 0.053682648)
+material_override = SubResource("ink")
+mesh = SubResource("box")
+
+[node name="PageLinesLeft4" type="MeshInstance3D" parent="OpenBible" unique_id=1993890412]
+transform = Transform3D(0.11075765, 0, 0, 0, 0.008, 0, 0, 0, 0.025, 0.121842116, 0.11, 0.053682648)
+material_override = SubResource("ink")
+mesh = SubResource("box")
+
+[node name="PageLinesLeft10" type="MeshInstance3D" parent="OpenBible" unique_id=1343186502]
+transform = Transform3D(0.11075765, 0, 0, 0, 0.008, 0, 0, 0, 0.025, 0.21319965, 0.11, -0.09002692)
+material_override = SubResource("ink")
+mesh = SubResource("box")
+
+[node name="PageLinesLeft11" type="MeshInstance3D" parent="OpenBible" unique_id=1168893939]
+transform = Transform3D(0.1925722, 0, 0, 0, 0.008, 0, 0, 0, 0.025, 0.18389043, 0.11, -0.15408102)
+material_override = SubResource("ink")
+mesh = SubResource("box")
+
+[node name="PageLinesLeft3" type="MeshInstance3D" parent="OpenBible" unique_id=2092109325]
+transform = Transform3D(0.24, 0, 0, 0, 0.008, 0, 0, 0, 0.025, -0.15889004, 0.11, 0.13417852)
+material_override = SubResource("ink")
+mesh = SubResource("box")
+
+[node name="PageLinesLeft14" type="MeshInstance3D" parent="OpenBible" unique_id=776109002]
+transform = Transform3D(0.18768315, 0, 0, 0, 0.008, 0, 0, 0, 0.025, 0.15375799, 0.11, 0.13417852)
+material_override = SubResource("ink")
+mesh = SubResource("box")
+
+[node name="PageLinesLeft5" type="MeshInstance3D" parent="OpenBible" unique_id=219222938]
+transform = Transform3D(0.24, 0, 0, 0, 0.008, 0, 0, 0, 0.025, -0.1850654, 0.11, -0.083100945)
+material_override = SubResource("ink")
+mesh = SubResource("box")
+
+[node name="PageLinesLeft6" type="MeshInstance3D" parent="OpenBible" unique_id=1336184652]
+transform = Transform3D(0.11741379, 0, 0, 0, 0.008, 0, 0, 0, 0.025, -0.27174774, 0.11, -0.15546122)
+material_override = SubResource("ink")
+mesh = SubResource("box")
+
+[node name="PageLinesLeft7" type="MeshInstance3D" parent="OpenBible" unique_id=1933812623]
+transform = Transform3D(0.11910796, 0, 0, 0, 0.008, 0, 0, 0, 0.025, -0.12838422, 0.11, -0.15546122)
+material_override = SubResource("ink")
+mesh = SubResource("box")
+
+[node name="PageLinesLeft8" type="MeshInstance3D" parent="OpenBible" unique_id=806047865]
+transform = Transform3D(0.071462594, 0, 0, 0, 0.008, 0, 0, 0, 0.025, -0.28564602, 0.11, 0.052563906)
+material_override = SubResource("ink")
+mesh = SubResource("box")
+
+[node name="PageLinesLeft12" type="MeshInstance3D" parent="OpenBible" unique_id=1961092297]
+transform = Transform3D(0.071462594, 0, 0, 0, 0.008, 0, 0, 0, 0.025, 0.23764229, 0.11, 0.052563906)
+material_override = SubResource("ink")
+mesh = SubResource("box")
+
+[node name="PageLinesLeft13" type="MeshInstance3D" parent="OpenBible" unique_id=914412502]
+transform = Transform3D(0.071462594, 0, 0, 0, 0.008, 0, 0, 0, 0.025, 0.10118002, 0.11, -0.08896008)
+material_override = SubResource("ink")
+mesh = SubResource("box")
+
+[node name="PageLinesLeft9" type="MeshInstance3D" parent="OpenBible" unique_id=577449339]
+transform = Transform3D(0.04027979, 0, 0, 0, 0.008, 0, 0, 0, 0.025, -0.08381906, 0.11, 0.057352245)
+material_override = SubResource("ink")
+mesh = SubResource("box")
+
+[node name="PageLinesRight" type="MeshInstance3D" parent="OpenBible" unique_id=783399830]
+transform = Transform3D(0.24, 0, 0, 0, 0.008, 0, 0, 0, 0.025, 0.19, 0.11, -0.018326886)
+material_override = SubResource("ink")
+mesh = SubResource("box")
+
+[node name="Chalice" type="Node3D" parent="." unique_id=35215243]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0.05)
+
+[node name="Base" type="MeshInstance3D" parent="Chalice" unique_id=301262980]
+transform = Transform3D(0.24, 0, 0, 0, 0.07, 0, 0, 0, 0.24, 0, 0.035, 0)
+material_override = SubResource("gold")
+mesh = SubResource("cylinder")
+
+[node name="Stem" type="MeshInstance3D" parent="Chalice" unique_id=2061425691]
+transform = Transform3D(0.07, 0, 0, 0, 0.34, 0, 0, 0, 0.07, 0, 0.22, 0)
+material_override = SubResource("gold")
+mesh = SubResource("cylinder")
+
+[node name="Cup" type="MeshInstance3D" parent="Chalice" unique_id=1492393239]
+transform = Transform3D(0.29, 0, 0, 0, 0.24, 0, 0, 0, 0.29, 0, 0.47, 0)
+material_override = SubResource("gold")
+mesh = SubResource("cylinder")
+
+[node name="OldCone" type="Node3D" parent="." unique_id=1204535831]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0, 0.55)
+
+[node name="Foot" type="MeshInstance3D" parent="OldCone" unique_id=416700916]
+transform = Transform3D(0.62, 0, 0, 0, 0.07, 0, 0, 0, 0.62, 0, 0.035, 0)
+material_override = SubResource("cone")
+mesh = SubResource("box")
+
+[node name="LoosePapers" type="MeshInstance3D" parent="." unique_id=1044225742]
+transform = Transform3D(1.1272473, 0, 0.24688643, 0, 0.018, 0, -0.4114774, 0, 0.6763484, 0.1, 0.02, 0.85)
+material_override = SubResource("paper")
+mesh = SubResource("box")
+
+[node name="OddJar" type="MeshInstance3D" parent="." unique_id=716643465]
+transform = Transform3D(0.24, 0, 0, 0, 0.5, 0, 0, 0, 0.24, 1.15, 0.25, 0.65)
+material_override = SubResource("glass")
+mesh = SubResource("cylinder")

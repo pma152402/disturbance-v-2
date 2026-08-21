@@ -96,6 +96,13 @@
 [ext_resource type="Texture2D" uid="uid://dvamc5vecdexr" path="res://assets/pictures/klimt_the_kiss.jpg" id="118_klimt"]
 [ext_resource type="Texture2D" uid="uid://dvikpxe0r043k" path="res://assets/pictures/goya_saturn.jpg" id="119_goya_saturn"]
 [ext_resource type="Texture2D" uid="uid://b00x17eoufrrf" path="res://assets/pictures/rubens_saturn.png" id="120_rubens_saturn"]
+[ext_resource type="PackedScene" path="res://house_props/old_dress_mannequin.tscn" id="121_mannequin"]
+[ext_resource type="PackedScene" path="res://house_props/hoarder_trash_bags.tscn" id="122_trash_bags"]
+[ext_resource type="PackedScene" path="res://house_props/hoarder_writing_desk.tscn" id="123_writing_desk"]
+[ext_resource type="PackedScene" path="res://house_props/worn_study_armchair.tscn" id="124_study_armchair"]
+[ext_resource type="PackedScene" path="res://house_props/standing_metal_shelving.tscn" id="125_metal_shelving"]
+[ext_resource type="PackedScene" path="res://house_props/old_wooden_crib.tscn" id="126_old_crib"]
+[ext_resource type="PackedScene" uid="uid://dc4rxm4ikli7i" path="res://house_props/hoarder_ritual_clutter.tscn" id="127_ritual_clutter"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lrwhq"]
 albedo_color = Color(0.44, 0.43, 0.39, 1)
@@ -130,7 +137,7 @@ size = Vector3(8.18191, 0.04, 22)
 material = SubResource("StandardMaterial3D_menbl")
 size = Vector3(4.6, 0.04, 5.5)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3ench"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uawfn"]
 render_priority = 0
 shader = ExtResource("37_wall_band")
 shader_parameter/upper_white = Color(0.96, 0.955, 0.94, 1)
@@ -1063,10 +1070,6 @@ size = Vector3(0.22, 1.25, 2.8)
 [sub_resource type="BoxShape3D" id="BoxShape3D_gland"]
 size = Vector3(0.22, 1.25, 2.8)
 
-[sub_resource type="BoxMesh" id="BoxMesh_ixgxx"]
-material = SubResource("StandardMaterial3D_l4kqb")
-size = Vector3(0.27, 0.24, 2.8)
-
 [sub_resource type="BoxMesh" id="BoxMesh_idobk"]
 material = SubResource("StandardMaterial3D_dc85j")
 size = Vector3(0.035, 1.7, 2.68)
@@ -1074,21 +1077,13 @@ size = Vector3(0.035, 1.7, 2.68)
 [sub_resource type="BoxShape3D" id="BoxShape3D_g7onf"]
 size = Vector3(0.035, 1.7, 2.68)
 
-[sub_resource type="BoxMesh" id="BoxMesh_7svug"]
-material = SubResource("StandardMaterial3D_l4kqb")
-size = Vector3(0.22, 0.09, 2.8)
-
-[sub_resource type="BoxMesh" id="BoxMesh_y4tsg"]
-material = SubResource("StandardMaterial3D_l4kqb")
-size = Vector3(0.22, 0.09, 2.8)
-
 [sub_resource type="BoxMesh" id="BoxMesh_drt48"]
 material = SubResource("StandardMaterial3D_l4kqb")
 size = Vector3(0.22, 1.7, 0.09)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wb1fk"]
 material = SubResource("StandardMaterial3D_fshbq")
-size = Vector3(0.22, 4, 9.7)
+size = Vector3(0.22, 4, 10.161524)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kkc6d"]
 size = Vector3(0.22, 4, 9.7)
@@ -1294,7 +1289,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.85, 2, 11)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/Wall_02" unique_id=62794170]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25219727, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_iwdyr")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/Wall_02" unique_id=192460172]
@@ -1308,7 +1303,7 @@ mesh = SubResource("BoxMesh_wbmjk")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.35, 11)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/FrontDoorLintel" unique_id=686164312]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_wgvm5")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/FrontDoorLintel" unique_id=1959482150]
@@ -1322,7 +1317,7 @@ mesh = SubResource("BoxMesh_jnqio")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.85, 2, 11)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/Wall_03" unique_id=240172313]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_x5jej")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/Wall_03" unique_id=2029012568]
@@ -1336,7 +1331,7 @@ mesh = SubResource("BoxMesh_0ug75")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.525, 11)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/WindowLowerWall_02" unique_id=1985732029]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_qtaom")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/WindowLowerWall_02" unique_id=206774516]
@@ -1350,7 +1345,7 @@ mesh = SubResource("BoxMesh_4l5k1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 3.375, 11)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/WindowUpperWall_02" unique_id=219862925]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_qoxe2")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/WindowUpperWall_02" unique_id=1455735771]
@@ -1386,7 +1381,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2, 2, 11)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/Wall_04" unique_id=711610025]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8983393, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_n2e5h")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/Wall_04" unique_id=670675513]
@@ -1401,7 +1396,7 @@ mesh = SubResource("BoxMesh_p0pbi")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.2, 2, -11)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/Wall_05" unique_id=1075072900]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_b2v2v")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/Wall_05" unique_id=513457116]
@@ -1415,7 +1410,7 @@ mesh = SubResource("BoxMesh_gsaaw")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.525, -11)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/WindowLowerWall_03" unique_id=1540438047]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_mfbg2")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/WindowLowerWall_03" unique_id=1143047346]
@@ -1429,7 +1424,7 @@ mesh = SubResource("BoxMesh_nylyt")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 3.375, -11)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/WindowUpperWall_03" unique_id=1277737230]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_geukx")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/WindowUpperWall_03" unique_id=270244929]
@@ -1465,7 +1460,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -11)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/Wall_06" unique_id=178894057]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2619748, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_3ench")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/Wall_06" unique_id=85335761]
@@ -1489,7 +1484,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2, 2, -11)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 2, -9.2)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/Wall_08" unique_id=1172951282]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_tx6ck")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/Wall_08" unique_id=1940193324]
@@ -1503,7 +1498,7 @@ mesh = SubResource("BoxMesh_sfi4n")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 0.525, -6)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/WindowLowerWall_05" unique_id=487354815]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_wb52u")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/WindowLowerWall_05" unique_id=2101874919]
@@ -1517,7 +1512,7 @@ mesh = SubResource("BoxMesh_03bn6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 3.375, -6)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/WindowUpperWall_05" unique_id=2099467888]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_muw6p")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/WindowUpperWall_05" unique_id=229026734]
@@ -1552,7 +1547,7 @@ mesh = SubResource("BoxMesh_wjisp")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 2, -0.75)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/Wall_09" unique_id=749142803]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_ruevc")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/Wall_09" unique_id=1478256685]
@@ -1567,7 +1562,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 0.525, 4.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/WindowLowerWall_06" unique_id=1210466447]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0007815, 0, 3.5286093)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_a31sn")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/WindowLowerWall_06" unique_id=702164576]
@@ -1582,7 +1577,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 3.375, 4.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/WindowUpperWall_06" unique_id=428096767]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0082154, 0, 3.5286093)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_ahgn4")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/WindowUpperWall_06" unique_id=2123165629]
@@ -1618,7 +1613,7 @@ mesh = SubResource("BoxMesh_splts")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 2, 8.45)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/Wall_10" unique_id=340131533]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_7ljhm")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/Wall_10" unique_id=834470360]
@@ -1645,7 +1640,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 2, 3.75)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/Wall_13" unique_id=979305573]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9070663, 0, -1.2139833)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_ua2yh")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/Wall_13" unique_id=810627468]
@@ -1657,7 +1652,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.4440838, 13, 2, -4.1307664)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/Wall_15" unique_id=1465019851]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9070663, 0, -1.1304033)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_ua2yh")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/Wall_15" unique_id=2054980535]
@@ -1668,7 +1663,7 @@ shape = SubResource("BoxShape3D_jxxnf")
 transform = Transform3D(0.0059838705, 0, -0.99998224, 0, 1, 0, 0.99998224, 0, 0.0059838705, 6.994165, 2, 2.0246193)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/DetachedWall13Extension" unique_id=1496977725]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_75lld")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/DetachedWall13Extension" unique_id=690329875]
@@ -1684,7 +1679,7 @@ mesh = SubResource("BoxMesh_chf20")
 
 [node name="Mesh4" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls" unique_id=335039555]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.098782, 0.525, -1.9231844)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_xdsa7")
 
 [node name="WindowLowerWall_09" type="StaticBody3D" parent="GroundFloor/ExteriorWalls" unique_id=837253170]
@@ -1692,7 +1687,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0.525, 7)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/WindowLowerWall_09" unique_id=1708098340]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9012184, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_xdsa7")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/WindowLowerWall_09" unique_id=1549360103]
@@ -1704,7 +1699,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 3.375, 7)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/WindowUpperWall_09" unique_id=1559389651]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9046993, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_m3mbh")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/WindowUpperWall_09" unique_id=92107921]
@@ -1716,7 +1711,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 3.375, -1.900507)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/WindowUpperWall_10" unique_id=202485071]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9046993, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_m3mbh")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/WindowUpperWall_10" unique_id=994650119]
@@ -1787,7 +1782,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 2, 9.7)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ExteriorWalls/Wall_14" unique_id=2115684520]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.894208, 0, -0.027246475)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_jjyb4")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ExteriorWalls/Wall_14" unique_id=451381266]
@@ -1800,7 +1795,7 @@ shape = SubResource("BoxShape3D_k0tqj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, -5.8)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/Wall" unique_id=743181492]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_cc812")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/Wall" unique_id=443037853]
@@ -1814,7 +1809,7 @@ mesh = SubResource("BoxMesh_2hixs")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 3.35, 0.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/KitchenDoorLintel" unique_id=2140946303]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_yl2gr")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/KitchenDoorLintel" unique_id=362860421]
@@ -1829,7 +1824,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, 6.3)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/Wall_02" unique_id=791275986]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5940626, 0, -7.2695313)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_2afeb")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/Wall_02" unique_id=1613294005]
@@ -1845,7 +1840,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.40674993, 4, 2, 0.62969816)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/Wall_03" unique_id=744282225]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0876582, 0.07470703, 2.1362553)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_yb3dn")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/Wall_03" unique_id=1097486493]
@@ -1857,7 +1852,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.29610792, 4, 2, -9.078947)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/Wall_04" unique_id=1351583836]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.5140624, -1.0723372, 0.07470703, 5.6050873)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_yb3dn")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/Wall_04" unique_id=610608011]
@@ -1877,7 +1872,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3.35, 1.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/LivingRoomDoorLintel" unique_id=854478714]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0780284, 0.09593582, 6.265298)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_eh1f8")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/LivingRoomDoorLintel" unique_id=1671164078]
@@ -1893,7 +1888,7 @@ transform = Transform3D(1, 0, 0, 0, 0.010716905, 0.9999426, 0, -0.9999426, 0.010
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/ReceptionFrontWallPiece" unique_id=1491049320]
 transform = Transform3D(1.1472749, 0, 0, 0, 1.0104262, 0, 0, 0, 1.0654473, -0.034286737, -1.335144e-05, 0.90605587)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_reception_front_piece")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/ReceptionFrontWallPiece" unique_id=1076142776]
@@ -1904,7 +1899,7 @@ shape = SubResource("BoxShape3D_reception_front_piece")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.55, 2, -6)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/Wall_05" unique_id=1208780694]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_a8hfu")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/Wall_05" unique_id=322006773]
@@ -1918,7 +1913,7 @@ mesh = SubResource("BoxMesh_riql6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.35, -6)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/BasementDoorLintel" unique_id=1472131575]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_ym15i")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/BasementDoorLintel" unique_id=1359122198]
@@ -1929,7 +1924,7 @@ transform = Transform3D(-0.004258756, 0, -0.999991, 0, 1, 0, 0.999991, 0, -0.004
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/BasementDoorLintel2" unique_id=1242273281]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.008887053, 0, -0.013257265)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_ym15i")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/BasementDoorLintel2" unique_id=556527478]
@@ -1944,7 +1939,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.55, 2, -6)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/Wall_06" unique_id=1106679573]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.603721, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_mvttv")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/Wall_06" unique_id=1364225328]
@@ -1969,7 +1964,7 @@ mesh = SubResource("BoxMesh_hq3e8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 2, 5.075)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/EntryLeftRoom/DoorWallRear" unique_id=533138109]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_entry_left_door_rear")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/EntryLeftRoom/DoorWallRear" unique_id=1781283338]
@@ -1987,7 +1982,7 @@ mesh = SubResource("BoxMesh_xtfwc")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 2, 9.77)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/EntryLeftRoom/DoorWallFront" unique_id=1048005213]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_entry_left_door_front")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/EntryLeftRoom/DoorWallFront" unique_id=1524299433]
@@ -2001,7 +1996,7 @@ mesh = SubResource("BoxMesh_entry_left_door_front_baseboard")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 3.45, 7.32)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/EntryLeftRoom/DoorLintel" unique_id=1808013326]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_entry_left_door_lintel")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/EntryLeftRoom/DoorLintel" unique_id=12668752]
@@ -2011,7 +2006,7 @@ shape = SubResource("BoxShape3D_entry_left_door_lintel")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.7, 2, 5)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/EntryLeftRoom/BackWall" unique_id=701902833]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_entry_left_room_back")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/EntryLeftRoom/BackWall" unique_id=1782116347]
@@ -2026,12 +2021,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 2, 8)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/EntryLeftRoom/WestWall" unique_id=1141468824]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.7284294, 0, 0, -2.1936522)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_entry_left_room_west")
 
 [node name="Mesh2" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/EntryLeftRoom/WestWall" unique_id=457178062]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.6194891, 0, 0, 2.2497368)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_entry_left_room_west")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/EntryLeftRoom/WestWall" unique_id=1310482591]
@@ -2047,7 +2042,7 @@ mesh = SubResource("BoxMesh_entry_left_room_west_baseboard")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -10.85)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/BasementEntrance/BasementBackWall" unique_id=509272024]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_tkxxf")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/BasementEntrance/BasementBackWall" unique_id=1477262905]
@@ -2171,7 +2166,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 6.2, 11)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/Wall_02" unique_id=1797418319]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.60234356, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_ohaue")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/Wall_02" unique_id=1024940381]
@@ -2185,7 +2180,7 @@ mesh = SubResource("BoxMesh_18860")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.725, 11)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_02" unique_id=2030073682]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_dwq8i")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_02" unique_id=819692604]
@@ -2199,7 +2194,7 @@ mesh = SubResource("BoxMesh_5613w")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.575, 11)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_02" unique_id=2004882527]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_1gp2d")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_02" unique_id=1314021670]
@@ -2234,7 +2229,7 @@ mesh = SubResource("BoxMesh_unby4")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 6.2, 11)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/Wall_03" unique_id=1481534704]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_fs1nt")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/Wall_03" unique_id=197470908]
@@ -2248,7 +2243,7 @@ mesh = SubResource("BoxMesh_gch3n")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 4.725, 11)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_03" unique_id=847414585]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_tlh22")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_03" unique_id=679951338]
@@ -2262,7 +2257,7 @@ mesh = SubResource("BoxMesh_nmsqc")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 7.575, 11)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_03" unique_id=972359132]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_6avnv")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_03" unique_id=488461714]
@@ -2297,7 +2292,7 @@ mesh = SubResource("BoxMesh_4e2a4")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2, 6.2, 11)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/Wall_04" unique_id=442733593]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_3jlgt")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/Wall_04" unique_id=84861454]
@@ -2332,7 +2327,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, -11)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/Wall_06" unique_id=159659052]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.60721445, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_cbwu5")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/Wall_06" unique_id=363153294]
@@ -2346,7 +2341,7 @@ mesh = SubResource("BoxMesh_t2vro")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 4.725, -11)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_05" unique_id=1075823868]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_bn5yj")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_05" unique_id=279580094]
@@ -2360,7 +2355,7 @@ mesh = SubResource("BoxMesh_drhgn")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 7.575, -11)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_05" unique_id=387993203]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_k1fik")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_05" unique_id=1947009619]
@@ -2395,7 +2390,7 @@ mesh = SubResource("BoxMesh_dhama")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2, 6.2, -11)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/Wall_07" unique_id=409879563]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_osfvl")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/Wall_07" unique_id=1539279759]
@@ -2410,7 +2405,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 6.2, -8.95)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/Wall_08" unique_id=555972351]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_gxa4i")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/Wall_08" unique_id=341868882]
@@ -2426,7 +2421,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 4.725, -5.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_06" unique_id=273911341]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7181506, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_n44cq")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_06" unique_id=189503833]
@@ -2442,7 +2437,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 7.575, -5.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_06" unique_id=1644143772]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_o64iw")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_06" unique_id=770704286]
@@ -2481,7 +2476,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 6.2, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/Wall_09" unique_id=378979391]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_4wycd")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/Wall_09" unique_id=663283244]
@@ -2497,7 +2492,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 4.725, 5.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_07" unique_id=1244906811]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_1qe1w")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_07" unique_id=1259056607]
@@ -2513,7 +2508,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 7.575, 5.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_07" unique_id=872988444]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_mtehu")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_07" unique_id=1313264108]
@@ -2552,7 +2547,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 6.2, 8.95)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/Wall_10" unique_id=449413641]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0, 0)
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_ng16w")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/Wall_10" unique_id=1138393071]
@@ -2567,7 +2562,7 @@ mesh = SubResource("BoxMesh_6wlrl")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 6.2, -8.95)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/Wall_11" unique_id=34266247]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_380o2")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/Wall_11" unique_id=719623077]
@@ -2581,7 +2576,7 @@ mesh = SubResource("BoxMesh_sl3qm")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 4.725, -5.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_08" unique_id=411018056]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_va55x")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_08" unique_id=793649317]
@@ -2595,15 +2590,11 @@ mesh = SubResource("BoxMesh_mp61b")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 7.575, -5.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_08" unique_id=1428048862]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_txmt0")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_08" unique_id=216182597]
 shape = SubResource("BoxShape3D_gland")
-
-[node name="WindowUpperWallBaseboard_08" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls" unique_id=1421884934]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 7.0699997, -5.5)
-mesh = SubResource("BoxMesh_ixgxx")
 
 [node name="WindowGlass_08" type="StaticBody3D" parent="UpperFloor/ExteriorWalls" unique_id=763542836]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 6.1, -5.5)
@@ -2614,14 +2605,6 @@ mesh = SubResource("BoxMesh_idobk")
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowGlass_08" unique_id=615864565]
 shape = SubResource("BoxShape3D_g7onf")
 
-[node name="WindowFrameBottom_08" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls" unique_id=1976332240]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 5.25, -5.5)
-mesh = SubResource("BoxMesh_7svug")
-
-[node name="WindowFrameTop_08" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls" unique_id=1156860875]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 6.95, -5.5)
-mesh = SubResource("BoxMesh_y4tsg")
-
 [node name="WindowFrameMiddle_08" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls" unique_id=237672332]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 6.1, -5.5)
 mesh = SubResource("BoxMesh_drt48")
@@ -2630,7 +2613,8 @@ mesh = SubResource("BoxMesh_drt48")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 6.2, 0.75)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/Wall_12" unique_id=4153203]
-material_override = SubResource("ShaderMaterial_3ench")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.230762)
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_wb1fk")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/Wall_12" unique_id=653027638]
@@ -2644,7 +2628,7 @@ mesh = SubResource("BoxMesh_pjgtb")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 4.725, 7)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_09" unique_id=1525685092]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_xk6sx")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_09" unique_id=151386061]
@@ -2658,7 +2642,7 @@ mesh = SubResource("BoxMesh_mdlof")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 7.575, 7)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_09" unique_id=969552165]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_c8r6l")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_09" unique_id=1088518778]
@@ -2693,7 +2677,7 @@ mesh = SubResource("BoxMesh_0q6cu")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 6.2, 9.7)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/Wall_13" unique_id=707352072]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_1vnk4")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/Wall_13" unique_id=1808393795]
@@ -2709,7 +2693,7 @@ mesh = SubResource("BoxMesh_lapnc")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 6.2, -7.05)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/Landing/Wall_03" unique_id=1183076650]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_i23k7")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/Landing/Wall_03" unique_id=636595927]
@@ -2723,7 +2707,7 @@ mesh = SubResource("BoxMesh_birxc")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 7.5499997, -2)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/Landing/BedroomDoorLintel" unique_id=710308599]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_icsiy")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/Landing/BedroomDoorLintel" unique_id=1963051348]
@@ -2737,7 +2721,7 @@ mesh = SubResource("BoxMesh_yyi5w")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 6.2, 2.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/Landing/Wall_04" unique_id=1245136390]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_n8fuq")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/Landing/Wall_04" unique_id=1300289822]
@@ -2751,7 +2735,7 @@ mesh = SubResource("BoxMesh_ob7ir")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 7.5499997, 7)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/Landing/BathroomDoorLintel" unique_id=666258161]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_tn675")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/Landing/BathroomDoorLintel" unique_id=573930677]
@@ -2765,7 +2749,7 @@ mesh = SubResource("BoxMesh_web4x")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 6.2, 9.55)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/Landing/Wall_05" unique_id=538092476]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_lj0s1")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/Landing/Wall_05" unique_id=422310059]
@@ -2796,7 +2780,7 @@ photo_texture = ExtResource("120_rubens_saturn")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 6.2, 3)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/RoomDivisions/BedroomBathroomDivider" unique_id=264478179]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_rdm8q")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/RoomDivisions/BedroomBathroomDivider" unique_id=151971304]
@@ -2810,7 +2794,7 @@ mesh = SubResource("BoxMesh_bhwtj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.1, 6.2, -4.6)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/RoomDivisions/BedroomSleepingAreaPartitionLeft" unique_id=1353543774]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_upper_bed_partition_left")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/RoomDivisions/BedroomSleepingAreaPartitionLeft" unique_id=47386914]
@@ -2824,7 +2808,7 @@ mesh = SubResource("BoxMesh_upper_bed_baseboard_left")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.75, 6.2, -4.6)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/RoomDivisions/BedroomSleepingAreaPartitionRight" unique_id=1265895554]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_upper_bed_partition_right")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/RoomDivisions/BedroomSleepingAreaPartitionRight" unique_id=177057089]
@@ -2838,11 +2822,41 @@ mesh = SubResource("BoxMesh_upper_bed_baseboard_right")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.85, 7.675, -4.6)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/RoomDivisions/BedroomSleepingAreaDoorLintel" unique_id=395749307]
-material_override = SubResource("ShaderMaterial_3ench")
+material_override = SubResource("ShaderMaterial_uawfn")
 mesh = SubResource("BoxMesh_upper_bed_partition_lintel")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/RoomDivisions/BedroomSleepingAreaDoorLintel" unique_id=2095988541]
 shape = SubResource("BoxShape3D_upper_bed_partition_lintel")
+
+[node name="UpperHoarderStudy" type="Node3D" parent="UpperFloor" unique_id=348788004]
+editor_description = "Primera habitacion superior convertida en estudio y almacen de acumulador. Objetos separados y editables."
+
+[node name="OldDressMannequin" parent="UpperFloor/UpperHoarderStudy" unique_id=1814460021 instance=ExtResource("121_mannequin")]
+transform = Transform3D(0.94923544, 0, 0.31456655, 0, 1, 0, -0.31456655, 0, 0.94923544, 5.2940826, 4.2, -4.0123205)
+
+[node name="TrashBagsCorner" parent="UpperFloor/UpperHoarderStudy" unique_id=710851673 instance=ExtResource("122_trash_bags")]
+transform = Transform3D(0.63498795, 0, -0.7725221, 0, 1, 0, 0.7725221, 0, 0.63498795, 4.7923393, 4.2, -3.783509)
+
+[node name="TrashBagsRear" parent="UpperFloor/UpperHoarderStudy" unique_id=167414552 instance=ExtResource("122_trash_bags")]
+transform = Transform3D(0.6271706, 0, 0.5282585, 0, 0.82, 0, -0.5282585, 0, 0.6271706, 6.15, 4.2, -9.65)
+
+[node name="WritingDesk" parent="UpperFloor/UpperHoarderStudy" unique_id=1184464017 instance=ExtResource("123_writing_desk")]
+transform = Transform3D(0.89479464, 0, 0.4464779, 0, 1, 0, -0.4464779, 0, 0.89479464, 5.8001585, 4.2, 1.6679118)
+
+[node name="StudyArmchair" parent="UpperFloor/UpperHoarderStudy" unique_id=767593671 instance=ExtResource("124_study_armchair")]
+transform = Transform3D(-0.96725804, -0.2225426, -0.12201133, 0.012254285, 0.43923432, -0.8982889, 0.25349906, -0.8703723, -0.422126, 6.749564, 4.3154645, -1.145507)
+
+[node name="StandingMetalShelving" parent="UpperFloor/UpperHoarderStudy" unique_id=616474003 instance=ExtResource("125_metal_shelving")]
+transform = Transform3D(0.4572941, 0, -1.2544701, 0, 1.0604239, 0, 1.1967529, 0, 0.47934848, 5.0460644, 4.2, -2.5701828)
+
+[node name="StandingMetalShelving2" parent="UpperFloor/UpperHoarderStudy" unique_id=990044439 instance=ExtResource("125_metal_shelving")]
+transform = Transform3D(-1.124326, -0.50832665, -0.008612013, -0.009191895, -0.00025719634, 1.3428987, -0.6141185, 0.9306464, -0.004332672, 9.479811, 4.2616377, 0.096612215)
+
+[node name="OldWoodenCrib" parent="UpperFloor/UpperHoarderStudy" unique_id=561823757 instance=ExtResource("126_old_crib")]
+transform = Transform3D(0.9728829, 0, 0.23129807, 0, 1, 0, -0.23129807, 0, 0.9728829, 6.358129, 3.961749, -2.823331)
+
+[node name="RitualAndHoarderClutter" parent="UpperFloor/UpperHoarderStudy" unique_id=1353577789 instance=ExtResource("127_ritual_clutter")]
+transform = Transform3D(0.96105546, 0, -0.27635565, 0, 1, 0, 0.27635565, 0, 0.96105546, 5.1527195, 4.182333, -0.9679607)
 
 [node name="UpperMasterBedroom" type="Node3D" parent="UpperFloor" unique_id=403341831]
 
@@ -2928,6 +2942,7 @@ mesh = SubResource("BoxMesh_6nupi")
 
 [node name="KitchenLight" type="OmniLight3D" parent="Lights" unique_id=1915489587]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 3.55, -1.5)
+visible = false
 light_color = Color(1, 0.69, 0.37, 1)
 light_energy = 2.2
 omni_range = 7.5
@@ -3062,6 +3077,15 @@ transform = Transform3D(0.010328844, 0, 0.99622035, 0, 1.15056, 0, -1.2631365, 0
 [node name="LivingRoomCurtains5" parent="FurnitureAndPickups" unique_id=1770573835 instance=ExtResource("34_curtains")]
 transform = Transform3D(1.2626045, 0, 0.030038595, 0, 1.15056, 0, -0.038086865, 0, 0.99580073, 8.04288, 4.4140344, 10.778794)
 
+[node name="LivingRoomCurtains6" parent="FurnitureAndPickups" unique_id=678510885 instance=ExtResource("34_curtains")]
+transform = Transform3D(1.2626045, 0, 0.030038595, 0, 1.15056, 0, -0.038086865, 0, 0.99580073, 0.007434452, 4.4140344, 10.633368)
+
+[node name="LivingRoomCurtains7" parent="FurnitureAndPickups" unique_id=2120836925 instance=ExtResource("34_curtains")]
+transform = Transform3D(-0.007478635, 0, -0.99623615, 0, 1.15056, 0, 1.2631567, 0, -0.0058983574, -4.9545584, 4.4140344, 5.523489)
+
+[node name="LivingRoomCurtains8" parent="FurnitureAndPickups" unique_id=1851680617 instance=ExtResource("34_curtains")]
+transform = Transform3D(-0.007478635, 0, -0.99623615, 0, 1.15056, 0, 1.2631567, 0, -0.0058983574, -4.8895054, 4.4140344, -5.464099)
+
 [node name="LivingRoomCurtains3" parent="FurnitureAndPickups" unique_id=610226932 instance=ExtResource("34_curtains")]
 transform = Transform3D(-0.010334402, 0, -0.99622023, 0, 1.15056, 0, 1.2631364, 0, -0.008150669, -6.61513, 0.18095714, 8.04227)
 
@@ -3070,9 +3094,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1925936, 8.242393, 7.24191
 
 [node name="LivingRoomGrandmaCeilingLamp3" parent="FurnitureAndPickups" unique_id=1569385529 instance=ExtResource("35_grandma_lamp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.9443283, 8.242393, 8.447634)
-
-[node name="LivingRoomGrandmaCeilingLamp5" parent="FurnitureAndPickups" unique_id=1188723593 instance=ExtResource("35_grandma_lamp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.9443283, 8.242393, -0.9408009)
 
 [node name="LivingRoomGrandmaCeilingLamp6" parent="FurnitureAndPickups" unique_id=466990947 instance=ExtResource("35_grandma_lamp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.9443283, 8.242393, -7.5627475)
@@ -3320,10 +3341,6 @@ assigned_lamps = Array[NodePath]([NodePath("../FurnitureAndPickups/LivingRoomGra
 [node name="LivingRoomLampSwitch2" parent="." unique_id=1318114046 instance=ExtResource("36_light_switch")]
 transform = Transform3D(-0.019318819, 0, 0.9998133, 0, 1, 0, -0.9998133, 0, -0.019318819, 2.868916, 5.578705, 8.781869)
 assigned_lamps = Array[NodePath]([NodePath("../FurnitureAndPickups/LivingRoomGrandmaCeilingLamp2")])
-
-[node name="LivingRoomLampSwitch3" parent="." unique_id=1984080596 instance=ExtResource("36_light_switch")]
-transform = Transform3D(-0.009615116, 0, -0.99995375, 0, 1, 0, 0.99995375, 0, -0.009615116, 3.117467, 5.578705, -0.37743407)
-assigned_lamps = Array[NodePath]([NodePath("../FurnitureAndPickups/LivingRoomGrandmaCeilingLamp5")])
 
 [node name="LivingRoomLampSwitch4" parent="." unique_id=812195544 instance=ExtResource("36_light_switch")]
 transform = Transform3D(0.99998945, 0, 0.004573133, 0, 1, 0, -0.004573133, 0, 0.99998945, 7.312795, 5.578705, -4.7174163)
