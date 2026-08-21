@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=3]
+[sub_resource type="StandardMaterial3D" id="leather"]
+albedo_color = Color(0.27, 0.105, 0.035, 1)
+roughness = 0.94
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.43, 0.3, 0.12, 1)
+metallic = 0.65
+roughness = 0.4
+[sub_resource type="BoxMesh" id="box"]
+[sub_resource type="TorusMesh" id="handle"]
+inner_radius = 0.13
+outer_radius = 0.17
+rings = 10
+ring_segments = 7
+[node name="WornLeatherSuitcase" type="Node3D"]
+[node name="Case" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.35, 0)
+scale = Vector3(1.0, 0.68, 0.34)
+mesh = SubResource("box")
+material_override = SubResource("leather")
+[node name="StrapLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.3, 0.35, -0.19)
+scale = Vector3(0.09, 0.68, 0.025)
+mesh = SubResource("box")
+material_override = SubResource("metal")
+[node name="StrapRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.3, 0.35, -0.19)
+scale = Vector3(0.09, 0.68, 0.025)
+mesh = SubResource("box")
+material_override = SubResource("metal")
+[node name="LatchLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.2, 0.4, -0.22)
+scale = Vector3(0.11, 0.12, 0.04)
+mesh = SubResource("box")
+material_override = SubResource("metal")
+[node name="LatchRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.2, 0.4, -0.22)
+scale = Vector3(0.11, 0.12, 0.04)
+mesh = SubResource("box")
+material_override = SubResource("metal")
+[node name="Handle" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.78, 0)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("handle")
+material_override = SubResource("leather")

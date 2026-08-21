@@ -1,46 +1,60 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://c16r7dw0pcyxy"]
+
 [sub_resource type="StandardMaterial3D" id="fabric"]
 albedo_color = Color(0.23, 0.16, 0.105, 1)
-roughness = 1.0
+
+[sub_resource type="BoxMesh" id="box"]
+
 [sub_resource type="StandardMaterial3D" id="wood"]
 albedo_color = Color(0.11, 0.045, 0.018, 1)
 roughness = 0.9
-[sub_resource type="BoxMesh" id="box"]
+
 [sub_resource type="BoxShape3D" id="collision_shape"]
-size = Vector3(1.15, 1.55, 1.0)
-[node name="WornStudyArmchair" type="StaticBody3D"]
+size = Vector3(1.15, 1.55, 1)
+
+[node name="WornStudyArmchair" type="StaticBody3D" unique_id=2061369211]
 editor_description = "Butaca de estudio vieja, ancha y tapizada, con brazos de madera."
-[node name="Seat" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.48, 0)
-scale = Vector3(0.85, 0.22, 0.78)
-mesh = SubResource("box")
+
+[node name="Seat" type="MeshInstance3D" parent="." unique_id=13717236]
+transform = Transform3D(0.85, 0, 0, 0, 0.22, 0, 0, 0, 0.78, 0, 0.48, 0)
 material_override = SubResource("fabric")
-[node name="Back" type="MeshInstance3D" parent="."]
-position = Vector3(0, 1.05, 0.32)
-rotation = Vector3(-0.12, 0, 0)
-scale = Vector3(0.88, 1.0, 0.2)
 mesh = SubResource("box")
+
+[node name="Back" type="MeshInstance3D" parent="." unique_id=1158144895]
+transform = Transform3D(0.88, 0, 0, 0, 0.99280864, 0.02394244, 0, -0.119712204, 0.19856173, 0, 1.05, 0.32)
 material_override = SubResource("fabric")
-[node name="LeftArm" type="MeshInstance3D" parent="."]
-position = Vector3(-0.53, 0.72, 0)
-scale = Vector3(0.12, 0.18, 0.82)
 mesh = SubResource("box")
+
+[node name="LeftArm" type="MeshInstance3D" parent="." unique_id=761372698]
+transform = Transform3D(0.12, 0, 0, 0, 0.18, 0, 0, 0, 0.82, -0.53, 0.72, 0)
 material_override = SubResource("wood")
-[node name="RightArm" type="MeshInstance3D" parent="."]
-position = Vector3(0.53, 0.72, 0)
-scale = Vector3(0.12, 0.18, 0.82)
 mesh = SubResource("box")
+
+[node name="RightArm" type="MeshInstance3D" parent="." unique_id=545062715]
+transform = Transform3D(0.12, 0, 0, 0, 0.18, 0, 0, 0, 0.82, 0.53, 0.72, 0)
 material_override = SubResource("wood")
-[node name="LegFL" type="MeshInstance3D" parent="."]
-position = Vector3(-0.38, 0.2, -0.25)
-scale = Vector3(0.09, 0.4, 0.09)
 mesh = SubResource("box")
+
+[node name="LegFL" type="MeshInstance3D" parent="." unique_id=1762037061]
+transform = Transform3D(0.09, 0, 0, 0, 0.4, 0, 0, 0, 0.09, -0.38, 0.2, -0.25)
 material_override = SubResource("wood")
-[node name="LegFR" type="MeshInstance3D" parent="."]
-position = Vector3(0.38, 0.2, -0.25)
-scale = Vector3(0.09, 0.4, 0.09)
 mesh = SubResource("box")
+
+[node name="LegFL2" type="MeshInstance3D" parent="." unique_id=1811627727]
+transform = Transform3D(0.09, 0, 0, 0, 0.4, 0, 0, 0, 0.09, -0.38, 0.2, 0.33692127)
 material_override = SubResource("wood")
-[node name="Collision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.78, 0.12)
+mesh = SubResource("box")
+
+[node name="LegFR" type="MeshInstance3D" parent="." unique_id=1010686242]
+transform = Transform3D(0.09, 0, 0, 0, 0.4, 0, 0, 0, 0.09, 0.38, 0.2, -0.25)
+material_override = SubResource("wood")
+mesh = SubResource("box")
+
+[node name="LegFR2" type="MeshInstance3D" parent="." unique_id=38571541]
+transform = Transform3D(0.09, 0, 0, 0, 0.4, 0, 0, 0, 0.09, 0.38, 0.2, 0.34096885)
+material_override = SubResource("wood")
+mesh = SubResource("box")
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=2020381899]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0.12)
 shape = SubResource("collision_shape")

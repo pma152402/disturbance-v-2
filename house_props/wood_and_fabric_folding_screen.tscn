@@ -1,0 +1,139 @@
+[gd_scene load_steps=6 format=3]
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.26, 0.11, 0.035, 1)
+roughness = 0.9
+[sub_resource type="StandardMaterial3D" id="fabric"]
+albedo_color = Color(0.42, 0.16, 0.12, 1)
+roughness = 1.0
+[sub_resource type="StandardMaterial3D" id="stripe"]
+albedo_color = Color(0.24, 0.075, 0.055, 1)
+roughness = 1.0
+[sub_resource type="StandardMaterial3D" id="hinge"]
+albedo_color = Color(0.43, 0.29, 0.09, 1)
+metallic = 0.72
+roughness = 0.38
+[sub_resource type="BoxMesh" id="box"]
+[node name="WoodAndFabricFoldingScreen" type="StaticBody3D"]
+editor_description = "Biombo grande de tres hojas articuladas, madera oscura, tela roja y bisagras de laton."
+[node name="LeftLeaf" type="Node3D" parent="."]
+position = Vector3(-0.9, 0, 0.22)
+rotation = Vector3(0, 0.28, 0)
+[node name="Fabric" type="MeshInstance3D" parent="LeftLeaf"]
+position = Vector3(0, 1.15, 0)
+scale = Vector3(0.72, 1.82, 0.055)
+mesh = SubResource("box")
+material_override = SubResource("fabric")
+[node name="Stripe" type="MeshInstance3D" parent="LeftLeaf"]
+position = Vector3(0, 1.15, -0.065)
+scale = Vector3(0.08, 1.72, 0.012)
+mesh = SubResource("box")
+material_override = SubResource("stripe")
+[node name="Top" type="MeshInstance3D" parent="LeftLeaf"]
+position = Vector3(0, 2.1, 0)
+scale = Vector3(0.88, 0.1, 0.11)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="Bottom" type="MeshInstance3D" parent="LeftLeaf"]
+position = Vector3(0, 0.2, 0)
+scale = Vector3(0.88, 0.1, 0.11)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="PostL" type="MeshInstance3D" parent="LeftLeaf"]
+position = Vector3(-0.42, 1.15, 0)
+scale = Vector3(0.1, 2.1, 0.11)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="PostR" type="MeshInstance3D" parent="LeftLeaf"]
+position = Vector3(0.42, 1.15, 0)
+scale = Vector3(0.1, 2.1, 0.11)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="MiddleLeaf" type="Node3D" parent="."]
+[node name="Fabric" type="MeshInstance3D" parent="MiddleLeaf"]
+position = Vector3(0, 1.15, 0)
+scale = Vector3(0.72, 1.82, 0.055)
+mesh = SubResource("box")
+material_override = SubResource("fabric")
+[node name="StripeL" type="MeshInstance3D" parent="MiddleLeaf"]
+position = Vector3(-0.2, 1.15, -0.065)
+scale = Vector3(0.055, 1.72, 0.012)
+mesh = SubResource("box")
+material_override = SubResource("stripe")
+[node name="StripeR" type="MeshInstance3D" parent="MiddleLeaf"]
+position = Vector3(0.2, 1.15, -0.065)
+scale = Vector3(0.055, 1.72, 0.012)
+mesh = SubResource("box")
+material_override = SubResource("stripe")
+[node name="Top" type="MeshInstance3D" parent="MiddleLeaf"]
+position = Vector3(0, 2.1, 0)
+scale = Vector3(0.88, 0.1, 0.11)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="Bottom" type="MeshInstance3D" parent="MiddleLeaf"]
+position = Vector3(0, 0.2, 0)
+scale = Vector3(0.88, 0.1, 0.11)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="PostL" type="MeshInstance3D" parent="MiddleLeaf"]
+position = Vector3(-0.42, 1.15, 0)
+scale = Vector3(0.1, 2.1, 0.11)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="PostR" type="MeshInstance3D" parent="MiddleLeaf"]
+position = Vector3(0.42, 1.15, 0)
+scale = Vector3(0.1, 2.1, 0.11)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="RightLeaf" type="Node3D" parent="."]
+position = Vector3(0.9, 0, 0.22)
+rotation = Vector3(0, -0.28, 0)
+[node name="Fabric" type="MeshInstance3D" parent="RightLeaf"]
+position = Vector3(0, 1.15, 0)
+scale = Vector3(0.72, 1.82, 0.055)
+mesh = SubResource("box")
+material_override = SubResource("fabric")
+[node name="Stripe" type="MeshInstance3D" parent="RightLeaf"]
+position = Vector3(0, 1.15, -0.065)
+scale = Vector3(0.08, 1.72, 0.012)
+mesh = SubResource("box")
+material_override = SubResource("stripe")
+[node name="Top" type="MeshInstance3D" parent="RightLeaf"]
+position = Vector3(0, 2.1, 0)
+scale = Vector3(0.88, 0.1, 0.11)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="Bottom" type="MeshInstance3D" parent="RightLeaf"]
+position = Vector3(0, 0.2, 0)
+scale = Vector3(0.88, 0.1, 0.11)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="PostL" type="MeshInstance3D" parent="RightLeaf"]
+position = Vector3(-0.42, 1.15, 0)
+scale = Vector3(0.1, 2.1, 0.11)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="PostR" type="MeshInstance3D" parent="RightLeaf"]
+position = Vector3(0.42, 1.15, 0)
+scale = Vector3(0.1, 2.1, 0.11)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="HingeLeftTop" type="MeshInstance3D" parent="."]
+position = Vector3(-0.45, 1.62, -0.04)
+scale = Vector3(0.05, 0.2, 0.03)
+mesh = SubResource("box")
+material_override = SubResource("hinge")
+[node name="HingeLeftBottom" type="MeshInstance3D" parent="."]
+position = Vector3(-0.45, 0.68, -0.04)
+scale = Vector3(0.05, 0.2, 0.03)
+mesh = SubResource("box")
+material_override = SubResource("hinge")
+[node name="HingeRightTop" type="MeshInstance3D" parent="."]
+position = Vector3(0.45, 1.62, -0.04)
+scale = Vector3(0.05, 0.2, 0.03)
+mesh = SubResource("box")
+material_override = SubResource("hinge")
+[node name="HingeRightBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0.45, 0.68, -0.04)
+scale = Vector3(0.05, 0.2, 0.03)
+mesh = SubResource("box")
+material_override = SubResource("hinge")

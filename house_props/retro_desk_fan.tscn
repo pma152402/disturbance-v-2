@@ -1,0 +1,52 @@
+[gd_scene load_steps=5 format=3]
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.23, 0.31, 0.3, 1)
+metallic = 0.68
+roughness = 0.48
+[sub_resource type="StandardMaterial3D" id="blade_mat"]
+albedo_color = Color(0.12, 0.17, 0.16, 1)
+metallic = 0.42
+roughness = 0.56
+[sub_resource type="CylinderMesh" id="cyl"]
+top_radius = 0.5
+bottom_radius = 0.5
+height = 1.0
+radial_segments = 12
+[sub_resource type="TorusMesh" id="cage"]
+inner_radius = 0.43
+outer_radius = 0.47
+rings = 14
+ring_segments = 8
+[node name="RetroDeskFan" type="Node3D"]
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.07, 0)
+scale = Vector3(0.48, 0.12, 0.34)
+mesh = SubResource("cyl")
+material_override = SubResource("metal")
+[node name="Stand" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.38, 0)
+scale = Vector3(0.07, 0.58, 0.07)
+mesh = SubResource("cyl")
+material_override = SubResource("metal")
+[node name="Cage" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.82, 0)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("cage")
+material_override = SubResource("metal")
+[node name="Hub" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.82, -0.03)
+rotation = Vector3(1.5708, 0, 0)
+scale = Vector3(0.12, 0.12, 0.12)
+mesh = SubResource("cyl")
+material_override = SubResource("metal")
+[node name="BladeVertical" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.82, -0.05)
+scale = Vector3(0.12, 0.7, 0.035)
+mesh = SubResource("cyl")
+material_override = SubResource("blade_mat")
+[node name="BladeHorizontal" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.82, -0.05)
+rotation = Vector3(0, 0, 1.5708)
+scale = Vector3(0.12, 0.7, 0.035)
+mesh = SubResource("cyl")
+material_override = SubResource("blade_mat")

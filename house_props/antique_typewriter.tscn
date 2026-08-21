@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://c76ulp7yripbt"]
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.055, 0.06, 0.055, 1)
+metallic = 0.5
+roughness = 0.55
+
+[sub_resource type="BoxMesh" id="box"]
+
+[sub_resource type="StandardMaterial3D" id="key"]
+albedo_color = Color(0.72, 0.66, 0.5, 1)
+roughness = 0.8
+
+[sub_resource type="CylinderMesh" id="cyl"]
+height = 1.0
+radial_segments = 10
+
+[node name="AntiqueTypewriter" type="Node3D" unique_id=1214084407]
+editor_description = "Maquina de escribir antigua con teclado, rodillo, carro y palanca."
+
+[node name="Body" type="MeshInstance3D" parent="." unique_id=2114709368]
+transform = Transform3D(0.78, 0, 0, 0, 0.28, 0, 0, 0, 0.58, 0, 0.18, 0)
+material_override = SubResource("metal")
+mesh = SubResource("box")
+
+[node name="Keyboard" type="MeshInstance3D" parent="." unique_id=1502002340]
+transform = Transform3D(0.68, 0, 0, 0, 0.048794873, 0.061104294, 0, -0.010911481, 0.2732513, 0, 0.3, -0.34)
+material_override = SubResource("key")
+mesh = SubResource("box")
+
+[node name="KeyRow1" type="MeshInstance3D" parent="." unique_id=227673526]
+transform = Transform3D(0.58, 0, 0, 0, 0.025, 0, 0, 0, 0.025, 0, 0.3049791, -0.38608655)
+material_override = SubResource("metal")
+mesh = SubResource("box")
+
+[node name="KeyRow2" type="MeshInstance3D" parent="." unique_id=1258822368]
+transform = Transform3D(0.52, 0, 0, 0, 0.025, 0, 0, 0, 0.025, 0, 0.32438934, -0.29885095)
+material_override = SubResource("metal")
+mesh = SubResource("box")
+
+[node name="Roller" type="MeshInstance3D" parent="." unique_id=2114934379]
+transform = Transform3D(-3.61999e-07, -0.92, 0, 0.1, -3.3303909e-06, 0, 0, 0, 0.1, 0, 0.3552459, 0.05)
+material_override = SubResource("metal")
+mesh = SubResource("cyl")
+
+[node name="CarriageReturn" type="MeshInstance3D" parent="." unique_id=1671072428]
+transform = Transform3D(0.022511179, 0.1652869, 0, -0.010874138, 0.3421699, 0, 0, 0, 0.025, 0.5071541, 0.50371385, 0.02)
+material_override = SubResource("metal")
+mesh = SubResource("cyl")

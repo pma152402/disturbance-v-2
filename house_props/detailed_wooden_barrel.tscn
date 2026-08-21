@@ -1,0 +1,81 @@
+[gd_scene load_steps=7 format=3]
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.34, 0.16, 0.055, 1)
+roughness = 0.9
+[sub_resource type="StandardMaterial3D" id="wood_dark"]
+albedo_color = Color(0.18, 0.075, 0.022, 1)
+roughness = 0.95
+[sub_resource type="StandardMaterial3D" id="iron"]
+albedo_color = Color(0.11, 0.12, 0.105, 1)
+metallic = 0.72
+roughness = 0.5
+[sub_resource type="CylinderMesh" id="body"]
+top_radius = 0.48
+bottom_radius = 0.48
+height = 1.2
+radial_segments = 16
+rings = 5
+[sub_resource type="TorusMesh" id="hoop"]
+inner_radius = 0.47
+outer_radius = 0.53
+rings = 16
+ring_segments = 8
+[sub_resource type="CylinderMesh" id="bung"]
+top_radius = 0.09
+bottom_radius = 0.11
+height = 0.08
+radial_segments = 10
+[node name="DetailedWoodenBarrel" type="StaticBody3D"]
+editor_description = "Barril detallado con cuerpo abombado, duelas marcadas, cinco aros de hierro, tapas y tapon."
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.63, 0)
+scale = Vector3(1.08, 1, 1.08)
+mesh = SubResource("body")
+material_override = SubResource("wood")
+[node name="Top" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.24, 0)
+scale = Vector3(0.92, 0.05, 0.92)
+mesh = SubResource("body")
+material_override = SubResource("wood_dark")
+[node name="Bottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.03, 0)
+scale = Vector3(0.92, 0.05, 0.92)
+mesh = SubResource("body")
+material_override = SubResource("wood_dark")
+[node name="HoopBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.14, 0)
+mesh = SubResource("hoop")
+material_override = SubResource("iron")
+[node name="HoopLow" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.38, 0)
+scale = Vector3(1.05, 1.05, 1.05)
+mesh = SubResource("hoop")
+material_override = SubResource("iron")
+[node name="HoopMiddle" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.64, 0)
+scale = Vector3(1.08, 1.08, 1.08)
+mesh = SubResource("hoop")
+material_override = SubResource("iron")
+[node name="HoopHigh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.9, 0)
+scale = Vector3(1.05, 1.05, 1.05)
+mesh = SubResource("hoop")
+material_override = SubResource("iron")
+[node name="HoopTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.14, 0)
+mesh = SubResource("hoop")
+material_override = SubResource("iron")
+[node name="StaveLineFront" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.63, -0.525)
+scale = Vector3(0.025, 1.08, 0.012)
+mesh = SubResource("body")
+material_override = SubResource("wood_dark")
+[node name="StaveLineLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.525, 0.63, 0)
+scale = Vector3(0.012, 1.08, 0.025)
+mesh = SubResource("body")
+material_override = SubResource("wood_dark")
+[node name="Bung" type="MeshInstance3D" parent="."]
+position = Vector3(0.12, 1.29, -0.05)
+mesh = SubResource("bung")
+material_override = SubResource("wood_dark")

@@ -1,69 +1,84 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3 uid="uid://clgyx2fwlngn5"]
 
-[sub_resource type="StandardMaterial3D" id="cloth"]
-albedo_color = Color(0.57, 0.5, 0.4, 1)
-roughness = 0.96
 [sub_resource type="StandardMaterial3D" id="wood"]
 albedo_color = Color(0.17, 0.075, 0.025, 1)
 roughness = 0.9
-[sub_resource type="CylinderMesh" id="cylinder"]
-top_radius = 0.5
-bottom_radius = 0.5
-height = 1.0
-radial_segments = 10
-[sub_resource type="SphereMesh" id="sphere"]
-radius = 0.5
-height = 1.0
-radial_segments = 12
-rings = 6
-[sub_resource type="BoxMesh" id="box"]
+
 [sub_resource type="CylinderMesh" id="base"]
 top_radius = 0.38
 bottom_radius = 0.48
 height = 0.09
 radial_segments = 14
+
+[sub_resource type="CylinderMesh" id="cylinder"]
+height = 1.0
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="cloth"]
+albedo_color = Color(0.57, 0.5, 0.4, 1)
+roughness = 0.96
+
+[sub_resource type="SphereMesh" id="sphere"]
+radial_segments = 12
+rings = 6
+
 [sub_resource type="CapsuleShape3D" id="collision_shape"]
 radius = 0.42
 height = 1.9
 
-[node name="OldDressMannequin" type="StaticBody3D"]
+[node name="OldDressMannequin" type="StaticBody3D" unique_id=1538739557]
 editor_description = "Maniqui antiguo de costura con torso de tela, brazos articulados y peana de madera."
-[node name="Base" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.045, 0)
+
+[node name="Base" type="MeshInstance3D" parent="." unique_id=508616470]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, 0)
+material_override = SubResource("wood")
 mesh = SubResource("base")
+
+[node name="Stand" type="MeshInstance3D" parent="." unique_id=520409755]
+transform = Transform3D(0.055, 0, 0, 0, 1.35, 0, 0, 0, 0.055, 0, 0.72, 0)
 material_override = SubResource("wood")
-[node name="Stand" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.72, 0)
-scale = Vector3(0.055, 1.35, 0.055)
 mesh = SubResource("cylinder")
-material_override = SubResource("wood")
-[node name="Torso" type="MeshInstance3D" parent="."]
-position = Vector3(0, 1.55, 0)
-scale = Vector3(0.48, 0.72, 0.28)
-mesh = SubResource("sphere")
+
+[node name="Torso" type="MeshInstance3D" parent="." unique_id=1388025473]
+transform = Transform3D(0.48, 0, 0, 0, 0.72, 0, 0, 0, 0.28, 0, 1.55, 0)
 material_override = SubResource("cloth")
-[node name="Waist" type="MeshInstance3D" parent="."]
-position = Vector3(0, 1.15, 0)
-scale = Vector3(0.28, 0.28, 0.22)
 mesh = SubResource("sphere")
+
+[node name="Waist" type="MeshInstance3D" parent="." unique_id=2088134616]
+transform = Transform3D(0.28, 0, 0, 0, 0.28, 0, 0, 0, 0.22, 0, 1.15, 0)
 material_override = SubResource("cloth")
-[node name="Neck" type="MeshInstance3D" parent="."]
-position = Vector3(0, 1.98, 0)
-scale = Vector3(0.11, 0.2, 0.11)
-mesh = SubResource("cylinder")
+mesh = SubResource("sphere")
+
+[node name="Waist2" type="MeshInstance3D" parent="." unique_id=1541181326]
+transform = Transform3D(0.35018155, 0, 0, 0, 0.36025184, 0, 0, 0, 0.22, 0, 1.9994079, 0)
+material_override = SubResource("cloth")
+mesh = SubResource("sphere")
+
+[node name="Neck" type="MeshInstance3D" parent="." unique_id=1026710960]
+transform = Transform3D(0.11, 0, 0, 0, 0.2, 0, 0, 0, 0.11, 0, 1.98, 0)
 material_override = SubResource("wood")
-[node name="LeftArm" type="MeshInstance3D" parent="."]
-position = Vector3(-0.46, 1.48, 0)
-rotation = Vector3(0, 0, -0.16)
-scale = Vector3(0.075, 0.75, 0.075)
 mesh = SubResource("cylinder")
+
+[node name="LeftArm" type="MeshInstance3D" parent="." unique_id=2140460342]
+transform = Transform3D(0.059709944, 0.4538417, 0, -0.04538417, 0.59709936, 0, 0, 0, 0.075, -0.3625291, 1.48, 0)
 material_override = SubResource("wood")
-[node name="RightArm" type="MeshInstance3D" parent="."]
-position = Vector3(0.46, 1.48, 0)
-rotation = Vector3(0, 0, 0.16)
-scale = Vector3(0.075, 0.75, 0.075)
 mesh = SubResource("cylinder")
+
+[node name="RightArm" type="MeshInstance3D" parent="." unique_id=1333189659]
+transform = Transform3D(0.06724878, -0.33205444, 0, 0.033205442, 0.6724876, 0, 0, 0, 0.075, 0.27557716, 1.48, 0)
 material_override = SubResource("wood")
-[node name="Collision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 1.05, 0)
+mesh = SubResource("cylinder")
+
+[node name="RightArm2" type="MeshInstance3D" parent="." unique_id=1980871481]
+transform = Transform3D(0.06913796, -0.29067898, 0, 0.029067898, 0.6913795, 0, 0, 0, 0.075, 0.205484, 0.79965556, 0)
+material_override = SubResource("wood")
+mesh = SubResource("cylinder")
+
+[node name="RightArm3" type="MeshInstance3D" parent="." unique_id=787771290]
+transform = Transform3D(-0.06085982, 0.25587496, 0.03558599, 0.029067896, 0.6913794, 0, -0.032804567, 0.1379213, -0.06601998, -0.1894648, 0.79965556, 0)
+material_override = SubResource("wood")
+mesh = SubResource("cylinder")
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=1957741292]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, 0)
 shape = SubResource("collision_shape")

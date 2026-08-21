@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://cura4ih50l6gx"]
+
+[sub_resource type="StandardMaterial3D" id="base_mat"]
+albedo_color = Color(0.12, 0.22, 0.12, 1)
+roughness = 0.95
+
+[sub_resource type="CylinderMesh" id="cylinder"]
+height = 1.0
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="light_pink"]
+albedo_color = Color(1, 0.55, 0.62, 1)
+roughness = 0.76
+
+[sub_resource type="StandardMaterial3D" id="pink"]
+albedo_color = Color(0.92, 0.28, 0.43, 1)
+roughness = 0.72
+
+[sub_resource type="SphereMesh" id="sphere"]
+radial_segments = 14
+rings = 7
+
+[sub_resource type="StandardMaterial3D" id="black"]
+albedo_color = Color(0.025, 0.02, 0.018, 1)
+roughness = 0.82
+
+[node name="DecorativePinkFlamingo" type="Node3D" unique_id=625058410]
+editor_description = "Flamenco rosa ornamental detallado con cuerpo emplumado, cuello curvo, pico bicolor, patas y peana."
+
+[node name="Base" type="MeshInstance3D" parent="." unique_id=1179323979]
+transform = Transform3D(0.55, 0, 0, 0, 0.09, 0, 0, 0, 0.42, 0, 0.045, 0)
+material_override = SubResource("base_mat")
+mesh = SubResource("cylinder")
+
+[node name="LeftLeg" type="MeshInstance3D" parent="." unique_id=352794686]
+transform = Transform3D(0.028, 0, 0, 0, 1.25, 0, 0, 0, 0.028, -0.12, 0.67, 0)
+material_override = SubResource("light_pink")
+mesh = SubResource("cylinder")
+
+[node name="RightLegLower" type="MeshInstance3D" parent="." unique_id=514366020]
+transform = Transform3D(0.021514636, 0.4479959, 0, -0.017919838, 0.5378659, 0, 0, 0, 0.028000005, 0.21794859, 0.34443718, 0)
+material_override = SubResource("light_pink")
+mesh = SubResource("cylinder")
+
+[node name="RightLegUpper" type="MeshInstance3D" parent="." unique_id=283711056]
+transform = Transform3D(0.023420956, -0.30141318, 0, 0.015344671, 0.4600545, 0, 0, 0, 0.028, 0.29, 0.83, 0)
+material_override = SubResource("light_pink")
+mesh = SubResource("cylinder")
+
+[node name="Body" type="MeshInstance3D" parent="." unique_id=1416277426]
+transform = Transform3D(0.6778252, 0.03835905, 0, -0.05434199, 0.4784648, 0, 0, 0, 0.42, 0, 1.25, 0)
+material_override = SubResource("pink")
+mesh = SubResource("sphere")
+
+[node name="Wing" type="MeshInstance3D" parent="." unique_id=453473854]
+transform = Transform3D(0.40489864, 0.046049517, 0.04631986, -0.08593419, 0.2951531, -4.904644e-10, -0.24304801, -0.027642088, 0.077165216, -0.08, 1.29, -0.24885148)
+material_override = SubResource("light_pink")
+mesh = SubResource("sphere")
+
+[node name="Wing2" type="MeshInstance3D" parent="." unique_id=581995715]
+transform = Transform3D(0.44976997, 0.051152777, -0.027434291, -0.085934184, 0.2951531, 2.8421662e-10, 0.14395222, 0.016371824, 0.08571674, -0.08, 1.29, 0.24905908)
+material_override = SubResource("light_pink")
+mesh = SubResource("sphere")
+
+[node name="TailFeather1" type="MeshInstance3D" parent="." unique_id=866990597]
+transform = Transform3D(0.040848747, 0.43812668, 0, -0.0912764, 0.19607398, 0, 0, 0, 0.1, 0.55, 1.24, 0.05)
+material_override = SubResource("pink")
+mesh = SubResource("sphere")
+
+[node name="TailFeather2" type="MeshInstance3D" parent="." unique_id=1789288292]
+transform = Transform3D(0.052351482, 0.3090979, 0, -0.0732074, 0.22103958, 0, 0, 0, 0.09, 0.5, 1.2292612, 0.12)
+material_override = SubResource("light_pink")
+mesh = SubResource("sphere")
+
+[node name="NeckLower" type="MeshInstance3D" parent="." unique_id=160762274]
+transform = Transform3D(0.058822, -0.54493874, 0, 0.06811734, 0.470576, 0, 0, 0, 0.089999996, -0.49812198, 1.62, 0)
+material_override = SubResource("pink")
+mesh = SubResource("cylinder")
+
+[node name="NeckUpper" type="MeshInstance3D" parent="." unique_id=1553100819]
+transform = Transform3D(0.08484793, 0.206762, 0, -0.030013839, 0.5845079, 0, 0, 0, 0.09, -0.65, 2.08, 0)
+material_override = SubResource("pink")
+mesh = SubResource("cylinder")
+
+[node name="Head" type="MeshInstance3D" parent="." unique_id=882541946]
+transform = Transform3D(0.24, 0, 0, 0, 0.22, 0, 0, 0, 0.2, -0.52, 2.39, 0)
+material_override = SubResource("pink")
+mesh = SubResource("sphere")
+
+[node name="BeakBase" type="MeshInstance3D" parent="." unique_id=450327550]
+transform = Transform3D(0.03153224, -0.32265478, 0, 0.09489846, 0.10720961, 0, 0, 0, 0.12, -0.73, 2.34, 0)
+material_override = SubResource("light_pink")
+mesh = SubResource("cylinder")
+
+[node name="BeakTip" type="MeshInstance3D" parent="." unique_id=156444139]
+transform = Transform3D(0.03351812, -0.26328075, 0, 0.100389145, 0.08790467, 0, 0, 0, 0.15563068, -0.7754252, 2.352231, 0)
+material_override = SubResource("black")
+mesh = SubResource("cylinder")

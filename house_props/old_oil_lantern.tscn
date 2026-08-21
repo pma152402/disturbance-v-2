@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=3]
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.12, 0.13, 0.115, 1)
+metallic = 0.72
+roughness = 0.52
+[sub_resource type="StandardMaterial3D" id="glass"]
+albedo_color = Color(0.54, 0.58, 0.48, 0.42)
+transparency = 1
+roughness = 0.2
+[sub_resource type="CylinderMesh" id="cyl"]
+top_radius = 0.5
+bottom_radius = 0.5
+height = 1.0
+radial_segments = 12
+[sub_resource type="SphereMesh" id="globe"]
+radius = 0.5
+height = 1.0
+radial_segments = 12
+rings = 6
+[sub_resource type="TorusMesh" id="handle"]
+inner_radius = 0.32
+outer_radius = 0.35
+rings = 12
+ring_segments = 7
+[node name="OldOilLantern" type="Node3D"]
+[node name="Tank" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.18, 0)
+scale = Vector3(0.42, 0.28, 0.42)
+mesh = SubResource("globe")
+material_override = SubResource("metal")
+[node name="GlassChimney" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.58, 0)
+scale = Vector3(0.3, 0.58, 0.3)
+mesh = SubResource("globe")
+material_override = SubResource("glass")
+[node name="Top" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.92, 0)
+scale = Vector3(0.3, 0.12, 0.3)
+mesh = SubResource("cyl")
+material_override = SubResource("metal")
+[node name="Handle" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.73, 0)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("handle")
+material_override = SubResource("metal")
