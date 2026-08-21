@@ -1,5 +1,3 @@
-res://house_baked.tscn
+res://house_props/cautivo_photo_frame.tscn
 res://pastel_wall_band.gdshader
-res://house_props/retro_alarm_clock.tscn
-res://house_props/our_lady_of_fatima_statue.tscn
-res://house_props/antique_vanity_table.tscn
+res://house_baked.tscn
