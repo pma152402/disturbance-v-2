@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://rainy_weather.gd" id="1_weather"]
 [ext_resource type="Texture2D" path="res://ps2_house/textures/Pasto1.jpg" id="2_ground_texture"]
 [ext_resource type="Texture2D" path="res://ps2_house/textures/Pasto2.jpg" id="3_dirt_texture"]
 [ext_resource type="Texture2D" path="res://ps2_house/textures/road.jpg" id="4_path_texture"]
+[ext_resource type="PackedScene" path="res://sounds/ambient/thunder/thunder_fragment_player.tscn" id="5_thunder_player"]
 
 [sub_resource type="StandardMaterial3D" id="Material_wet_ground"]
 albedo_color = Color(0.42, 0.52, 0.34, 1)
@@ -208,3 +209,5 @@ light_energy = 0.24
 omni_range = 38.0
 omni_attenuation = 1.15
 shadow_enabled = false
+
+[node name="ThunderFragmentPlayer" parent="." instance=ExtResource("5_thunder_player")]

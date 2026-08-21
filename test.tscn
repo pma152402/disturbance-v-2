@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" path="res://exterior_environment.tscn" id="6_exterior"]
 [ext_resource type="Script" uid="uid://b8mkr502lfbrl" path="res://found_footage_overlay.gd" id="7_footage_overlay"]
 [ext_resource type="FontFile" uid="uid://b60wwt30lnp8h" path="res://assets/fonts/PressStart2P-Regular.ttf" id="8_pixel_font"]
+[ext_resource type="PackedScene" path="res://sounds/ambient/rain/rain_ambience.tscn" id="9_rain_ambience"]
+[ext_resource type="Script" path="res://sounds/ambient/indoor_weather_audio.gd" id="10_indoor_weather"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_storm"]
 panorama = ExtResource("5_storm_panorama")
@@ -57,6 +59,11 @@ transform = Transform3D(0.97682786, 0, 0.21402662, 0, 1, 0, -0.21402662, 0, 0.97
 transform = Transform3D(0.8996488, 0, -0.025142336, 0, 0.9, 0, 0.025142336, 0, 0.8996488, 6.945027, 3.0062962, 2.2190597)
 
 [node name="Weather" parent="." unique_id=73805243 instance=ExtResource("4_weather")]
+
+[node name="RainAmbience" parent="." instance=ExtResource("9_rain_ambience")]
+
+[node name="IndoorWeatherAudio" type="Node" parent="."]
+script = ExtResource("10_indoor_weather")
 
 [node name="ExteriorGround" parent="Weather" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)

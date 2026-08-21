@@ -55,6 +55,10 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
 @onready var stamina_bar: ProgressBar = $StaminaUI/StaminaBar
 @onready var interaction_prompt: Label = $InteractionUI/InteractionPrompt
+@onready var holster_sound: AudioStreamPlayer = $HolsterSound
+@onready var switch_sound: AudioStreamPlayer = $SwitchSound
+@onready var flashlight_click_sound: AudioStreamPlayer = $FlashlightClickSound
+@onready var footstep_sound: AudioStreamPlayer = $FootstepSound
 
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 var _camera_rest_position: Vector3
@@ -83,9 +87,11 @@ var _held_item: StringName = &""
 var _flashlight_holstered := true
 var _flashlight_was_on := true
 var _zoom_fov_target := 75.0
+var _last_footstep_beat := -1
 
 const ThrownCanScene := preload("res://thrown_can.tscn")
 const ThrownBottleScene := preload("res://thrown_bottle.tscn")
+const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
 
 
 func _ready() -> void:
@@ -101,6 +107,8 @@ func _ready() -> void:
 	camera.make_current()
 	_zoom_fov_target = clampf(camera.fov, zoom_min_fov, zoom_max_fov)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	holster_sound.stream = GameplaySounds.make_switch_click()
+	footstep_sound.stream = GameplaySounds.make_footstep()
 
 
 func _input(event: InputEvent) -> void:
@@ -169,6 +177,8 @@ func _input(event: InputEvent) -> void:
 				return
 		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and not _flashlight_holstered:
 			flashlight.visible = not flashlight.visible
+			flashlight_click_sound.pitch_scale = randf_range(0.98, 1.02)
+			flashlight_click_sound.call(&"play_clip")
 			get_viewport().set_input_as_handled()
 			return
 		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_LEFT:
@@ -239,6 +249,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_update_interaction_prompt()
 	_update_camera_motion(delta, input_vector, is_sprinting)
+	_update_footsteps(delta, input_vector, is_sprinting)
 	_update_stamina_ui(delta, previous_stamina, is_sprinting)
 	var zoom_ratio := inverse_lerp(zoom_min_fov, zoom_max_fov, _zoom_fov_target)
 	var sprint_fov_bonus := lerpf(1.0, 5.0, zoom_ratio) if is_sprinting else 0.0
@@ -300,6 +311,40 @@ func _toggle_flashlight_holster() -> void:
 	else:
 		hand_rig.visible = true
 		flashlight.visible = _flashlight_was_on
+	holster_sound.pitch_scale = randf_range(0.97, 1.03)
+	holster_sound.play()
+
+
+func play_switch_sound() -> void:
+	switch_sound.pitch_scale = randf_range(0.97, 1.03)
+	if switch_sound.has_method(&"play_clip"):
+		switch_sound.call(&"play_clip")
+	else:
+		switch_sound.play()
+
+
+func _update_footsteps(_delta: float, input_vector: Vector2, is_sprinting: bool) -> void:
+	var moving := is_on_floor() and input_vector.length_squared() > 0.01 and Vector2(velocity.x, velocity.z).length() > 0.18
+	if not moving or _jump_phase != JumpPhase.IDLE or _stance_transition_timer > 0.0:
+		_last_footstep_beat = int(floor(_bob_phase / PI))
+		return
+
+	# El minimo vertical del balanceo ocurre cada PI radianes: ahi apoya un pie.
+	var current_beat := int(floor(_bob_phase / PI))
+	if current_beat == _last_footstep_beat:
+		return
+	_last_footstep_beat = current_beat
+
+	var volume := -13.0
+	if is_sprinting:
+		volume = -8.5
+	elif _stance == Stance.CROUCHED:
+		volume = -17.0
+	elif _stance == Stance.PRONE:
+		volume = -20.0
+	footstep_sound.volume_db = volume + randf_range(-1.2, 0.8)
+	footstep_sound.pitch_scale = randf_range(0.88, 1.12)
+	footstep_sound.play()
 
 
 func _get_interactable() -> Node:
@@ -320,6 +365,8 @@ func _try_interact(pressed_key: Key) -> bool:
 		return false
 	var picked_up: bool = target.interact(self)
 	if picked_up:
+		if target.has_method(&"uses_switch_sound") and target.uses_switch_sound():
+			play_switch_sound()
 		interaction_prompt.hide()
 	return picked_up
 

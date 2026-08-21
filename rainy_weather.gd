@@ -11,6 +11,7 @@ extends Node3D
 @onready var ground_flash: OmniLight3D = $InteriorLightning/GroundFloorFlash
 @onready var upper_flash: OmniLight3D = $InteriorLightning/UpperFloorFlash
 @onready var basement_flash: OmniLight3D = $InteriorLightning/BasementFlash
+@onready var thunder_player: AudioStreamPlayer = $ThunderFragmentPlayer
 
 var _lightning_timer := 0.0
 var _lightning_tween: Tween
@@ -45,6 +46,8 @@ func _schedule_lightning() -> void:
 func _flash_lightning() -> void:
 	if is_instance_valid(_lightning_tween):
 		_lightning_tween.kill()
+	if thunder_player.has_method("play_lightning_fragment"):
+		thunder_player.call("play_lightning_fragment")
 	_flash_strength = 0.0
 	_lightning_tween = create_tween()
 	_lightning_tween.tween_property(self, "_flash_strength", 1.0, 0.045)

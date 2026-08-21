@@ -1,0 +1,3 @@
+# Godot genera esta carpeta localmente al importar y abrir el proyecto.
+# No debe versionarse: contiene caches, rutas del editor y nombres temporales.
+.godot/

@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="AudioStream" path="res://sounds/ambient/thunder/thunder.mp3" id="1_thunder_audio"]
+[ext_resource type="Script" path="res://sounds/ambient/thunder/thunder_fragment_player.gd" id="2_thunder_script"]
+
+[node name="ThunderFragmentPlayer" type="AudioStreamPlayer"]
+editor_description = "Reproduce un fragmento aleatorio del trueno cada vez que la tormenta genera un relampago."
+stream = ExtResource("1_thunder_audio")
+volume_db = -10.0
+bus = &"Weather"
+script = ExtResource("2_thunder_script")
+fragment_duration = 4.2
+thunder_volume_db = -10.0

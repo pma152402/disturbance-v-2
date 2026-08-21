@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://d0hosun1t0o3o"
+path="res://.godot/imported/🌧️ RELAJANTE Sonido de Lluvia Corto (1 MINUTO) Efecto Blanco ASMR de Lluvia para Dormir y Relajarse - Naturaleza Nítida (youtube).mp3-69aff933994dd51a267727856a913028.mp3str"
+
+[deps]
+
+source_file="res://sounds/ambient/rain/🌧️ RELAJANTE Sonido de Lluvia Corto (1 MINUTO) Efecto Blanco ASMR de Lluvia para Dormir y Relajarse - Naturaleza Nítida (youtube).mp3"
+dest_files=["res://.godot/imported/🌧️ RELAJANTE Sonido de Lluvia Corto (1 MINUTO) Efecto Blanco ASMR de Lluvia para Dormir y Relajarse - Naturaleza Nítida (youtube).mp3-69aff933994dd51a267727856a913028.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

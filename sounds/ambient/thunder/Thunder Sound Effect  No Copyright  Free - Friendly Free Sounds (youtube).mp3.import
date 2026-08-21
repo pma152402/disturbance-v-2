@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://doehdqoxiho0w"
+path="res://.godot/imported/Thunder Sound Effect  No Copyright  Free - Friendly Free Sounds (youtube).mp3-6da8f70cf12df8df0af7a623d70749a5.mp3str"
+
+[deps]
+
+source_file="res://sounds/ambient/thunder/Thunder Sound Effect  No Copyright  Free - Friendly Free Sounds (youtube).mp3"
+dest_files=["res://.godot/imported/Thunder Sound Effect  No Copyright  Free - Friendly Free Sounds (youtube).mp3-6da8f70cf12df8df0af7a623d70749a5.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -10,6 +10,10 @@ func get_interaction_key() -> Key:
 	return KEY_F
 
 
+func uses_switch_sound() -> bool:
+	return true
+
+
 func get_interaction_text(_player: Node = null) -> String:
 	var lamps := _get_controlled_lamps()
 	if lamps.is_empty():

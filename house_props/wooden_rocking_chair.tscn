@@ -1,4 +1,5 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
+[ext_resource type="AudioStream" path="res://sounds/ambient/rocking_chair.mp3" id="1_rocking_audio"]
 [sub_resource type="StandardMaterial3D" id="wood"]
 albedo_color = Color(0.24, 0.105, 0.035, 1)
 roughness = 0.9
@@ -110,3 +111,10 @@ mesh = SubResource("runner")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.78, 0)
 shape = SubResource("shape")
+[node name="RockingSound" type="AudioStreamPlayer3D" parent="."]
+position = Vector3(0, 0.48, 0)
+stream = ExtResource("1_rocking_audio")
+volume_db = 2.0
+unit_size = 9.0
+max_distance = 28.0
+attenuation_model = 1

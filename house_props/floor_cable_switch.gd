@@ -17,10 +17,11 @@ func _on_body_entered(body: Node3D) -> void:
 	if lamp == null or not lamp.has_method("set_lamp_enabled"):
 		return
 	lamp.call("set_lamp_enabled", not bool(lamp.get("is_on")))
+	if body.has_method(&"play_switch_sound"):
+		body.call(&"play_switch_sound")
 	button.position.y = 0.052
 
 
 func _on_body_exited(body: Node3D) -> void:
 	if body.is_in_group(&"player"):
 		button.position.y = 0.075
-
