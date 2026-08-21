@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://e607axembg5f"]
+
+[sub_resource type="StandardMaterial3D" id="box_mat"]
+albedo_color = Color(0.68, 0.63, 0.5, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="box"]
+material = SubResource("box_mat")
+size = Vector3(0.48, 0.72, 0.22)
+
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.4, 0.055, 0.05, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="top"]
+material = SubResource("red")
+size = Vector3(0.5, 0.07, 0.24)
+
+[sub_resource type="StandardMaterial3D" id="blue"]
+albedo_color = Color(0.08, 0.25, 0.42, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="stripe"]
+size = Vector3(0.4, 0.075, 0.016)
+
+[node name="StripedDetergentBox" type="Node3D" unique_id=1652917236]
+editor_description = "Caja crema de detergente con patrón frontal de franjas alternas azules y rojas."
+
+[node name="Box" type="MeshInstance3D" parent="." unique_id=1670692579]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
+mesh = SubResource("box")
+
+[node name="Top" type="MeshInstance3D" parent="." unique_id=101243271]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.735, 0)
+mesh = SubResource("top")
+
+[node name="BlueStripe1" type="MeshInstance3D" parent="." unique_id=216922663]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52, -0.102338955)
+material_override = SubResource("blue")
+mesh = SubResource("stripe")
+
+[node name="RedStripe" type="MeshInstance3D" parent="." unique_id=1986464776]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -0.10333895)
+material_override = SubResource("red")
+mesh = SubResource("stripe")
+
+[node name="BlueStripe2" type="MeshInstance3D" parent="." unique_id=1290998123]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28, -0.102338955)
+material_override = SubResource("blue")
+mesh = SubResource("stripe")

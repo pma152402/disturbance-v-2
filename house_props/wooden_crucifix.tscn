@@ -1,0 +1,100 @@
+[gd_scene format=3 uid="uid://ba7lwuaaxjnjo"]
+
+[sub_resource type="StandardMaterial3D" id="Material_wood"]
+albedo_color = Color(0.23, 0.105, 0.035, 1)
+roughness = 0.92
+
+[sub_resource type="BoxMesh" id="Mesh_vertical"]
+material = SubResource("Material_wood")
+size = Vector3(0.15, 1.45, 0.09)
+
+[sub_resource type="BoxMesh" id="Mesh_horizontal"]
+material = SubResource("Material_wood")
+size = Vector3(0.82, 0.14, 0.09)
+
+[sub_resource type="StandardMaterial3D" id="Material_figure"]
+albedo_color = Color(0.62, 0.65, 0.67, 1)
+metallic = 0.82
+roughness = 0.3
+
+[sub_resource type="SphereMesh" id="Mesh_head"]
+material = SubResource("Material_figure")
+radius = 0.095
+height = 0.18
+radial_segments = 10
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="Mesh_body"]
+material = SubResource("Material_figure")
+radius = 0.085
+height = 0.42
+radial_segments = 10
+rings = 3
+
+[sub_resource type="CylinderMesh" id="Mesh_limb"]
+material = SubResource("Material_figure")
+top_radius = 0.032
+bottom_radius = 0.04
+height = 0.34
+radial_segments = 8
+
+[sub_resource type="BoxShape3D" id="Shape_cross"]
+size = Vector3(0.82, 1.45, 0.12)
+
+[node name="WoodenCrucifix" type="StaticBody3D" unique_id=763614938]
+editor_description = "Crucifijo marron con figura estilizada de Cristo y piezas editables por separado."
+
+[node name="CrossVertical" type="MeshInstance3D" parent="." unique_id=1391546584]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.725, 0)
+mesh = SubResource("Mesh_vertical")
+
+[node name="CrossHorizontal" type="MeshInstance3D" parent="." unique_id=424770429]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08, 0)
+mesh = SubResource("Mesh_horizontal")
+
+[node name="Christ" type="Node3D" parent="." unique_id=1841966377]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.085)
+
+[node name="Head" type="MeshInstance3D" parent="Christ" unique_id=426660128]
+transform = Transform3D(0.990216, -0.13954312, 0, 0.13954312, 0.990216, 0, 0, 0, 1, 0.009977857, 1.1741959, -0.053396344)
+mesh = SubResource("Mesh_head")
+
+[node name="Torso" type="MeshInstance3D" parent="Christ" unique_id=898969067]
+transform = Transform3D(0.8171745, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.94, 0)
+mesh = SubResource("Mesh_body")
+
+[node name="LeftArm" type="MeshInstance3D" parent="Christ" unique_id=57732133]
+transform = Transform3D(-0.11902701, -0.5570227, 0, 0.7478229, -0.088658355, 0, 0, 0, 1, -0.123895094, 1.0536147, 0)
+mesh = SubResource("Mesh_limb")
+
+[node name="RightArm2" type="MeshInstance3D" parent="Christ" unique_id=667983988]
+transform = Transform3D(-0.4316068, 0.44251025, 0, -0.6344696, -0.30102387, 0, 0, 0, 0.82388204, -0.29218328, 1.0879065, 0)
+mesh = SubResource("Mesh_limb")
+
+[node name="RightArm3" type="MeshInstance3D" parent="Christ" unique_id=1429893595]
+transform = Transform3D(-0.4386411, -0.4150975, 0, 0.6183341, -0.29446673, 0, 0, 0, 1, 0.28250664, 1.0810363, 0.011276148)
+mesh = SubResource("Mesh_limb")
+
+[node name="RightArm" type="MeshInstance3D" parent="Christ" unique_id=412114570]
+transform = Transform3D(0.1700535, -0.59896344, 0, 0.70189613, 0.14511526, 0, 0, 0, 1, 0.12102729, 1.0588225, 0.016748667)
+mesh = SubResource("Mesh_limb")
+
+[node name="LeftLeg" type="MeshInstance3D" parent="Christ" unique_id=48050233]
+transform = Transform3D(0.91859895, 0.07241823, 0, -0.11076405, 0.60058576, 0, 0, 0, 1, -0.040368438, 0.698411, 0)
+mesh = SubResource("Mesh_limb")
+
+[node name="RightLeg" type="MeshInstance3D" parent="Christ" unique_id=215294940]
+transform = Transform3D(0.89263535, -0.059905987, 0, 0.107633375, 0.496818, 0, 0, 0, 1, 0.04180907, 0.68646336, 0)
+mesh = SubResource("Mesh_limb")
+
+[node name="RightLeg2" type="MeshInstance3D" parent="Christ" unique_id=463158048]
+transform = Transform3D(0.8683526, 0.12975058, 0, -0.23312351, 0.48330283, 0, 0, 0, 1, 0.03584272, 0.5420555, 0)
+mesh = SubResource("Mesh_limb")
+
+[node name="RightLeg3" type="MeshInstance3D" parent="Christ" unique_id=161550594]
+transform = Transform3D(0.85499805, -0.15480481, 0, 0.27813858, 0.47587007, 0, 0, 0, 1, -0.024482287, 0.51517105, 0)
+mesh = SubResource("Mesh_limb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2033448885]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.725, 0)
+shape = SubResource("Shape_cross")

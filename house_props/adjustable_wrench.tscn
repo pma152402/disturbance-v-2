@@ -1,0 +1,54 @@
+[gd_scene load_steps=8 format=3]
+[sub_resource type="StandardMaterial3D" id="steel"]
+albedo_color = Color(0.38, 0.4, 0.4, 1)
+metallic = 0.9
+roughness = 0.3
+[sub_resource type="StandardMaterial3D" id="dark_steel"]
+albedo_color = Color(0.16, 0.18, 0.18, 1)
+metallic = 0.82
+roughness = 0.38
+[sub_resource type="BoxMesh" id="handle"]
+material = SubResource("steel")
+size = Vector3(0.13, 0.72, 0.055)
+[sub_resource type="BoxMesh" id="jaw"]
+material = SubResource("steel")
+size = Vector3(0.12, 0.31, 0.065)
+[sub_resource type="BoxMesh" id="head"]
+material = SubResource("steel")
+size = Vector3(0.34, 0.2, 0.07)
+[sub_resource type="CylinderMesh" id="worm"]
+material = SubResource("dark_steel")
+top_radius = 0.06
+bottom_radius = 0.06
+height = 0.15
+radial_segments = 10
+[sub_resource type="TorusMesh" id="lanyard"]
+material = SubResource("dark_steel")
+inner_radius = 0.035
+outer_radius = 0.055
+rings = 6
+ring_segments = 10
+[node name="AdjustableWrench" type="Node3D"]
+editor_description = "Llave inglesa detallada con mango, cabeza, mordazas abiertas, rueda de ajuste y orificio."
+[node name="Handle" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.4, 0)
+mesh = SubResource("handle")
+[node name="Head" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.82, 0)
+mesh = SubResource("head")
+[node name="LeftJaw" type="MeshInstance3D" parent="."]
+position = Vector3(-0.13, 0.99, 0)
+rotation = Vector3(0, 0, -0.38)
+mesh = SubResource("jaw")
+[node name="RightJaw" type="MeshInstance3D" parent="."]
+position = Vector3(0.13, 0.99, 0)
+rotation = Vector3(0, 0, 0.38)
+mesh = SubResource("jaw")
+[node name="AdjustmentWheel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.79, 0)
+rotation = Vector3(0, 0, 1.570796)
+mesh = SubResource("worm")
+[node name="HandleHole" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.085, -0.035)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("lanyard")

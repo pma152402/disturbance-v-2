@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://house_props/book.tscn" id="1_book"]
+
+[sub_resource type="StandardMaterial3D" id="Material_green"]
+albedo_color = Color(0.12, 0.25, 0.18, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Material_blue"]
+albedo_color = Color(0.09, 0.16, 0.31, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="Material_ochre"]
+albedo_color = Color(0.43, 0.25, 0.055, 1)
+roughness = 0.92
+
+[node name="ThreeBooksTogether" type="Node3D"]
+editor_description = "Tres libros apilados en paralelo. Cada libro permanece como nodo independiente."
+
+[node name="GreenBook" parent="." instance=ExtResource("1_book")]
+transform = Transform3D(0.999391, 0, -0.034899, 0, 1, 0, 0.034899, 0, 0.999391, 0, 0, 0)
+
+[node name="BottomCover" parent="GreenBook" index="0"]
+material_override = SubResource("Material_green")
+
+[node name="TopCover" parent="GreenBook" index="2"]
+material_override = SubResource("Material_green")
+
+[node name="Spine" parent="GreenBook" index="3"]
+material_override = SubResource("Material_green")
+
+[node name="BlueBook" parent="." instance=ExtResource("1_book")]
+transform = Transform3D(0.99863, 0, 0.052336, 0, 1, 0, -0.052336, 0, 0.99863, 0.015, 0.16, 0)
+
+[node name="BottomCover" parent="BlueBook" index="0"]
+material_override = SubResource("Material_blue")
+
+[node name="TopCover" parent="BlueBook" index="2"]
+material_override = SubResource("Material_blue")
+
+[node name="Spine" parent="BlueBook" index="3"]
+material_override = SubResource("Material_blue")
+
+[node name="OchreBook" parent="." instance=ExtResource("1_book")]
+transform = Transform3D(0.999848, 0, -0.017452, 0, 1, 0, 0.017452, 0, 0.999848, -0.01, 0.32, 0.01)
+
+[node name="BottomCover" parent="OchreBook" index="0"]
+material_override = SubResource("Material_ochre")
+
+[node name="TopCover" parent="OchreBook" index="2"]
+material_override = SubResource("Material_ochre")
+
+[node name="Spine" parent="OchreBook" index="3"]
+material_override = SubResource("Material_ochre")
+
+[editable path="GreenBook"]
+[editable path="BlueBook"]
+[editable path="OchreBook"]

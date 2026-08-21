@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=3]
+[sub_resource type="StandardMaterial3D" id="plastic"]
+albedo_color = Color(0.63, 0.59, 0.49, 1)
+roughness = 0.76
+[sub_resource type="StandardMaterial3D" id="blue_cloth"]
+albedo_color = Color(0.12, 0.21, 0.32, 1)
+roughness = 1.0
+[sub_resource type="StandardMaterial3D" id="red_cloth"]
+albedo_color = Color(0.34, 0.065, 0.055, 1)
+roughness = 1.0
+[sub_resource type="CylinderMesh" id="basket"]
+material = SubResource("plastic")
+top_radius = 0.36
+bottom_radius = 0.29
+height = 0.62
+radial_segments = 12
+[sub_resource type="TorusMesh" id="rim"]
+material = SubResource("plastic")
+inner_radius = 0.33
+outer_radius = 0.375
+rings = 6
+ring_segments = 12
+[sub_resource type="SphereMesh" id="cloth"]
+radius = 0.19
+height = 0.21
+radial_segments = 8
+rings = 4
+[sub_resource type="CylinderShape3D" id="shape"]
+radius = 0.38
+height = 0.8
+[node name="PlasticLaundryHamper" type="StaticBody3D"]
+editor_description = "Cesta plastica alta llena de ropa azul, roja y clara sobresaliendo por arriba."
+[node name="Basket" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.31, 0)
+mesh = SubResource("basket")
+[node name="TopRim" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.62, 0)
+mesh = SubResource("rim")
+[node name="BlueClothes" type="MeshInstance3D" parent="."]
+position = Vector3(-0.13, 0.69, 0)
+rotation = Vector3(0.2, 0, -0.25)
+material_override = SubResource("blue_cloth")
+mesh = SubResource("cloth")
+[node name="RedClothes" type="MeshInstance3D" parent="."]
+position = Vector3(0.14, 0.7, -0.03)
+rotation = Vector3(-0.15, 0.3, 0.2)
+material_override = SubResource("red_cloth")
+mesh = SubResource("cloth")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.4, 0)
+shape = SubResource("shape")

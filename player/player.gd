@@ -78,9 +78,9 @@ var _stance_start_values := Vector3.ZERO
 var _stance_target_values := Vector3.ZERO
 var _jump_phase := JumpPhase.IDLE
 var _jump_timer := 0.0
-var _jump_start_head_y := 0.65
+var _jump_start_head_y := 0.9
 var _held_item: StringName = &""
-var _flashlight_holstered := false
+var _flashlight_holstered := true
 var _flashlight_was_on := true
 var _zoom_fov_target := 75.0
 
@@ -90,6 +90,8 @@ const ThrownBottleScene := preload("res://thrown_bottle.tscn")
 
 func _ready() -> void:
 	add_to_group(&"player")
+	hand_rig.visible = false
+	flashlight.visible = false
 	_camera_rest_position = camera.position
 	_stamina = max_stamina
 	stamina_bar.max_value = max_stamina
@@ -446,12 +448,12 @@ func _update_stance_transition(delta: float) -> void:
 func _get_stance_values(target_stance: Stance) -> Vector3:
 	match target_stance:
 		Stance.STANDING:
-			return Vector3(0.65, 1.8, 0.0)
+			return Vector3(0.9, 2.1, 0.15)
 		Stance.CROUCHED:
 			return Vector3(0.17, 1.2, -0.3)
 		Stance.PRONE:
 			return Vector3(-0.36, 0.65, -0.575)
-	return Vector3(0.65, 1.8, 0.0)
+	return Vector3(0.9, 2.1, 0.15)
 
 
 func _request_jump() -> void:
@@ -486,9 +488,9 @@ func _update_jump(delta: float) -> void:
 	elif _jump_phase == JumpPhase.RECOVERING:
 		var recovery_progress := clampf(_jump_timer / jump_recovery_time, 0.0, 1.0)
 		var eased_recovery := recovery_progress * recovery_progress * (3.0 - 2.0 * recovery_progress)
-		head.position.y = lerpf(_jump_start_head_y, 0.65, eased_recovery)
+		head.position.y = lerpf(_jump_start_head_y, 0.9, eased_recovery)
 		if recovery_progress >= 1.0:
-			head.position.y = 0.65
+			head.position.y = 0.9
 			_jump_phase = JumpPhase.IDLE
 
 

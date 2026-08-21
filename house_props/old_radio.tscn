@@ -1,0 +1,53 @@
+[gd_scene load_steps=9 format=3]
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.25, 0.105, 0.035, 1)
+roughness = 0.9
+[sub_resource type="StandardMaterial3D" id="cloth"]
+albedo_color = Color(0.22, 0.19, 0.14, 1)
+roughness = 1.0
+[sub_resource type="StandardMaterial3D" id="glass"]
+albedo_color = Color(0.58, 0.49, 0.3, 1)
+roughness = 0.3
+[sub_resource type="BoxMesh" id="body"]
+material = SubResource("wood")
+size = Vector3(0.78, 0.48, 0.28)
+[sub_resource type="CylinderMesh" id="speaker"]
+material = SubResource("cloth")
+top_radius = 0.16
+bottom_radius = 0.16
+height = 0.035
+radial_segments = 12
+[sub_resource type="BoxMesh" id="dial"]
+material = SubResource("glass")
+size = Vector3(0.28, 0.1, 0.025)
+[sub_resource type="CylinderMesh" id="knob"]
+material = SubResource("cloth")
+top_radius = 0.055
+bottom_radius = 0.055
+height = 0.055
+radial_segments = 8
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(0.78, 0.48, 0.28)
+[node name="OldRadio" type="StaticBody3D"]
+editor_description = "Radio antigua de madera con altavoz, dial y mandos separados."
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.24, 0)
+mesh = SubResource("body")
+[node name="Speaker" type="MeshInstance3D" parent="."]
+position = Vector3(-0.2, 0.26, -0.16)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("speaker")
+[node name="TuningWindow" type="MeshInstance3D" parent="."]
+position = Vector3(0.2, 0.34, -0.158)
+mesh = SubResource("dial")
+[node name="LeftKnob" type="MeshInstance3D" parent="."]
+position = Vector3(0.12, 0.18, -0.17)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("knob")
+[node name="RightKnob" type="MeshInstance3D" parent="."]
+position = Vector3(0.29, 0.18, -0.17)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("knob")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.24, 0)
+shape = SubResource("shape")

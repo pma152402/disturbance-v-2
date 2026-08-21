@@ -1,0 +1,109 @@
+[gd_scene format=3 uid="uid://dhj1f2pngrq5v"]
+
+[sub_resource type="StandardMaterial3D" id="basket"]
+albedo_color = Color(0.55, 0.48, 0.34, 1)
+
+[sub_resource type="CylinderMesh" id="basket_mesh"]
+material = SubResource("basket")
+top_radius = 0.34
+bottom_radius = 0.27
+height = 0.58
+radial_segments = 10
+
+[sub_resource type="TorusMesh" id="rim"]
+material = SubResource("basket")
+inner_radius = 0.31
+outer_radius = 0.35
+rings = 6
+ring_segments = 12
+
+[sub_resource type="StandardMaterial3D" id="dark_cloth"]
+albedo_color = Color(0.11, 0.13, 0.16, 1)
+
+[sub_resource type="SphereMesh" id="clothes"]
+radius = 0.16
+height = 0.18
+radial_segments = 8
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="light_cloth"]
+albedo_color = Color(0.62, 0.58, 0.49, 1)
+
+[sub_resource type="CylinderShape3D" id="shape"]
+height = 0.72
+radius = 0.35
+
+[node name="DirtyLaundryBasket" type="StaticBody3D" unique_id=1122821435]
+editor_description = "Cesta de ropa sucia llena, con varias prendas arrugadas sobresaliendo."
+
+[node name="Basket" type="MeshInstance3D" parent="." unique_id=695225706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.29, 0)
+mesh = SubResource("basket_mesh")
+
+[node name="TopRim" type="MeshInstance3D" parent="." unique_id=643055362]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
+mesh = SubResource("rim")
+
+[node name="DarkShirt" type="MeshInstance3D" parent="." unique_id=1841152821]
+transform = Transform3D(0.9183383, 0.26493967, 0.29404384, -0.24616797, 0.9640719, -0.09983342, -0.30992922, 0.019296668, 0.95056385, -0.15097158, 0.52729946, 0.017744208)
+material_override = SubResource("dark_cloth")
+mesh = SubResource("clothes")
+
+[node name="DarkShirt2" type="MeshInstance3D" parent="." unique_id=77331635]
+transform = Transform3D(0.9183383, 0.26493967, 0.29404384, -0.24616797, 0.9640719, -0.09983342, -0.30992922, 0.019296668, 0.95056385, -0.019128207, 0.5172463, -0.13056025)
+material_override = SubResource("dark_cloth")
+mesh = SubResource("clothes")
+
+[node name="DarkShirt4" type="MeshInstance3D" parent="." unique_id=1704847958]
+transform = Transform3D(0.9183383, 0.26493967, 0.29404384, -0.24616797, 0.9640719, -0.09983342, -0.30992922, 0.019296668, 0.95056385, 0.11850585, 0.52849776, -0.12252611)
+material_override = SubResource("dark_cloth")
+mesh = SubResource("clothes")
+
+[node name="DarkShirt3" type="MeshInstance3D" parent="." unique_id=469716903]
+transform = Transform3D(-0.17786829, 0.31931883, 0.58013004, 0.057735913, 1.1619487, -0.15435582, -0.44241822, 0.023257291, -0.25337702, -0.18402761, 0.53044456, -0.13320729)
+material_override = SubResource("dark_cloth")
+mesh = SubResource("clothes")
+
+[node name="LightTowel" type="MeshInstance3D" parent="." unique_id=2020351300]
+transform = Transform3D(0.97589743, -0.21822962, 0, 0.21713938, 0.971022, 0.09983342, -0.02178661, -0.09742718, 0.9950042, 0.14488393, 0.53927785, -0.028890729)
+material_override = SubResource("light_cloth")
+mesh = SubResource("clothes")
+
+[node name="LightTowel2" type="MeshInstance3D" parent="." unique_id=638089513]
+transform = Transform3D(0.97589743, -0.21822962, 0, 0.21713938, 0.971022, 0.09983342, -0.02178661, -0.09742718, 0.9950042, -0.08295852, 0.55305606, 0.08840689)
+material_override = SubResource("light_cloth")
+mesh = SubResource("clothes")
+
+[node name="LightTowel3" type="MeshInstance3D" parent="." unique_id=819077614]
+transform = Transform3D(0.33617547, 0.69935024, 0.63078964, -0.018923283, 0.6746513, -0.73789406, -0.9416094, 0.23612529, 0.24003522, 0.10160289, 0.54658633, 0.065583676)
+material_override = SubResource("light_cloth")
+mesh = SubResource("clothes")
+
+[node name="LightTowel7" type="MeshInstance3D" parent="." unique_id=1151016031]
+transform = Transform3D(0.33617547, 0.69935024, 0.63078964, -0.018923283, 0.6746513, -0.73789406, -0.9416094, 0.23612529, 0.24003522, 0.14059445, 0.58420086, 0.0787486)
+material_override = SubResource("light_cloth")
+mesh = SubResource("clothes")
+
+[node name="LightTowel4" type="MeshInstance3D" parent="." unique_id=1705905977]
+transform = Transform3D(0.33617547, 0.69935024, 0.63078964, -0.018923283, 0.6746513, -0.73789406, -0.9416094, 0.23612529, 0.24003522, -0.04036311, 0.61105996, 0.031845465)
+material_override = SubResource("light_cloth")
+mesh = SubResource("clothes")
+
+[node name="LightTowel5" type="MeshInstance3D" parent="." unique_id=1861676003]
+transform = Transform3D(0.33617547, 0.028326223, 0.94137335, -0.018923312, 0.99954915, -0.023318987, -0.9416094, -0.009974599, 0.3365599, 0.035385583, 0.629878, 0.028124142)
+material_override = SubResource("light_cloth")
+mesh = SubResource("clothes")
+
+[node name="LightTowel6" type="MeshInstance3D" parent="." unique_id=1378354881]
+transform = Transform3D(0.24933892, -0.22725852, 0.94137335, 0.72010374, 0.6934747, -0.023318976, -0.6475192, 0.6837009, 0.3365599, -0.04660095, 0.61693764, 0.12280529)
+material_override = SubResource("light_cloth")
+mesh = SubResource("clothes")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1539193810]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
+shape = SubResource("shape")
+
+[node name="DarkShirt5" type="MeshInstance3D" parent="." unique_id=713822847]
+transform = Transform3D(0.9183383, 0.26493967, 0.29404384, -0.24616797, 0.9640719, -0.09983342, -0.30992922, 0.019296668, 0.95056385, 0.0026861993, 0.52112865, -0.1702775)
+material_override = SubResource("dark_cloth")
+mesh = SubResource("clothes")

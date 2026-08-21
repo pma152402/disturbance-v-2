@@ -1,0 +1,112 @@
+[gd_scene load_steps=10 format=3]
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.24, 0.105, 0.035, 1)
+roughness = 0.9
+[sub_resource type="StandardMaterial3D" id="fabric"]
+albedo_color = Color(0.30, 0.075, 0.055, 1)
+roughness = 1.0
+[sub_resource type="BoxMesh" id="seat"]
+material = SubResource("wood")
+size = Vector3(0.72, 0.09, 0.62)
+[sub_resource type="BoxMesh" id="post"]
+material = SubResource("wood")
+size = Vector3(0.075, 1.15, 0.075)
+[sub_resource type="BoxMesh" id="slat"]
+material = SubResource("wood")
+size = Vector3(0.085, 0.76, 0.045)
+[sub_resource type="BoxMesh" id="rail"]
+material = SubResource("wood")
+size = Vector3(0.72, 0.09, 0.07)
+[sub_resource type="BoxMesh" id="leg"]
+material = SubResource("wood")
+size = Vector3(0.08, 0.48, 0.08)
+[sub_resource type="BoxMesh" id="runner"]
+material = SubResource("wood")
+size = Vector3(0.08, 0.075, 0.48)
+[sub_resource type="BoxMesh" id="cushion"]
+material = SubResource("fabric")
+size = Vector3(0.63, 0.08, 0.53)
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(0.82, 1.55, 1.25)
+[node name="WoodenRockingChair" type="StaticBody3D"]
+editor_description = "Mecedora de madera con respaldo de listones, brazos, cojin y patines curvos segmentados."
+[node name="Seat" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.58, 0)
+mesh = SubResource("seat")
+[node name="Cushion" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.665, -0.015)
+mesh = SubResource("cushion")
+[node name="BackLeftPost" type="MeshInstance3D" parent="."]
+position = Vector3(-0.34, 1.03, 0.27)
+rotation = Vector3(-0.12, 0, 0)
+mesh = SubResource("post")
+[node name="BackRightPost" type="MeshInstance3D" parent="."]
+position = Vector3(0.34, 1.03, 0.27)
+rotation = Vector3(-0.12, 0, 0)
+mesh = SubResource("post")
+[node name="BackTopRail" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.57, 0.34)
+mesh = SubResource("rail")
+[node name="BackSlat1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.21, 1.18, 0.3)
+rotation = Vector3(-0.12, 0, 0)
+mesh = SubResource("slat")
+[node name="BackSlat2" type="MeshInstance3D" parent="."]
+position = Vector3(-0.07, 1.18, 0.3)
+rotation = Vector3(-0.12, 0, 0)
+mesh = SubResource("slat")
+[node name="BackSlat3" type="MeshInstance3D" parent="."]
+position = Vector3(0.07, 1.18, 0.3)
+rotation = Vector3(-0.12, 0, 0)
+mesh = SubResource("slat")
+[node name="BackSlat4" type="MeshInstance3D" parent="."]
+position = Vector3(0.21, 1.18, 0.3)
+rotation = Vector3(-0.12, 0, 0)
+mesh = SubResource("slat")
+[node name="FrontLeftLeg" type="MeshInstance3D" parent="."]
+position = Vector3(-0.31, 0.35, -0.23)
+rotation = Vector3(0.08, 0, 0)
+mesh = SubResource("leg")
+[node name="FrontRightLeg" type="MeshInstance3D" parent="."]
+position = Vector3(0.31, 0.35, -0.23)
+rotation = Vector3(0.08, 0, 0)
+mesh = SubResource("leg")
+[node name="RearLeftLeg" type="MeshInstance3D" parent="."]
+position = Vector3(-0.31, 0.35, 0.23)
+rotation = Vector3(-0.08, 0, 0)
+mesh = SubResource("leg")
+[node name="RearRightLeg" type="MeshInstance3D" parent="."]
+position = Vector3(0.31, 0.35, 0.23)
+rotation = Vector3(-0.08, 0, 0)
+mesh = SubResource("leg")
+[node name="LeftArm" type="MeshInstance3D" parent="."]
+position = Vector3(-0.38, 0.91, 0)
+mesh = SubResource("runner")
+[node name="RightArm" type="MeshInstance3D" parent="."]
+position = Vector3(0.38, 0.91, 0)
+mesh = SubResource("runner")
+[node name="LeftRunnerRear" type="MeshInstance3D" parent="."]
+position = Vector3(-0.31, 0.08, 0.4)
+rotation = Vector3(-0.18, 0, 0)
+mesh = SubResource("runner")
+[node name="LeftRunnerCenter" type="MeshInstance3D" parent="."]
+position = Vector3(-0.31, 0.035, 0)
+mesh = SubResource("runner")
+[node name="LeftRunnerFront" type="MeshInstance3D" parent="."]
+position = Vector3(-0.31, 0.08, -0.4)
+rotation = Vector3(0.18, 0, 0)
+mesh = SubResource("runner")
+[node name="RightRunnerRear" type="MeshInstance3D" parent="."]
+position = Vector3(0.31, 0.08, 0.4)
+rotation = Vector3(-0.18, 0, 0)
+mesh = SubResource("runner")
+[node name="RightRunnerCenter" type="MeshInstance3D" parent="."]
+position = Vector3(0.31, 0.035, 0)
+mesh = SubResource("runner")
+[node name="RightRunnerFront" type="MeshInstance3D" parent="."]
+position = Vector3(0.31, 0.08, -0.4)
+rotation = Vector3(0.18, 0, 0)
+mesh = SubResource("runner")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.78, 0)
+shape = SubResource("shape")

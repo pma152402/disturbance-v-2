@@ -1,0 +1,44 @@
+[gd_scene load_steps=8 format=3]
+[sub_resource type="StandardMaterial3D" id="yellow"]
+albedo_color = Color(0.72, 0.55, 0.08, 1)
+roughness = 0.62
+[sub_resource type="StandardMaterial3D" id="cap_mat"]
+albedo_color = Color(0.34, 0.055, 0.045, 1)
+roughness = 0.65
+[sub_resource type="StandardMaterial3D" id="label_mat"]
+albedo_color = Color(0.18, 0.32, 0.24, 1)
+roughness = 0.88
+[sub_resource type="BoxMesh" id="body"]
+material = SubResource("yellow")
+size = Vector3(0.42, 0.62, 0.3)
+[sub_resource type="TorusMesh" id="handle"]
+material = SubResource("yellow")
+inner_radius = 0.085
+outer_radius = 0.13
+rings = 7
+ring_segments = 10
+[sub_resource type="CylinderMesh" id="cap"]
+material = SubResource("cap_mat")
+top_radius = 0.09
+bottom_radius = 0.1
+height = 0.1
+radial_segments = 10
+[sub_resource type="BoxMesh" id="label"]
+material = SubResource("label_mat")
+size = Vector3(0.3, 0.28, 0.018)
+[node name="YellowDetergentBottle" type="Node3D"]
+editor_description = "Botella rectangular amarilla con asa superior, tapón rojo y etiqueta verde oscura."
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.31, 0)
+mesh = SubResource("body")
+[node name="Handle" type="MeshInstance3D" parent="."]
+position = Vector3(-0.08, 0.67, 0)
+rotation = Vector3(1.570796, 0, 0)
+scale = Vector3(1.2, 1, 0.82)
+mesh = SubResource("handle")
+[node name="Cap" type="MeshInstance3D" parent="."]
+position = Vector3(0.13, 0.67, 0)
+mesh = SubResource("cap")
+[node name="FrontLabel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.31, -0.16)
+mesh = SubResource("label")

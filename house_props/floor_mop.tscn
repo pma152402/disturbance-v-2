@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://d0f388y5ib45a"]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.32, 0.16, 0.055, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="handle"]
+material = SubResource("wood")
+top_radius = 0.025
+bottom_radius = 0.025
+height = 1.65
+radial_segments = 7
+
+[sub_resource type="StandardMaterial3D" id="plastic"]
+albedo_color = Color(0.18, 0.24, 0.23, 1)
+roughness = 0.72
+
+[sub_resource type="BoxMesh" id="head"]
+material = SubResource("plastic")
+size = Vector3(0.42, 0.09, 0.16)
+
+[sub_resource type="StandardMaterial3D" id="yellow_plastic"]
+albedo_color = Color(0.78, 0.58, 0.075, 1)
+roughness = 0.72
+
+[sub_resource type="BoxMesh" id="head_small"]
+material = SubResource("yellow_plastic")
+size = Vector3(0.34, 0.055, 0.13)
+
+[node name="FloorMop" type="Node3D" unique_id=476493266]
+editor_description = "Fregona vieja con palo de madera, cabezal oscuro y tiras de tela separadas."
+
+[node name="Handle" type="MeshInstance3D" parent="." unique_id=2064029959]
+transform = Transform3D(0.99280864, 0.119712204, 0, -0.119712204, 0.99280864, 0, 0, 0, 1, 0.1, 0.9, 0)
+mesh = SubResource("handle")
+
+[node name="Head" type="MeshInstance3D" parent="." unique_id=1337484828]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+mesh = SubResource("head")
+
+[node name="Head2" type="MeshInstance3D" parent="." unique_id=1591587274]
+transform = Transform3D(1.1410795, 0, 0, 0, 1, 0, 0, 0, 1.075444, 0, 0.0325, 0)
+mesh = SubResource("head_small")

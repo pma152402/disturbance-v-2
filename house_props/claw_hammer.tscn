@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://duaianigwwrs1"]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.34, 0.16, 0.045, 1)
+roughness = 0.9
+
+[sub_resource type="CapsuleMesh" id="handle"]
+material = SubResource("wood")
+radius = 0.055
+height = 0.78
+radial_segments = 8
+rings = 2
+
+[sub_resource type="StandardMaterial3D" id="steel"]
+albedo_color = Color(0.32, 0.34, 0.34, 1)
+metallic = 0.9
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="head"]
+material = SubResource("steel")
+size = Vector3(0.48, 0.16, 0.16)
+
+[node name="ClawHammer" type="Node3D" unique_id=659521500]
+editor_description = "Martillo detallado con mango de madera, cabeza de acero, cara circular y garra bifurcada."
+
+[node name="WoodenHandle" type="MeshInstance3D" parent="." unique_id=15323512]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, 0)
+mesh = SubResource("handle")
+
+[node name="SteelHead" type="MeshInstance3D" parent="." unique_id=767262468]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84, 0)
+mesh = SubResource("head")

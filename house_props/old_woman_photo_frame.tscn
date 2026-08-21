@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://house_props/photo_frame.tscn" id="1_frame"]
+[ext_resource type="Texture2D" path="res://assets/pictures/old_woman_portrait.jpg" id="2_photo"]
+
+[node name="OldWomanPhotoFrame" type="Node3D"]
+editor_description = "Cuadro vertical independiente con retrato antiguo y marco marron a juego con los demas."
+
+[node name="Frame" parent="." instance=ExtResource("1_frame")]
+scale = Vector3(0.62, 1.08, 1)
+photo_texture = ExtResource("2_photo")
+frame_color = Color(0.22, 0.095, 0.025, 1)
+

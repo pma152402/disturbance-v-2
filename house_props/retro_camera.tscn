@@ -1,0 +1,55 @@
+[gd_scene load_steps=9 format=3]
+[sub_resource type="StandardMaterial3D" id="black"]
+albedo_color = Color(0.055, 0.052, 0.045, 1)
+roughness = 0.68
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.38, 0.4, 0.38, 1)
+metallic = 0.75
+roughness = 0.28
+[sub_resource type="StandardMaterial3D" id="glass"]
+albedo_color = Color(0.025, 0.065, 0.075, 1)
+metallic = 0.45
+roughness = 0.12
+[sub_resource type="BoxMesh" id="body"]
+material = SubResource("black")
+size = Vector3(0.55, 0.34, 0.25)
+[sub_resource type="CylinderMesh" id="lens"]
+material = SubResource("metal")
+top_radius = 0.13
+bottom_radius = 0.16
+height = 0.18
+radial_segments = 12
+[sub_resource type="CylinderMesh" id="glass_mesh"]
+material = SubResource("glass")
+top_radius = 0.105
+bottom_radius = 0.105
+height = 0.02
+radial_segments = 12
+[sub_resource type="BoxMesh" id="finder"]
+material = SubResource("metal")
+size = Vector3(0.16, 0.1, 0.12)
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(0.56, 0.46, 0.38)
+[node name="RetroCamera" type="StaticBody3D"]
+editor_description = "Camara fotografica retro negra y plateada con objetivo y visor separados."
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.2, 0)
+mesh = SubResource("body")
+[node name="LensBarrel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.2, -0.22)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("lens")
+[node name="LensGlass" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.2, -0.32)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("glass_mesh")
+[node name="Viewfinder" type="MeshInstance3D" parent="."]
+position = Vector3(0.13, 0.42, 0)
+mesh = SubResource("finder")
+[node name="ShutterButton" type="MeshInstance3D" parent="."]
+position = Vector3(-0.17, 0.405, 0)
+scale = Vector3(0.28, 0.35, 0.28)
+mesh = SubResource("lens")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.23, -0.04)
+shape = SubResource("shape")

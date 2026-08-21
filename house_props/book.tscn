@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Material_cover"]
+albedo_color = Color(0.34, 0.075, 0.055, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="Material_pages"]
+albedo_color = Color(0.73, 0.67, 0.52, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_cover"]
+material = SubResource("Material_cover")
+size = Vector3(0.42, 0.035, 0.62)
+
+[sub_resource type="BoxMesh" id="Mesh_pages"]
+material = SubResource("Material_pages")
+size = Vector3(0.385, 0.09, 0.57)
+
+[sub_resource type="BoxMesh" id="Mesh_spine"]
+material = SubResource("Material_cover")
+size = Vector3(0.035, 0.16, 0.62)
+
+[sub_resource type="BoxShape3D" id="Shape_book"]
+size = Vector3(0.42, 0.16, 0.62)
+
+[node name="Book" type="StaticBody3D"]
+editor_description = "Libro individual. Cubiertas y bloque de paginas son nodos separados y faciles de recolorear."
+
+[node name="BottomCover" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.0175, 0)
+mesh = SubResource("Mesh_cover")
+
+[node name="Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.08, 0)
+mesh = SubResource("Mesh_pages")
+
+[node name="TopCover" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.1425, 0)
+mesh = SubResource("Mesh_cover")
+
+[node name="Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.1925, 0.08, 0)
+mesh = SubResource("Mesh_spine")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.08, 0)
+shape = SubResource("Shape_book")

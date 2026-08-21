@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=3]
+[sub_resource type="StandardMaterial3D" id="porcelain"]
+albedo_color = Color(0.84, 0.81, 0.68, 1)
+roughness = 0.45
+[sub_resource type="StandardMaterial3D" id="flower"]
+albedo_color = Color(0.32, 0.06, 0.07, 1)
+roughness = 0.7
+[sub_resource type="SphereMesh" id="body"]
+material = SubResource("porcelain")
+radius = 0.24
+height = 0.38
+radial_segments = 12
+rings = 6
+[sub_resource type="CylinderMesh" id="spout"]
+material = SubResource("porcelain")
+top_radius = 0.045
+bottom_radius = 0.09
+height = 0.34
+radial_segments = 10
+[sub_resource type="TorusMesh" id="handle"]
+material = SubResource("porcelain")
+inner_radius = 0.12
+outer_radius = 0.17
+rings = 8
+ring_segments = 12
+[sub_resource type="CylinderMesh" id="lid"]
+material = SubResource("flower")
+top_radius = 0.09
+bottom_radius = 0.13
+height = 0.07
+radial_segments = 10
+[node name="PorcelainTeapot" type="Node3D"]
+editor_description = "Tetera de porcelana crema con detalle rojo oscuro."
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.2, 0)
+mesh = SubResource("body")
+[node name="Spout" type="MeshInstance3D" parent="."]
+position = Vector3(0.27, 0.28, 0)
+rotation = Vector3(0, 0, -1.05)
+mesh = SubResource("spout")
+[node name="Handle" type="MeshInstance3D" parent="."]
+position = Vector3(-0.24, 0.23, 0)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("handle")
+[node name="Lid" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.43, 0)
+mesh = SubResource("lid")

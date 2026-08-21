@@ -1,0 +1,45 @@
+[gd_scene load_steps=9 format=3]
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.34, 0.055, 0.045, 1)
+roughness = 0.92
+[sub_resource type="StandardMaterial3D" id="green"]
+albedo_color = Color(0.08, 0.22, 0.13, 1)
+roughness = 0.92
+[sub_resource type="StandardMaterial3D" id="blue"]
+albedo_color = Color(0.075, 0.14, 0.27, 1)
+roughness = 0.92
+[sub_resource type="StandardMaterial3D" id="cream"]
+albedo_color = Color(0.62, 0.54, 0.36, 1)
+roughness = 0.95
+[sub_resource type="BoxMesh" id="large_box"]
+size = Vector3(0.72, 0.12, 0.5)
+[sub_resource type="BoxMesh" id="medium_box"]
+size = Vector3(0.64, 0.1, 0.46)
+[sub_resource type="BoxMesh" id="puzzle_box"]
+size = Vector3(0.58, 0.09, 0.42)
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(0.76, 0.38, 0.54)
+[node name="BoardGameStack" type="StaticBody3D"]
+editor_description = "Tres juegos de mesa y un puzle apilados horizontalmente, cada caja independiente."
+[node name="RedGame" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.06, 0)
+material_override = SubResource("red")
+mesh = SubResource("large_box")
+[node name="GreenGame" type="MeshInstance3D" parent="."]
+position = Vector3(0.015, 0.17, -0.005)
+rotation = Vector3(0, 0.035, 0)
+material_override = SubResource("green")
+mesh = SubResource("medium_box")
+[node name="BluePuzzle" type="MeshInstance3D" parent="."]
+position = Vector3(-0.02, 0.265, 0.01)
+rotation = Vector3(0, -0.045, 0)
+material_override = SubResource("blue")
+mesh = SubResource("puzzle_box")
+[node name="CreamGame" type="MeshInstance3D" parent="."]
+position = Vector3(0.01, 0.355, 0)
+rotation = Vector3(0, 0.025, 0)
+material_override = SubResource("cream")
+mesh = SubResource("puzzle_box")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.19, 0)
+shape = SubResource("shape")

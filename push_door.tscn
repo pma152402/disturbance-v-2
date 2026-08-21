@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera4.jpg" id="3_wood"]
 
 [sub_resource type="BoxShape3D" id="Shape_panel"]
-size = Vector3(2.08, 2.62, 0.12)
+size = Vector3(1.96, 2.7, 0.12)
 
 [sub_resource type="StandardMaterial3D" id="Material_frame"]
 resource_local_to_scene = true
@@ -72,29 +72,29 @@ position = Vector3(0, 2.79, 0)
 mesh = SubResource("Mesh_frame_top")
 
 [node name="Hinge" type="AnimatableBody3D" parent="."]
-position = Vector3(-1.04, 0, 0)
+position = Vector3(-0.98, 0, 0)
 collision_layer = 3
 collision_mask = 1
 script = ExtResource("1_script")
 
 [node name="PanelVisual" parent="Hinge" instance=ExtResource("2_visual")]
-scale = Vector3(2.175, 1.229, 2.4)
+scale = Vector3(2.0495, 1.2666, 2.4)
 
 [node name="DoorKnobs" type="Node3D" parent="Hinge"]
 
 [node name="FrontKnob" type="MeshInstance3D" parent="Hinge/DoorKnobs"]
-position = Vector3(1.78, 1.28, 0.145)
+position = Vector3(1.68, 1.28, 0.145)
 mesh = SubResource("Mesh_knob")
 
 [node name="BackKnob" type="MeshInstance3D" parent="Hinge/DoorKnobs"]
-position = Vector3(1.78, 1.28, -0.145)
+position = Vector3(1.68, 1.28, -0.145)
 mesh = SubResource("Mesh_knob")
 
 [node name="Spindle" type="MeshInstance3D" parent="Hinge/DoorKnobs"]
-position = Vector3(1.78, 1.28, 0)
+position = Vector3(1.68, 1.28, 0)
 rotation = Vector3(1.5708, 0, 0)
 mesh = SubResource("Mesh_spindle")
 
 [node name="PanelCollision" type="CollisionShape3D" parent="Hinge"]
-position = Vector3(1.04, 1.31, 0)
+position = Vector3(0.98, 1.35, 0)
 shape = SubResource("Shape_panel")

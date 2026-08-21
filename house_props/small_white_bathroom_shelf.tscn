@@ -1,0 +1,62 @@
+[gd_scene load_steps=6 format=3]
+
+[sub_resource type="StandardMaterial3D" id="white"]
+albedo_color = Color(0.88, 0.89, 0.85, 1)
+roughness = 0.48
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.52, 0.54, 0.53, 1)
+metallic = 0.82
+roughness = 0.22
+
+[sub_resource type="BoxMesh" id="board"]
+material = SubResource("white")
+size = Vector3(0.78, 0.07, 0.26)
+
+[sub_resource type="BoxMesh" id="bracket"]
+material = SubResource("metal")
+size = Vector3(0.035, 0.25, 0.035)
+
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(0.8, 0.1, 0.28)
+
+[node name="SmallWhiteBathroomShelf" type="StaticBody3D"]
+
+[node name="ShelfBoard" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.26, -0.12)
+mesh = SubResource("board")
+
+[node name="RaisedBackLip" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.34, 0)
+rotation = Vector3(1.5708, 0, 0)
+scale = Vector3(1, 0.3, 0.6)
+mesh = SubResource("board")
+
+[node name="FrontLip" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.31, -0.25)
+rotation = Vector3(1.5708, 0, 0)
+scale = Vector3(1, 0.18, 0.35)
+mesh = SubResource("board")
+
+[node name="LeftBracketVertical" type="MeshInstance3D" parent="."]
+position = Vector3(-0.27, 0.13, -0.015)
+mesh = SubResource("bracket")
+
+[node name="LeftBracketDiagonal" type="MeshInstance3D" parent="."]
+position = Vector3(-0.27, 0.15, -0.12)
+rotation = Vector3(0.7, 0, 0)
+mesh = SubResource("bracket")
+
+[node name="RightBracketVertical" type="MeshInstance3D" parent="."]
+position = Vector3(0.27, 0.13, -0.015)
+mesh = SubResource("bracket")
+
+[node name="RightBracketDiagonal" type="MeshInstance3D" parent="."]
+position = Vector3(0.27, 0.15, -0.12)
+rotation = Vector3(0.7, 0, 0)
+mesh = SubResource("bracket")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.26, -0.12)
+shape = SubResource("collision")
+

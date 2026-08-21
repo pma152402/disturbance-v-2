@@ -2,7 +2,7 @@ extends AnimatableBody3D
 
 @export_range(70.0, 110.0, 1.0) var open_angle_degrees := 90.0
 @export_range(0.05, 1.0, 0.01) var transition_time := 0.18
-@export var panel_half_width := 1.04
+@export var panel_half_width := 0.98
 
 var _is_open := false
 var _is_animating := false

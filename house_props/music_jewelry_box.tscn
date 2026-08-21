@@ -1,0 +1,55 @@
+[gd_scene load_steps=9 format=3]
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.24, 0.085, 0.035, 1)
+roughness = 0.84
+[sub_resource type="StandardMaterial3D" id="velvet"]
+albedo_color = Color(0.23, 0.025, 0.055, 1)
+roughness = 1.0
+[sub_resource type="StandardMaterial3D" id="gold"]
+albedo_color = Color(0.48, 0.31, 0.055, 1)
+metallic = 0.78
+roughness = 0.32
+[sub_resource type="BoxMesh" id="box"]
+material = SubResource("wood")
+size = Vector3(0.58, 0.25, 0.4)
+[sub_resource type="BoxMesh" id="lid"]
+material = SubResource("wood")
+size = Vector3(0.6, 0.07, 0.42)
+[sub_resource type="BoxMesh" id="inlay"]
+material = SubResource("velvet")
+size = Vector3(0.44, 0.018, 0.27)
+[sub_resource type="CylinderMesh" id="crank"]
+material = SubResource("gold")
+top_radius = 0.018
+bottom_radius = 0.018
+height = 0.18
+radial_segments = 7
+[sub_resource type="SphereMesh" id="knob"]
+material = SubResource("gold")
+radius = 0.035
+height = 0.06
+radial_segments = 8
+rings = 4
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(0.62, 0.34, 0.44)
+[node name="MusicJewelryBox" type="StaticBody3D"]
+editor_description = "Joyero musical de madera con terciopelo, incrustacion y manivela dorada."
+[node name="Box" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.125, 0)
+mesh = SubResource("box")
+[node name="Lid" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.285, 0)
+mesh = SubResource("lid")
+[node name="VelvetInlay" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.325, -0.015)
+mesh = SubResource("inlay")
+[node name="Crank" type="MeshInstance3D" parent="."]
+position = Vector3(0.37, 0.17, 0)
+rotation = Vector3(0, 0, 1.570796)
+mesh = SubResource("crank")
+[node name="CrankKnob" type="MeshInstance3D" parent="."]
+position = Vector3(0.46, 0.17, 0)
+mesh = SubResource("knob")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.17, 0)
+shape = SubResource("shape")

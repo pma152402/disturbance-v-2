@@ -1,0 +1,77 @@
+[gd_scene load_steps=7 format=3]
+
+[sub_resource type="StandardMaterial3D" id="chrome"]
+albedo_color = Color(0.48, 0.5, 0.5, 1)
+metallic = 0.9
+roughness = 0.18
+
+[sub_resource type="StandardMaterial3D" id="paper"]
+albedo_color = Color(0.91, 0.89, 0.83, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="cardboard"]
+albedo_color = Color(0.3, 0.2, 0.12, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="metal_cylinder"]
+material = SubResource("chrome")
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.42
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="roll"]
+material = SubResource("paper")
+top_radius = 0.13
+bottom_radius = 0.13
+height = 0.28
+radial_segments = 18
+rings = 2
+
+[sub_resource type="CylinderMesh" id="tube"]
+material = SubResource("cardboard")
+top_radius = 0.04
+bottom_radius = 0.04
+height = 0.285
+radial_segments = 12
+
+[node name="WallToiletRollHolder" type="Node3D"]
+
+[node name="WallPlate" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.02, 0.03)
+rotation = Vector3(1.5708, 0, 0)
+scale = Vector3(1.7, 0.18, 1.7)
+mesh = SubResource("metal_cylinder")
+
+[node name="LeftBracket" type="MeshInstance3D" parent="."]
+position = Vector3(-0.18, 0, -0.09)
+rotation = Vector3(1.5708, 0, 0)
+scale = Vector3(0.8, 0.35, 0.8)
+mesh = SubResource("metal_cylinder")
+
+[node name="RightBracket" type="MeshInstance3D" parent="."]
+position = Vector3(0.18, 0, -0.09)
+rotation = Vector3(1.5708, 0, 0)
+scale = Vector3(0.8, 0.35, 0.8)
+mesh = SubResource("metal_cylinder")
+
+[node name="HorizontalSpindle" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, -0.2)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("metal_cylinder")
+
+[node name="PaperRoll" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, -0.2)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("roll")
+
+[node name="CardboardCoreLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.143, 0, -0.2)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("tube")
+
+[node name="LoosePaperEnd" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.115, -0.235)
+scale = Vector3(0.64, 0.62, 0.03)
+mesh = SubResource("roll")
+

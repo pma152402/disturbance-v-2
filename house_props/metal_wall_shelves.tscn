@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://dyl5054gr01cx"]
+
+[sub_resource type="StandardMaterial3D" id="edge"]
+albedo_color = Color(0.13, 0.15, 0.16, 1)
+metallic = 0.82
+roughness = 0.38
+
+[sub_resource type="BoxMesh" id="rail"]
+material = SubResource("edge")
+size = Vector3(0.07, 1.552832, 0.07)
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.28, 0.31, 0.32, 1)
+metallic = 0.72
+roughness = 0.46
+
+[sub_resource type="BoxMesh" id="shelf"]
+material = SubResource("metal")
+size = Vector3(1.45, 0.06, 0.42)
+
+[sub_resource type="BoxMesh" id="support"]
+material = SubResource("edge")
+size = Vector3(0.055, 0.48, 0.055)
+
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(1.5, 1.6, 0.48)
+
+[node name="MetalWallShelves" type="StaticBody3D" unique_id=2124574437]
+editor_description = "Tres estantes metalicos de pared con raíles verticales, rebordes y soportes diagonales."
+
+[node name="LeftRail" type="MeshInstance3D" parent="." unique_id=1920955124]
+transform = Transform3D(1, 0, 0, 0, 0.6796683, 0, 0, 0, 1, -0.62, 0.80096245, 0.18)
+mesh = SubResource("rail")
+
+[node name="RightRail" type="MeshInstance3D" parent="." unique_id=447559272]
+transform = Transform3D(1, 0, 0, 0, 0.68143094, 0, 0, 0, 1, 0.62, 0.8, 0.18)
+mesh = SubResource("rail")
+
+[node name="LowerShelf" type="MeshInstance3D" parent="." unique_id=1908552819]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+mesh = SubResource("shelf")
+
+[node name="MiddleShelf" type="MeshInstance3D" parent="." unique_id=1443634259]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+mesh = SubResource("shelf")
+
+[node name="UpperShelf" type="MeshInstance3D" parent="." unique_id=1433836583]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+mesh = SubResource("shelf")
+
+[node name="LowerLeftBrace" type="MeshInstance3D" parent="." unique_id=1155743190]
+transform = Transform3D(1, 0, 0, 0, 0.71091354, -0.7032794, 0, 0.7032794, 0.71091354, -0.6025431, 0.48, 0.09)
+mesh = SubResource("support")
+
+[node name="LowerRightBrace" type="MeshInstance3D" parent="." unique_id=731590251]
+transform = Transform3D(1, 0, 0, 0, 0.71091354, -0.7032794, 0, 0.7032794, 0.71091354, 0.6237251, 0.48, 0.09)
+mesh = SubResource("support")
+
+[node name="MiddleLeftBrace" type="MeshInstance3D" parent="." unique_id=1801927826]
+transform = Transform3D(1, 0, 0, 0, 0.71091354, -0.7032794, 0, 0.7032794, 0.71091354, -0.6025431, 0.98, 0.09)
+mesh = SubResource("support")
+
+[node name="MiddleRightBrace" type="MeshInstance3D" parent="." unique_id=399110759]
+transform = Transform3D(1, 0, 0, 0, 0.71091354, -0.7032794, 0, 0.7032794, 0.71091354, 0.6237251, 0.98, 0.09)
+mesh = SubResource("support")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1015961556]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("shape")

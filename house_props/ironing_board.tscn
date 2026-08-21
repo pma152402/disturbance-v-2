@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://5awfb1cgoeh2"]
+
+[sub_resource type="StandardMaterial3D" id="cover"]
+albedo_color = Color(0.43, 0.56, 0.58, 1)
+roughness = 0.95
+
+[sub_resource type="CapsuleMesh" id="board"]
+material = SubResource("cover")
+radius = 0.23
+height = 1.65
+radial_segments = 10
+rings = 3
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.32, 0.34, 0.33, 1)
+metallic = 0.6
+roughness = 0.42
+
+[sub_resource type="BoxMesh" id="leg"]
+material = SubResource("metal")
+size = Vector3(0.06, 0.92, 0.06)
+
+[sub_resource type="BoxMesh" id="iron_rest"]
+material = SubResource("metal")
+size = Vector3(0.42, 0.045, 0.38)
+
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(1.75, 0.16, 0.48)
+
+[node name="IroningBoard" type="StaticBody3D" unique_id=1669783591]
+editor_description = "Tabla de planchar abierta con funda azul apagada, patas cruzadas y soporte metalico."
+
+[node name="Board" type="MeshInstance3D" parent="." unique_id=600243585]
+transform = Transform3D(-9.153865e-09, -1, 1.00410546e-07, -0.029160231, 3.1391647e-07, 0.31986392, -0.9995748, 0, -0.009331256, 0, 0.88, 0)
+mesh = SubResource("board")
+
+[node name="LeftLeg" type="MeshInstance3D" parent="." unique_id=2042393369]
+transform = Transform3D(-0.16180104, 0.98682344, 0, -0.98682344, -0.16180104, 0, 0, 0, 1, 0.18715829, 0.7302175, 0.108483955)
+mesh = SubResource("leg")
+
+[node name="RightLeg" type="MeshInstance3D" parent="." unique_id=1829585282]
+transform = Transform3D(0.08191857, -0.996639, 0, 0.996639, 0.08191857, 0, 0, 0, 1, 0.1739971, 0.7568139, -0.10646126)
+mesh = SubResource("leg")
+
+[node name="IronRest" type="MeshInstance3D" parent="." unique_id=1854932866]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.02, 0.87, 0)
+mesh = SubResource("iron_rest")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1083892057]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, 0)
+shape = SubResource("shape")

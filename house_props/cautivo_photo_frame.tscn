@@ -1,0 +1,71 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://house_props/photo_frame.tscn" id="1_frame"]
+[ext_resource type="Texture2D" path="res://assets/pictures/cautivo.jpg" id="2_photo"]
+[ext_resource type="FontFile" path="res://assets/fonts/PressStart2P-Regular.ttf" id="3_font"]
+
+[sub_resource type="StandardMaterial3D" id="Material_calendar_paper"]
+albedo_color = Color(0.91, 0.9, 0.84, 1)
+roughness = 0.96
+
+[sub_resource type="StandardMaterial3D" id="Material_binding"]
+albedo_color = Color(0.67, 0.68, 0.66, 1)
+metallic = 0.42
+roughness = 0.38
+
+[sub_resource type="BoxMesh" id="Mesh_calendar_paper"]
+material = SubResource("Material_calendar_paper")
+size = Vector3(1.02, 0.64, 0.035)
+
+[sub_resource type="BoxMesh" id="Mesh_binding"]
+material = SubResource("Material_binding")
+size = Vector3(1.02, 0.045, 0.045)
+
+[sub_resource type="BoxShape3D" id="Shape_calendar"]
+size = Vector3(1.1, 2.52, 0.14)
+
+[node name="CautivoCalendar" type="Node3D"]
+editor_description = "Calendario de pared del Cautivo, con marco blanco, fotografia superior y mes completo debajo."
+
+[node name="Frame" parent="." instance=ExtResource("1_frame")]
+scale = Vector3(0.57, 1.52, 1)
+photo_texture = ExtResource("2_photo")
+frame_color = Color(0.92, 0.91, 0.86, 1)
+
+[node name="CalendarPaper" type="MeshInstance3D" parent="."]
+position = Vector3(0, -1.075, 0.055)
+mesh = SubResource("Mesh_calendar_paper")
+
+[node name="MetalBinding" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.735, 0.075)
+mesh = SubResource("Mesh_binding")
+
+[node name="Month" type="Label3D" parent="."]
+position = Vector3(0, -0.835, 0.085)
+visibility_range_end = 7.0
+visibility_range_end_margin = 2.0
+visibility_range_fade_mode = 1
+font = ExtResource("3_font")
+font_size = 25
+pixel_size = 0.0032
+modulate = Color(0.14, 0.115, 0.085, 0.82)
+outline_size = 0
+text = "OCTUBRE 1994"
+
+[node name="CalendarGrid" type="Label3D" parent="."]
+position = Vector3(0, -1.12, 0.086)
+visibility_range_end = 6.0
+visibility_range_end_margin = 2.0
+visibility_range_fade_mode = 1
+font = ExtResource("3_font")
+font_size = 18
+pixel_size = 0.00265
+modulate = Color(0.12, 0.1, 0.075, 0.76)
+outline_size = 0
+text = "L  M  X  J  V  S  D\n-- -- -- -- -- 01 02\n03 04 05 06 07 08 09\n10 11 12 13 14 15 16\n17 18 19 20 21 22 23\n24 25 26 27 28 29 30\n31 -- -- -- -- -- --"
+
+[node name="CalendarCollision" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CalendarCollision"]
+position = Vector3(0, -0.35, -0.01)
+shape = SubResource("Shape_calendar")

@@ -1,0 +1,61 @@
+[gd_scene load_steps=6 format=3]
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.5, 0.52, 0.51, 1)
+metallic = 0.88
+roughness = 0.2
+
+[sub_resource type="StandardMaterial3D" id="towel"]
+albedo_color = Color(0.48, 0.66, 0.68, 1)
+roughness = 0.95
+
+[sub_resource type="CylinderMesh" id="rail"]
+material = SubResource("metal")
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.82
+radial_segments = 10
+
+[sub_resource type="BoxMesh" id="cloth"]
+material = SubResource("towel")
+size = Vector3(0.58, 0.62, 0.035)
+
+[sub_resource type="BoxMesh" id="stripe"]
+material = SubResource("towel")
+size = Vector3(0.018, 0.57, 0.012)
+
+[node name="WallTowelHolder" type="Node3D"]
+
+[node name="Rail" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.36, -0.11)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("rail")
+
+[node name="LeftMount" type="MeshInstance3D" parent="."]
+position = Vector3(-0.39, 0.36, -0.035)
+rotation = Vector3(1.5708, 0, 0)
+scale = Vector3(1.4, 0.22, 1.4)
+mesh = SubResource("rail")
+
+[node name="RightMount" type="MeshInstance3D" parent="."]
+position = Vector3(0.39, 0.36, -0.035)
+rotation = Vector3(1.5708, 0, 0)
+scale = Vector3(1.4, 0.22, 1.4)
+mesh = SubResource("rail")
+
+[node name="HangingTowel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.03, -0.13)
+mesh = SubResource("cloth")
+
+[node name="FoldLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.16, 0.03, -0.153)
+mesh = SubResource("stripe")
+
+[node name="FoldCenter" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.03, -0.153)
+mesh = SubResource("stripe")
+
+[node name="FoldRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.16, 0.03, -0.153)
+mesh = SubResource("stripe")
+

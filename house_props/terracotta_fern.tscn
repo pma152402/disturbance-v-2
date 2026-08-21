@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://c220yytlp3ob5"]
+
+[sub_resource type="StandardMaterial3D" id="pot_mat"]
+albedo_color = Color(0.45, 0.19, 0.09, 1)
+roughness = 0.95
+
+[sub_resource type="CylinderMesh" id="pot"]
+material = SubResource("pot_mat")
+top_radius = 0.19
+bottom_radius = 0.13
+height = 0.3
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="soil_mat"]
+albedo_color = Color(0.1, 0.065, 0.035, 1)
+
+[sub_resource type="CylinderMesh" id="soil"]
+material = SubResource("soil_mat")
+top_radius = 0.17
+bottom_radius = 0.17
+height = 0.025
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="leaf_mat"]
+albedo_color = Color(0.055, 0.22, 0.095, 1)
+roughness = 0.92
+
+[sub_resource type="CapsuleMesh" id="leaf"]
+material = SubResource("leaf_mat")
+radius = 0.045
+height = 0.48
+radial_segments = 7
+rings = 2
+
+[node name="TerracottaFern" type="Node3D" unique_id=1225231284]
+editor_description = "Helecho abierto en maceta clasica de terracota."
+
+[node name="Pot" type="MeshInstance3D" parent="." unique_id=802993577]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+mesh = SubResource("pot")
+
+[node name="Soil" type="MeshInstance3D" parent="." unique_id=1176092119]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.305, 0)
+mesh = SubResource("soil")
+
+[node name="Leaf1" type="MeshInstance3D" parent="." unique_id=763950825]
+transform = Transform3D(0.71091354, 0.7032794, 0, -0.7032794, 0.71091354, 0, 0, 0, 1, -0.125633, 0.51474005, 0)
+mesh = SubResource("leaf")
+
+[node name="Leaf2" type="MeshInstance3D" parent="." unique_id=296667925]
+transform = Transform3D(0.71091354, -0.7032794, 0, 0.7032794, 0.71091354, 0, 0, 0, 1, 0.13502096, 0.5152502, 0)
+mesh = SubResource("leaf")
+
+[node name="Leaf3" type="MeshInstance3D" parent="." unique_id=1805903451]
+transform = Transform3D(1, 0, 0, 0, 0.7518057, -0.65938467, 0, 0.65938467, 0.7518057, 0, 0.55, -0.15)
+mesh = SubResource("leaf")
+
+[node name="Leaf4" type="MeshInstance3D" parent="." unique_id=1681604902]
+transform = Transform3D(1, 0, 0, 0, 0.7518057, 0.65938467, 0, -0.65938467, 0.7518057, 0, 0.55, 0.15)
+mesh = SubResource("leaf")
+
+[node name="Leaf5" type="MeshInstance3D" parent="." unique_id=1242188781]
+transform = Transform3D(0.31170753, -0.01398544, 0, 0.0043597934, 0.9999022, 0, 0, 0, 0.35266578, 0.0014149375, 0.4788377, 0)
+mesh = SubResource("leaf")

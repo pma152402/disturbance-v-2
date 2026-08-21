@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://d285xtf1e7xdr"]
+
+[sub_resource type="StandardMaterial3D" id="Material_phone"]
+albedo_color = Color(0.075, 0.068, 0.055, 1)
+roughness = 0.68
+
+[sub_resource type="BoxMesh" id="Mesh_base"]
+material = SubResource("Material_phone")
+size = Vector3(0.62, 0.22, 0.48)
+
+[sub_resource type="StandardMaterial3D" id="Material_dial"]
+albedo_color = Color(0.32, 0.29, 0.22, 1)
+metallic = 0.25
+roughness = 0.46
+
+[sub_resource type="TorusMesh" id="Mesh_dial"]
+material = SubResource("Material_dial")
+inner_radius = 0.105
+outer_radius = 0.205
+rings = 10
+ring_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="Material_label"]
+albedo_color = Color(0.72, 0.66, 0.51, 1)
+roughness = 0.95
+
+[sub_resource type="CylinderMesh" id="Mesh_label"]
+material = SubResource("Material_label")
+top_radius = 0.09
+bottom_radius = 0.09
+height = 0.025
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="Mesh_grip"]
+material = SubResource("Material_phone")
+top_radius = 0.065
+bottom_radius = 0.065
+height = 0.46
+radial_segments = 10
+
+[sub_resource type="SphereMesh" id="Mesh_receiver_end"]
+material = SubResource("Material_phone")
+radius = 0.11
+height = 0.14
+radial_segments = 10
+rings = 4
+
+[sub_resource type="BoxShape3D" id="Shape_phone"]
+size = Vector3(0.68, 0.42, 0.5)
+
+[node name="RotaryPhone" type="StaticBody3D" unique_id=8882910]
+editor_description = "Telefono negro antiguo con disco y auricular, construido con pocas piezas estilo PS2."
+
+[node name="Base" type="MeshInstance3D" parent="." unique_id=2098750689]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.11, 0)
+mesh = SubResource("Mesh_base")
+
+[node name="RotaryDial" type="MeshInstance3D" parent="." unique_id=1468558207]
+transform = Transform3D(1, 0, 0, 0, 3.1391647e-07, -1, 0, 1, 3.1391647e-07, 0, 0.16362979, -0.14999998)
+mesh = SubResource("Mesh_dial")
+
+[node name="DialLabel" type="MeshInstance3D" parent="." unique_id=1740433230]
+transform = Transform3D(1, 0, 0, 0, 3.1391647e-07, -1, 0, 1, 3.1391647e-07, 0, 0.235, -0.165)
+mesh = SubResource("Mesh_label")
+
+[node name="Receiver" type="Node3D" parent="." unique_id=1630930841]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0)
+
+[node name="Grip" type="MeshInstance3D" parent="Receiver" unique_id=2107459733]
+transform = Transform3D(3.1391647e-07, -1, 0, 1, 3.1391647e-07, 0, 0, 0, 1, -2.860977e-08, -0.09113816, 0)
+mesh = SubResource("Mesh_grip")
+
+[node name="LeftEarpiece" type="MeshInstance3D" parent="Receiver" unique_id=1776656986]
+transform = Transform3D(0.8993699, -0.31477574, 0, 0.4371885, 0.64754635, 0, 0, 0, 1, -0.255, -0.1139777, 0)
+mesh = SubResource("Mesh_receiver_end")
+
+[node name="RightEarpiece" type="MeshInstance3D" parent="Receiver" unique_id=2109157785]
+transform = Transform3D(0.8731002, 0.3510294, 0, -0.4875408, 0.6286322, 0, 0, 0, 1, 0.255, -0.121385634, 0)
+mesh = SubResource("Mesh_receiver_end")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1836151917]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21, 0)
+shape = SubResource("Shape_phone")

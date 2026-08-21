@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3]
+[sub_resource type="StandardMaterial3D" id="frame_mat"]
+albedo_color = Color(0.27, 0.13, 0.035, 1)
+roughness = 0.86
+[sub_resource type="StandardMaterial3D" id="mirror_mat"]
+albedo_color = Color(0.38, 0.46, 0.48, 1)
+metallic = 0.92
+roughness = 0.08
+[sub_resource type="BoxMesh" id="vertical"]
+material = SubResource("frame_mat")
+size = Vector3(0.1, 1.72, 0.09)
+[sub_resource type="BoxMesh" id="horizontal"]
+material = SubResource("frame_mat")
+size = Vector3(0.92, 0.1, 0.09)
+[sub_resource type="QuadMesh" id="glass"]
+material = SubResource("mirror_mat")
+size = Vector2(0.72, 1.52)
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(0.92, 1.72, 0.1)
+[node name="AntiqueMirror" type="StaticBody3D"]
+editor_description = "Espejo alto antiguo con marco de madera y superficie plateada ligeramente azulada."
+[node name="MirrorSurface" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.91, -0.015)
+mesh = SubResource("glass")
+[node name="LeftFrame" type="MeshInstance3D" parent="."]
+position = Vector3(-0.41, 0.91, 0)
+mesh = SubResource("vertical")
+[node name="RightFrame" type="MeshInstance3D" parent="."]
+position = Vector3(0.41, 0.91, 0)
+mesh = SubResource("vertical")
+[node name="TopFrame" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.72, 0)
+mesh = SubResource("horizontal")
+[node name="BottomFrame" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.1, 0)
+mesh = SubResource("horizontal")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.91, 0)
+shape = SubResource("shape")

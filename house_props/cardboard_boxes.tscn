@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://4flqk0ta5sgp"]
+
+[sub_resource type="StandardMaterial3D" id="cardboard"]
+albedo_color = Color(0.46, 0.31, 0.15, 1)
+
+[sub_resource type="BoxMesh" id="large"]
+material = SubResource("cardboard")
+size = Vector3(0.78, 0.58, 0.62)
+
+[sub_resource type="StandardMaterial3D" id="tape"]
+albedo_color = Color(0.66, 0.57, 0.39, 1)
+roughness = 0.82
+
+[sub_resource type="BoxMesh" id="tape_strip"]
+material = SubResource("tape")
+size = Vector3(0.11, 0.012, 0.58724606)
+
+[sub_resource type="BoxMesh" id="medium"]
+material = SubResource("cardboard")
+size = Vector3(0.62, 0.46, 0.5)
+
+[sub_resource type="BoxMesh" id="small"]
+material = SubResource("cardboard")
+size = Vector3(0.48, 0.36, 0.4)
+
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(1.45, 1.05, 0.72)
+
+[node name="CardboardBoxes" type="StaticBody3D" unique_id=1664240136]
+editor_description = "Tres cajas de carton de tamaños distintos, apiladas de forma irregular y con cinta visible."
+
+[node name="LargeBox" type="MeshInstance3D" parent="." unique_id=258008602]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.29, 0)
+mesh = SubResource("large")
+
+[node name="LargeTape" type="MeshInstance3D" parent="." unique_id=1081926128]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.5765617, -0.0061816275)
+mesh = SubResource("tape_strip")
+
+[node name="LargeTape2" type="MeshInstance3D" parent="." unique_id=1170985839]
+transform = Transform3D(1, 0, 0, 0, -0.0023634098, 0.9999972, 0, -0.9999972, -0.0023634098, -0.25, 0.28951254, -0.30405277)
+mesh = SubResource("tape_strip")
+
+[node name="MediumBox" type="MeshInstance3D" parent="." unique_id=794821447]
+transform = Transform3D(0.99680173, 0, 0.07991469, 0, 1, 0, -0.07991469, 0, 0.99680173, 0.43, 0.23, 0.03)
+mesh = SubResource("medium")
+
+[node name="SmallBox" type="MeshInstance3D" parent="." unique_id=664218673]
+transform = Transform3D(0.99820054, 0, -0.059964005, 0, 1, 0, 0.059964005, 0, 0.99820054, -0.2, 0.76, -0.02)
+mesh = SubResource("small")
+
+[node name="SmallTape" type="MeshInstance3D" parent="." unique_id=1174661258]
+transform = Transform3D(0.8, 0, 0, 0, 1, 0, 0, 0, 0.689052, -0.2, 0.93411005, -0.02)
+mesh = SubResource("tape_strip")
+
+[node name="SmallTape3" type="MeshInstance3D" parent="." unique_id=1522042074]
+transform = Transform3D(0.033051014, 0, -1.5286312, 0, 1, 0, 0.799317, 0, 0.06320749, 0.29002333, 0.4549935, 0.029520145)
+mesh = SubResource("tape_strip")
+
+[node name="SmallTape4" type="MeshInstance3D" parent="." unique_id=1764294952]
+transform = Transform3D(0.033051018, 0.99910146, -0.007320013, 0, 0.009466701, 0.77386403, 0.79931694, -0.041311916, 0.00030268356, 0.73701763, 0.23119493, 0.011037341)
+mesh = SubResource("tape_strip")
+
+[node name="SmallTape2" type="MeshInstance3D" parent="." unique_id=1683528299]
+transform = Transform3D(0.8, 0, 0, 0, -0.008298227, 0.61997867, 0, -0.99996555, -0.0051449006, -0.2, 0.75711894, -0.21614835)
+mesh = SubResource("tape_strip")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=683021876]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.525, 0)
+shape = SubResource("shape")
