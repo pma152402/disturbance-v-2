@@ -1,0 +1,71 @@
+[gd_scene load_steps=8 format=3]
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.38, 0.4, 0.37, 1)
+metallic = 0.78
+roughness = 0.3
+[sub_resource type="StandardMaterial3D" id="cream"]
+albedo_color = Color(0.8, 0.78, 0.7, 1)
+roughness = 0.5
+[sub_resource type="StandardMaterial3D" id="sage"]
+albedo_color = Color(0.34, 0.42, 0.35, 1)
+roughness = 0.68
+[sub_resource type="BoxMesh" id="metal_box"]
+material = SubResource("metal")
+[sub_resource type="BoxMesh" id="sage_box"]
+material = SubResource("sage")
+[sub_resource type="CylinderMesh" id="plate"]
+material = SubResource("cream")
+top_radius = 0.16
+bottom_radius = 0.16
+height = 0.025
+radial_segments = 16
+[sub_resource type="CylinderMesh" id="rail"]
+material = SubResource("metal")
+top_radius = 0.012
+bottom_radius = 0.012
+height = 0.48
+radial_segments = 7
+
+[node name="RetroDishDryingRack" type="Node3D"]
+editor_description = "Escurreplatos metalico con bandeja verde, cuatro platos separados y rejillas."
+[node name="DrainTray" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.04, 0)
+scale = Vector3(0.9, 0.06, 0.48)
+mesh = SubResource("sage_box")
+[node name="BackRail" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.25, 0.18)
+rotation = Vector3(0, 0, 1.5708)
+scale = Vector3(1, 1.8, 1)
+mesh = SubResource("rail")
+[node name="FrontRail" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.16, -0.18)
+rotation = Vector3(0, 0, 1.5708)
+scale = Vector3(1, 1.8, 1)
+mesh = SubResource("rail")
+[node name="Plate1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.3, 0.23, 0)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("plate")
+[node name="Plate2" type="MeshInstance3D" parent="."]
+position = Vector3(-0.1, 0.23, 0)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("plate")
+[node name="Plate3" type="MeshInstance3D" parent="."]
+position = Vector3(0.1, 0.23, 0)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("plate")
+[node name="Plate4" type="MeshInstance3D" parent="."]
+position = Vector3(0.3, 0.23, 0)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("plate")
+[node name="Divider1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.2, 0.18, 0)
+mesh = SubResource("rail")
+[node name="Divider2" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.18, 0)
+mesh = SubResource("rail")
+[node name="Divider3" type="MeshInstance3D" parent="."]
+position = Vector3(0.2, 0.18, 0)
+mesh = SubResource("rail")
+

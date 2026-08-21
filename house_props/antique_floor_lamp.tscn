@@ -1,0 +1,63 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://house_props/antique_floor_lamp.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.24, 0.16, 0.06, 1)
+metallic = 0.68
+roughness = 0.36
+[sub_resource type="StandardMaterial3D" id="shade"]
+albedo_color = Color(0.42, 0.09, 0.075, 1)
+roughness = 0.92
+[sub_resource type="StandardMaterial3D" id="glow"]
+albedo_color = Color(1, 0.69, 0.34, 1)
+emission_enabled = true
+emission = Color(1, 0.55, 0.18, 1)
+emission_energy_multiplier = 2.2
+[sub_resource type="CylinderMesh" id="pole"]
+material = SubResource("metal")
+top_radius = 0.035
+bottom_radius = 0.045
+height = 1.65
+radial_segments = 10
+[sub_resource type="CylinderMesh" id="base"]
+material = SubResource("metal")
+top_radius = 0.3
+bottom_radius = 0.34
+height = 0.1
+radial_segments = 14
+[sub_resource type="CylinderMesh" id="shade_mesh"]
+material = SubResource("shade")
+top_radius = 0.2
+bottom_radius = 0.45
+height = 0.58
+radial_segments = 14
+[sub_resource type="SphereMesh" id="bulb"]
+material = SubResource("glow")
+radius = 0.12
+height = 0.24
+radial_segments = 10
+rings = 5
+
+[node name="AntiqueFloorLamp" type="Node3D"]
+editor_description = "Lampara de pie antigua con base de metal, fuste fino, pantalla burdeos y bombilla encendida."
+script = ExtResource("1_script")
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.05, 0)
+mesh = SubResource("base")
+[node name="Pole" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.88, 0)
+mesh = SubResource("pole")
+[node name="Shade" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.78, 0)
+mesh = SubResource("shade_mesh")
+[node name="Bulb" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.7, 0)
+mesh = SubResource("bulb")
+[node name="WarmLight" type="OmniLight3D" parent="."]
+position = Vector3(0, 1.66, 0)
+light_color = Color(1, 0.62, 0.32, 1)
+light_energy = 1.25
+omni_range = 4.6
+omni_attenuation = 1.5
+shadow_enabled = true

@@ -1,0 +1,97 @@
+[gd_scene load_steps=7 format=3]
+
+[sub_resource type="StandardMaterial3D" id="gum"]
+albedo_color = Color(0.72, 0.22, 0.28, 1)
+roughness = 0.48
+[sub_resource type="StandardMaterial3D" id="gum_dark"]
+albedo_color = Color(0.4, 0.075, 0.095, 1)
+roughness = 0.55
+[sub_resource type="StandardMaterial3D" id="tooth"]
+albedo_color = Color(0.91, 0.87, 0.7, 1)
+roughness = 0.34
+[sub_resource type="CapsuleMesh" id="gum_segment"]
+material = SubResource("gum")
+radius = 0.09
+height = 0.34
+radial_segments = 10
+rings = 4
+[sub_resource type="CapsuleMesh" id="tooth_mesh"]
+material = SubResource("tooth")
+radius = 0.035
+height = 0.115
+radial_segments = 8
+rings = 3
+[sub_resource type="SphereMesh" id="palate"]
+material = SubResource("gum_dark")
+radius = 0.25
+height = 0.08
+radial_segments = 16
+rings = 4
+
+[node name="DetailedFalseTeeth" type="Node3D"]
+editor_description = "Dentadura postiza detallada con paladar, encia en herradura y diez dientes individuales."
+[node name="Palate" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.055, 0.035)
+scale = Vector3(1, 1, 0.78)
+mesh = SubResource("palate")
+[node name="GumLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.17, 0.075, 0)
+rotation = Vector3(0, 0.48, 1.5708)
+mesh = SubResource("gum_segment")
+[node name="GumFront" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.075, -0.17)
+rotation = Vector3(1.5708, 0, 1.5708)
+scale = Vector3(1, 1.15, 1)
+mesh = SubResource("gum_segment")
+[node name="GumRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.17, 0.075, 0)
+rotation = Vector3(0, -0.48, 1.5708)
+mesh = SubResource("gum_segment")
+[node name="IncisorL2" type="MeshInstance3D" parent="."]
+position = Vector3(-0.105, 0.035, -0.235)
+rotation = Vector3(-0.12, 0, 0)
+mesh = SubResource("tooth_mesh")
+[node name="IncisorL1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.035, 0.027, -0.25)
+rotation = Vector3(-0.12, 0, 0)
+scale = Vector3(1.1, 1.08, 1)
+mesh = SubResource("tooth_mesh")
+[node name="IncisorR1" type="MeshInstance3D" parent="."]
+position = Vector3(0.035, 0.027, -0.25)
+rotation = Vector3(-0.12, 0, 0)
+scale = Vector3(1.1, 1.08, 1)
+mesh = SubResource("tooth_mesh")
+[node name="IncisorR2" type="MeshInstance3D" parent="."]
+position = Vector3(0.105, 0.035, -0.235)
+rotation = Vector3(-0.12, 0, 0)
+mesh = SubResource("tooth_mesh")
+[node name="CanineLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.165, 0.04, -0.2)
+rotation = Vector3(-0.08, 0, -0.15)
+scale = Vector3(0.9, 1.18, 0.9)
+mesh = SubResource("tooth_mesh")
+[node name="CanineRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.165, 0.04, -0.2)
+rotation = Vector3(-0.08, 0, 0.15)
+scale = Vector3(0.9, 1.18, 0.9)
+mesh = SubResource("tooth_mesh")
+[node name="MolarLeftFront" type="MeshInstance3D" parent="."]
+position = Vector3(-0.215, 0.05, -0.14)
+rotation = Vector3(0, 0, -0.22)
+scale = Vector3(1.15, 0.9, 1.2)
+mesh = SubResource("tooth_mesh")
+[node name="MolarLeftRear" type="MeshInstance3D" parent="."]
+position = Vector3(-0.245, 0.06, -0.06)
+rotation = Vector3(0, 0, -0.28)
+scale = Vector3(1.2, 0.85, 1.3)
+mesh = SubResource("tooth_mesh")
+[node name="MolarRightFront" type="MeshInstance3D" parent="."]
+position = Vector3(0.215, 0.05, -0.14)
+rotation = Vector3(0, 0, 0.22)
+scale = Vector3(1.15, 0.9, 1.2)
+mesh = SubResource("tooth_mesh")
+[node name="MolarRightRear" type="MeshInstance3D" parent="."]
+position = Vector3(0.245, 0.06, -0.06)
+rotation = Vector3(0, 0, 0.28)
+scale = Vector3(1.2, 0.85, 1.3)
+mesh = SubResource("tooth_mesh")

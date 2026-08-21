@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[sub_resource type="Shader" id="floor_shader"]
+code = "shader_type spatial;\nrender_mode diffuse_burley;\nuniform vec4 tile_color : source_color = vec4(0.83, 0.84, 0.8, 1.0);\nuniform vec4 grout_color : source_color = vec4(0.5, 0.52, 0.5, 1.0);\nuniform vec2 tile_count = vec2(9.0, 12.0);\nuniform float grout_width = 0.038;\nvoid fragment() {\n vec2 cell = fract(UV * tile_count);\n float edge = step(cell.x, grout_width) + step(1.0 - grout_width, cell.x) + step(cell.y, grout_width) + step(1.0 - grout_width, cell.y);\n float grout = clamp(edge, 0.0, 1.0);\n vec2 tile_id = floor(UV * tile_count);\n float variation = (sin(tile_id.x * 7.17 + tile_id.y * 3.71) * 0.5 + 0.5) * 0.035;\n ALBEDO = mix(tile_color.rgb + vec3(variation), grout_color.rgb, grout);\n ROUGHNESS = mix(0.48, 0.92, grout);\n}\n"
+
+[sub_resource type="ShaderMaterial" id="floor_material"]
+shader = SubResource("floor_shader")
+
+[sub_resource type="BoxMesh" id="floor_mesh"]
+material = SubResource("floor_material")
+size = Vector3(4.5, 0.045, 5.84)
+
+[node name="BathroomWhiteFloorTiles" type="Node3D"]
+editor_description = "Suelo completo de baldosas blancas para el bano de entrada. No incluye colision adicional."
+
+[node name="WhiteSquareTileFloor" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.035, 0)
+mesh = SubResource("floor_mesh")
+

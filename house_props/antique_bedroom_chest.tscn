@@ -1,0 +1,66 @@
+[gd_scene load_steps=9 format=3]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.24, 0.105, 0.035, 1)
+roughness = 0.86
+[sub_resource type="StandardMaterial3D" id="wood_dark"]
+albedo_color = Color(0.12, 0.045, 0.018, 1)
+roughness = 0.9
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.34, 0.27, 0.12, 1)
+metallic = 0.68
+roughness = 0.38
+[sub_resource type="BoxMesh" id="wood_box"]
+material = SubResource("wood")
+[sub_resource type="BoxMesh" id="dark_box"]
+material = SubResource("wood_dark")
+[sub_resource type="BoxMesh" id="metal_box"]
+material = SubResource("metal")
+[sub_resource type="CylinderMesh" id="lid_curve"]
+material = SubResource("wood")
+top_radius = 0.5
+bottom_radius = 0.5
+height = 1.45
+radial_segments = 12
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(1.55, 0.9, 0.9)
+
+[node name="AntiqueBedroomChest" type="StaticBody3D"]
+editor_description = "Cofre antiguo de madera con tapa abombada, bandas metalicas, cerradura y patas."
+[node name="ChestBody" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.42, 0)
+scale = Vector3(1.5, 0.72, 0.82)
+mesh = SubResource("wood_box")
+[node name="CurvedLid" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.79, 0)
+rotation = Vector3(0, 0, 1.5708)
+scale = Vector3(0.8, 1, 0.8)
+mesh = SubResource("lid_curve")
+[node name="FrontBandLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.5, 0.5, -0.43)
+scale = Vector3(0.07, 0.82, 0.035)
+mesh = SubResource("metal_box")
+[node name="FrontBandRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.5, 0.5, -0.43)
+scale = Vector3(0.07, 0.82, 0.035)
+mesh = SubResource("metal_box")
+[node name="CenterLatch" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.57, -0.47)
+scale = Vector3(0.18, 0.26, 0.05)
+mesh = SubResource("metal_box")
+[node name="Keyhole" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.56, -0.515)
+scale = Vector3(0.04, 0.08, 0.025)
+mesh = SubResource("dark_box")
+[node name="LeftFoot" type="MeshInstance3D" parent="."]
+position = Vector3(-0.58, 0.06, 0)
+scale = Vector3(0.12, 0.14, 0.65)
+mesh = SubResource("dark_box")
+[node name="RightFoot" type="MeshInstance3D" parent="."]
+position = Vector3(0.58, 0.06, 0)
+scale = Vector3(0.12, 0.14, 0.65)
+mesh = SubResource("dark_box")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.45, 0)
+shape = SubResource("collision")
+

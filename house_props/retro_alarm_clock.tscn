@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://bp32wcm4wdcd7"]
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.32, 0.33, 0.3, 1)
+metallic = 0.76
+roughness = 0.3
+
+[sub_resource type="CylinderMesh" id="clock_body"]
+material = SubResource("metal")
+top_radius = 0.28
+bottom_radius = 0.28
+height = 0.14
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="face"]
+albedo_color = Color(0.82, 0.8, 0.71, 1)
+roughness = 0.55
+
+[sub_resource type="CylinderMesh" id="clock_face"]
+material = SubResource("face")
+top_radius = 0.235
+bottom_radius = 0.235
+height = 0.018
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="dark"]
+albedo_color = Color(0.035, 0.038, 0.034, 1)
+roughness = 0.72
+
+[sub_resource type="BoxMesh" id="dark_box"]
+material = SubResource("dark")
+
+[sub_resource type="SphereMesh" id="bell"]
+material = SubResource("metal")
+radius = 0.16
+height = 0.22
+radial_segments = 12
+rings = 5
+
+[sub_resource type="CylinderMesh" id="button"]
+material = SubResource("dark")
+top_radius = 0.035
+bottom_radius = 0.045
+height = 0.1
+radial_segments = 9
+
+[node name="RetroAlarmClock" type="Node3D" unique_id=1752734922]
+editor_description = "Reloj despertador retro de dos campanas con esfera, agujas, patas y boton superior."
+
+[node name="ClockBody" type="MeshInstance3D" parent="." unique_id=441975255]
+transform = Transform3D(1, 0, 0, 0, -3.6199901e-06, -1, 0, 1, -3.6199901e-06, 0, 0.34, 0)
+mesh = SubResource("clock_body")
+
+[node name="ClockFace" type="MeshInstance3D" parent="." unique_id=1107304188]
+transform = Transform3D(1, 0, 0, 0, -3.6199901e-06, -1, 0, 1, -3.6199901e-06, 0, 0.34, -0.081)
+mesh = SubResource("clock_face")
+
+[node name="HourHand" type="MeshInstance3D" parent="." unique_id=1060304582]
+transform = Transform3D(0.021313114, 0.07317621, 0, -0.013067181, 0.119353436, 0, 0, 0, 0.018, -0.040390417, 0.3098436, -0.1)
+mesh = SubResource("dark_box")
+
+[node name="MinuteHand" type="MeshInstance3D" parent="." unique_id=2052024520]
+transform = Transform3D(0.012279982, -0.14622916, 0, 0.013160624, 0.13644426, 0, 0, 0, 0.018, 0.06938841, 0.30155602, -0.102)
+mesh = SubResource("dark_box")
+
+[node name="CenterPin" type="MeshInstance3D" parent="." unique_id=1071472205]
+transform = Transform3D(0.04, 0, 0, 0, 0.04, 0, 0, 0, 0.025, 0, 0.36848032, -0.115)
+mesh = SubResource("dark_box")
+
+[node name="LeftBell" type="MeshInstance3D" parent="." unique_id=2097518821]
+transform = Transform3D(0.9553365, 0.1575524, 0, -0.29552022, 0.5093241, 0, 0, 0, 1, -0.22, 0.67, 0)
+mesh = SubResource("bell")
+
+[node name="RightBell" type="MeshInstance3D" parent="." unique_id=755358463]
+transform = Transform3D(0.9553365, -0.12836038, 0, 0.29552022, 0.4149542, 0, 0, 0, 1, 0.22, 0.67, 0)
+mesh = SubResource("bell")
+
+[node name="TopButton" type="MeshInstance3D" parent="." unique_id=920691881]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6605148, 0)
+mesh = SubResource("button")
+
+[node name="LeftFoot" type="MeshInstance3D" parent="." unique_id=318218039]
+transform = Transform3D(0.046968635, 0.061721608, 0, -0.01714489, 0.1690871, 0, 0, 0, 0.05, -0.18, 0.08, 0)
+mesh = SubResource("dark_box")
+
+[node name="RightFoot" type="MeshInstance3D" parent="." unique_id=1456107736]
+transform = Transform3D(0.046968635, -0.061721608, 0, 0.01714489, 0.1690871, 0, 0, 0, 0.05, 0.18, 0.08, 0)
+mesh = SubResource("dark_box")

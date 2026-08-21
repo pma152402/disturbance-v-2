@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/crochet_doily_transparent.png" id="1_doily_texture"]
+
+[sub_resource type="StandardMaterial3D" id="doily_material"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.62, 0.6, 0.55, 1)
+albedo_texture = ExtResource("1_doily_texture")
+roughness = 1.0
+metallic = 0.0
+texture_filter = 5
+
+[sub_resource type="QuadMesh" id="doily_mesh"]
+material = SubResource("doily_material")
+size = Vector2(1.18, 1.18)
+
+[node name="CrochetTableDoily" type="Node3D"]
+editor_description = "Tapete redondo de ganchillo blanco con transparencia real y calados visibles."
+
+[node name="Lace" type="MeshInstance3D" parent="."]
+rotation = Vector3(-1.5708, 0, 0)
+mesh = SubResource("doily_mesh")
+cast_shadow = 0

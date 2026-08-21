@@ -1,0 +1,63 @@
+[gd_scene load_steps=8 format=3]
+
+[sub_resource type="StandardMaterial3D" id="cream"]
+albedo_color = Color(0.72, 0.69, 0.59, 1)
+roughness = 0.74
+[sub_resource type="StandardMaterial3D" id="sage"]
+albedo_color = Color(0.34, 0.42, 0.35, 1)
+roughness = 0.68
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.38, 0.39, 0.36, 1)
+metallic = 0.78
+roughness = 0.28
+[sub_resource type="BoxMesh" id="cream_box"]
+material = SubResource("cream")
+[sub_resource type="BoxMesh" id="sage_box"]
+material = SubResource("sage")
+[sub_resource type="BoxMesh" id="metal_box"]
+material = SubResource("metal")
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(1.05, 2.1, 0.82)
+
+[node name="RetroRefrigerator" type="StaticBody3D"]
+editor_description = "Nevera antigua de dos puertas con bordes redondeados simulados, rejilla, bisagras y tiradores."
+[node name="Cabinet" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.05, 0)
+scale = Vector3(1.05, 2.1, 0.82)
+mesh = SubResource("cream_box")
+[node name="FreezerDoor" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.75, -0.43)
+scale = Vector3(0.94, 0.58, 0.045)
+mesh = SubResource("sage_box")
+[node name="MainDoor" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.78, -0.43)
+scale = Vector3(0.94, 1.25, 0.045)
+mesh = SubResource("cream_box")
+[node name="DoorDivider" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.43, -0.47)
+scale = Vector3(0.96, 0.04, 0.025)
+mesh = SubResource("metal_box")
+[node name="FreezerHandle" type="MeshInstance3D" parent="."]
+position = Vector3(0.36, 1.72, -0.5)
+scale = Vector3(0.075, 0.34, 0.06)
+mesh = SubResource("metal_box")
+[node name="MainHandle" type="MeshInstance3D" parent="."]
+position = Vector3(0.36, 0.88, -0.5)
+scale = Vector3(0.075, 0.58, 0.06)
+mesh = SubResource("metal_box")
+[node name="TopHinge" type="MeshInstance3D" parent="."]
+position = Vector3(-0.48, 1.85, -0.45)
+scale = Vector3(0.06, 0.14, 0.07)
+mesh = SubResource("metal_box")
+[node name="BottomHinge" type="MeshInstance3D" parent="."]
+position = Vector3(-0.48, 0.45, -0.45)
+scale = Vector3(0.06, 0.14, 0.07)
+mesh = SubResource("metal_box")
+[node name="BottomVent" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.08, -0.45)
+scale = Vector3(0.7, 0.07, 0.04)
+mesh = SubResource("sage_box")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.05, 0)
+shape = SubResource("collision")
+

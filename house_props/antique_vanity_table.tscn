@@ -1,0 +1,171 @@
+[gd_scene format=3 uid="uid://cemigolydjlpq"]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.24, 0.105, 0.035, 1)
+roughness = 0.86
+
+[sub_resource type="BoxMesh" id="wood_box"]
+material = SubResource("wood")
+
+[sub_resource type="StandardMaterial3D" id="wood_dark"]
+albedo_color = Color(0.12, 0.045, 0.018, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="dark_box"]
+material = SubResource("wood_dark")
+
+[sub_resource type="CylinderMesh" id="knob"]
+material = SubResource("wood_dark")
+top_radius = 0.045
+bottom_radius = 0.045
+height = 0.055
+radial_segments = 9
+
+[sub_resource type="StandardMaterial3D" id="mirror"]
+albedo_color = Color(0.36, 0.43, 0.44, 1)
+metallic = 0.9
+roughness = 0.09
+
+[sub_resource type="QuadMesh" id="mirror_quad"]
+material = SubResource("mirror")
+size = Vector2(0.95, 1.15)
+
+[sub_resource type="StandardMaterial3D" id="cracked_glass"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.88, 0.94, 0.96, 0.52)
+
+[sub_resource type="BoxMesh" id="crack_mesh"]
+material = SubResource("cracked_glass")
+
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(1.55, 0.88, 0.55)
+
+[node name="AntiqueVanityTable" type="StaticBody3D" unique_id=695771496]
+editor_description = "Tocador antiguo con tablero, tres cajones, espejo alto enmarcado, patas y pomos."
+
+[node name="TableTop" type="MeshInstance3D" parent="." unique_id=871382887]
+transform = Transform3D(1.65, 0, 0, 0, 0.1, 0, 0, 0, 0.62, 0, 0.82, 0)
+mesh = SubResource("wood_box")
+
+[node name="LeftDrawer" type="MeshInstance3D" parent="." unique_id=749525878]
+transform = Transform3D(0.48, 0, 0, 0, 0.22, 0, 0, 0, 0.58238465, -0.52, 0.67, -0.015727907)
+mesh = SubResource("dark_box")
+
+[node name="CenterDrawer" type="MeshInstance3D" parent="." unique_id=1842511824]
+transform = Transform3D(0.48, 0, 0, 0, 0.22, 0, 0, 0, 0.6073506, 0, 0.67, -0.04041314)
+mesh = SubResource("dark_box")
+
+[node name="RightDrawer" type="MeshInstance3D" parent="." unique_id=1627489914]
+transform = Transform3D(0.48, 0, 0, 0, 0.22, 0, 0, 0, 0.57281154, 0.52, 0.67, -0.036677837)
+mesh = SubResource("dark_box")
+
+[node name="LeftDrawerKnob" type="MeshInstance3D" parent="." unique_id=1577550390]
+transform = Transform3D(1, 0, 0, 0, -3.6199901e-06, -1, 0, 1, -3.6199901e-06, -0.52, 0.67000026, 0.30183375)
+mesh = SubResource("knob")
+
+[node name="CenterDrawerKnob" type="MeshInstance3D" parent="." unique_id=1241676157]
+transform = Transform3D(1, 0, 0, 0, -3.6199901e-06, -1, 0, 1, -3.6199901e-06, 0, 0.6700003, 0.2883724)
+mesh = SubResource("knob")
+
+[node name="RightDrawerKnob" type="MeshInstance3D" parent="." unique_id=1381510982]
+transform = Transform3D(1, 0, 0, 0, -3.6199901e-06, -1, 0, 1, -3.6199901e-06, 0.52, 0.6700004, 0.26981813)
+mesh = SubResource("knob")
+
+[node name="LeftLeg" type="MeshInstance3D" parent="." unique_id=433891737]
+transform = Transform3D(0.11, 0, 0, 0, 0.7, 0, 0, 0, 0.11, -0.66, 0.36, 0)
+mesh = SubResource("wood_box")
+
+[node name="RightLeg" type="MeshInstance3D" parent="." unique_id=21543858]
+transform = Transform3D(0.11, 0, 0, 0, 0.7, 0, 0, 0, 0.11, 0.66, 0.36, 0)
+mesh = SubResource("wood_box")
+
+[node name="MirrorSurface" type="MeshInstance3D" parent="." unique_id=2036522167]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, -0.03)
+mesh = SubResource("mirror_quad")
+
+[node name="MirrorTopFrame" type="MeshInstance3D" parent="." unique_id=531115399]
+transform = Transform3D(1.15, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 2.14, 0)
+mesh = SubResource("dark_box")
+
+[node name="MirrorBottomFrame" type="MeshInstance3D" parent="." unique_id=640822197]
+transform = Transform3D(1.15, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0.96, 0)
+mesh = SubResource("dark_box")
+
+[node name="MirrorLeftFrame" type="MeshInstance3D" parent="." unique_id=1978719404]
+transform = Transform3D(0.1, 0, 0, 0, 1.28, 0, 0, 0, 0.1, -0.53, 1.55, 0)
+mesh = SubResource("dark_box")
+
+[node name="BrokenMirrorCracks" type="Node3D" parent="." unique_id=300329324]
+
+[node name="ImpactOneCenter" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=1969284570]
+transform = Transform3D(0.07, 0, 0, 0, 0.07, 0, 0, 0, 0.018, -0.2, 1.72, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="ImpactOneCrack1" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=557421859]
+transform = Transform3D(0.01794243, -0.0255727, 0, 0.0014384644, 0.31897655, 0, 0, 0, 0.012, -0.2, 1.9, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="ImpactOneCrack2" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=549179037]
+transform = Transform3D(0.007842284, 0.30603418, 0, -0.016201807, 0.14813203, 0, 0, 0, 0.012, -0.04, 1.79, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="ImpactOneCrack3" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=1777947730]
+transform = Transform3D(0.013532503, 0.22419079, 0, -0.011868924, 0.25561395, 0, 0, 0, 0.012, -0.34, 1.58, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="ImpactOneCrack4" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=1345650570]
+transform = Transform3D(0.010904762, -0.2386805, 0, 0.014320828, 0.18174604, 0, 0, 0, 0.012, -0.37, 1.8, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="ImpactOneCrack5" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=1736583246]
+transform = Transform3D(0.013929969, -0.096439324, 0, 0.005563807, 0.2414528, 0, 0, 0, 0.012, -0.12, 1.56, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="ImpactTwoCenter" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=710128047]
+transform = Transform3D(0.06, 0, 0, 0, 0.06, 0, 0, 0, 0.018, 0.27, 1.35, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="ImpactTwoCrack1" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=533575597]
+transform = Transform3D(0.015920067, 0.027953358, 0, -0.0015973349, 0.27860117, 0, 0, 0, 0.012, 0.27, 1.5, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="ImpactTwoCrack2" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=230348735]
+transform = Transform3D(0.008373856, 0.23859024, 0, -0.013633729, 0.14654247, 0, 0, 0, 0.012, 0.4, 1.42, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="ImpactTwoCrack3" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=747704157]
+transform = Transform3D(0.01091554, 0.21934375, 0, -0.011698334, 0.20466638, 0, 0, 0, 0.012, 0.13, 1.25, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="ImpactTwoCrack4" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=639412273]
+transform = Transform3D(0.00930693, -0.22775635, 0, 0.013014649, 0.16287127, 0, 0, 0, 0.012, 0.12, 1.43, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="ImpactTwoCrack5" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=1173208117]
+transform = Transform3D(0.011935344, -0.12544493, 0, 0.0073176217, 0.20460588, 0, 0, 0, 0.012, 0.37, 1.24, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="ImpactOneBranchA" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=344723796]
+transform = Transform3D(0.006139991, 0.13160625, 0, -0.006580312, 0.12279983, 0, 0, 0, 0.008, -0.02, 1.96, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="ImpactOneBranchB" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=1619465369]
+transform = Transform3D(0.0082177995, -0.06524167, 0, 0.0036698438, 0.14609422, 0, 0, 0, 0.008, -0.44, 1.54, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="ImpactTwoBranchA" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=975143445]
+transform = Transform3D(0.008357981, 0.059347276, 0, -0.003338284, 0.14858633, 0, 0, 0, 0.008, 0.46, 1.53, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="ImpactTwoBranchB" type="MeshInstance3D" parent="BrokenMirrorCracks" unique_id=1249453431]
+transform = Transform3D(0.008423071, -0.05988662, 0, 0.003170468, 0.15910245, 0, 0, 0, 0.008, 0.04, 1.18, -0.012)
+mesh = SubResource("crack_mesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=3325034]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44, 0)
+shape = SubResource("collision")
+
+[node name="MirrorRightFrame" type="MeshInstance3D" parent="." unique_id=1023928274]
+transform = Transform3D(0.1, 0, 0, 0, 1.28, 0, 0, 0, 0.1, 0.53, 1.55, 0)
+mesh = SubResource("dark_box")

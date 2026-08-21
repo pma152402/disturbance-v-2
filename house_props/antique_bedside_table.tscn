@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=3]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.24, 0.105, 0.035, 1)
+roughness = 0.86
+[sub_resource type="StandardMaterial3D" id="dark"]
+albedo_color = Color(0.12, 0.045, 0.018, 1)
+roughness = 0.9
+[sub_resource type="BoxMesh" id="wood_box"]
+material = SubResource("wood")
+[sub_resource type="BoxMesh" id="dark_box"]
+material = SubResource("dark")
+[sub_resource type="CylinderMesh" id="knob"]
+material = SubResource("dark")
+top_radius = 0.045
+bottom_radius = 0.045
+height = 0.055
+radial_segments = 9
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(0.72, 0.72, 0.58)
+
+[node name="AntiqueBedsideTable" type="StaticBody3D"]
+editor_description = "Mesita de noche de madera con cajon, puerta inferior, balda y patas cortas."
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.38, 0)
+scale = Vector3(0.7, 0.68, 0.55)
+mesh = SubResource("wood_box")
+[node name="Top" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.76, 0)
+scale = Vector3(0.78, 0.08, 0.62)
+mesh = SubResource("dark_box")
+[node name="Drawer" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.58, -0.3)
+scale = Vector3(0.58, 0.2, 0.045)
+mesh = SubResource("dark_box")
+[node name="LowerDoor" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.29, -0.3)
+scale = Vector3(0.58, 0.28, 0.045)
+mesh = SubResource("dark_box")
+[node name="DrawerKnob" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.58, -0.35)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("knob")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.36, 0)
+shape = SubResource("collision")
+

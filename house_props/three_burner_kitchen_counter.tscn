@@ -1,0 +1,86 @@
+[gd_scene load_steps=10 format=3]
+
+[sub_resource type="StandardMaterial3D" id="cream"]
+albedo_color = Color(0.72, 0.69, 0.59, 1)
+roughness = 0.74
+[sub_resource type="StandardMaterial3D" id="sage"]
+albedo_color = Color(0.34, 0.42, 0.35, 1)
+roughness = 0.7
+[sub_resource type="StandardMaterial3D" id="top"]
+albedo_color = Color(0.48, 0.43, 0.34, 1)
+roughness = 0.6
+[sub_resource type="StandardMaterial3D" id="iron"]
+albedo_color = Color(0.07, 0.075, 0.065, 1)
+metallic = 0.62
+roughness = 0.46
+[sub_resource type="BoxMesh" id="cream_box"]
+material = SubResource("cream")
+[sub_resource type="BoxMesh" id="sage_box"]
+material = SubResource("sage")
+[sub_resource type="BoxMesh" id="top_box"]
+material = SubResource("top")
+[sub_resource type="CylinderMesh" id="burner"]
+material = SubResource("iron")
+top_radius = 0.17
+bottom_radius = 0.17
+height = 0.035
+radial_segments = 16
+[sub_resource type="CylinderMesh" id="knob"]
+material = SubResource("iron")
+top_radius = 0.055
+bottom_radius = 0.055
+height = 0.05
+radial_segments = 10
+
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(1.56, 1.08, 0.7)
+
+[node name="ThreeBurnerKitchenCounter" type="StaticBody3D"]
+editor_description = "Encimera antigua coordinada con tres hornillas de hierro, mandos frontales y armario inferior."
+[node name="CabinetBody" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.48, 0)
+scale = Vector3(1.45, 0.9, 0.62)
+mesh = SubResource("cream_box")
+[node name="CounterTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.96, -0.01)
+scale = Vector3(1.56, 0.09, 0.7)
+mesh = SubResource("top_box")
+[node name="LargeBurner" type="MeshInstance3D" parent="."]
+position = Vector3(-0.4, 1.03, -0.08)
+mesh = SubResource("burner")
+[node name="RearBurner" type="MeshInstance3D" parent="."]
+position = Vector3(0.33, 1.03, 0.12)
+scale = Vector3(0.82, 1, 0.82)
+mesh = SubResource("burner")
+[node name="FrontBurner" type="MeshInstance3D" parent="."]
+position = Vector3(0.36, 1.03, -0.2)
+scale = Vector3(0.72, 1, 0.72)
+mesh = SubResource("burner")
+[node name="LeftDoor" type="MeshInstance3D" parent="."]
+position = Vector3(-0.37, 0.48, -0.33)
+scale = Vector3(0.63, 0.68, 0.045)
+mesh = SubResource("sage_box")
+[node name="RightDoor" type="MeshInstance3D" parent="."]
+position = Vector3(0.37, 0.48, -0.33)
+scale = Vector3(0.63, 0.68, 0.045)
+mesh = SubResource("sage_box")
+[node name="ControlRail" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.83, -0.37)
+scale = Vector3(1.25, 0.12, 0.035)
+mesh = SubResource("cream_box")
+[node name="Knob1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.28, 0.83, -0.42)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("knob")
+[node name="Knob2" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.83, -0.42)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("knob")
+[node name="Knob3" type="MeshInstance3D" parent="."]
+position = Vector3(0.28, 0.83, -0.42)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("knob")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.54, -0.01)
+shape = SubResource("collision")

@@ -1,0 +1,80 @@
+[gd_scene load_steps=11 format=3]
+
+[sub_resource type="StandardMaterial3D" id="cream"]
+albedo_color = Color(0.72, 0.69, 0.59, 1)
+roughness = 0.74
+[sub_resource type="StandardMaterial3D" id="sage"]
+albedo_color = Color(0.34, 0.42, 0.35, 1)
+roughness = 0.68
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.46, 0.48, 0.45, 1)
+metallic = 0.88
+roughness = 0.23
+[sub_resource type="BoxMesh" id="cream_box"]
+material = SubResource("cream")
+[sub_resource type="BoxMesh" id="sage_box"]
+material = SubResource("sage")
+[sub_resource type="BoxMesh" id="metal_box"]
+material = SubResource("metal")
+[sub_resource type="TorusMesh" id="sink_rim"]
+material = SubResource("metal")
+inner_radius = 0.25
+outer_radius = 0.38
+rings = 12
+ring_segments = 16
+[sub_resource type="CylinderMesh" id="faucet"]
+material = SubResource("metal")
+top_radius = 0.03
+bottom_radius = 0.04
+height = 0.42
+radial_segments = 10
+[sub_resource type="CylinderMesh" id="knob"]
+material = SubResource("metal")
+top_radius = 0.055
+bottom_radius = 0.055
+height = 0.05
+radial_segments = 10
+
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(1.6, 1.04, 0.73)
+
+[node name="RetroSinkCounter" type="StaticBody3D"]
+editor_description = "Modulo fregadero coordinado con seno metalico, grifo alto, dos mandos y puertas inferiores."
+[node name="CabinetBody" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.48, 0)
+scale = Vector3(1.5, 0.9, 0.65)
+mesh = SubResource("cream_box")
+[node name="CounterTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.96, 0)
+scale = Vector3(1.6, 0.09, 0.73)
+mesh = SubResource("metal_box")
+[node name="SinkRim" type="MeshInstance3D" parent="."]
+position = Vector3(-0.2, 1.02, -0.03)
+scale = Vector3(1.1, 1, 0.82)
+mesh = SubResource("sink_rim")
+[node name="LeftDoor" type="MeshInstance3D" parent="."]
+position = Vector3(-0.38, 0.48, -0.35)
+scale = Vector3(0.64, 0.67, 0.045)
+mesh = SubResource("sage_box")
+[node name="RightDoor" type="MeshInstance3D" parent="."]
+position = Vector3(0.38, 0.48, -0.35)
+scale = Vector3(0.64, 0.67, 0.045)
+mesh = SubResource("sage_box")
+[node name="FaucetStem" type="MeshInstance3D" parent="."]
+position = Vector3(0.35, 1.2, 0.15)
+mesh = SubResource("faucet")
+[node name="FaucetSpout" type="MeshInstance3D" parent="."]
+position = Vector3(0.2, 1.38, 0.03)
+rotation = Vector3(1.5708, 0, 1.5708)
+scale = Vector3(0.8, 0.8, 0.8)
+mesh = SubResource("faucet")
+[node name="HotKnob" type="MeshInstance3D" parent="."]
+position = Vector3(0.16, 1.05, 0.17)
+mesh = SubResource("knob")
+[node name="ColdKnob" type="MeshInstance3D" parent="."]
+position = Vector3(0.54, 1.05, 0.17)
+mesh = SubResource("knob")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.52, 0)
+shape = SubResource("collision")
