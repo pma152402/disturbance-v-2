@@ -2,8 +2,18 @@ extends StaticBody3D
 
 @export var lamp_group: StringName = &"living_room_ceiling_lamp"
 @export var assigned_lamps: Array[NodePath] = []
+@export var switch_on_sound: AudioStream
+@export var switch_off_sound: AudioStream
 
 @onready var rocker: MeshInstance3D = $Rocker
+@onready var switch_audio: AudioStreamPlayer3D = $SwitchAudio
+
+var _rocker_tween: Tween
+
+
+func _ready() -> void:
+	# Las lamparas terminan su propio _ready primero; despues reflejamos su estado real.
+	call_deferred(&"_sync_rocker_with_lamps")
 
 
 func get_interaction_key() -> Key:
@@ -11,7 +21,8 @@ func get_interaction_key() -> Key:
 
 
 func uses_switch_sound() -> bool:
-	return true
+	# El componente reproduce su audio 3D; el jugador no debe duplicarlo.
+	return false
 
 
 func get_interaction_text(_player: Node = null) -> String:
@@ -30,8 +41,35 @@ func interact(_player: Node = null) -> bool:
 	var now_on := not _are_all_lamps_on(lamps)
 	for lamp: Node in lamps:
 		lamp.call("set_lamp_enabled", now_on)
-	rocker.rotation.x = deg_to_rad(-14.0 if now_on else 14.0)
+	_set_rocker_position(now_on, true)
+	_play_switch_sound(now_on)
 	return true
+
+
+func _sync_rocker_with_lamps() -> void:
+	var lamps := _get_controlled_lamps()
+	_set_rocker_position(not lamps.is_empty() and _are_all_lamps_on(lamps), false)
+
+
+func _set_rocker_position(is_on: bool, animated: bool) -> void:
+	var target_angle := deg_to_rad(-14.0 if is_on else 14.0)
+	if _rocker_tween != null:
+		_rocker_tween.kill()
+	if not animated:
+		rocker.rotation.x = target_angle
+		return
+	_rocker_tween = create_tween()
+	_rocker_tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_rocker_tween.tween_property(rocker, "rotation:x", target_angle, 0.075)
+
+
+func _play_switch_sound(is_on: bool) -> void:
+	var selected_stream := switch_on_sound if is_on else switch_off_sound
+	if selected_stream == null:
+		return
+	switch_audio.stream = selected_stream
+	switch_audio.pitch_scale = randf_range(0.985, 1.015)
+	switch_audio.play()
 
 
 func _get_controlled_lamps() -> Array[Node]:

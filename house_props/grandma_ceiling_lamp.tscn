@@ -1,7 +1,9 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://house_props/grandma_ceiling_lamp.gd" id="1_controller"]
 [ext_resource type="Script" path="res://flickering_light.gd" id="2_flicker"]
+[ext_resource type="AudioStream" path="res://sounds/objects/light_flicker.mp3" id="3_flicker_audio"]
+[ext_resource type="Script" path="res://sounds/objects/flicker_sound_player.gd" id="4_flicker_player"]
 
 [sub_resource type="StandardMaterial3D" id="Brass"]
 albedo_color = Color(0.29, 0.19, 0.065, 1)
@@ -92,6 +94,18 @@ flicker_strength = 0.12
 blackout_min_duration = 0.08
 blackout_max_duration = 0.18
 fixture_path = NodePath("../WarmBulb")
+flicker_sound_path = NodePath("../FlickerSound")
+
+[node name="FlickerSound" type="AudioStreamPlayer3D" parent="."]
+position = Vector3(0, -0.78, 0)
+stream = ExtResource("3_flicker_audio")
+volume_db = -8.5
+unit_size = 5.0
+max_distance = 18.0
+attenuation_model = 1
+script = ExtResource("4_flicker_player")
+clip_start = 1.15
+clip_duration = 0.55
 
 [node name="DownwardHalo" type="SpotLight3D" parent="."]
 position = Vector3(0, -0.9, 0)

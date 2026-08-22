@@ -7,6 +7,7 @@ extends OmniLight3D
 @export var blackout_min_duration := 0.22
 @export var blackout_max_duration := 0.58
 @export var fixture_path: NodePath
+@export var flicker_sound_path: NodePath
 
 var _time := 0.0
 var _noise := FastNoiseLite.new()
@@ -14,6 +15,7 @@ var _blackout_remaining := 0.0
 var _blackout_cooldown := 0.0
 var _fixture_material: StandardMaterial3D
 var _fixture_is_dark := false
+var _flicker_sound: AudioStreamPlayer3D
 
 
 func _ready() -> void:
@@ -24,6 +26,7 @@ func _ready() -> void:
 	if fixture:
 		_fixture_material = fixture.get_active_material(0).duplicate() as StandardMaterial3D
 		fixture.set_surface_override_material(0, _fixture_material)
+	_flicker_sound = get_node_or_null(flicker_sound_path) as AudioStreamPlayer3D
 
 
 func _process(delta: float) -> void:
@@ -42,6 +45,8 @@ func _process(delta: float) -> void:
 		_blackout_cooldown = _blackout_remaining + randf_range(0.65, 1.5)
 		light_energy = 0.0
 		_set_fixture_dark(true)
+		if _flicker_sound != null and _flicker_sound.has_method(&"play_flicker"):
+			_flicker_sound.call(&"play_flicker")
 		return
 
 	_set_fixture_dark(false)

@@ -3,6 +3,7 @@ extends Node3D
 @onready var warm_light: OmniLight3D = $GentleWarmGlow
 @onready var downward_halo: SpotLight3D = $DownwardHalo
 @onready var glowing_bulb: MeshInstance3D = $WarmBulb
+@onready var flicker_sound: AudioStreamPlayer3D = $FlickerSound
 
 var is_on := false
 
@@ -25,6 +26,8 @@ func set_lamp_enabled(enabled: bool) -> void:
 	warm_light.set_process(enabled)
 	downward_halo.visible = enabled
 	glowing_bulb.visible = enabled
+	if not enabled and flicker_sound.has_method(&"stop_flicker"):
+		flicker_sound.call(&"stop_flicker")
 	if enabled:
 		warm_light.light_energy = float(warm_light.get("base_energy"))
 		downward_halo.light_energy = 3.2

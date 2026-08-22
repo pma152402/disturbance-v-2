@@ -335,13 +335,13 @@ func _update_footsteps(_delta: float, input_vector: Vector2, is_sprinting: bool)
 		return
 	_last_footstep_beat = current_beat
 
-	var volume := -13.0
+	var volume := -19.0
 	if is_sprinting:
-		volume = -8.5
+		volume = -14.5
 	elif _stance == Stance.CROUCHED:
-		volume = -17.0
+		volume = -23.0
 	elif _stance == Stance.PRONE:
-		volume = -20.0
+		volume = -26.0
 	footstep_sound.volume_db = volume + randf_range(-1.2, 0.8)
 	footstep_sound.pitch_scale = randf_range(0.88, 1.12)
 	footstep_sound.play()
