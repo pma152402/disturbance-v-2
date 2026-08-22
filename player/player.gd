@@ -178,7 +178,7 @@ func _input(event: InputEvent) -> void:
 		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and not _flashlight_holstered:
 			flashlight.visible = not flashlight.visible
 			flashlight_click_sound.pitch_scale = randf_range(0.98, 1.02)
-			flashlight_click_sound.call(&"play_clip")
+			flashlight_click_sound.play()
 			get_viewport().set_input_as_handled()
 			return
 		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_LEFT:
@@ -317,10 +317,7 @@ func _toggle_flashlight_holster() -> void:
 
 func play_switch_sound() -> void:
 	switch_sound.pitch_scale = randf_range(0.97, 1.03)
-	if switch_sound.has_method(&"play_clip"):
-		switch_sound.call(&"play_clip")
-	else:
-		switch_sound.play()
+	switch_sound.play()
 
 
 func _update_footsteps(_delta: float, input_vector: Vector2, is_sprinting: bool) -> void:
@@ -335,13 +332,13 @@ func _update_footsteps(_delta: float, input_vector: Vector2, is_sprinting: bool)
 		return
 	_last_footstep_beat = current_beat
 
-	var volume := -19.0
+	var volume := -25.0
 	if is_sprinting:
-		volume = -14.5
+		volume = -20.5
 	elif _stance == Stance.CROUCHED:
-		volume = -23.0
+		volume = -29.0
 	elif _stance == Stance.PRONE:
-		volume = -26.0
+		volume = -32.0
 	footstep_sound.volume_db = volume + randf_range(-1.2, 0.8)
 	footstep_sound.pitch_scale = randf_range(0.88, 1.12)
 	footstep_sound.play()

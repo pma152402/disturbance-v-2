@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://player/player.gd" id="1_player"]
 [ext_resource type="ArrayMesh" path="res://ps2_objects/Flashlight/Flashlight.obj" id="2_flashlight_mesh"]
@@ -6,9 +6,8 @@
 [ext_resource type="PackedScene" path="res://can_visual.tscn" id="4_can_visual"]
 [ext_resource type="PackedScene" path="res://bottle_visual.tscn" id="5_bottle_visual"]
 [ext_resource type="FontFile" path="res://assets/fonts/PressStart2P-Regular.ttf" id="6_pixel_font"]
-[ext_resource type="AudioStream" path="res://sounds/interactions/flashlight_click.mp3" id="7_flashlight_click"]
+[ext_resource type="AudioStream" path="res://sounds/interactions/flashlight_toggle.wav" id="7_flashlight_click"]
 [ext_resource type="AudioStream" path="res://sounds/interactions/light_switch_on.wav" id="8_light_switch"]
-[ext_resource type="Script" path="res://sounds/interactions/short_interaction_sound.gd" id="9_short_sound"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.34
@@ -80,9 +79,6 @@ volume_db = -9.0
 [node name="FlashlightClickSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_flashlight_click")
 volume_db = -9.0
-script = ExtResource("9_short_sound")
-clip_start = 1.55
-clip_duration = 1.4
 
 [node name="FootstepSound" type="AudioStreamPlayer" parent="."]
 volume_db = -13.0
