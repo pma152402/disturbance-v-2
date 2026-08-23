@@ -37,7 +37,6 @@ fog_sky_affect = 0.72
 shader = ExtResource("3_shader")
 shader_parameter/pixel_size = 8.0
 shader_parameter/color_levels = 24.0
-shader_parameter/noise_strength = 0.025
 shader_parameter/chromatic_aberration = 1.2
 shader_parameter/scanline_strength = 0.09
 shader_parameter/fisheye_strength = 0.007
