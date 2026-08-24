@@ -64,12 +64,12 @@
 [ext_resource type="PackedScene" path="res://house_props/yellow_detergent_bottle.tscn" id="80_yellow_detergent"]
 [ext_resource type="PackedScene" uid="uid://e607axembg5f" path="res://house_props/striped_detergent_box.tscn" id="81_striped_detergent"]
 [ext_resource type="PackedScene" uid="uid://cc3jm0f8osgjv" path="res://house_props/circle_pattern_detergent_box.tscn" id="82_circle_detergent"]
-[ext_resource type="PackedScene" path="res://house_props/detailed_toilet.tscn" id="83_toilet"]
-[ext_resource type="PackedScene" path="res://house_props/detailed_bathtub_shower.tscn" id="84_bathtub"]
+[ext_resource type="PackedScene" uid="uid://ddrvx46yq3koc" path="res://house_props/detailed_toilet.tscn" id="83_toilet"]
+[ext_resource type="PackedScene" uid="uid://ct0tb5gah586w" path="res://house_props/detailed_bathtub_shower.tscn" id="84_bathtub"]
 [ext_resource type="PackedScene" path="res://house_props/detailed_pedestal_sink.tscn" id="85_sink"]
-[ext_resource type="PackedScene" path="res://house_props/wall_toilet_roll_holder.tscn" id="86_toilet_roll"]
+[ext_resource type="PackedScene" uid="uid://ctn2lcgvm8rkv" path="res://house_props/wall_toilet_roll_holder.tscn" id="86_toilet_roll"]
 [ext_resource type="PackedScene" path="res://house_props/wall_towel_holder.tscn" id="87_towel_holder"]
-[ext_resource type="PackedScene" path="res://house_props/small_white_bathroom_shelf.tscn" id="89_bathroom_shelf"]
+[ext_resource type="PackedScene" uid="uid://hc04qilkyfei" path="res://house_props/small_white_bathroom_shelf.tscn" id="89_bathroom_shelf"]
 [ext_resource type="PackedScene" path="res://house_props/white_antique_mirror.tscn" id="90_white_mirror"]
 [ext_resource type="PackedScene" path="res://house_props/old_woman_photo_frame.tscn" id="91_old_woman_frame"]
 [ext_resource type="PackedScene" path="res://house_props/bathroom_floor_tile_panel.tscn" id="93_floor_tiles"]
@@ -3448,7 +3448,7 @@ transform = Transform3D(-1.1261328, 0, 0.019309947, 0, 1, 0, -0.017677577, 0, -1
 transform = Transform3D(-1.2188475, 0, -0.0096491305, 0, 1.2116429, 0, 0.011009299, 0, -1.0682622, -3.4922018, 0.019200012, 5.4300447)
 
 [node name="DetailedBathtubShower" parent="." unique_id=1545146978 instance=ExtResource("84_bathtub")]
-transform = Transform3D(1.2289222, 0, 0, 0, 1, 0, 0, 0, 1.4980679, -4.7347755, 0.006359577, 10.22097)
+transform = Transform3D(1.2289222, 0, 0, 0, 1, 0, 0, 0, 1.4980679, -4.734052, 0.050037235, 10.221611)
 
 [node name="BookOpeningWallCabinet" parent="." unique_id=2097912195 instance=ExtResource("99_flap_cabinets")]
 transform = Transform3D(-0.9999758, 0, 0.006949883, 0, 0.8906947, 0, -0.006949883, 0, -0.9999758, 6.0943947, 1.9046881, -5.6769943)

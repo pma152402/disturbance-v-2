@@ -1,69 +1,75 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene format=3 uid="uid://ddrvx46yq3koc"]
+
 [sub_resource type="StandardMaterial3D" id="porcelain"]
 albedo_color = Color(0.82, 0.83, 0.79, 1)
 roughness = 0.38
-[sub_resource type="StandardMaterial3D" id="water"]
-transparency = 1
-albedo_color = Color(0.12, 0.28, 0.34, 0.55)
-roughness = 0.18
-[sub_resource type="StandardMaterial3D" id="metal"]
-albedo_color = Color(0.5, 0.52, 0.5, 1)
-metallic = 0.88
-roughness = 0.22
-[sub_resource type="CapsuleMesh" id="base"]
-material = SubResource("porcelain")
-radius = 0.26
-height = 0.58
-radial_segments = 12
-rings = 3
+
 [sub_resource type="TorusMesh" id="bowl_rim"]
 material = SubResource("porcelain")
 inner_radius = 0.19
 outer_radius = 0.32
 rings = 10
 ring_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="water"]
+transparency = 1
+albedo_color = Color(0.12, 0.28, 0.34, 0.55)
+roughness = 0.18
+
 [sub_resource type="CylinderMesh" id="bowl_water"]
 material = SubResource("water")
 top_radius = 0.185
 bottom_radius = 0.185
 height = 0.018
 radial_segments = 14
+
 [sub_resource type="BoxMesh" id="tank"]
 material = SubResource("porcelain")
 size = Vector3(0.56, 0.62, 0.25)
+
 [sub_resource type="BoxMesh" id="tank_lid"]
 material = SubResource("porcelain")
 size = Vector3(0.59, 0.07, 0.28)
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.5, 0.52, 0.5, 1)
+metallic = 0.88
+roughness = 0.22
+
 [sub_resource type="CylinderMesh" id="button"]
 material = SubResource("metal")
 top_radius = 0.055
 bottom_radius = 0.055
 height = 0.025
 radial_segments = 10
-[node name="DetailedToilet" type="Node3D"]
+
+[node name="DetailedToilet" type="Node3D" unique_id=2075792956]
 editor_description = "Inodoro detallado con pie, taza, agua, asiento, cisterna, tapa y pulsador metalico."
-[node name="Pedestal" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.29, 0.08)
-scale = Vector3(0.9, 1, 1.08)
-mesh = SubResource("base")
-[node name="BowlRim" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.55, -0.12)
-scale = Vector3(1, 1, 1.25)
+
+[node name="BowlRim" type="MeshInstance3D" parent="." unique_id=1569088249]
+transform = Transform3D(1, 0, 0, 0, 4.1001806, 0, 0, 0, 1.25, 0, 0.3405676, -0.12)
 mesh = SubResource("bowl_rim")
-[node name="BowlWater" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.535, -0.12)
-scale = Vector3(1, 1, 1.25)
+
+[node name="BowlWater" type="MeshInstance3D" parent="." unique_id=1456636039]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.25, 0, 0.4281773, -0.12)
 mesh = SubResource("bowl_water")
-[node name="Seat" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.595, -0.12)
-scale = Vector3(0.9, 0.45, 1.13)
+
+[node name="Seat" type="MeshInstance3D" parent="." unique_id=463397008]
+transform = Transform3D(0.9, 0, 0, 0, 0.45, 0, 0, 0, 1.13, 0, 0.595, -0.12)
 mesh = SubResource("bowl_rim")
-[node name="Tank" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.72, 0.3)
+
+[node name="Tank" type="MeshInstance3D" parent="." unique_id=7438385]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0.3)
 mesh = SubResource("tank")
-[node name="TankLid" type="MeshInstance3D" parent="."]
-position = Vector3(0, 1.065, 0.3)
+
+[node name="TankLid" type="MeshInstance3D" parent="." unique_id=1944367245]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.065, 0.3)
 mesh = SubResource("tank_lid")
-[node name="FlushButton" type="MeshInstance3D" parent="."]
-position = Vector3(0.15, 1.11, 0.3)
+
+[node name="FlushButton" type="MeshInstance3D" parent="." unique_id=1627554993]
+transform = Transform3D(3.746271, 0, 0, 0, 1, 0, 0, 0, 4.8019166, 0.013207585, 0.35075945, -0.15878636)
+mesh = SubResource("button")
+
+[node name="FlushButton2" type="MeshInstance3D" parent="." unique_id=1831573797]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.009924024, 1.11, 0.3)
 mesh = SubResource("button")

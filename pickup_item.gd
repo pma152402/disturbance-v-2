@@ -2,6 +2,10 @@ extends Area3D
 
 @export var item_name := "OBJETO"
 @export var item_type: StringName = &"bottle"
+@export_group("Pickup animation")
+@export var pickup_rise := 0.55
+@export var pickup_rotation := Vector3(0.4, 1.8, -0.3)
+@export var pickup_duration := 0.28
 
 var _picked_up := false
 
@@ -30,8 +34,9 @@ func interact(_player: Node = null) -> bool:
 
 	var tween := create_tween().set_parallel(true)
 	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.tween_property(self, "position", position + Vector3(0.0, 0.55, 0.0), 0.28)
-	tween.tween_property(self, "rotation", rotation + Vector3(0.4, 1.8, -0.3), 0.28)
-	tween.tween_property(self, "scale", Vector3.ZERO, 0.28)
+	tween.tween_property(self, "position", position + Vector3(0.0, pickup_rise, 0.0), pickup_duration)
+	if not pickup_rotation.is_zero_approx():
+		tween.tween_property(self, "rotation", rotation + pickup_rotation, pickup_duration)
+	tween.tween_property(self, "scale", Vector3.ZERO, pickup_duration)
 	tween.chain().tween_callback(queue_free)
 	return true

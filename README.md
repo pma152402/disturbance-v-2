@@ -1,19 +1,18 @@
-# 3D Lights and Shadows
+# Disturbance V2
 
-This project showcases various 3D light and shadow features supported by Godot.
-This includes contact-hardening shadows (PCSS), light projectors, and area lights.
+Juego de terror en primera persona hecho con Godot 4 y renderer Forward+.
 
-The background sky uses a PhysicalSkyMaterial, which allows for the sky colors
-to be automatically adjusted as the sun performs a day/night cycle. The radiance
-map (used to provide ambient and reflected light to the scene) is updated in
-real-time with the environment sky's process mode set accordingly.
+## Escenas principales
 
-Language: GDScript
+- `test.tscn`: escena de arranque; integra casa, jugador, exterior, clima y postprocesado.
+- `house_baked.tscn`: mapa editable y decoracion de la casa.
+- `player/player.tscn`: personaje, camara, manos, interaccion y audio de movimiento.
 
-Renderer: Forward+
+## Organizacion
 
-Check out this demo on the asset library: https://godotengine.org/asset-library/asset/2741
+- `house_props/`: componentes reutilizables de mobiliario, luces e interacciones.
+- `sounds/`: ambientes, interacciones y sonidos localizados de objetos.
+- `assets/`: imagenes, fuentes y recursos propios del juego.
+- `ps2_house/` y `ps2_objects/`: paquetes externos conservados con sus rutas originales.
 
-## Screenshots
-
-![Screenshot](screenshots/3d_lights_and_shadows.webp)
+La carpeta `.godot/` es cache local y no se versiona.

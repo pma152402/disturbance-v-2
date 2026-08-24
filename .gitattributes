@@ -1,0 +1,23 @@
+* text=auto
+
+# Recursos de texto de Godot: mismos finales de linea en Windows y Git.
+*.gd text eol=lf
+*.gdshader text eol=lf
+*.godot text eol=lf
+*.tscn text eol=lf
+*.tres text eol=lf
+*.md text eol=lf
+
+# Recursos binarios.
+*.blend binary
+*.dae binary
+*.fbx binary
+*.glb binary
+*.jpg binary
+*.mp3 binary
+*.obj binary
+*.png binary
+*.res binary
+*.ttf binary
+*.wav binary
+*.webp binary

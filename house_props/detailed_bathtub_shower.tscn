@@ -1,80 +1,95 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene format=3 uid="uid://ct0tb5gah586w"]
+
 [sub_resource type="StandardMaterial3D" id="porcelain"]
 albedo_color = Color(0.76, 0.8, 0.79, 1)
 roughness = 0.42
-[sub_resource type="StandardMaterial3D" id="metal"]
-albedo_color = Color(0.46, 0.49, 0.49, 1)
-metallic = 0.9
-roughness = 0.2
+
 [sub_resource type="StandardMaterial3D" id="dark"]
 albedo_color = Color(0.07, 0.08, 0.08, 1)
 roughness = 0.7
-[sub_resource type="CylinderMesh" id="pipe"]
-material = SubResource("metal")
-top_radius = 0.025
-bottom_radius = 0.025
-height = 1.55
-radial_segments = 8
-[sub_resource type="CylinderMesh" id="spout"]
-material = SubResource("metal")
-top_radius = 0.04
-bottom_radius = 0.055
-height = 0.34
-radial_segments = 9
-[sub_resource type="CylinderMesh" id="shower_head"]
-material = SubResource("metal")
-top_radius = 0.14
-bottom_radius = 0.1
-height = 0.08
-radial_segments = 12
+
 [sub_resource type="CylinderMesh" id="knob"]
 material = SubResource("dark")
 top_radius = 0.075
 bottom_radius = 0.075
 height = 0.055
 radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.46, 0.49, 0.49, 1)
+metallic = 0.9
+roughness = 0.2
+
+[sub_resource type="CylinderMesh" id="pipe"]
+material = SubResource("metal")
+top_radius = 0.025
+bottom_radius = 0.025
+height = 1.55
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="spout"]
+material = SubResource("metal")
+top_radius = 0.04
+bottom_radius = 0.055
+height = 0.34
+radial_segments = 9
+
+[sub_resource type="CylinderMesh" id="shower_head"]
+material = SubResource("metal")
+top_radius = 0.14
+bottom_radius = 0.1
+height = 0.08
+radial_segments = 12
+
 [sub_resource type="BoxShape3D" id="shape"]
 size = Vector3(1.9, 0.68, 0.9)
-[node name="DetailedBathtubShower" type="StaticBody3D"]
+
+[node name="DetailedBathtubShower" type="StaticBody3D" unique_id=237694344]
 editor_description = "Bañera realmente hueca con borde, desagüe, grifos, caño, columna y cabezal de ducha."
-[node name="TubShell" type="CSGBox3D" parent="."]
-position = Vector3(0, 0.34, 0)
+
+[node name="TubShell" type="CSGBox3D" parent="." unique_id=84650802]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, 0)
 size = Vector3(1.9, 0.68, 0.9)
 material = SubResource("porcelain")
-[node name="InnerCavity" type="CSGBox3D" parent="TubShell"]
+
+[node name="InnerCavity" type="CSGBox3D" parent="TubShell" unique_id=1128459402]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.11, 0)
 operation = 2
-position = Vector3(0, 0.11, 0)
 size = Vector3(1.62, 0.58, 0.64)
 material = SubResource("porcelain")
-[node name="Drain" type="MeshInstance3D" parent="."]
-position = Vector3(-0.52, 0.11, 0)
-rotation = Vector3(1.570796, 0, 0)
-scale = Vector3(0.45, 0.3, 0.45)
+
+[node name="Drain" type="MeshInstance3D" parent="." unique_id=1196838533]
+transform = Transform3D(0.45, 0, 0, 0, 9.417494e-08, -0.45, 0, 0.3, 1.412624e-07, -0.52, 0.11, 0)
 mesh = SubResource("knob")
-[node name="ShowerColumn" type="MeshInstance3D" parent="."]
-position = Vector3(0.72, 1.28, 0.36)
+
+[node name="ShowerColumn" type="MeshInstance3D" parent="." unique_id=786416165]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.72, 1.28, 0.36)
 mesh = SubResource("pipe")
-[node name="TopArm" type="MeshInstance3D" parent="."]
-position = Vector3(0.72, 2.02, 0.18)
-rotation = Vector3(1.570796, 0, 0)
-scale = Vector3(1, 0.3, 1)
+
+[node name="TopArm" type="MeshInstance3D" parent="." unique_id=1107157196]
+transform = Transform3D(1, 0, 0, 0, 3.296585e-07, -1.0000008, 0, 1.0501472, 3.1391673e-07, 0.72, 2.02, 0.18)
 mesh = SubResource("spout")
-[node name="ShowerHead" type="MeshInstance3D" parent="."]
-position = Vector3(0.72, 1.92, -0.02)
-rotation = Vector3(1.570796, 0, 0)
+
+[node name="ShowerHead" type="MeshInstance3D" parent="." unique_id=505751645]
+transform = Transform3D(1, 0, 0, 0, -0.8567595, 0.66862684, 0, -0.5157158, -1.1107911, 0.72, 2.0067272, -0.02)
 mesh = SubResource("shower_head")
-[node name="BathSpout" type="MeshInstance3D" parent="."]
-position = Vector3(0.58, 0.78, 0.27)
-rotation = Vector3(1.570796, 0, 0)
+
+[node name="BathSpout" type="MeshInstance3D" parent="." unique_id=778249638]
+transform = Transform3D(1, 0, 0, 0, 3.1391647e-07, -1, 0, 1, 3.1391647e-07, 0.58, 0.78, 0.27)
 mesh = SubResource("spout")
-[node name="HotKnob" type="MeshInstance3D" parent="."]
-position = Vector3(0.42, 0.82, 0.42)
-rotation = Vector3(1.570796, 0, 0)
+
+[node name="BathSpout2" type="MeshInstance3D" parent="." unique_id=170188010]
+transform = Transform3D(1, 0, 0, 0, 0.2712751, 0.012629885, 0, -0.0034264473, 0.99991995, 0.58, 0.7151642, 0.14810243)
+mesh = SubResource("spout")
+
+[node name="HotKnob" type="MeshInstance3D" parent="." unique_id=305335546]
+transform = Transform3D(1, 0, 0, 0, 3.1391647e-07, -1, 0, 1, 3.1391647e-07, 0.42, 0.82, 0.42)
 mesh = SubResource("knob")
-[node name="ColdKnob" type="MeshInstance3D" parent="."]
-position = Vector3(0.72, 0.82, 0.42)
-rotation = Vector3(1.570796, 0, 0)
+
+[node name="ColdKnob" type="MeshInstance3D" parent="." unique_id=366196302]
+transform = Transform3D(1, 0, 0, 0, 3.1391647e-07, -1, 0, 1, 3.1391647e-07, 0.72, 0.82, 0.42)
 mesh = SubResource("knob")
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.34, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1435777090]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, 0)
 shape = SubResource("shape")

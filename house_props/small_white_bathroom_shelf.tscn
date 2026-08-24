@@ -1,62 +1,30 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3 uid="uid://hc04qilkyfei"]
 
 [sub_resource type="StandardMaterial3D" id="white"]
 albedo_color = Color(0.88, 0.89, 0.85, 1)
 roughness = 0.48
 
-[sub_resource type="StandardMaterial3D" id="metal"]
-albedo_color = Color(0.52, 0.54, 0.53, 1)
-metallic = 0.82
-roughness = 0.22
-
 [sub_resource type="BoxMesh" id="board"]
 material = SubResource("white")
 size = Vector3(0.78, 0.07, 0.26)
 
-[sub_resource type="BoxMesh" id="bracket"]
-material = SubResource("metal")
-size = Vector3(0.035, 0.25, 0.035)
-
 [sub_resource type="BoxShape3D" id="collision"]
 size = Vector3(0.8, 0.1, 0.28)
 
-[node name="SmallWhiteBathroomShelf" type="StaticBody3D"]
+[node name="SmallWhiteBathroomShelf" type="StaticBody3D" unique_id=2098287810]
 
-[node name="ShelfBoard" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.26, -0.12)
+[node name="ShelfBoard" type="MeshInstance3D" parent="." unique_id=1354303715]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, -0.12)
 mesh = SubResource("board")
 
-[node name="RaisedBackLip" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.34, 0)
-rotation = Vector3(1.5708, 0, 0)
-scale = Vector3(1, 0.3, 0.6)
+[node name="RaisedBackLip" type="MeshInstance3D" parent="." unique_id=63941239]
+transform = Transform3D(1, 0, 0, 0, -1.085997e-06, -0.6, 0, 0.3, -2.171994e-06, 0, 0.34, 0)
 mesh = SubResource("board")
 
-[node name="FrontLip" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.31, -0.25)
-rotation = Vector3(1.5708, 0, 0)
-scale = Vector3(1, 0.18, 0.35)
+[node name="FrontLip" type="MeshInstance3D" parent="." unique_id=1691453172]
+transform = Transform3D(1, 0, 0, 0, -6.5159827e-07, -0.35, 0, 0.18, -1.2669965e-06, 0, 0.31, -0.25)
 mesh = SubResource("board")
 
-[node name="LeftBracketVertical" type="MeshInstance3D" parent="."]
-position = Vector3(-0.27, 0.13, -0.015)
-mesh = SubResource("bracket")
-
-[node name="LeftBracketDiagonal" type="MeshInstance3D" parent="."]
-position = Vector3(-0.27, 0.15, -0.12)
-rotation = Vector3(0.7, 0, 0)
-mesh = SubResource("bracket")
-
-[node name="RightBracketVertical" type="MeshInstance3D" parent="."]
-position = Vector3(0.27, 0.13, -0.015)
-mesh = SubResource("bracket")
-
-[node name="RightBracketDiagonal" type="MeshInstance3D" parent="."]
-position = Vector3(0.27, 0.15, -0.12)
-rotation = Vector3(0.7, 0, 0)
-mesh = SubResource("bracket")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.26, -0.12)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1009395627]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, -0.12)
 shape = SubResource("collision")
-

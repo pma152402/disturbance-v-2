@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3]
 
-[ext_resource type="Script" path="res://can_pickup.gd" id="1_pickup"]
+[ext_resource type="Script" path="res://pickup_item.gd" id="1_pickup"]
 [ext_resource type="PackedScene" path="res://can_visual.tscn" id="2_visual"]
 
 [sub_resource type="CylinderShape3D" id="Shape_can"]
@@ -11,6 +11,11 @@ height = 0.23
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_pickup")
+item_name = "LATA"
+item_type = &"can"
+pickup_rise = 0.35
+pickup_rotation = Vector3(0, 0, 0)
+pickup_duration = 0.16
 
 [node name="CanVisual" parent="." instance=ExtResource("2_visual")]
 

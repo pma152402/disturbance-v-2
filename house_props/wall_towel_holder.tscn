@@ -1,13 +1,9 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3 uid="uid://bh34og3urxdrl"]
 
 [sub_resource type="StandardMaterial3D" id="metal"]
 albedo_color = Color(0.5, 0.52, 0.51, 1)
 metallic = 0.88
 roughness = 0.2
-
-[sub_resource type="StandardMaterial3D" id="towel"]
-albedo_color = Color(0.48, 0.66, 0.68, 1)
-roughness = 0.95
 
 [sub_resource type="CylinderMesh" id="rail"]
 material = SubResource("metal")
@@ -15,6 +11,10 @@ top_radius = 0.025
 bottom_radius = 0.025
 height = 0.82
 radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="towel"]
+albedo_color = Color(0.48, 0.66, 0.68, 1)
+roughness = 0.95
 
 [sub_resource type="BoxMesh" id="cloth"]
 material = SubResource("towel")
@@ -24,38 +24,40 @@ size = Vector3(0.58, 0.62, 0.035)
 material = SubResource("towel")
 size = Vector3(0.018, 0.57, 0.012)
 
-[node name="WallTowelHolder" type="Node3D"]
+[node name="WallTowelHolder" type="Node3D" unique_id=921879855]
 
-[node name="Rail" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.36, -0.11)
-rotation = Vector3(0, 0, 1.5708)
+[node name="Rail" type="MeshInstance3D" parent="." unique_id=243171651]
+transform = Transform3D(-3.6199901e-06, -1, 0, 1, -3.6199901e-06, 0, 0, 0, 1, 0, 0.3346567, -0.11)
 mesh = SubResource("rail")
 
-[node name="LeftMount" type="MeshInstance3D" parent="."]
-position = Vector3(-0.39, 0.36, -0.035)
-rotation = Vector3(1.5708, 0, 0)
-scale = Vector3(1.4, 0.22, 1.4)
+[node name="LeftMount" type="MeshInstance3D" parent="." unique_id=682678716]
+transform = Transform3D(1.4, 0, 0, 0, -7.9639784e-07, -1.4, 0, 0.22, -5.067986e-06, -0.39, 0.3303714, -0.035)
 mesh = SubResource("rail")
 
-[node name="RightMount" type="MeshInstance3D" parent="."]
-position = Vector3(0.39, 0.36, -0.035)
-rotation = Vector3(1.5708, 0, 0)
-scale = Vector3(1.4, 0.22, 1.4)
+[node name="RightMount" type="MeshInstance3D" parent="." unique_id=507878534]
+transform = Transform3D(1.4, 0, 0, 0, -7.9639784e-07, -1.4, 0, 0.22, -5.067986e-06, 0.39, 0.33150136, -0.035)
 mesh = SubResource("rail")
 
-[node name="HangingTowel" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.03, -0.13)
+[node name="HangingTowel" type="MeshInstance3D" parent="." unique_id=2015951573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -0.13)
 mesh = SubResource("cloth")
 
-[node name="FoldLeft" type="MeshInstance3D" parent="."]
-position = Vector3(-0.16, 0.03, -0.153)
+[node name="HangingTowel2" type="MeshInstance3D" parent="." unique_id=688288841]
+transform = Transform3D(1, 0, 0, 0, 1.1913059, 0, 0, 0, 1, 0, -0.020108478, -0.05247709)
+mesh = SubResource("cloth")
+
+[node name="HangingTowel3" type="MeshInstance3D" parent="." unique_id=1547253051]
+transform = Transform3D(1, 0, 0, 0, -0.002081231, 0.9903095, 0, -0.17782114, -0.01159065, 0, 0.3567314, -0.092687584)
+mesh = SubResource("cloth")
+
+[node name="FoldLeft" type="MeshInstance3D" parent="." unique_id=742411438]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16, 0.03, -0.153)
 mesh = SubResource("stripe")
 
-[node name="FoldCenter" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.03, -0.153)
+[node name="FoldCenter" type="MeshInstance3D" parent="." unique_id=1803184118]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -0.153)
 mesh = SubResource("stripe")
 
-[node name="FoldRight" type="MeshInstance3D" parent="."]
-position = Vector3(0.16, 0.03, -0.153)
+[node name="FoldRight" type="MeshInstance3D" parent="." unique_id=17533095]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16, 0.03, -0.153)
 mesh = SubResource("stripe")
-
