@@ -139,7 +139,7 @@
 [ext_resource type="PackedScene" uid="uid://bl0nq3tiyv431" path="res://house_props/old_house_key.tscn" id="166_house_key"]
 [ext_resource type="PackedScene" uid="uid://c006aseox5vu2" path="res://house_props/pull_down_attic_entry.tscn" id="167_attic_entry"]
 [ext_resource type="PackedScene" path="res://house_props/ritual_table.tscn" id="168_ritual_table"]
-[ext_resource type="PackedScene" path="res://house_props/child_tricycle.tscn" id="169_tricycle"]
+[ext_resource type="PackedScene" uid="uid://bi7oae8m0sh4c" path="res://house_props/child_tricycle.tscn" id="169_tricycle"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lrwhq"]
 albedo_color = Color(0.44, 0.43, 0.39, 1)
@@ -2502,7 +2502,7 @@ transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, 
 transform = Transform3D(0.20765443, 0, 0.34624586, 0, 0.6691427, 0, -0.41262072, 0, 0.17425078, 3.4346993, 5.0188003, 5.012678)
 
 [node name="DriedPaintBuckets" parent="UpperFloor/UpperHoarderStudy/NewDiogenesClutter" unique_id=1319494563 instance=ExtResource("163_paint_buckets")]
-transform = Transform3D(0.26226905, 0, -0.9649949, 0, 1, 0, 0.9649949, 0, 0.26226905, 12.186942, 6.72432, -3.3088288)
+transform = Transform3D(0.6612225, 0, -0.75019, 0, 1, 0, 0.75019, 0, 0.6612225, 11.206022, 6.72432, -3.7090418)
 
 [node name="InvestigationPhotoWall" parent="UpperFloor/UpperHoarderStudy/NewDiogenesClutter" unique_id=800729277 instance=ExtResource("164_investigation_wall")]
 transform = Transform3D(-0.9999664, 0, -0.008200187, 0, 1, 0, 0.008200187, 0, -0.9999664, 10.128719, 6.69626, -4.671448)
@@ -2637,7 +2637,7 @@ transform = Transform3D(0.99280864, 0, 0.119712204, 0, 1, 0, -0.119712204, 0, 0.
 transform = Transform3D(0.008279741, 0, 0.9999657, 0, 1, 0, -0.9999657, 0, 0.008279741, 9.401718, 4.166556, -7.7238455)
 
 [node name="ChildTricycle" parent="NewFrontHouseDecor" unique_id=310219187 instance=ExtResource("169_tricycle")]
-transform = Transform3D(0.9130889, 0, 0.40776044, 0, 1, 0, -0.40776044, 0, 0.9130889, 7.15, 0, 13.1)
+transform = Transform3D(0.96612227, 0.15553816, 0.20594974, -0.21402492, 0.92879057, 0.3025584, -0.14422487, -0.3363868, 0.93061453, 12.223722, 6.502488, -3.2408934)
 
 [node name="OutdoorDecorationStaging" type="Node3D" parent="." unique_id=427412402]
 editor_description = "Decoraciones restauradas en las posiciones exactas anteriores al borrado."

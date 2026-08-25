@@ -10,6 +10,8 @@
 [ext_resource type="FontFile" uid="uid://b60wwt30lnp8h" path="res://assets/fonts/PressStart2P-Regular.ttf" id="8_pixel_font"]
 [ext_resource type="PackedScene" path="res://sounds/ambient/rain/rain_ambience.tscn" id="9_rain_ambience"]
 [ext_resource type="Script" path="res://sounds/ambient/indoor_weather_audio.gd" id="10_indoor_weather"]
+[ext_resource type="PackedScene" path="res://runtime_house_navigation.tscn" id="11_runtime_navigation"]
+[ext_resource type="PackedScene" path="res://monster_grandmother.tscn" id="12_monster_grandmother"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_storm"]
 panorama = ExtResource("5_storm_panorama")
@@ -111,8 +113,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.2, 0)
 
 [node name="ExteriorEnvironment" parent="." unique_id=1088491580 instance=ExtResource("6_exterior")]
 
+[node name="RuntimeHouseNavigation" parent="." instance=ExtResource("11_runtime_navigation")]
+
 [node name="Player" parent="." unique_id=546288329 instance=ExtResource("1_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 8.5)
+
+[node name="MonsterGrandmother" parent="." instance=ExtResource("12_monster_grandmother")]
+position = Vector3(0, 4.35, -8.2)
+rotation = Vector3(0, 3.14159, 0)
 
 [node name="PS2PostProcess" type="CanvasLayer" parent="." unique_id=13050641]
 layer = 100

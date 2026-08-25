@@ -89,6 +89,9 @@ var _flashlight_was_on := true
 var _zoom_fov_target := 95.0
 var _last_footstep_beat := -1
 var _zoom_segments: Array[ColorRect] = []
+var _monster_hits := 0
+var _monster_hit_cooldown := 0.0
+var _monster_restart_pending := false
 
 const ZOOM_SEGMENT_ON := Color(0.86, 0.9, 0.83, 0.92)
 const ZOOM_SEGMENT_OFF := Color(0.20, 0.23, 0.20, 0.42)
@@ -124,6 +127,10 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		var key_event := event as InputEventKey
 		var pressed_key := key_event.physical_keycode if key_event.physical_keycode != 0 else key_event.keycode
+		if pressed_key == KEY_R:
+			get_viewport().set_input_as_handled()
+			get_tree().call_deferred(&"reload_current_scene")
+			return
 		if pressed_key == KEY_F and _try_interact(pressed_key):
 			get_viewport().set_input_as_handled()
 			return
@@ -200,6 +207,7 @@ func _input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_monster_hit_cooldown = maxf(0.0, _monster_hit_cooldown - delta)
 	_update_stance_transition(delta)
 	head.rotation.x = _look_pitch
 	head.rotation.y = 0.0
@@ -574,6 +582,31 @@ func _try_spend_stamina(cost: float) -> bool:
 	if _stamina <= 0.0:
 		_is_exhausted = true
 	return true
+
+
+func receive_monster_attack(attacker: Node3D) -> void:
+	if _monster_hit_cooldown > 0.0 or _monster_restart_pending:
+		return
+	_monster_hit_cooldown = 1.15
+	_monster_hits += 1
+	_stamina = maxf(0.0, _stamina - 34.0)
+	_is_exhausted = true
+	var away := global_position - attacker.global_position
+	away.y = 0.0
+	if away.length_squared() > 0.01:
+		away = away.normalized()
+		velocity.x += away.x * 4.2
+		velocity.z += away.z * 4.2
+	velocity.y = maxf(velocity.y, 1.1)
+	_look_pitch = clampf(_look_pitch + deg_to_rad(randf_range(-7.0, 5.0)), deg_to_rad(-max_look_angle), deg_to_rad(max_look_angle))
+	if _monster_hits >= 3:
+		_monster_restart_pending = true
+		_restart_after_monster_catch()
+
+
+func _restart_after_monster_catch() -> void:
+	await get_tree().create_timer(0.85).timeout
+	get_tree().reload_current_scene()
 
 
 func _update_stamina_ui(delta: float, previous_stamina: float, is_sprinting: bool) -> void:
