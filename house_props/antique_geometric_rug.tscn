@@ -1,0 +1,58 @@
+[gd_scene load_steps=9 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Base"]
+albedo_color = Color(0.08, 0.16, 0.15, 1)
+roughness = 0.98
+[sub_resource type="StandardMaterial3D" id="Cream"]
+albedo_color = Color(0.65, 0.57, 0.39, 1)
+roughness = 0.96
+[sub_resource type="StandardMaterial3D" id="Rust"]
+albedo_color = Color(0.38, 0.12, 0.065, 1)
+roughness = 1.0
+[sub_resource type="BoxMesh" id="Rug"]
+material = SubResource("Base")
+size = Vector3(2.05, 0.026, 1.2)
+[sub_resource type="BoxMesh" id="BorderLong"]
+material = SubResource("Cream")
+size = Vector3(1.9, 0.012, 0.045)
+[sub_resource type="BoxMesh" id="BorderShort"]
+material = SubResource("Cream")
+size = Vector3(0.045, 0.012, 1.05)
+[sub_resource type="BoxMesh" id="Diamond"]
+material = SubResource("Rust")
+size = Vector3(0.34, 0.014, 0.34)
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(2.05, 0.05, 1.2)
+
+[node name="AntiqueGeometricRug" type="StaticBody3D"]
+editor_description = "Alfombra antigua verde con cenefa crema y rombos oxidados."
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.025, 0)
+shape = SubResource("Collision")
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.013, 0)
+mesh = SubResource("Rug")
+[node name="BorderTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.032, -0.5)
+mesh = SubResource("BorderLong")
+[node name="BorderBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.032, 0.5)
+mesh = SubResource("BorderLong")
+[node name="BorderLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.94, 0.032, 0)
+mesh = SubResource("BorderShort")
+[node name="BorderRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.94, 0.032, 0)
+mesh = SubResource("BorderShort")
+[node name="DiamondLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.52, 0.038, 0)
+rotation = Vector3(0, 0.785398, 0)
+mesh = SubResource("Diamond")
+[node name="DiamondCenter" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.038, 0)
+rotation = Vector3(0, 0.785398, 0)
+mesh = SubResource("Diamond")
+[node name="DiamondRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.52, 0.038, 0)
+rotation = Vector3(0, 0.785398, 0)
+mesh = SubResource("Diamond")

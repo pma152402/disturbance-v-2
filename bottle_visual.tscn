@@ -1,16 +1,124 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=12 format=3]
 
-[ext_resource type="ArrayMesh" path="res://ps2_objects/Bottles/Bottle_1.obj" id="1_bottle"]
-[ext_resource type="Texture2D" path="res://ps2_objects/Bottles/Bottles.png" id="2_texture"]
+[sub_resource type="StandardMaterial3D" id="Material_glass"]
+albedo_color = Color(0.105, 0.245, 0.17, 1)
+metallic = 0.08
+roughness = 0.28
 
-[sub_resource type="StandardMaterial3D" id="Material_bottle"]
-albedo_texture = ExtResource("2_texture")
-texture_filter = 0
-roughness = 0.82
+[sub_resource type="StandardMaterial3D" id="Material_glass_dark"]
+albedo_color = Color(0.055, 0.13, 0.09, 1)
+metallic = 0.12
+roughness = 0.24
+
+[sub_resource type="StandardMaterial3D" id="Material_label"]
+albedo_color = Color(0.68, 0.58, 0.39, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="Material_label_mark"]
+albedo_color = Color(0.32, 0.075, 0.045, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Material_cap"]
+albedo_color = Color(0.22, 0.12, 0.055, 1)
+roughness = 1.0
+
+[sub_resource type="CylinderMesh" id="Mesh_body"]
+material = SubResource("Material_glass")
+top_radius = 0.087
+bottom_radius = 0.09
+height = 0.255
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_shoulders"]
+material = SubResource("Material_glass")
+top_radius = 0.041
+bottom_radius = 0.087
+height = 0.072
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_neck"]
+material = SubResource("Material_glass_dark")
+top_radius = 0.035
+bottom_radius = 0.041
+height = 0.105
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_label"]
+material = SubResource("Material_label")
+top_radius = 0.091
+bottom_radius = 0.093
+height = 0.105
+radial_segments = 10
+rings = 1
+
+[sub_resource type="TorusMesh" id="Mesh_lip"]
+material = SubResource("Material_glass_dark")
+inner_radius = 0.026
+outer_radius = 0.045
+rings = 10
+ring_segments = 6
+
+[sub_resource type="CylinderMesh" id="Mesh_cap"]
+material = SubResource("Material_cap")
+top_radius = 0.029
+bottom_radius = 0.03
+height = 0.022
+radial_segments = 10
+rings = 1
 
 [node name="BottleVisual" type="Node3D"]
+editor_description = "Botella reutilizable: cuerpo, hombros, cuello, boca, tapon y etiqueta son piezas separadas."
 
-[node name="Bottle" type="MeshInstance3D" parent="."]
-mesh = ExtResource("1_bottle")
-material_override = SubResource("Material_bottle")
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.1325, 0)
+mesh = SubResource("Mesh_body")
+cast_shadow = 1
+
+[node name="BaseRing" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.012, 0)
+scale = Vector3(1.02, 0.15, 1.02)
+mesh = SubResource("Mesh_body")
+material_override = SubResource("Material_glass_dark")
+cast_shadow = 1
+
+[node name="Shoulders" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.296, 0)
+mesh = SubResource("Mesh_shoulders")
+cast_shadow = 1
+
+[node name="Neck" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.3845, 0)
+mesh = SubResource("Mesh_neck")
+cast_shadow = 1
+
+[node name="MouthRing" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.443, 0)
+mesh = SubResource("Mesh_lip")
+cast_shadow = 1
+
+[node name="Cork" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.455, 0)
+mesh = SubResource("Mesh_cap")
+cast_shadow = 1
+
+[node name="PaperLabel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.15, 0)
+mesh = SubResource("Mesh_label")
+cast_shadow = 1
+
+[node name="LabelBandTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.19, 0)
+scale = Vector3(1.012, 0.035, 1.012)
+mesh = SubResource("Mesh_label")
+material_override = SubResource("Material_label_mark")
+cast_shadow = 1
+
+[node name="LabelBandBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.11, 0)
+scale = Vector3(1.012, 0.035, 1.012)
+mesh = SubResource("Mesh_label")
+material_override = SubResource("Material_label_mark")
 cast_shadow = 1

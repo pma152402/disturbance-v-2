@@ -1,0 +1,86 @@
+[gd_scene load_steps=10 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Plastic"]
+albedo_color = Color(0.075, 0.078, 0.08, 1)
+roughness = 0.72
+[sub_resource type="StandardMaterial3D" id="Button"]
+albedo_color = Color(0.28, 0.29, 0.28, 1)
+roughness = 0.8
+[sub_resource type="StandardMaterial3D" id="Power"]
+albedo_color = Color(0.62, 0.055, 0.045, 1)
+roughness = 0.76
+[sub_resource type="StandardMaterial3D" id="Label"]
+albedo_color = Color(0.72, 0.72, 0.67, 1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="Body"]
+material = SubResource("Plastic")
+size = Vector3(0.23, 0.055, 0.62)
+[sub_resource type="CylinderMesh" id="RoundButton"]
+material = SubResource("Button")
+top_radius = 0.026
+bottom_radius = 0.026
+height = 0.018
+radial_segments = 8
+[sub_resource type="CylinderMesh" id="PowerButton"]
+material = SubResource("Power")
+top_radius = 0.034
+bottom_radius = 0.034
+height = 0.02
+radial_segments = 10
+[sub_resource type="BoxMesh" id="DPad"]
+material = SubResource("Button")
+size = Vector3(0.045, 0.018, 0.13)
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(0.24, 0.08, 0.63)
+
+[node name="RetroTVRemote" type="StaticBody3D"]
+editor_description = "Mando de tele antiguo con boton de encendido, teclado numerico y cruceta."
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.04, 0)
+shape = SubResource("Collision")
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.03, 0)
+mesh = SubResource("Body")
+[node name="Power" type="MeshInstance3D" parent="."]
+position = Vector3(-0.065, 0.069, -0.245)
+mesh = SubResource("PowerButton")
+[node name="Button1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.062, 0.068, -0.13)
+mesh = SubResource("RoundButton")
+[node name="Button2" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.068, -0.13)
+mesh = SubResource("RoundButton")
+[node name="Button3" type="MeshInstance3D" parent="."]
+position = Vector3(0.062, 0.068, -0.13)
+mesh = SubResource("RoundButton")
+[node name="Button4" type="MeshInstance3D" parent="."]
+position = Vector3(-0.062, 0.068, -0.065)
+mesh = SubResource("RoundButton")
+[node name="Button5" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.068, -0.065)
+mesh = SubResource("RoundButton")
+[node name="Button6" type="MeshInstance3D" parent="."]
+position = Vector3(0.062, 0.068, -0.065)
+mesh = SubResource("RoundButton")
+[node name="Button7" type="MeshInstance3D" parent="."]
+position = Vector3(-0.062, 0.068, 0)
+mesh = SubResource("RoundButton")
+[node name="Button8" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.068, 0)
+mesh = SubResource("RoundButton")
+[node name="Button9" type="MeshInstance3D" parent="."]
+position = Vector3(0.062, 0.068, 0)
+mesh = SubResource("RoundButton")
+[node name="DPadVertical" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.069, 0.15)
+mesh = SubResource("DPad")
+[node name="DPadHorizontal" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.069, 0.15)
+rotation = Vector3(0, 1.570796, 0)
+mesh = SubResource("DPad")
+[node name="BottomButtonLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.05, 0.068, 0.25)
+mesh = SubResource("RoundButton")
+[node name="BottomButtonRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.05, 0.068, 0.25)
+mesh = SubResource("RoundButton")

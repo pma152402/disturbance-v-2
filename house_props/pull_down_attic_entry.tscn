@@ -1,0 +1,135 @@
+[gd_scene format=3 uid="uid://c006aseox5vu2"]
+
+[sub_resource type="StandardMaterial3D" id="Material_dark"]
+albedo_color = Color(0.012, 0.014, 0.013, 1)
+
+[sub_resource type="StandardMaterial3D" id="Material_wood_light"]
+albedo_color = Color(0.53, 0.345, 0.17, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Mesh_hatch"]
+material = SubResource("Material_wood_light")
+size = Vector3(1.02, 0.1, 1.7)
+
+[sub_resource type="StandardMaterial3D" id="Material_wood"]
+albedo_color = Color(0.34, 0.205, 0.105, 1)
+roughness = 0.94
+
+[sub_resource type="BoxMesh" id="Mesh_frame_long"]
+material = SubResource("Material_wood")
+size = Vector3(0.14, 0.16, 1.95)
+
+[sub_resource type="BoxMesh" id="Mesh_frame_short"]
+material = SubResource("Material_wood")
+size = Vector3(1.22, 0.16, 0.14)
+
+[sub_resource type="StandardMaterial3D" id="Material_metal"]
+albedo_color = Color(0.2, 0.22, 0.21, 1)
+metallic = 0.78
+roughness = 0.48
+
+[sub_resource type="CylinderMesh" id="Mesh_hinge"]
+material = SubResource("Material_metal")
+top_radius = 0.065
+bottom_radius = 0.065
+height = 0.92
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_rail"]
+material = SubResource("Material_wood_light")
+size = Vector3(0.11, 2.55, 0.1)
+
+[sub_resource type="BoxMesh" id="Mesh_rung"]
+material = SubResource("Material_wood")
+size = Vector3(0.82, 0.085, 0.11)
+
+[sub_resource type="BoxShape3D" id="Shape_hatch"]
+size = Vector3(1.25, 0.18, 2)
+
+[sub_resource type="BoxShape3D" id="Shape_ladder"]
+size = Vector3(1, 2.55, 0.22)
+
+[node name="PullDownAtticEntry" type="StaticBody3D" unique_id=1946464143]
+editor_description = "Entrada de desvan americana: marco de techo, trampilla abatida y escalera plegable colgante."
+
+[node name="DarkOpening" type="MeshInstance3D" parent="." unique_id=1366246310]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6518083, -0.26241863)
+material_override = SubResource("Material_dark")
+mesh = SubResource("Mesh_hatch")
+
+[node name="CeilingFrame" type="Node3D" parent="." unique_id=897172968]
+
+[node name="Left" type="MeshInstance3D" parent="CeilingFrame" unique_id=132191654]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.59, 2.6644855, -0.26655573)
+mesh = SubResource("Mesh_frame_long")
+
+[node name="Right" type="MeshInstance3D" parent="CeilingFrame" unique_id=539033782]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.59, 2.6644855, -0.28112838)
+mesh = SubResource("Mesh_frame_long")
+
+[node name="Front" type="MeshInstance3D" parent="CeilingFrame" unique_id=114598868]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6644855, 0.6550039)
+mesh = SubResource("Mesh_frame_short")
+
+[node name="Rear" type="MeshInstance3D" parent="CeilingFrame" unique_id=696668330]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6644855, -1.1849961)
+mesh = SubResource("Mesh_frame_short")
+
+[node name="OpenedHatch" type="Node3D" parent="." unique_id=244560284]
+transform = Transform3D(1, 0, 0, 0, 0.589788, 0.8075581, 0, -0.8075581, 0.589788, 0, 2.18, 0.66)
+
+[node name="Panel" type="MeshInstance3D" parent="OpenedHatch" unique_id=892997929]
+transform = Transform3D(1, 0, 0, 0, 0.85692984, 0.515433, 0, -0.515433, 0.85692984, 0, 1.3302553, -1.4020464)
+mesh = SubResource("Mesh_hatch")
+
+[node name="CeilingHinge" type="MeshInstance3D" parent="." unique_id=2099946319]
+transform = Transform3D(-3.6199901e-06, -1, 0, 1, -3.6199901e-06, 0, 0, 0, 1, 0, 2.6297219, 0.48256433)
+mesh = SubResource("Mesh_hinge")
+
+[node name="HangingLadder" type="Node3D" parent="." unique_id=1029292708]
+transform = Transform3D(1, 0, 0, 0, 0.92490906, 0.3801884, 0, -0.3801884, 0.92490906, 0, 2.62, 0.48)
+
+[node name="LeftRail" type="MeshInstance3D" parent="HangingLadder" unique_id=1867254339]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, -0.65584385, -1.4454422)
+mesh = SubResource("Mesh_rail")
+
+[node name="RightRail" type="MeshInstance3D" parent="HangingLadder" unique_id=367006883]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, -0.65584385, -1.4454422)
+mesh = SubResource("Mesh_rail")
+
+[node name="Rung01" type="MeshInstance3D" parent="HangingLadder" unique_id=1778569972]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.374156, -1.4454423)
+mesh = SubResource("Mesh_rung")
+
+[node name="Rung02" type="MeshInstance3D" parent="HangingLadder" unique_id=86630329]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.014156103, -1.4454422)
+mesh = SubResource("Mesh_rung")
+
+[node name="Rung03" type="MeshInstance3D" parent="HangingLadder" unique_id=1682662593]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.34584403, -1.4454422)
+mesh = SubResource("Mesh_rung")
+
+[node name="Rung04" type="MeshInstance3D" parent="HangingLadder" unique_id=755494425]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7058439, -1.4454422)
+mesh = SubResource("Mesh_rung")
+
+[node name="Rung05" type="MeshInstance3D" parent="HangingLadder" unique_id=346634087]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0658439, -1.4454423)
+mesh = SubResource("Mesh_rung")
+
+[node name="Rung06" type="MeshInstance3D" parent="HangingLadder" unique_id=763537616]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.425844, -1.4454422)
+mesh = SubResource("Mesh_rung")
+
+[node name="Rung07" type="MeshInstance3D" parent="HangingLadder" unique_id=234147013]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.7858441, -1.4454422)
+mesh = SubResource("Mesh_rung")
+
+[node name="HatchCollision" type="CollisionShape3D" parent="." unique_id=1915511537]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.88, 0)
+shape = SubResource("Shape_hatch")
+
+[node name="LadderCollision" type="CollisionShape3D" parent="." unique_id=860398168]
+transform = Transform3D(1, 0, 0, 0, 0.92490906, 0.3801884, 0, -0.3801884, 0.92490906, 0, 1.38, -0.5928591)
+shape = SubResource("Shape_ladder")

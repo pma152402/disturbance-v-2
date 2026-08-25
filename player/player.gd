@@ -86,8 +86,12 @@ var _jump_start_head_y := 0.9
 var _held_item: StringName = &""
 var _flashlight_holstered := true
 var _flashlight_was_on := true
-var _zoom_fov_target := 75.0
+var _zoom_fov_target := 95.0
 var _last_footstep_beat := -1
+var _zoom_segments: Array[ColorRect] = []
+
+const ZOOM_SEGMENT_ON := Color(0.86, 0.9, 0.83, 0.92)
+const ZOOM_SEGMENT_OFF := Color(0.20, 0.23, 0.20, 0.42)
 
 const ThrownCanScene := preload("res://thrown_can.tscn")
 const ThrownBottleScene := preload("res://thrown_bottle.tscn")
@@ -96,6 +100,9 @@ const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
 
 func _ready() -> void:
 	add_to_group(&"player")
+	for child in $ZoomUI/ZoomMeter/ZoomSegments.get_children():
+		if child is ColorRect:
+			_zoom_segments.append(child as ColorRect)
 	hand_rig.visible = false
 	flashlight.visible = false
 	_camera_rest_position = camera.position
@@ -105,7 +112,9 @@ func _ready() -> void:
 	_stamina_fill_style = stamina_bar.get_theme_stylebox("fill").duplicate() as StyleBoxFlat
 	stamina_bar.add_theme_stylebox_override("fill", _stamina_fill_style)
 	camera.make_current()
-	_zoom_fov_target = clampf(camera.fov, zoom_min_fov, zoom_max_fov)
+	camera.fov = zoom_max_fov
+	_zoom_fov_target = zoom_max_fov
+	_update_zoom_meter()
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	holster_sound.stream = GameplaySounds.make_switch_click()
 	footstep_sound.stream = GameplaySounds.make_footstep()
@@ -256,8 +265,18 @@ func _physics_process(delta: float) -> void:
 	var desired_fov := _zoom_fov_target + sprint_fov_bonus
 	var zoom_weight := 1.0 - exp(-zoom_smoothing * delta)
 	camera.fov = lerpf(camera.fov, desired_fov, zoom_weight)
+	_update_zoom_meter()
 
 
+func _update_zoom_meter() -> void:
+	var zoom_amount := clampf(
+		inverse_lerp(zoom_max_fov, zoom_min_fov, camera.fov) * 100.0,
+		0.0,
+		100.0
+	)
+	var lit_segments := roundi(zoom_amount * float(_zoom_segments.size()) / 100.0)
+	for index in _zoom_segments.size():
+		_zoom_segments[index].color = ZOOM_SEGMENT_ON if index < lit_segments else ZOOM_SEGMENT_OFF
 func _update_camera_motion(delta: float, input_vector: Vector2, is_sprinting: bool) -> void:
 	var is_walking := is_on_floor() and input_vector.length_squared() > 0.01
 	var target_position := _camera_rest_position

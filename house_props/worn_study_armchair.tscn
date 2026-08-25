@@ -10,7 +10,7 @@ albedo_color = Color(0.11, 0.045, 0.018, 1)
 roughness = 0.9
 
 [sub_resource type="BoxShape3D" id="collision_shape"]
-size = Vector3(1.15, 1.55, 1)
+size = Vector3(1.040857, 1.3438476, 0.67333984)
 
 [node name="WornStudyArmchair" type="StaticBody3D" unique_id=2061369211]
 editor_description = "Butaca de estudio vieja, ancha y tapizada, con brazos de madera."
@@ -56,5 +56,5 @@ material_override = SubResource("wood")
 mesh = SubResource("box")
 
 [node name="Collision" type="CollisionShape3D" parent="." unique_id=2020381899]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0.12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.003863573, 0.88307613, 0.0406543)
 shape = SubResource("collision_shape")

@@ -27,16 +27,16 @@ roughness = 0.95
 
 [sub_resource type="CylinderMesh" id="BoxMesh_hand"]
 material = SubResource("StandardMaterial3D_hand")
-top_radius = 0.055
-bottom_radius = 0.065
+top_radius = 0.032
+bottom_radius = 0.038
 height = 0.72
 radial_segments = 8
 rings = 1
 
 [sub_resource type="SphereMesh" id="SphereMesh_hand"]
 material = SubResource("StandardMaterial3D_hand")
-radius = 0.105
-height = 0.21
+radius = 0.067
+height = 0.134
 radial_segments = 10
 rings = 6
 
@@ -98,7 +98,7 @@ position = Vector3(0, 0.9, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head"]
 current = true
-fov = 75.0
+fov = 95.0
 near = 0.05
 
 [node name="InteractionRay" type="RayCast3D" parent="Head/Camera3D"]
@@ -109,28 +109,30 @@ collide_with_bodies = true
 
 [node name="HandRig" type="Node3D" parent="Head/Camera3D"]
 visible = false
+scale = Vector3(0.65, 0.65, 0.65)
 
 [node name="Hand" type="MeshInstance3D" parent="Head/Camera3D/HandRig"]
-position = Vector3(0.25, -0.195, -0.02)
+position = Vector3(0.22, -0.17, 0.08)
 rotation = Vector3(-1.48, -0.08, -0.08)
 mesh = SubResource("BoxMesh_hand")
 cast_shadow = 0
 
 [node name="HandBall" type="MeshInstance3D" parent="Head/Camera3D/HandRig"]
-position = Vector3(0.25, -0.17, -0.29)
+position = Vector3(0.22, -0.145, -0.175)
+scale = Vector3(0.9, 0.82, 1.08)
 mesh = SubResource("SphereMesh_hand")
 cast_shadow = 0
 
 [node name="FlashlightBody" type="MeshInstance3D" parent="Head/Camera3D/HandRig"]
-position = Vector3(0.25, -0.15, -0.29)
-rotation = Vector3(-1.5708, 0, 0)
-scale = Vector3(0.72, 0.72, 0.72)
+position = Vector3(0.22, -0.135, -0.14)
+rotation = Vector3(-1.48, -0.08, -0.08)
+scale = Vector3(0.62, 0.62, 0.62)
 mesh = ExtResource("2_flashlight_mesh")
 material_override = SubResource("StandardMaterial3D_flashlight")
 cast_shadow = 0
 
 [node name="Flashlight" type="SpotLight3D" parent="Head/Camera3D/HandRig"]
-position = Vector3(0.25, -0.155, -0.52)
+position = Vector3(0.22, -0.135, -0.4)
 light_color = Color(1, 0.9, 0.72, 1)
 light_energy = 6.5
 shadow_enabled = true
@@ -188,6 +190,162 @@ theme_override_styles/background = SubResource("StyleBoxFlat_stamina_background"
 theme_override_styles/fill = SubResource("StyleBoxFlat_stamina_fill")
 value = 100.0
 show_percentage = false
+
+[node name="ZoomUI" type="CanvasLayer" parent="."]
+layer = 101
+
+[node name="ZoomMeter" type="Control" parent="ZoomUI"]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -370.0
+offset_top = -154.0
+offset_right = -38.0
+offset_bottom = -116.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Minus" type="Label" parent="ZoomUI/ZoomMeter"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 4.0
+offset_right = 28.0
+offset_bottom = 34.0
+theme_override_colors/font_color = Color(0.9, 0.93, 0.86, 0.9)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.02, 0.96)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_pixel_font")
+theme_override_font_sizes/font_size = 16
+text = "-"
+horizontal_alignment = 1
+
+[node name="ZoomSegments" type="Control" parent="ZoomUI/ZoomMeter"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 332.0
+offset_bottom = 38.0
+mouse_filter = 2
+
+[node name="Segment01" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+offset_left = 35.0
+offset_top = 14.0
+offset_right = 51.0
+offset_bottom = 23.0
+mouse_filter = 2
+color = Color(0.2, 0.23, 0.2, 0.42)
+
+[node name="Segment02" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+offset_left = 56.0
+offset_top = 14.0
+offset_right = 72.0
+offset_bottom = 23.0
+mouse_filter = 2
+color = Color(0.2, 0.23, 0.2, 0.42)
+
+[node name="Segment03" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+offset_left = 77.0
+offset_top = 14.0
+offset_right = 93.0
+offset_bottom = 23.0
+mouse_filter = 2
+color = Color(0.2, 0.23, 0.2, 0.42)
+
+[node name="Segment04" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+offset_left = 98.0
+offset_top = 14.0
+offset_right = 114.0
+offset_bottom = 23.0
+mouse_filter = 2
+color = Color(0.2, 0.23, 0.2, 0.42)
+
+[node name="Segment05" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+offset_left = 119.0
+offset_top = 14.0
+offset_right = 135.0
+offset_bottom = 23.0
+mouse_filter = 2
+color = Color(0.2, 0.23, 0.2, 0.42)
+
+[node name="Segment06" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+offset_left = 140.0
+offset_top = 14.0
+offset_right = 156.0
+offset_bottom = 23.0
+mouse_filter = 2
+color = Color(0.2, 0.23, 0.2, 0.42)
+
+[node name="Segment07" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+offset_left = 161.0
+offset_top = 14.0
+offset_right = 177.0
+offset_bottom = 23.0
+mouse_filter = 2
+color = Color(0.2, 0.23, 0.2, 0.42)
+
+[node name="Segment08" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+offset_left = 182.0
+offset_top = 14.0
+offset_right = 198.0
+offset_bottom = 23.0
+mouse_filter = 2
+color = Color(0.2, 0.23, 0.2, 0.42)
+
+[node name="Segment09" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+offset_left = 203.0
+offset_top = 14.0
+offset_right = 219.0
+offset_bottom = 23.0
+mouse_filter = 2
+color = Color(0.2, 0.23, 0.2, 0.42)
+
+[node name="Segment10" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+offset_left = 224.0
+offset_top = 14.0
+offset_right = 240.0
+offset_bottom = 23.0
+mouse_filter = 2
+color = Color(0.2, 0.23, 0.2, 0.42)
+
+[node name="Segment11" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+offset_left = 245.0
+offset_top = 14.0
+offset_right = 261.0
+offset_bottom = 23.0
+mouse_filter = 2
+color = Color(0.2, 0.23, 0.2, 0.42)
+
+[node name="Segment12" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+offset_left = 266.0
+offset_top = 14.0
+offset_right = 282.0
+offset_bottom = 23.0
+mouse_filter = 2
+color = Color(0.2, 0.23, 0.2, 0.42)
+
+[node name="Plus" type="Label" parent="ZoomUI/ZoomMeter"]
+layout_mode = 0
+offset_left = 302.0
+offset_top = 4.0
+offset_right = 332.0
+offset_bottom = 34.0
+theme_override_colors/font_color = Color(0.9, 0.93, 0.86, 0.9)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.02, 0.96)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_pixel_font")
+theme_override_font_sizes/font_size = 16
+text = "+"
+horizontal_alignment = 1
 
 [node name="InteractionUI" type="CanvasLayer" parent="."]
 layer = 101

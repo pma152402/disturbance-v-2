@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bidnrc64cc23"]
+
+[sub_resource type="StandardMaterial3D" id="Rubber"]
+albedo_color = Color(0.035, 0.038, 0.04, 1)
+roughness = 0.98
+
+[sub_resource type="TorusMesh" id="TireBody"]
+material = SubResource("Rubber")
+inner_radius = 0.3
+outer_radius = 0.56
+rings = 24
+ring_segments = 12
+
+[sub_resource type="StandardMaterial3D" id="WornRubber"]
+albedo_color = Color(0.085, 0.082, 0.075, 1)
+
+[sub_resource type="TorusMesh" id="SidewallRing"]
+material = SubResource("WornRubber")
+inner_radius = 0.305
+outer_radius = 0.34
+rings = 20
+ring_segments = 8
+
+[node name="WornTire" type="StaticBody3D" unique_id=1088289329]
+editor_description = "Neumatico viejo con flancos, valvula y tacos de desgaste separados."
+
+[node name="TireBody" type="MeshInstance3D" parent="." unique_id=70018986]
+transform = Transform3D(1, 0, 0, 0, 3.1391647e-07, -1, 0, 1, 3.1391647e-07, 0, 0.56, 0)
+mesh = SubResource("TireBody")
+
+[node name="SidewallBack" type="MeshInstance3D" parent="." unique_id=885631820]
+transform = Transform3D(1, 0, 0, 0, 2.2463892e-06, -1.0000029, 0, 7.1560097, 3.1391738e-07, 0, 0.56, 0.02116923)
+mesh = SubResource("SidewallRing")
+
+[node name="Treads" type="Node3D" parent="." unique_id=325474653]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56, 0)

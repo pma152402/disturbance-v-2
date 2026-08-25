@@ -1,0 +1,155 @@
+[gd_scene load_steps=8 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Material_bark"]
+albedo_color = Color(0.205, 0.145, 0.095, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Material_bark_dark"]
+albedo_color = Color(0.105, 0.075, 0.052, 1)
+roughness = 1.0
+
+[sub_resource type="CylinderMesh" id="Mesh_trunk_lower"]
+material = SubResource("Material_bark")
+top_radius = 0.42
+bottom_radius = 0.68
+height = 3.5
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_trunk_upper"]
+material = SubResource("Material_bark")
+top_radius = 0.19
+bottom_radius = 0.43
+height = 3.0
+radial_segments = 7
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_branch"]
+material = SubResource("Material_bark")
+top_radius = 0.055
+bottom_radius = 0.22
+height = 2.8
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_twig"]
+material = SubResource("Material_bark_dark")
+top_radius = 0.018
+bottom_radius = 0.075
+height = 1.75
+radial_segments = 5
+rings = 1
+
+[sub_resource type="CapsuleShape3D" id="Shape_trunk"]
+radius = 0.54
+height = 6.0
+
+[node name="LargeDeadEntryTree" type="StaticBody3D"]
+editor_description = "Arbol seco grande de entrada. Sus ramas estan separadas para poder retocarlas desde el editor."
+collision_layer = 1
+collision_mask = 1
+
+[node name="Trunk" type="Node3D" parent="."]
+
+[node name="Lower" type="MeshInstance3D" parent="Trunk"]
+position = Vector3(0, 1.75, 0)
+rotation = Vector3(0.025, 0.1, -0.055)
+mesh = SubResource("Mesh_trunk_lower")
+
+[node name="Upper" type="MeshInstance3D" parent="Trunk"]
+position = Vector3(-0.14, 4.75, 0.04)
+rotation = Vector3(-0.04, -0.05, 0.12)
+mesh = SubResource("Mesh_trunk_upper")
+
+[node name="BrokenTop" type="MeshInstance3D" parent="Trunk"]
+position = Vector3(-0.48, 6.75, 0.06)
+rotation = Vector3(0.04, 0, 0.31)
+scale = Vector3(0.72, 0.78, 0.72)
+mesh = SubResource("Mesh_branch")
+
+[node name="Roots" type="Node3D" parent="."]
+
+[node name="RootLeft" type="MeshInstance3D" parent="Roots"]
+position = Vector3(-0.62, 0.2, 0.1)
+rotation = Vector3(0, 0.22, 1.42)
+scale = Vector3(1.25, 0.62, 1.1)
+mesh = SubResource("Mesh_branch")
+
+[node name="RootRight" type="MeshInstance3D" parent="Roots"]
+position = Vector3(0.58, 0.18, -0.18)
+rotation = Vector3(0.1, -0.35, -1.42)
+scale = Vector3(1.0, 0.55, 0.9)
+mesh = SubResource("Mesh_branch")
+
+[node name="RootFront" type="MeshInstance3D" parent="Roots"]
+position = Vector3(0.05, 0.18, 0.62)
+rotation = Vector3(1.42, 0.2, 0.04)
+scale = Vector3(0.85, 0.52, 0.85)
+mesh = SubResource("Mesh_branch")
+
+[node name="MainBranches" type="Node3D" parent="."]
+
+[node name="LeftBranch" type="MeshInstance3D" parent="MainBranches"]
+position = Vector3(-1.22, 5.02, 0)
+rotation = Vector3(0.06, -0.08, 1.02)
+scale = Vector3(1.08, 1.15, 1.08)
+mesh = SubResource("Mesh_branch")
+
+[node name="LeftForkA" type="MeshInstance3D" parent="MainBranches"]
+position = Vector3(-2.47, 6.03, 0.02)
+rotation = Vector3(-0.1, 0.12, 0.57)
+scale = Vector3(0.82, 0.9, 0.82)
+mesh = SubResource("Mesh_twig")
+
+[node name="LeftForkB" type="MeshInstance3D" parent="MainBranches"]
+position = Vector3(-2.2, 5.92, 0.14)
+rotation = Vector3(0.28, -0.25, 1.35)
+scale = Vector3(0.7, 0.76, 0.7)
+mesh = SubResource("Mesh_twig")
+
+[node name="RightBranch" type="MeshInstance3D" parent="MainBranches"]
+position = Vector3(1.08, 5.38, 0.02)
+rotation = Vector3(-0.04, 0.16, -1.0)
+scale = Vector3(1.05, 1.12, 1.05)
+mesh = SubResource("Mesh_branch")
+
+[node name="RightForkA" type="MeshInstance3D" parent="MainBranches"]
+position = Vector3(2.3, 6.35, 0.05)
+rotation = Vector3(0.08, -0.18, -0.55)
+scale = Vector3(0.8, 0.88, 0.8)
+mesh = SubResource("Mesh_twig")
+
+[node name="RightForkB" type="MeshInstance3D" parent="MainBranches"]
+position = Vector3(2.12, 6.15, -0.1)
+rotation = Vector3(-0.18, 0.32, -1.38)
+scale = Vector3(0.68, 0.74, 0.68)
+mesh = SubResource("Mesh_twig")
+
+[node name="RearBranch" type="MeshInstance3D" parent="MainBranches"]
+position = Vector3(-0.1, 5.2, -1.12)
+rotation = Vector3(-1.02, 0.05, 0.02)
+scale = Vector3(0.86, 1.05, 0.86)
+mesh = SubResource("Mesh_branch")
+
+[node name="RearFork" type="MeshInstance3D" parent="MainBranches"]
+position = Vector3(-0.05, 6.1, -2.15)
+rotation = Vector3(-0.62, 0.35, -0.18)
+scale = Vector3(0.68, 0.82, 0.68)
+mesh = SubResource("Mesh_twig")
+
+[node name="FrontBranch" type="MeshInstance3D" parent="MainBranches"]
+position = Vector3(0.05, 4.55, 1.02)
+rotation = Vector3(1.08, -0.1, -0.08)
+scale = Vector3(0.78, 0.9, 0.78)
+mesh = SubResource("Mesh_branch")
+
+[node name="FrontFork" type="MeshInstance3D" parent="MainBranches"]
+position = Vector3(0.2, 5.28, 2.18)
+rotation = Vector3(0.66, -0.4, 0.1)
+scale = Vector3(0.62, 0.76, 0.62)
+mesh = SubResource("Mesh_twig")
+
+[node name="TrunkCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-0.08, 3.0, 0.02)
+rotation = Vector3(0, 0, 0.04)
+shape = SubResource("Shape_trunk")

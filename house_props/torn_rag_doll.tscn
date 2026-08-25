@@ -1,0 +1,99 @@
+[gd_scene load_steps=12 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Cloth"]
+albedo_color = Color(0.46, 0.39, 0.3, 1)
+roughness = 1.0
+[sub_resource type="StandardMaterial3D" id="FadedBlue"]
+albedo_color = Color(0.16, 0.25, 0.28, 1)
+roughness = 1.0
+[sub_resource type="StandardMaterial3D" id="Patch"]
+albedo_color = Color(0.45, 0.16, 0.08, 1)
+roughness = 0.98
+[sub_resource type="StandardMaterial3D" id="Yarn"]
+albedo_color = Color(0.20, 0.08, 0.035, 1)
+roughness = 1.0
+[sub_resource type="StandardMaterial3D" id="ButtonMat"]
+albedo_color = Color(0.035, 0.04, 0.035, 1)
+roughness = 0.72
+[sub_resource type="SphereMesh" id="Head"]
+material = SubResource("Cloth")
+radius = 0.15
+height = 0.28
+radial_segments = 10
+rings = 6
+[sub_resource type="BoxMesh" id="Torso"]
+material = SubResource("FadedBlue")
+size = Vector3(0.27, 0.34, 0.16)
+[sub_resource type="CylinderMesh" id="Limb"]
+material = SubResource("Cloth")
+top_radius = 0.035
+bottom_radius = 0.055
+height = 0.34
+radial_segments = 7
+[sub_resource type="CylinderMesh" id="YarnStrand"]
+material = SubResource("Yarn")
+top_radius = 0.012
+bottom_radius = 0.012
+height = 0.24
+radial_segments = 5
+[sub_resource type="CylinderMesh" id="Button"]
+material = SubResource("ButtonMat")
+top_radius = 0.027
+bottom_radius = 0.027
+height = 0.012
+radial_segments = 8
+[sub_resource type="BoxMesh" id="PatchMesh"]
+material = SubResource("Patch")
+size = Vector3(0.12, 0.11, 0.012)
+
+[node name="TornRagDoll" type="StaticBody3D"]
+editor_description = "Muneca de trapo descolorida con parche, un boton perdido, pelo de lana y extremidades flojas."
+[node name="Torso" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.38, 0)
+rotation = Vector3(0.05, 0, -0.08)
+mesh = SubResource("Torso")
+[node name="Head" type="MeshInstance3D" parent="."]
+position = Vector3(-0.02, 0.65, -0.015)
+rotation = Vector3(0.12, 0, -0.18)
+mesh = SubResource("Head")
+[node name="ButtonEye" type="MeshInstance3D" parent="."]
+position = Vector3(-0.07, 0.675, -0.14)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("Button")
+[node name="MissingEyeStitch" type="MeshInstance3D" parent="."]
+position = Vector3(0.045, 0.675, -0.143)
+rotation = Vector3(1.570796, 0, 0)
+scale = Vector3(0.45, 1, 0.18)
+mesh = SubResource("Button")
+[node name="ChestPatch" type="MeshInstance3D" parent="."]
+position = Vector3(0.035, 0.4, -0.087)
+rotation = Vector3(0, 0, 0.2)
+mesh = SubResource("PatchMesh")
+[node name="Hair1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.1, 0.79, 0)
+rotation = Vector3(0, 0, -0.38)
+mesh = SubResource("YarnStrand")
+[node name="Hair2" type="MeshInstance3D" parent="."]
+position = Vector3(-0.035, 0.81, 0)
+rotation = Vector3(0, 0, -0.12)
+mesh = SubResource("YarnStrand")
+[node name="Hair3" type="MeshInstance3D" parent="."]
+position = Vector3(0.045, 0.79, 0)
+rotation = Vector3(0, 0, 0.3)
+mesh = SubResource("YarnStrand")
+[node name="LooseLeftArm" type="MeshInstance3D" parent="."]
+position = Vector3(-0.2, 0.37, 0)
+rotation = Vector3(0.25, 0.05, -0.65)
+mesh = SubResource("Limb")
+[node name="RightArm" type="MeshInstance3D" parent="."]
+position = Vector3(0.18, 0.4, 0)
+rotation = Vector3(-0.15, 0, 0.35)
+mesh = SubResource("Limb")
+[node name="LeftLeg" type="MeshInstance3D" parent="."]
+position = Vector3(-0.09, 0.13, 0)
+rotation = Vector3(0.18, 0, -0.12)
+mesh = SubResource("Limb")
+[node name="RightLeg" type="MeshInstance3D" parent="."]
+position = Vector3(0.1, 0.12, 0)
+rotation = Vector3(-0.1, 0, 0.18)
+mesh = SubResource("Limb")

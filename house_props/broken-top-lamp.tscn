@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://ci1snqtou0s3k"]
+
+[sub_resource type="StandardMaterial3D" id="Brass"]
+albedo_color = Color(0.29, 0.19, 0.065, 1)
+metallic = 0.55
+roughness = 0.48
+
+[sub_resource type="CylinderMesh" id="Canopy"]
+material = SubResource("Brass")
+top_radius = 0.19
+bottom_radius = 0.27
+height = 0.11
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="BrownTrim"]
+albedo_color = Color(0.18, 0.065, 0.022, 1)
+roughness = 0.8
+
+[sub_resource type="CylinderMesh" id="Cord"]
+material = SubResource("BrownTrim")
+top_radius = 0.018
+bottom_radius = 0.018
+height = 0.46
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="Socket"]
+material = SubResource("Brass")
+top_radius = 0.09
+bottom_radius = 0.12
+height = 0.18
+radial_segments = 12
+
+[sub_resource type="StandardMaterial3D" id="CreamGlass"]
+transparency = 1
+albedo_color = Color(0.91, 0.78, 0.53, 0.84)
+roughness = 0.42
+
+[sub_resource type="CylinderMesh" id="Shade"]
+material = SubResource("CreamGlass")
+top_radius = 0.2
+bottom_radius = 0.58
+height = 0.38
+radial_segments = 16
+
+[node name="GrandmaCeilingLamp" type="Node3D" unique_id=1728888960 groups=["living_room_ceiling_lamp"]]
+editor_description = "Lámpara colgante antigua con pantalla crema, latón envejecido y borde marrón."
+
+[node name="CeilingCanopy" type="MeshInstance3D" parent="." unique_id=1999519290]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.055, 0)
+mesh = SubResource("Canopy")
+
+[node name="HangingCord" type="MeshInstance3D" parent="." unique_id=1676076172]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.32, 0)
+mesh = SubResource("Cord")
+
+[node name="BrassSocket" type="MeshInstance3D" parent="." unique_id=1836393124]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+mesh = SubResource("Socket")
+
+[node name="GlassShade" type="MeshInstance3D" parent="." unique_id=339519848]
+transform = Transform3D(1, 0, 0, 0, 0.92241514, 0.38619983, 0, -0.38619983, 0.92241514, -0.0002747774, -0.9337919, 0.005548626)
+mesh = SubResource("Shade")

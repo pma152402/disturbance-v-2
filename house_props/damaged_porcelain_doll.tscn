@@ -1,0 +1,97 @@
+[gd_scene format=3 uid="uid://byse1pum3cvc6"]
+
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(0.55, 0.9, 0.38)
+
+[sub_resource type="StandardMaterial3D" id="Dress"]
+albedo_color = Color(0.31, 0.12, 0.15, 1)
+roughness = 0.96
+
+[sub_resource type="CylinderMesh" id="DressBody"]
+material = SubResource("Dress")
+top_radius = 0.11
+bottom_radius = 0.27
+height = 0.43
+radial_segments = 12
+
+[sub_resource type="StandardMaterial3D" id="Porcelain"]
+albedo_color = Color(0.72, 0.65, 0.56, 1)
+roughness = 0.86
+
+[sub_resource type="SphereMesh" id="Head"]
+material = SubResource("Porcelain")
+radius = 0.16
+height = 0.31
+radial_segments = 12
+rings = 7
+
+[sub_resource type="StandardMaterial3D" id="Hair"]
+albedo_color = Color(0.1, 0.052, 0.025, 1)
+roughness = 0.94
+
+[sub_resource type="SphereMesh" id="HairCap"]
+material = SubResource("Hair")
+radius = 0.165
+height = 0.13
+radial_segments = 12
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="Dark"]
+albedo_color = Color(0.012, 0.01, 0.009, 1)
+
+[sub_resource type="SphereMesh" id="Eye"]
+material = SubResource("Dark")
+radius = 0.022
+height = 0.02
+radial_segments = 8
+rings = 3
+
+[sub_resource type="CylinderMesh" id="Limb"]
+material = SubResource("Porcelain")
+top_radius = 0.035
+bottom_radius = 0.045
+height = 0.32
+radial_segments = 8
+
+[node name="DamagedPorcelainDoll" type="StaticBody3D" unique_id=377926968]
+editor_description = "Muneca de porcelana con un ojo perdido, grietas faciales, vestido gastado y brazo roto."
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=537707908]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+shape = SubResource("Collision")
+
+[node name="Dress" type="MeshInstance3D" parent="." unique_id=1169534302]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.31, 0)
+mesh = SubResource("DressBody")
+
+[node name="Head" type="MeshInstance3D" parent="." unique_id=984312760]
+transform = Transform3D(0.9948164, -0.062962204, -0.07985076, 0.05991604, 0.9974021, -0.039989334, 0.082161136, 0.0349977, 0.9960044, 0, 0.68, 0)
+mesh = SubResource("Head")
+
+[node name="HairCap" type="MeshInstance3D" parent="." unique_id=2001139775]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.79, 0.012)
+mesh = SubResource("HairCap")
+
+[node name="RemainingEye" type="MeshInstance3D" parent="." unique_id=1412056237]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.055, 0.705, -0.145)
+mesh = SubResource("Eye")
+
+[node name="EmptyEyeSocket" type="MeshInstance3D" parent="." unique_id=15494633]
+transform = Transform3D(1.35, 0, 0, 0, 1.2, 0, 0, 0, 1, 0.055, 0.705, -0.145)
+mesh = SubResource("Eye")
+
+[node name="LeftArm" type="MeshInstance3D" parent="." unique_id=225122064]
+transform = Transform3D(0.7936878, 0.5580046, 0.24226122, -0.35770094, 0.75021124, -0.5560875, -0.49204648, 0.35470283, 0.79503214, -0.17531651, 0.37072095, -0.04816386)
+mesh = SubResource("Limb")
+
+[node name="LeftArm2" type="MeshInstance3D" parent="." unique_id=2010558258]
+transform = Transform3D(0.06725502, -0.5732448, -0.8166193, -0.35770094, 0.75021124, -0.5560875, 0.9314113, 0.3295052, -0.15459467, 0.16923796, 0.37072095, 0)
+mesh = SubResource("Limb")
+
+[node name="LeftLeg" type="MeshInstance3D" parent="." unique_id=2112483792]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0.08, 0)
+mesh = SubResource("Limb")
+
+[node name="RightLeg" type="MeshInstance3D" parent="." unique_id=548704278]
+transform = Transform3D(0.9959527, -0.08987855, 0, 0.08976623, 0.99470806, -0.04997917, 0.004492055, 0.04977689, 0.99875027, 0.09, 0.08, 0)
+mesh = SubResource("Limb")

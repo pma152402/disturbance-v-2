@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://8lcsocea1fn8"]
+
+[sub_resource type="StandardMaterial3D" id="Felt"]
+albedo_color = Color(0.19, 0.13, 0.075, 1)
+
+[sub_resource type="CylinderMesh" id="Brim"]
+material = SubResource("Felt")
+top_radius = 0.48
+bottom_radius = 0.48
+height = 0.035
+radial_segments = 20
+
+[sub_resource type="CylinderMesh" id="Crown"]
+material = SubResource("Felt")
+top_radius = 0.27
+bottom_radius = 0.32
+height = 0.34
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="Band"]
+albedo_color = Color(0.055, 0.035, 0.025, 1)
+roughness = 0.88
+
+[sub_resource type="TorusMesh" id="HatBand"]
+material = SubResource("Band")
+inner_radius = 0.285
+outer_radius = 0.325
+rings = 18
+ring_segments = 6
+
+[node name="OldFedoraHat" type="StaticBody3D" unique_id=222342359]
+editor_description = "Sombrero antiguo de fieltro con ala ovalada, cinta, lazo y hendiduras."
+
+[node name="Brim" type="MeshInstance3D" parent="." unique_id=1318276908]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.78, 0, 0.04, 0)
+mesh = SubResource("Brim")
+
+[node name="Crown" type="MeshInstance3D" parent="." unique_id=1009981022]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.86, 0, 0.22, 0)
+mesh = SubResource("Crown")
+
+[node name="HatBand" type="MeshInstance3D" parent="." unique_id=1416507268]
+transform = Transform3D(1, 0, 0, 0, 2.8548, 0, 0, 0, 0.86, 0, 0.07785855, 0)
+mesh = SubResource("HatBand")

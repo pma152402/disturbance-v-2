@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://0uwp8lxvsq3j"]
+
+[sub_resource type="StandardMaterial3D" id="AmberGlass"]
+transparency = 1
+albedo_color = Color(0.24, 0.09, 0.025, 0.82)
+roughness = 0.42
+
+[sub_resource type="CylinderMesh" id="Bottle"]
+material = SubResource("AmberGlass")
+top_radius = 0.075
+bottom_radius = 0.085
+height = 0.24
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="RedLabel"]
+albedo_color = Color(0.42, 0.055, 0.045, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="LabelBand"]
+material = SubResource("RedLabel")
+top_radius = 0.087
+bottom_radius = 0.087
+height = 0.075
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="WhitePlastic"]
+albedo_color = Color(0.66, 0.65, 0.58, 1)
+roughness = 0.82
+
+[sub_resource type="CylinderMesh" id="Cap"]
+material = SubResource("WhitePlastic")
+top_radius = 0.082
+bottom_radius = 0.082
+height = 0.055
+radial_segments = 10
+
+[sub_resource type="BoxMesh" id="MedicineBox"]
+material = SubResource("WhitePlastic")
+size = Vector3(0.18, 0.32, 0.09)
+
+[sub_resource type="StandardMaterial3D" id="Pill"]
+albedo_color = Color(0.72, 0.66, 0.5, 1)
+roughness = 0.78
+
+[sub_resource type="CapsuleMesh" id="LoosePill"]
+material = SubResource("Pill")
+radius = 0.022
+height = 0.075
+radial_segments = 8
+rings = 3
+
+[node name="ExpiredMedicines" type="StaticBody3D" unique_id=1605109512]
+editor_description = "Medicamentos viejos: frascos ambar, cajas descoloridas y pastillas sueltas."
+
+[node name="BottleA" type="MeshInstance3D" parent="." unique_id=2126978638]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 0.12, 0)
+mesh = SubResource("Bottle")
+
+[node name="BottleALabel" type="MeshInstance3D" parent="." unique_id=278583872]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 0.11, 0)
+mesh = SubResource("LabelBand")
+
+[node name="BottleACap" type="MeshInstance3D" parent="." unique_id=1678147854]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 0.268, 0)
+mesh = SubResource("Cap")
+
+[node name="BottleB" type="MeshInstance3D" parent="." unique_id=59028927]
+transform = Transform3D(0.8036546, 0, 0.16290885, 0, 0.82, 0, -0.16290885, 0, 0.8036546, 0.02, 0.11, -0.08)
+mesh = SubResource("Bottle")
+
+[node name="BottleBCap" type="MeshInstance3D" parent="." unique_id=1434825317]
+transform = Transform3D(0.82, 0, 0, 0, 0.82, 0, 0, 0, 0.82, 0.02, 0.232, -0.08)
+mesh = SubResource("Cap")
+
+[node name="MedicineBoxFallen" type="MeshInstance3D" parent="." unique_id=957130123]
+transform = Transform3D(2.140972e-07, -0.76727206, 0.4181498, 0.8, 2.825248e-07, 0, -1.3126412e-07, 0.4704185, 0.68201965, 0.05, 0.05, 0.2)
+mesh = SubResource("MedicineBox")
+
+[node name="LoosePill1" type="MeshInstance3D" parent="." unique_id=1861882307]
+transform = Transform3D(2.7548762e-07, -0.87758255, 0.47942555, 1, 3.1391647e-07, 0, -1.5049957e-07, 0.47942555, 0.87758255, -0.1, 0.03, 0.18)
+mesh = SubResource("LoosePill")
+
+[node name="LoosePill2" type="MeshInstance3D" parent="." unique_id=905513893]
+transform = Transform3D(2.9488456e-07, -0.9393727, -0.3428978, 1, 3.1391647e-07, 0, 1.0764127e-07, -0.3428978, 0.9393727, -0.2, 0.03, 0.22)
+mesh = SubResource("LoosePill")
+
+[node name="LoosePill3" type="MeshInstance3D" parent="." unique_id=1232528538]
+transform = Transform3D(2.1870771e-07, -0.6967067, 0.7173561, 1, 3.1391647e-07, 0, -2.251899e-07, 0.7173561, 0.6967067, 0.24, 0.03, 0.2)
+mesh = SubResource("LoosePill")

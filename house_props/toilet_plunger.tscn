@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://dwv05564ju2lc"]
+
+[sub_resource type="StandardMaterial3D" id="Material_rubber"]
+albedo_color = Color(0.42, 0.055, 0.04, 1)
+roughness = 0.82
+
+[sub_resource type="CylinderMesh" id="Mesh_cup"]
+material = SubResource("Material_rubber")
+top_radius = 0.055
+bottom_radius = 0.17
+height = 0.16
+radial_segments = 12
+rings = 2
+
+[sub_resource type="TorusMesh" id="Mesh_rubber_lip"]
+material = SubResource("Material_rubber")
+inner_radius = 0.13
+outer_radius = 0.18
+rings = 12
+ring_segments = 6
+
+[sub_resource type="StandardMaterial3D" id="Material_wood"]
+albedo_color = Color(0.47, 0.285, 0.12, 1)
+roughness = 0.93
+
+[sub_resource type="CylinderMesh" id="Mesh_handle"]
+material = SubResource("Material_wood")
+top_radius = 0.025
+bottom_radius = 0.03
+height = 0.82
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CapsuleShape3D" id="Shape_plunger"]
+radius = 0.17
+height = 0.95
+
+[node name="ToiletPlunger" type="StaticBody3D" unique_id=582687857]
+editor_description = "Desatascador detallado con mango y piezas de goma separadas."
+
+[node name="RubberCup" type="MeshInstance3D" parent="." unique_id=118366259]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.095, 0)
+mesh = SubResource("Mesh_cup")
+
+[node name="CupLip" type="MeshInstance3D" parent="." unique_id=1984873969]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.018, 0)
+mesh = SubResource("Mesh_rubber_lip")
+
+[node name="Handle" type="MeshInstance3D" parent="." unique_id=1788707472]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.575, 0)
+mesh = SubResource("Mesh_handle")
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=1362088676]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0)
+shape = SubResource("Shape_plunger")

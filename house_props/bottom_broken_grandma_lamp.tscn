@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://culyc7n4irqp1"]
+
+[sub_resource type="StandardMaterial3D" id="OldCord"]
+albedo_color = Color(0.18, 0.065, 0.022, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="Cord"]
+material = SubResource("OldCord")
+top_radius = 0.018
+bottom_radius = 0.018
+height = 0.48
+radial_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="BrokenCreamGlass"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.72, 0.61, 0.43, 0.72)
+roughness = 0.76
+
+[sub_resource type="BoxMesh" id="ShadeShardLarge"]
+material = SubResource("BrokenCreamGlass")
+size = Vector3(0.42, 0.025, 0.3)
+
+[sub_resource type="BoxMesh" id="ShadeShardSmall"]
+material = SubResource("BrokenCreamGlass")
+size = Vector3(0.25, 0.022, 0.2)
+
+[sub_resource type="BoxMesh" id="TrimFragment"]
+material = SubResource("OldCord")
+size = Vector3(0.34, 0.035, 0.045)
+
+[sub_resource type="StandardMaterial3D" id="DeadBulbGlass"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.48, 0.47, 0.43, 0.42)
+roughness = 0.82
+
+[sub_resource type="BoxMesh" id="GlassSplinter"]
+material = SubResource("DeadBulbGlass")
+size = Vector3(0.12, 0.012, 0.035)
+
+[node name="BrokenGrandmaLamp" type="StaticBody3D" unique_id=1418219838]
+editor_description = "Lampara antigua caida: pantalla partida, bombilla rota y cable doblado. Sin luz ni interaccion."
+
+[node name="BentCordA" type="MeshInstance3D" parent="." unique_id=1446287511]
+transform = Transform3D(-0.061119944, -0.99813056, 0, 0.99813056, -0.061119944, 0, 0, 0, 1, -0.42, 0.0030384809, 0.03)
+mesh = SubResource("Cord")
+
+[node name="BentCordB" type="MeshInstance3D" parent="." unique_id=130671332]
+transform = Transform3D(0.90250623, -0.43067682, 2.8331152e-07, 3.1391647e-07, 9.854355e-14, -1, 0.43067682, 0.90250623, 1.3519667e-07, -0.042730294, -0.020198077, -0.07)
+mesh = SubResource("Cord")
+
+[node name="ShadeShardA" type="MeshInstance3D" parent="." unique_id=1483700251]
+transform = Transform3D(0.9364402, 0.1573518, 0.3135605, -0.13909683, 0.98704904, -0.07991469, -0.32207426, 0.031220067, 0.94619954, 0.33, 0.07, 0.14)
+mesh = SubResource("ShadeShardLarge")
+
+[node name="ShadeShardB" type="MeshInstance3D" parent="." unique_id=1586316407]
+transform = Transform3D(0.8846738, -0.06985002, -0.46094823, 0.109580755, 0.9921675, 0.059964005, 0.45314935, -0.103559636, 0.8853988, 0.63, 0.06, -0.05)
+mesh = SubResource("ShadeShardLarge")
+
+[node name="ShadeShardC" type="MeshInstance3D" parent="." unique_id=1383740222]
+transform = Transform3D(0.69987994, -0.05424978, 0.7121973, 0.19724062, 0.9730186, -0.119712204, -0.6864869, 0.22425842, 0.69169647, 0.48, 0.08, 0.39)
+mesh = SubResource("ShadeShardSmall")
+
+[node name="ShadeShardD" type="MeshInstance3D" parent="." unique_id=833077981]
+transform = Transform3D(0.9625832, 0.18535788, -0.19767681, -0.16833714, 0.980661, 0.09983342, 0.21235885, -0.06282163, 0.9751704, 0.82, 0.055, 0.22)
+mesh = SubResource("ShadeShardSmall")
+
+[node name="BrokenTrimA" type="MeshInstance3D" parent="." unique_id=825303161]
+transform = Transform3D(0.8960525, 0, 0.44394812, 0, 1, 0, -0.44394812, 0, 0.8960525, 0.38, 0.095, 0.32)
+mesh = SubResource("TrimFragment")
+
+[node name="BrokenTrimB" type="MeshInstance3D" parent="." unique_id=890853836]
+transform = Transform3D(0.7518057, 0, -0.65938467, 0, 1, 0, 0.65938467, 0, 0.7518057, 0.75, 0.09, 0.08)
+mesh = SubResource("TrimFragment")
+
+[node name="BulbGlassSplinterA" type="MeshInstance3D" parent="." unique_id=1734980800]
+transform = Transform3D(0.8253356, 0, 0.5646425, 0, 1, 0, -0.5646425, 0, 0.8253356, 0.31, 0.035, -0.34)
+mesh = SubResource("GlassSplinter")
+
+[node name="BulbGlassSplinterB" type="MeshInstance3D" parent="." unique_id=764540528]
+transform = Transform3D(0.9393727, 0, -0.3428978, 0, 1, 0, 0.3428978, 0, 0.9393727, 0.48, 0.032, -0.27)
+mesh = SubResource("GlassSplinter")

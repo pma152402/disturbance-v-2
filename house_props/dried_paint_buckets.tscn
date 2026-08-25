@@ -1,0 +1,92 @@
+[gd_scene load_steps=11 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Tin"]
+albedo_color = Color(0.34, 0.35, 0.33, 1)
+metallic = 0.62
+roughness = 0.68
+[sub_resource type="StandardMaterial3D" id="OldLabel"]
+albedo_color = Color(0.48, 0.43, 0.31, 1)
+roughness = 0.96
+[sub_resource type="StandardMaterial3D" id="DryBlue"]
+albedo_color = Color(0.10, 0.25, 0.31, 1)
+roughness = 1.0
+[sub_resource type="StandardMaterial3D" id="DryCream"]
+albedo_color = Color(0.57, 0.52, 0.4, 1)
+roughness = 1.0
+[sub_resource type="CylinderMesh" id="Can"]
+material = SubResource("Tin")
+top_radius = 0.24
+bottom_radius = 0.21
+height = 0.44
+radial_segments = 14
+[sub_resource type="TorusMesh" id="Rim"]
+material = SubResource("Tin")
+inner_radius = 0.225
+outer_radius = 0.25
+rings = 14
+ring_segments = 6
+[sub_resource type="CylinderMesh" id="DryPaint"]
+material = SubResource("DryBlue")
+top_radius = 0.215
+bottom_radius = 0.215
+height = 0.022
+radial_segments = 12
+[sub_resource type="CylinderMesh" id="Handle"]
+material = SubResource("Tin")
+top_radius = 0.012
+bottom_radius = 0.012
+height = 0.48
+radial_segments = 6
+[sub_resource type="BoxMesh" id="Label"]
+material = SubResource("OldLabel")
+size = Vector3(0.32, 0.19, 0.012)
+[sub_resource type="BoxMesh" id="PaintDrip"]
+material = SubResource("DryCream")
+size = Vector3(0.045, 0.21, 0.018)
+
+[node name="DriedPaintBuckets" type="StaticBody3D"]
+editor_description = "Tres cubos metalicos con pintura seca, etiquetas viejas, goteos y asas caidas."
+[node name="BucketA" type="Node3D" parent="."]
+[node name="Can" type="MeshInstance3D" parent="BucketA"]
+position = Vector3(0, 0.22, 0)
+mesh = SubResource("Can")
+[node name="TopRim" type="MeshInstance3D" parent="BucketA"]
+position = Vector3(0, 0.44, 0)
+mesh = SubResource("Rim")
+[node name="DriedPaintSurface" type="MeshInstance3D" parent="BucketA"]
+position = Vector3(0, 0.435, 0)
+mesh = SubResource("DryPaint")
+[node name="OldFrontLabel" type="MeshInstance3D" parent="BucketA"]
+position = Vector3(0, 0.24, -0.222)
+mesh = SubResource("Label")
+[node name="SideDrip" type="MeshInstance3D" parent="BucketA"]
+position = Vector3(0.13, 0.32, -0.226)
+mesh = SubResource("PaintDrip")
+[node name="FallenHandle" type="MeshInstance3D" parent="BucketA"]
+position = Vector3(0, 0.16, 0.27)
+rotation = Vector3(1.570796, 0, 1.570796)
+mesh = SubResource("Handle")
+[node name="BucketB" type="Node3D" parent="."]
+position = Vector3(0.43, 0, 0.16)
+rotation = Vector3(0, -0.22, 0)
+scale = Vector3(0.82, 0.82, 0.82)
+[node name="Can" type="MeshInstance3D" parent="BucketB"]
+position = Vector3(0, 0.22, 0)
+mesh = SubResource("Can")
+[node name="TopRim" type="MeshInstance3D" parent="BucketB"]
+position = Vector3(0, 0.44, 0)
+mesh = SubResource("Rim")
+[node name="DryCreamPaint" type="MeshInstance3D" parent="BucketB"]
+position = Vector3(0, 0.435, 0)
+material_override = SubResource("DryCream")
+mesh = SubResource("DryPaint")
+[node name="BucketC" type="Node3D" parent="."]
+position = Vector3(-0.38, 0, 0.2)
+rotation = Vector3(0, 0.35, -0.08)
+scale = Vector3(0.68, 0.68, 0.68)
+[node name="Can" type="MeshInstance3D" parent="BucketC"]
+position = Vector3(0, 0.22, 0)
+mesh = SubResource("Can")
+[node name="TopRim" type="MeshInstance3D" parent="BucketC"]
+position = Vector3(0, 0.44, 0)
+mesh = SubResource("Rim")

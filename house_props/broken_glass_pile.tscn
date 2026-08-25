@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://ck33283tb5ron"]
+
+[sub_resource type="StandardMaterial3D" id="Glass"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.48, 0.58, 0.56, 0.34)
+metallic = 0.12
+roughness = 0.24
+
+[sub_resource type="PrismMesh" id="LargeShard"]
+material = SubResource("Glass")
+size = Vector3(0.42, 0.018, 0.28)
+
+[sub_resource type="PrismMesh" id="SmallShard"]
+material = SubResource("Glass")
+size = Vector3(0.22, 0.014, 0.15)
+
+[node name="BrokenGlassPile" type="StaticBody3D" unique_id=1240003131]
+editor_description = "Monton de cristales rotos transparentes con fragmentos grandes y pequenas astillas."
+
+[node name="Shard1" type="MeshInstance3D" parent="." unique_id=2036362607]
+transform = Transform3D(0.9375255, 0.06494554, 0.34180114, -0.039861437, 0.9960044, -0.07991469, -0.34562552, 0.061297383, 0.93636835, -0.25, 0.025, 0.08)
+mesh = SubResource("LargeShard")
+
+[node name="Shard2" type="MeshInstance3D" parent="." unique_id=218169300]
+transform = Transform3D(0.8146027, -0.0058793165, -0.5799896, 0.049889233, 0.99695307, 0.059964005, 0.57786983, -0.07778207, 0.81241393, 0.18, 0.03, -0.12)
+mesh = SubResource("LargeShard")
+
+[node name="Shard3" type="MeshInstance3D" parent="." unique_id=1542708858]
+transform = Transform3D(0.45925555, 0.052438736, 0.8867551, 0.07951545, 0.9918219, -0.09983342, -0.88473827, 0.11635978, 0.45133, 0.34, 0.028, 0.18)
+mesh = SubResource("SmallShard")
+
+[node name="Shard4" type="MeshInstance3D" parent="." unique_id=534323461]
+transform = Transform3D(0.6844973, -0.01741543, 0.7288074, -0.059772223, 0.99500805, 0.07991469, -0.72656095, -0.09826382, 0.6800393, -0.43, 0.025, -0.2)
+mesh = SubResource("SmallShard")
+
+[node name="Shard5" type="MeshInstance3D" parent="." unique_id=958776652]
+transform = Transform3D(0.9687607, -0.15263784, -0.19545956, 0.11777809, 0.9767685, -0.17902958, 0.21824543, 0.15041597, 0.9642323, 0.02, 0.045, 0.27)
+mesh = SubResource("SmallShard")
+
+[node name="Shard6" type="MeshInstance3D" parent="." unique_id=856097970]
+transform = Transform3D(0.58804, 0, 0.10926814, 0, 1, 0, -0.1192016, 0, 0.53903663, 0.48, 0.02, -0.15)
+mesh = SubResource("SmallShard")
+
+[node name="Shard7" type="MeshInstance3D" parent="." unique_id=1145300326]
+transform = Transform3D(0.14189506, 0, -0.4744923, 0, 1, 0, 0.42704308, 0, 0.15766118, -0.05, 0.02, -0.3)
+mesh = SubResource("SmallShard")

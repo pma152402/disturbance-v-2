@@ -1,0 +1,189 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="PackedScene" path="res://house_props/investigation_polaroid.tscn" id="1_polaroid"]
+[sub_resource type="StandardMaterial3D" id="Cork"]
+albedo_color = Color(0.30, 0.17, 0.075, 1)
+roughness = 1.0
+[sub_resource type="StandardMaterial3D" id="Wood"]
+albedo_color = Color(0.16, 0.07, 0.025, 1)
+roughness = 0.88
+[sub_resource type="StandardMaterial3D" id="OldPaper"]
+albedo_color = Color(0.48, 0.43, 0.32, 1)
+roughness = 1.0
+[sub_resource type="StandardMaterial3D" id="Ink"]
+albedo_color = Color(0.055, 0.05, 0.042, 1)
+roughness = 1.0
+[sub_resource type="StandardMaterial3D" id="RedString"]
+albedo_color = Color(0.48, 0.035, 0.025, 1)
+roughness = 0.85
+[sub_resource type="StandardMaterial3D" id="PinMat"]
+albedo_color = Color(0.65, 0.08, 0.04, 1)
+metallic = 0.22
+roughness = 0.58
+[sub_resource type="BoxMesh" id="Board"]
+material = SubResource("Cork")
+size = Vector3(2.75, 1.55, 0.11)
+[sub_resource type="BoxMesh" id="FrameH"]
+material = SubResource("Wood")
+size = Vector3(2.95, 0.1, 0.18)
+[sub_resource type="BoxMesh" id="FrameV"]
+material = SubResource("Wood")
+size = Vector3(0.1, 1.65, 0.18)
+[sub_resource type="BoxMesh" id="Clipping"]
+material = SubResource("OldPaper")
+size = Vector3(0.42, 0.3, 0.016)
+[sub_resource type="BoxMesh" id="InkLine"]
+material = SubResource("Ink")
+size = Vector3(0.3, 0.012, 0.009)
+[sub_resource type="CylinderMesh" id="String"]
+material = SubResource("RedString")
+top_radius = 0.008
+bottom_radius = 0.008
+height = 1.0
+radial_segments = 5
+[sub_resource type="SphereMesh" id="Pin"]
+material = SubResource("PinMat")
+radius = 0.025
+height = 0.04
+radial_segments = 8
+rings = 3
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(2.95, 1.65, 0.2)
+
+[node name="InvestigationPhotoWall" type="StaticBody3D"]
+editor_description = "Panel de investigacion con dieciseis polaroids, recortes, chinchetas e hilos rojos."
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Collision")
+[node name="CorkBoard" type="MeshInstance3D" parent="."]
+mesh = SubResource("Board")
+[node name="FrameTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.8, 0)
+mesh = SubResource("FrameH")
+[node name="FrameBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.8, 0)
+mesh = SubResource("FrameH")
+[node name="FrameLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-1.425, 0, 0)
+mesh = SubResource("FrameV")
+[node name="FrameRight" type="MeshInstance3D" parent="."]
+position = Vector3(1.425, 0, 0)
+mesh = SubResource("FrameV")
+
+[node name="RedConnections" type="Node3D" parent="."]
+[node name="Thread1" type="MeshInstance3D" parent="RedConnections"]
+position = Vector3(-0.78, 0.28, 0.112)
+rotation = Vector3(0, 0, -0.88)
+scale = Vector3(1, 0.74, 1)
+mesh = SubResource("String")
+[node name="Thread2" type="MeshInstance3D" parent="RedConnections"]
+position = Vector3(-0.15, 0.36, 0.113)
+rotation = Vector3(0, 0, -1.25)
+scale = Vector3(1, 0.92, 1)
+mesh = SubResource("String")
+[node name="Thread3" type="MeshInstance3D" parent="RedConnections"]
+position = Vector3(0.55, 0.25, 0.114)
+rotation = Vector3(0, 0, -0.5)
+scale = Vector3(1, 0.8, 1)
+mesh = SubResource("String")
+[node name="Thread4" type="MeshInstance3D" parent="RedConnections"]
+position = Vector3(0.88, -0.15, 0.115)
+rotation = Vector3(0, 0, 0.78)
+scale = Vector3(1, 0.76, 1)
+mesh = SubResource("String")
+[node name="Thread5" type="MeshInstance3D" parent="RedConnections"]
+position = Vector3(0.25, -0.32, 0.116)
+rotation = Vector3(0, 0, 1.18)
+scale = Vector3(1, 0.96, 1)
+mesh = SubResource("String")
+[node name="Thread6" type="MeshInstance3D" parent="RedConnections"]
+position = Vector3(-0.47, -0.34, 0.117)
+rotation = Vector3(0, 0, 0.42)
+scale = Vector3(1, 0.74, 1)
+mesh = SubResource("String")
+[node name="Thread7" type="MeshInstance3D" parent="RedConnections"]
+position = Vector3(0.02, 0.02, 0.118)
+rotation = Vector3(0, 0, 0.2)
+scale = Vector3(1, 1.18, 1)
+mesh = SubResource("String")
+
+[node name="Polaroids" type="Node3D" parent="."]
+[node name="Photo01" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(-1.12, 0.5, 0.14)
+rotation = Vector3(0, 0, -0.12)
+[node name="Photo02" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(-0.73, 0.53, 0.145)
+rotation = Vector3(0, 0, 0.08)
+scale = Vector3(0.9, 0.9, 0.9)
+[node name="Photo03" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(-0.31, 0.49, 0.142)
+rotation = Vector3(0, 0, -0.05)
+[node name="Photo04" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(0.12, 0.52, 0.144)
+rotation = Vector3(0, 0, 0.11)
+[node name="Photo05" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(0.55, 0.5, 0.143)
+rotation = Vector3(0, 0, -0.09)
+[node name="Photo06" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(1.02, 0.47, 0.146)
+rotation = Vector3(0, 0, 0.14)
+[node name="Photo07" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(-1.0, 0.04, 0.148)
+rotation = Vector3(0, 0, 0.06)
+[node name="Photo08" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(-0.58, 0.02, 0.15)
+rotation = Vector3(0, 0, -0.13)
+[node name="Photo09" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(-0.14, 0.06, 0.152)
+rotation = Vector3(0, 0, 0.04)
+[node name="Photo10" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(0.3, 0.02, 0.149)
+rotation = Vector3(0, 0, -0.07)
+[node name="Photo11" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(0.73, 0.06, 0.151)
+rotation = Vector3(0, 0, 0.12)
+[node name="Photo12" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(1.12, -0.05, 0.155)
+rotation = Vector3(0, 0, -0.16)
+[node name="Photo13" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(-0.86, -0.46, 0.153)
+rotation = Vector3(0, 0, -0.1)
+[node name="Photo14" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(-0.4, -0.48, 0.156)
+rotation = Vector3(0, 0, 0.09)
+[node name="Photo15" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(0.08, -0.46, 0.154)
+rotation = Vector3(0, 0, -0.12)
+[node name="Photo16" parent="Polaroids" instance=ExtResource("1_polaroid")]
+position = Vector3(0.56, -0.47, 0.157)
+rotation = Vector3(0, 0, 0.07)
+
+[node name="Clippings" type="Node3D" parent="."]
+[node name="ClippingLeft" type="MeshInstance3D" parent="Clippings"]
+position = Vector3(-1.17, -0.38, 0.13)
+rotation = Vector3(0, 0, 0.13)
+mesh = SubResource("Clipping")
+[node name="ClippingRight" type="MeshInstance3D" parent="Clippings"]
+position = Vector3(1.12, 0.31, 0.13)
+rotation = Vector3(0, 0, -0.12)
+mesh = SubResource("Clipping")
+[node name="HeadlineLeft" type="MeshInstance3D" parent="Clippings"]
+position = Vector3(-1.17, -0.34, 0.143)
+rotation = Vector3(0, 0, 0.13)
+mesh = SubResource("InkLine")
+[node name="HeadlineRight" type="MeshInstance3D" parent="Clippings"]
+position = Vector3(1.12, 0.35, 0.143)
+rotation = Vector3(0, 0, -0.12)
+mesh = SubResource("InkLine")
+[node name="Pins" type="Node3D" parent="."]
+[node name="Pin1" type="MeshInstance3D" parent="Pins"]
+position = Vector3(-1.12, 0.68, 0.18)
+mesh = SubResource("Pin")
+[node name="Pin2" type="MeshInstance3D" parent="Pins"]
+position = Vector3(-0.14, 0.25, 0.18)
+mesh = SubResource("Pin")
+[node name="Pin3" type="MeshInstance3D" parent="Pins"]
+position = Vector3(0.73, 0.25, 0.18)
+mesh = SubResource("Pin")
+[node name="Pin4" type="MeshInstance3D" parent="Pins"]
+position = Vector3(0.08, -0.27, 0.18)
+mesh = SubResource("Pin")

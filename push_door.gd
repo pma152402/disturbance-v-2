@@ -1,5 +1,7 @@
 extends AnimatableBody3D
 
+const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
+
 @export_range(70.0, 110.0, 1.0) var open_angle_degrees := 90.0
 @export_range(0.05, 1.0, 0.01) var transition_time := 0.18
 @export var panel_half_width := 0.98
@@ -9,6 +11,7 @@ extends AnimatableBody3D
 @export_range(0.0, 110.0, 1.0) var negative_open_angle_degrees := 0.0
 
 @onready var panel_collision: CollisionShape3D = $PanelCollision
+@onready var door_sound: AudioStreamPlayer3D = $DoorSound
 
 var _is_open := false
 var _is_animating := false
@@ -16,6 +19,13 @@ var _open_sign := 1.0
 var _active_tween: Tween
 var _last_interactor: Node3D
 var _collision_restore_token := 0
+var _open_sound: AudioStreamWAV
+var _close_sound: AudioStreamWAV
+
+
+func _ready() -> void:
+	_open_sound = GameplaySounds.make_door_open()
+	_close_sound = GameplaySounds.make_door_close()
 
 
 func get_interaction_key() -> Key:
@@ -34,8 +44,16 @@ func interact(player: Node) -> bool:
 		_open_sign = _get_open_sign(player)
 	_last_interactor = player as Node3D if player is Node3D else null
 	_is_open = not _is_open
+	_play_door_sound(_is_open)
 	_animate_to(_open_sign * deg_to_rad(_get_open_angle()) if _is_open else 0.0)
 	return true
+
+
+func _play_door_sound(opening: bool) -> void:
+	door_sound.stream = _open_sound if opening else _close_sound
+	door_sound.volume_db = -7.0 if opening else -5.5
+	door_sound.pitch_scale = randf_range(0.95, 1.05)
+	door_sound.play()
 
 
 func _get_open_sign(player: Node) -> float:
