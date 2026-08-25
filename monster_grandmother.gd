@@ -4,6 +4,9 @@ signal state_changed(previous_state: State, new_state: State)
 
 enum State { PATROL, INVESTIGATE, CHASE, SEARCH, ATTACK }
 
+const STAIR_LOWER_ANCHOR := Vector3(-1.328, 0.12, 3.0)
+const STAIR_UPPER_ANCHOR := Vector3(-1.328, 4.18, -2.18)
+
 @export var patrol_speed := 1.0
 @export var investigate_speed := 1.45
 @export var chase_speed := 3.15
@@ -58,16 +61,7 @@ var _player_start_position_set := false
 var _smoothed_move_direction := Vector3.ZERO
 var _duck_amount := 0.0
 var _duck_hold_timer := 0.0
-var _horror_event_timer := 3.0
-var _horror_event_elapsed := 0.0
-var _horror_event_duration := 0.0
-var _horror_event_mode := 0
-var _horror_event_side := 1.0
-var _horror_neck_yaw := 0.0
-var _horror_neck_pitch := 0.0
-var _horror_neck_roll := 0.0
-var _horror_torso_yaw := 0.0
-var _horror_torso_roll := 0.0
+var _force_stair_steering := false
 
 
 func _ready() -> void:
@@ -84,7 +78,6 @@ func _ready() -> void:
 	footstep_sound.stream = _make_footstep_sound()
 	voice_sound.stream = _make_chase_voice()
 	breathing_sound.play()
-	_horror_event_timer = randf_range(2.4, 5.2)
 	call_deferred(&"_finish_navigation_setup")
 
 
@@ -188,6 +181,7 @@ func _update_awareness(delta: float, sees_player: bool, hears_player: bool) -> v
 func _update_movement(delta: float) -> void:
 	var target := _patrol_target
 	var speed := patrol_speed
+	_force_stair_steering = false
 	match current_state:
 		State.INVESTIGATE:
 			target = _last_known_player_position
@@ -195,6 +189,7 @@ func _update_movement(delta: float) -> void:
 		State.CHASE:
 			target = _player.global_position
 			speed = chase_speed
+			target = _get_floor_transition_target(target)
 		State.SEARCH:
 			target = _last_known_player_position
 			speed = patrol_speed * 0.72
@@ -206,7 +201,7 @@ func _update_movement(delta: float) -> void:
 			navigation_agent.target_position = target
 
 	var next_point := target
-	if _navigation_available and not navigation_agent.is_navigation_finished():
+	if not _force_stair_steering and _navigation_available and not navigation_agent.is_navigation_finished():
 		next_point = navigation_agent.get_next_path_position()
 		next_point = _get_next_useful_path_point(next_point)
 	var flat_direction := next_point - global_position
@@ -232,6 +227,30 @@ func _update_movement(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0.0, delta * 6.0)
 		velocity.z = move_toward(velocity.z, 0.0, delta * 6.0)
 		_smoothed_move_direction = _smoothed_move_direction.move_toward(Vector3.ZERO, delta * 4.0)
+
+
+func _get_floor_transition_target(player_target: Vector3) -> Vector3:
+	var player_is_upstairs := player_target.y > 2.65
+	var player_is_downstairs := player_target.y < 1.65
+	if player_is_upstairs and global_position.y < 3.72:
+		var lower_distance := Vector2(
+			global_position.x - STAIR_LOWER_ANCHOR.x,
+			global_position.z - STAIR_LOWER_ANCHOR.z
+		).length()
+		if global_position.y < 0.8 and lower_distance > 0.72:
+			return STAIR_LOWER_ANCHOR
+		_force_stair_steering = true
+		return STAIR_UPPER_ANCHOR
+	if player_is_downstairs and global_position.y > 0.62:
+		var upper_distance := Vector2(
+			global_position.x - STAIR_UPPER_ANCHOR.x,
+			global_position.z - STAIR_UPPER_ANCHOR.z
+		).length()
+		if global_position.y > 3.55 and upper_distance > 0.72:
+			return STAIR_UPPER_ANCHOR
+		_force_stair_steering = true
+		return STAIR_LOWER_ANCHOR
+	return player_target
 
 
 func _get_next_useful_path_point(first_point: Vector3) -> Vector3:
@@ -263,52 +282,6 @@ func _update_frame_duck(delta: float) -> void:
 	var target_duck := 1.0 if _duck_hold_timer > 0.0 else 0.0
 	var duck_speed := 4.6 if target_duck > _duck_amount else 2.8
 	_duck_amount = move_toward(_duck_amount, target_duck, delta * duck_speed)
-
-
-func _update_horror_motion(delta: float) -> void:
-	_horror_neck_yaw = 0.0
-	_horror_neck_pitch = 0.0
-	_horror_neck_roll = 0.0
-	_horror_torso_yaw = 0.0
-	_horror_torso_roll = 0.0
-	if not _player_has_moved:
-		return
-
-	if _horror_event_duration <= 0.0:
-		_horror_event_timer -= delta
-		if _horror_event_timer <= 0.0:
-			_horror_event_mode = randi_range(0, 2)
-			_horror_event_side = -1.0 if randf() < 0.5 else 1.0
-			_horror_event_duration = randf_range(0.72, 1.5)
-			_horror_event_elapsed = 0.0
-		return
-
-	_horror_event_elapsed += delta
-	var progress := clampf(_horror_event_elapsed / _horror_event_duration, 0.0, 1.0)
-	# Entra con un tiron y tarda mas en volver a su postura normal.
-	var snap_in := clampf(progress / 0.1, 0.0, 1.0)
-	var slow_release := clampf((1.0 - progress) / 0.58, 0.0, 1.0)
-	var envelope := minf(snap_in, slow_release)
-	match _horror_event_mode:
-		0:
-			_horror_neck_yaw = _horror_event_side * deg_to_rad(108.0) * envelope
-			_horror_neck_roll = _horror_event_side * deg_to_rad(38.0) * envelope
-			_horror_neck_pitch = deg_to_rad(-12.0) * envelope
-		1:
-			_horror_neck_yaw = _horror_event_side * deg_to_rad(38.0) * envelope
-			_horror_neck_roll = -_horror_event_side * deg_to_rad(58.0) * envelope
-			_horror_torso_yaw = _horror_event_side * deg_to_rad(34.0) * envelope
-			_horror_torso_roll = _horror_event_side * deg_to_rad(17.0) * envelope
-		2:
-			var twitch := sin(_horror_event_elapsed * 42.0) * envelope
-			_horror_neck_yaw = _horror_event_side * (deg_to_rad(62.0) * envelope + deg_to_rad(7.0) * twitch)
-			_horror_neck_roll = -_horror_event_side * (deg_to_rad(27.0) * envelope + deg_to_rad(5.0) * twitch)
-			_horror_torso_yaw = -_horror_event_side * deg_to_rad(18.0) * envelope
-
-	if progress >= 1.0:
-		_horror_event_duration = 0.0
-		_horror_event_elapsed = 0.0
-		_horror_event_timer = randf_range(3.0, 7.5)
 
 
 func _update_attack(delta: float) -> void:
@@ -387,7 +360,6 @@ func _try_open_door() -> void:
 
 
 func _update_animation(delta: float) -> void:
-	_update_horror_motion(delta)
 	var horizontal_speed := Vector2(velocity.x, velocity.z).length()
 	var moving_amount := clampf(horizontal_speed / maxf(chase_speed, 0.01), 0.0, 1.0)
 	var cadence := lerpf(2.8, 8.2, moving_amount)
@@ -399,29 +371,29 @@ func _update_animation(delta: float) -> void:
 	if current_state == State.ATTACK:
 		var attack_progress := clampf(_attack_timer / 0.72, 0.0, 1.0)
 		var thrust := sin(attack_progress * PI)
-		left_arm.rotation.x = lerpf(left_arm.rotation.x, -1.38 * thrust, minf(delta * 16.0, 1.0))
-		right_arm.rotation.x = lerpf(right_arm.rotation.x, -1.38 * thrust, minf(delta * 16.0, 1.0))
-		left_elbow.rotation.x = lerpf(left_elbow.rotation.x, -0.55, minf(delta * 12.0, 1.0))
-		right_elbow.rotation.x = lerpf(right_elbow.rotation.x, -0.55, minf(delta * 12.0, 1.0))
+		left_arm.rotation.x = lerpf(left_arm.rotation.x, 1.38 * thrust, minf(delta * 16.0, 1.0))
+		right_arm.rotation.x = lerpf(right_arm.rotation.x, 1.38 * thrust, minf(delta * 16.0, 1.0))
+		left_elbow.rotation.x = lerpf(left_elbow.rotation.x, 0.55, minf(delta * 12.0, 1.0))
+		right_elbow.rotation.x = lerpf(right_elbow.rotation.x, 0.55, minf(delta * 12.0, 1.0))
 		torso.rotation.x = lerpf(torso.rotation.x, -0.34 * thrust - _duck_amount * 0.18, minf(delta * 14.0, 1.0))
 	else:
 		left_leg.rotation.x = lerpf(left_leg.rotation.x, leg_swing, minf(delta * 12.0, 1.0))
 		right_leg.rotation.x = lerpf(right_leg.rotation.x, -leg_swing, minf(delta * 12.0, 1.0))
 		left_knee.rotation.x = lerpf(left_knee.rotation.x, maxf(0.0, -leg_swing) * 0.62 + _duck_amount * 0.52, minf(delta * 13.0, 1.0))
 		right_knee.rotation.x = lerpf(right_knee.rotation.x, maxf(0.0, leg_swing) * 0.62 + _duck_amount * 0.52, minf(delta * 13.0, 1.0))
-		left_arm.rotation.x = lerpf(left_arm.rotation.x, -arm_swing - chase_amount * 0.35, minf(delta * 10.0, 1.0))
-		right_arm.rotation.x = lerpf(right_arm.rotation.x, arm_swing - chase_amount * 0.35, minf(delta * 10.0, 1.0))
-		left_elbow.rotation.x = lerpf(left_elbow.rotation.x, -0.16 - chase_amount * 0.52, minf(delta * 10.0, 1.0))
-		right_elbow.rotation.x = lerpf(right_elbow.rotation.x, -0.16 - chase_amount * 0.52, minf(delta * 10.0, 1.0))
+		left_arm.rotation.x = lerpf(left_arm.rotation.x, -arm_swing + chase_amount * 0.35, minf(delta * 10.0, 1.0))
+		right_arm.rotation.x = lerpf(right_arm.rotation.x, arm_swing + chase_amount * 0.35, minf(delta * 10.0, 1.0))
+		left_elbow.rotation.x = lerpf(left_elbow.rotation.x, 0.16 + chase_amount * 0.52, minf(delta * 10.0, 1.0))
+		right_elbow.rotation.x = lerpf(right_elbow.rotation.x, 0.16 + chase_amount * 0.52, minf(delta * 10.0, 1.0))
 		torso.rotation.x = lerpf(torso.rotation.x, -0.07 - chase_amount * 0.18 - _duck_amount * 0.16, minf(delta * 8.0, 1.0))
 	torso.position.y = lerpf(torso.position.y, 1.9 - _duck_amount * 0.62, minf(delta * 7.0, 1.0))
-	torso.rotation.y = lerp_angle(torso.rotation.y, _horror_torso_yaw, minf(delta * 11.0, 1.0))
-	torso.rotation.z = lerp_angle(torso.rotation.z, _horror_torso_roll, minf(delta * 11.0, 1.0))
+	torso.rotation.y = lerp_angle(torso.rotation.y, 0.0, minf(delta * 11.0, 1.0))
+	torso.rotation.z = lerp_angle(torso.rotation.z, 0.0, minf(delta * 11.0, 1.0))
 
 	var search_scan := sin(_motion_phase * 0.42) * 0.62 if current_state == State.SEARCH else 0.0
-	head_rig.rotation.x = lerp_angle(head_rig.rotation.x, _horror_neck_pitch, minf(delta * 15.0, 1.0))
-	head_rig.rotation.y = lerp_angle(head_rig.rotation.y, search_scan + _horror_neck_yaw, minf(delta * 15.0, 1.0))
-	head_rig.rotation.z = lerp_angle(head_rig.rotation.z, sin(_motion_phase * 0.23) * 0.045 + _horror_neck_roll, minf(delta * 15.0, 1.0))
+	head_rig.rotation.x = lerp_angle(head_rig.rotation.x, 0.0, minf(delta * 15.0, 1.0))
+	head_rig.rotation.y = lerp_angle(head_rig.rotation.y, search_scan, minf(delta * 4.0, 1.0))
+	head_rig.rotation.z = lerp_angle(head_rig.rotation.z, sin(_motion_phase * 0.23) * 0.045, minf(delta * 6.0, 1.0))
 	model.position.y = (absf(sin(_motion_phase)) - 0.5) * 0.055 * moving_amount + sin(Time.get_ticks_msec() * 0.0018) * 0.012
 
 	if horizontal_speed > 0.25 and is_on_floor():
