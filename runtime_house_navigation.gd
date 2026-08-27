@@ -17,8 +17,8 @@ func _ready() -> void:
 	_navigation_mesh.cell_height = 0.25
 	_navigation_mesh.region_min_size = 1.0
 	_navigation_mesh.filter_baking_aabb = AABB(
-		Vector3(-15.0, -1.0, -15.0),
-		Vector3(30.0, 11.0, 30.0)
+		Vector3(-15.0, -1.0, -42.0),
+		Vector3(30.0, 11.0, 57.0)
 	)
 	_navigation_mesh.geometry_parsed_geometry_type = NavigationMesh.PARSED_GEOMETRY_STATIC_COLLIDERS
 	NavigationServer3D.parse_source_geometry_data(

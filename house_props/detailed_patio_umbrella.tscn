@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3]
+[sub_resource type="StandardMaterial3D" id="cloth"]
+albedo_color = Color(0.55,0.12,0.09,1)
+roughness = 0.94
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.38,0.4,0.38,1)
+metallic = 0.75
+roughness = 0.4
+[sub_resource type="StandardMaterial3D" id="stone"]
+albedo_color = Color(0.2,0.2,0.18,1)
+roughness = 0.96
+[sub_resource type="CylinderMesh" id="pole"]
+top_radius = 0.035
+bottom_radius = 0.035
+height = 2.85
+radial_segments = 8
+[sub_resource type="CylinderMesh" id="canopy"]
+top_radius = 0.06
+bottom_radius = 1.65
+height = 0.52
+radial_segments = 12
+[sub_resource type="CylinderMesh" id="base"]
+top_radius = 0.4
+bottom_radius = 0.48
+height = 0.14
+radial_segments = 12
+[node name="DetailedPatioUmbrella" type="StaticBody3D"]
+editor_description = "Sombrilla de jardin con lona segmentada, mastil metalico, remate y base pesada."
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.07,0)
+mesh = SubResource("base")
+material_override = SubResource("stone")
+[node name="Pole" type="MeshInstance3D" parent="."]
+position = Vector3(0,1.48,0)
+mesh = SubResource("pole")
+material_override = SubResource("metal")
+[node name="Canopy" type="MeshInstance3D" parent="."]
+position = Vector3(0,2.72,0)
+mesh = SubResource("canopy")
+material_override = SubResource("cloth")
+[node name="Finial" type="MeshInstance3D" parent="."]
+position = Vector3(0,3.03,0)
+scale = Vector3(0.16,0.16,0.16)
+mesh = SubResource("base")
+material_override = SubResource("metal")

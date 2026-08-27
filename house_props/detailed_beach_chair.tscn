@@ -1,0 +1,121 @@
+[gd_scene format=3 uid="uid://bcvgbo676x4v5"]
+
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(0.86, 1.3, 1.05)
+
+[sub_resource type="StandardMaterial3D" id="fabric"]
+albedo_color = Color(0.57, 0.11, 0.08, 1)
+roughness = 0.92
+
+[sub_resource type="BoxMesh" id="box"]
+
+[sub_resource type="StandardMaterial3D" id="stripe"]
+albedo_color = Color(0.9, 0.68, 0.32, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.58, 0.61, 0.59, 1)
+metallic = 0.75
+roughness = 0.42
+
+[sub_resource type="StandardMaterial3D" id="rubber"]
+albedo_color = Color(0.055, 0.06, 0.055, 1)
+roughness = 0.96
+
+[sub_resource type="CylinderMesh" id="hinge"]
+top_radius = 0.075
+bottom_radius = 0.075
+height = 0.08
+radial_segments = 10
+
+[node name="DetailedBeachChair" type="StaticBody3D" unique_id=1657239854]
+editor_description = "Silla de playa plegable tubular con asiento y respaldo de lona a franjas."
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=1644024116]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
+shape = SubResource("shape")
+
+[node name="Seat" type="MeshInstance3D" parent="." unique_id=276905091]
+transform = Transform3D(0.74, 0, 0, 0, 0.044562064, 0.094637714, 0, -0.00626279, 0.6733823, 0, 0.48, -0.05)
+material_override = SubResource("fabric")
+mesh = SubResource("box")
+
+[node name="SeatStripe" type="MeshInstance3D" parent="." unique_id=593596451]
+transform = Transform3D(0.16, 0, 0, 0, 0.011883217, 0.08907078, 0, -0.0016700773, 0.63377154, 0, 0.515, -0.05)
+material_override = SubResource("stripe")
+mesh = SubResource("box")
+
+[node name="Back" type="MeshInstance3D" parent="." unique_id=889241626]
+transform = Transform3D(0.74, 0, 0, 0, 0.78663963, -0.015782975, 0, 0.29461545, 0.042141404, 0, 0.9477328, 0.44005018)
+material_override = SubResource("fabric")
+mesh = SubResource("box")
+
+[node name="BackStripe" type="MeshInstance3D" parent="." unique_id=922546023]
+transform = Transform3D(0.16, 0, 0, 0, 0.730451, -0.004208792, 0, 0.2735715, 0.011237707, 0, 0.9695361, 0.41267115)
+material_override = SubResource("stripe")
+mesh = SubResource("box")
+
+[node name="LeftSeatRail" type="MeshInstance3D" parent="." unique_id=126740027]
+transform = Transform3D(0.055, 0, 0, 0, 0.054464743, 0.10437983, 0, -0.0076545207, 0.74270105, -0.39, 0.47, -0.05)
+material_override = SubResource("metal")
+mesh = SubResource("box")
+
+[node name="RightSeatRail" type="MeshInstance3D" parent="." unique_id=1076874093]
+transform = Transform3D(0.055, 0, 0, 0, 0.054464743, 0.10437983, 0, -0.0076545207, 0.74270105, 0.39, 0.47, -0.05)
+material_override = SubResource("metal")
+mesh = SubResource("box")
+
+[node name="LeftBackRail" type="MeshInstance3D" parent="." unique_id=1901984428]
+transform = Transform3D(0.055000007, 0, 0, 0, 0.8802872, -0.019290298, 0, 0.32968873, 0.051506165, -0.39, 0.9367954, 0.43773198)
+material_override = SubResource("metal")
+mesh = SubResource("box")
+
+[node name="RightBackRail" type="MeshInstance3D" parent="." unique_id=1319358040]
+transform = Transform3D(0.055000007, 0, 0, 0, 0.8802872, -0.019290298, 0, 0.32968873, 0.051506165, 0.39, 0.9367954, 0.43773198)
+material_override = SubResource("metal")
+mesh = SubResource("box")
+
+[node name="LeftFrontLeg" type="MeshInstance3D" parent="." unique_id=1610602630]
+transform = Transform3D(0.055, 0, 0, 0, 0.29371122, 0.012877018, 0, -0.084220335, 0.0449075, -0.39, 0.25, -0.3360917)
+material_override = SubResource("metal")
+mesh = SubResource("box")
+
+[node name="LeftFrontLeg2" type="MeshInstance3D" parent="." unique_id=328992456]
+transform = Transform3D(0.055, 0, 0, 0, 0.29371122, 0.012877018, 0, -0.084220335, 0.0449075, 0.38641155, 0.25, -0.3360917)
+material_override = SubResource("metal")
+mesh = SubResource("box")
+
+[node name="LeftRearLeg" type="MeshInstance3D" parent="." unique_id=1843141234]
+transform = Transform3D(0.055, 0, 0, 0, 0.5516128, -0.016995935, 0, 0.17922986, 0.05230811, -0.39, 0.3551969, 0.2658335)
+material_override = SubResource("metal")
+mesh = SubResource("box")
+
+[node name="RightRearLeg" type="MeshInstance3D" parent="." unique_id=452646450]
+transform = Transform3D(0.055, 0, 0, 0, 0.5516128, -0.016995935, 0, 0.17922986, 0.05230811, 0.39, 0.35361156, 0.26810056)
+material_override = SubResource("metal")
+mesh = SubResource("box")
+
+[node name="FrontCrossbar" type="MeshInstance3D" parent="." unique_id=856306543]
+transform = Transform3D(0.84, 0, 0, 0, 0.055, 0, 0, 0, 0.055, 0, 0.09, -0.3)
+material_override = SubResource("metal")
+mesh = SubResource("box")
+
+[node name="RearCrossbar" type="MeshInstance3D" parent="." unique_id=53057458]
+transform = Transform3D(0.84, 0, 0, 0, 0.055, 0, 0, 0, 0.055, 0, 0.09, 0.21077782)
+material_override = SubResource("metal")
+mesh = SubResource("box")
+
+[node name="TopCrossbar" type="MeshInstance3D" parent="." unique_id=531460794]
+transform = Transform3D(0.84, 0, 0, 0, 0.043024246, -0.034262445, 0, 0.034262445, 0.043024246, 0, 1.3791401, 0.60463345)
+material_override = SubResource("metal")
+mesh = SubResource("box")
+
+[node name="LeftHinge" type="MeshInstance3D" parent="." unique_id=924179173]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -0.43, 0.5, 0.25)
+material_override = SubResource("rubber")
+mesh = SubResource("hinge")
+
+[node name="RightHinge" type="MeshInstance3D" parent="." unique_id=939623468]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.43, 0.5, 0.25)
+material_override = SubResource("rubber")
+mesh = SubResource("hinge")

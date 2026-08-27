@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://cjloh6qj2tebp"]
+
+[sub_resource type="StandardMaterial3D" id="black"]
+albedo_color = Color(0.07, 0.075, 0.07, 1)
+metallic = 0.62
+roughness = 0.42
+
+[sub_resource type="CylinderMesh" id="bowl"]
+top_radius = 0.62
+bottom_radius = 0.36
+height = 0.48
+radial_segments = 12
+
+[sub_resource type="StandardMaterial3D" id="steel"]
+albedo_color = Color(0.45, 0.47, 0.45, 1)
+metallic = 0.82
+roughness = 0.35
+
+[sub_resource type="BoxMesh" id="box"]
+size = Vector3(0.98779297, 1, 1)
+
+[sub_resource type="CylinderMesh" id="lid"]
+top_radius = 0.18
+bottom_radius = 0.63
+height = 0.34
+radial_segments = 12
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.34, 0.14, 0.045, 1)
+roughness = 0.88
+
+[sub_resource type="CylinderMesh" id="leg"]
+top_radius = 0.025
+bottom_radius = 0.025
+height = 1.0
+radial_segments = 8
+
+[node name="DetailedCharcoalBarbecue" type="StaticBody3D" unique_id=271115957]
+editor_description = "Barbacoa kettle con cuba, parrilla, tapa apoyada, asas, tres patas y ruedas."
+
+[node name="Bowl" type="MeshInstance3D" parent="." unique_id=2011771029]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_override = SubResource("black")
+mesh = SubResource("bowl")
+
+[node name="Grate1" type="MeshInstance3D" parent="." unique_id=958565606]
+transform = Transform3D(1.08, 0, 0, 0, 0.025, 0, 0, 0, 0.025, 0.03526795, 1.25, 0)
+material_override = SubResource("steel")
+mesh = SubResource("box")
+
+[node name="Grate2" type="MeshInstance3D" parent="." unique_id=2021855513]
+transform = Transform3D(0.96, 0, 0, 0, 0.025, 0, 0, 0, 0.025, 0, 1.25, 0.18)
+material_override = SubResource("steel")
+mesh = SubResource("box")
+
+[node name="Grate3" type="MeshInstance3D" parent="." unique_id=439600187]
+transform = Transform3D(0.96, 0, 0, 0, 0.025, 0, 0, 0, 0.025, 0, 1.25, -0.18)
+material_override = SubResource("steel")
+mesh = SubResource("box")
+
+[node name="Lid" type="MeshInstance3D" parent="." unique_id=1482995213]
+transform = Transform3D(0.90049034, 0.43487602, 0, -0.43487602, 0.90049034, 0, 0, 0, 1, 0.10009679, 1.6331944, 0.04418406)
+material_override = SubResource("black")
+mesh = SubResource("lid")
+
+[node name="LidHandle" type="MeshInstance3D" parent="." unique_id=354106030]
+transform = Transform3D(-0.0055194856, 0.080477685, 0, -0.5710153, -0.0007779045, 0, 0, 0, 0.07072989, -0.4847843, 1.4594121, -0.009050593)
+material_override = SubResource("wood")
+mesh = SubResource("box")
+
+[node name="LegLeft" type="MeshInstance3D" parent="." unique_id=1721439704]
+transform = Transform3D(0.9781476, 0.2079117, 0, -0.2079117, 0.9781476, 0, 0, 0, 1, -0.34, 0.52, 0)
+material_override = SubResource("steel")
+mesh = SubResource("leg")
+
+[node name="LegRight" type="MeshInstance3D" parent="." unique_id=1866765998]
+transform = Transform3D(0.9781476, -0.2079117, 0, 0.2079117, 0.9781476, 0, 0, 0, 1, 0.34, 0.52, 0)
+material_override = SubResource("steel")
+mesh = SubResource("leg")
+
+[node name="RearLeg" type="MeshInstance3D" parent="." unique_id=342124556]
+transform = Transform3D(1, 0, 0, 0, 0.93450654, 0.35594577, 0, -0.35594577, 0.93450654, 0, 0.40988332, 0.3)
+material_override = SubResource("steel")
+mesh = SubResource("leg")
+
+[node name="RearLeg2" type="MeshInstance3D" parent="." unique_id=1119976104]
+transform = Transform3D(1, 0, 0, 0, 0.93594325, -0.35215068, 0, 0.35215068, 0.93594325, 0, 0.40988332, -0.3055133)
+material_override = SubResource("steel")
+mesh = SubResource("leg")

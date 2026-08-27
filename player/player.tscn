@@ -8,6 +8,7 @@
 [ext_resource type="FontFile" path="res://assets/fonts/PressStart2P-Regular.ttf" id="6_pixel_font"]
 [ext_resource type="AudioStream" path="res://sounds/interactions/flashlight_toggle.wav" id="7_flashlight_click"]
 [ext_resource type="AudioStream" path="res://sounds/interactions/light_switch_on.wav" id="8_light_switch"]
+[ext_resource type="PackedScene" path="res://held_plunger_visual.tscn" id="9_plunger"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.34
@@ -167,6 +168,12 @@ rotation = Vector3(0.16, 0, -0.18)
 visible = false
 position = Vector3(-0.35, -0.37, -0.38)
 rotation = Vector3(0.12, 0, -0.16)
+
+[node name="HeldPlunger" parent="Head/Camera3D/LeftHandRig" instance=ExtResource("9_plunger")]
+visible = false
+position = Vector3(-0.42, -0.57, -0.48)
+rotation = Vector3(-0.42, 0.08, -0.34)
+scale = Vector3(0.72, 0.72, 0.72)
 
 [node name="StaminaUI" type="CanvasLayer" parent="."]
 layer = 20

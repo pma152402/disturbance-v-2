@@ -1,4 +1,7 @@
-[gd_scene format=3 uid="uid://ddrvx46yq3koc"]
+[gd_scene load_steps=8 format=3 uid="uid://ddrvx46yq3koc"]
+
+[ext_resource type="Script" path="res://toilet_plunger_puzzle.gd" id="1_puzzle"]
+[ext_resource type="PackedScene" path="res://held_plunger_visual.tscn" id="2_plunger_visual"]
 
 [sub_resource type="StandardMaterial3D" id="porcelain"]
 albedo_color = Color(0.82, 0.83, 0.79, 1)
@@ -43,8 +46,14 @@ bottom_radius = 0.055
 height = 0.025
 radial_segments = 10
 
-[node name="DetailedToilet" type="Node3D" unique_id=2075792956]
+[sub_resource type="BoxShape3D" id="Shape_interaction"]
+size = Vector3(0.85, 1.25, 1.15)
+
+[node name="DetailedToilet" type="StaticBody3D" unique_id=2075792956]
 editor_description = "Inodoro detallado con pie, taza, agua, asiento, cisterna, tapa y pulsador metalico."
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_puzzle")
 
 [node name="BowlRim" type="MeshInstance3D" parent="." unique_id=1569088249]
 transform = Transform3D(1, 0, 0, 0, 4.1001806, 0, 0, 0, 1.25, 0, 0.3405676, -0.12)
@@ -73,3 +82,13 @@ mesh = SubResource("button")
 [node name="FlushButton2" type="MeshInstance3D" parent="." unique_id=1831573797]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.009924024, 1.11, 0.3)
 mesh = SubResource("button")
+
+[node name="PlungerInBowl" parent="." instance=ExtResource("2_plunger_visual")]
+visible = false
+position = Vector3(0.03, 0.36, -0.13)
+rotation = Vector3(0.17, 0, -0.12)
+scale = Vector3(0.88, 0.88, 0.88)
+
+[node name="InteractionCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.62, 0.02)
+shape = SubResource("Shape_interaction")

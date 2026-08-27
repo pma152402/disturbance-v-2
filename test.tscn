@@ -119,8 +119,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.2, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 8.5)
 
 [node name="MonsterGrandmother" parent="." instance=ExtResource("12_monster_grandmother")]
-position = Vector3(0, 4.35, -8.2)
-rotation = Vector3(0, 3.14159, 0)
+position = Vector3(10.15, 4.35, 8.65)
+rotation = Vector3(0, -1.82, 0)
 
 [node name="PS2PostProcess" type="CanvasLayer" parent="." unique_id=13050641]
 layer = 100

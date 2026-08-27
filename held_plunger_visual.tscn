@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Material_rubber"]
+albedo_color = Color(0.42, 0.055, 0.04, 1)
+roughness = 0.82
+
+[sub_resource type="CylinderMesh" id="Mesh_cup"]
+material = SubResource("Material_rubber")
+top_radius = 0.055
+bottom_radius = 0.17
+height = 0.16
+radial_segments = 12
+
+[sub_resource type="TorusMesh" id="Mesh_lip"]
+material = SubResource("Material_rubber")
+inner_radius = 0.13
+outer_radius = 0.18
+rings = 12
+ring_segments = 6
+
+[sub_resource type="StandardMaterial3D" id="Material_wood"]
+albedo_color = Color(0.47, 0.285, 0.12, 1)
+roughness = 0.93
+
+[sub_resource type="CylinderMesh" id="Mesh_handle"]
+material = SubResource("Material_wood")
+top_radius = 0.025
+bottom_radius = 0.03
+height = 0.82
+radial_segments = 8
+
+[node name="HeldPlunger" type="Node3D"]
+
+[node name="RubberCup" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.095, 0)
+mesh = SubResource("Mesh_cup")
+
+[node name="CupLip" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.018, 0)
+mesh = SubResource("Mesh_lip")
+
+[node name="Handle" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.575, 0)
+mesh = SubResource("Mesh_handle")

@@ -77,7 +77,7 @@ func _add_yard_vegetation(transforms: Array[Transform3D], rng: RandomNumberGener
 	var added := 0
 	while added < amount:
 		var plant_position := Vector3(rng.randf_range(-22.8, 22.8), 0.02, rng.randf_range(-22.8, 22.8))
-		if absf(plant_position.x) < 13.0 and absf(plant_position.z) < 13.0:
+		if _is_inside_house_footprint(plant_position, 0.45):
 			continue
 		if plant_position.z > 8.0 and absf(plant_position.x) < 5.0:
 			continue
@@ -91,6 +91,8 @@ func _add_outer_vegetation(transforms: Array[Transform3D], rng: RandomNumberGene
 	var added := 0
 	while added < amount:
 		var plant_position := Vector3(rng.randf_range(-52.0, 52.0), 0.02, rng.randf_range(-52.0, 52.0))
+		if _is_inside_house_footprint(plant_position, 0.75):
+			continue
 		if absf(plant_position.x) < 25.5 and absf(plant_position.z) < 25.5:
 			continue
 		if plant_position.z > 23.5 and absf(plant_position.x) < 7.5:
@@ -105,6 +107,8 @@ func _add_forest_outside_fence(transforms: Array[Transform3D], rng: RandomNumber
 	var added := 0
 	while added < amount:
 		var tree_position := Vector3(rng.randf_range(-51.5, 51.5), 0.0, rng.randf_range(-51.5, 51.5))
+		if _is_inside_house_footprint(tree_position, 3.2):
+			continue
 		# The fence is at x/z +/-24. Keep even the widest foliage outside it.
 		if absf(tree_position.x) < 27.5 and absf(tree_position.z) < 27.5:
 			continue
@@ -123,3 +127,25 @@ func _add_forest_outside_fence(transforms: Array[Transform3D], rng: RandomNumber
 		var tree_basis := Basis(Vector3.UP, rng.randf_range(0.0, TAU)).scaled(Vector3(width, height, width))
 		transforms.append(Transform3D(tree_basis, tree_position))
 		added += 1
+
+
+func _is_inside_house_footprint(world_position: Vector3, margin: float) -> bool:
+	var inside_original_house := (
+		world_position.x > -13.3 - margin
+		and world_position.x < 13.3 + margin
+		and world_position.z > -11.3 - margin
+		and world_position.z < 11.3 + margin
+	)
+	var inside_north_connector := (
+		world_position.x > -2.65 - margin
+		and world_position.x < 3.15 + margin
+		and world_position.z > -22.2 - margin
+		and world_position.z < -10.6 + margin
+	)
+	var inside_north_wing := (
+		world_position.x > -12.2 - margin
+		and world_position.x < 12.7 + margin
+		and world_position.z > -38.2 - margin
+		and world_position.z < -21.8 + margin
+	)
+	return inside_original_house or inside_north_connector or inside_north_wing

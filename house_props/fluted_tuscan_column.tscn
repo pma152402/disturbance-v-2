@@ -1,0 +1,98 @@
+[gd_scene load_steps=9 format=3]
+
+[sub_resource type="StandardMaterial3D" id="plaster"]
+albedo_color = Color(0.91, 0.895, 0.84, 1)
+roughness = 0.94
+
+[sub_resource type="StandardMaterial3D" id="shadow"]
+albedo_color = Color(0.7, 0.68, 0.61, 1)
+roughness = 0.96
+
+[sub_resource type="BoxMesh" id="box"]
+
+[sub_resource type="CylinderMesh" id="shaft"]
+top_radius = 0.29
+bottom_radius = 0.34
+height = 2.75
+radial_segments = 16
+
+[sub_resource type="CylinderMesh" id="round_step"]
+top_radius = 0.43
+bottom_radius = 0.43
+height = 0.12
+radial_segments = 16
+
+[sub_resource type="TorusMesh" id="ring"]
+inner_radius = 0.29
+outer_radius = 0.38
+rings = 16
+ring_segments = 8
+
+[sub_resource type="CylinderMesh" id="flute"]
+top_radius = 0.025
+bottom_radius = 0.025
+height = 2.42
+radial_segments = 6
+
+[sub_resource type="CylinderShape3D" id="collision"]
+radius = 0.5
+height = 3.85
+
+[node name="FlutedTuscanColumn" type="StaticBody3D"]
+editor_description = "Columna toscana redonda de 3,85 m, con plinto, basa escalonada, fuste ligeramente conico, estrias y capitel."
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.925, 0)
+shape = SubResource("collision")
+[node name="SquarePlinth" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.1, 0)
+scale = Vector3(0.92, 0.2, 0.92)
+mesh = SubResource("box")
+material_override = SubResource("plaster")
+[node name="LowerStep" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.27, 0)
+mesh = SubResource("round_step")
+material_override = SubResource("shadow")
+[node name="BaseRing" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.42, 0)
+mesh = SubResource("ring")
+material_override = SubResource("plaster")
+[node name="Shaft" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.82, 0)
+mesh = SubResource("shaft")
+material_override = SubResource("plaster")
+[node name="FluteFront" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.84, -0.305)
+mesh = SubResource("flute")
+material_override = SubResource("shadow")
+[node name="FluteBack" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.84, 0.305)
+mesh = SubResource("flute")
+material_override = SubResource("shadow")
+[node name="FluteLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.305, 1.84, 0)
+mesh = SubResource("flute")
+material_override = SubResource("shadow")
+[node name="FluteRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.305, 1.84, 0)
+mesh = SubResource("flute")
+material_override = SubResource("shadow")
+[node name="NeckRing" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.24, 0)
+mesh = SubResource("ring")
+material_override = SubResource("plaster")
+[node name="CapitalRound" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.42, 0)
+scale = Vector3(1.08, 1, 1.08)
+mesh = SubResource("round_step")
+material_override = SubResource("shadow")
+[node name="CapitalBlock" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.61, 0)
+scale = Vector3(0.96, 0.22, 0.96)
+mesh = SubResource("box")
+material_override = SubResource("plaster")
+[node name="TopSlab" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.78, 0)
+scale = Vector3(1.08, 0.14, 1.08)
+mesh = SubResource("box")
+material_override = SubResource("shadow")
+

@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://dwv05564ju2lc"]
+[gd_scene load_steps=6 format=3 uid="uid://dwv05564ju2lc"]
+
+[ext_resource type="Script" path="res://plunger_pickup.gd" id="1_pickup"]
 
 [sub_resource type="StandardMaterial3D" id="Material_rubber"]
 albedo_color = Color(0.42, 0.055, 0.04, 1)
@@ -37,6 +39,9 @@ height = 0.95
 
 [node name="ToiletPlunger" type="StaticBody3D" unique_id=582687857]
 editor_description = "Desatascador detallado con mango y piezas de goma separadas."
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_pickup")
 
 [node name="RubberCup" type="MeshInstance3D" parent="." unique_id=118366259]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.095, 0)

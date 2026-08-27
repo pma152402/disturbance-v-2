@@ -1,0 +1,188 @@
+[gd_scene format=3 uid="uid://bqdbypiyietff"]
+
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(2.25, 3.1, 1.7)
+
+[sub_resource type="StandardMaterial3D" id="stone"]
+albedo_color = Color(0.55, 0.47, 0.37, 1)
+
+[sub_resource type="BoxMesh" id="box"]
+
+[sub_resource type="StandardMaterial3D" id="iron"]
+albedo_color = Color(0.09, 0.08, 0.065, 1)
+metallic = 0.72
+roughness = 0.58
+
+[sub_resource type="CylinderMesh" id="log"]
+top_radius = 0.07
+bottom_radius = 0.07
+height = 0.85
+radial_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="brick"]
+albedo_color = Color(0.43, 0.17, 0.08, 1)
+roughness = 0.96
+
+[sub_resource type="StandardMaterial3D" id="dark"]
+albedo_color = Color(0.025, 0.02, 0.015, 1)
+
+[sub_resource type="CylinderMesh" id="cavity_back"]
+top_radius = 0.4
+bottom_radius = 0.4
+height = 0.035
+radial_segments = 16
+
+[sub_resource type="CylinderMesh" id="chimney"]
+top_radius = 0.24
+bottom_radius = 0.31
+height = 1.0
+radial_segments = 10
+
+[node name="DetailedWoodFiredOven" type="StaticBody3D" unique_id=665082088]
+editor_description = "Horno de lena de mamposteria, con cupula, boca tiznada, repisa, puerta de hierro y chimenea."
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=433403743]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+shape = SubResource("shape")
+
+[node name="BaseLeftPier" type="MeshInstance3D" parent="." unique_id=885001413]
+transform = Transform3D(0.54, 0, 0, 0, 0.96, 0, 0, 0, 1.55, -0.83, 0.48, 0)
+material_override = SubResource("stone")
+mesh = SubResource("box")
+
+[node name="BaseRightPier" type="MeshInstance3D" parent="." unique_id=330076244]
+transform = Transform3D(0.54, 0, 0, 0, 0.96, 0, 0, 0, 1.55, 0.83, 0.48, 0)
+material_override = SubResource("stone")
+mesh = SubResource("box")
+
+[node name="BaseRearWall" type="MeshInstance3D" parent="." unique_id=511505337]
+transform = Transform3D(1.15, 0, 0, 0, 0.96, 0, 0, 0, 0.12, 0, 0.48, 0.7)
+material_override = SubResource("stone")
+mesh = SubResource("box")
+
+[node name="BaseCavityCeiling" type="MeshInstance3D" parent="." unique_id=2004508971]
+transform = Transform3D(1.15, 0, 0, 0, 0.1, 0, 0, 0, 1.45, 0, 0.91, -0.05)
+material_override = SubResource("stone")
+mesh = SubResource("box")
+
+[node name="StoredLog1" type="MeshInstance3D" parent="." unique_id=1087991008]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -0.25, 0.18, -0.18)
+material_override = SubResource("iron")
+mesh = SubResource("log")
+
+[node name="StoredLog3" type="MeshInstance3D" parent="." unique_id=769184465]
+transform = Transform3D(-4.15985e-08, -0.9516628, -0.3071449, 1, -4.371139e-08, 0, -1.3425731e-08, -0.3071449, 0.9516628, -0.01632762, 0.18, -0.46677834)
+material_override = SubResource("iron")
+mesh = SubResource("log")
+
+[node name="StoredLog4" type="MeshInstance3D" parent="." unique_id=1241735218]
+transform = Transform3D(-2.9733066e-08, -0.68021333, -0.7330142, 1, -4.371139e-08, 0, -3.204107e-08, -0.7330142, 0.68021333, -0.114038885, 0.33923, -0.28142077)
+material_override = SubResource("iron")
+mesh = SubResource("log")
+
+[node name="StoredLog5" type="MeshInstance3D" parent="." unique_id=2060647717]
+transform = Transform3D(0.09228462, 0.5075208, -0.8566833, 0.7804608, -0.5711537, -0.25429234, -0.61835665, -0.64514047, -0.44880876, 0.08343761, 0.29541743, -0.34397095)
+material_override = SubResource("iron")
+mesh = SubResource("log")
+
+[node name="StoredLog2" type="MeshInstance3D" parent="." unique_id=1760631404]
+transform = Transform3D(0.258819, -0.9659258, -1.131334e-08, -4.371139e-08, 1.9106855e-15, -1, 0.9659258, 0.258819, -4.222196e-08, 0.22, 0.2, -0.05)
+material_override = SubResource("iron")
+mesh = SubResource("log")
+
+[node name="HearthShelf" type="MeshInstance3D" parent="." unique_id=825607021]
+transform = Transform3D(2.35, 0, 0, 0, 0.14, 0, 0, 0, 1.82, 0, 1.02, -0.08)
+material_override = SubResource("brick")
+mesh = SubResource("box")
+
+[node name="DomeWithOpening" type="CSGCombiner3D" parent="." unique_id=890671332]
+
+[node name="Dome" type="CSGSphere3D" parent="DomeWithOpening" unique_id=1358442613]
+transform = Transform3D(1.02, 0, 0, 0, 0.72, 0, 0, 0, 0.92, 0, 1.4951051, 0.06)
+radius = 1.0
+radial_segments = 16
+rings = 8
+material = SubResource("brick")
+
+[node name="MouthCut" type="CSGCylinder3D" parent="DomeWithOpening" unique_id=1068232934]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 1.3751051, -0.72)
+operation = 2
+radius = 0.43
+height = 1.15
+sides = 16
+material = SubResource("dark")
+
+[node name="RecessBack" type="MeshInstance3D" parent="." unique_id=528916753]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 1.5, -0.12)
+material_override = SubResource("dark")
+mesh = SubResource("cavity_back")
+
+[node name="MouthFloor" type="MeshInstance3D" parent="." unique_id=1311481338]
+transform = Transform3D(0.78, 0, 0, 0, 0.08, 0, 0, 0, 0.78, 0, 1.1, -0.56)
+material_override = SubResource("brick")
+mesh = SubResource("box")
+
+[node name="LeftJamb" type="MeshInstance3D" parent="." unique_id=567340275]
+transform = Transform3D(0.14, 0, 0, 0, 0.7, 0, 0, 0, 0.28, -0.48, 1.3551052, -0.58887213)
+material_override = SubResource("brick")
+mesh = SubResource("box")
+
+[node name="RightJamb" type="MeshInstance3D" parent="." unique_id=372549129]
+transform = Transform3D(0.14, 0, 0, 0, 0.7, 0, 0, 0, 0.28, 0.48, 1.3551052, -0.58887213)
+material_override = SubResource("brick")
+mesh = SubResource("box")
+
+[node name="ArchBrickLeft" type="MeshInstance3D" parent="." unique_id=201294436]
+transform = Transform3D(0.25441444, 0.09538547, 0, -0.15897578, 0.15264866, 0, 0, 0, 0.3, -0.33, 1.7551051, -0.6088721)
+material_override = SubResource("brick")
+mesh = SubResource("box")
+
+[node name="ArchBrickLeft2" type="MeshInstance3D" parent="." unique_id=2083523192]
+transform = Transform3D(0.2609625, 0.08878898, 0, -0.14798163, 0.1565775, 0, 0, 0, 0.29999998, -0.44877717, 1.5941554, -0.6088721)
+material_override = SubResource("brick")
+mesh = SubResource("box")
+
+[node name="ArchBrickCenter" type="MeshInstance3D" parent="." unique_id=88077618]
+transform = Transform3D(0.32, 0, 0, 0, 0.18, 0, 0, 0, 0.3, 0.0026302636, 1.8301442, -0.6088721)
+material_override = SubResource("brick")
+mesh = SubResource("box")
+
+[node name="ArchBrickCenter2" type="MeshInstance3D" parent="." unique_id=285672071]
+transform = Transform3D(0.32, 0, 0, 0, 0.18, 0, 0, 0, 0.3, 0.5451958, 1.1743929, -0.6088721)
+material_override = SubResource("brick")
+mesh = SubResource("box")
+
+[node name="ArchBrickCenter4" type="MeshInstance3D" parent="." unique_id=2076935184]
+transform = Transform3D(0.32, 0, 0, 0, 0.18, 0, 0, 0, 0.3, -0.5597694, 1.1743929, -0.6088721)
+material_override = SubResource("brick")
+mesh = SubResource("box")
+
+[node name="ArchBrickCenter5" type="MeshInstance3D" parent="." unique_id=527088976]
+transform = Transform3D(0.31792355, 0.02047226, 0, -0.036395125, 0.178832, 0, 0, 0, 0.3, -0.53365266, 1.3789991, -0.6088721)
+material_override = SubResource("brick")
+mesh = SubResource("box")
+
+[node name="ArchBrickCenter3" type="MeshInstance3D" parent="." unique_id=2041486863]
+transform = Transform3D(0.31801727, -0.020006469, 0, 0.03556705, 0.17888471, 0, 0, 0, 0.3, 0.5451958, 1.403747, -0.6088721)
+material_override = SubResource("brick")
+mesh = SubResource("box")
+
+[node name="ArchBrickRight" type="MeshInstance3D" parent="." unique_id=84408256]
+transform = Transform3D(0.21177955, -0.12749034, 0, 0.21248391, 0.12706773, 0, 0, 0, 0.29999998, 0.33750734, 1.7910842, -0.6088721)
+material_override = SubResource("brick")
+mesh = SubResource("box")
+
+[node name="ArchBrickRight2" type="MeshInstance3D" parent="." unique_id=583470569]
+transform = Transform3D(0.25441444, -0.09538547, 0, 0.15897578, 0.15264866, 0, 0, 0, 0.3, 0.46085283, 1.6090375, -0.6088721)
+material_override = SubResource("brick")
+mesh = SubResource("box")
+
+[node name="Chimney" type="MeshInstance3D" parent="." unique_id=1892253318]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.62, 0.18)
+material_override = SubResource("brick")
+mesh = SubResource("chimney")
+
+[node name="ChimneyCap" type="MeshInstance3D" parent="." unique_id=1950468423]
+transform = Transform3D(0.7, 0, 0, 0, 0.09, 0, 0, 0, 0.7, 0, 3.13, 0.18)
+material_override = SubResource("stone")
+mesh = SubResource("box")

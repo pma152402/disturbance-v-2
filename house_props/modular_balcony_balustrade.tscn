@@ -1,0 +1,104 @@
+[gd_scene load_steps=12 format=3]
+[ext_resource type="Script" path="res://house_props/modular_balcony_balustrade.gd" id="1"]
+[sub_resource type="StandardMaterial3D" id="plaster"]
+albedo_color = Color(0.91,0.895,0.84,1)
+roughness = 0.94
+[sub_resource type="StandardMaterial3D" id="edge"]
+albedo_color = Color(0.72,0.7,0.64,1)
+roughness = 0.96
+[sub_resource type="BoxMesh" id="box"]
+[sub_resource type="BoxShape3D" id="collision"]
+resource_local_to_scene = true
+size = Vector3(3.2,1.08,0.24)
+
+[sub_resource type="CylinderMesh" id="shaft_mesh"]
+material = SubResource("plaster")
+top_radius = 0.075
+bottom_radius = 0.075
+height = 0.48
+radial_segments = 10
+
+[sub_resource type="SphereMesh" id="bulb_mesh"]
+material = SubResource("plaster")
+radius = 0.13
+height = 0.25
+radial_segments = 10
+rings = 6
+
+[sub_resource type="CylinderMesh" id="foot_mesh"]
+material = SubResource("plaster")
+top_radius = 0.1
+bottom_radius = 0.14
+height = 0.14
+radial_segments = 10
+
+[sub_resource type="MultiMesh" id="shaft_multimesh"]
+resource_local_to_scene = true
+transform_format = 1
+mesh = SubResource("shaft_mesh")
+
+[sub_resource type="MultiMesh" id="bulb_multimesh"]
+resource_local_to_scene = true
+transform_format = 1
+mesh = SubResource("bulb_mesh")
+
+[sub_resource type="MultiMesh" id="foot_multimesh"]
+resource_local_to_scene = true
+transform_format = 1
+mesh = SubResource("foot_mesh")
+[node name="ModularBalconyBalustrade" type="StaticBody3D"]
+editor_description = "Ajusta Length o escala el nodo en X: railes, postes, colision y cantidad de balaustres se adaptan automaticamente."
+script = ExtResource("1")
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0,0.54,0)
+shape = SubResource("collision")
+[node name="BottomPlinth" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.1,0)
+scale = Vector3(3.2,0.2,0.28)
+mesh = SubResource("box")
+material_override = SubResource("plaster")
+[node name="BottomTrim" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.225,0)
+scale = Vector3(3.08,0.07,0.22)
+mesh = SubResource("box")
+material_override = SubResource("edge")
+[node name="TopRail" type="MeshInstance3D" parent="."]
+position = Vector3(0,1.0,0)
+scale = Vector3(3.2,0.17,0.3)
+mesh = SubResource("box")
+material_override = SubResource("plaster")
+[node name="TopRailCap" type="MeshInstance3D" parent="."]
+position = Vector3(0,1.115,0)
+scale = Vector3(3.32,0.07,0.36)
+mesh = SubResource("box")
+material_override = SubResource("edge")
+[node name="LeftEndPost" type="MeshInstance3D" parent="."]
+position = Vector3(-1.5,0.58,0)
+scale = Vector3(0.26,0.86,0.26)
+mesh = SubResource("box")
+material_override = SubResource("plaster")
+[node name="LeftPostCap" type="MeshInstance3D" parent="."]
+position = Vector3(-1.5,0.96,0)
+scale = Vector3(0.35,0.11,0.35)
+mesh = SubResource("box")
+material_override = SubResource("edge")
+[node name="RightEndPost" type="MeshInstance3D" parent="."]
+position = Vector3(1.5,0.58,0)
+scale = Vector3(0.26,0.86,0.26)
+mesh = SubResource("box")
+material_override = SubResource("plaster")
+[node name="RightPostCap" type="MeshInstance3D" parent="."]
+position = Vector3(1.5,0.96,0)
+scale = Vector3(0.35,0.11,0.35)
+mesh = SubResource("box")
+material_override = SubResource("edge")
+[node name="Balusters" type="Node3D" parent="."]
+
+[node name="Shafts" type="MultiMeshInstance3D" parent="Balusters"]
+multimesh = SubResource("shaft_multimesh")
+
+[node name="Bulbs" type="MultiMeshInstance3D" parent="Balusters"]
+multimesh = SubResource("bulb_multimesh")
+
+[node name="Feet" type="MultiMeshInstance3D" parent="Balusters"]
+multimesh = SubResource("foot_multimesh")

@@ -24,8 +24,8 @@ radial_segments = 10
 rings = 3
 
 [sub_resource type="StandardMaterial3D" id="Material_skin"]
-albedo_color = Color(0.48, 0.4, 0.32, 1)
-roughness = 0.92
+albedo_color = Color(0.355, 0.33, 0.285, 1)
+roughness = 0.97
 
 [sub_resource type="SphereMesh" id="Mesh_small_sphere"]
 material = SubResource("Material_skin")
@@ -41,9 +41,19 @@ height = 0.72
 radial_segments = 12
 rings = 7
 
+[sub_resource type="StandardMaterial3D" id="Material_socket"]
+albedo_color = Color(0.022, 0.014, 0.013, 1)
+
+[sub_resource type="SphereMesh" id="Mesh_socket"]
+material = SubResource("Material_socket")
+radius = 0.105
+height = 0.15
+radial_segments = 8
+rings = 5
+
 [sub_resource type="StandardMaterial3D" id="Material_sclera"]
-albedo_color = Color(0.58, 0.52, 0.42, 1)
-roughness = 0.82
+albedo_color = Color(0.31, 0.285, 0.205, 1)
+roughness = 0.9
 
 [sub_resource type="SphereMesh" id="Mesh_sclera"]
 material = SubResource("Material_sclera")
@@ -53,11 +63,11 @@ radial_segments = 8
 rings = 5
 
 [sub_resource type="StandardMaterial3D" id="Material_eye"]
-albedo_color = Color(0.005, 0.003, 0.003, 1)
+albedo_color = Color(0.008, 0.001, 0.001, 1)
 roughness = 0.35
 emission_enabled = true
-emission = Color(0.055, 0.006, 0.004, 1)
-emission_energy_multiplier = 0.7
+emission = Color(0.16, 0.004, 0.002, 1)
+emission_energy_multiplier = 1.15
 
 [sub_resource type="SphereMesh" id="Mesh_eye"]
 material = SubResource("Material_eye")
@@ -72,7 +82,7 @@ roughness = 0.8
 
 [sub_resource type="BoxMesh" id="Mesh_mouth"]
 material = SubResource("Material_mouth")
-size = Vector3(0.22, 0.2232788, 0.035)
+size = Vector3(0.16482727, 0.2232788, 0.035)
 
 [sub_resource type="StandardMaterial3D" id="Material_teeth"]
 albedo_color = Color(0.54, 0.47, 0.3, 1)
@@ -107,7 +117,7 @@ height = 0.92
 radial_segments = 7
 
 [sub_resource type="StandardMaterial3D" id="Material_skin_dark"]
-albedo_color = Color(0.215, 0.13, 0.105, 1)
+albedo_color = Color(0.135, 0.09, 0.075, 1)
 roughness = 0.96
 
 [sub_resource type="CylinderMesh" id="Mesh_finger"]
@@ -188,8 +198,7 @@ mesh = SubResource("Mesh_skirt")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
 
 [node name="DressSkirt2" type="MeshInstance3D" parent="Model/TorsoRig" unique_id=1403032111]
-position = Vector3(0, 0.3213006, 0)
-scale = Vector3(0.74006087, 1, 0.66352165)
+transform = Transform3D(0.74006087, 0, 0, 0, 1, 0, 0, 0, 0.66352165, 0, 0.3213006, 0)
 mesh = SubResource("Mesh_skirt")
 
 [node name="Neck" type="MeshInstance3D" parent="Model/TorsoRig" unique_id=393584388]
@@ -200,67 +209,71 @@ mesh = SubResource("Mesh_small_sphere")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.04, -0.015)
 
 [node name="Head" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=2073002903]
-transform = Transform3D(0.92, 0, 0, 0, 0.7056376, 0, 0, 0, 0.82, 3.3695478e-09, 0, -0.038543135)
+transform = Transform3D(0.84, 0, 0, 0, 1.13, 0, 0, 0, 0.72, 0, 0, -0.025)
 mesh = SubResource("Mesh_head")
 
 [node name="Nose" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=2128461912]
-transform = Transform3D(1.4422817, 1.6372914e-08, 1.1087138e-08, -4.7466653e-08, 0.46089533, 0.6489866, 9.275716e-09, -0.1872843, 1.5971165, 0, 0.038985252, -0.335)
+transform = Transform3D(0.71741, -0.03489666, 6.53495e-08, 0.016248556, 0.6446766, 1.8121943, -0.019156653, -0.7600569, 1.5370946, 0.007999995, 0.015000105, -0.28586632)
 mesh = SubResource("Mesh_small_sphere")
 
+[node name="LeftEyeSocket" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=7898876]
+transform = Transform3D(1.0012511, 0.07474187, 0, -0.0802714, 0.93227947, 0, 0, 0, 0.38, -0.14500001, 0.10500002, -0.21306801)
+mesh = SubResource("Mesh_socket")
+
+[node name="RightEyeSocket" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=417088989]
+transform = Transform3D(0.9401208, -0.09324345, 0, 0.10383242, 0.84424603, 0, 0, 8.881784e-16, 0.38, 0.14499998, 0.08699989, -0.21316946)
+mesh = SubResource("Mesh_socket")
+
 [node name="LeftEyeWhite" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=157371606]
-transform = Transform3D(1.25, 0, 0, 0, 0.7, 0, 0, 0, 0.55, -0.13000001, 0.09500003, -0.23819949)
+transform = Transform3D(1.2460022, 0.0511454, 0, -0.09989336, 0.6379531, 0, 0, 0, 0.44, -0.14500001, 0.10500002, -0.22979003)
 mesh = SubResource("Mesh_sclera")
 
 [node name="LeftEye" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=1579896871]
-transform = Transform3D(2.306751, 0, 0, 0, 1.05, 0, 0, 0, 0.55000013, -0.15120333, 0.09200001, -0.2555908)
+transform = Transform3D(0.58, 0, 0, 0, 0.85, 0, 0, 0, 0.48, -0.163, 0.102999926, -0.2487518)
 mesh = SubResource("Mesh_eye")
 
 [node name="RightEyeWhite" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=754994428]
-transform = Transform3D(1.25, 0, 0, 0, 0.7, 0, 0, 0, 0.55, 0.12999998, 0.09500003, -0.23819949)
+transform = Transform3D(0.74807566, -0.058600374, 0, 0.08262183, 0.5305803, 0, 7.1054274e-15, 0, 0.43999997, 0.14499998, 0.08699989, -0.23701967)
 mesh = SubResource("Mesh_sclera")
 
 [node name="RightEye" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=12365039]
-transform = Transform3D(1.9166182, 0, 0, 0, 1.05, 0, 0, 0, 0.5500001, 0.14940527, 0.09200001, -0.25654465)
+transform = Transform3D(0.42, 0, 0, 0, 0.7, 0, 0, 0, 0.48, 0.16400002, 0.08200002, -0.25467974)
 mesh = SubResource("Mesh_eye")
 
 [node name="Mouth" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=1011978669]
-transform = Transform3D(1, 0, 0, 0, 0.99680173, -0.07991469, 0, 0.07991469, 0.99680173, -7.1054274e-15, -0.13109756, -0.29607517)
-mesh = SubResource("Mesh_mouth")
-
-[node name="Mouth2" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=641886920]
-transform = Transform3D(1, 0, 0, 0, 0.99680173, -0.07991469, 0, 0.07991469, 0.99680173, -7.1054274e-15, -0.13109756, -0.29607517)
+transform = Transform3D(1.3791548, 0.035692737, 1.8020785e-09, -0.046989217, 0.99191326, 0.18444167, 0.011133396, -0.23501912, 0.7784479, 0.0004808827, -0.15227532, -0.24990748)
 mesh = SubResource("Mesh_mouth")
 
 [node name="Tooth01" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=457208028]
-transform = Transform3D(0.99820054, -0.059964005, 0, 0.059772223, 0.99500805, -0.07991469, 0.004792005, 0.079770885, 0.99680173, -0.072, -0.051267385, -0.31025457)
+transform = Transform3D(0.88850445, 0.20711367, 3.1943017e-09, -0.14073391, 1.259654, 0.19145566, 0.027452141, -0.24571331, 0.9815012, -0.089999996, -0.07979679, -0.27949214)
 mesh = SubResource("Mesh_tooth")
 
 [node name="Tooth02" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=46480066]
-transform = Transform3D(0.9992001, 0.039989334, 0, -0.039861437, 0.9960044, -0.07991469, -0.0031957352, 0.07985076, 0.99680173, -0.025000002, -0.055267334, -0.31225455)
+transform = Transform3D(0.81799185, -0.06015083, 2.134712e-09, 0.05629216, 0.842024, 0.19145572, -0.010980582, -0.16424868, 0.9815014, -0.031999983, -0.06841135, -0.28579068)
 mesh = SubResource("Mesh_tooth")
 
 [node name="Tooth03" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=1200812151]
-transform = Transform3D(0.9992001, -0.039989334, 0, 0.039861437, 0.9960044, -0.07991469, 0.0031957352, 0.07985076, 0.99680173, 0.024999999, -0.055267334, -0.31225455)
+transform = Transform3D(1.048937, 0.05038302, 1.2063737e-09, -0.046360306, 1.0981685, 0.19145566, 0.00904323, -0.21421328, 0.9815012, 0.021999985, -0.065495014, -0.28764445)
 mesh = SubResource("Mesh_tooth")
 
 [node name="Tooth04" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=1027388396]
-transform = Transform3D(0.99820054, 0.059964005, 0, -0.059772223, 0.99500805, -0.07991469, -0.004792005, 0.079770885, 0.99680173, 0.072, -0.051267385, -0.31025457)
+transform = Transform3D(0.86416364, -0.13597839, 1.3376109e-09, 0.1631214, 0.69396377, 0.19145572, -0.031819135, -0.1353674, 0.9815012, 0.08300001, -0.06425595, -0.2838375)
 mesh = SubResource("Mesh_tooth")
 
 [node name="Tooth05" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=852374866]
-transform = Transform3D(0.99820054, -0.059964005, 0, 0.059772223, 0.99500805, -0.07991469, 0.004792005, 0.079770885, 0.99680173, -0.072, -0.2164967, -0.31025457)
+transform = Transform3D(0.87011856, -0.11955049, -7.815544e-10, 0.12907284, 0.776384, 0.19145566, -0.02517748, -0.15144466, 0.9815012, -0.086, -0.23901343, -0.23289719)
 mesh = SubResource("Mesh_tooth")
 
 [node name="Tooth06" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=1352807253]
-transform = Transform3D(0.9992001, 0.039989334, 0, -0.039861437, 0.9960044, -0.07991469, -0.0031957352, 0.07985076, 0.99680173, -0.025000004, -0.22049665, -0.31225455)
+transform = Transform3D(0.99680173, 0.09749595, 1.6705499e-09, -0.07843639, 1.1936017, 0.19145566, 0.015300127, -0.2328289, 0.9815013, -0.02800002, -0.23006272, -0.23955332)
 mesh = SubResource("Mesh_tooth")
 
 [node name="Tooth07" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=560106676]
-transform = Transform3D(0.9992001, -0.039989334, 0, 0.039861437, 0.9960044, -0.07991469, 0.0031957352, 0.07985076, 0.99680173, 0.024999997, -0.22049665, -0.31225455)
+transform = Transform3D(0.8384884, -0.04077551, 1.0399077e-09, 0.049437966, 0.6662198, 0.19145566, -0.009643575, -0.12995559, 0.9815013, 0.026999984, -0.2475152, -0.2357118)
 mesh = SubResource("Mesh_tooth")
 
 [node name="Tooth08" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=448788359]
-transform = Transform3D(0.99820054, 0.059964005, 0, -0.059772223, 0.99500805, -0.07991469, -0.004792005, 0.079770885, 0.99680173, 0.072, -0.2164967, -0.31025457)
+transform = Transform3D(0.9016613, 0.2145629, 1.3376038e-09, -0.17939468, 1.0388916, 0.19145569, 0.03499347, -0.20265053, 0.9815014, 0.084, -0.23511267, -0.23502626)
 mesh = SubResource("Mesh_tooth")
 
 [node name="HairBack" type="MeshInstance3D" parent="Model/TorsoRig/HeadRig" unique_id=414084977]
@@ -280,89 +293,79 @@ transform = Transform3D(0.8, 0, 0, 0, 1.2, 0, 0, 0, 1, 0.3, 0.15, 0.02)
 mesh = SubResource("Mesh_hair")
 
 [node name="LeftArmPivot" type="Node3D" parent="Model/TorsoRig" unique_id=2044153304]
-position = Vector3(-0.34, 0.57, 0)
-rotation = Vector3(-0.12, 0, -0.11)
+transform = Transform3D(0.9939561, 0.1097783, 0, -0.108988844, 0.9868082, 0.119712204, 0.0131418025, -0.11898867, 0.99280864, -0.34, 0.57, 0)
 
-[node name="ShoulderJoint" type="MeshInstance3D" parent="Model/TorsoRig/LeftArmPivot"]
-scale = Vector3(1.15, 1, 1.15)
+[node name="ShoulderJoint" type="MeshInstance3D" parent="Model/TorsoRig/LeftArmPivot" unique_id=1978656178]
+transform = Transform3D(1.15, 0, 0, 0, 1, 0, 0, 0, 1.15, 0, 0, 0)
 mesh = SubResource("Mesh_small_sphere")
 
 [node name="UpperArm" type="MeshInstance3D" parent="Model/TorsoRig/LeftArmPivot" unique_id=371719491]
-position = Vector3(0, -0.44, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.44, 0)
 mesh = SubResource("Mesh_upper_arm")
 
 [node name="LeftElbow" type="Node3D" parent="Model/TorsoRig/LeftArmPivot" unique_id=1159563276]
 transform = Transform3D(1, 0, 0, 0, 0.98722726, 0.15931821, 0, -0.15931821, 0.98722726, 0, -0.88, 0)
 
-[node name="Joint" type="MeshInstance3D" parent="Model/TorsoRig/LeftArmPivot/LeftElbow"]
-scale = Vector3(0.72, 0.72, 0.72)
+[node name="Joint" type="MeshInstance3D" parent="Model/TorsoRig/LeftArmPivot/LeftElbow" unique_id=1940889733]
+transform = Transform3D(0.72, 0, 0, 0, 0.72, 0, 0, 0, 0.72, 0, 0, 0)
 mesh = SubResource("Mesh_small_sphere")
 
 [node name="Forearm" type="MeshInstance3D" parent="Model/TorsoRig/LeftArmPivot/LeftElbow" unique_id=1415041781]
-position = Vector3(0, -0.46, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.46, 0)
 mesh = SubResource("Mesh_forearm")
 
 [node name="Hand" type="MeshInstance3D" parent="Model/TorsoRig/LeftArmPivot/LeftElbow" unique_id=1154545053]
-position = Vector3(0, -0.94, 0)
-scale = Vector3(0.8, 1.15, 0.7)
+transform = Transform3D(0.8, 0, 0, 0, 1.15, 0, 0, 0, 0.7, 0, -0.94, 0)
 mesh = SubResource("Mesh_small_sphere")
 
 [node name="Finger01" type="MeshInstance3D" parent="Model/TorsoRig/LeftArmPivot/LeftElbow" unique_id=1122879099]
-position = Vector3(-0.045, -1.08, -0.025)
-rotation = Vector3(0.12, 0, -0.08)
+transform = Transform3D(0.99680173, 0.07991469, 0, -0.079339996, 0.9896334, -0.119712204, -0.009566763, 0.11932933, 0.99280864, -0.045, -1.08, -0.025)
 mesh = SubResource("Mesh_finger")
 
 [node name="Finger02" type="MeshInstance3D" parent="Model/TorsoRig/LeftArmPivot/LeftElbow" unique_id=926190742]
-position = Vector3(-0.015, -1.1, -0.045)
-rotation = Vector3(0.18, 0, -0.02)
+transform = Transform3D(0.9998, 0.019998666, 0, -0.01967556, 0.9836469, -0.17902958, -0.0035803528, 0.17899378, 0.9838437, -0.015, -1.1, -0.045)
 mesh = SubResource("Mesh_finger")
 
 [node name="Finger03" type="MeshInstance3D" parent="Model/TorsoRig/LeftArmPivot/LeftElbow" unique_id=1530694976]
-position = Vector3(0.02, -1.09, -0.04)
-rotation = Vector3(0.14, 0, 0.04)
+transform = Transform3D(0.9992001, -0.039989334, 0, 0.039598078, 0.98942393, -0.13954312, 0.005580236, 0.13943149, 0.990216, 0.02, -1.09, -0.04)
 mesh = SubResource("Mesh_finger")
 
 [node name="RightArmPivot" type="Node3D" parent="Model/TorsoRig" unique_id=961029282]
-position = Vector3(0.34, 0.57, 0)
-rotation = Vector3(-0.12, 0, 0.11)
+transform = Transform3D(0.9939561, -0.1097783, 0, 0.108988844, 0.9868082, 0.119712204, -0.0131418025, -0.11898867, 0.99280864, 0.34, 0.57, 0)
 
-[node name="ShoulderJoint" type="MeshInstance3D" parent="Model/TorsoRig/RightArmPivot"]
-scale = Vector3(1.15, 1, 1.15)
+[node name="ShoulderJoint" type="MeshInstance3D" parent="Model/TorsoRig/RightArmPivot" unique_id=1581700583]
+transform = Transform3D(1.15, 0, 0, 0, 1, 0, 0, 0, 1.15, 0, 0, 0)
 mesh = SubResource("Mesh_small_sphere")
 
 [node name="UpperArm" type="MeshInstance3D" parent="Model/TorsoRig/RightArmPivot" unique_id=994342781]
-position = Vector3(0, -0.44, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.44, 0)
 mesh = SubResource("Mesh_upper_arm")
 
 [node name="RightElbow" type="Node3D" parent="Model/TorsoRig/RightArmPivot" unique_id=1530651956]
 transform = Transform3D(1, 0, 0, 0, 0.98722726, 0.15931821, 0, -0.15931821, 0.98722726, 0, -0.88, 0)
 
-[node name="Joint" type="MeshInstance3D" parent="Model/TorsoRig/RightArmPivot/RightElbow"]
-scale = Vector3(0.72, 0.72, 0.72)
+[node name="Joint" type="MeshInstance3D" parent="Model/TorsoRig/RightArmPivot/RightElbow" unique_id=1266023078]
+transform = Transform3D(0.72, 0, 0, 0, 0.72, 0, 0, 0, 0.72, 0, 0, 0)
 mesh = SubResource("Mesh_small_sphere")
 
 [node name="Forearm" type="MeshInstance3D" parent="Model/TorsoRig/RightArmPivot/RightElbow" unique_id=1115932085]
-position = Vector3(0, -0.46, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.46, 0)
 mesh = SubResource("Mesh_forearm")
 
 [node name="Hand" type="MeshInstance3D" parent="Model/TorsoRig/RightArmPivot/RightElbow" unique_id=289345333]
-position = Vector3(0, -0.94, 0)
-scale = Vector3(0.8, 1.15, 0.7)
+transform = Transform3D(0.8, 0, 0, 0, 1.15, 0, 0, 0, 0.7, 0, -0.94, 0)
 mesh = SubResource("Mesh_small_sphere")
 
 [node name="Finger01" type="MeshInstance3D" parent="Model/TorsoRig/RightArmPivot/RightElbow" unique_id=310017140]
-position = Vector3(-0.045, -1.08, -0.025)
-rotation = Vector3(0.12, 0, -0.08)
+transform = Transform3D(0.99680173, 0.07991469, 0, -0.079339996, 0.9896334, -0.119712204, -0.009566763, 0.11932933, 0.99280864, -0.045, -1.08, -0.025)
 mesh = SubResource("Mesh_finger")
 
 [node name="Finger02" type="MeshInstance3D" parent="Model/TorsoRig/RightArmPivot/RightElbow" unique_id=161813216]
-position = Vector3(-0.015, -1.1, -0.045)
-rotation = Vector3(0.18, 0, -0.02)
+transform = Transform3D(0.9998, 0.019998666, 0, -0.01967556, 0.9836469, -0.17902958, -0.0035803528, 0.17899378, 0.9838437, -0.015, -1.1, -0.045)
 mesh = SubResource("Mesh_finger")
 
 [node name="Finger03" type="MeshInstance3D" parent="Model/TorsoRig/RightArmPivot/RightElbow" unique_id=1460862992]
-position = Vector3(0.02, -1.09, -0.04)
-rotation = Vector3(0.14, 0, 0.04)
+transform = Transform3D(0.9992001, -0.039989334, 0, 0.039598078, 0.98942393, -0.13954312, 0.005580236, 0.13943149, 0.990216, 0.02, -1.09, -0.04)
 mesh = SubResource("Mesh_finger")
 
 [node name="LeftLegPivot" type="Node3D" parent="Model" unique_id=1331862690]

@@ -3,11 +3,12 @@ extends Node3D
 @onready var bulb: MeshInstance3D = $Bulb
 @onready var warm_light: OmniLight3D = $WarmLight
 
+@export var starts_on := false
 var is_on := false
 
 
 func _ready() -> void:
-	set_lamp_enabled(false)
+	set_lamp_enabled(starts_on)
 
 
 func set_lamp_enabled(enabled: bool) -> void:

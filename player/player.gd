@@ -50,6 +50,7 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var left_hand: MeshInstance3D = $Head/Camera3D/LeftHandRig/LeftHand
 @onready var held_can: Node3D = $Head/Camera3D/LeftHandRig/HeldCan
 @onready var held_bottle: Node3D = $Head/Camera3D/LeftHandRig/HeldBottle
+@onready var held_plunger: Node3D = $Head/Camera3D/LeftHandRig/HeldPlunger
 @onready var flashlight: SpotLight3D = $Head/Camera3D/HandRig/Flashlight
 @onready var interaction_ray: RayCast3D = $Head/Camera3D/InteractionRay
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
@@ -84,20 +85,30 @@ var _jump_phase := JumpPhase.IDLE
 var _jump_timer := 0.0
 var _jump_start_head_y := 0.9
 var _held_item: StringName = &""
+var _key_inventory: Dictionary = {
+	&"back_room_key": true,
+	&"diogenes_key": true,
+	&"master_bedroom_key": true,
+	&"lower_north_wing_key": true,
+}
 var _flashlight_holstered := true
 var _flashlight_was_on := true
+var _flashlight_available := true
 var _zoom_fov_target := 95.0
 var _last_footstep_beat := -1
 var _zoom_segments: Array[ColorRect] = []
 var _monster_hits := 0
 var _monster_hit_cooldown := 0.0
 var _monster_restart_pending := false
+var _skill_check_active := false
+var _walker_controller: Node3D
 
 const ZOOM_SEGMENT_ON := Color(0.86, 0.9, 0.83, 0.92)
 const ZOOM_SEGMENT_OFF := Color(0.20, 0.23, 0.20, 0.42)
 
 const ThrownCanScene := preload("res://thrown_can.tscn")
 const ThrownBottleScene := preload("res://thrown_bottle.tscn")
+const DroppedFlashlightScene := preload("res://dropped_flashlight.tscn")
 const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
 
 
@@ -127,9 +138,15 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		var key_event := event as InputEventKey
 		var pressed_key := key_event.physical_keycode if key_event.physical_keycode != 0 else key_event.keycode
+		if _skill_check_active and pressed_key in [KEY_F, KEY_SPACE]:
+			return
 		if pressed_key == KEY_R:
 			get_viewport().set_input_as_handled()
 			get_tree().call_deferred(&"reload_current_scene")
+			return
+		if pressed_key == KEY_F and is_instance_valid(_walker_controller):
+			_walker_controller.call(&"stop_moving")
+			get_viewport().set_input_as_handled()
 			return
 		if pressed_key == KEY_F and _try_interact(pressed_key):
 			get_viewport().set_input_as_handled()
@@ -191,7 +208,7 @@ func _input(event: InputEvent) -> void:
 				_zoom_fov_target = clampf(_zoom_fov_target + wheel_amount, zoom_min_fov, zoom_max_fov)
 				get_viewport().set_input_as_handled()
 				return
-		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and not _flashlight_holstered:
+		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and _flashlight_available and not _flashlight_holstered:
 			flashlight.visible = not flashlight.visible
 			flashlight_click_sound.pitch_scale = randf_range(0.98, 1.02)
 			flashlight_click_sound.play()
@@ -211,6 +228,20 @@ func _physics_process(delta: float) -> void:
 	_update_stance_transition(delta)
 	head.rotation.x = _look_pitch
 	head.rotation.y = 0.0
+	if is_instance_valid(_walker_controller):
+		var walker_input := Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
+		velocity = Vector3.ZERO
+		_walker_controller.call(&"drive_from_player", walker_input, delta)
+		_update_interaction_prompt()
+		_update_camera_motion(delta, walker_input, false)
+		_update_footsteps(delta, Vector2.ZERO, false)
+		var previous_walker_stamina := _stamina
+		_stamina = minf(max_stamina, _stamina + stamina_recovery_per_second * delta)
+		_update_stamina_ui(delta, previous_walker_stamina, false)
+		var walker_zoom_weight := 1.0 - exp(-zoom_smoothing * delta)
+		camera.fov = lerpf(camera.fov, _zoom_fov_target, walker_zoom_weight)
+		_update_zoom_meter()
+		return
 
 	if not is_on_floor():
 		var gravity_multiplier := upward_gravity_multiplier if velocity.y > 0.0 else falling_gravity_multiplier
@@ -330,6 +361,8 @@ func _update_camera_motion(delta: float, input_vector: Vector2, is_sprinting: bo
 
 
 func _toggle_flashlight_holster() -> void:
+	if not _flashlight_available:
+		return
 	_flashlight_holstered = not _flashlight_holstered
 	if _flashlight_holstered:
 		_flashlight_was_on = flashlight.visible
@@ -345,6 +378,17 @@ func _toggle_flashlight_holster() -> void:
 func play_switch_sound() -> void:
 	switch_sound.pitch_scale = randf_range(0.97, 1.03)
 	switch_sound.play()
+
+
+func set_skill_check_active(active: bool) -> void:
+	_skill_check_active = active
+
+
+func set_plunger_minigame_pose(active: bool) -> void:
+	if _held_item != &"plunger":
+		return
+	held_plunger.visible = not active
+	left_hand.visible = not active
 
 
 func _update_footsteps(_delta: float, input_vector: Vector2, is_sprinting: bool) -> void:
@@ -396,6 +440,10 @@ func _try_interact(pressed_key: Key) -> bool:
 
 
 func _update_interaction_prompt() -> void:
+	if is_instance_valid(_walker_controller):
+		interaction_prompt.visible = true
+		interaction_prompt.text = "F  SOLTAR ANDADOR"
+		return
 	var target := _get_interactable()
 	interaction_prompt.visible = target != null
 	if target != null:
@@ -427,8 +475,106 @@ func is_holding_item() -> bool:
 	return not _held_item.is_empty()
 
 
+func is_holding_item_type(item_type: StringName) -> bool:
+	return _held_item == item_type
+
+
+func begin_moving_walker(walker: Node3D) -> bool:
+	if walker == null or is_instance_valid(_walker_controller) or not _held_item.is_empty():
+		return false
+	_drop_flashlight()
+	_walker_controller = walker
+	_jump_phase = JumpPhase.IDLE
+	velocity = Vector3.ZERO
+	add_collision_exception_with(walker)
+	return true
+
+
+func sync_to_walker(world_position: Vector3, walker_yaw: float) -> void:
+	if not is_instance_valid(_walker_controller):
+		return
+	global_position = world_position
+	rotation.y = walker_yaw
+	velocity = Vector3.ZERO
+
+
+func end_moving_walker(walker: Node3D) -> void:
+	if walker != _walker_controller:
+		return
+	remove_collision_exception_with(walker)
+	_walker_controller = null
+	velocity = Vector3.ZERO
+
+
+func pick_up_plunger() -> bool:
+	if not _held_item.is_empty():
+		return false
+	_drop_flashlight()
+	_held_item = &"plunger"
+	left_hand.visible = true
+	held_plunger.visible = true
+	held_plunger.scale = Vector3.ZERO
+	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(held_plunger, "scale", Vector3(0.72, 0.72, 0.72), 0.24)
+	return true
+
+
+func consume_held_item(item_type: StringName) -> bool:
+	if _held_item != item_type:
+		return false
+	_held_item = &""
+	held_plunger.visible = false
+	left_hand.visible = false
+	return true
+
+
+func recover_flashlight(was_on: bool) -> bool:
+	if _flashlight_available or not _held_item.is_empty():
+		return false
+	_flashlight_available = true
+	_flashlight_holstered = false
+	_flashlight_was_on = was_on
+	hand_rig.visible = true
+	flashlight.visible = was_on
+	return true
+
+
+func _drop_flashlight() -> void:
+	if not _flashlight_available:
+		return
+	var was_on := flashlight.visible
+	var dropped := DroppedFlashlightScene.instantiate() as RigidBody3D
+	get_tree().current_scene.add_child(dropped)
+	var forward := -camera.global_basis.z.normalized()
+	forward.y = 0.0
+	forward = forward.normalized()
+	dropped.global_position = global_position + forward * 0.32 + Vector3.UP * 0.5
+	dropped.global_basis = camera.global_basis
+	dropped.linear_velocity = Vector3.ZERO
+	dropped.angular_velocity = Vector3.ZERO
+	dropped.call(&"set_light_enabled", was_on)
+	_flashlight_available = false
+	_flashlight_holstered = true
+	_flashlight_was_on = was_on
+	flashlight.visible = false
+	hand_rig.visible = false
+
+
+func add_key(key_id: StringName) -> bool:
+	if key_id.is_empty():
+		return false
+	_key_inventory[key_id] = true
+	return true
+
+
+func has_key(key_id: StringName) -> bool:
+	return not key_id.is_empty() and _key_inventory.has(key_id)
+
+
 func _throw_held_item() -> void:
 	if _held_item.is_empty():
+		return
+	if _held_item == &"plunger":
 		return
 	var thrown_scene: PackedScene = ThrownCanScene if _held_item == &"can" else ThrownBottleScene
 	_held_item = &""

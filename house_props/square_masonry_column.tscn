@@ -1,0 +1,84 @@
+[gd_scene load_steps=6 format=3]
+
+[sub_resource type="StandardMaterial3D" id="plaster"]
+albedo_color = Color(0.91, 0.895, 0.84, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="trim"]
+albedo_color = Color(0.68, 0.66, 0.59, 1)
+roughness = 0.97
+
+[sub_resource type="StandardMaterial3D" id="inset"]
+albedo_color = Color(0.82, 0.805, 0.75, 1)
+roughness = 0.98
+
+[sub_resource type="BoxMesh" id="box"]
+
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(0.9, 3.85, 0.9)
+
+[node name="SquareMasonryColumn" type="StaticBody3D"]
+editor_description = "Columna cuadrada de 3,85 m, con plinto ancho, fuste de mamposteria, paneles hundidos y capitel escalonado."
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.925, 0)
+shape = SubResource("collision")
+[node name="BottomPlinth" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.1, 0)
+scale = Vector3(1.05, 0.2, 1.05)
+mesh = SubResource("box")
+material_override = SubResource("trim")
+[node name="BaseBlock" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.34, 0)
+scale = Vector3(0.88, 0.3, 0.88)
+mesh = SubResource("box")
+material_override = SubResource("plaster")
+[node name="LowerBevel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.54, 0)
+scale = Vector3(0.78, 0.1, 0.78)
+mesh = SubResource("box")
+material_override = SubResource("trim")
+[node name="Shaft" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.92, 0)
+scale = Vector3(0.68, 2.66, 0.68)
+mesh = SubResource("box")
+material_override = SubResource("plaster")
+[node name="FrontInset" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.92, -0.348)
+scale = Vector3(0.43, 1.92, 0.025)
+mesh = SubResource("box")
+material_override = SubResource("inset")
+[node name="BackInset" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.92, 0.348)
+scale = Vector3(0.43, 1.92, 0.025)
+mesh = SubResource("box")
+material_override = SubResource("inset")
+[node name="LeftInset" type="MeshInstance3D" parent="."]
+position = Vector3(-0.348, 1.92, 0)
+scale = Vector3(0.025, 1.92, 0.43)
+mesh = SubResource("box")
+material_override = SubResource("inset")
+[node name="RightInset" type="MeshInstance3D" parent="."]
+position = Vector3(0.348, 1.92, 0)
+scale = Vector3(0.025, 1.92, 0.43)
+mesh = SubResource("box")
+material_override = SubResource("inset")
+[node name="Neck" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.32, 0)
+scale = Vector3(0.78, 0.16, 0.78)
+mesh = SubResource("box")
+material_override = SubResource("trim")
+[node name="CapitalLower" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.48, 0)
+scale = Vector3(0.9, 0.18, 0.9)
+mesh = SubResource("box")
+material_override = SubResource("plaster")
+[node name="CapitalUpper" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.67, 0)
+scale = Vector3(1.04, 0.2, 1.04)
+mesh = SubResource("box")
+material_override = SubResource("trim")
+[node name="TopSlab" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.82, 0)
+scale = Vector3(1.14, 0.1, 1.14)
+mesh = SubResource("box")
+material_override = SubResource("plaster")

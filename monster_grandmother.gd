@@ -6,13 +6,15 @@ enum State { PATROL, INVESTIGATE, CHASE, SEARCH, ATTACK }
 
 const STAIR_LOWER_ANCHOR := Vector3(-1.328, 0.12, 3.0)
 const STAIR_UPPER_ANCHOR := Vector3(-1.328, 4.18, -2.18)
-
-@export var patrol_speed := 1.0
-@export var investigate_speed := 1.45
-@export var chase_speed := 3.15
+@export var patrol_speed := 0.88
+@export var investigate_speed := 1.28
+@export var chase_speed := 2.75
 @export var vision_distance := 15.0
 @export_range(10.0, 160.0, 1.0) var vision_angle_degrees := 78.0
 @export var hearing_distance := 7.5
+@export_group("Espera inicial")
+@export var starts_waiting_covered_eyes := true
+@export_range(1.5, 8.0, 0.1) var wake_distance := 3.6
 @export var chase_memory_seconds := 12.0
 @export var search_seconds := 8.0
 @export var attack_distance := 1.05
@@ -28,6 +30,9 @@ const STAIR_UPPER_ANCHOR := Vector3(-1.328, 4.18, -2.18)
 @onready var model: Node3D = $Model
 @onready var torso: Node3D = $Model/TorsoRig
 @onready var head_rig: Node3D = $Model/TorsoRig/HeadRig
+@onready var left_eye: Node3D = $Model/TorsoRig/HeadRig/LeftEye
+@onready var right_eye: Node3D = $Model/TorsoRig/HeadRig/RightEye
+@onready var mouth: MeshInstance3D = get_node_or_null("Model/TorsoRig/HeadRig/Mouth") as MeshInstance3D
 @onready var left_arm: Node3D = $Model/TorsoRig/LeftArmPivot
 @onready var right_arm: Node3D = $Model/TorsoRig/RightArmPivot
 @onready var left_elbow: Node3D = $Model/TorsoRig/LeftArmPivot/LeftElbow
@@ -62,6 +67,12 @@ var _smoothed_move_direction := Vector3.ZERO
 var _duck_amount := 0.0
 var _duck_hold_timer := 0.0
 var _force_stair_steering := false
+var _waiting_covered_eyes := false
+var _mouth_close_amount := 0.0
+var _mouth_rest_scale := Vector3.ONE
+var teeth: Array[MeshInstance3D] = []
+var _teeth_rest_positions: Array[Vector3] = []
+var _teeth_rest_scales: Array[Vector3] = []
 
 
 func _ready() -> void:
@@ -78,6 +89,16 @@ func _ready() -> void:
 	footstep_sound.stream = _make_footstep_sound()
 	voice_sound.stream = _make_chase_voice()
 	breathing_sound.play()
+	_waiting_covered_eyes = starts_waiting_covered_eyes
+	if is_instance_valid(mouth):
+		_mouth_rest_scale = mouth.scale
+	for tooth_number in range(1, 9):
+		var tooth_path := "Model/TorsoRig/HeadRig/Tooth%02d" % tooth_number
+		var tooth := get_node_or_null(tooth_path) as MeshInstance3D
+		if is_instance_valid(tooth):
+			teeth.append(tooth)
+			_teeth_rest_positions.append(tooth.position)
+			_teeth_rest_scales.append(tooth.scale)
 	call_deferred(&"_finish_navigation_setup")
 
 
@@ -121,7 +142,11 @@ func _physics_process(delta: float) -> void:
 	var hears_player := _can_hear_player()
 	_update_awareness(delta, sees_player, hears_player)
 
-	if current_state == State.ATTACK:
+	var distress_active := _update_distress(delta)
+	if distress_active:
+		velocity.x = move_toward(velocity.x, 0.0, delta * 10.0)
+		velocity.z = move_toward(velocity.z, 0.0, delta * 10.0)
+	elif current_state == State.ATTACK:
 		_update_attack(delta)
 	else:
 		_update_movement(delta)
@@ -130,6 +155,22 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_try_open_door()
 	_update_animation(delta)
+
+
+func _update_distress(delta: float) -> bool:
+	if not _waiting_covered_eyes:
+		return false
+	if global_position.distance_to(_player.global_position) <= wake_distance:
+		_waiting_covered_eyes = false
+		_player_has_moved = true
+		_last_known_player_position = _player.global_position
+		_change_state(State.CHASE)
+		return false
+	var to_player := _player.global_position - global_position
+	to_player.y = 0.0
+	if to_player.length_squared() > 0.01:
+		rotation.y = lerp_angle(rotation.y, atan2(to_player.x, to_player.z), minf(delta * 8.0, 1.0))
+	return true
 
 
 func _update_awareness(delta: float, sees_player: bool, hears_player: bool) -> void:
@@ -367,8 +408,25 @@ func _update_animation(delta: float) -> void:
 	var leg_swing := sin(_motion_phase) * lerpf(0.18, 0.72, moving_amount)
 	var arm_swing := sin(_motion_phase) * lerpf(0.08, 0.46, moving_amount)
 	var chase_amount := 1.0 if current_state == State.CHASE else 0.0
+	var distress_active := _waiting_covered_eyes
+	var player_distance := global_position.distance_to(_player.global_position) if is_instance_valid(_player) else INF
+	var reach_active := (
+		current_state == State.CHASE
+		and player_distance >= 2.35
+		and player_distance <= 7.2
+		and absf(_player.global_position.y - global_position.y) < 1.7
+	)
+	_update_mouth_pose(delta, distress_active)
 
-	if current_state == State.ATTACK:
+	if distress_active:
+		left_leg.rotation.x = lerpf(left_leg.rotation.x, 0.0, minf(delta * 9.0, 1.0))
+		right_leg.rotation.x = lerpf(right_leg.rotation.x, 0.0, minf(delta * 9.0, 1.0))
+		left_knee.rotation.x = lerpf(left_knee.rotation.x, 0.22, minf(delta * 9.0, 1.0))
+		right_knee.rotation.x = lerpf(right_knee.rotation.x, 0.22, minf(delta * 9.0, 1.0))
+		_pose_hand_over_eye(left_arm, left_elbow, left_eye, -1.0, delta)
+		_pose_hand_over_eye(right_arm, right_elbow, right_eye, 1.0, delta)
+		torso.rotation.x = lerpf(torso.rotation.x, -0.2, minf(delta * 8.0, 1.0))
+	elif current_state == State.ATTACK:
 		var attack_progress := clampf(_attack_timer / 0.72, 0.0, 1.0)
 		var thrust := sin(attack_progress * PI)
 		left_arm.rotation.x = lerpf(left_arm.rotation.x, 1.38 * thrust, minf(delta * 16.0, 1.0))
@@ -381,11 +439,26 @@ func _update_animation(delta: float) -> void:
 		right_leg.rotation.x = lerpf(right_leg.rotation.x, -leg_swing, minf(delta * 12.0, 1.0))
 		left_knee.rotation.x = lerpf(left_knee.rotation.x, maxf(0.0, -leg_swing) * 0.62 + _duck_amount * 0.52, minf(delta * 13.0, 1.0))
 		right_knee.rotation.x = lerpf(right_knee.rotation.x, maxf(0.0, leg_swing) * 0.62 + _duck_amount * 0.52, minf(delta * 13.0, 1.0))
-		left_arm.rotation.x = lerpf(left_arm.rotation.x, -arm_swing + chase_amount * 0.35, minf(delta * 10.0, 1.0))
-		right_arm.rotation.x = lerpf(right_arm.rotation.x, arm_swing + chase_amount * 0.35, minf(delta * 10.0, 1.0))
-		left_elbow.rotation.x = lerpf(left_elbow.rotation.x, 0.16 + chase_amount * 0.52, minf(delta * 10.0, 1.0))
-		right_elbow.rotation.x = lerpf(right_elbow.rotation.x, 0.16 + chase_amount * 0.52, minf(delta * 10.0, 1.0))
-		torso.rotation.x = lerpf(torso.rotation.x, -0.07 - chase_amount * 0.18 - _duck_amount * 0.16, minf(delta * 8.0, 1.0))
+		if reach_active:
+			var player_right := _player.global_basis.x.normalized()
+			var reach_center := _player.global_position + Vector3.UP * 1.05
+			_pose_arm_toward_position(left_arm, left_elbow, reach_center + player_right * 0.2, -1.0, delta)
+			_pose_arm_toward_position(right_arm, right_elbow, reach_center - player_right * 0.2, 1.0, delta)
+		else:
+			left_arm.rotation.x = lerpf(left_arm.rotation.x, -arm_swing + chase_amount * 0.35, minf(delta * 10.0, 1.0))
+			right_arm.rotation.x = lerpf(right_arm.rotation.x, arm_swing + chase_amount * 0.35, minf(delta * 10.0, 1.0))
+			left_elbow.rotation.x = lerpf(left_elbow.rotation.x, 0.16 + chase_amount * 0.52, minf(delta * 10.0, 1.0))
+			right_elbow.rotation.x = lerpf(right_elbow.rotation.x, 0.16 + chase_amount * 0.52, minf(delta * 10.0, 1.0))
+		torso.rotation.x = lerpf(torso.rotation.x, -0.07 - chase_amount * (0.26 if reach_active else 0.18) - _duck_amount * 0.16, minf(delta * 8.0, 1.0))
+	if not distress_active and not reach_active:
+		left_arm.rotation.y = lerp_angle(left_arm.rotation.y, 0.0, minf(delta * 7.0, 1.0))
+		right_arm.rotation.y = lerp_angle(right_arm.rotation.y, 0.0, minf(delta * 7.0, 1.0))
+		left_arm.rotation.z = lerp_angle(left_arm.rotation.z, -0.11, minf(delta * 7.0, 1.0))
+		right_arm.rotation.z = lerp_angle(right_arm.rotation.z, 0.11, minf(delta * 7.0, 1.0))
+		left_elbow.rotation.y = lerp_angle(left_elbow.rotation.y, 0.0, minf(delta * 7.0, 1.0))
+		right_elbow.rotation.y = lerp_angle(right_elbow.rotation.y, 0.0, minf(delta * 7.0, 1.0))
+		left_elbow.rotation.z = lerp_angle(left_elbow.rotation.z, 0.0, minf(delta * 7.0, 1.0))
+		right_elbow.rotation.z = lerp_angle(right_elbow.rotation.z, 0.0, minf(delta * 7.0, 1.0))
 	torso.position.y = lerpf(torso.position.y, 1.9 - _duck_amount * 0.62, minf(delta * 7.0, 1.0))
 	torso.rotation.y = lerp_angle(torso.rotation.y, 0.0, minf(delta * 11.0, 1.0))
 	torso.rotation.z = lerp_angle(torso.rotation.z, 0.0, minf(delta * 11.0, 1.0))
@@ -402,6 +475,114 @@ func _update_animation(delta: float) -> void:
 			_last_step_beat = beat
 			footstep_sound.pitch_scale = randf_range(0.82, 1.02) + moving_amount * 0.08
 			footstep_sound.play()
+
+
+func _update_mouth_pose(delta: float, distress_active: bool) -> void:
+	if not is_instance_valid(mouth):
+		return
+	var target_amount := 1.0 if distress_active else 0.0
+	var transition_speed := 5.5 if distress_active else 3.5
+	_mouth_close_amount = move_toward(_mouth_close_amount, target_amount, delta * transition_speed)
+
+	mouth.scale = _mouth_rest_scale
+	mouth.scale.y = lerpf(_mouth_rest_scale.y, _mouth_rest_scale.y * 0.18, _mouth_close_amount)
+
+	var closed_y := mouth.position.y
+	for i in teeth.size():
+		var tooth := teeth[i]
+		if not is_instance_valid(tooth):
+			continue
+		var rest_position := _teeth_rest_positions[i]
+		var rest_scale := _teeth_rest_scales[i]
+		var closed_position := rest_position
+		closed_position.y = closed_y + (-0.012 if i < 4 else 0.012)
+		tooth.position = rest_position.lerp(closed_position, _mouth_close_amount)
+		tooth.scale = rest_scale
+		tooth.scale.y = lerpf(rest_scale.y, rest_scale.y * 0.25, _mouth_close_amount)
+
+
+func _pose_hand_over_eye(arm: Node3D, elbow: Node3D, eye: Node3D, outward_side: float, delta: float) -> void:
+	const UPPER_ARM_LENGTH := 0.88
+	const FOREARM_TO_HAND_LENGTH := 0.94
+	var face_forward := -head_rig.global_basis.z.normalized()
+	var target := eye.global_position + face_forward * 0.055
+	var shoulder := arm.global_position
+	var shoulder_to_target := target - shoulder
+	var target_distance := shoulder_to_target.length()
+	if target_distance < 0.001:
+		return
+
+	var reach_min := absf(UPPER_ARM_LENGTH - FOREARM_TO_HAND_LENGTH) + 0.01
+	var reach_max := UPPER_ARM_LENGTH + FOREARM_TO_HAND_LENGTH - 0.01
+	var solved_distance := clampf(target_distance, reach_min, reach_max)
+	var target_direction := shoulder_to_target / target_distance
+	target = shoulder + target_direction * solved_distance
+
+	# El punto del codo tiene dos soluciones; elegimos siempre la exterior
+	# para que cada brazo cubra el ojo de su mismo lado sin cruzarse.
+	var along_distance := (
+		UPPER_ARM_LENGTH * UPPER_ARM_LENGTH
+		- FOREARM_TO_HAND_LENGTH * FOREARM_TO_HAND_LENGTH
+		+ solved_distance * solved_distance
+	) / (2.0 * solved_distance)
+	var bend_height := sqrt(maxf(0.0, UPPER_ARM_LENGTH * UPPER_ARM_LENGTH - along_distance * along_distance))
+	var arm_parent := arm.get_parent() as Node3D
+	var parent_basis := arm_parent.global_basis.orthonormalized()
+	var outward := parent_basis.x.normalized() * outward_side
+	var bend_direction := outward - target_direction * outward.dot(target_direction)
+	if bend_direction.length_squared() < 0.001:
+		bend_direction = parent_basis.y.cross(target_direction)
+	bend_direction = bend_direction.normalized()
+	var elbow_target := shoulder + target_direction * along_distance + bend_direction * bend_height
+
+	var upper_direction_world := (elbow_target - shoulder).normalized()
+	var upper_direction_local := (parent_basis.inverse() * upper_direction_world).normalized()
+	var desired_arm_quaternion := Quaternion(Vector3.DOWN, upper_direction_local)
+	var desired_arm_global_basis := parent_basis * Basis(desired_arm_quaternion)
+	var lower_direction_world := (target - elbow_target).normalized()
+	var lower_direction_local := (desired_arm_global_basis.inverse() * lower_direction_world).normalized()
+	var desired_elbow_quaternion := Quaternion(Vector3.DOWN, lower_direction_local)
+
+	var pose_weight := minf(delta * 8.0, 1.0)
+	arm.quaternion = arm.quaternion.slerp(desired_arm_quaternion, pose_weight)
+	elbow.quaternion = elbow.quaternion.slerp(desired_elbow_quaternion, pose_weight)
+
+
+func _pose_arm_toward_position(arm: Node3D, elbow: Node3D, target_position: Vector3, outward_side: float, delta: float) -> void:
+	const UPPER_ARM_LENGTH := 0.88
+	const FOREARM_TO_HAND_LENGTH := 0.94
+	var shoulder := arm.global_position
+	var shoulder_to_target := target_position - shoulder
+	var target_distance := shoulder_to_target.length()
+	if target_distance < 0.001:
+		return
+	var target_direction := shoulder_to_target / target_distance
+	var reach_min := absf(UPPER_ARM_LENGTH - FOREARM_TO_HAND_LENGTH) + 0.01
+	var reach_max := UPPER_ARM_LENGTH + FOREARM_TO_HAND_LENGTH - 0.025
+	var solved_distance := clampf(target_distance, reach_min, reach_max)
+	var solved_target := shoulder + target_direction * solved_distance
+	var along_distance := (
+		UPPER_ARM_LENGTH * UPPER_ARM_LENGTH
+		- FOREARM_TO_HAND_LENGTH * FOREARM_TO_HAND_LENGTH
+		+ solved_distance * solved_distance
+	) / (2.0 * solved_distance)
+	var bend_height := sqrt(maxf(0.0, UPPER_ARM_LENGTH * UPPER_ARM_LENGTH - along_distance * along_distance))
+	var arm_parent := arm.get_parent() as Node3D
+	var parent_basis := arm_parent.global_basis.orthonormalized()
+	var outward := parent_basis.x.normalized() * outward_side
+	var bend_direction := outward - target_direction * outward.dot(target_direction)
+	if bend_direction.length_squared() < 0.001:
+		bend_direction = parent_basis.y.cross(target_direction)
+	bend_direction = bend_direction.normalized()
+	var elbow_target := shoulder + target_direction * along_distance + bend_direction * bend_height
+	var upper_direction_local := (parent_basis.inverse() * (elbow_target - shoulder).normalized()).normalized()
+	var desired_arm_quaternion := Quaternion(Vector3.DOWN, upper_direction_local)
+	var desired_arm_global_basis := parent_basis * Basis(desired_arm_quaternion)
+	var lower_direction_local := (desired_arm_global_basis.inverse() * (solved_target - elbow_target).normalized()).normalized()
+	var desired_elbow_quaternion := Quaternion(Vector3.DOWN, lower_direction_local)
+	var pose_weight := minf(delta * 10.0, 1.0)
+	arm.quaternion = arm.quaternion.slerp(desired_arm_quaternion, pose_weight)
+	elbow.quaternion = elbow.quaternion.slerp(desired_elbow_quaternion, pose_weight)
 
 
 func _make_breathing_sound() -> AudioStreamWAV:
