@@ -161,7 +161,7 @@
 [ext_resource type="PackedScene" uid="uid://dywtgm4qi3m8f" path="res://house_props/old_vertical_iron_ladder.tscn" id="193_iron_ladder"]
 [ext_resource type="PackedScene" uid="uid://l8msy1x5kuid" path="res://house_props/detailed_confessional.tscn" id="194_confessional"]
 [ext_resource type="PackedScene" uid="uid://dub7mefke18ig" path="res://house_props/cellar_bulkhead_entrance.tscn" id="195_cellar_bulkhead"]
-[ext_resource type="PackedScene" path="res://house_props/detailed_spiral_staircase.tscn" id="196_spiral_stair"]
+[ext_resource type="PackedScene" path="res://house_props/initial_basement_access.tscn" id="197_initial_basement"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lower_floor"]
 albedo_color = Color(0.44, 0.43, 0.39, 1)
@@ -777,6 +777,9 @@ size = Vector3(2.7884548, 0.27080995, 34.762016)
 material = SubResource("StandardMaterial3D_lrwhq")
 size = Vector3(2.7884548, 0.27080995, 25.765068)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_xp51w"]
+size = Vector3(13.539615, 0.2, 6.336426)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_ah8vk"]
 size = Vector3(10.7, 0.2, 22)
 
@@ -1275,6 +1278,17 @@ size = Vector3(2.44, 1.05, 0.18)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_upper_bed_partition_lintel"]
 size = Vector3(2.44, 1.05, 0.18)
+
+[sub_resource type="StandardMaterial3D" id="stone"]
+albedo_color = Color(0.25, 0.235, 0.205, 1)
+roughness = 0.98
+
+[sub_resource type="BoxMesh" id="stone_box"]
+material = SubResource("stone")
+size = Vector3(1, 1, 0.001)
+
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(1, 1, 0.0087890625)
 
 [node name="EditableTwoStoreyHouse" type="Node3D" unique_id=1251538920]
 script = ExtResource("38_wall_band_applier")
@@ -2554,6 +2568,10 @@ mesh = SubResource("BoxMesh_tjyac")
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/UpperFloorSlabWest2" unique_id=1829241055]
 transform = Transform3D(0.71768016, 0, 0, 0, 1, 0, 0, 0, 0.27994332, 2.9112659, 0, 0)
 shape = SubResource("BoxShape3D_bl01h")
+
+[node name="Collision2" type="CollisionShape3D" parent="UpperFloor/UpperFloorSlabWest2" unique_id=765234177]
+transform = Transform3D(0.71768016, 0, 0, 0, 1, 0, 0, 0, 0.27994332, 6.780816, 0, 3.9197593)
+shape = SubResource("BoxShape3D_xp51w")
 
 [node name="UpperFloorSlabEast" type="StaticBody3D" parent="UpperFloor" unique_id=1329842936]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.65, 4.1, 0)
@@ -4253,7 +4271,8 @@ transform = Transform3D(5.5877892e-05, 0.02115095, 0.5406919, 0.0012840453, 0.73
 [node name="CellarBulkheadEntranceStaging" parent="." unique_id=1874915032 instance=ExtResource("195_cellar_bulkhead")]
 transform = Transform3D(-0.006493758, 0, -0.75983346, 0, 1, 0, 0.8414861, 0, -0.005863644, -5.741586, -0.22558224, 3.177816)
 
-[node name="DetailedSpiralStaircaseStaging" parent="." unique_id=62070292 instance=ExtResource("196_spiral_stair")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 15.5)
+[node name="BasementAccessAndInitialRoom" parent="." unique_id=867008395 instance=ExtResource("197_initial_basement")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.741586, -1.2255822, 3.777816)
 
-[editable path="DetailedSpiralStaircaseStaging"]
+[editable path="BasementAccessAndInitialRoom"]
+[editable path="BasementAccessAndInitialRoom/BasementSpiralStaircase"]

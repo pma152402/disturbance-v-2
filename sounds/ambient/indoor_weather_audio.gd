@@ -5,11 +5,10 @@ extends Node
 
 @export_node_path("Node3D") var player_path: NodePath = NodePath("../Player")
 @export var bus_name: StringName = &"Weather"
-@export_group("Indoor house bounds")
-@export var house_min_x := -12.65
-@export var house_max_x := 12.65
-@export var house_min_z := -38.4
-@export var house_max_z := 10.65
+@export_group("Indoor detection")
+@export_flags_3d_physics var shelter_collision_mask := 1
+@export var shelter_probe_start_height := 0.35
+@export var shelter_probe_height := 24.0
 @export_group("Acoustics")
 @export_range(100.0, 20000.0, 10.0) var indoor_cutoff_hz := 2100.0
 @export_range(100.0, 20000.0, 10.0) var outdoor_cutoff_hz := 20000.0
@@ -51,8 +50,22 @@ func _exit_tree() -> void:
 
 
 func _is_inside_house(position: Vector3) -> bool:
-	return position.x > house_min_x and position.x < house_max_x \
-		and position.z > house_min_z and position.z < house_max_z
+	if _player == null or not is_instance_valid(_player):
+		return false
+	var world := _player.get_world_3d()
+	if world == null:
+		return false
+	var ray_start := position + Vector3.UP * shelter_probe_start_height
+	var ray_end := ray_start + Vector3.UP * shelter_probe_height
+	var query := PhysicsRayQueryParameters3D.create(
+		ray_start,
+		ray_end,
+		shelter_collision_mask,
+		[_player.get_rid()]
+	)
+	query.collide_with_areas = false
+	query.hit_from_inside = true
+	return not world.direct_space_state.intersect_ray(query).is_empty()
 
 
 func _setup_weather_bus() -> void:

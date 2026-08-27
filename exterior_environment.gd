@@ -128,6 +128,9 @@ func _add_yard_vegetation(transforms: Array[Transform3D], rng: RandomNumberGener
 		var plant_position := Vector3(rng.randf_range(-22.8, 22.8), 0.02, rng.randf_range(-22.8, 22.8))
 		if _is_inside_house_footprint(plant_position, 0.45):
 			continue
+		# Mantener completamente limpio el hueco de acceso al sotano.
+		if Vector2(plant_position.x + 5.75, plant_position.z - 3.78).length_squared() < 6.25:
+			continue
 		if plant_position.z > 8.0 and absf(plant_position.x) < 5.0:
 			continue
 		var plant_scale := rng.randf_range(min_scale, max_scale)

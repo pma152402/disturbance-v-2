@@ -77,6 +77,7 @@ transform = Transform3D(-0.009029448, 0, 0.21999885, 0.25736618, 0.3783913, 6.52
 mesh = SubResource("BoxMesh_epnuo")
 
 [node name="OpeningVoid" type="MeshInstance3D" parent="." unique_id=1590615737]
+visible = false
 transform = Transform3D(2.75, 0, 0, 0, 0.06, 0, 0, 0, 3.65, 0, 0.02, 0)
 mesh = SubResource("dark_box")
 
@@ -110,12 +111,10 @@ shape = SubResource("shape")
 transform = Transform3D(1.15, 0, 0, 0, 0.08, -0.1, 0, 0.65, 3.1, -0.68, -0.04802209, 0)
 mesh = SubResource("metal_box")
 
-[node name="CenterHandles" type="Node3D" parent="." unique_id=1250009137]
-
-[node name="Left" type="MeshInstance3D" parent="CenterHandles" unique_id=954613637]
-transform = Transform3D(0.08, 0, 0, 0, 0.08, 0, 0, 0, 0.34, -0.12, 0.5340774, -0.55)
+[node name="Handle" type="MeshInstance3D" parent="LeftHinge" unique_id=954613637]
+transform = Transform3D(0.08, 0, 0, 0, 0.08, 0, 0, 0, 0.34, 1.26, 0.1040774, -0.55)
 mesh = SubResource("metal_box")
 
-[node name="Right" type="MeshInstance3D" parent="CenterHandles" unique_id=892399971]
-transform = Transform3D(0.08, 0, 0, 0, 0.08, 0, 0, 0, 0.34, 0.12, 0.5340774, -0.55)
+[node name="Handle" type="MeshInstance3D" parent="RightHinge" unique_id=892399971]
+transform = Transform3D(0.08, 0, 0, 0, 0.08, 0, 0, 0, 0.34, -1.26, 0.1040774, -0.55)
 mesh = SubResource("metal_box")

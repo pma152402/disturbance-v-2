@@ -1,4 +1,4 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://covsipnm1vl7v"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6xflm"]
 albedo_color = Color(0.075, 0.07, 0.065, 1)
@@ -11,9 +11,6 @@ top_radius = 0.13
 bottom_radius = 0.13
 height = 6.35
 radial_segments = 10
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_e8ovu"]
-size = Vector3(2.3625, 0.16, 0.72)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6erc3"]
 albedo_color = Color(0.19, 0.09, 0.04, 1)
@@ -234,9 +231,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.225)
 
 [node name="TopLanding" type="StaticBody3D" parent="." unique_id=1218315412]
 transform = Transform3D(0.9396924, 0, -0.34202018, 0, 1, 0, 0.34202018, 0, 0.9396924, -0.41897467, 6, 1.1511234)
-
-[node name="@CollisionShape3D@5" type="CollisionShape3D" parent="TopLanding" unique_id=1009646600]
-shape = SubResource("BoxShape3D_e8ovu")
 
 [node name="Step01" type="StaticBody3D" parent="." unique_id=1633881707]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0.91)
@@ -597,6 +591,48 @@ mesh = SubResource("BoxMesh_fdfvv")
 
 [node name="Collision" type="CollisionShape3D" parent="Step28" unique_id=1348483049]
 shape = SubResource("BoxShape3D_6b8x3")
+
+[node name="Step29" type="StaticBody3D" parent="." unique_id=1552266951]
+transform = Transform3D(0.3420201, 0, 0.9396926, 0, 1, 0, -0.9396926, 0, 0.3420201, -0.59207284, 6.216509, 0.5938448)
+
+[node name="Tread" type="MeshInstance3D" parent="Step29" unique_id=1549142943]
+mesh = SubResource("BoxMesh_fdfvv")
+
+[node name="Collision" type="CollisionShape3D" parent="Step29" unique_id=100353578]
+shape = SubResource("BoxShape3D_6b8x3")
+
+[node name="Step30" type="StaticBody3D" parent="." unique_id=947108146]
+transform = Transform3D(0.3420201, 0, 0.9396926, 0, 1, 0, -0.9396926, 0, 0.3420201, -0.8364962, 6.426339, 0.5938448)
+
+[node name="Tread" type="MeshInstance3D" parent="Step30" unique_id=95540927]
+mesh = SubResource("BoxMesh_fdfvv")
+
+[node name="Collision" type="CollisionShape3D" parent="Step30" unique_id=617063200]
+shape = SubResource("BoxShape3D_6b8x3")
+
+[node name="Step31" type="StaticBody3D" parent="." unique_id=1371594437]
+transform = Transform3D(0.3420201, 0, 0.9396926, 0, 1, 0, -0.9396926, 0, 0.3420201, -1.1093692, 6.6115437, 0.5938448)
+
+[node name="Tread" type="MeshInstance3D" parent="Step31" unique_id=273794383]
+mesh = SubResource("BoxMesh_fdfvv")
+
+[node name="Collision" type="CollisionShape3D" parent="Step31" unique_id=1912579848]
+shape = SubResource("BoxShape3D_6b8x3")
+
+[node name="Step32" type="StaticBody3D" parent="." unique_id=1081603538]
+transform = Transform3D(0.3420201, 0, 0.9396926, 0, 1, 0, -0.9396926, 0, 0.3420201, -1.345372, 6.8144865, 0.5938448)
+
+[node name="Tread" type="MeshInstance3D" parent="Step32" unique_id=621406055]
+mesh = SubResource("BoxMesh_fdfvv")
+
+[node name="Collision" type="CollisionShape3D" parent="Step32" unique_id=1306833334]
+shape = SubResource("BoxShape3D_6b8x3")
+
+[node name="Step33" type="StaticBody3D" parent="." unique_id=952695591]
+transform = Transform3D(0.3420201, 0, 0.9396926, 0, 1, 0, -0.9396926, 0, 0.3420201, -1.5341883, 7.040178, 0.5938448)
+
+[node name="Step34" type="StaticBody3D" parent="." unique_id=1219375503]
+transform = Transform3D(0.3420201, 0, 0.9396926, 0, 1, 0, -0.9396926, 0, 0.3420201, -1.7559421, 7.244154, 0.5938448)
 
 [node name="Baluster28" type="MeshInstance3D" parent="." unique_id=1863360938]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.57117367, 6.48, 1.5692867)
