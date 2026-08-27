@@ -19,7 +19,7 @@ texture_filter = 0
 size = Vector3(48, 1.5, 0.26)
 
 [sub_resource type="BoxShape3D" id="Shape_side"]
-size = Vector3(0.26, 1.5, 64)
+size = Vector3(0.26, 1.5, 72)
 
 [sub_resource type="BoxMesh" id="Fence_piece"]
 
@@ -56,15 +56,15 @@ collision_mask = 1
 material_override = SubResource("Material_fence")
 
 [node name="NorthCollision" type="CollisionShape3D" parent="Fence"]
-position = Vector3(0, 0.75, -40)
+position = Vector3(0, 0.75, -48)
 shape = SubResource("Shape_north")
 
 [node name="WestCollision" type="CollisionShape3D" parent="Fence"]
-position = Vector3(-24, 0.75, -8)
+position = Vector3(-24, 0.75, -12)
 shape = SubResource("Shape_side")
 
 [node name="EastCollision" type="CollisionShape3D" parent="Fence"]
-position = Vector3(24, 0.75, -8)
+position = Vector3(24, 0.75, -12)
 shape = SubResource("Shape_side")
 
 [node name="SouthLeftCollision" type="CollisionShape3D" parent="Fence"]

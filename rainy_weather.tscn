@@ -25,22 +25,37 @@ size = Vector3(110, 0.16, 110)
 
 [sub_resource type="BoxMesh" id="Mesh_ground_west"]
 material = SubResource("Material_wet_ground")
-size = Vector3(47.66, 0.16, 110)
+size = Vector3(42.8, 0.16, 110)
 [sub_resource type="BoxMesh" id="Mesh_ground_east"]
 material = SubResource("Material_wet_ground")
 size = Vector3(59.14, 0.16, 110)
 [sub_resource type="BoxMesh" id="Mesh_ground_north"]
 material = SubResource("Material_wet_ground")
-size = Vector3(3.2, 0.16, 57.18)
+size = Vector3(3.2, 0.16, 41.98)
+[sub_resource type="BoxMesh" id="Mesh_ground_church_west_north"]
+material = SubResource("Material_wet_ground")
+size = Vector3(4.86, 0.16, 12.8)
+[sub_resource type="BoxMesh" id="Mesh_ground_church_west_south"]
+material = SubResource("Material_wet_ground")
+size = Vector3(4.86, 0.16, 94.8)
+[sub_resource type="BoxMesh" id="Mesh_ground_church_center_north"]
+material = SubResource("Material_wet_ground")
+size = Vector3(3.2, 0.16, 12.8)
 [sub_resource type="BoxMesh" id="Mesh_ground_south"]
 material = SubResource("Material_wet_ground")
 size = Vector3(3.2, 0.16, 49.92)
 [sub_resource type="BoxShape3D" id="Shape_ground_west"]
-size = Vector3(47.66, 0.16, 110)
+size = Vector3(42.8, 0.16, 110)
 [sub_resource type="BoxShape3D" id="Shape_ground_east"]
 size = Vector3(59.14, 0.16, 110)
 [sub_resource type="BoxShape3D" id="Shape_ground_north"]
-size = Vector3(3.2, 0.16, 57.18)
+size = Vector3(3.2, 0.16, 41.98)
+[sub_resource type="BoxShape3D" id="Shape_ground_church_west_north"]
+size = Vector3(4.86, 0.16, 12.8)
+[sub_resource type="BoxShape3D" id="Shape_ground_church_west_south"]
+size = Vector3(4.86, 0.16, 94.8)
+[sub_resource type="BoxShape3D" id="Shape_ground_church_center_north"]
+size = Vector3(3.2, 0.16, 12.8)
 [sub_resource type="BoxShape3D" id="Shape_ground_south"]
 size = Vector3(3.2, 0.16, 49.92)
 [sub_resource type="BoxMesh" id="Mesh_ground_collar_x"]
@@ -291,15 +306,27 @@ shadow_enabled = false
 [node name="CellarGroundCutout" type="Node3D" parent="."]
 
 [node name="GroundWest" type="MeshInstance3D" parent="CellarGroundCutout"]
-position = Vector3(-31.17, -0.1, 0)
+position = Vector3(-33.6, -0.1, 0)
 mesh = SubResource("Mesh_ground_west")
+
+[node name="ChurchAccessWestNorth" type="MeshInstance3D" parent="CellarGroundCutout"]
+position = Vector3(-9.77, -0.1, -48.6)
+mesh = SubResource("Mesh_ground_church_west_north")
+
+[node name="ChurchAccessWestSouth" type="MeshInstance3D" parent="CellarGroundCutout"]
+position = Vector3(-9.77, -0.1, 7.6)
+mesh = SubResource("Mesh_ground_church_west_south")
+
+[node name="ChurchAccessCenterNorth" type="MeshInstance3D" parent="CellarGroundCutout"]
+position = Vector3(-5.74, -0.1, -48.6)
+mesh = SubResource("Mesh_ground_church_center_north")
 
 [node name="GroundEast" type="MeshInstance3D" parent="CellarGroundCutout"]
 position = Vector3(25.43, -0.1, 0)
 mesh = SubResource("Mesh_ground_east")
 
 [node name="GroundNorth" type="MeshInstance3D" parent="CellarGroundCutout"]
-position = Vector3(-5.74, -0.1, -26.41)
+position = Vector3(-5.74, -0.1, -18.81)
 mesh = SubResource("Mesh_ground_north")
 
 [node name="GroundSouth" type="MeshInstance3D" parent="CellarGroundCutout"]
@@ -361,15 +388,27 @@ mesh = SubResource("Mesh_dirt_collar_z")
 [node name="GroundCutoutCollision" type="StaticBody3D" parent="CellarGroundCutout"]
 
 [node name="West" type="CollisionShape3D" parent="CellarGroundCutout/GroundCutoutCollision"]
-position = Vector3(-31.17, -0.1, 0)
+position = Vector3(-33.6, -0.1, 0)
 shape = SubResource("Shape_ground_west")
+
+[node name="ChurchAccessWestNorth" type="CollisionShape3D" parent="CellarGroundCutout/GroundCutoutCollision"]
+position = Vector3(-9.77, -0.1, -48.6)
+shape = SubResource("Shape_ground_church_west_north")
+
+[node name="ChurchAccessWestSouth" type="CollisionShape3D" parent="CellarGroundCutout/GroundCutoutCollision"]
+position = Vector3(-9.77, -0.1, 7.6)
+shape = SubResource("Shape_ground_church_west_south")
+
+[node name="ChurchAccessCenterNorth" type="CollisionShape3D" parent="CellarGroundCutout/GroundCutoutCollision"]
+position = Vector3(-5.74, -0.1, -48.6)
+shape = SubResource("Shape_ground_church_center_north")
 
 [node name="East" type="CollisionShape3D" parent="CellarGroundCutout/GroundCutoutCollision"]
 position = Vector3(25.43, -0.1, 0)
 shape = SubResource("Shape_ground_east")
 
 [node name="North" type="CollisionShape3D" parent="CellarGroundCutout/GroundCutoutCollision"]
-position = Vector3(-5.74, -0.1, -26.41)
+position = Vector3(-5.74, -0.1, -18.81)
 shape = SubResource("Shape_ground_north")
 
 [node name="South" type="CollisionShape3D" parent="CellarGroundCutout/GroundCutoutCollision"]

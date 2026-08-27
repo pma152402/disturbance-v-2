@@ -3,6 +3,11 @@ extends Node
 ## Amortigua la tormenta cuando el jugador esta dentro de la casa.
 ## El cambio es progresivo para que atravesar una puerta no produzca un corte.
 
+const LOWER_CHURCH_BASEMENT_ROOM := AABB(
+	Vector3(-12.4, -4.5, -42.6),
+	Vector3(8.8, 5.2, 4.8)
+)
+
 @export_node_path("Node3D") var player_path: NodePath = NodePath("../Player")
 @export var bus_name: StringName = &"Weather"
 @export_group("Indoor detection")
@@ -50,6 +55,10 @@ func _exit_tree() -> void:
 
 
 func _is_inside_house(position: Vector3) -> bool:
+	# La sala inferior de la iglesia tiene un hueco de escalera abierto, por lo
+	# que un rayo vertical puede escapar por el acceso aunque el jugador esté dentro.
+	if LOWER_CHURCH_BASEMENT_ROOM.has_point(position):
+		return true
 	if _player == null or not is_instance_valid(_player):
 		return false
 	var world := _player.get_world_3d()

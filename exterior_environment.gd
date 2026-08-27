@@ -22,10 +22,11 @@ func _build_fence_instances() -> void:
 	if fence_piece_mesh == null or not is_instance_valid(fence_visual):
 		return
 	var pieces: Array[Transform3D] = []
-	# La ampliacion llega hasta Z=-38.2: el limite norte queda detras de ella.
-	_add_horizontal_fence(pieces, -24.0, 24.0, -40.0)
-	_add_vertical_fence(pieces, -24.0, -40.0, 24.0)
-	_add_vertical_fence(pieces, 24.0, -40.0, 24.0)
+	# La sala inferior tras la iglesia llega hasta Z=-42.6. Dejamos un patio
+	# exterior util antes del nuevo limite norte.
+	_add_horizontal_fence(pieces, -24.0, 24.0, -48.0)
+	_add_vertical_fence(pieces, -24.0, -48.0, 24.0)
+	_add_vertical_fence(pieces, 24.0, -48.0, 24.0)
 	# Entrada principal abierta entre X=-2.7 y X=2.7.
 	_add_horizontal_fence(pieces, -24.0, -2.7, 24.0)
 	_add_horizontal_fence(pieces, 2.7, 24.0, 24.0)
@@ -145,7 +146,7 @@ func _add_outer_vegetation(transforms: Array[Transform3D], rng: RandomNumberGene
 		var plant_position := Vector3(rng.randf_range(-52.0, 52.0), 0.02, rng.randf_range(-52.0, 52.0))
 		if _is_inside_house_footprint(plant_position, 0.75):
 			continue
-		if absf(plant_position.x) < 25.5 and plant_position.z > -41.5 and plant_position.z < 25.5:
+		if absf(plant_position.x) < 25.5 and plant_position.z > -49.5 and plant_position.z < 25.5:
 			continue
 		if plant_position.z > 23.5 and absf(plant_position.x) < 7.5:
 			continue
@@ -161,8 +162,8 @@ func _add_forest_outside_fence(transforms: Array[Transform3D], rng: RandomNumber
 		var tree_position := Vector3(rng.randf_range(-51.5, 51.5), 0.0, rng.randf_range(-51.5, 51.5))
 		if _is_inside_house_footprint(tree_position, 3.2):
 			continue
-		# El cercado es asimetrico: al norte llega a Z=-40 para rodear la ampliacion.
-		if absf(tree_position.x) < 27.5 and tree_position.z > -43.5 and tree_position.z < 27.5:
+		# El cercado norte queda en Z=-48 para rodear tambien la sala inferior.
+		if absf(tree_position.x) < 27.5 and tree_position.z > -51.5 and tree_position.z < 27.5:
 			continue
 		# Preserve the route leading through the south gate.
 		if tree_position.z > 23.5 and absf(tree_position.x) < 7.5:

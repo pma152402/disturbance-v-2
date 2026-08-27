@@ -1,67 +1,170 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3 uid="uid://kswr5ya6yjel"]
+
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(4.2, 1.25, 1.45)
+
 [sub_resource type="StandardMaterial3D" id="stone"]
-albedo_color = Color(0.84,0.81,0.72,1)
+albedo_color = Color(0.84, 0.81, 0.72, 1)
 roughness = 0.92
+
+[sub_resource type="BoxMesh" id="box"]
+
 [sub_resource type="StandardMaterial3D" id="cloth"]
-albedo_color = Color(0.48,0.035,0.03,1)
+albedo_color = Color(0.48, 0.035, 0.03, 1)
 roughness = 0.96
+
 [sub_resource type="StandardMaterial3D" id="gold"]
-albedo_color = Color(0.58,0.39,0.08,1)
+albedo_color = Color(0.58, 0.39, 0.08, 1)
 metallic = 0.64
 roughness = 0.42
-[sub_resource type="BoxMesh" id="box"]
+
 [sub_resource type="CylinderMesh" id="candle"]
 top_radius = 0.035
 bottom_radius = 0.04
-height = 0.38
+height = 0.36236328
 radial_segments = 8
-[sub_resource type="BoxShape3D" id="shape"]
-size = Vector3(4.2,1.25,1.45)
-[node name="ChurchAltar" type="StaticBody3D"]
+
+[sub_resource type="StandardMaterial3D" id="flame_material"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.42, 0.055, 0.94)
+emission_enabled = true
+emission = Color(1, 0.19, 0.018, 1)
+emission_energy_multiplier = 4.5
+
+[sub_resource type="SphereMesh" id="flame_mesh"]
+material = SubResource("flame_material")
+radius = 0.034
+height = 0.095
+radial_segments = 8
+rings = 4
+
+[node name="ChurchAltar" type="StaticBody3D" unique_id=950695025]
 editor_description = "Altar de piedra con frontal textil, cruz dorada, gradas y dos cirios."
-[node name="Collision" type="CollisionShape3D" parent="."]
-position = Vector3(0,0.62,0)
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=1449303952]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62, 0)
 shape = SubResource("shape")
-[node name="StepLower" type="MeshInstance3D" parent="."]
-position = Vector3(0,0.1,0.18)
-scale = Vector3(5.3,0.2,2.2)
-mesh = SubResource("box")
+
+[node name="StepLower" type="MeshInstance3D" parent="." unique_id=1952790828]
+transform = Transform3D(5.3, 0, 0, 0, 0.2, 0, 0, 0, 2.2, 0, 0.1, 0.18)
 material_override = SubResource("stone")
-[node name="StepUpper" type="MeshInstance3D" parent="."]
-position = Vector3(0,0.27,0)
-scale = Vector3(4.7,0.14,1.8)
 mesh = SubResource("box")
+
+[node name="StepUpper" type="MeshInstance3D" parent="." unique_id=1558119741]
+transform = Transform3D(4.7, 0, 0, 0, 0.14, 0, 0, 0, 1.8, 0, 0.27, 0)
 material_override = SubResource("stone")
-[node name="AltarBody" type="MeshInstance3D" parent="."]
-position = Vector3(0,0.78,0)
-scale = Vector3(4.05,0.95,1.25)
 mesh = SubResource("box")
+
+[node name="AltarBody" type="MeshInstance3D" parent="." unique_id=723834980]
+transform = Transform3D(4.05, 0, 0, 0, 0.95, 0, 0, 0, 1.25, 0, 0.78, 0)
 material_override = SubResource("stone")
-[node name="AltarTop" type="MeshInstance3D" parent="."]
-position = Vector3(0,1.29,0)
-scale = Vector3(4.35,0.12,1.48)
 mesh = SubResource("box")
+
+[node name="AltarTop" type="MeshInstance3D" parent="." unique_id=708901544]
+transform = Transform3D(4.35, 0, 0, 0, 0.12, 0, 0, 0, 1.48, 0, 1.29, 0)
 material_override = SubResource("stone")
-[node name="FrontCloth" type="MeshInstance3D" parent="."]
-position = Vector3(0,0.78,0.64)
-scale = Vector3(2.25,0.75,0.025)
 mesh = SubResource("box")
+
+[node name="FrontCloth" type="MeshInstance3D" parent="." unique_id=1650702576]
+transform = Transform3D(2.25, 0, 0, 0, 0.75, 0, 0, 0, 0.025, 0, 0.78, 0.64)
 material_override = SubResource("cloth")
-[node name="CrossVertical" type="MeshInstance3D" parent="."]
-position = Vector3(0,1.95,-0.1)
-scale = Vector3(0.1,1.05,0.1)
 mesh = SubResource("box")
+
+[node name="CrossVertical" type="MeshInstance3D" parent="." unique_id=702126998]
+transform = Transform3D(0.1, 0, 0, 0, 1.05, 0, 0, 0, 0.1, 0, 1.8411014, -0.1)
 material_override = SubResource("gold")
-[node name="CrossHorizontal" type="MeshInstance3D" parent="."]
-position = Vector3(0,2.08,-0.1)
-scale = Vector3(0.62,0.1,0.1)
 mesh = SubResource("box")
+
+[node name="CrossHorizontal" type="MeshInstance3D" parent="." unique_id=4635498]
+transform = Transform3D(0.62, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 2.0867064, -0.1)
 material_override = SubResource("gold")
-[node name="CandleLeft" type="MeshInstance3D" parent="."]
-position = Vector3(-1.45,1.54,0)
+mesh = SubResource("box")
+
+[node name="CandleLeft" type="MeshInstance3D" parent="." unique_id=1710266449]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6268817, 1.5165749, -0.23119617)
+material_override = SubResource("gold")
 mesh = SubResource("candle")
+
+[node name="Flame" type="MeshInstance3D" parent="CandleLeft"]
+position = Vector3(0, 0.225, 0)
+mesh = SubResource("flame_mesh")
+
+[node name="CandleLeft2" type="MeshInstance3D" parent="." unique_id=121800721]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5810921, 1.4211253, -0.33491957)
 material_override = SubResource("gold")
-[node name="CandleRight" type="MeshInstance3D" parent="."]
-position = Vector3(1.45,1.54,0)
 mesh = SubResource("candle")
+
+[node name="Flame" type="MeshInstance3D" parent="CandleLeft2"]
+position = Vector3(0, 0.225, 0)
+mesh = SubResource("flame_mesh")
+
+[node name="CandleLeft3" type="MeshInstance3D" parent="." unique_id=990902001]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4508104, 1.4850568, -0.20109761)
 material_override = SubResource("gold")
+mesh = SubResource("candle")
+
+[node name="Flame" type="MeshInstance3D" parent="CandleLeft3"]
+position = Vector3(0, 0.225, 0)
+mesh = SubResource("flame_mesh")
+
+[node name="CandleRight" type="MeshInstance3D" parent="." unique_id=1212574436]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5684971, 1.5311816, 0.18928385)
+material_override = SubResource("gold")
+mesh = SubResource("candle")
+
+[node name="Flame" type="MeshInstance3D" parent="CandleRight"]
+position = Vector3(0, 0.225, 0)
+mesh = SubResource("flame_mesh")
+
+[node name="CandleRight2" type="MeshInstance3D" parent="." unique_id=365450816]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6818231, 1.4106281, 0.055783987)
+material_override = SubResource("gold")
+mesh = SubResource("candle")
+
+[node name="Flame" type="MeshInstance3D" parent="CandleRight2"]
+position = Vector3(0, 0.225, 0)
+mesh = SubResource("flame_mesh")
+
+[node name="CandleRight3" type="MeshInstance3D" parent="." unique_id=230700329]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2331965, 1.2856975, -0.34266186)
+material_override = SubResource("gold")
+mesh = SubResource("candle")
+
+[node name="Flame" type="MeshInstance3D" parent="CandleRight3"]
+position = Vector3(0, 0.225, 0)
+mesh = SubResource("flame_mesh")
+
+[node name="CandleRight4" type="MeshInstance3D" parent="." unique_id=305378230]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8620498, 1.2856975, 0.23290682)
+material_override = SubResource("gold")
+mesh = SubResource("candle")
+
+[node name="Flame" type="MeshInstance3D" parent="CandleRight4"]
+position = Vector3(0, 0.225, 0)
+mesh = SubResource("flame_mesh")
+
+[node name="CandleRight5" type="MeshInstance3D" parent="." unique_id=1248258636]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.633635, 1.2856975, 0.11283326)
+material_override = SubResource("gold")
+mesh = SubResource("candle")
+
+[node name="Flame" type="MeshInstance3D" parent="CandleRight5"]
+position = Vector3(0, 0.225, 0)
+mesh = SubResource("flame_mesh")
+
+[node name="LeftCandleLight" type="OmniLight3D" parent="."]
+position = Vector3(-1.5, 1.75, 0)
+light_color = Color(1, 0.48, 0.16, 1)
+light_energy = 1.35
+omni_range = 3.8
+omni_attenuation = 1.45
+shadow_enabled = false
+
+[node name="RightCandleLight" type="OmniLight3D" parent="."]
+position = Vector3(1.5, 1.75, 0)
+light_color = Color(1, 0.48, 0.16, 1)
+light_energy = 1.35
+omni_range = 3.8
+omni_attenuation = 1.45
+shadow_enabled = false
