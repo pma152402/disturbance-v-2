@@ -150,7 +150,7 @@
 [ext_resource type="PackedScene" path="res://house_props/detailed_patio_umbrella.tscn" id="182_umbrella"]
 [ext_resource type="PackedScene" uid="uid://cjloh6qj2tebp" path="res://house_props/detailed_charcoal_barbecue.tscn" id="183_barbecue"]
 [ext_resource type="PackedScene" path="res://house_props/modular_balcony_balustrade.tscn" id="184_balustrade"]
-[ext_resource type="PackedScene" path="res://house_props/fluted_tuscan_column.tscn" id="185_round_column"]
+[ext_resource type="PackedScene" uid="uid://br3awo5sw3vbm" path="res://house_props/fluted_tuscan_column.tscn" id="185_round_column"]
 [ext_resource type="PackedScene" path="res://house_props/square_masonry_column.tscn" id="186_square_column"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lower_floor"]
@@ -900,31 +900,83 @@ size = Vector3(0.22, 0.09, 2.8)
 material = SubResource("StandardMaterial3D_l4kqb")
 size = Vector3(0.22, 1.7, 0.09)
 
-[sub_resource type="BoxMesh" id="BoxMesh_4wycd"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1v73x"]
+render_priority = 0
+shader = ExtResource("37_wall_band")
+shader_parameter/upper_white = Color(0.96, 0.955, 0.94, 1)
+shader_parameter/lower_pastel_blue = Color(0.89, 0.885, 0.86, 1)
+shader_parameter/lower_stripe_blue = Color(0.8, 0.795, 0.77, 1)
+shader_parameter/border_blue = Color(0.85, 0.84, 0.81, 1)
+shader_parameter/stripe_width = 0.32
+shader_parameter/border_width = 0.075
+shader_parameter/ground_band_top = 1.38
+shader_parameter/upper_floor_start = 4.1
+shader_parameter/upper_band_top = 5.48
+
+[sub_resource type="BoxMesh" id="BoxMesh_ahffo"]
 material = SubResource("StandardMaterial3D_fshbq")
-size = Vector3(0.22, 4, 8.2)
+size = Vector3(0.22, 4, 6.653638)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y0aht"]
+render_priority = 0
+shader = ExtResource("37_wall_band")
+shader_parameter/upper_white = Color(0.96, 0.955, 0.94, 1)
+shader_parameter/lower_pastel_blue = Color(0.89, 0.885, 0.86, 1)
+shader_parameter/lower_stripe_blue = Color(0.8, 0.795, 0.77, 1)
+shader_parameter/border_blue = Color(0.85, 0.84, 0.81, 1)
+shader_parameter/stripe_width = 0.32
+shader_parameter/border_width = 0.075
+shader_parameter/ground_band_top = 1.38
+shader_parameter/upper_floor_start = 4.1
+shader_parameter/upper_band_top = 5.48
+
+[sub_resource type="BoxMesh" id="BoxMesh_skvqi"]
+material = SubResource("StandardMaterial3D_fshbq")
+size = Vector3(0.22, 4, 1.4858154)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8fu0m"]
-size = Vector3(0.22, 4, 14.238843)
+size = Vector3(0.22, 4, 9.662512)
 
 [sub_resource type="BoxMesh" id="BoxMesh_cbypp"]
 material = SubResource("StandardMaterial3D_l4kqb")
-size = Vector3(0.27, 0.24, 8.2)
+size = Vector3(0.27, 0.24, 11.064343)
 
-[sub_resource type="BoxMesh" id="BoxMesh_1qe1w"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0fnyj"]
+render_priority = 0
+shader = ExtResource("37_wall_band")
+shader_parameter/upper_white = Color(0.96, 0.955, 0.94, 1)
+shader_parameter/lower_pastel_blue = Color(0.89, 0.885, 0.86, 1)
+shader_parameter/lower_stripe_blue = Color(0.8, 0.795, 0.77, 1)
+shader_parameter/border_blue = Color(0.85, 0.84, 0.81, 1)
+shader_parameter/stripe_width = 0.32
+shader_parameter/border_width = 0.075
+shader_parameter/ground_band_top = 1.38
+shader_parameter/upper_floor_start = 4.1
+shader_parameter/upper_band_top = 5.48
+
+[sub_resource type="BoxMesh" id="BoxMesh_5bgcw"]
 material = SubResource("StandardMaterial3D_fshbq")
-size = Vector3(0.22, 1.05, 2.8)
+size = Vector3(0.22, 1.0040039, 2.8)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_uebv0"]
 size = Vector3(0.22, 1.05, 2.8)
 
-[sub_resource type="BoxMesh" id="BoxMesh_4a5gc"]
-material = SubResource("StandardMaterial3D_l4kqb")
-size = Vector3(0.27, 0.24, 2.8)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dtp7y"]
+render_priority = 0
+shader = ExtResource("37_wall_band")
+shader_parameter/upper_white = Color(0.96, 0.955, 0.94, 1)
+shader_parameter/lower_pastel_blue = Color(0.89, 0.885, 0.86, 1)
+shader_parameter/lower_stripe_blue = Color(0.8, 0.795, 0.77, 1)
+shader_parameter/border_blue = Color(0.85, 0.84, 0.81, 1)
+shader_parameter/stripe_width = 0.32
+shader_parameter/border_width = 0.075
+shader_parameter/ground_band_top = 1.38
+shader_parameter/upper_floor_start = 4.1
+shader_parameter/upper_band_top = 5.48
 
-[sub_resource type="BoxMesh" id="BoxMesh_mtehu"]
+[sub_resource type="BoxMesh" id="BoxMesh_cdto2"]
 material = SubResource("StandardMaterial3D_fshbq")
-size = Vector3(0.22, 1.25, 2.8)
+size = Vector3(0.22, 1.2045898, 2.8)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g7iy2"]
 size = Vector3(0.22, 1.25, 2.8)
@@ -952,16 +1004,29 @@ size = Vector3(0.22, 0.09, 2.8)
 material = SubResource("StandardMaterial3D_l4kqb")
 size = Vector3(0.22, 1.7, 0.09)
 
-[sub_resource type="BoxMesh" id="BoxMesh_ng16w"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ua2yh"]
+render_priority = 0
+shader = ExtResource("37_wall_band")
+shader_parameter/upper_white = Color(0.96, 0.955, 0.94, 1)
+shader_parameter/lower_pastel_blue = Color(0.89, 0.885, 0.86, 1)
+shader_parameter/lower_stripe_blue = Color(0.8, 0.795, 0.77, 1)
+shader_parameter/border_blue = Color(0.85, 0.84, 0.81, 1)
+shader_parameter/stripe_width = 0.32
+shader_parameter/border_width = 0.075
+shader_parameter/ground_band_top = 1.38
+shader_parameter/upper_floor_start = 4.1
+shader_parameter/upper_band_top = 5.48
+
+[sub_resource type="BoxMesh" id="BoxMesh_jxxnf"]
 material = SubResource("StandardMaterial3D_fshbq")
-size = Vector3(0.22, 4, 4.1)
+size = Vector3(0.22, 4, 1.7677491)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8i74s"]
-size = Vector3(0.22, 4, 4.1)
+size = Vector3(0.22, 4, 1.7718017)
 
 [sub_resource type="BoxMesh" id="BoxMesh_6wlrl"]
 material = SubResource("StandardMaterial3D_l4kqb")
-size = Vector3(0.27, 0.24, 4.1)
+size = Vector3(0.27, 0.24, 1.7596191)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wb1fk"]
 material = SubResource("StandardMaterial3D_fshbq")
@@ -2753,87 +2818,93 @@ mesh = SubResource("BoxMesh_o12eh")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 6.2, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/Wall_09" unique_id=378979391]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0, 0)
-material_override = SubResource("ShaderMaterial_ghr3d")
-mesh = SubResource("BoxMesh_4wycd")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0, -0.7731811)
+material_override = SubResource("ShaderMaterial_1v73x")
+mesh = SubResource("BoxMesh_ahffo")
+
+[node name="Mesh2" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/Wall_09" unique_id=1289784722]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0, 6.078941)
+material_override = SubResource("ShaderMaterial_y0aht")
+mesh = SubResource("BoxMesh_skvqi")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/Wall_09" unique_id=663283244]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7181506, 0, 0.046178818)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7181506, 0, -2.2419868)
 shape = SubResource("BoxShape3D_8fu0m")
 
 [node name="WallBaseboard_09" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls" unique_id=1686699187]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2794333, 4.3199997, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2794333, 4.3199997, 1.4321716)
 mesh = SubResource("BoxMesh_cbypp")
 
 [node name="WindowLowerWall_07" type="StaticBody3D" parent="UpperFloor/ExteriorWalls" unique_id=2079596676]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 4.725, 5.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_07" unique_id=1244906811]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0, 0)
-material_override = SubResource("ShaderMaterial_ghr3d")
-mesh = SubResource("BoxMesh_1qe1w")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, -0.022997856, -1.5561678)
+material_override = SubResource("ShaderMaterial_0fnyj")
+mesh = SubResource("BoxMesh_5bgcw")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowLowerWall_07" unique_id=1259056607]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7181506, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7181506, 0, -4.307187)
 shape = SubResource("BoxShape3D_uebv0")
-
-[node name="WindowLowerWallBaseboard_07" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls" unique_id=1150700106]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2794333, 4.3199997, 5.5)
-mesh = SubResource("BoxMesh_4a5gc")
 
 [node name="WindowUpperWall_07" type="StaticBody3D" parent="UpperFloor/ExteriorWalls" unique_id=339517287]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 7.575, 5.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_07" unique_id=872988444]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0, 0)
-material_override = SubResource("ShaderMaterial_ghr3d")
-mesh = SubResource("BoxMesh_mtehu")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0.022705078, -1.5561678)
+material_override = SubResource("ShaderMaterial_dtp7y")
+mesh = SubResource("BoxMesh_cdto2")
+
+[node name="Mesh2" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_07" unique_id=676545559]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0.022705078, 2.5209942)
+material_override = SubResource("ShaderMaterial_dtp7y")
+mesh = SubResource("BoxMesh_cdto2")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowUpperWall_07" unique_id=1313264108]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7181506, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7181506, 0, -4.2845397)
 shape = SubResource("BoxShape3D_g7iy2")
 
 [node name="WindowUpperWallBaseboard_07" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls" unique_id=599701299]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.276966, 7.0699997, 5.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.276966, 7.0699997, 3.9438322)
 mesh = SubResource("BoxMesh_kwdj8")
 
 [node name="WindowGlass_07" type="StaticBody3D" parent="UpperFloor/ExteriorWalls" unique_id=1661164365]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 6.1, 5.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/WindowGlass_07" unique_id=884074883]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0, -1.5561678)
 mesh = SubResource("BoxMesh_hw1xk")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/WindowGlass_07" unique_id=1263652427]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7105656, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7105656, 0, -1.5335205)
 shape = SubResource("BoxShape3D_ane1u")
 
 [node name="WindowFrameBottom_07" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls" unique_id=893182086]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2794333, 5.25, 5.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2794333, 5.25, 3.9664795)
 mesh = SubResource("BoxMesh_oohv1")
 
 [node name="WindowFrameTop_07" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls" unique_id=846105368]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.277546, 6.95, 5.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.277546, 6.95, 3.9664795)
 mesh = SubResource("BoxMesh_30kef")
 
 [node name="WindowFrameMiddle_07" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls" unique_id=743689241]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2794333, 6.1, 5.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2794333, 6.1, 3.9438322)
 mesh = SubResource("BoxMesh_nr5kl")
 
 [node name="Wall_10" type="StaticBody3D" parent="UpperFloor/ExteriorWalls" unique_id=1246576748]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 6.2, 8.95)
 
 [node name="Mesh" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls/Wall_10" unique_id=449413641]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0, 0)
-material_override = SubResource("ShaderMaterial_ghr3d")
-mesh = SubResource("BoxMesh_ng16w")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7205667, 0, 1.1661253)
+material_override = SubResource("ShaderMaterial_ua2yh")
+mesh = SubResource("BoxMesh_jxxnf")
 
 [node name="Collision" type="CollisionShape3D" parent="UpperFloor/ExteriorWalls/Wall_10" unique_id=1138393071]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.724269, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.724269, 0, 1.1640987)
 shape = SubResource("BoxShape3D_8i74s")
 
 [node name="WallBaseboard_10" type="MeshInstance3D" parent="UpperFloor/ExteriorWalls" unique_id=737646895]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2794333, 4.3199997, 8.95)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2794333, 4.3199997, 10.12019)
 mesh = SubResource("BoxMesh_6wlrl")
 
 [node name="Wall_11" type="StaticBody3D" parent="UpperFloor/ExteriorWalls" unique_id=92587509]
@@ -3221,6 +3292,9 @@ transform = Transform3D(0.63136756, 0, 0.007932322, 0, 1, 0, -0.009471224, 0, 0.
 [node name="UpperNorth_NorthWingEntranceDoor" parent="." unique_id=1108012119 instance=ExtResource("5_dtcv6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24414635, 4.1999993, -21.880274)
 
+[node name="UpperNorth_NorthWingEntranceDoor2" parent="." unique_id=1620606182 instance=ExtResource("5_dtcv6")]
+transform = Transform3D(0.0059003755, 0, -0.9999827, 0, 1, 0, 0.9999827, 0, 0.0059003755, -5.2605085, 4.1999993, 8.026448)
+
 [node name="UpperNorth_ArchiveDoor" parent="." unique_id=1772146927 instance=ExtResource("5_dtcv6")]
 transform = Transform3D(-3.6199901e-06, 0, -1, 0, 1, 0, 1, 0, -3.6199901e-06, -2.5, 4.2, -25.9)
 
@@ -3382,6 +3456,9 @@ transform = Transform3D(-0.89543986, 0, -0.44518238, 0, 1, 0, 0.44518238, 0, -0.
 [node name="BeachChairRight2" parent="NewFrontHouseDecor" unique_id=1657239854 instance=ExtResource("181_beach_chair")]
 transform = Transform3D(0.44119722, 0, 0.89741015, 0, 1, 0, -0.89741015, 0, 0.44119722, 11.394463, 0, -12.051167)
 
+[node name="BeachChairRight3" parent="NewFrontHouseDecor" unique_id=529811674 instance=ExtResource("181_beach_chair")]
+transform = Transform3D(0.8465752, 0, 0.53226906, 0, 1, 0, -0.53226906, 0, 0.8465752, 9.934429, 0, -9.464349)
+
 [node name="DetailedPatioUmbrella" parent="NewFrontHouseDecor" unique_id=1285606415 instance=ExtResource("182_umbrella")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.987336, 0, -12.080339)
 
@@ -3391,17 +3468,59 @@ transform = Transform3D(-0.68075657, 0, -0.7325099, 0, 1, 0, 0.7325099, 0, -0.68
 [node name="BalconyBalustradeSample" parent="NewFrontHouseDecor" unique_id=1376732484 instance=ExtResource("184_balustrade")]
 transform = Transform3D(0.0014823104, 0, 0.9984767, 0, 1, 0, -1.9312592, 0, 0.0007663665, -6.960331, 4.009446, 7.9983683)
 
+[node name="BalconyBalustradeSample4" parent="NewFrontHouseDecor" unique_id=1158204789 instance=ExtResource("184_balustrade")]
+transform = Transform3D(0.0011150693, 0, 0.9986763, 0, 1, 0, -1.4527915, 0, 0.0007665197, 11.0183525, -0.104537964, -8.500256)
+
+[node name="BalconyBalustradeSample5" parent="NewFrontHouseDecor" unique_id=1757636101 instance=ExtResource("184_balustrade")]
+transform = Transform3D(-1.125783, 0, 0.008278771, 0, 0.99999994, 0, -0.009312001, 0, -1.0008701, 4.841915, -0.104537964, -10.741826)
+
+[node name="BalconyBalustradeSample6" parent="NewFrontHouseDecor" unique_id=1945953165 instance=ExtResource("184_balustrade")]
+transform = Transform3D(-0.5924513, 0, 0.008311213, 0, 0.99999994, 0, -0.0049005067, 0, -1.0047922, 9.924362, -0.104537964, -10.741826)
+
 [node name="BalconyBalustradeSample2" parent="NewFrontHouseDecor" unique_id=809213168 instance=ExtResource("184_balustrade")]
 transform = Transform3D(0.48947376, 0, 0.008873726, 0, 0.9999999, 0, -0.0047141234, 0, 0.9213714, -6.212161, 4.009446, 5.0219836)
 
 [node name="BalconyBalustradeSample3" parent="NewFrontHouseDecor" unique_id=1759087772 instance=ExtResource("184_balustrade")]
 transform = Transform3D(0.48947376, 0, 0.008873726, 0, 0.9999999, 0, -0.0047141234, 0, 0.9213714, -6.212161, 4.009446, 10.956416)
 
-[node name="FlutedTuscanColumnSample" parent="NewFrontHouseDecor" unique_id=229093829 instance=ExtResource("185_round_column")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -20.5)
+[node name="FlutedTuscanColumnSample9" parent="NewFrontHouseDecor" unique_id=1691762666 instance=ExtResource("185_round_column")]
+transform = Transform3D(1, 0, 0, 0, 1.0109874, 0, 0, 0, 1, 2.5342877, 0, -11.473598)
+
+[node name="FlutedTuscanColumnSample13" parent="NewFrontHouseDecor" unique_id=693814136 instance=ExtResource("185_round_column")]
+transform = Transform3D(1, 0, 0, 0, 1.0109874, 0, 0, 0, 1, -2.0302243, 0, -11.473598)
+
+[node name="FlutedTuscanColumnSample10" parent="NewFrontHouseDecor" unique_id=1363419949 instance=ExtResource("185_round_column")]
+transform = Transform3D(1, 0, 0, 0, 1.0109874, 0, 0, 0, 1, 2.5342877, 0, -14.759351)
+
+[node name="FlutedTuscanColumnSample14" parent="NewFrontHouseDecor" unique_id=2050494253 instance=ExtResource("185_round_column")]
+transform = Transform3D(1, 0, 0, 0, 1.0109874, 0, 0, 0, 1, -2.0573585, 0, -14.759351)
+
+[node name="FlutedTuscanColumnSample11" parent="NewFrontHouseDecor" unique_id=434985838 instance=ExtResource("185_round_column")]
+transform = Transform3D(1, 0, 0, 0, 1.0109874, 0, 0, 0, 1, 2.5342877, 0, -18.113285)
+
+[node name="FlutedTuscanColumnSample15" parent="NewFrontHouseDecor" unique_id=883145912 instance=ExtResource("185_round_column")]
+transform = Transform3D(1, 0, 0, 0, 1.0109874, 0, 0, 0, 1, -2.0415614, 0, -18.113285)
+
+[node name="FlutedTuscanColumnSample12" parent="NewFrontHouseDecor" unique_id=805948053 instance=ExtResource("185_round_column")]
+transform = Transform3D(1, 0, 0, 0, 1.0109874, 0, 0, 0, 1, 2.5342877, 0, -21.341122)
+
+[node name="FlutedTuscanColumnSample16" parent="NewFrontHouseDecor" unique_id=1303142305 instance=ExtResource("185_round_column")]
+transform = Transform3D(1, 0, 0, 0, 1.0109874, 0, 0, 0, 1, -2.02795, 0, -21.341122)
+
+[node name="FlutedTuscanColumnSample2" parent="NewFrontHouseDecor" unique_id=826442491 instance=ExtResource("185_round_column")]
+transform = Transform3D(1, 0, 0, 0, 1.0191776, 0, 0, 0, 1, 12.579873, 0, -10.617683)
+
+[node name="FlutedTuscanColumnSample3" parent="NewFrontHouseDecor" unique_id=1226843508 instance=ExtResource("185_round_column")]
+transform = Transform3D(1, 0, 0, 0, 1.0191776, 0, 0, 0, 1, 12.579873, 0, 10.58313)
+
+[node name="FlutedTuscanColumnSample4" parent="NewFrontHouseDecor" unique_id=581980421 instance=ExtResource("185_round_column")]
+transform = Transform3D(1, 0, 0, 0, 1.0191776, 0, 0, 0, 1, 12.579873, 0, 3.3422625)
+
+[node name="FlutedTuscanColumnSample5" parent="NewFrontHouseDecor" unique_id=936592516 instance=ExtResource("185_round_column")]
+transform = Transform3D(1, 0, 0, 0, 1.0191776, 0, 0, 0, 1, 12.579873, 0, -3.6213264)
 
 [node name="SquareMasonryColumnSample" parent="NewFrontHouseDecor" unique_id=52758632 instance=ExtResource("186_square_column")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, -20.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.22301, -0.27152604, -35.78524)
 
 [node name="OutdoorDecorationStaging" type="Node3D" parent="." unique_id=427412402]
 editor_description = "Decoraciones restauradas en las posiciones exactas anteriores al borrado."
@@ -3612,7 +3731,7 @@ transform = Transform3D(1.2626045, 0, 0.030038595, 0, 1.15056, 0, -0.038086865, 
 transform = Transform3D(1.2626045, 0, 0.030038595, 0, 1.15056, 0, -0.038086865, 0, 0.99580073, 0.007434452, 4.4140344, 10.633368)
 
 [node name="LivingRoomCurtains7" parent="FurnitureAndPickups" unique_id=2120836925 instance=ExtResource("34_curtains")]
-transform = Transform3D(-0.007478635, 0, -0.99623615, 0, 1.15056, 0, 1.2631567, 0, -0.0058983574, -4.9545584, 4.4140344, 5.523489)
+transform = Transform3D(-0.007478635, 0, -0.99623615, 0, 1.15056, 0, 1.2631567, 0, -0.0058983574, -4.9545584, 4.4140344, 3.9673212)
 
 [node name="LivingRoomCurtains8" parent="FurnitureAndPickups" unique_id=1851680617 instance=ExtResource("34_curtains")]
 transform = Transform3D(-0.007478635, 0, -0.99623615, 0, 1.15056, 0, 1.2631567, 0, -0.0058983574, -4.8895054, 4.4140344, -5.464099)

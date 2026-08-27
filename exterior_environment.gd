@@ -3,6 +3,8 @@ extends Node3D
 
 @export var tree_mesh: ArrayMesh
 @export var grass_mesh: ArrayMesh
+@export var fence_piece_mesh: BoxMesh
+@onready var fence_visual: MultiMeshInstance3D = $Fence/Visual
 @onready var trees: MultiMeshInstance3D = $Trees
 @onready var grass: MultiMeshInstance3D = $Vegetation/Grass
 @onready var tall_grass: MultiMeshInstance3D = $Vegetation/TallGrass
@@ -11,8 +13,55 @@ extends Node3D
 
 
 func _ready() -> void:
+	_build_fence_instances()
 	_build_tree_instances()
 	_build_vegetation_instances()
+
+
+func _build_fence_instances() -> void:
+	if fence_piece_mesh == null or not is_instance_valid(fence_visual):
+		return
+	var pieces: Array[Transform3D] = []
+	# La ampliacion llega hasta Z=-38.2: el limite norte queda detras de ella.
+	_add_horizontal_fence(pieces, -24.0, 24.0, -40.0)
+	_add_vertical_fence(pieces, -24.0, -40.0, 24.0)
+	_add_vertical_fence(pieces, 24.0, -40.0, 24.0)
+	# Entrada principal abierta entre X=-2.7 y X=2.7.
+	_add_horizontal_fence(pieces, -24.0, -2.7, 24.0)
+	_add_horizontal_fence(pieces, 2.7, 24.0, 24.0)
+	var generated := MultiMesh.new()
+	generated.transform_format = MultiMesh.TRANSFORM_3D
+	generated.mesh = fence_piece_mesh
+	generated.instance_count = pieces.size()
+	fence_visual.multimesh = generated
+	for index in pieces.size():
+		generated.set_instance_transform(index, pieces[index])
+
+
+func _add_horizontal_fence(pieces: Array[Transform3D], from_x: float, to_x: float, z: float) -> void:
+	var length := to_x - from_x
+	var center_x := (from_x + to_x) * 0.5
+	_add_fence_piece(pieces, Vector3(center_x, 0.56, z), Vector3(length, 0.1, 0.11))
+	_add_fence_piece(pieces, Vector3(center_x, 1.17, z), Vector3(length, 0.1, 0.11))
+	var post_count := maxi(1, int(ceil(absf(length) / 1.15)))
+	for index in post_count + 1:
+		var ratio := float(index) / float(post_count)
+		_add_fence_piece(pieces, Vector3(lerpf(from_x, to_x, ratio), 0.76, z), Vector3(0.16, 1.52, 0.16))
+
+
+func _add_vertical_fence(pieces: Array[Transform3D], x: float, from_z: float, to_z: float) -> void:
+	var length := to_z - from_z
+	var center_z := (from_z + to_z) * 0.5
+	_add_fence_piece(pieces, Vector3(x, 0.56, center_z), Vector3(0.11, 0.1, length))
+	_add_fence_piece(pieces, Vector3(x, 1.17, center_z), Vector3(0.11, 0.1, length))
+	var post_count := maxi(1, int(ceil(absf(length) / 1.15)))
+	for index in post_count + 1:
+		var ratio := float(index) / float(post_count)
+		_add_fence_piece(pieces, Vector3(x, 0.76, lerpf(from_z, to_z, ratio)), Vector3(0.16, 1.52, 0.16))
+
+
+func _add_fence_piece(pieces: Array[Transform3D], at: Vector3, piece_scale: Vector3) -> void:
+	pieces.append(Transform3D(Basis.IDENTITY.scaled(piece_scale), at))
 
 
 func _build_tree_instances() -> void:
@@ -93,7 +142,7 @@ func _add_outer_vegetation(transforms: Array[Transform3D], rng: RandomNumberGene
 		var plant_position := Vector3(rng.randf_range(-52.0, 52.0), 0.02, rng.randf_range(-52.0, 52.0))
 		if _is_inside_house_footprint(plant_position, 0.75):
 			continue
-		if absf(plant_position.x) < 25.5 and absf(plant_position.z) < 25.5:
+		if absf(plant_position.x) < 25.5 and plant_position.z > -41.5 and plant_position.z < 25.5:
 			continue
 		if plant_position.z > 23.5 and absf(plant_position.x) < 7.5:
 			continue
@@ -109,8 +158,8 @@ func _add_forest_outside_fence(transforms: Array[Transform3D], rng: RandomNumber
 		var tree_position := Vector3(rng.randf_range(-51.5, 51.5), 0.0, rng.randf_range(-51.5, 51.5))
 		if _is_inside_house_footprint(tree_position, 3.2):
 			continue
-		# The fence is at x/z +/-24. Keep even the widest foliage outside it.
-		if absf(tree_position.x) < 27.5 and absf(tree_position.z) < 27.5:
+		# El cercado es asimetrico: al norte llega a Z=-40 para rodear la ampliacion.
+		if absf(tree_position.x) < 27.5 and tree_position.z > -43.5 and tree_position.z < 27.5:
 			continue
 		# Preserve the route leading through the south gate.
 		if tree_position.z > 23.5 and absf(tree_position.x) < 7.5:
