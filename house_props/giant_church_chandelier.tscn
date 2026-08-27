@@ -1,0 +1,404 @@
+[gd_scene format=3 uid="uid://boe6xhomr1c6c"]
+
+[ext_resource type="Script" uid="uid://deqmq2q42f2st" path="res://house_props/toggleable_church_fixture.gd" id="1_controller"]
+
+[sub_resource type="StandardMaterial3D" id="aged_brass"]
+albedo_color = Color(0.32, 0.19, 0.055, 1)
+metallic = 0.72
+roughness = 0.43
+
+[sub_resource type="CylinderMesh" id="canopy"]
+material = SubResource("aged_brass")
+top_radius = 0.28
+height = 0.16
+radial_segments = 18
+
+[sub_resource type="StandardMaterial3D" id="dark_iron"]
+albedo_color = Color(0.075, 0.055, 0.042, 1)
+metallic = 0.58
+roughness = 0.7
+
+[sub_resource type="TorusMesh" id="chain_link"]
+material = SubResource("dark_iron")
+inner_radius = 0.075
+outer_radius = 0.11
+rings = 10
+ring_segments = 8
+
+[sub_resource type="CylinderMesh" id="central_stem"]
+material = SubResource("aged_brass")
+top_radius = 0.055
+bottom_radius = 0.075
+height = 1.05
+radial_segments = 10
+
+[sub_resource type="TorusMesh" id="upper_ring"]
+material = SubResource("dark_iron")
+inner_radius = 0.57
+outer_radius = 0.65
+rings = 20
+ring_segments = 8
+
+[sub_resource type="TorusMesh" id="main_ring"]
+material = SubResource("aged_brass")
+inner_radius = 0.94
+outer_radius = 1.08
+rings = 24
+ring_segments = 10
+
+[sub_resource type="CylinderMesh" id="candle_cup"]
+material = SubResource("aged_brass")
+top_radius = 0.2
+bottom_radius = 0.08
+height = 0.16
+radial_segments = 14
+
+[sub_resource type="CylinderMesh" id="arm_rod"]
+material = SubResource("aged_brass")
+top_radius = 0.055
+bottom_radius = 0.075
+height = 1.3
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="arm_upturn"]
+material = SubResource("aged_brass")
+top_radius = 0.045
+bottom_radius = 0.06
+height = 0.58
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="wax"]
+albedo_color = Color(0.82, 0.74, 0.59, 1)
+roughness = 0.92
+
+[sub_resource type="CylinderMesh" id="candle"]
+material = SubResource("wax")
+top_radius = 0.075
+bottom_radius = 0.085
+height = 0.54
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="bulb_off"]
+albedo_color = Color(0.48, 0.39, 0.25, 1)
+roughness = 0.38
+
+[sub_resource type="SphereMesh" id="bulb_off_mesh"]
+material = SubResource("bulb_off")
+radius = 0.11
+height = 0.25
+radial_segments = 10
+rings = 6
+
+[sub_resource type="StandardMaterial3D" id="bulb_glow"]
+albedo_color = Color(1, 0.72, 0.32, 1)
+roughness = 0.22
+emission_enabled = true
+emission = Color(1, 0.43, 0.1, 1)
+emission_energy_multiplier = 3.2
+
+[sub_resource type="SphereMesh" id="bulb_glow_mesh"]
+material = SubResource("bulb_glow")
+radius = 0.09
+height = 0.21
+radial_segments = 10
+rings = 6
+
+[node name="GiantChurchChandelier" type="Node3D" unique_id=1409698728 groups=["church_lights"]]
+editor_description = "Candelabro monumental de ocho brazos: dos aros estructurales, cadena real, brazos unidos, copas y velas electricas. Se entrega apagado."
+script = ExtResource("1_controller")
+light_paths = Array[NodePath]([NodePath("WarmVolume"), NodePath("DownwardHalo")])
+glow_mesh_paths = Array[NodePath]([NodePath("Arm0/Glow"), NodePath("Arm45/Glow"), NodePath("Arm90/Glow"), NodePath("Arm135/Glow"), NodePath("Arm180/Glow"), NodePath("Arm225/Glow"), NodePath("Arm270/Glow"), NodePath("Arm315/Glow")])
+
+[node name="CeilingCanopy" type="MeshInstance3D" parent="." unique_id=913813237]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52194685, 0)
+mesh = SubResource("canopy")
+
+[node name="ChainLink1" type="MeshInstance3D" parent="." unique_id=612792121]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -0.3, 0)
+mesh = SubResource("chain_link")
+
+[node name="ChainLink2" type="MeshInstance3D" parent="." unique_id=1309799824]
+transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 0, -0.47, 0)
+mesh = SubResource("chain_link")
+
+[node name="ChainLink3" type="MeshInstance3D" parent="." unique_id=1119045707]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -0.64, 0)
+mesh = SubResource("chain_link")
+
+[node name="ChainLink4" type="MeshInstance3D" parent="." unique_id=1417620289]
+transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 0, -0.81, 0)
+mesh = SubResource("chain_link")
+
+[node name="ChainLink5" type="MeshInstance3D" parent="." unique_id=637881906]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.3741915, 0)
+mesh = SubResource("chain_link")
+
+[node name="ChainLink6" type="MeshInstance3D" parent="." unique_id=206123822]
+transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 0, 0.2041915, 0)
+mesh = SubResource("chain_link")
+
+[node name="ChainLink7" type="MeshInstance3D" parent="." unique_id=1769301407]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.03419152, 0)
+mesh = SubResource("chain_link")
+
+[node name="ChainLink8" type="MeshInstance3D" parent="." unique_id=1835759371]
+transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 0, -0.1358085, 0)
+mesh = SubResource("chain_link")
+
+[node name="CentralStem" type="MeshInstance3D" parent="." unique_id=653682149]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.38, 0)
+mesh = SubResource("central_stem")
+
+[node name="UpperBraceRing" type="MeshInstance3D" parent="." unique_id=97780569]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.42, 0)
+mesh = SubResource("upper_ring")
+
+[node name="MainStructuralRing" type="MeshInstance3D" parent="." unique_id=1544480574]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.02, 0)
+mesh = SubResource("main_ring")
+
+[node name="LowerFinial" type="MeshInstance3D" parent="." unique_id=2126921619]
+transform = Transform3D(0.42, 0, 0, 0, 0.52, 0, 0, 0, 0.42, 0, -2.32, 0)
+mesh = SubResource("candle_cup")
+
+[node name="Arm0" type="Node3D" parent="." unique_id=1284012073]
+
+[node name="RadialArm" type="MeshInstance3D" parent="Arm0" unique_id=581617615]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 1.5, -2.02, 0)
+mesh = SubResource("arm_rod")
+
+[node name="Upturn" type="MeshInstance3D" parent="Arm0" unique_id=1743838613]
+transform = Transform3D(0.90630776, 0.42261827, 0, -0.42261827, 0.90630776, 0, 0, 0, 1, 2.08, -1.79, 0)
+mesh = SubResource("arm_upturn")
+
+[node name="Cup" type="MeshInstance3D" parent="Arm0" unique_id=875452531]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.55, 0)
+mesh = SubResource("candle_cup")
+
+[node name="Candle" type="MeshInstance3D" parent="Arm0" unique_id=278308907]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.24, 0)
+mesh = SubResource("candle")
+
+[node name="Bulb" type="MeshInstance3D" parent="Arm0" unique_id=269278273]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+mesh = SubResource("bulb_off_mesh")
+
+[node name="Glow" type="MeshInstance3D" parent="Arm0" unique_id=606515369]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+visible = false
+mesh = SubResource("bulb_glow_mesh")
+
+[node name="Arm45" type="Node3D" parent="." unique_id=1469272]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 0, 0, 0)
+
+[node name="RadialArm" type="MeshInstance3D" parent="Arm45" unique_id=1197310505]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 1.5, -2.02, 0)
+mesh = SubResource("arm_rod")
+
+[node name="Upturn" type="MeshInstance3D" parent="Arm45" unique_id=1907303931]
+transform = Transform3D(0.90630776, 0.42261827, 0, -0.42261827, 0.90630776, 0, 0, 0, 1, 2.08, -1.79, 0)
+mesh = SubResource("arm_upturn")
+
+[node name="Cup" type="MeshInstance3D" parent="Arm45" unique_id=1252846324]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.55, 0)
+mesh = SubResource("candle_cup")
+
+[node name="Candle" type="MeshInstance3D" parent="Arm45" unique_id=421210440]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.24, 0)
+mesh = SubResource("candle")
+
+[node name="Bulb" type="MeshInstance3D" parent="Arm45" unique_id=852706307]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+mesh = SubResource("bulb_off_mesh")
+
+[node name="Glow" type="MeshInstance3D" parent="Arm45" unique_id=950100836]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+visible = false
+mesh = SubResource("bulb_glow_mesh")
+
+[node name="Arm90" type="Node3D" parent="." unique_id=1511680306]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+
+[node name="RadialArm" type="MeshInstance3D" parent="Arm90" unique_id=861585489]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 1.5, -2.02, 0)
+mesh = SubResource("arm_rod")
+
+[node name="Upturn" type="MeshInstance3D" parent="Arm90" unique_id=1593988281]
+transform = Transform3D(0.90630776, 0.42261827, 0, -0.42261827, 0.90630776, 0, 0, 0, 1, 2.08, -1.79, 0)
+mesh = SubResource("arm_upturn")
+
+[node name="Cup" type="MeshInstance3D" parent="Arm90" unique_id=183360527]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.55, 0)
+mesh = SubResource("candle_cup")
+
+[node name="Candle" type="MeshInstance3D" parent="Arm90" unique_id=261855925]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.24, 0)
+mesh = SubResource("candle")
+
+[node name="Bulb" type="MeshInstance3D" parent="Arm90" unique_id=508466703]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+mesh = SubResource("bulb_off_mesh")
+
+[node name="Glow" type="MeshInstance3D" parent="Arm90" unique_id=323416126]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+visible = false
+mesh = SubResource("bulb_glow_mesh")
+
+[node name="Arm135" type="Node3D" parent="." unique_id=1199491131]
+transform = Transform3D(-0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, -0.70710677, 0, 0, 0)
+
+[node name="RadialArm" type="MeshInstance3D" parent="Arm135" unique_id=999710110]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 1.5, -2.02, 0)
+mesh = SubResource("arm_rod")
+
+[node name="Upturn" type="MeshInstance3D" parent="Arm135" unique_id=735318065]
+transform = Transform3D(0.90630776, 0.42261827, 0, -0.42261827, 0.90630776, 0, 0, 0, 1, 2.08, -1.79, 0)
+mesh = SubResource("arm_upturn")
+
+[node name="Cup" type="MeshInstance3D" parent="Arm135" unique_id=824068367]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.55, 0)
+mesh = SubResource("candle_cup")
+
+[node name="Candle" type="MeshInstance3D" parent="Arm135" unique_id=294363771]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.24, 0)
+mesh = SubResource("candle")
+
+[node name="Bulb" type="MeshInstance3D" parent="Arm135" unique_id=586155961]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+mesh = SubResource("bulb_off_mesh")
+
+[node name="Glow" type="MeshInstance3D" parent="Arm135" unique_id=2123925573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+visible = false
+mesh = SubResource("bulb_glow_mesh")
+
+[node name="Arm180" type="Node3D" parent="." unique_id=1672663940]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+
+[node name="RadialArm" type="MeshInstance3D" parent="Arm180" unique_id=442693557]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 1.5, -2.02, 0)
+mesh = SubResource("arm_rod")
+
+[node name="Upturn" type="MeshInstance3D" parent="Arm180" unique_id=407274170]
+transform = Transform3D(0.90630776, 0.42261827, 0, -0.42261827, 0.90630776, 0, 0, 0, 1, 2.08, -1.79, 0)
+mesh = SubResource("arm_upturn")
+
+[node name="Cup" type="MeshInstance3D" parent="Arm180" unique_id=1329490527]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.55, 0)
+mesh = SubResource("candle_cup")
+
+[node name="Candle" type="MeshInstance3D" parent="Arm180" unique_id=886018919]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.24, 0)
+mesh = SubResource("candle")
+
+[node name="Bulb" type="MeshInstance3D" parent="Arm180" unique_id=1956512388]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+mesh = SubResource("bulb_off_mesh")
+
+[node name="Glow" type="MeshInstance3D" parent="Arm180" unique_id=1323528799]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+visible = false
+mesh = SubResource("bulb_glow_mesh")
+
+[node name="Arm225" type="Node3D" parent="." unique_id=1275879160]
+transform = Transform3D(-0.7071068, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, -0.7071068, 0, 0, 0)
+
+[node name="RadialArm" type="MeshInstance3D" parent="Arm225" unique_id=733609795]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 1.5, -2.02, 0)
+mesh = SubResource("arm_rod")
+
+[node name="Upturn" type="MeshInstance3D" parent="Arm225" unique_id=1720213311]
+transform = Transform3D(0.90630776, 0.42261827, 0, -0.42261827, 0.90630776, 0, 0, 0, 1, 2.08, -1.79, 0)
+mesh = SubResource("arm_upturn")
+
+[node name="Cup" type="MeshInstance3D" parent="Arm225" unique_id=1019599881]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.55, 0)
+mesh = SubResource("candle_cup")
+
+[node name="Candle" type="MeshInstance3D" parent="Arm225" unique_id=2059978184]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.24, 0)
+mesh = SubResource("candle")
+
+[node name="Bulb" type="MeshInstance3D" parent="Arm225" unique_id=772974062]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+mesh = SubResource("bulb_off_mesh")
+
+[node name="Glow" type="MeshInstance3D" parent="Arm225" unique_id=2113159345]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+visible = false
+mesh = SubResource("bulb_glow_mesh")
+
+[node name="Arm270" type="Node3D" parent="." unique_id=1482098861]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 0, 0, 0)
+
+[node name="RadialArm" type="MeshInstance3D" parent="Arm270" unique_id=1299791918]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 1.5, -2.02, 0)
+mesh = SubResource("arm_rod")
+
+[node name="Upturn" type="MeshInstance3D" parent="Arm270" unique_id=2095904270]
+transform = Transform3D(0.90630776, 0.42261827, 0, -0.42261827, 0.90630776, 0, 0, 0, 1, 2.08, -1.79, 0)
+mesh = SubResource("arm_upturn")
+
+[node name="Cup" type="MeshInstance3D" parent="Arm270" unique_id=925942025]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.55, 0)
+mesh = SubResource("candle_cup")
+
+[node name="Candle" type="MeshInstance3D" parent="Arm270" unique_id=1133054581]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.24, 0)
+mesh = SubResource("candle")
+
+[node name="Bulb" type="MeshInstance3D" parent="Arm270" unique_id=1946572001]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+mesh = SubResource("bulb_off_mesh")
+
+[node name="Glow" type="MeshInstance3D" parent="Arm270" unique_id=2072383721]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+visible = false
+mesh = SubResource("bulb_glow_mesh")
+
+[node name="Arm315" type="Node3D" parent="." unique_id=905521383]
+transform = Transform3D(0.70710665, 0, -0.7071069, 0, 1, 0, 0.7071069, 0, 0.70710665, 0, 0, 0)
+
+[node name="RadialArm" type="MeshInstance3D" parent="Arm315" unique_id=1176312209]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 1.5, -2.02, 0)
+mesh = SubResource("arm_rod")
+
+[node name="Upturn" type="MeshInstance3D" parent="Arm315" unique_id=956880804]
+transform = Transform3D(0.90630776, 0.42261827, 0, -0.42261827, 0.90630776, 0, 0, 0, 1, 2.08, -1.79, 0)
+mesh = SubResource("arm_upturn")
+
+[node name="Cup" type="MeshInstance3D" parent="Arm315" unique_id=1855795809]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.55, 0)
+mesh = SubResource("candle_cup")
+
+[node name="Candle" type="MeshInstance3D" parent="Arm315" unique_id=678208969]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -1.24, 0)
+mesh = SubResource("candle")
+
+[node name="Bulb" type="MeshInstance3D" parent="Arm315" unique_id=1898467018]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+mesh = SubResource("bulb_off_mesh")
+
+[node name="Glow" type="MeshInstance3D" parent="Arm315" unique_id=560575151]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.92, 0)
+visible = false
+mesh = SubResource("bulb_glow_mesh")
+
+[node name="WarmVolume" type="OmniLight3D" parent="." unique_id=765375773]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.25, 0)
+visible = false
+light_color = Color(1, 0.62, 0.3, 1)
+light_energy = 5.8
+shadow_enabled = true
+omni_range = 11.5
+omni_attenuation = 1.45
+
+[node name="DownwardHalo" type="SpotLight3D" parent="." unique_id=1597857093]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, -1.7, 0)
+visible = false
+light_color = Color(1, 0.7, 0.4, 1)
+light_energy = 4.2
+shadow_enabled = true
+spot_range = 12.0
+spot_attenuation = 0.7
+spot_angle = 58.0

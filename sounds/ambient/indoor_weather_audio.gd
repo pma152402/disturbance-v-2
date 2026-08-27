@@ -8,7 +8,7 @@ extends Node
 @export_group("Indoor house bounds")
 @export var house_min_x := -12.65
 @export var house_max_x := 12.65
-@export var house_min_z := -10.65
+@export var house_min_z := -38.4
 @export var house_max_z := 10.65
 @export_group("Acoustics")
 @export_range(100.0, 20000.0, 10.0) var indoor_cutoff_hz := 2100.0

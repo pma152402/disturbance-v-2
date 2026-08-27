@@ -1,0 +1,164 @@
+[gd_scene load_steps=2 format=3 uid="uid://dywtgm4qi3m8f"]
+
+[ext_resource type="Script" path="res://house_props/old_vertical_iron_ladder.gd" id="1_ladder"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_du3ly"]
+size = Vector3(0.60445434, 0.09, 0.13430664)
+
+[sub_resource type="StandardMaterial3D" id="aged_iron"]
+albedo_color = Color(0.105, 0.09, 0.075, 1)
+metallic = 0.72
+roughness = 0.76
+
+[sub_resource type="BoxMesh" id="box"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h0olw"]
+albedo_color = Color(0.105, 0.09, 0.075, 1)
+metallic = 0.72
+roughness = 0.76
+
+[sub_resource type="BoxMesh" id="BoxMesh_lgxhp"]
+size = Vector3(0.54193115, 1, 1)
+
+[sub_resource type="BoxShape3D" id="rung_shape"]
+size = Vector3(1.12, 0.09, 0.13)
+
+[node name="OldVerticalIronLadder" type="StaticBody3D" unique_id=938422698]
+collision_layer = 3
+script = ExtResource("1_ladder")
+editor_description = "Escalera vertical antigua de hierro: largueros, once peldaños rectangulares soldados y hueco central abierto. Cada pieza es seleccionable en su escena."
+
+[node name="Rung07Collision" type="CollisionShape3D" parent="." unique_id=1519854980]
+transform = Transform3D(-0.0010107653, 0, 0.99999946, 0, 1, 0, -0.99999946, 0, -0.0010107653, -0.48938325, 4.364927, -0.24062678)
+shape = SubResource("BoxShape3D_du3ly")
+
+[node name="Rung07Collision2" type="CollisionShape3D" parent="." unique_id=947133308]
+transform = Transform3D(-0.0010107653, 0, 0.99999946, 0, 1, 0, -0.99999946, 0, -0.0010107653, 0.48223802, 4.364927, -0.24062678)
+shape = SubResource("BoxShape3D_du3ly")
+
+[node name="Rung11" type="MeshInstance3D" parent="." unique_id=1864347729]
+transform = Transform3D(1.12, 0, 0, 0, 0.09, 0, 0, 0, 0.13, 0, 4.36, 0)
+material_override = SubResource("aged_iron")
+mesh = SubResource("box")
+
+[node name="Rung12" type="MeshInstance3D" parent="." unique_id=1316303253]
+transform = Transform3D(0.0015212521, 0, 0.12999988, 0, 0.09, 0, -1.1199988, 0, 0.0001765741, -0.48827574, 4.36, -0.23464003)
+material_override = SubResource("StandardMaterial3D_h0olw")
+mesh = SubResource("BoxMesh_lgxhp")
+
+[node name="Rung13" type="MeshInstance3D" parent="." unique_id=161099749]
+transform = Transform3D(0.0015212521, 0, 0.12999988, 0, 0.09, 0, -1.1199988, 0, 0.0001765741, 0.4921181, 4.36, -0.23464003)
+material_override = SubResource("StandardMaterial3D_h0olw")
+mesh = SubResource("BoxMesh_lgxhp")
+
+[node name="Rung11Collision" type="CollisionShape3D" parent="." unique_id=1945890]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.36, 0)
+shape = SubResource("rung_shape")
+
+[node name="Rung07Collision3" type="CollisionShape3D" parent="." unique_id=1988009433]
+transform = Transform3D(-0.0010071925, 0.084007464, 0.9964647, 8.491182e-05, 0.99646515, -0.08400741, -0.9999996, 0, -0.0010107654, -0.4873794, 3.8042014, -0.24062678)
+shape = SubResource("BoxShape3D_du3ly")
+
+[node name="Rung07Collision5" type="CollisionShape3D" parent="." unique_id=1488482243]
+transform = Transform3D(-0.0010107653, 0, 0.99999946, 0, 1, 0, -0.99999946, 0, -0.0010107653, -0.48938325, 2.4805472, -0.24062678)
+shape = SubResource("BoxShape3D_du3ly")
+
+[node name="Rung07Collision6" type="CollisionShape3D" parent="." unique_id=438956705]
+transform = Transform3D(-0.0010107653, 0, 0.99999946, 0, 1, 0, -0.99999946, 0, -0.0010107653, 0.48223802, 2.4805472, -0.24062678)
+shape = SubResource("BoxShape3D_du3ly")
+
+[node name="Rung17" type="MeshInstance3D" parent="." unique_id=1529572753]
+transform = Transform3D(1.12, 0, 0, 0, 0.09, 0, 0, 0, 0.13, 0, 2.4756205, 0)
+material_override = SubResource("aged_iron")
+mesh = SubResource("box")
+
+[node name="Rung18" type="MeshInstance3D" parent="." unique_id=1349153387]
+transform = Transform3D(0.0015212521, 0, 0.12999988, 0, 0.09, 0, -1.1199988, 0, 0.0001765741, -0.48827574, 2.4756205, -0.23464003)
+material_override = SubResource("StandardMaterial3D_h0olw")
+mesh = SubResource("BoxMesh_lgxhp")
+
+[node name="Rung19" type="MeshInstance3D" parent="." unique_id=1102317102]
+transform = Transform3D(0.0015212521, 0, 0.12999988, 0, 0.09, 0, -1.1199988, 0, 0.0001765741, 0.4921181, 2.4756205, -0.23464003)
+material_override = SubResource("StandardMaterial3D_h0olw")
+mesh = SubResource("BoxMesh_lgxhp")
+
+[node name="Rung11Collision3" type="CollisionShape3D" parent="." unique_id=1613418874]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4756205, 0)
+shape = SubResource("rung_shape")
+
+[node name="Rung07Collision8" type="CollisionShape3D" parent="." unique_id=319129425]
+transform = Transform3D(-0.0010107653, 0, 0.99999946, 0, 1, 0, -0.99999946, 0, -0.0010107653, -0.48938325, 1.6619873, -0.24062678)
+shape = SubResource("BoxShape3D_du3ly")
+
+[node name="Rung07Collision9" type="CollisionShape3D" parent="." unique_id=775147919]
+transform = Transform3D(-0.0010107653, 0, 0.99999946, 0, 1, 0, -0.99999946, 0, -0.0010107653, 0.48223802, 1.6619873, -0.24062678)
+shape = SubResource("BoxShape3D_du3ly")
+
+[node name="Rung20" type="MeshInstance3D" parent="." unique_id=1564874299]
+transform = Transform3D(1.12, 0, 0, 0, 0.09, 0, 0, 0, 0.13, 0, 1.6570606, 0)
+material_override = SubResource("aged_iron")
+mesh = SubResource("box")
+
+[node name="Rung21" type="MeshInstance3D" parent="." unique_id=611670944]
+transform = Transform3D(0.0015212521, 0, 0.12999988, 0, 0.09, 0, -1.1199988, 0, 0.0001765741, -0.48827574, 1.6570606, -0.23464003)
+material_override = SubResource("StandardMaterial3D_h0olw")
+mesh = SubResource("BoxMesh_lgxhp")
+
+[node name="Rung22" type="MeshInstance3D" parent="." unique_id=156971]
+transform = Transform3D(0.0015212521, 0, 0.12999988, 0, 0.09, 0, -1.1199988, 0, 0.0001765741, 0.4921181, 1.6570606, -0.23464003)
+material_override = SubResource("StandardMaterial3D_h0olw")
+mesh = SubResource("BoxMesh_lgxhp")
+
+[node name="Rung11Collision4" type="CollisionShape3D" parent="." unique_id=677206054]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6570606, 0)
+shape = SubResource("rung_shape")
+
+[node name="Rung07Collision11" type="CollisionShape3D" parent="." unique_id=1653309439]
+transform = Transform3D(-0.0010070077, -0.08614885, 0.99628186, -8.707626e-05, 0.9962823, 0.0861488, -0.9999996, 0, -0.0010107654, -0.49496785, 3.0774844, -0.24062678)
+shape = SubResource("BoxShape3D_du3ly")
+
+[node name="Rung07Collision12" type="CollisionShape3D" parent="." unique_id=1054385997]
+transform = Transform3D(-0.0010070077, -0.08614885, 0.99628186, -8.707626e-05, 0.9962823, 0.0861488, -0.9999996, 0, -0.0010107654, 0.4730412, 3.1611884, -0.24062678)
+shape = SubResource("BoxShape3D_du3ly")
+
+[node name="Rung23" type="MeshInstance3D" parent="." unique_id=1876725574]
+transform = Transform3D(1.1158361, -0.0077533964, 0, 0.0964867, 0.089665405, 0, 0, 0, 0.13, -0.0069795474, 3.1147356, 0)
+material_override = SubResource("aged_iron")
+mesh = SubResource("box")
+
+[node name="Rung24" type="MeshInstance3D" parent="." unique_id=2067662327]
+transform = Transform3D(0.0015155964, -0.0077533955, 0.12951657, 0.0001310541, 0.089665405, 0.011199339, -1.1199988, 0, 0.00017657409, -0.49344, 3.0726714, -0.23464003)
+material_override = SubResource("StandardMaterial3D_h0olw")
+mesh = SubResource("BoxMesh_lgxhp")
+
+[node name="Rung25" type="MeshInstance3D" parent="." unique_id=1650637864]
+transform = Transform3D(0.0015155964, -0.0077533955, 0.12951657, 0.0001310541, 0.089665405, 0.011199339, -1.1199988, 0, 0.00017657409, 0.483309, 3.1571312, -0.23464003)
+material_override = SubResource("StandardMaterial3D_h0olw")
+mesh = SubResource("BoxMesh_lgxhp")
+
+[node name="Rung11Collision5" type="CollisionShape3D" parent="." unique_id=2056552558]
+transform = Transform3D(0.9962823, -0.08614884, 0, 0.08614884, 0.9962823, 0, 0, 0, 1, -0.0069795474, 3.1147356, 0)
+shape = SubResource("rung_shape")
+
+[node name="Rung07Collision4" type="CollisionShape3D" parent="." unique_id=511550337]
+transform = Transform3D(-0.0010071925, 0.084007464, 0.9964647, 8.491182e-05, 0.99646515, -0.08400741, -0.9999996, 0, -0.0010107654, 0.48080733, 3.7225778, -0.24062678)
+shape = SubResource("BoxShape3D_du3ly")
+
+[node name="Rung14" type="MeshInstance3D" parent="." unique_id=1319472519]
+transform = Transform3D(1.116041, 0.0075606713, 0, -0.09408835, 0.089681864, 0, 0, 0, 0.13, -0.0001399052, 3.7581801, 0)
+material_override = SubResource("aged_iron")
+mesh = SubResource("box")
+
+[node name="Rung15" type="MeshInstance3D" parent="." unique_id=691376091]
+transform = Transform3D(0.0015158746, 0.007560671, 0.12954034, -0.0001277965, 0.089681864, -0.010920959, -1.1199988, 0, 0.00017657409, -0.48668966, 3.799199, -0.23464003)
+material_override = SubResource("StandardMaterial3D_h0olw")
+mesh = SubResource("BoxMesh_lgxhp")
+
+[node name="Rung16" type="MeshInstance3D" parent="." unique_id=418006439]
+transform = Transform3D(0.0015158746, 0.007560671, 0.12954034, -0.0001277965, 0.089681864, -0.010920959, -1.1199988, 0, 0.00017657409, 0.49023864, 3.7168386, -0.23464003)
+material_override = SubResource("StandardMaterial3D_h0olw")
+mesh = SubResource("BoxMesh_lgxhp")
+
+[node name="Rung11Collision2" type="CollisionShape3D" parent="." unique_id=1317851699]
+transform = Transform3D(0.99646515, 0.08400746, 0, -0.08400746, 0.99646515, 0, 0, 0, 1, -0.0001399052, 3.7581801, 0)
+shape = SubResource("rung_shape")

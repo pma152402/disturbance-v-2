@@ -1,0 +1,144 @@
+[gd_scene load_steps=11 format=3]
+
+[sub_resource type="StandardMaterial3D" id="stone"]
+albedo_color = Color(0.72, 0.69, 0.61, 1)
+roughness = 0.96
+
+[sub_resource type="StandardMaterial3D" id="glass_blue"]
+transparency = 1
+albedo_color = Color(0.055, 0.19, 0.34, 0.82)
+emission_enabled = true
+emission = Color(0.025, 0.09, 0.18, 1)
+emission_energy_multiplier = 0.48
+roughness = 0.28
+
+[sub_resource type="StandardMaterial3D" id="glass_red"]
+transparency = 1
+albedo_color = Color(0.42, 0.035, 0.03, 0.82)
+emission_enabled = true
+emission = Color(0.18, 0.018, 0.012, 1)
+emission_energy_multiplier = 0.42
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="glass_gold"]
+transparency = 1
+albedo_color = Color(0.52, 0.29, 0.045, 0.8)
+emission_enabled = true
+emission = Color(0.2, 0.095, 0.012, 1)
+emission_energy_multiplier = 0.38
+roughness = 0.32
+
+[sub_resource type="BoxMesh" id="box"]
+
+[sub_resource type="PrismMesh" id="pointed_glass"]
+material = SubResource("glass_gold")
+size = Vector3(2.05, 0.85, 0.07)
+left_to_right = 0.5
+
+[sub_resource type="CylinderMesh" id="rosette"]
+material = SubResource("glass_red")
+top_radius = 0.27
+bottom_radius = 0.27
+height = 0.075
+radial_segments = 12
+
+[sub_resource type="TorusMesh" id="rosette_frame"]
+material = SubResource("stone")
+inner_radius = 0.26
+outer_radius = 0.32
+rings = 12
+ring_segments = 8
+
+[sub_resource type="BoxShape3D" id="glass_collision"]
+size = Vector3(2.08, 3.52, 0.1)
+
+[node name="ChurchStainedWindow" type="Node3D"]
+editor_description = "Ventanilla gotica modular con vidrios oscuros, parteluz, roseton y remate apuntado. Colocada en un hueco real del muro."
+
+[node name="GlassCollision" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.76, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GlassCollision"]
+shape = SubResource("glass_collision")
+
+[node name="BluePaneLeftLower" type="MeshInstance3D" parent="."]
+position = Vector3(-0.53, 0.72, 0)
+scale = Vector3(0.94, 1.26, 0.07)
+mesh = SubResource("box")
+material_override = SubResource("glass_blue")
+
+[node name="RedPaneRightLower" type="MeshInstance3D" parent="."]
+position = Vector3(0.53, 0.72, 0)
+scale = Vector3(0.94, 1.26, 0.07)
+mesh = SubResource("box")
+material_override = SubResource("glass_red")
+
+[node name="GoldPaneLeftUpper" type="MeshInstance3D" parent="."]
+position = Vector3(-0.53, 2.03, 0)
+scale = Vector3(0.94, 1.22, 0.07)
+mesh = SubResource("box")
+material_override = SubResource("glass_gold")
+
+[node name="BluePaneRightUpper" type="MeshInstance3D" parent="."]
+position = Vector3(0.53, 2.03, 0)
+scale = Vector3(0.94, 1.22, 0.07)
+mesh = SubResource("box")
+material_override = SubResource("glass_blue")
+
+[node name="PointedGlass" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.06, 0)
+mesh = SubResource("pointed_glass")
+
+[node name="LeftStoneJamb" type="MeshInstance3D" parent="."]
+position = Vector3(-1.13, 1.55, 0.02)
+scale = Vector3(0.18, 3.25, 0.2)
+mesh = SubResource("box")
+material_override = SubResource("stone")
+
+[node name="RightStoneJamb" type="MeshInstance3D" parent="."]
+position = Vector3(1.13, 1.55, 0.02)
+scale = Vector3(0.18, 3.25, 0.2)
+mesh = SubResource("box")
+material_override = SubResource("stone")
+
+[node name="BottomSill" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.02, 0.02)
+scale = Vector3(2.45, 0.2, 0.26)
+mesh = SubResource("box")
+material_override = SubResource("stone")
+
+[node name="CenterMullion" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.6, 0.05)
+scale = Vector3(0.14, 3.14, 0.18)
+mesh = SubResource("box")
+material_override = SubResource("stone")
+
+[node name="HorizontalMullion" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.36, 0.05)
+scale = Vector3(2.18, 0.13, 0.18)
+mesh = SubResource("box")
+material_override = SubResource("stone")
+
+[node name="LeftArchFrame" type="MeshInstance3D" parent="."]
+position = Vector3(-0.55, 3.13, 0.04)
+rotation_degrees = Vector3(0, 0, -39)
+scale = Vector3(1.52, 0.16, 0.2)
+mesh = SubResource("box")
+material_override = SubResource("stone")
+
+[node name="RightArchFrame" type="MeshInstance3D" parent="."]
+position = Vector3(0.55, 3.13, 0.04)
+rotation_degrees = Vector3(0, 0, 39)
+scale = Vector3(1.52, 0.16, 0.2)
+mesh = SubResource("box")
+material_override = SubResource("stone")
+
+[node name="Rosette" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.56, 0.08)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("rosette")
+
+[node name="RosetteFrame" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.56, 0.11)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("rosette_frame")

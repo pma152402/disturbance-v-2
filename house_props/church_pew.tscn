@@ -1,0 +1,52 @@
+[gd_scene load_steps=5 format=3]
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.27,0.105,0.035,1)
+roughness = 0.9
+[sub_resource type="StandardMaterial3D" id="edge"]
+albedo_color = Color(0.12,0.045,0.018,1)
+roughness = 0.94
+[sub_resource type="BoxMesh" id="box"]
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(4.2,1.15,0.82)
+[node name="ChurchPew" type="StaticBody3D"]
+editor_description = "Banco de iglesia de madera oscura con asiento, respaldo inclinado, apoyabrazos y reclinatorio trasero."
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0,0.575,0)
+shape = SubResource("shape")
+[node name="Seat" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.52,-0.05)
+scale = Vector3(4.05,0.12,0.58)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="Back" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.88,0.31)
+rotation_degrees = Vector3(-8,0,0)
+scale = Vector3(4.12,0.68,0.11)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+[node name="LeftEnd" type="MeshInstance3D" parent="."]
+position = Vector3(-2.08,0.57,0)
+scale = Vector3(0.16,1.14,0.75)
+mesh = SubResource("box")
+material_override = SubResource("edge")
+[node name="RightEnd" type="MeshInstance3D" parent="."]
+position = Vector3(2.08,0.57,0)
+scale = Vector3(0.16,1.14,0.75)
+mesh = SubResource("box")
+material_override = SubResource("edge")
+[node name="LeftFoot" type="MeshInstance3D" parent="."]
+position = Vector3(-1.72,0.23,0.05)
+scale = Vector3(0.13,0.45,0.55)
+mesh = SubResource("box")
+material_override = SubResource("edge")
+[node name="RightFoot" type="MeshInstance3D" parent="."]
+position = Vector3(1.72,0.23,0.05)
+scale = Vector3(0.13,0.45,0.55)
+mesh = SubResource("box")
+material_override = SubResource("edge")
+[node name="Kneeler" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.3,0.58)
+scale = Vector3(3.75,0.1,0.18)
+mesh = SubResource("box")
+material_override = SubResource("wood")
+

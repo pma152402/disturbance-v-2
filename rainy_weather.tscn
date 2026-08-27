@@ -74,7 +74,7 @@ scale_max = 1.25
 
 [sub_resource type="ParticleProcessMaterial" id="Particles_east_west"]
 emission_shape = 3
-emission_box_extents = Vector3(6, 0.5, 17)
+emission_box_extents = Vector3(6, 0.5, 31)
 direction = Vector3(0, -1, 0)
 spread = 0.75
 initial_velocity_min = 18.0
@@ -120,7 +120,7 @@ shape = SubResource("Shape_exterior_ground")
 [node name="Puddles" type="Node3D" parent="."]
 
 [node name="PuddleNorth" type="MeshInstance3D" parent="Puddles"]
-position = Vector3(-8, -0.012, -24)
+position = Vector3(-8, -0.012, -43)
 scale = Vector3(1.5, 1, 0.65)
 mesh = SubResource("Mesh_puddle")
 
@@ -137,7 +137,7 @@ mesh = SubResource("Mesh_puddle")
 [node name="Rain" type="Node3D" parent="."]
 
 [node name="NorthRain" type="GPUParticles3D" parent="Rain"]
-position = Vector3(0, 15, -23)
+position = Vector3(0, 15, -47)
 amount = 900
 lifetime = 1.8
 preprocess = 1.8
@@ -157,22 +157,22 @@ process_material = SubResource("Particles_north_south")
 draw_pass_1 = SubResource("Mesh_raindrop")
 
 [node name="WestRain" type="GPUParticles3D" parent="Rain"]
-position = Vector3(-24, 15, 0)
+position = Vector3(-24, 15, -13)
 amount = 650
 lifetime = 1.8
 preprocess = 1.8
 randomness = 0.25
-visibility_aabb = AABB(-7, -42, -18, 14, 45, 36)
+visibility_aabb = AABB(-7, -42, -32, 14, 45, 64)
 process_material = SubResource("Particles_east_west")
 draw_pass_1 = SubResource("Mesh_raindrop")
 
 [node name="EastRain" type="GPUParticles3D" parent="Rain"]
-position = Vector3(24, 15, 0)
+position = Vector3(24, 15, -13)
 amount = 650
 lifetime = 1.8
 preprocess = 1.8
 randomness = 0.25
-visibility_aabb = AABB(-7, -42, -18, 14, 45, 36)
+visibility_aabb = AABB(-7, -42, -32, 14, 45, 64)
 process_material = SubResource("Particles_east_west")
 draw_pass_1 = SubResource("Mesh_raindrop")
 

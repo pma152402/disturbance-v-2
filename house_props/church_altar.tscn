@@ -1,0 +1,67 @@
+[gd_scene load_steps=7 format=3]
+[sub_resource type="StandardMaterial3D" id="stone"]
+albedo_color = Color(0.84,0.81,0.72,1)
+roughness = 0.92
+[sub_resource type="StandardMaterial3D" id="cloth"]
+albedo_color = Color(0.48,0.035,0.03,1)
+roughness = 0.96
+[sub_resource type="StandardMaterial3D" id="gold"]
+albedo_color = Color(0.58,0.39,0.08,1)
+metallic = 0.64
+roughness = 0.42
+[sub_resource type="BoxMesh" id="box"]
+[sub_resource type="CylinderMesh" id="candle"]
+top_radius = 0.035
+bottom_radius = 0.04
+height = 0.38
+radial_segments = 8
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(4.2,1.25,1.45)
+[node name="ChurchAltar" type="StaticBody3D"]
+editor_description = "Altar de piedra con frontal textil, cruz dorada, gradas y dos cirios."
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0,0.62,0)
+shape = SubResource("shape")
+[node name="StepLower" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.1,0.18)
+scale = Vector3(5.3,0.2,2.2)
+mesh = SubResource("box")
+material_override = SubResource("stone")
+[node name="StepUpper" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.27,0)
+scale = Vector3(4.7,0.14,1.8)
+mesh = SubResource("box")
+material_override = SubResource("stone")
+[node name="AltarBody" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.78,0)
+scale = Vector3(4.05,0.95,1.25)
+mesh = SubResource("box")
+material_override = SubResource("stone")
+[node name="AltarTop" type="MeshInstance3D" parent="."]
+position = Vector3(0,1.29,0)
+scale = Vector3(4.35,0.12,1.48)
+mesh = SubResource("box")
+material_override = SubResource("stone")
+[node name="FrontCloth" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.78,0.64)
+scale = Vector3(2.25,0.75,0.025)
+mesh = SubResource("box")
+material_override = SubResource("cloth")
+[node name="CrossVertical" type="MeshInstance3D" parent="."]
+position = Vector3(0,1.95,-0.1)
+scale = Vector3(0.1,1.05,0.1)
+mesh = SubResource("box")
+material_override = SubResource("gold")
+[node name="CrossHorizontal" type="MeshInstance3D" parent="."]
+position = Vector3(0,2.08,-0.1)
+scale = Vector3(0.62,0.1,0.1)
+mesh = SubResource("box")
+material_override = SubResource("gold")
+[node name="CandleLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-1.45,1.54,0)
+mesh = SubResource("candle")
+material_override = SubResource("gold")
+[node name="CandleRight" type="MeshInstance3D" parent="."]
+position = Vector3(1.45,1.54,0)
+mesh = SubResource("candle")
+material_override = SubResource("gold")

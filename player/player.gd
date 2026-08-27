@@ -102,6 +102,7 @@ var _monster_hit_cooldown := 0.0
 var _monster_restart_pending := false
 var _skill_check_active := false
 var _walker_controller: Node3D
+var _ladder_controller: Node3D
 
 const ZOOM_SEGMENT_ON := Color(0.86, 0.9, 0.83, 0.92)
 const ZOOM_SEGMENT_OFF := Color(0.20, 0.23, 0.20, 0.42)
@@ -144,6 +145,10 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			get_tree().call_deferred(&"reload_current_scene")
 			return
+		if pressed_key == KEY_F and is_instance_valid(_ladder_controller):
+			_ladder_controller.call(&"stop_climbing", false)
+			get_viewport().set_input_as_handled()
+			return
 		if pressed_key == KEY_F and is_instance_valid(_walker_controller):
 			_walker_controller.call(&"stop_moving")
 			get_viewport().set_input_as_handled()
@@ -164,6 +169,10 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 		if pressed_key == KEY_SPACE:
+			if is_instance_valid(_ladder_controller):
+				_ladder_controller.call(&"stop_climbing", true)
+				get_viewport().set_input_as_handled()
+				return
 			_request_jump()
 			get_viewport().set_input_as_handled()
 			return
@@ -228,6 +237,20 @@ func _physics_process(delta: float) -> void:
 	_update_stance_transition(delta)
 	head.rotation.x = _look_pitch
 	head.rotation.y = 0.0
+	if is_instance_valid(_ladder_controller):
+		var ladder_input := Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
+		velocity = Vector3.ZERO
+		_ladder_controller.call(&"drive_from_player", ladder_input, delta)
+		_update_interaction_prompt()
+		_update_camera_motion(delta, Vector2.ZERO, false)
+		_update_footsteps(delta, Vector2.ZERO, false)
+		var previous_ladder_stamina := _stamina
+		_stamina = minf(max_stamina, _stamina + stamina_recovery_per_second * delta)
+		_update_stamina_ui(delta, previous_ladder_stamina, false)
+		var ladder_zoom_weight := 1.0 - exp(-zoom_smoothing * delta)
+		camera.fov = lerpf(camera.fov, _zoom_fov_target, ladder_zoom_weight)
+		_update_zoom_meter()
+		return
 	if is_instance_valid(_walker_controller):
 		var walker_input := Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
 		velocity = Vector3.ZERO
@@ -440,6 +463,10 @@ func _try_interact(pressed_key: Key) -> bool:
 
 
 func _update_interaction_prompt() -> void:
+	if is_instance_valid(_ladder_controller):
+		interaction_prompt.visible = true
+		interaction_prompt.text = "F  SOLTAR ESCALERA"
+		return
 	if is_instance_valid(_walker_controller):
 		interaction_prompt.visible = true
 		interaction_prompt.text = "F  SOLTAR ANDADOR"
@@ -480,7 +507,7 @@ func is_holding_item_type(item_type: StringName) -> bool:
 
 
 func begin_moving_walker(walker: Node3D) -> bool:
-	if walker == null or is_instance_valid(_walker_controller) or not _held_item.is_empty():
+	if walker == null or is_instance_valid(_walker_controller) or is_instance_valid(_ladder_controller) or not _held_item.is_empty():
 		return false
 	_drop_flashlight()
 	_walker_controller = walker
@@ -504,6 +531,41 @@ func end_moving_walker(walker: Node3D) -> void:
 	remove_collision_exception_with(walker)
 	_walker_controller = null
 	velocity = Vector3.ZERO
+
+
+func begin_climbing_ladder(ladder: Node3D) -> bool:
+	if (
+		ladder == null
+		or is_instance_valid(_ladder_controller)
+		or is_instance_valid(_walker_controller)
+		or not _held_item.is_empty()
+		or _stance != Stance.STANDING
+		or _stance_transition_timer > 0.0
+	):
+		return false
+	_ladder_controller = ladder
+	_jump_phase = JumpPhase.IDLE
+	velocity = Vector3.ZERO
+	motion_mode = CharacterBody3D.MOTION_MODE_FLOATING
+	add_collision_exception_with(ladder)
+	return true
+
+
+func sync_to_ladder(world_position: Vector3, ladder_yaw: float) -> void:
+	if not is_instance_valid(_ladder_controller):
+		return
+	global_position = world_position
+	rotation.y = ladder_yaw
+	velocity = Vector3.ZERO
+
+
+func end_climbing_ladder(ladder: Node3D, launch_velocity := Vector3.ZERO) -> void:
+	if ladder != _ladder_controller:
+		return
+	remove_collision_exception_with(ladder)
+	_ladder_controller = null
+	motion_mode = CharacterBody3D.MOTION_MODE_GROUNDED
+	velocity = launch_velocity
 
 
 func pick_up_plunger() -> bool:

@@ -60,7 +60,7 @@ material_override = SubResource("plaster")
 mesh = SubResource("ring")
 
 [node name="Shaft" type="MeshInstance3D" parent="." unique_id=809308291]
-transform = Transform3D(1, 0, 0, 0, 1.0584395, 0, 0, 0, 1, 0, 1.8196105, 0)
+transform = Transform3D(1, 0, 0, 0, 1.08597, 0, 0, 0, 1, 0, 1.798797, 0)
 material_override = SubResource("plaster")
 mesh = SubResource("shaft")
 
@@ -85,12 +85,12 @@ material_override = SubResource("shadow")
 mesh = SubResource("flute")
 
 [node name="NeckRing" type="MeshInstance3D" parent="." unique_id=1431698890]
-transform = Transform3D(1, 0, 0, 0, 1.0584395, 0, 0, 0, 1, 0, 3.3225944, 0)
+transform = Transform3D(1, 0, 0, 0, 1.359402, 0, 0, 0, 1, 0, 3.3225944, 0)
 material_override = SubResource("plaster")
 mesh = SubResource("ring")
 
 [node name="CapitalRound" type="MeshInstance3D" parent="." unique_id=1730169511]
-transform = Transform3D(1.08, 0, 0, 0, 1, 0, 0, 0, 1.08, 0, 3.42, 0)
+transform = Transform3D(1.08, 0, 0, 0, 1.0260105, 0, 0, 0, 1.08, 0, 3.4408135, 0)
 material_override = SubResource("shadow")
 mesh = SubResource("round_step")
 
