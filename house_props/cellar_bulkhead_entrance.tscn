@@ -1,0 +1,121 @@
+[gd_scene format=3 uid="uid://dub7mefke18ig"]
+
+[ext_resource type="Script" uid="uid://ba7x7ves2dtsu" path="res://house_props/cellar_bulkhead_entrance.gd" id="1"]
+
+[sub_resource type="BoxShape3D" id="shape"]
+
+[sub_resource type="StandardMaterial3D" id="dark"]
+albedo_color = Color(0.018, 0.02, 0.022, 1)
+
+[sub_resource type="BoxMesh" id="dark_box"]
+material = SubResource("dark")
+
+[sub_resource type="BoxMesh" id="BoxMesh_ragcr"]
+material = SubResource("dark")
+size = Vector3(1, 1.460083, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_epnuo"]
+material = SubResource("dark")
+size = Vector3(1, 0.93304443, 1)
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.22, 0.095, 0.035, 1)
+roughness = 0.94
+
+[sub_resource type="BoxMesh" id="wood_box"]
+material = SubResource("wood")
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.08, 0.075, 0.068, 1)
+metallic = 0.78
+roughness = 0.62
+
+[sub_resource type="BoxMesh" id="metal_box"]
+material = SubResource("metal")
+
+[node name="CellarBulkheadEntrance" type="Area3D" unique_id=629307705]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1")
+
+[node name="InteractionShape" type="CollisionShape3D" parent="." unique_id=572159093]
+transform = Transform3D(2.8, 0, 0, 0, 0.45398685, 0, 0, 0, 3.8, 0, 0.377486, 0)
+shape = SubResource("shape")
+
+[node name="StoneCurb" type="StaticBody3D" parent="." unique_id=1026717274]
+
+[node name="LeftCurb" type="MeshInstance3D" parent="StoneCurb" unique_id=581715056]
+transform = Transform3D(0.22, 0, 0, 0, 0.38, 0, 0, 0, 3.9, -1.5, 0.19, 0)
+mesh = SubResource("dark_box")
+
+[node name="LeftCurbCollision" type="CollisionShape3D" parent="StoneCurb" unique_id=1317696281]
+transform = Transform3D(0.22, 0, 0, 0, 0.38, 0, 0, 0, 3.9, -1.5, 0.19, 0)
+shape = SubResource("shape")
+
+[node name="RightCurb" type="MeshInstance3D" parent="StoneCurb" unique_id=1345066424]
+transform = Transform3D(0.22, 0, 0, 0, 0.38, 0, 0, 0, 3.9, 1.5, 0.19, 0)
+mesh = SubResource("dark_box")
+
+[node name="RightCurbCollision" type="CollisionShape3D" parent="StoneCurb" unique_id=2116270200]
+transform = Transform3D(0.22, 0, 0, 0, 0.38, 0, 0, 0, 3.9, 1.5, 0.19, 0)
+shape = SubResource("shape")
+
+[node name="RearCurb" type="MeshInstance3D" parent="StoneCurb" unique_id=602093473]
+transform = Transform3D(2.8, 0, 0, 0, 0.38, 0, 0, 0, 0.22, 0, 0.19, 1.95)
+mesh = SubResource("dark_box")
+
+[node name="RearCurb2" type="MeshInstance3D" parent="StoneCurb" unique_id=121780597]
+transform = Transform3D(2.8, 0, 0, 0, 0.38, 0, 0, 0, 0.22, 0, 0.27741575, -1.8415452)
+mesh = SubResource("BoxMesh_ragcr")
+
+[node name="RearCurb4" type="MeshInstance3D" parent="StoneCurb" unique_id=1518482466]
+transform = Transform3D(-0.009029448, 0, 0.21999885, 0.25736618, 0.3783913, 6.521092e-05, -2.7881317, 0.034928456, -0.00070645125, -1.29932, 0.26096165, -0.38604122)
+mesh = SubResource("BoxMesh_epnuo")
+
+[node name="RearCurb5" type="MeshInstance3D" parent="StoneCurb" unique_id=894313042]
+transform = Transform3D(-0.009029448, 0, 0.21999885, 0.25736618, 0.3783913, 6.521092e-05, -2.7881317, 0.034928456, -0.00070645125, 1.2992961, 0.26096165, -0.38604122)
+mesh = SubResource("BoxMesh_epnuo")
+
+[node name="OpeningVoid" type="MeshInstance3D" parent="." unique_id=1590615737]
+transform = Transform3D(2.75, 0, 0, 0, 0.06, 0, 0, 0, 3.65, 0, 0.02, 0)
+mesh = SubResource("dark_box")
+
+[node name="LeftHinge" type="AnimatableBody3D" parent="." unique_id=465919749]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.38, 0.43, 0)
+
+[node name="Door" type="MeshInstance3D" parent="LeftHinge" unique_id=196614488]
+transform = Transform3D(1.4212205, 0, 0, 0, 0.038399696, -0.27624714, 0, 0.4367966, 3.502419, 0.675, 0.024468541, 0)
+mesh = SubResource("wood_box")
+
+[node name="Collision" type="CollisionShape3D" parent="LeftHinge" unique_id=1422073461]
+transform = Transform3D(1.35, 0, 0, 0, 0.034673575, -0.27706125, 0, 0.39441195, 3.5127409, 0.675, 0, 0)
+shape = SubResource("shape")
+
+[node name="Brace1" type="MeshInstance3D" parent="LeftHinge" unique_id=1401771954]
+transform = Transform3D(1.15, 0, 0, 0, 0.08, -0.1, 0, 0.65, 3.1, 0.68, -0.04802209, 0)
+mesh = SubResource("metal_box")
+
+[node name="RightHinge" type="AnimatableBody3D" parent="." unique_id=1104222184]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.38, 0.43, 0)
+
+[node name="Door" type="MeshInstance3D" parent="RightHinge" unique_id=1415313740]
+transform = Transform3D(1.35, 0, 0, 0, 0.038399696, -0.27624714, 0, 0.4367966, 3.502419, -0.675, 0.024468541, 0)
+mesh = SubResource("wood_box")
+
+[node name="Collision" type="CollisionShape3D" parent="RightHinge" unique_id=1321991719]
+transform = Transform3D(1.35, 0, 0, 0, 0.03618469, -0.2770967, 0, 0.4116009, 3.5131903, -0.675, 0, 0)
+shape = SubResource("shape")
+
+[node name="Brace1" type="MeshInstance3D" parent="RightHinge" unique_id=974221986]
+transform = Transform3D(1.15, 0, 0, 0, 0.08, -0.1, 0, 0.65, 3.1, -0.68, -0.04802209, 0)
+mesh = SubResource("metal_box")
+
+[node name="CenterHandles" type="Node3D" parent="." unique_id=1250009137]
+
+[node name="Left" type="MeshInstance3D" parent="CenterHandles" unique_id=954613637]
+transform = Transform3D(0.08, 0, 0, 0, 0.08, 0, 0, 0, 0.34, -0.12, 0.5340774, -0.55)
+mesh = SubResource("metal_box")
+
+[node name="Right" type="MeshInstance3D" parent="CenterHandles" unique_id=892399971]
+transform = Transform3D(0.08, 0, 0, 0, 0.08, 0, 0, 0, 0.34, 0.12, 0.5340774, -0.55)
+mesh = SubResource("metal_box")

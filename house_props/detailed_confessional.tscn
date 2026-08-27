@@ -1,0 +1,143 @@
+[gd_scene format=3 uid="uid://l8msy1x5kuid"]
+
+[sub_resource type="StandardMaterial3D" id="dark_wood"]
+albedo_color = Color(0.105, 0.04, 0.018, 1)
+roughness = 0.93
+
+[sub_resource type="BoxMesh" id="dark_box"]
+material = SubResource("dark_wood")
+size = Vector3(1, 1.0257263, 1)
+
+[sub_resource type="BoxShape3D" id="box_shape"]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.235, 0.105, 0.045, 1)
+roughness = 0.88
+
+[sub_resource type="BoxMesh" id="wood_box"]
+material = SubResource("wood")
+
+[sub_resource type="StandardMaterial3D" id="curtain"]
+albedo_color = Color(0.22, 0.018, 0.025, 1)
+
+[sub_resource type="BoxMesh" id="curtain_box"]
+material = SubResource("curtain")
+
+[sub_resource type="PrismMesh" id="roof_prism"]
+material = SubResource("dark_wood")
+size = Vector3(4.8, 0.9, 1.75)
+
+[node name="DetailedConfessional" type="StaticBody3D" unique_id=503783141]
+editor_description = "Confesionario antiguo de tres cuerpos. Toda la estructura apoya sobre un zocalo comun; postes, cabina, reclinatorios, celosias y cubierta se tocan fisicamente."
+
+[node name="Base" type="MeshInstance3D" parent="." unique_id=481489688]
+transform = Transform3D(4.8, 0, 0, 0, 0.22, 0, 0, 0, 1.75, 0, 0.11, 0)
+mesh = SubResource("dark_box")
+
+[node name="BaseCollision" type="CollisionShape3D" parent="." unique_id=1167162254]
+transform = Transform3D(4.8, 0, 0, 0, 0.22, 0, 0, 0, 1.75, 0, 0.11, 0)
+shape = SubResource("box_shape")
+
+[node name="Back" type="MeshInstance3D" parent="." unique_id=484685909]
+transform = Transform3D(4.6, 0, 0, 0, 3.35, 0, 0, 0, 0.18, 0, 1.78, 0.78)
+mesh = SubResource("wood_box")
+
+[node name="BackCollision" type="CollisionShape3D" parent="." unique_id=725703343]
+transform = Transform3D(4.6, 0, 0, 0, 3.35, 0, 0, 0, 0.18, 0, 1.78, 0.78)
+shape = SubResource("box_shape")
+
+[node name="LeftSide" type="MeshInstance3D" parent="." unique_id=2116351607]
+transform = Transform3D(0.18, 0, 0, 0, 3.35, 0, 0, 0, 1.55, -2.31, 1.78, 0)
+mesh = SubResource("wood_box")
+
+[node name="LeftCollision" type="CollisionShape3D" parent="." unique_id=1373294407]
+transform = Transform3D(0.18, 0, 0, 0, 3.35, 0, 0, 0, 1.55, -2.31, 1.78, 0)
+shape = SubResource("box_shape")
+
+[node name="RightSide" type="MeshInstance3D" parent="." unique_id=1020087168]
+transform = Transform3D(0.18, 0, 0, 0, 3.35, 0, 0, 0, 1.55, 2.31, 1.78, 0)
+mesh = SubResource("wood_box")
+
+[node name="RightCollision" type="CollisionShape3D" parent="." unique_id=666997369]
+transform = Transform3D(0.18, 0, 0, 0, 3.35, 0, 0, 0, 1.55, 2.31, 1.78, 0)
+shape = SubResource("box_shape")
+
+[node name="LeftDivider" type="MeshInstance3D" parent="." unique_id=1532275879]
+transform = Transform3D(0.16, 0, 0, 0, 3.25, 0, 0, 0, 1.5, -0.82, 1.74, 0)
+mesh = SubResource("dark_box")
+
+[node name="RightDivider" type="MeshInstance3D" parent="." unique_id=543973944]
+transform = Transform3D(0.16, 0, 0, 0, 3.25, 0, 0, 0, 1.5, 0.82, 1.74, 0)
+mesh = SubResource("dark_box")
+
+[node name="CenterCurtain" type="MeshInstance3D" parent="." unique_id=737821169]
+transform = Transform3D(1.45, 0, 0, 0, 2.65, 0, 0, 0, 0.08, 0, 1.58, -0.79)
+mesh = SubResource("curtain_box")
+
+[node name="CurtainFold1" type="MeshInstance3D" parent="." unique_id=80358178]
+transform = Transform3D(0.07, 0, 0, 0, 2.55, 0, 0, 0, 0.1, -0.48, 1.5873541, -0.81342494)
+mesh = SubResource("dark_box")
+
+[node name="CurtainFold2" type="MeshInstance3D" parent="." unique_id=262802333]
+transform = Transform3D(0.07, 0, 0, 0, 2.55, 0, 0, 0, 0.1, 0, 1.5988325, -0.81342494)
+mesh = SubResource("dark_box")
+
+[node name="CurtainFold3" type="MeshInstance3D" parent="." unique_id=2099129935]
+transform = Transform3D(0.07, 0, 0, 0, 2.55, 0, 0, 0, 0.1, 0.48, 1.5866147, -0.81342494)
+mesh = SubResource("dark_box")
+
+[node name="LeftKneeler" type="MeshInstance3D" parent="." unique_id=1234411635]
+transform = Transform3D(1.25, 0, 0, 0, 0.22, 0, 0, 0, 0.62, -1.55, 0.45, -0.5)
+mesh = SubResource("dark_box")
+
+[node name="RightKneeler" type="MeshInstance3D" parent="." unique_id=993496918]
+transform = Transform3D(1.25, 0, 0, 0, 0.22, 0, 0, 0, 0.62, 1.55, 0.45, -0.5)
+mesh = SubResource("dark_box")
+
+[node name="LeftScreenFrame" type="MeshInstance3D" parent="." unique_id=2017866211]
+transform = Transform3D(1.15, 0, 0, 0, 1.4767824, 0, 0, 0, 0.12, -1.43, 2.830869, -0.81)
+mesh = SubResource("dark_box")
+
+[node name="RightScreenFrame" type="MeshInstance3D" parent="." unique_id=1038816041]
+transform = Transform3D(1.15, 0, 0, 0, 1.4767824, 0, 0, 0, 0.12, 1.43, 2.830869, -0.81)
+mesh = SubResource("dark_box")
+
+[node name="LeftLatticeV1" type="MeshInstance3D" parent="." unique_id=621676871]
+transform = Transform3D(0.06, 0, 0, 0, 1.0970384, 0, 0, 0, 0.06, -1.72, 2.830869, -0.8534249)
+mesh = SubResource("wood_box")
+
+[node name="LeftLatticeV2" type="MeshInstance3D" parent="." unique_id=457331236]
+transform = Transform3D(0.06, 0, 0, 0, 1.0970384, 0, 0, 0, 0.06, -1.43, 2.830869, -0.8534249)
+mesh = SubResource("wood_box")
+
+[node name="LeftLatticeV3" type="MeshInstance3D" parent="." unique_id=2029006342]
+transform = Transform3D(0.06, 0, 0, 0, 1.0970384, 0, 0, 0, 0.06, -1.14, 2.830869, -0.8534249)
+mesh = SubResource("wood_box")
+
+[node name="RightLatticeV1" type="MeshInstance3D" parent="." unique_id=1220980134]
+transform = Transform3D(0.06, 0, 0, 0, 1.0970384, 0, 0, 0, 0.06, 1.14, 2.830869, -0.8534249)
+mesh = SubResource("wood_box")
+
+[node name="RightLatticeV2" type="MeshInstance3D" parent="." unique_id=1868383995]
+transform = Transform3D(0.06, 0, 0, 0, 1.0970384, 0, 0, 0, 0.06, 1.43, 2.830869, -0.8534249)
+mesh = SubResource("wood_box")
+
+[node name="RightLatticeV3" type="MeshInstance3D" parent="." unique_id=547965401]
+transform = Transform3D(0.06, 0, 0, 0, 1.0970384, 0, 0, 0, 0.06, 1.72, 2.830869, -0.8534249)
+mesh = SubResource("wood_box")
+
+[node name="TopCornice" type="MeshInstance3D" parent="." unique_id=1534751423]
+transform = Transform3D(4.9, 0, 0, 0, 0.24, 0, 0, 0, 1.85, 0, 3.48, 0)
+mesh = SubResource("dark_box")
+
+[node name="Pediment" type="MeshInstance3D" parent="." unique_id=105171415]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.95, 0)
+mesh = SubResource("roof_prism")
+
+[node name="CenterCrossVertical" type="MeshInstance3D" parent="." unique_id=384484391]
+transform = Transform3D(0.12, 0, 0, 0, 0.64, 0, 0, 0, 0.1, 0, 3.93, -0.94)
+mesh = SubResource("wood_box")
+
+[node name="CenterCrossHorizontal" type="MeshInstance3D" parent="." unique_id=1297601308]
+transform = Transform3D(0.5, 0, 0, 0, 0.12, 0, 0, 0, 0.1, 0, 4.02, -0.94)
+mesh = SubResource("wood_box")
