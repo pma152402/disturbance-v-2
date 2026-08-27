@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="ArrayMesh" path="res://exterior_grass_mesh.tres" id="1_grass"]
+
+[node name="EditableGrassClump" type="MeshInstance3D"]
+editor_description = "Mata individual sin colision. Se puede mover, escalar, duplicar o borrar directamente desde house_baked."
+mesh = ExtResource("1_grass")
+cast_shadow = 0
