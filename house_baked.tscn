@@ -4264,6 +4264,363 @@ transform = Transform3D(-0.006493758, 0, -0.75983346, 0, 1, 0, 0.8414861, 0, -0.
 [node name="BasementAccessAndInitialRoom" parent="." unique_id=867008395 instance=ExtResource("197_initial_basement")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.741586, -1.2255822, 3.777816)
 
+[node name="CentralColumn" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="0" unique_id=1664595805]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 0.15848064, 3, 0.71636295)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step01" parent_id_path=PackedInt32Array(867008395, 708787101, 1633881707) index="0" unique_id=471110369]
+transform = Transform3D(-0.9998404, 0, 0.017869532, 0, 1, 0, -0.017869532, 0, -0.9998404, 1.1034894, 0, 0.17474508)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step01" parent_id_path=PackedInt32Array(867008395, 708787101, 1633881707) index="1" unique_id=715325099]
+transform = Transform3D(-0.9998404, 0, 0.017869532, 0, 1, 0, -0.017869532, 0, -0.9998404, 1.1034894, 0, 0.17474508)
+
+[node name="Baluster01" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="4" unique_id=1168916062]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 0.18832445, 0.48000002, -0.9533682)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step02" parent_id_path=PackedInt32Array(867008395, 708787101, 1183662165) index="0" unique_id=27552025]
+transform = Transform3D(-0.9998404, 0, 0.01786989, 0, 0.99999964, 0, -0.01786989, 0, -0.9998404, 1.1635332, 0, 0.34419036)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step02" parent_id_path=PackedInt32Array(867008395, 708787101, 1183662165) index="1" unique_id=1012666989]
+transform = Transform3D(-0.9998404, 0, 0.01786989, 0, 0.99999964, 0, -0.01786989, 0, -0.9998404, 1.1635332, 0, 0.34419036)
+
+[node name="Baluster02" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="6" unique_id=1600715991]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 0.59346724, 0.70222235, -0.89598894)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step03" parent_id_path=PackedInt32Array(867008395, 708787101, 1425820645) index="0" unique_id=1485326364]
+transform = Transform3D(-0.9998404, 0, 0.0178698, 0, 1, 0, -0.0178698, 0, -0.9998404, 1.2629743, 0, 0.4939468)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step03" parent_id_path=PackedInt32Array(867008395, 708787101, 1425820645) index="1" unique_id=1597160075]
+transform = Transform3D(-0.9998404, 0, 0.0178698, 0, 1, 0, -0.0178698, 0, -0.9998404, 1.2629743, 0, 0.4939468)
+
+[node name="Baluster03" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="8" unique_id=1257948466]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 0.97249603, 0.9244442, -0.74181366)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step04" parent_id_path=PackedInt32Array(867008395, 708787101, 678110871) index="0" unique_id=1383477278]
+transform = Transform3D(-0.9998404, 0, 0.017869651, 0, 0.99999964, 0, -0.017869651, 0, -0.9998404, 1.3958564, 0, 0.6150265)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step04" parent_id_path=PackedInt32Array(867008395, 708787101, 678110871) index="1" unique_id=884107708]
+transform = Transform3D(-0.9998404, 0, 0.017869651, 0, 0.99999964, 0, -0.017869651, 0, -0.9998404, 1.3958564, 0, 0.6150265)
+
+[node name="Baluster04" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="10" unique_id=884236925]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 1.3026552, 1.1466665, -0.50009346)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step05" parent_id_path=PackedInt32Array(867008395, 708787101, 1406765768) index="0" unique_id=1249674152]
+transform = Transform3D(-0.999841, 0, 0.01786977, 0, 1, 0, -0.01786977, 0, -0.999841, 1.5541902, 0, 0.7001599)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step05" parent_id_path=PackedInt32Array(867008395, 708787101, 1406765768) index="1" unique_id=1548737560]
+transform = Transform3D(-0.999841, 0, 0.01786977, 0, 1, 0, -0.01786977, 0, -0.999841, 1.5541902, 0, 0.7001599)
+
+[node name="Baluster05" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="12" unique_id=21896460]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 1.5641222, 1.3688889, -0.18534088)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step06" parent_id_path=PackedInt32Array(867008395, 708787101, 1101032153) index="0" unique_id=1006396456]
+transform = Transform3D(-0.9998404, 0, 0.017869707, 0, 1, 0, -0.017869707, 0, -0.9998404, 1.7284703, 0, 0.7442355)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step06" parent_id_path=PackedInt32Array(867008395, 708787101, 1101032153) index="1" unique_id=295994520]
+transform = Transform3D(-0.9998404, 0, 0.017869707, 0, 1, 0, -0.017869707, 0, -0.9998404, 1.7284703, 0, 0.7442355)
+
+[node name="Baluster06" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="14" unique_id=111805851]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 1.7412019, 1.5911112, 0.1835432)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step07" parent_id_path=PackedInt32Array(867008395, 708787101, 1702952964) index="0" unique_id=296615197]
+transform = Transform3D(-0.9998406, 0, 0.017869756, 0, 1, 0, -0.017869756, 0, -0.9998406, 1.9082398, 0, 0.7446027)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step07" parent_id_path=PackedInt32Array(867008395, 708787101, 1702952964) index="1" unique_id=1317738047]
+transform = Transform3D(-0.9998406, 0, 0.017869756, 0, 1, 0, -0.017869756, 0, -0.9998406, 1.9082398, 0, 0.7446027)
+
+[node name="Baluster07" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="16" unique_id=74397915]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 1.8232613, 1.8133335, 0.58441734)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step08" parent_id_path=PackedInt32Array(867008395, 708787101, 463953048) index="0" unique_id=1282541894]
+transform = Transform3D(-0.99984074, 0, 0.0178698, 0, 1, 0, -0.0178698, 0, -0.99984074, 2.0827045, 0, 0.7012472)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step08" parent_id_path=PackedInt32Array(867008395, 708787101, 463953048) index="1" unique_id=1973703308]
+transform = Transform3D(-0.99984074, 0, 0.0178698, 0, 1, 0, -0.0178698, 0, -0.99984074, 2.0827045, 0, 0.7012472)
+
+[node name="Baluster08" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="18" unique_id=2107895917]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 1.8053737, 2.0355558, 0.9932108)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step09" parent_id_path=PackedInt32Array(867008395, 708787101, 1318760152) index="0" unique_id=1854714229]
+transform = Transform3D(-0.9998403, 0, 0.017869681, 0, 0.9999996, 0, -0.017869681, 0, -0.9998403, 2.241386, 0, 0.61676836)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step09" parent_id_path=PackedInt32Array(867008395, 708787101, 1318760152) index="1" unique_id=1812809372]
+transform = Transform3D(-0.9998403, 0, 0.017869681, 0, 0.9999996, 0, -0.017869681, 0, -0.9998403, 2.241386, 0, 0.61676836)
+
+[node name="Baluster09" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="20" unique_id=2021683724]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 1.6886153, 2.2577777, 1.3853874)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step10" parent_id_path=PackedInt32Array(867008395, 708787101, 448600516) index="0" unique_id=158375788]
+transform = Transform3D(-0.99984026, 0, 0.01786974, 0, 1, 0, -0.01786974, 0, -0.99984026, 2.374762, 0, 0.49623728)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step10" parent_id_path=PackedInt32Array(867008395, 708787101, 448600516) index="1" unique_id=1684920179]
+transform = Transform3D(-0.99984026, 0, 0.01786974, 0, 1, 0, -0.01786974, 0, -0.99984026, 2.374762, 0, 0.49623728)
+
+[node name="Baluster10" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="22" unique_id=41830358]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 1.4799938, 2.48, 1.7373953)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step11" parent_id_path=PackedInt32Array(867008395, 708787101, 391963616) index="0" unique_id=909575019]
+transform = Transform3D(-0.9998402, 0, 0.01786986, 0, 1, 0, -0.01786986, 0, -0.9998402, 2.47482, 0, 0.34688854)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step11" parent_id_path=PackedInt32Array(867008395, 708787101, 391963616) index="1" unique_id=508113695]
+transform = Transform3D(-0.9998402, 0, 0.01786986, 0, 1, 0, -0.01786986, 0, -0.9998402, 2.47482, 0, 0.34688854)
+
+[node name="Baluster11" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="24" unique_id=1828439992]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 1.1920328, 2.7022219, 2.0281072)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step12" parent_id_path=PackedInt32Array(867008395, 708787101, 450898799) index="0" unique_id=1418061770]
+transform = Transform3D(-0.99984014, 0, 0.017869748, 0, 1, 0, -0.017869748, 0, -0.99984014, 2.5355585, 0, 0.17769098)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step12" parent_id_path=PackedInt32Array(867008395, 708787101, 450898799) index="1" unique_id=969531907]
+transform = Transform3D(-0.99984014, 0, 0.017869748, 0, 1, 0, -0.017869748, 0, -0.99984014, 2.5355585, 0, 0.17769098)
+
+[node name="Baluster12" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="26" unique_id=174599903]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 0.84202385, 2.9244442, 2.2400653)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step13" parent_id_path=PackedInt32Array(867008395, 708787101, 348232562) index="0" unique_id=1023134777]
+transform = Transform3D(-0.9998403, 0, 0.017869622, 0, 1, 0, -0.017869622, 0, -0.9998403, 2.5533328, 0, -0.0011978149)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step13" parent_id_path=PackedInt32Array(867008395, 708787101, 348232562) index="1" unique_id=628629683]
+transform = Transform3D(-0.9998403, 0, 0.017869622, 0, 1, 0, -0.017869622, 0, -0.9998403, 2.5533328, 0, -0.0011978149)
+
+[node name="Baluster13" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="28" unique_id=820263798]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 0.45097923, 3.1466665, 2.360548)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step14" parent_id_path=PackedInt32Array(867008395, 708787101, 1767640042) index="0" unique_id=1030978547]
+transform = Transform3D(-0.9998405, 0, 0.0178698, 0, 1, 0, -0.0178698, 0, -0.9998405, 2.527069, 0, -0.1790371)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step14" parent_id_path=PackedInt32Array(867008395, 708787101, 1767640042) index="1" unique_id=1283126166]
+transform = Transform3D(-0.9998405, 0, 0.0178698, 0, 1, 0, -0.0178698, 0, -0.9998405, 2.527069, 0, -0.1790371)
+
+[node name="Baluster14" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="30" unique_id=1373383857]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 0.04237175, 3.3688874, 2.3823223)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step15" parent_id_path=PackedInt32Array(867008395, 708787101, 1378324771) index="0" unique_id=1187587335]
+transform = Transform3D(-0.99984, 0, 0.01786974, 0, 0.99999946, 0, -0.01786974, 0, -0.99984, 2.4583502, 0, -0.3451519)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step15" parent_id_path=PackedInt32Array(867008395, 708787101, 1378324771) index="1" unique_id=472744997]
+transform = Transform3D(-0.99984, 0, 0.01786974, 0, 0.99999946, 0, -0.01786974, 0, -0.99984, 2.4583502, 0, -0.3451519)
+
+[node name="Baluster15" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="32" unique_id=1023120584]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, -0.35926437, 3.5911098, 2.3040774)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step16" parent_id_path=PackedInt32Array(867008395, 708787101, 1123762006) index="0" unique_id=1283560781]
+transform = Transform3D(-0.9998399, 0, 0.017869651, 0, 0.99999946, 0, -0.017869651, 0, -0.9998399, 2.351295, 0, -0.48957038)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step16" parent_id_path=PackedInt32Array(867008395, 708787101, 1123762006) index="1" unique_id=720162010]
+transform = Transform3D(-0.9998399, 0, 0.017869651, 0, 0.99999946, 0, -0.017869651, 0, -0.9998399, 2.351295, 0, -0.48957038)
+
+[node name="Baluster16" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="34" unique_id=1299748344]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, -0.7298186, 3.8133318, 2.130514)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step17" parent_id_path=PackedInt32Array(867008395, 708787101, 1817101715) index="0" unique_id=56587469]
+transform = Transform3D(-0.99984044, 0, 0.017869383, 0, 1, 0, -0.017869383, 0, -0.99984044, 2.212336, 0, -0.60362005)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step17" parent_id_path=PackedInt32Array(867008395, 708787101, 1817101715) index="1" unique_id=1048210635]
+transform = Transform3D(-0.99984044, 0, 0.017869383, 0, 1, 0, -0.017869383, 0, -0.99984044, 2.212336, 0, -0.60362005)
+
+[node name="Baluster17" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="36" unique_id=476945522]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, -1.04704, 4.035555, 1.8720512)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step18" parent_id_path=PackedInt32Array(867008395, 708787101, 1064997953) index="0" unique_id=1348430743]
+transform = Transform3D(-0.9998401, 0, 0.017869592, 0, 0.99999946, 0, -0.017869592, 0, -0.9998401, 2.0498123, 0, -0.68045354)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step18" parent_id_path=PackedInt32Array(867008395, 708787101, 1064997953) index="1" unique_id=1159118685]
+transform = Transform3D(-0.9998401, 0, 0.017869592, 0, 0.99999946, 0, -0.017869592, 0, -0.9998401, 2.0498123, 0, -0.68045354)
+
+[node name="Baluster18" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="38" unique_id=1992278391]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, -1.291889, 4.257777, 1.5442066)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step19" parent_id_path=PackedInt32Array(867008395, 708787101, 2041709892) index="0" unique_id=1239987997]
+transform = Transform3D(-0.99984014, 0, 0.01786973, 0, 0.99999946, 0, -0.01786973, 0, -0.99984014, 1.873487, 0, -0.71546507)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step19" parent_id_path=PackedInt32Array(867008395, 708787101, 2041709892) index="1" unique_id=2099057123]
+transform = Transform3D(-0.99984014, 0, 0.01786973, 0, 0.99999946, 0, -0.01786973, 0, -0.99984014, 1.873487, 0, -0.71546507)
+
+[node name="Baluster19" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="40" unique_id=214410501]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, -1.4496632, 4.4799995, 1.1666594)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step20" parent_id_path=PackedInt32Array(867008395, 708787101, 142458923) index="0" unique_id=1938343564]
+transform = Transform3D(-0.99984056, 0, 0.01786977, 0, 1, 0, -0.01786977, 0, -0.99984056, 1.6939416, 0, -0.70654106)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step20" parent_id_path=PackedInt32Array(867008395, 708787101, 142458923) index="1" unique_id=1452742824]
+transform = Transform3D(-0.99984056, 0, 0.01786977, 0, 1, 0, -0.01786977, 0, -0.99984056, 1.6939416, 0, -0.70654106)
+
+[node name="Baluster20" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="42" unique_id=984340402]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, -1.5108914, 4.702222, 0.76208067)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step21" parent_id_path=PackedInt32Array(867008395, 708787101, 1658405174) index="0" unique_id=1675398834]
+transform = Transform3D(-0.99984, 0, 0.017869681, 0, 1, 0, -0.017869681, 0, -0.99984, 1.5219514, 0, -0.6542239)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step21" parent_id_path=PackedInt32Array(867008395, 708787101, 1658405174) index="1" unique_id=841982308]
+transform = Transform3D(-0.99984, 0, 0.017869681, 0, 1, 0, -0.017869681, 0, -0.99984, 1.5219514, 0, -0.6542239)
+
+[node name="Baluster21" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="44" unique_id=1500801378]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, -1.4718974, 4.924444, 0.35475636)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step22" parent_id_path=PackedInt32Array(867008395, 708787101, 958070076) index="0" unique_id=585838742]
+transform = Transform3D(-0.99984026, 0, 0.01786977, 0, 0.99999964, 0, -0.01786977, 0, -0.99984026, 1.3678491, 0, -0.5616536)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step22" parent_id_path=PackedInt32Array(867008395, 708787101, 958070076) index="1" unique_id=1827809298]
+transform = Transform3D(-0.99984026, 0, 0.01786977, 0, 0.99999964, 0, -0.01786977, 0, -0.99984026, 1.3678491, 0, -0.5616536)
+
+[node name="Baluster22" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="46" unique_id=1133261184]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, -1.3350224, 5.1466665, -0.03085804)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step23" parent_id_path=PackedInt32Array(867008395, 708787101, 208629799) index="0" unique_id=1219905503]
+transform = Transform3D(-0.9998405, 0, 0.017869592, 0, 1, 0, -0.017869592, 0, -0.9998405, 1.2408805, 0, -0.4343872)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step23" parent_id_path=PackedInt32Array(867008395, 708787101, 208629799) index="1" unique_id=1634509289]
+transform = Transform3D(-0.9998405, 0, 0.017869592, 0, 1, 0, -0.017869592, 0, -0.9998405, 1.2408805, 0, -0.4343872)
+
+[node name="Baluster23" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="48" unique_id=371652043]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, -1.1084828, 5.368886, -0.37161303)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step24" parent_id_path=PackedInt32Array(867008395, 708787101, 119935071) index="0" unique_id=946643085]
+transform = Transform3D(-0.9998399, 0, 0.01786977, 0, 0.9999996, 0, -0.01786977, 0, -0.9998399, 1.1486737, 0, -0.28006935)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step24" parent_id_path=PackedInt32Array(867008395, 708787101, 119935071) index="1" unique_id=1034291196]
+transform = Transform3D(-0.9998399, 0, 0.01786977, 0, 0.9999996, 0, -0.01786977, 0, -0.9998399, 1.1486737, 0, -0.28006935)
+
+[node name="Baluster24" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="50" unique_id=36907505]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, -0.80588317, 5.5911083, -0.64705086)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step25" parent_id_path=PackedInt32Array(867008395, 708787101, 1239510035) index="0" unique_id=1894630377]
+transform = Transform3D(-0.9998404, 0, 0.01786964, 0, 1, 0, -0.01786964, 0, -0.9998404, 1.0967607, 0, -0.10795593)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step25" parent_id_path=PackedInt32Array(867008395, 708787101, 1239510035) index="1" unique_id=450926518]
+transform = Transform3D(-0.9998404, 0, 0.01786964, 0, 1, 0, -0.01786964, 0, -0.9998404, 1.0967607, 0, -0.10795593)
+
+[node name="Baluster25" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="52" unique_id=1886027072]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, -0.44538498, 5.8133307, -0.84063435)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step26" parent_id_path=PackedInt32Array(867008395, 708787101, 535554239) index="0" unique_id=254726678]
+transform = Transform3D(-0.9998402, 0, 0.017869726, 0, 0.9999996, 0, -0.017869726, 0, -0.9998402, 1.0882583, 0, 0.07161093)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step26" parent_id_path=PackedInt32Array(867008395, 708787101, 535554239) index="1" unique_id=1857881451]
+transform = Transform3D(-0.9998402, 0, 0.017869726, 0, 0.9999996, 0, -0.017869726, 0, -0.9998402, 1.0882583, 0, 0.07161093)
+
+[node name="Baluster26" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="54" unique_id=258297850]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, -0.048631668, 6.0355525, -0.9407425)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step27" parent_id_path=PackedInt32Array(867008395, 708787101, 1355325498) index="0" unique_id=1583799315]
+transform = Transform3D(-0.99983996, 0, 0.017869502, 0, 1, 0, -0.017869502, 0, -0.99983996, 1.1236792, 0, 0.24785662)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step27" parent_id_path=PackedInt32Array(867008395, 708787101, 1355325498) index="1" unique_id=1797416893]
+transform = Transform3D(-0.99983996, 0, 0.017869502, 0, 1, 0, -0.017869502, 0, -0.99983996, 1.1236792, 0, 0.24785662)
+
+[node name="Baluster27" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="56" unique_id=1490175280]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 0.36055183, 6.257775, -0.9413662)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step28" parent_id_path=PackedInt32Array(867008395, 708787101, 651294173) index="0" unique_id=516254123]
+transform = Transform3D(-0.9998398, 0, 0.017869592, 0, 0.99999946, 0, -0.017869592, 0, -0.9998398, 1.2008953, 0, 0.41019535)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step28" parent_id_path=PackedInt32Array(867008395, 708787101, 651294173) index="1" unique_id=1348483049]
+transform = Transform3D(-0.9998398, 0, 0.017869592, 0, 0.99999946, 0, -0.017869592, 0, -0.9998398, 1.2008953, 0, 0.41019535)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step29" parent_id_path=PackedInt32Array(867008395, 708787101, 1552266951) index="0" unique_id=1549142943]
+transform = Transform3D(-0.9998398, 0, 0.017869592, 0, 0.99999946, 0, -0.017869592, 0, -0.9998398, 0.8956704, 0, 1.1139872)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step29" parent_id_path=PackedInt32Array(867008395, 708787101, 1552266951) index="1" unique_id=100353578]
+transform = Transform3D(-0.9998398, 0, 0.017869592, 0, 0.99999946, 0, -0.017869592, 0, -0.9998398, 0.8956704, 0, 1.1139872)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step30" parent_id_path=PackedInt32Array(867008395, 708787101, 947108146) index="0" unique_id=95540927]
+transform = Transform3D(-0.9998398, 0, 0.017869592, 0, 0.99999946, 0, -0.017869592, 0, -0.9998398, 1.0587492, 0, 1.5748119)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step30" parent_id_path=PackedInt32Array(867008395, 708787101, 947108146) index="1" unique_id=617063200]
+transform = Transform3D(-0.9998398, 0, 0.017869592, 0, 0.99999946, 0, -0.017869592, 0, -0.9998398, 1.0587492, 0, 1.5748119)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step31" parent_id_path=PackedInt32Array(867008395, 708787101, 1371594437) index="0" unique_id=273794383]
+transform = Transform3D(-0.9998398, 0, 0.017869592, 0, 0.99999946, 0, -0.017869592, 0, -0.9998398, 1.2408085, 0, 2.0892718)
+
+[node name="Collision" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step31" parent_id_path=PackedInt32Array(867008395, 708787101, 1371594437) index="1" unique_id=1912579848]
+transform = Transform3D(-0.9998398, 0, 0.017869592, 0, 0.99999946, 0, -0.017869592, 0, -0.9998398, 1.2408085, 0, 2.0892718)
+
+[node name="Tread" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase/Step32" parent_id_path=PackedInt32Array(867008395, 708787101, 1081603538) index="0" unique_id=621406055]
+transform = Transform3D(-0.9998398, 0, 0.017869592, 0, 0.99999946, 0, -0.017869592, 0, -0.9998398, 1.3982677, 0, 2.5342183)
+
+[node name="Baluster28" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="64" unique_id=1863360938]
+transform = Transform3D(-0.9998398, 0, 0.01786971, 0, 0.99999946, 0, -0.01786971, 0, -0.9998398, 0.7576065, 6.479997, -0.84246635)
+
+[node name="Handrail01" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="65" unique_id=565126426]
+transform = Transform3D(0.4799584, 0.87008715, -0.11219421, -0.8772489, 0.4772451, -0.051680025, 0.008578002, 0.12322652, 0.9923411, 0.3908968, 1.0711112, -0.92467976)
+
+[node name="Handrail02" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="66" unique_id=837859361]
+transform = Transform3D(0.5030306, 0.8140032, -0.29044476, -0.86422145, 0.47724515, -0.15924136, 0.0089904815, 0.33111238, 0.9435481, 0.7829819, 1.293333, -0.818902)
+
+[node name="Handrail03" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="67" unique_id=2078858115]
+transform = Transform3D(0.55335534, 0.70904994, -0.43708694, -0.8328862, 0.47724494, -0.28024495, 0.009889826, 0.5191189, 0.85464424, 1.1375761, 1.5155554, -0.6209521)
+
+[node name="Handrail04" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="68" unique_id=793714413]
+transform = Transform3D(0.63953865, 0.56152844, -0.5250476, -0.76867336, 0.4772451, -0.42588466, 0.011430293, 0.67596054, 0.73684883, 1.4333887, 1.7377777, -0.34271717)
+
+[node name="Handrail05" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="69" unique_id=267268527]
+transform = Transform3D(0.7707232, 0.38029537, -0.5112344, -0.63702065, 0.47724518, -0.60534346, 0.013774827, 0.7922194, 0.61008, 1.6526623, 1.96, -0.0008983612)
+
+[node name="Handrail06" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="70" unique_id=509803013]
+transform = Transform3D(0.9278655, 0.17623055, -0.32864493, -0.3725448, 0.47724468, -0.7958938, 0.016583383, 0.86091745, 0.50847286, 1.7822304, 2.1822224, 0.38398075)
+
+[node name="Handrail07" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="71" unique_id=597948792]
+transform = Transform3D(0.9987091, -0.03841403, 0.033228353, 0.04755159, 0.4772453, -0.8774825, 0.017849475, 0.87792957, 0.4784558, 1.8143182, 2.4044447, 0.78881454)
+
+[node name="Handrail08" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="72" unique_id=1915276733]
+transform = Transform3D(0.89649725, -0.2507525, 0.36526, 0.44275847, 0.4772447, -0.7590793, 0.016022563, 0.8422348, 0.53887135, 1.746994, 2.6266665, 1.1892991)
+
+[node name="Handrail09" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="73" unique_id=750244392]
+transform = Transform3D(0.739361, -0.4480368, 0.5026007, 0.6731788, 0.47724518, -0.5648597, 0.01321426, 0.7559757, 0.6544656, 1.5843039, 2.8488889, 1.5613909)
+
+[node name="Handrail10" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="74" unique_id=895265042]
+transform = Transform3D(0.6178702, -0.61842304, 0.48558056, 0.786202, 0.4772448, -0.3925849, 0.011043102, 0.6243311, 0.7810811, 1.3360143, 3.0711112, 1.8827515)
+
+[node name="Handrail11" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="75" unique_id=1466372081]
+transform = Transform3D(0.5401326, -0.7516815, 0.3784585, 0.8415239, 0.47724503, -0.25312692, 0.009653404, 0.45520437, 0.89033383, 1.0170288, 3.2933319, 2.1340868)
+
+[node name="Handrail12" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="76" unique_id=105704996]
+transform = Transform3D(0.4961152, -0.83981264, 0.220417, 0.8682109, 0.4772451, -0.13581568, 0.008866832, 0.2587488, 0.96590334, 0.6465006, 3.5155542, 2.3003075)
+
+[node name="Handrail13" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="77" unique_id=1361185063]
+transform = Transform3D(0.47810113, -0.87752485, 0.03698936, 0.87826264, 0.47724482, -0.0298543, 0.008544937, 0.046759814, 0.9988691, 0.24667358, 3.7377763, 2.3714342)
+
+[node name="Handrail14" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="78" unique_id=1773244142]
+transform = Transform3D(0.48282352, -0.86255443, -0.15126416, 0.8756751, 0.47724536, 0.07368923, 0.008629262, -0.1680372, 0.98574257, -0.15844774, 3.9599986, 2.343199)
+
+[node name="Handrail15" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="79" unique_id=124205102]
+transform = Transform3D(0.5111375, -0.7957995, -0.32471588, 0.85944957, 0.47724494, 0.18325444, 0.009135261, -0.37274545, 0.9278879, -0.5445423, 4.1822224, 2.2172956)
+
+[node name="Handrail16" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="80" unique_id=755012241]
+transform = Transform3D(0.5681568, -0.6812686, -0.46159476, 0.82285714, 0.47724447, 0.30845258, 0.010154381, -0.5550765, 0.8317368, -0.88842916, 4.4044447, 2.0012827)
+
+[node name="Handrail17" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="81" unique_id=1388731220]
+transform = Transform3D(0.66326696, -0.5258372, -0.53251386, 0.74828815, 0.47724506, 0.46076125, 0.011854202, -0.70408183, 0.71001893, -1.1694646, 4.626666, 1.708127)
+
+[node name="Handrail18" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="82" unique_id=1531924332]
+transform = Transform3D(0.8036245, -0.33883637, -0.48926097, 0.5949623, 0.47724533, 0.646727, 0.014362723, -0.810818, 0.585121, -1.3707752, 4.8488884, 1.355432)
+
+[node name="Handrail19" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="83" unique_id=2072438732]
+transform = Transform3D(0.955539, -0.13149399, -0.26392046, 0.29436895, 0.4772453, 0.8279998, 0.017077714, -0.86887604, 0.49473405, -1.4802768, 5.0711107, 0.96437025)
+
+[node name="Handrail20" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="84" unique_id=57993717]
+transform = Transform3D(0.9898139, 0.083743244, 0.115126714, -0.1412591, 0.47724435, 0.86734235, 0.01769039, -0.87477064, 0.48421282, -1.491395, 5.29333, 0.5584192)
+
+[node name="Handrail21" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="85" unique_id=1249047940]
+transform = Transform3D(0.86307776, 0.29395282, 0.41071546, -0.50483406, 0.47724524, 0.7192903, 0.015425295, -0.8281473, 0.56029737, -1.40346, 5.5155525, 0.16194868)
+
+[node name="Handrail22" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="86" unique_id=2132224927]
+transform = Transform3D(0.70987767, 0.4865144, 0.50929046, -0.70421016, 0.47724515, 0.52566516, 0.012687251, -0.7318058, 0.6813946, -1.2217526, 5.737775, -0.20123577)
+
+[node name="Handrail23" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="87" unique_id=1373274192]
+transform = Transform3D(0.5981775, 0.6498681, 0.4688861, -0.8012918, 0.4772451, 0.36078772, 0.010690957, -0.59152985, 0.8062116, -0.95718384, 5.959997, -0.5093317)
+
+[node name="Handrail24" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="88" unique_id=64982033]
+transform = Transform3D(0.52838993, 0.77420634, 0.3484359, -0.84894896, 0.4772454, 0.22698478, 0.009443596, -0.41574088, 0.9094336, -0.6256342, 6.1822195, -0.7438412)
+
+[node name="Handrail25" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="89" unique_id=1318972967]
+transform = Transform3D(0.49033514, 0.85206497, 0.18318184, -0.8714896, 0.4772444, 0.11288577, 0.008763507, -0.21499303, 0.976576, -0.24700975, 6.404442, -0.89068794)
+
+[node name="Handrail26" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="90" unique_id=1445615307]
+transform = Transform3D(0.47723824, 0.8787688, -0.0028951764, -0.87873214, 0.47724518, 0.0081336945, 0.008529484, -0.0013375878, 0.9999623, 0.15596056, 6.6266637, -0.9410529)
+
+[node name="Handrail27" parent="BasementAccessAndInitialRoom/BasementSpiralStaircase" parent_id_path=PackedInt32Array(867008395, 708787101) index="91" unique_id=1353679863]
+transform = Transform3D(0.48671943, 0.85271496, -0.18968451, -0.87351483, 0.4772453, -0.09596066, 0.008698896, 0.21239817, 0.977144, 0.5590801, 6.848886, -0.8919153)
+
 [node name="Mesh" parent="BasementAccessAndInitialRoom/WestWall" parent_id_path=PackedInt32Array(867008395, 844975574) index="0" unique_id=2132288380]
 material_override = SubResource("ShaderMaterial_xp51w")
 
@@ -4443,6 +4800,18 @@ transform = Transform3D(-1.40046, 0, 0.34783763, 0, 0.9799999, 0, -0.34783763, 0
 
 [node name="GrassBlock36" parent="GrassClumpsStagingFrontDoor" unique_id=539235388 instance=ExtResource("198_editable_grass")]
 transform = Transform3D(-0.15351118, 0.0009934803, -1.3412428, 0.00067900616, 1.0499991, 0.0012079576, 1.3412431, -0.00041785857, -0.15351179, -8.334821, 0.028116103, 3.053839)
+
+[node name="GrassBlock85" parent="GrassClumpsStagingFrontDoor" unique_id=803715484 instance=ExtResource("198_editable_grass")]
+transform = Transform3D(-0.15351118, 0.0009934803, -1.3412428, 0.00067900616, 1.0499991, 0.0012079576, 1.3412431, -0.00041785857, -0.15351179, -7.38388, 0.028116103, 1.6367638)
+
+[node name="GrassBlock86" parent="GrassClumpsStagingFrontDoor" unique_id=775549038 instance=ExtResource("198_editable_grass")]
+transform = Transform3D(-1.1382569, 0.0009504403, -0.7258574, 0.00067900616, 1.0499991, 0.0012079575, 0.7258581, 0.00050820515, -1.1382571, -5.940754, 0.028116103, 1.0849769)
+
+[node name="GrassBlock87" parent="GrassClumpsStagingFrontDoor" unique_id=1909146551 instance=ExtResource("198_editable_grass")]
+transform = Transform3D(-1.1382569, 0.0009504403, -0.7258574, 0.00067900616, 1.0499991, 0.0012079575, 0.7258581, 0.00050820515, -1.1382571, -5.940754, 0.028116103, 4.6733375)
+
+[node name="GrassBlock88" parent="GrassClumpsStagingFrontDoor" unique_id=1985686258 instance=ExtResource("198_editable_grass")]
+transform = Transform3D(-1.1382569, 0.0009504403, -0.7258574, 0.00067900616, 1.0499991, 0.0012079575, 0.7258581, 0.00050820515, -1.1382571, -7.808252, 0.028116103, 4.845569)
 
 [node name="GrassBlock37" parent="GrassClumpsStagingFrontDoor" unique_id=659458832 instance=ExtResource("198_editable_grass")]
 transform = Transform3D(-1.3320265, 0.0011164831, -0.6547892, 0.0015209068, 1.1799996, 8.9454035e-05, 0.65478885, -0.00046959368, -1.3320273, -8.885737, 0.029153023, 4.349597)

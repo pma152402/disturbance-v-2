@@ -81,11 +81,11 @@ size = Vector3(3.2, 0.025, 25.88)
 material = SubResource("Material_yard_dirt")
 size = Vector3(3.2, 0.025, 18.62)
 [sub_resource type="BoxMesh" id="Mesh_dirt_collar_x"]
-material = SubResource("Material_yard_dirt")
-size = Vector3(0.275, 0.025, 2.9)
+material = SubResource("Material_wet_ground")
+size = Vector3(0.55, 0.025, 3.35)
 [sub_resource type="BoxMesh" id="Mesh_dirt_collar_z"]
-material = SubResource("Material_yard_dirt")
-size = Vector3(2.65, 0.025, 0.28)
+material = SubResource("Material_wet_ground")
+size = Vector3(3.35, 0.025, 0.55)
 
 [sub_resource type="StandardMaterial3D" id="Material_entry_path"]
 albedo_color = Color(0.46, 0.39, 0.28, 1)
@@ -343,19 +343,19 @@ position = Vector3(-5.74, -0.1, 4.94)
 mesh = SubResource("Mesh_ground_collar_z")
 
 [node name="CollarDirtWest" type="MeshInstance3D" parent="CellarGroundCutout"]
-position = Vector3(-7.2025, -0.012, 3.63)
+position = Vector3(-7.29, -0.012, 3.3)
 mesh = SubResource("Mesh_dirt_collar_x")
 
 [node name="CollarDirtEast" type="MeshInstance3D" parent="CellarGroundCutout"]
-position = Vector3(-4.2775, -0.012, 3.63)
+position = Vector3(-4.19, -0.012, 3.3)
 mesh = SubResource("Mesh_dirt_collar_x")
 
 [node name="CollarDirtNorth" type="MeshInstance3D" parent="CellarGroundCutout"]
-position = Vector3(-5.74, -0.012, 2.32)
+position = Vector3(-5.74, -0.012, 1.9)
 mesh = SubResource("Mesh_dirt_collar_z")
 
 [node name="CollarDirtSouth" type="MeshInstance3D" parent="CellarGroundCutout"]
-position = Vector3(-5.74, -0.012, 4.94)
+position = Vector3(-5.74, -0.012, 4.7)
 mesh = SubResource("Mesh_dirt_collar_z")
 
 [node name="GroundCutoutCollision" type="StaticBody3D" parent="CellarGroundCutout"]
