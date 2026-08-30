@@ -49,6 +49,14 @@ func interact(player: Node) -> bool:
 	return true
 
 
+func ensure_open_for_npc(actor: Node) -> bool:
+	# NPCs only request an open passage. Reusing interact() while closed keeps
+	# locked-door checks in derived scripts, but never toggles an open door shut.
+	if _is_open:
+		return true
+	return interact(actor)
+
+
 func _play_door_sound(opening: bool) -> void:
 	door_sound.stream = _open_sound if opening else _close_sound
 	door_sound.volume_db = -7.0 if opening else -5.5

@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://ps2_house/textures/Metal1.jpg" id="1_metal"]
+
+[resource]
+albedo_color = Color(0.31, 0.15, 0.075, 1)
+albedo_texture = ExtResource("1_metal")
+metallic = 0.24
+roughness = 0.92
+texture_filter = 0
+uv1_scale = Vector3(2.0, 2.0, 2.0)
+uv1_triplanar = true
+uv1_world_triplanar = true
+

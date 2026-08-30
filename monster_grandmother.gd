@@ -395,9 +395,9 @@ func _try_open_door() -> void:
 	if not door_ray.is_colliding():
 		return
 	var collider := door_ray.get_collider()
-	if collider and collider.has_method(&"interact"):
+	if collider and collider.has_method(&"ensure_open_for_npc"):
 		_door_cooldown = 1.0
-		collider.call_deferred(&"interact", self)
+		collider.call_deferred(&"ensure_open_for_npc", self)
 
 
 func _update_animation(delta: float) -> void:

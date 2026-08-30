@@ -3,8 +3,17 @@ extends RefCounted
 
 const MIX_RATE := 22050
 
+static var _switch_click_cache: AudioStreamWAV
+static var _footstep_cache: AudioStreamWAV
+static var _can_impact_cache: AudioStreamWAV
+static var _glass_break_cache: AudioStreamWAV
+static var _door_open_cache: AudioStreamWAV
+static var _door_close_cache: AudioStreamWAV
+
 
 static func make_switch_click() -> AudioStreamWAV:
+	if _switch_click_cache != null:
+		return _switch_click_cache
 	var duration := 0.105
 	var sample_count := int(MIX_RATE * duration)
 	var samples := PackedFloat32Array()
@@ -21,10 +30,13 @@ static func make_switch_click() -> AudioStreamWAV:
 		var body := 0.34 * exp(-time * 38.0) * sin(TAU * 165.0 * time)
 		var grit := rng.randf_range(-1.0, 1.0) * exp(-time * 85.0) * 0.14
 		samples[index] = clampf((first_snap * 0.48 + second_snap + body + grit) * 0.72, -1.0, 1.0)
-	return _stream_from_samples(samples)
+	_switch_click_cache = _stream_from_samples(samples)
+	return _switch_click_cache
 
 
 static func make_footstep() -> AudioStreamWAV:
+	if _footstep_cache != null:
+		return _footstep_cache
 	var duration := 0.16
 	var sample_count := int(MIX_RATE * duration)
 	var samples := PackedFloat32Array()
@@ -42,10 +54,13 @@ static func make_footstep() -> AudioStreamWAV:
 			sole = 0.0
 		var texture := smoothed_noise * exp(-time * 18.0)
 		samples[index] = clampf(heel * 0.42 + sole * 0.22 + texture * 0.28, -1.0, 1.0)
-	return _stream_from_samples(samples)
+	_footstep_cache = _stream_from_samples(samples)
+	return _footstep_cache
 
 
 static func make_can_impact() -> AudioStreamWAV:
+	if _can_impact_cache != null:
+		return _can_impact_cache
 	var duration := 0.24
 	var sample_count := int(MIX_RATE * duration)
 	var samples := PackedFloat32Array()
@@ -59,10 +74,13 @@ static func make_can_impact() -> AudioStreamWAV:
 		var body := sin(TAU * 185.0 * time) * exp(-time * 31.0)
 		var rattle := rng.randf_range(-1.0, 1.0) * exp(-time * 38.0)
 		samples[index] = clampf(strike * 0.35 + ring * 0.2 + body * 0.28 + rattle * 0.12, -1.0, 1.0)
-	return _stream_from_samples(samples)
+	_can_impact_cache = _stream_from_samples(samples)
+	return _can_impact_cache
 
 
 static func make_glass_break() -> AudioStreamWAV:
+	if _glass_break_cache != null:
+		return _glass_break_cache
 	var duration := 0.42
 	var sample_count := int(MIX_RATE * duration)
 	var samples := PackedFloat32Array()
@@ -80,10 +98,13 @@ static func make_glass_break() -> AudioStreamWAV:
 		if time < 0.075:
 			scatter = 0.0
 		samples[index] = clampf(initial_crack * 0.5 + chime_a * 0.18 + chime_b * 0.12 + scatter * 0.18, -1.0, 1.0)
-	return _stream_from_samples(samples)
+	_glass_break_cache = _stream_from_samples(samples)
+	return _glass_break_cache
 
 
 static func make_door_open() -> AudioStreamWAV:
+	if _door_open_cache != null:
+		return _door_open_cache
 	var duration := 0.38
 	var sample_count := int(MIX_RATE * duration)
 	var samples := PackedFloat32Array()
@@ -99,10 +120,13 @@ static func make_door_open() -> AudioStreamWAV:
 		var hinge_grit := smoothed_noise * sin(PI * clampf(time / duration, 0.0, 1.0))
 		var latch := sin(TAU * 640.0 * time) * exp(-time * 70.0)
 		samples[index] = clampf(creak * 0.38 + hinge_grit * 0.24 + latch * 0.18, -1.0, 1.0)
-	return _stream_from_samples(samples)
+	_door_open_cache = _stream_from_samples(samples)
+	return _door_open_cache
 
 
 static func make_door_close() -> AudioStreamWAV:
+	if _door_close_cache != null:
+		return _door_close_cache
 	var duration := 0.26
 	var sample_count := int(MIX_RATE * duration)
 	var samples := PackedFloat32Array()
@@ -118,7 +142,8 @@ static func make_door_close() -> AudioStreamWAV:
 		if time < 0.055:
 			latch = 0.0
 		samples[index] = clampf(wood_thud * 0.52 + frame_hit * 0.24 + latch * 0.3, -1.0, 1.0)
-	return _stream_from_samples(samples)
+	_door_close_cache = _stream_from_samples(samples)
+	return _door_close_cache
 
 
 static func _stream_from_samples(samples: PackedFloat32Array) -> AudioStreamWAV:

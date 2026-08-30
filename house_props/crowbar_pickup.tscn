@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://bw7x63114y08g"]
+
+[ext_resource type="Script" uid="uid://o6mefudt8cpt" path="res://house_props/crowbar_pickup.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="Material_red"]
+albedo_color = Color(0.31, 0.035, 0.025, 1)
+metallic = 0.72
+roughness = 0.48
+
+[sub_resource type="CylinderMesh" id="Mesh_shaft"]
+material = SubResource("Material_red")
+top_radius = 0.045
+bottom_radius = 0.05
+height = 1.28
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="Material_worn"]
+albedo_color = Color(0.13, 0.055, 0.035, 1)
+metallic = 0.64
+roughness = 0.62
+
+[sub_resource type="CylinderMesh" id="Mesh_hook"]
+material = SubResource("Material_worn")
+top_radius = 0.043
+bottom_radius = 0.047
+height = 0.34
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="Material_edge"]
+albedo_color = Color(0.42, 0.43, 0.4, 1)
+metallic = 0.9
+roughness = 0.28
+
+[sub_resource type="BoxMesh" id="Mesh_tip"]
+material = SubResource("Material_edge")
+size = Vector3(0.24, 0.035, 0.095)
+
+[sub_resource type="CylinderMesh" id="Mesh_collared"]
+material = SubResource("Material_edge")
+top_radius = 0.055
+bottom_radius = 0.055
+height = 0.035
+radial_segments = 10
+
+[sub_resource type="CapsuleShape3D" id="Shape_pickup"]
+radius = 0.11
+height = 1.78
+
+[node name="CrowbarPickup" type="StaticBody3D" unique_id=1875665869]
+editor_description = "Palanca de acero rojo desgastado con gancho curvo, uña de palanca y metal expuesto. Se recoge con F."
+collision_layer = 2
+script = ExtResource("1_script")
+
+[node name="Visual" type="Node3D" parent="." unique_id=1537882401]
+
+[node name="MainShaft" type="MeshInstance3D" parent="Visual" unique_id=222396707]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
+mesh = SubResource("Mesh_shaft")
+
+[node name="UpperCurveA" type="MeshInstance3D" parent="Visual" unique_id=1144950564]
+transform = Transform3D(0.63337976, 0.7738411, 0, -0.7738411, 0.63337976, 0, 0, 0, 1, 0.10318513, 1.4838685, 0)
+mesh = SubResource("Mesh_hook")
+
+[node name="UpperCurveB" type="MeshInstance3D" parent="Visual" unique_id=467201010]
+transform = Transform3D(0.523366, 0.852108, 0, -0.852108, 0.523366, 0, 0, 0, 1, 0.25318512, 1.6038685, 0)
+mesh = SubResource("Mesh_hook")
+
+[node name="UpperFlatTip" type="MeshInstance3D" parent="Visual" unique_id=1682551028]
+transform = Transform3D(0.8951681, 0.44572872, 0, -0.44572872, 0.8951681, 0, 0, 0, 1, 0.45839566, 1.6641146, 0)
+mesh = SubResource("Mesh_tip")
+
+[node name="LowerPryTip" type="MeshInstance3D" parent="Visual" unique_id=352946484]
+transform = Transform3D(0.93853325, -0.34518877, 0, 0.34518877, 0.93853325, 0, 0, 0, 1, -0.12320009, 0.115999825, 0)
+mesh = SubResource("Mesh_tip")
+
+[node name="CollarUpper" type="MeshInstance3D" parent="Visual" unique_id=1385198171]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00030243956, 1.355, 0)
+mesh = SubResource("Mesh_collared")
+
+[node name="CollarLower" type="MeshInstance3D" parent="Visual" unique_id=1423039692]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00083028246, 0.16, 0)
+mesh = SubResource("Mesh_collared")
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=1987451391]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 0.82, 0)
+shape = SubResource("Shape_pickup")

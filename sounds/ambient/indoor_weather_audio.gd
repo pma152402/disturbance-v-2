@@ -3,10 +3,15 @@ extends Node
 ## Amortigua la tormenta cuando el jugador esta dentro de la casa.
 ## El cambio es progresivo para que atravesar una puerta no produzca un corte.
 
-const LOWER_CHURCH_BASEMENT_ROOM := AABB(
-	Vector3(-12.4, -4.5, -42.6),
-	Vector3(8.8, 5.2, 4.8)
-)
+const EXPLICIT_INDOOR_VOLUMES: Array[AABB] = [
+	# Sala inferior de la iglesia, cuyo acceso abierto deja escapar el rayo vertical.
+	AABB(Vector3(-12.4, -4.5, -42.6), Vector3(8.8, 5.2, 4.8)),
+	# Descenso localizado. No se extiende hasta el exterior situado sobre el sotano.
+	AABB(Vector3(-10.3, -10.1, -48.7), Vector3(4.6, 6.5, 7.2)),
+	# Planta subterranea: el techo del volumen queda bien por debajo del terreno,
+	# para no amortiguar la lluvia cuando el jugador camina fuera de la iglesia.
+	AABB(Vector3(-62.0, -5.2, -186.0), Vector3(112.0, 4.9, 156.0)),
+]
 
 @export_node_path("Node3D") var player_path: NodePath = NodePath("../Player")
 @export var bus_name: StringName = &"Weather"
@@ -57,7 +62,7 @@ func _exit_tree() -> void:
 func _is_inside_house(position: Vector3) -> bool:
 	# La sala inferior de la iglesia tiene un hueco de escalera abierto, por lo
 	# que un rayo vertical puede escapar por el acceso aunque el jugador esté dentro.
-	if LOWER_CHURCH_BASEMENT_ROOM.has_point(position):
+	if _is_inside_explicit_volume(position):
 		return true
 	if _player == null or not is_instance_valid(_player):
 		return false
@@ -75,6 +80,13 @@ func _is_inside_house(position: Vector3) -> bool:
 	query.collide_with_areas = false
 	query.hit_from_inside = true
 	return not world.direct_space_state.intersect_ray(query).is_empty()
+
+
+func _is_inside_explicit_volume(position: Vector3) -> bool:
+	for volume: AABB in EXPLICIT_INDOOR_VOLUMES:
+		if volume.has_point(position):
+			return true
+	return false
 
 
 func _setup_weather_bus() -> void:

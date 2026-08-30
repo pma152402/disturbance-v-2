@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://sounds/ambient/indoor_weather_audio.gd" id="10_indoor_weather"]
 [ext_resource type="PackedScene" path="res://runtime_house_navigation.tscn" id="11_runtime_navigation"]
 [ext_resource type="PackedScene" path="res://monster_grandmother.tscn" id="12_monster_grandmother"]
+[ext_resource type="PackedScene" path="res://runtime_catacomb_navigation.tscn" id="13_catacomb_navigation"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_storm"]
 panorama = ExtResource("5_storm_panorama")
@@ -114,6 +115,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.2, 0)
 [node name="ExteriorEnvironment" parent="." unique_id=1088491580 instance=ExtResource("6_exterior")]
 
 [node name="RuntimeHouseNavigation" parent="." instance=ExtResource("11_runtime_navigation")]
+
+[node name="RuntimeCatacombNavigation" parent="." instance=ExtResource("13_catacomb_navigation")]
 
 [node name="Player" parent="." unique_id=546288329 instance=ExtResource("1_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 8.5)

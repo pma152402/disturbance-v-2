@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Material_red"]
+albedo_color = Color(0.31, 0.035, 0.025, 1)
+metallic = 0.72
+roughness = 0.48
+
+[sub_resource type="StandardMaterial3D" id="Material_worn"]
+albedo_color = Color(0.13, 0.055, 0.035, 1)
+metallic = 0.64
+roughness = 0.62
+
+[sub_resource type="StandardMaterial3D" id="Material_edge"]
+albedo_color = Color(0.42, 0.43, 0.4, 1)
+metallic = 0.9
+roughness = 0.28
+
+[sub_resource type="CylinderMesh" id="Mesh_shaft"]
+material = SubResource("Material_red")
+top_radius = 0.045
+bottom_radius = 0.05
+height = 1.28
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="Mesh_hook"]
+material = SubResource("Material_worn")
+top_radius = 0.043
+bottom_radius = 0.047
+height = 0.34
+radial_segments = 10
+
+[sub_resource type="BoxMesh" id="Mesh_tip"]
+material = SubResource("Material_edge")
+size = Vector3(0.24, 0.035, 0.095)
+
+[node name="HeldCrowbar" type="Node3D"]
+
+[node name="MainShaft" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.78, 0)
+mesh = SubResource("Mesh_shaft")
+
+[node name="UpperCurveA" type="MeshInstance3D" parent="."]
+position = Vector3(0.103, 1.484, 0)
+rotation = Vector3(0, 0, 0.885)
+mesh = SubResource("Mesh_hook")
+
+[node name="UpperCurveB" type="MeshInstance3D" parent="."]
+position = Vector3(0.253, 1.604, 0)
+rotation = Vector3(0, 0, 1.021)
+mesh = SubResource("Mesh_hook")
+
+[node name="UpperFlatTip" type="MeshInstance3D" parent="."]
+position = Vector3(0.458, 1.664, 0)
+rotation = Vector3(0, 0, 0.462)
+mesh = SubResource("Mesh_tip")
+
+[node name="LowerPryTip" type="MeshInstance3D" parent="."]
+position = Vector3(-0.123, 0.116, 0)
+rotation = Vector3(0, 0, -0.352)
+mesh = SubResource("Mesh_tip")

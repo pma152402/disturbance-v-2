@@ -1,0 +1,172 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://house_props/catacombs/materials/aged_iron.tres" id="1_iron"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/rusted_iron.tres" id="2_rust"]
+
+[sub_resource type="BoxMesh" id="Mesh_post"]
+material = ExtResource("1_iron")
+size = Vector3(0.18, 3.2, 0.18)
+
+[sub_resource type="BoxMesh" id="Mesh_frame_h"]
+material = ExtResource("1_iron")
+size = Vector3(3.2, 0.18, 0.18)
+
+[sub_resource type="BoxMesh" id="Mesh_bar"]
+material = ExtResource("1_iron")
+size = Vector3(0.065, 2.76, 0.065)
+
+[sub_resource type="BoxMesh" id="Mesh_rail"]
+material = ExtResource("2_rust")
+size = Vector3(2.82, 0.11, 0.1)
+
+[sub_resource type="CylinderMesh" id="Mesh_spike"]
+material = ExtResource("2_rust")
+top_radius = 0.0
+bottom_radius = 0.095
+height = 0.25
+radial_segments = 6
+
+[sub_resource type="CylinderMesh" id="Mesh_hinge"]
+material = ExtResource("2_rust")
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.34
+radial_segments = 8
+
+[sub_resource type="BoxMesh" id="Mesh_lock_plate"]
+material = ExtResource("2_rust")
+size = Vector3(0.3, 0.42, 0.075)
+
+[sub_resource type="TorusMesh" id="Mesh_lock_ring"]
+material = ExtResource("1_iron")
+inner_radius = 0.09
+outer_radius = 0.14
+rings = 10
+ring_segments = 6
+
+[sub_resource type="BoxShape3D" id="Shape_gate"]
+size = Vector3(3.2, 3.2, 0.18)
+
+[node name="CatacombIronGate" type="StaticBody3D"]
+editor_description = "Reja fija de hierro de 3,2 m con barrotes, puntas, bisagras y placa de cerradura. Una sola colisión bloquea el vano completo. El frente mira hacia -Z."
+
+[node name="GateCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.6, 0)
+shape = SubResource("Shape_gate")
+
+[node name="FrameLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-1.51, 1.6, 0)
+mesh = SubResource("Mesh_post")
+
+[node name="FrameRight" type="MeshInstance3D" parent="."]
+position = Vector3(1.51, 1.6, 0)
+mesh = SubResource("Mesh_post")
+
+[node name="FrameTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.11, 0)
+mesh = SubResource("Mesh_frame_h")
+
+[node name="FrameBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.09, 0)
+mesh = SubResource("Mesh_frame_h")
+
+[node name="Bar01" type="MeshInstance3D" parent="."]
+position = Vector3(-1.2, 1.56, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Bar02" type="MeshInstance3D" parent="."]
+position = Vector3(-0.9, 1.56, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Bar03" type="MeshInstance3D" parent="."]
+position = Vector3(-0.6, 1.56, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Bar04" type="MeshInstance3D" parent="."]
+position = Vector3(-0.3, 1.56, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Bar05" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.56, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Bar06" type="MeshInstance3D" parent="."]
+position = Vector3(0.3, 1.56, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Bar07" type="MeshInstance3D" parent="."]
+position = Vector3(0.6, 1.56, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Bar08" type="MeshInstance3D" parent="."]
+position = Vector3(0.9, 1.56, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Bar09" type="MeshInstance3D" parent="."]
+position = Vector3(1.2, 1.56, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="UpperRail" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.25, -0.015)
+mesh = SubResource("Mesh_rail")
+
+[node name="MiddleRail" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.42, -0.015)
+mesh = SubResource("Mesh_rail")
+
+[node name="LowerRail" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.6, -0.015)
+mesh = SubResource("Mesh_rail")
+
+[node name="Spike01" type="MeshInstance3D" parent="."]
+position = Vector3(-1.2, 3.0, 0)
+mesh = SubResource("Mesh_spike")
+
+[node name="Spike02" type="MeshInstance3D" parent="."]
+position = Vector3(-0.9, 3.0, 0)
+mesh = SubResource("Mesh_spike")
+
+[node name="Spike03" type="MeshInstance3D" parent="."]
+position = Vector3(-0.6, 3.0, 0)
+mesh = SubResource("Mesh_spike")
+
+[node name="Spike04" type="MeshInstance3D" parent="."]
+position = Vector3(-0.3, 3.0, 0)
+mesh = SubResource("Mesh_spike")
+
+[node name="Spike05" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.0, 0)
+mesh = SubResource("Mesh_spike")
+
+[node name="Spike06" type="MeshInstance3D" parent="."]
+position = Vector3(0.3, 3.0, 0)
+mesh = SubResource("Mesh_spike")
+
+[node name="Spike07" type="MeshInstance3D" parent="."]
+position = Vector3(0.6, 3.0, 0)
+mesh = SubResource("Mesh_spike")
+
+[node name="Spike08" type="MeshInstance3D" parent="."]
+position = Vector3(0.9, 3.0, 0)
+mesh = SubResource("Mesh_spike")
+
+[node name="Spike09" type="MeshInstance3D" parent="."]
+position = Vector3(1.2, 3.0, 0)
+mesh = SubResource("Mesh_spike")
+
+[node name="HingeUpper" type="MeshInstance3D" parent="."]
+position = Vector3(-1.47, 2.45, -0.15)
+mesh = SubResource("Mesh_hinge")
+
+[node name="HingeLower" type="MeshInstance3D" parent="."]
+position = Vector3(-1.47, 0.72, -0.15)
+mesh = SubResource("Mesh_hinge")
+
+[node name="LockPlate" type="MeshInstance3D" parent="."]
+position = Vector3(1.15, 1.38, -0.11)
+mesh = SubResource("Mesh_lock_plate")
+
+[node name="LockRing" type="MeshInstance3D" parent="."]
+position = Vector3(1.15, 1.38, -0.2)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_lock_ring")

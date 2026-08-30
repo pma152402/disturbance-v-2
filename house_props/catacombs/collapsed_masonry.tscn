@@ -1,0 +1,172 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://house_props/catacombs/materials/catacomb_stone.tres" id="1_stone"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/wet_concrete.tres" id="2_dark_stone"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/rotted_wood.tres" id="3_wood"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/cavity_dark.tres" id="4_dark"]
+
+[sub_resource type="BoxMesh" id="Mesh_stone_box"]
+material = ExtResource("1_stone")
+
+[sub_resource type="PrismMesh" id="Mesh_stone_wedge"]
+material = ExtResource("2_dark_stone")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_beam"]
+material = ExtResource("3_wood")
+
+[sub_resource type="BoxMesh" id="Mesh_dark_back"]
+material = ExtResource("4_dark")
+size = Vector3(3.18, 2.55, 0.12)
+
+[sub_resource type="BoxShape3D" id="Shape_blockage"]
+size = Vector3(3.2, 2.65, 1.05)
+
+[node name="CollapsedMasonry" type="StaticBody3D"]
+editor_description = "Derrumbe modular para cerrar un ramal de 3,2 m. Piedras y vigas son visuales; una única colisión ancha bloquea el paso de forma fiable."
+
+[node name="BlockageCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.325, 0)
+shape = SubResource("Shape_blockage")
+
+[node name="DarknessBehindRubble" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.28, 0.49)
+mesh = SubResource("Mesh_dark_back")
+
+[node name="FoundationStone01" type="MeshInstance3D" parent="."]
+position = Vector3(-1.28, 0.28, -0.2)
+rotation = Vector3(0.08, 0.2, -0.05)
+scale = Vector3(0.72, 0.48, 0.72)
+mesh = SubResource("Mesh_stone_box")
+
+[node name="FoundationStone02" type="MeshInstance3D" parent="."]
+position = Vector3(-0.58, 0.32, 0.03)
+rotation = Vector3(-0.06, -0.14, 0.08)
+scale = Vector3(0.78, 0.58, 0.92)
+mesh = SubResource("Mesh_stone_box")
+
+[node name="FoundationStone03" type="MeshInstance3D" parent="."]
+position = Vector3(0.18, 0.27, -0.12)
+rotation = Vector3(0.12, 0.08, -0.04)
+scale = Vector3(0.74, 0.46, 0.68)
+mesh = SubResource("Mesh_stone_box")
+
+[node name="FoundationStone04" type="MeshInstance3D" parent="."]
+position = Vector3(0.91, 0.31, 0.04)
+rotation = Vector3(-0.1, 0.25, 0.08)
+scale = Vector3(0.7, 0.55, 0.82)
+mesh = SubResource("Mesh_stone_box")
+
+[node name="FoundationStone05" type="MeshInstance3D" parent="."]
+position = Vector3(1.38, 0.22, -0.19)
+rotation = Vector3(0.04, -0.22, -0.12)
+scale = Vector3(0.42, 0.38, 0.6)
+mesh = SubResource("Mesh_stone_wedge")
+
+[node name="MiddleStone01" type="MeshInstance3D" parent="."]
+position = Vector3(-1.15, 0.87, 0.06)
+rotation = Vector3(-0.12, 0.1, 0.15)
+scale = Vector3(0.7, 0.62, 0.7)
+mesh = SubResource("Mesh_stone_box")
+
+[node name="MiddleStone02" type="MeshInstance3D" parent="."]
+position = Vector3(-0.43, 0.91, -0.14)
+rotation = Vector3(0.07, -0.28, -0.08)
+scale = Vector3(0.68, 0.55, 0.78)
+mesh = SubResource("Mesh_stone_wedge")
+
+[node name="MiddleStone03" type="MeshInstance3D" parent="."]
+position = Vector3(0.22, 0.84, 0.02)
+rotation = Vector3(-0.08, 0.18, 0.11)
+scale = Vector3(0.62, 0.5, 0.68)
+mesh = SubResource("Mesh_stone_box")
+
+[node name="MiddleStone04" type="MeshInstance3D" parent="."]
+position = Vector3(0.83, 0.9, -0.12)
+rotation = Vector3(0.12, -0.16, -0.14)
+scale = Vector3(0.67, 0.58, 0.72)
+mesh = SubResource("Mesh_stone_box")
+
+[node name="MiddleStone05" type="MeshInstance3D" parent="."]
+position = Vector3(1.36, 0.77, 0.09)
+rotation = Vector3(-0.05, 0.3, 0.18)
+scale = Vector3(0.43, 0.52, 0.62)
+mesh = SubResource("Mesh_stone_wedge")
+
+[node name="UpperStone01" type="MeshInstance3D" parent="."]
+position = Vector3(-1.2, 1.47, -0.1)
+rotation = Vector3(0.06, -0.22, -0.16)
+scale = Vector3(0.59, 0.55, 0.62)
+mesh = SubResource("Mesh_stone_wedge")
+
+[node name="UpperStone02" type="MeshInstance3D" parent="."]
+position = Vector3(-0.61, 1.46, 0.05)
+rotation = Vector3(-0.1, 0.1, 0.1)
+scale = Vector3(0.58, 0.48, 0.7)
+mesh = SubResource("Mesh_stone_box")
+
+[node name="UpperStone03" type="MeshInstance3D" parent="."]
+position = Vector3(-0.02, 1.39, -0.15)
+rotation = Vector3(0.08, 0.24, -0.06)
+scale = Vector3(0.62, 0.53, 0.68)
+mesh = SubResource("Mesh_stone_box")
+
+[node name="UpperStone04" type="MeshInstance3D" parent="."]
+position = Vector3(0.59, 1.48, 0.02)
+rotation = Vector3(-0.05, -0.18, 0.13)
+scale = Vector3(0.6, 0.5, 0.67)
+mesh = SubResource("Mesh_stone_wedge")
+
+[node name="UpperStone05" type="MeshInstance3D" parent="."]
+position = Vector3(1.18, 1.39, -0.11)
+rotation = Vector3(0.1, 0.2, -0.08)
+scale = Vector3(0.55, 0.56, 0.7)
+mesh = SubResource("Mesh_stone_box")
+
+[node name="CrownStone01" type="MeshInstance3D" parent="."]
+position = Vector3(-0.86, 2.03, 0.03)
+rotation = Vector3(-0.08, 0.1, -0.2)
+scale = Vector3(0.58, 0.46, 0.64)
+mesh = SubResource("Mesh_stone_box")
+
+[node name="CrownStone02" type="MeshInstance3D" parent="."]
+position = Vector3(-0.26, 1.94, -0.13)
+rotation = Vector3(0.06, -0.18, 0.12)
+scale = Vector3(0.54, 0.48, 0.58)
+mesh = SubResource("Mesh_stone_wedge")
+
+[node name="CrownStone03" type="MeshInstance3D" parent="."]
+position = Vector3(0.34, 2.04, 0.04)
+rotation = Vector3(-0.1, 0.26, -0.08)
+scale = Vector3(0.6, 0.44, 0.62)
+mesh = SubResource("Mesh_stone_box")
+
+[node name="CrownStone04" type="MeshInstance3D" parent="."]
+position = Vector3(0.91, 1.94, -0.11)
+rotation = Vector3(0.08, -0.2, 0.16)
+scale = Vector3(0.52, 0.5, 0.58)
+mesh = SubResource("Mesh_stone_wedge")
+
+[node name="TopLooseStone01" type="MeshInstance3D" parent="."]
+position = Vector3(-0.48, 2.43, 0.02)
+rotation = Vector3(0.12, 0.1, -0.18)
+scale = Vector3(0.46, 0.32, 0.5)
+mesh = SubResource("Mesh_stone_box")
+
+[node name="TopLooseStone02" type="MeshInstance3D" parent="."]
+position = Vector3(0.14, 2.39, -0.1)
+rotation = Vector3(-0.06, -0.25, 0.14)
+scale = Vector3(0.5, 0.35, 0.48)
+mesh = SubResource("Mesh_stone_wedge")
+
+[node name="RottenSupportBeamLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.72, 1.32, -0.5)
+rotation = Vector3(0.08, 0.12, -0.34)
+scale = Vector3(0.16, 2.75, 0.17)
+mesh = SubResource("Mesh_beam")
+
+[node name="RottenSupportBeamRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.82, 1.19, -0.46)
+rotation = Vector3(-0.05, -0.18, 0.42)
+scale = Vector3(0.14, 2.45, 0.15)
+mesh = SubResource("Mesh_beam")

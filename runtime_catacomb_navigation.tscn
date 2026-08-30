@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://runtime_house_navigation.gd" id="1_script"]
+
+[node name="RuntimeCatacombNavigation" type="NavigationRegion3D"]
+editor_description = "Navegacion del laberinto elevado. La entrada superior es una caida de una sola direccion."
+script = ExtResource("1_script")
+baking_aabb = AABB(-62, -5.2, -186, 112, 5.45, 156)
+navigation_label = "catacomb"
+bake_delay_frames = 3
+parsing_root_path = NodePath("../House/ChurchCatacombs")
+
+[node name="IrreversibleChurchDrop" type="NavigationLink3D" parent="."]
+editor_description = "Permite bajar desde la iglesia al nivel inferior, pero nunca volver a subir: las primeras escaleras ya no existen."
+start_position = Vector3(-4.0, 0.5, -41.75)
+end_position = Vector3(-4.85, -3.95, -40.99)
+bidirectional = false
+enter_cost = 0.1

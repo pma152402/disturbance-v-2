@@ -1,0 +1,187 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://house_props/catacombs/materials/aged_iron.tres" id="1_iron"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/rusted_iron.tres" id="2_rust"]
+
+[sub_resource type="CylinderMesh" id="Mesh_main_pipe"]
+material = ExtResource("1_iron")
+top_radius = 0.14
+bottom_radius = 0.14
+height = 3.4
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="Mesh_vertical_pipe"]
+material = ExtResource("1_iron")
+top_radius = 0.11
+bottom_radius = 0.11
+height = 2.6
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="Mesh_small_pipe"]
+material = ExtResource("2_rust")
+top_radius = 0.075
+bottom_radius = 0.075
+height = 1.55
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="Mesh_flange"]
+material = ExtResource("2_rust")
+top_radius = 0.205
+bottom_radius = 0.205
+height = 0.09
+radial_segments = 10
+
+[sub_resource type="SphereMesh" id="Mesh_joint"]
+material = ExtResource("2_rust")
+radius = 0.19
+height = 0.34
+radial_segments = 8
+rings = 4
+
+[sub_resource type="TorusMesh" id="Mesh_valve_ring"]
+material = ExtResource("2_rust")
+inner_radius = 0.29
+outer_radius = 0.36
+rings = 12
+ring_segments = 6
+
+[sub_resource type="CylinderMesh" id="Mesh_valve_stem"]
+material = ExtResource("1_iron")
+top_radius = 0.045
+bottom_radius = 0.045
+height = 0.43
+radial_segments = 7
+
+[sub_resource type="BoxMesh" id="Mesh_valve_spoke"]
+material = ExtResource("2_rust")
+size = Vector3(0.63, 0.045, 0.045)
+
+[sub_resource type="CylinderMesh" id="Mesh_valve_hub"]
+material = ExtResource("2_rust")
+top_radius = 0.11
+bottom_radius = 0.11
+height = 0.12
+radial_segments = 10
+
+[sub_resource type="BoxMesh" id="Mesh_bracket"]
+material = ExtResource("2_rust")
+size = Vector3(0.42, 0.09, 0.28)
+
+[sub_resource type="CylinderMesh" id="Mesh_bolt"]
+material = ExtResource("1_iron")
+top_radius = 0.035
+bottom_radius = 0.035
+height = 0.035
+radial_segments = 6
+
+[sub_resource type="BoxShape3D" id="Shape_pipe_cluster"]
+size = Vector3(3.45, 2.72, 0.48)
+
+[node name="SewerPipeCluster" type="StaticBody3D"]
+editor_description = "Kit de tuberías de alcantarilla para pared, con colisión única ajustada al volumen de los tubos. El frente y la válvula miran hacia -Z."
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.31, -0.22)
+shape = SubResource("Shape_pipe_cluster")
+
+[node name="MainHorizontalPipe" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.72, -0.22)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("Mesh_main_pipe")
+
+[node name="MainLeftFlange" type="MeshInstance3D" parent="."]
+position = Vector3(-1.28, 1.72, -0.22)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("Mesh_flange")
+
+[node name="MainRightFlange" type="MeshInstance3D" parent="."]
+position = Vector3(1.28, 1.72, -0.22)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("Mesh_flange")
+
+[node name="VerticalBranch" type="MeshInstance3D" parent="."]
+position = Vector3(-1.1, 1.3, -0.22)
+mesh = SubResource("Mesh_vertical_pipe")
+
+[node name="VerticalLowerFlange" type="MeshInstance3D" parent="."]
+position = Vector3(-1.1, 0.4, -0.22)
+mesh = SubResource("Mesh_flange")
+
+[node name="VerticalUpperFlange" type="MeshInstance3D" parent="."]
+position = Vector3(-1.1, 2.3, -0.22)
+mesh = SubResource("Mesh_flange")
+
+[node name="MainTJoint" type="MeshInstance3D" parent="."]
+position = Vector3(-1.1, 1.72, -0.22)
+mesh = SubResource("Mesh_joint")
+
+[node name="SmallReturnPipe" type="MeshInstance3D" parent="."]
+position = Vector3(1.05, 0.83, -0.28)
+mesh = SubResource("Mesh_small_pipe")
+
+[node name="SmallReturnTopJoint" type="MeshInstance3D" parent="."]
+position = Vector3(1.05, 1.62, -0.28)
+scale = Vector3(0.72, 0.72, 0.72)
+mesh = SubResource("Mesh_joint")
+
+[node name="SmallReturnLowerFlange" type="MeshInstance3D" parent="."]
+position = Vector3(1.05, 0.18, -0.28)
+scale = Vector3(0.72, 0.72, 0.72)
+mesh = SubResource("Mesh_flange")
+
+[node name="ValveStem" type="MeshInstance3D" parent="."]
+position = Vector3(0.48, 1.72, -0.43)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_valve_stem")
+
+[node name="ValveWheel" type="MeshInstance3D" parent="."]
+position = Vector3(0.48, 1.72, -0.68)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_valve_ring")
+
+[node name="ValveSpokeHorizontal" type="MeshInstance3D" parent="."]
+position = Vector3(0.48, 1.72, -0.68)
+mesh = SubResource("Mesh_valve_spoke")
+
+[node name="ValveSpokeDiagonalA" type="MeshInstance3D" parent="."]
+position = Vector3(0.48, 1.72, -0.68)
+rotation = Vector3(0, 0, 1.0472)
+mesh = SubResource("Mesh_valve_spoke")
+
+[node name="ValveSpokeDiagonalB" type="MeshInstance3D" parent="."]
+position = Vector3(0.48, 1.72, -0.68)
+rotation = Vector3(0, 0, -1.0472)
+mesh = SubResource("Mesh_valve_spoke")
+
+[node name="ValveHub" type="MeshInstance3D" parent="."]
+position = Vector3(0.48, 1.72, -0.71)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_valve_hub")
+
+[node name="WallBracketLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.55, 1.72, 0.02)
+mesh = SubResource("Mesh_bracket")
+
+[node name="WallBracketRight" type="MeshInstance3D" parent="."]
+position = Vector3(1.38, 1.72, 0.02)
+mesh = SubResource("Mesh_bracket")
+
+[node name="BracketLeftBoltA" type="MeshInstance3D" parent="."]
+position = Vector3(-0.7, 1.72, -0.135)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_bolt")
+
+[node name="BracketLeftBoltB" type="MeshInstance3D" parent="."]
+position = Vector3(-0.4, 1.72, -0.135)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_bolt")
+
+[node name="BracketRightBoltA" type="MeshInstance3D" parent="."]
+position = Vector3(1.23, 1.72, -0.135)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_bolt")
+
+[node name="BracketRightBoltB" type="MeshInstance3D" parent="."]
+position = Vector3(1.53, 1.72, -0.135)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_bolt")

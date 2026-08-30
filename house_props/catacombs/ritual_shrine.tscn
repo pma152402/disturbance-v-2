@@ -1,0 +1,97 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://house_props/catacombs/materials/catacomb_stone.tres" id="1_stone"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/old_bone.tres" id="2_bone"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/candle_wax.tres" id="3_wax"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/warm_flame.tres" id="4_flame"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/cavity_dark.tres" id="5_dark"]
+
+[sub_resource type="BoxMesh" id="Mesh_altar"]
+material = ExtResource("1_stone")
+size = Vector3(1.8, 1.0, 0.75)
+
+[sub_resource type="BoxMesh" id="Mesh_slab"]
+material = ExtResource("1_stone")
+size = Vector3(2.05, 0.18, 0.92)
+
+[sub_resource type="SphereMesh" id="Mesh_skull"]
+material = ExtResource("2_bone")
+radius = 0.18
+height = 0.27
+radial_segments = 8
+rings = 5
+
+[sub_resource type="SphereMesh" id="Mesh_socket"]
+material = ExtResource("5_dark")
+radius = 0.045
+height = 0.035
+radial_segments = 6
+rings = 3
+
+[sub_resource type="CylinderMesh" id="Mesh_candle"]
+material = ExtResource("3_wax")
+top_radius = 0.055
+bottom_radius = 0.07
+height = 0.34
+radial_segments = 7
+
+[sub_resource type="SphereMesh" id="Mesh_flame"]
+material = ExtResource("4_flame")
+radius = 0.045
+height = 0.13
+radial_segments = 7
+rings = 4
+
+[sub_resource type="BoxShape3D" id="Shape_shrine"]
+size = Vector3(2.08, 1.25, 0.95)
+
+[node name="RitualShrine" type="StaticBody3D"]
+editor_description = "Pequeño altar funerario de piedra, calaveras y velas. Collider único de volumen completo."
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.625, 0)
+shape = SubResource("Shape_shrine")
+
+[node name="AltarBody" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.5, 0)
+mesh = SubResource("Mesh_altar")
+
+[node name="AltarSlab" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.07, 0)
+mesh = SubResource("Mesh_slab")
+
+[node name="Skull" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.31, -0.05)
+mesh = SubResource("Mesh_skull")
+
+[node name="SocketLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.065, 1.34, -0.19)
+mesh = SubResource("Mesh_socket")
+
+[node name="SocketRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.065, 1.34, -0.19)
+mesh = SubResource("Mesh_socket")
+
+[node name="CandleLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.62, 1.32, -0.04)
+mesh = SubResource("Mesh_candle")
+
+[node name="FlameLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.62, 1.55, -0.04)
+mesh = SubResource("Mesh_flame")
+
+[node name="CandleRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.62, 1.32, -0.04)
+scale = Vector3(1, 0.76, 1)
+mesh = SubResource("Mesh_candle")
+
+[node name="FlameRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.62, 1.5, -0.04)
+mesh = SubResource("Mesh_flame")
+
+[node name="WeakGlow" type="OmniLight3D" parent="."]
+position = Vector3(0, 1.55, -0.18)
+light_color = Color(1, 0.52, 0.22, 1)
+light_energy = 0.22
+omni_range = 2.7
+shadow_enabled = false

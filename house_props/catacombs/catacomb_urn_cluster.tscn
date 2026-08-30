@@ -1,0 +1,82 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://house_props/catacombs/materials/catacomb_stone.tres" id="1_stone"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/cavity_dark.tres" id="2_dark"]
+
+[sub_resource type="CylinderMesh" id="Mesh_urn"]
+material = ExtResource("1_stone")
+top_radius = 0.22
+bottom_radius = 0.31
+height = 0.72
+radial_segments = 9
+
+[sub_resource type="TorusMesh" id="Mesh_rim"]
+material = ExtResource("1_stone")
+inner_radius = 0.17
+outer_radius = 0.24
+rings = 10
+ring_segments = 6
+
+[sub_resource type="CylinderMesh" id="Mesh_lid"]
+material = ExtResource("1_stone")
+top_radius = 0.1
+bottom_radius = 0.25
+height = 0.16
+radial_segments = 9
+
+[sub_resource type="SphereMesh" id="Mesh_hole"]
+material = ExtResource("2_dark")
+radius = 0.16
+height = 0.05
+radial_segments = 8
+rings = 3
+
+[sub_resource type="BoxShape3D" id="Shape_cluster"]
+size = Vector3(1.45, 0.85, 0.95)
+
+[node name="CatacombUrnCluster" type="StaticBody3D"]
+editor_description = "Grupo de urnas funerarias desgastadas, con una colisión simple para todo el conjunto."
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.425, 0)
+shape = SubResource("Shape_cluster")
+
+[node name="UrnLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.46, 0.36, 0.08)
+rotation = Vector3(0, 0, -0.08)
+mesh = SubResource("Mesh_urn")
+
+[node name="UrnLeftRim" type="MeshInstance3D" parent="."]
+position = Vector3(-0.46, 0.72, 0.08)
+mesh = SubResource("Mesh_rim")
+
+[node name="UrnLeftLid" type="MeshInstance3D" parent="."]
+position = Vector3(-0.46, 0.82, 0.08)
+mesh = SubResource("Mesh_lid")
+
+[node name="UrnCenter" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.34, -0.12)
+scale = Vector3(1.15, 0.95, 1.15)
+mesh = SubResource("Mesh_urn")
+
+[node name="UrnCenterRim" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.69, -0.12)
+scale = Vector3(1.15, 1, 1.15)
+mesh = SubResource("Mesh_rim")
+
+[node name="UrnCenterOpening" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.705, -0.12)
+mesh = SubResource("Mesh_hole")
+cast_shadow = 0
+
+[node name="UrnRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.48, 0.29, 0.16)
+rotation = Vector3(0, 0, 0.13)
+scale = Vector3(0.82, 0.8, 0.82)
+mesh = SubResource("Mesh_urn")
+
+[node name="UrnRightRim" type="MeshInstance3D" parent="."]
+position = Vector3(0.51, 0.58, 0.16)
+rotation = Vector3(0, 0, 0.13)
+scale = Vector3(0.82, 1, 0.82)
+mesh = SubResource("Mesh_rim")

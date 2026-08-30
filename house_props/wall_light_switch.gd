@@ -1,6 +1,5 @@
 extends StaticBody3D
 
-@export var lamp_group: StringName = &"living_room_ceiling_lamp"
 @export var assigned_lamps: Array[NodePath] = []
 @export var switch_on_sound: AudioStream
 @export var switch_off_sound: AudioStream
@@ -74,34 +73,11 @@ func _play_switch_sound(is_on: bool) -> void:
 
 func _get_controlled_lamps() -> Array[Node]:
 	var controlled: Array[Node] = []
-	if not assigned_lamps.is_empty():
-		for lamp_path: NodePath in assigned_lamps:
-			var lamp := get_node_or_null(lamp_path)
-			if lamp != null and lamp.has_method("set_lamp_enabled"):
-				controlled.append(lamp)
-		return controlled
-	var lamps := get_tree().get_nodes_in_group(lamp_group)
-	for lamp: Node in lamps:
-		if not lamp is Node3D:
-			continue
-		var lamp_3d := lamp as Node3D
-		if _belongs_to_this_controller(lamp_3d.global_position):
+	for lamp_path: NodePath in assigned_lamps:
+		var lamp := get_node_or_null(lamp_path)
+		if lamp != null and lamp.has_method("set_lamp_enabled"):
 			controlled.append(lamp)
-	controlled.sort_custom(func(a: Node, b: Node) -> bool:
-		return global_position.distance_squared_to((a as Node3D).global_position) < global_position.distance_squared_to((b as Node3D).global_position)
-	)
 	return controlled
-
-
-func _belongs_to_this_controller(lamp_position: Vector3) -> bool:
-	# Planta superior: un interruptor controla las dos lámparas de arriba.
-	if global_position.y > 4.2:
-		return lamp_position.y > 6.0
-	# Salón: la lámpara situada en el ala derecha de la planta baja.
-	if global_position.x > 0.0:
-		return lamp_position.y < 6.0 and lamp_position.x > 3.0
-	# Pasillo central inferior: las dos lámparas alineadas cerca de X = 0.
-	return lamp_position.y < 6.0 and lamp_position.x <= 3.0
 
 
 func _are_all_lamps_on(lamps: Array[Node]) -> bool:

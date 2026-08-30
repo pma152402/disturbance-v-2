@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="Script" path="res://player/player.gd" id="1_player"]
 [ext_resource type="ArrayMesh" path="res://ps2_objects/Flashlight/Flashlight.obj" id="2_flashlight_mesh"]
@@ -8,7 +8,8 @@
 [ext_resource type="FontFile" path="res://assets/fonts/PressStart2P-Regular.ttf" id="6_pixel_font"]
 [ext_resource type="AudioStream" path="res://sounds/interactions/flashlight_toggle.wav" id="7_flashlight_click"]
 [ext_resource type="AudioStream" path="res://sounds/interactions/light_switch_on.wav" id="8_light_switch"]
-[ext_resource type="PackedScene" path="res://held_plunger_visual.tscn" id="9_plunger"]
+[ext_resource type="PackedScene" path="res://player/held_items/plunger.tscn" id="9_plunger"]
+[ext_resource type="PackedScene" path="res://player/held_items/crowbar.tscn" id="10_crowbar"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.34
@@ -174,6 +175,12 @@ visible = false
 position = Vector3(-0.42, -0.57, -0.48)
 rotation = Vector3(-0.42, 0.08, -0.34)
 scale = Vector3(0.72, 0.72, 0.72)
+
+[node name="HeldCrowbar" parent="Head/Camera3D/LeftHandRig" instance=ExtResource("10_crowbar")]
+visible = false
+position = Vector3(-0.43, -0.62, -0.5)
+rotation = Vector3(-0.5, 0.08, -0.4)
+scale = Vector3(0.58, 0.58, 0.58)
 
 [node name="StaminaUI" type="CanvasLayer" parent="."]
 layer = 20

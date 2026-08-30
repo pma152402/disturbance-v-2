@@ -1,0 +1,64 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://house_props/catacombs/materials/rotted_wood.tres" id="1_wood"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/rusted_iron.tres" id="2_iron"]
+
+[sub_resource type="BoxMesh" id="Mesh_beam"]
+material = ExtResource("1_wood")
+size = Vector3(2.45, 0.18, 0.16)
+
+[sub_resource type="BoxMesh" id="Mesh_post"]
+material = ExtResource("1_wood")
+size = Vector3(0.18, 2.2, 0.18)
+
+[sub_resource type="CylinderMesh" id="Mesh_nail"]
+material = ExtResource("2_iron")
+top_radius = 0.028
+bottom_radius = 0.028
+height = 0.09
+radial_segments = 6
+
+[sub_resource type="BoxShape3D" id="Shape_barricade"]
+size = Vector3(2.55, 2.25, 0.36)
+
+[node name="WoodenBarricade" type="StaticBody3D"]
+editor_description = "Barricada de vigas podridas, con huecos visuales pero collider sólido simple."
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.12, 0)
+shape = SubResource("Shape_barricade")
+
+[node name="PostLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.9, 1.1, 0)
+rotation = Vector3(0, 0, -0.08)
+mesh = SubResource("Mesh_post")
+
+[node name="PostRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.9, 1.1, 0)
+rotation = Vector3(0, 0, 0.1)
+mesh = SubResource("Mesh_post")
+
+[node name="BeamLow" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.56, -0.03)
+rotation = Vector3(0, 0, -0.1)
+mesh = SubResource("Mesh_beam")
+
+[node name="BeamMiddle" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.18, 0.02)
+rotation = Vector3(0, 0, 0.14)
+mesh = SubResource("Mesh_beam")
+
+[node name="BeamHigh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.78, -0.02)
+rotation = Vector3(0, 0, -0.06)
+mesh = SubResource("Mesh_beam")
+
+[node name="NailLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.9, 1.17, -0.12)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_nail")
+
+[node name="NailRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.9, 1.2, -0.12)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_nail")

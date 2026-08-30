@@ -1,0 +1,188 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://house_props/catacombs/materials/catacomb_stone.tres" id="1_stone"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/cavity_dark.tres" id="2_dark"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/old_bone.tres" id="3_bone"]
+
+[sub_resource type="BoxMesh" id="Mesh_back"]
+material = ExtResource("1_stone")
+size = Vector3(4.0, 3.0, 0.28)
+
+[sub_resource type="BoxMesh" id="Mesh_border_h"]
+material = ExtResource("1_stone")
+size = Vector3(4.16, 0.18, 0.46)
+
+[sub_resource type="BoxMesh" id="Mesh_border_v"]
+material = ExtResource("1_stone")
+size = Vector3(0.18, 3.0, 0.46)
+
+[sub_resource type="BoxMesh" id="Mesh_grid_h"]
+material = ExtResource("1_stone")
+size = Vector3(3.82, 0.15, 0.43)
+
+[sub_resource type="BoxMesh" id="Mesh_grid_v"]
+material = ExtResource("1_stone")
+size = Vector3(0.15, 2.82, 0.43)
+
+[sub_resource type="BoxMesh" id="Mesh_cavity"]
+material = ExtResource("2_dark")
+size = Vector3(1.12, 1.12, 0.035)
+
+[sub_resource type="SphereMesh" id="Mesh_skull"]
+material = ExtResource("3_bone")
+radius = 0.16
+height = 0.24
+radial_segments = 8
+rings = 5
+
+[sub_resource type="BoxMesh" id="Mesh_jaw"]
+material = ExtResource("3_bone")
+size = Vector3(0.22, 0.09, 0.11)
+
+[sub_resource type="CylinderMesh" id="Mesh_bone"]
+material = ExtResource("3_bone")
+top_radius = 0.035
+bottom_radius = 0.045
+height = 0.48
+radial_segments = 6
+
+[sub_resource type="SphereMesh" id="Mesh_joint"]
+material = ExtResource("3_bone")
+radius = 0.052
+height = 0.09
+radial_segments = 6
+rings = 3
+
+[sub_resource type="SphereMesh" id="Mesh_eye"]
+material = ExtResource("2_dark")
+radius = 0.035
+height = 0.055
+radial_segments = 6
+rings = 3
+
+[sub_resource type="BoxShape3D" id="Shape_wall"]
+size = Vector3(4.16, 3.0, 0.46)
+
+[node name="BurialNichePanel" type="StaticBody3D"]
+editor_description = "Panel de osario modular de 4 x 3 m con seis nichos. Una única colisión plana; cráneos y huesos son detalle visual barato. El frente mira hacia -Z."
+
+[node name="WallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.5, 0.1)
+shape = SubResource("Shape_wall")
+
+[node name="StoneBacking" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.5, 0.1)
+mesh = SubResource("Mesh_back")
+
+[node name="OuterFrameTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.91, -0.08)
+mesh = SubResource("Mesh_border_h")
+
+[node name="OuterFrameBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.09, -0.08)
+mesh = SubResource("Mesh_border_h")
+
+[node name="OuterFrameLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-1.99, 1.5, -0.08)
+mesh = SubResource("Mesh_border_v")
+
+[node name="OuterFrameRight" type="MeshInstance3D" parent="."]
+position = Vector3(1.99, 1.5, -0.08)
+mesh = SubResource("Mesh_border_v")
+
+[node name="CenterRail" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.5, -0.08)
+mesh = SubResource("Mesh_grid_h")
+
+[node name="DividerLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.655, 1.5, -0.08)
+mesh = SubResource("Mesh_grid_v")
+
+[node name="DividerRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.655, 1.5, -0.08)
+mesh = SubResource("Mesh_grid_v")
+
+[node name="NicheTopLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-1.31, 2.21, -0.14)
+mesh = SubResource("Mesh_cavity")
+
+[node name="NicheTopCenter" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.21, -0.14)
+mesh = SubResource("Mesh_cavity")
+
+[node name="NicheTopRight" type="MeshInstance3D" parent="."]
+position = Vector3(1.31, 2.21, -0.14)
+mesh = SubResource("Mesh_cavity")
+
+[node name="NicheBottomLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-1.31, 0.79, -0.14)
+mesh = SubResource("Mesh_cavity")
+
+[node name="NicheBottomCenter" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.79, -0.14)
+mesh = SubResource("Mesh_cavity")
+
+[node name="NicheBottomRight" type="MeshInstance3D" parent="."]
+position = Vector3(1.31, 0.79, -0.14)
+mesh = SubResource("Mesh_cavity")
+
+[node name="SkullTopLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-1.31, 2.23, -0.25)
+rotation = Vector3(0.04, -0.14, 0.06)
+mesh = SubResource("Mesh_skull")
+
+[node name="SkullTopLeftJaw" type="MeshInstance3D" parent="."]
+position = Vector3(-1.31, 2.09, -0.27)
+rotation = Vector3(0.04, -0.14, 0.06)
+mesh = SubResource("Mesh_jaw")
+
+[node name="SkullTopLeftEyeL" type="MeshInstance3D" parent="."]
+position = Vector3(-1.375, 2.25, -0.39)
+mesh = SubResource("Mesh_eye")
+
+[node name="SkullTopLeftEyeR" type="MeshInstance3D" parent="."]
+position = Vector3(-1.245, 2.25, -0.39)
+mesh = SubResource("Mesh_eye")
+
+[node name="SkullBottomCenter" type="MeshInstance3D" parent="."]
+position = Vector3(0.06, 0.84, -0.26)
+rotation = Vector3(-0.03, 0.22, -0.11)
+mesh = SubResource("Mesh_skull")
+
+[node name="SkullBottomCenterJaw" type="MeshInstance3D" parent="."]
+position = Vector3(0.06, 0.70, -0.27)
+rotation = Vector3(-0.03, 0.22, -0.11)
+mesh = SubResource("Mesh_jaw")
+
+[node name="SkullBottomRight" type="MeshInstance3D" parent="."]
+position = Vector3(1.23, 0.80, -0.25)
+rotation = Vector3(0.08, -0.3, 0.09)
+mesh = SubResource("Mesh_skull")
+
+[node name="SkullBottomRightJaw" type="MeshInstance3D" parent="."]
+position = Vector3(1.23, 0.66, -0.27)
+rotation = Vector3(0.08, -0.3, 0.09)
+mesh = SubResource("Mesh_jaw")
+
+[node name="CrossedBoneTopCenterA" type="MeshInstance3D" parent="."]
+position = Vector3(-0.11, 2.18, -0.28)
+rotation = Vector3(0, 0, 0.83)
+mesh = SubResource("Mesh_bone")
+
+[node name="CrossedBoneTopCenterB" type="MeshInstance3D" parent="."]
+position = Vector3(0.12, 2.17, -0.29)
+rotation = Vector3(0, 0, -0.78)
+mesh = SubResource("Mesh_bone")
+
+[node name="LooseBoneBottomLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-1.34, 0.72, -0.28)
+rotation = Vector3(0.08, 0.1, 1.18)
+mesh = SubResource("Mesh_bone")
+
+[node name="JointBottomLeftA" type="MeshInstance3D" parent="."]
+position = Vector3(-1.12, 0.62, -0.29)
+mesh = SubResource("Mesh_joint")
+
+[node name="JointBottomLeftB" type="MeshInstance3D" parent="."]
+position = Vector3(-1.56, 0.82, -0.29)
+mesh = SubResource("Mesh_joint")

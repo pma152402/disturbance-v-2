@@ -1,0 +1,152 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://house_props/catacombs/materials/aged_iron.tres" id="1_iron"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/rusted_iron.tres" id="2_rust"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/candle_wax.tres" id="3_wax"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/warm_flame.tres" id="4_flame"]
+[ext_resource type="Material" path="res://house_props/catacombs/materials/cavity_dark.tres" id="5_wick"]
+
+[sub_resource type="BoxMesh" id="Mesh_backplate"]
+material = ExtResource("2_rust")
+size = Vector3(0.38, 0.72, 0.09)
+
+[sub_resource type="BoxMesh" id="Mesh_bracket"]
+material = ExtResource("1_iron")
+size = Vector3(0.085, 0.085, 0.58)
+
+[sub_resource type="CylinderMesh" id="Mesh_rivet"]
+material = ExtResource("1_iron")
+top_radius = 0.045
+bottom_radius = 0.045
+height = 0.035
+radial_segments = 7
+
+[sub_resource type="CylinderMesh" id="Mesh_canopy"]
+material = ExtResource("2_rust")
+top_radius = 0.12
+bottom_radius = 0.36
+height = 0.22
+radial_segments = 10
+
+[sub_resource type="TorusMesh" id="Mesh_ring"]
+material = ExtResource("1_iron")
+inner_radius = 0.25
+outer_radius = 0.31
+rings = 10
+ring_segments = 6
+
+[sub_resource type="CylinderMesh" id="Mesh_cage_rod"]
+material = ExtResource("1_iron")
+top_radius = 0.022
+bottom_radius = 0.022
+height = 0.66
+radial_segments = 6
+
+[sub_resource type="CylinderMesh" id="Mesh_candle"]
+material = ExtResource("3_wax")
+top_radius = 0.075
+bottom_radius = 0.085
+height = 0.42
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="Mesh_wick"]
+material = ExtResource("5_wick")
+top_radius = 0.012
+bottom_radius = 0.012
+height = 0.07
+radial_segments = 5
+
+[sub_resource type="SphereMesh" id="Mesh_flame"]
+material = ExtResource("4_flame")
+radius = 0.065
+height = 0.18
+radial_segments = 8
+rings = 5
+
+[sub_resource type="CylinderMesh" id="Mesh_bottom_finial"]
+material = ExtResource("2_rust")
+top_radius = 0.13
+bottom_radius = 0.025
+height = 0.22
+radial_segments = 8
+
+[sub_resource type="BoxShape3D" id="Shape_lantern"]
+size = Vector3(0.7, 1.25, 0.72)
+
+[node name="CatacombWallLantern" type="StaticBody3D" groups=["catacomb_lights"]]
+editor_description = "Farol mural de catacumba con vela, jaula de hierro y una colisión simplificada. Incluye una única OmniLight cálida sin sombras. El frente mira hacia -Z."
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.38, -0.48)
+shape = SubResource("Shape_lantern")
+
+[node name="WallBackplate" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.52, 0)
+mesh = SubResource("Mesh_backplate")
+
+[node name="BackplateRivetTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.77, -0.065)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_rivet")
+
+[node name="BackplateRivetBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.27, -0.065)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_rivet")
+
+[node name="WallBracket" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.78, -0.31)
+mesh = SubResource("Mesh_bracket")
+
+[node name="LanternCanopy" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.68, -0.59)
+mesh = SubResource("Mesh_canopy")
+
+[node name="UpperCageRing" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.55, -0.59)
+mesh = SubResource("Mesh_ring")
+
+[node name="LowerCageRing" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.91, -0.59)
+mesh = SubResource("Mesh_ring")
+
+[node name="CageRodFront" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.23, -0.87)
+mesh = SubResource("Mesh_cage_rod")
+
+[node name="CageRodBack" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.23, -0.31)
+mesh = SubResource("Mesh_cage_rod")
+
+[node name="CageRodLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.28, 1.23, -0.59)
+mesh = SubResource("Mesh_cage_rod")
+
+[node name="CageRodRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.28, 1.23, -0.59)
+mesh = SubResource("Mesh_cage_rod")
+
+[node name="Candle" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.08, -0.59)
+mesh = SubResource("Mesh_candle")
+
+[node name="Wick" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.325, -0.59)
+mesh = SubResource("Mesh_wick")
+
+[node name="Flame" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.43, -0.59)
+scale = Vector3(0.72, 1.1, 0.72)
+mesh = SubResource("Mesh_flame")
+
+[node name="BottomFinial" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.78, -0.59)
+mesh = SubResource("Mesh_bottom_finial")
+
+[node name="WarmLight" type="OmniLight3D" parent="."]
+position = Vector3(0, 1.38, -0.72)
+light_color = Color(1, 0.57, 0.28, 1)
+light_energy = 1.75
+omni_range = 5.2
+omni_attenuation = 1.65
+shadow_enabled = false

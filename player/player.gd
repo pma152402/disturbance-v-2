@@ -51,6 +51,7 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var held_can: Node3D = $Head/Camera3D/LeftHandRig/HeldCan
 @onready var held_bottle: Node3D = $Head/Camera3D/LeftHandRig/HeldBottle
 @onready var held_plunger: Node3D = $Head/Camera3D/LeftHandRig/HeldPlunger
+@onready var held_crowbar: Node3D = $Head/Camera3D/LeftHandRig/HeldCrowbar
 @onready var flashlight: SpotLight3D = $Head/Camera3D/HandRig/Flashlight
 @onready var interaction_ray: RayCast3D = $Head/Camera3D/InteractionRay
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
@@ -85,12 +86,10 @@ var _jump_phase := JumpPhase.IDLE
 var _jump_timer := 0.0
 var _jump_start_head_y := 0.9
 var _held_item: StringName = &""
-var _key_inventory: Dictionary = {
-	&"back_room_key": true,
-	&"diogenes_key": true,
-	&"master_bedroom_key": true,
-	&"lower_north_wing_key": true,
-}
+var _key_inventory: Dictionary = {}
+var _tool_inventory: Dictionary = {}
+@export_category("Debug")
+@export var debug_all_keys := true
 var _flashlight_holstered := true
 var _flashlight_was_on := true
 var _flashlight_available := true
@@ -581,11 +580,28 @@ func pick_up_plunger() -> bool:
 	return true
 
 
+func pick_up_crowbar() -> bool:
+	if not _held_item.is_empty():
+		return false
+	_drop_flashlight()
+	add_tool(&"crowbar")
+	_held_item = &"crowbar"
+	left_hand.visible = true
+	held_crowbar.visible = true
+	held_crowbar.scale = Vector3.ONE * 0.03
+	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(held_crowbar, "scale", Vector3(0.58, 0.58, 0.58), 0.24)
+	return true
+
+
 func consume_held_item(item_type: StringName) -> bool:
 	if _held_item != item_type:
 		return false
 	_held_item = &""
-	held_plunger.visible = false
+	if item_type == &"plunger":
+		held_plunger.visible = false
+	elif item_type == &"crowbar":
+		held_crowbar.visible = false
 	left_hand.visible = false
 	return true
 
@@ -630,7 +646,18 @@ func add_key(key_id: StringName) -> bool:
 
 
 func has_key(key_id: StringName) -> bool:
-	return not key_id.is_empty() and _key_inventory.has(key_id)
+	return debug_all_keys or (not key_id.is_empty() and _key_inventory.has(key_id))
+
+
+func add_tool(tool_id: StringName) -> bool:
+	if tool_id.is_empty():
+		return false
+	_tool_inventory[tool_id] = true
+	return true
+
+
+func has_tool(tool_id: StringName) -> bool:
+	return not tool_id.is_empty() and _tool_inventory.has(tool_id)
 
 
 func _throw_held_item() -> void:

@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://ps2_house/textures/Ladrillos.jpg" id="1_stone"]
+
+[resource]
+albedo_color = Color(0.39, 0.405, 0.365, 1)
+albedo_texture = ExtResource("1_stone")
+roughness = 0.97
+texture_filter = 0
+uv1_scale = Vector3(1.35, 1.35, 1.35)
+uv1_triplanar = true
+uv1_world_triplanar = true
+
