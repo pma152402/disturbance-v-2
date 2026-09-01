@@ -18,10 +18,15 @@ func _run_validation() -> void:
 	var player := player_scene.instantiate() as CharacterBody3D
 	test_scene.add_child(freezer)
 	test_scene.add_child(player)
+	player.global_transform = Transform3D(Basis(Vector3.UP, 0.47), Vector3(2.3, 0.2, -1.7))
 	await process_frame
+	if not (freezer.get_node("Body") as MeshInstance3D).visible or (freezer.get_node("OuterFront") as MeshInstance3D).visible:
+		_fail("Desde fuera no se conserva el modelo original")
+		return
 	if freezer.collision_layer & 2 == 0 or absf(float(freezer.call(&"get_interaction_distance")) - 1.5) > 0.01:
 		_fail("F no usa una distancia de 1.5 metros")
 		return
+	var return_transform := player.global_transform
 	if not bool(freezer.call(&"interact", player)):
 		_fail("F no abre el congelador")
 		return
@@ -29,9 +34,18 @@ func _run_validation() -> void:
 	if player.get("_freezer_controller") != freezer or not bool(freezer.call(&"is_player_hidden", player)):
 		_fail("El jugador no queda escondido")
 		return
+	if (freezer.get_node("Body") as MeshInstance3D).visible or not (freezer.get_node("OuterFront") as MeshInstance3D).visible:
+		_fail("El interior no se activa solamente al esconderse")
+		return
 	var player_collision := player.get_node("CollisionShape3D") as CollisionShape3D
 	if not player_collision.disabled or int(player.get("_stance")) != 1:
 		_fail("El jugador no queda a una altura fija segura")
+		return
+	if float(freezer.get("hiding_position").y) < 0.47:
+		_fail("La camara no sube hasta la rendija")
+		return
+	if freezer.get_node_or_null("OuterFrontUpper") == null or freezer.get_node_or_null("InteriorFrontUpper") == null:
+		_fail("La pared frontal no deja una rendija de vision")
 		return
 	player.call(&"_update_interaction_prompt")
 	var prompt := player.get_node("InteractionUI/InteractionPrompt") as Label
@@ -53,6 +67,12 @@ func _run_validation() -> void:
 		return
 	if int(player.get("_stance")) != 0:
 		_fail("No se restaura la postura anterior")
+		return
+	if not player.global_transform.is_equal_approx(return_transform):
+		_fail("El jugador no vuelve al punto exacto desde el que entro: actual=%s esperado=%s" % [player.global_transform, return_transform])
+		return
+	if not (freezer.get_node("Body") as MeshInstance3D).visible or (freezer.get_node("OuterFront") as MeshInstance3D).visible:
+		_fail("Al salir no vuelve el modelo original")
 		return
 	await create_timer(0.42).timeout
 	if absf((freezer.get_node("LidHinge") as Node3D).rotation.x) > 0.01:

@@ -132,6 +132,8 @@ var _walker_flashlight_was_drawn := false
 var _ladder_controller: Node3D
 var _freezer_controller: Node3D
 var _freezer_previous_stance := Stance.STANDING
+var _freezer_return_transform := Transform3D.IDENTITY
+var _freezer_exit_lock_timer := 0.0
 
 const ZOOM_SEGMENT_ON := Color(0.86, 0.9, 0.83, 0.92)
 const ZOOM_SEGMENT_OFF := Color(0.20, 0.23, 0.20, 0.42)
@@ -317,6 +319,12 @@ func _physics_process(delta: float) -> void:
 		var freezer_zoom_weight := 1.0 - exp(-zoom_smoothing * delta)
 		camera.fov = lerpf(camera.fov, _zoom_fov_target, freezer_zoom_weight)
 		_update_zoom_meter()
+		return
+	if _freezer_exit_lock_timer > 0.0:
+		_freezer_exit_lock_timer = maxf(0.0, _freezer_exit_lock_timer - delta)
+		velocity = Vector3.ZERO
+		_update_interaction_prompt()
+		_update_camera_motion(delta, Vector2.ZERO, false)
 		return
 	if is_instance_valid(_ladder_controller):
 		var ladder_input := Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
@@ -936,7 +944,7 @@ func end_climbing_ladder(ladder: Node3D, launch_velocity := Vector3.ZERO) -> voi
 	velocity = launch_velocity
 
 
-func enter_chest_freezer(freezer: Node3D, hiding_world_position: Vector3, facing_direction: Vector3) -> bool:
+func prepare_chest_freezer_entry(freezer: Node3D) -> bool:
 	if (
 		freezer == null
 		or is_instance_valid(_freezer_controller)
@@ -946,9 +954,16 @@ func enter_chest_freezer(freezer: Node3D, hiding_world_position: Vector3, facing
 	):
 		return false
 	_freezer_previous_stance = _stance
+	_freezer_return_transform = global_transform
 	_freezer_controller = freezer
 	_jump_phase = JumpPhase.IDLE
 	velocity = Vector3.ZERO
+	return true
+
+
+func enter_chest_freezer(freezer: Node3D, hiding_world_position: Vector3, facing_direction: Vector3) -> bool:
+	if freezer == null or freezer != _freezer_controller:
+		return false
 	global_position = hiding_world_position
 	var flat_facing := Vector3(facing_direction.x, 0.0, facing_direction.z).normalized()
 	if not flat_facing.is_zero_approx():
@@ -959,17 +974,15 @@ func enter_chest_freezer(freezer: Node3D, hiding_world_position: Vector3, facing
 	return true
 
 
-func leave_chest_freezer(exit_world_position: Vector3, facing_direction: Vector3) -> void:
+func leave_chest_freezer(_exit_world_position: Vector3, _facing_direction: Vector3) -> void:
 	if not is_instance_valid(_freezer_controller):
 		return
-	global_position = exit_world_position
-	var flat_facing := Vector3(facing_direction.x, 0.0, facing_direction.z).normalized()
-	if not flat_facing.is_zero_approx():
-		look_at(global_position + flat_facing, Vector3.UP)
+	global_transform = _freezer_return_transform
 	_freezer_controller = null
 	collision_shape.disabled = false
 	_set_stance_immediate(_freezer_previous_stance)
 	velocity = Vector3.ZERO
+	_freezer_exit_lock_timer = 0.25
 	_equip_inventory_slot(_selected_inventory_slot)
 
 

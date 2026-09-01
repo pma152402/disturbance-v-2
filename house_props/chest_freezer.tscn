@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://b87fvm7j53ow7"]
+[gd_scene load_steps=22 format=3 uid="uid://b87fvm7j53ow7"]
 
 [ext_resource type="Script" path="res://house_props/chest_freezer.gd" id="1_script"]
 
@@ -65,52 +65,88 @@ size = Vector3(1.5, 0.76, 0.08)
 material = SubResource("white")
 size = Vector3(0.08, 0.76, 0.62)
 
+[sub_resource type="BoxMesh" id="outer_front_lower"]
+material = SubResource("white")
+size = Vector3(1.5, 0.58, 0.08)
+
+[sub_resource type="BoxMesh" id="outer_front_upper"]
+material = SubResource("white")
+size = Vector3(1.5, 0.08, 0.08)
+
+[sub_resource type="BoxMesh" id="interior_front_lower"]
+material = SubResource("inside")
+size = Vector3(1.3, 0.46, 0.025)
+
+[sub_resource type="BoxMesh" id="interior_front_upper"]
+material = SubResource("inside")
+size = Vector3(1.3, 0.06, 0.025)
+
 [node name="ChestFreezer" type="StaticBody3D" unique_id=1032956703]
 editor_description = "Congelador horizontal tipo arcon, estatico y con la tapa gris diferenciada del cuerpo principal."
 collision_layer = 2
 script = ExtResource("1_script")
 
 [node name="Body" type="MeshInstance3D" parent="." unique_id=1775773220]
-visible = false
+position = Vector3(0, 0.38, 0)
 mesh = SubResource("body")
 
 [node name="OuterBottom" type="MeshInstance3D" parent="."]
+visible = false
 position = Vector3(0, 0.04, 0)
 mesh = SubResource("outer_bottom")
 
 [node name="OuterBack" type="MeshInstance3D" parent="."]
+visible = false
 position = Vector3(0, 0.38, 0.35)
 mesh = SubResource("outer_long_wall")
 
 [node name="OuterFront" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.38, -0.35)
-mesh = SubResource("outer_long_wall")
+visible = false
+position = Vector3(0, 0.29, -0.35)
+mesh = SubResource("outer_front_lower")
+
+[node name="OuterFrontUpper" type="MeshInstance3D" parent="."]
+visible = false
+position = Vector3(0, 0.72, -0.35)
+mesh = SubResource("outer_front_upper")
 
 [node name="OuterLeft" type="MeshInstance3D" parent="."]
+visible = false
 position = Vector3(-0.71, 0.38, 0)
 mesh = SubResource("outer_side_wall")
 
 [node name="OuterRight" type="MeshInstance3D" parent="."]
+visible = false
 position = Vector3(0.71, 0.38, 0)
 mesh = SubResource("outer_side_wall")
 
 [node name="InteriorBottom" type="MeshInstance3D" parent="."]
+visible = false
 position = Vector3(0, 0.105, 0)
 mesh = SubResource("interior_bottom")
 
 [node name="InteriorBack" type="MeshInstance3D" parent="."]
+visible = false
 position = Vector3(0, 0.405, 0.295)
 mesh = SubResource("interior_long_wall")
 
 [node name="InteriorFront" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.405, -0.295)
-mesh = SubResource("interior_long_wall")
+visible = false
+position = Vector3(0, 0.335, -0.295)
+mesh = SubResource("interior_front_lower")
+
+[node name="InteriorFrontUpper" type="MeshInstance3D" parent="."]
+visible = false
+position = Vector3(0, 0.725, -0.295)
+mesh = SubResource("interior_front_upper")
 
 [node name="InteriorLeft" type="MeshInstance3D" parent="."]
+visible = false
 position = Vector3(-0.65, 0.405, 0)
 mesh = SubResource("interior_side_wall")
 
 [node name="InteriorRight" type="MeshInstance3D" parent="."]
+visible = false
 position = Vector3(0.65, 0.405, 0)
 mesh = SubResource("interior_side_wall")
 

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://locked_door.tscn" id="1_locked"]
+
+[node name="PuertaPrincipal" instance=ExtResource("1_locked")]
+
+[node name="Hinge" parent="." index="1"]
+required_key_id = &"main_door_key"
+required_key_name = "LLAVE DE LA PUERTA PRINCIPAL"
+
+[editable path="Hinge"]
