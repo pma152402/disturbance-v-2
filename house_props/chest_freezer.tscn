@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://b87fvm7j53ow7"]
+[gd_scene load_steps=18 format=3 uid="uid://b87fvm7j53ow7"]
+
+[ext_resource type="Script" path="res://house_props/chest_freezer.gd" id="1_script"]
 
 [sub_resource type="StandardMaterial3D" id="white"]
 albedo_color = Color(0.6703443, 0.7072128, 0.74734384, 1)
@@ -39,23 +41,89 @@ size = Vector3(0.48, 0.075, 0.07)
 [sub_resource type="BoxShape3D" id="shape"]
 size = Vector3(1.5, 0.76, 0.78)
 
+[sub_resource type="BoxMesh" id="interior_bottom"]
+material = SubResource("inside")
+size = Vector3(1.3, 0.035, 0.59)
+
+[sub_resource type="BoxMesh" id="interior_long_wall"]
+material = SubResource("inside")
+size = Vector3(1.3, 0.58, 0.025)
+
+[sub_resource type="BoxMesh" id="interior_side_wall"]
+material = SubResource("inside")
+size = Vector3(0.025, 0.58, 0.59)
+
+[sub_resource type="BoxMesh" id="outer_bottom"]
+material = SubResource("white")
+size = Vector3(1.5, 0.08, 0.78)
+
+[sub_resource type="BoxMesh" id="outer_long_wall"]
+material = SubResource("white")
+size = Vector3(1.5, 0.76, 0.08)
+
+[sub_resource type="BoxMesh" id="outer_side_wall"]
+material = SubResource("white")
+size = Vector3(0.08, 0.76, 0.62)
+
 [node name="ChestFreezer" type="StaticBody3D" unique_id=1032956703]
 editor_description = "Congelador horizontal tipo arcon, estatico y con la tapa gris diferenciada del cuerpo principal."
+collision_layer = 2
+script = ExtResource("1_script")
 
 [node name="Body" type="MeshInstance3D" parent="." unique_id=1775773220]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0)
+visible = false
 mesh = SubResource("body")
 
-[node name="DarkInterior" type="MeshInstance3D" parent="." unique_id=457050625]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.765, 0)
-mesh = SubResource("interior")
+[node name="OuterBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.04, 0)
+mesh = SubResource("outer_bottom")
 
-[node name="Lid" type="MeshInstance3D" parent="." unique_id=246679604]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.79, 0)
-mesh = SubResource("lid")
+[node name="OuterBack" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.38, 0.35)
+mesh = SubResource("outer_long_wall")
+
+[node name="OuterFront" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.38, -0.35)
+mesh = SubResource("outer_long_wall")
+
+[node name="OuterLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.71, 0.38, 0)
+mesh = SubResource("outer_side_wall")
+
+[node name="OuterRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.71, 0.38, 0)
+mesh = SubResource("outer_side_wall")
+
+[node name="InteriorBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.105, 0)
+mesh = SubResource("interior_bottom")
+
+[node name="InteriorBack" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.405, 0.295)
+mesh = SubResource("interior_long_wall")
+
+[node name="InteriorFront" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.405, -0.295)
+mesh = SubResource("interior_long_wall")
+
+[node name="InteriorLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.65, 0.405, 0)
+mesh = SubResource("interior_side_wall")
+
+[node name="InteriorRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.65, 0.405, 0)
+mesh = SubResource("interior_side_wall")
 
 [node name="LidHinge" type="Node3D" parent="." unique_id=361537531]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.79, 0.39)
+
+[node name="Lid" type="MeshInstance3D" parent="LidHinge" unique_id=246679604]
+position = Vector3(0, 0, -0.39)
+mesh = SubResource("lid")
+
+[node name="DarkInterior" type="MeshInstance3D" parent="LidHinge" unique_id=457050625]
+position = Vector3(0, -0.025, -0.39)
+mesh = SubResource("interior")
 
 [node name="Gasket" type="MeshInstance3D" parent="LidHinge" unique_id=1077682069]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.075, -0.39)

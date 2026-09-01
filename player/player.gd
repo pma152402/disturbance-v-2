@@ -130,6 +130,8 @@ var _skill_check_active := false
 var _walker_controller: Node3D
 var _walker_flashlight_was_drawn := false
 var _ladder_controller: Node3D
+var _freezer_controller: Node3D
+var _freezer_previous_stance := Stance.STANDING
 
 const ZOOM_SEGMENT_ON := Color(0.86, 0.9, 0.83, 0.92)
 const ZOOM_SEGMENT_OFF := Color(0.20, 0.23, 0.20, 0.42)
@@ -191,6 +193,14 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			get_tree().call_deferred(&"reload_current_scene")
 			return
+		if is_instance_valid(_freezer_controller):
+			if pressed_key == KEY_F:
+				_freezer_controller.call(&"request_exit", self)
+				get_viewport().set_input_as_handled()
+				return
+			if pressed_key in [KEY_CTRL, KEY_X]:
+				get_viewport().set_input_as_handled()
+				return
 		if _held_item == &"recipe_book" and _recipe_book_reading and pressed_key in [KEY_Q, KEY_E]:
 			_turn_recipe_book_pages(-1 if pressed_key == KEY_Q else 1)
 			get_viewport().set_input_as_handled()
@@ -300,6 +310,14 @@ func _physics_process(delta: float) -> void:
 	_update_stance_transition(delta)
 	head.rotation.x = _look_pitch
 	head.rotation.y = 0.0
+	if is_instance_valid(_freezer_controller):
+		velocity = Vector3.ZERO
+		_update_interaction_prompt()
+		_update_camera_motion(delta, Vector2.ZERO, false)
+		var freezer_zoom_weight := 1.0 - exp(-zoom_smoothing * delta)
+		camera.fov = lerpf(camera.fov, _zoom_fov_target, freezer_zoom_weight)
+		_update_zoom_meter()
+		return
 	if is_instance_valid(_ladder_controller):
 		var ladder_input := Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
 		velocity = Vector3.ZERO
@@ -426,8 +444,9 @@ func _update_camera_motion(delta: float, input_vector: Vector2, is_sprinting: bo
 		)
 		hand_bob_roll = -sin(_bob_phase * 0.5) * deg_to_rad(bob_roll_degrees) * hand_bob_multiplier
 
-	var lean_input := 0.0 if _recipe_book_reading else Input.get_axis(&"lean_left", &"lean_right")
-	_lean_amount = 0.0 if _recipe_book_reading else move_toward(_lean_amount, lean_input, lean_speed * delta)
+	var lock_lean := _recipe_book_reading or is_instance_valid(_freezer_controller)
+	var lean_input := 0.0 if lock_lean else Input.get_axis(&"lean_left", &"lean_right")
+	_lean_amount = 0.0 if lock_lean else move_toward(_lean_amount, lean_input, lean_speed * delta)
 	target_position.x += _lean_amount * lean_distance
 	var target_roll := bob_roll - _lean_amount * deg_to_rad(lean_angle_degrees)
 
@@ -732,6 +751,10 @@ func _try_interact(pressed_key: Key) -> bool:
 
 func _update_interaction_prompt() -> void:
 	note_controls_prompt.visible = false
+	if is_instance_valid(_freezer_controller):
+		interaction_prompt.visible = true
+		interaction_prompt.text = "F  SALIR DEL CONGELADOR"
+		return
 	if is_instance_valid(_ladder_controller):
 		interaction_prompt.visible = true
 		interaction_prompt.text = "F  SOLTAR ESCALERA"
@@ -911,6 +934,55 @@ func end_climbing_ladder(ladder: Node3D, launch_velocity := Vector3.ZERO) -> voi
 	_ladder_controller = null
 	motion_mode = CharacterBody3D.MOTION_MODE_GROUNDED
 	velocity = launch_velocity
+
+
+func enter_chest_freezer(freezer: Node3D, hiding_world_position: Vector3, facing_direction: Vector3) -> bool:
+	if (
+		freezer == null
+		or is_instance_valid(_freezer_controller)
+		or is_instance_valid(_ladder_controller)
+		or is_instance_valid(_walker_controller)
+		or _skill_check_active
+	):
+		return false
+	_freezer_previous_stance = _stance
+	_freezer_controller = freezer
+	_jump_phase = JumpPhase.IDLE
+	velocity = Vector3.ZERO
+	global_position = hiding_world_position
+	var flat_facing := Vector3(facing_direction.x, 0.0, facing_direction.z).normalized()
+	if not flat_facing.is_zero_approx():
+		look_at(global_position + flat_facing, Vector3.UP)
+	_set_stance_immediate(Stance.CROUCHED)
+	collision_shape.disabled = true
+	_hide_all_held_visuals()
+	return true
+
+
+func leave_chest_freezer(exit_world_position: Vector3, facing_direction: Vector3) -> void:
+	if not is_instance_valid(_freezer_controller):
+		return
+	global_position = exit_world_position
+	var flat_facing := Vector3(facing_direction.x, 0.0, facing_direction.z).normalized()
+	if not flat_facing.is_zero_approx():
+		look_at(global_position + flat_facing, Vector3.UP)
+	_freezer_controller = null
+	collision_shape.disabled = false
+	_set_stance_immediate(_freezer_previous_stance)
+	velocity = Vector3.ZERO
+	_equip_inventory_slot(_selected_inventory_slot)
+
+
+func _set_stance_immediate(target_stance: Stance) -> void:
+	var values := _get_stance_values(target_stance)
+	var capsule := collision_shape.shape as CapsuleShape3D
+	head.position.y = values.x
+	capsule.height = values.y
+	collision_shape.position.y = values.z
+	_stance = target_stance
+	_pending_stance = target_stance
+	_stance_transition_timer = 0.0
+	_stance_transition_elapsed = 0.0
 
 
 func pick_up_plunger() -> bool:
