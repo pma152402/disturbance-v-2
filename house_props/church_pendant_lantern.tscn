@@ -93,6 +93,9 @@ script = ExtResource("1_controller")
 light_paths = Array[NodePath]([NodePath("WarmLight"), NodePath("FloorHalo")])
 glow_mesh_paths = Array[NodePath]([NodePath("Glow")])
 
+[node name="GrandmotherAttractionPoint" type="Marker3D" parent="."]
+position = Vector3(0, -3, 1.3)
+
 [node name="CeilingCanopy" type="MeshInstance3D" parent="." unique_id=1610517264]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.065, 0)
 mesh = SubResource("canopy")

@@ -62,6 +62,8 @@ rings = 7
 [node name="GrandmaCeilingLamp" type="Node3D" groups=["living_room_ceiling_lamp"]]
 editor_description = "Lámpara colgante antigua con pantalla crema, latón envejecido y borde marrón."
 script = ExtResource("1_controller")
+[node name="GrandmotherAttractionPoint" type="Marker3D" parent="."]
+position = Vector3(0, -3, 1.25)
 [node name="CeilingCanopy" type="MeshInstance3D" parent="."]
 position = Vector3(0, -0.055, 0)
 mesh = SubResource("Canopy")

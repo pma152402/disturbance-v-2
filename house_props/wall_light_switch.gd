@@ -33,13 +33,15 @@ func get_interaction_text(_player: Node = null) -> String:
 	return ("F  APAGAR " if all_on else "F  ENCENDER ") + noun
 
 
-func interact(_player: Node = null) -> bool:
+func interact(player: Node = null) -> bool:
 	var lamps := _get_controlled_lamps()
 	if lamps.is_empty():
 		return false
 	var now_on := not _are_all_lamps_on(lamps)
 	for lamp: Node in lamps:
 		lamp.call("set_lamp_enabled", now_on)
+		if now_on and player != null and player.has_method(&"notify_light_switched_on") and lamp is Node3D:
+			player.call(&"notify_light_switched_on", lamp as Node3D)
 	_set_rocker_position(now_on, true)
 	_play_switch_sound(now_on)
 	return true

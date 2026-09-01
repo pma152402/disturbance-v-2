@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://smjf2mu6l56j"]
+
+[ext_resource type="Script" uid="uid://4wnmls80g8b0" path="res://player/held_items/matchbox_held_visual.gd" id="1"]
+
+[sub_resource type="StandardMaterial3D" id="box_mat"]
+albedo_color = Color(0.58, 0.11, 0.045, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="box_mesh"]
+size = Vector3(0.20399414, 0.074628904, 0.13)
+
+[sub_resource type="StandardMaterial3D" id="paper_mat"]
+albedo_color = Color(0.86, 0.7, 0.4, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="sleeve_mesh"]
+size = Vector3(0.205, 0.078, 0.09)
+
+[sub_resource type="StandardMaterial3D" id="wood_mat"]
+albedo_color = Color(0.72, 0.52, 0.28, 1)
+
+[sub_resource type="CylinderMesh" id="stick_mesh"]
+top_radius = 0.008
+bottom_radius = 0.008
+height = 0.31
+radial_segments = 6
+
+[sub_resource type="StandardMaterial3D" id="head_mat"]
+albedo_color = Color(0.31, 0.055, 0.025, 1)
+roughness = 0.95
+
+[sub_resource type="SphereMesh" id="head_mesh"]
+radius = 0.018
+height = 0.036
+radial_segments = 8
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="flame_mat"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.53, 0.08, 0.9)
+
+[sub_resource type="SphereMesh" id="flame_mesh"]
+radius = 0.035
+height = 0.105
+radial_segments = 8
+rings = 5
+
+[node name="HeldMatchbox" type="Node3D" unique_id=837092785]
+script = ExtResource("1")
+
+[node name="Box" type="MeshInstance3D" parent="." unique_id=993735263]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.3711236e-05, 0.0011816435, 0)
+material_override = SubResource("box_mat")
+mesh = SubResource("box_mesh")
+
+[node name="Sleeve" type="MeshInstance3D" parent="." unique_id=1765401901]
+material_override = SubResource("paper_mat")
+mesh = SubResource("sleeve_mesh")
+
+[node name="MatchRoot" type="Node3D" parent="." unique_id=623888424]
+transform = Transform3D(0.9130889, 0.40776044, 0, -0.40725085, 0.9119478, -0.04997917, -0.020379528, 0.045635425, 0.99875027, -0.11, -0.03, -0.02)
+
+[node name="Stick" type="MeshInstance3D" parent="MatchRoot" unique_id=952049311]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.155, 0)
+material_override = SubResource("wood_mat")
+mesh = SubResource("stick_mesh")
+
+[node name="Head" type="MeshInstance3D" parent="MatchRoot" unique_id=2029790442]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.315, 0)
+material_override = SubResource("head_mat")
+mesh = SubResource("head_mesh")
+
+[node name="Flame" type="Node3D" parent="MatchRoot" unique_id=481119895]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
+
+[node name="FlameMesh" type="MeshInstance3D" parent="MatchRoot/Flame" unique_id=277905864]
+material_override = SubResource("flame_mat")
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="MatchLight" type="OmniLight3D" parent="MatchRoot/Flame" unique_id=1028786186]
+light_color = Color(1, 0.48, 0.16, 1)
+light_energy = 2.3
+shadow_enabled = true
+omni_range = 4.2
+omni_attenuation = 1.35
+
+[node name="StrikeGlow" type="OmniLight3D" parent="." unique_id=591067190]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0)
+light_color = Color(1, 0.32, 0.08, 1)
+omni_range = 1.0

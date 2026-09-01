@@ -1,10 +1,14 @@
 extends CharacterBody3D
 
+signal light_switched_on(source: Node3D)
+signal footstep_heard(world_position: Vector3, hearing_radius: float)
+
 @export var move_speed := 1.4
-@export var sprint_speed := 4.8
+@export var sprint_speed := 3.6
 @export var crouch_speed := 1.55
 @export var prone_speed := 0.8
-@export var acceleration := 10.0
+@export var acceleration := 5.0
+@export var sprint_turn_acceleration := 20.0
 @export var mouse_sensitivity := 0.0022
 @export var zoom_min_fov := 35.0
 @export var zoom_max_fov := 95.0
@@ -15,12 +19,12 @@ extends CharacterBody3D
 @export var bob_vertical_amount := 0.06
 @export var bob_horizontal_amount := 0.032
 @export var bob_roll_degrees := 0.9
-@export var sprint_bob_multiplier := 1.52
+@export var sprint_bob_multiplier := 1.38
 @export var lean_distance := 0.48
 @export var lean_angle_degrees := 16.0
 @export var lean_speed := 7.0
 @export var max_stamina := 100.0
-@export var stamina_drain_per_second := 5.5
+@export var stamina_drain_per_second := 4.3
 @export var stamina_recovery_per_second := 6.0
 @export var exhausted_recovery_threshold := 22.0
 @export var jump_stamina_cost := 4.0
@@ -32,13 +36,17 @@ extends CharacterBody3D
 @export var prone_transition_time := 0.55
 @export var hand_aim_sensitivity := 0.0025
 @export var hand_return_speed := 5.0
-@export var jump_velocity := 4.1
+@export var jump_velocity := 5.8
 @export var jump_windup_time := 0.11
 @export var jump_recovery_time := 0.13
 @export var upward_gravity_multiplier := 1.7
-@export var falling_gravity_multiplier := 2.3
+@export var falling_gravity_multiplier := 1.15
 @export var can_throw_force := 8.5
 @export var can_throw_upward_force := 1.25
+@export_category("Equipo inicial")
+@export var starts_with_flashlight := false
+@export var starts_with_matchbox := false
+@export var starts_with_lit_candle := false
 
 enum Stance { STANDING, CROUCHED, PRONE }
 enum JumpPhase { IDLE, WINDUP, RECOVERING }
@@ -55,8 +63,12 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var held_note: Node3D = $Head/Camera3D/RightHandRig/HeldNote
 @onready var held_recipe_book: Node3D = $Head/Camera3D/RightHandRig/HeldRecipeBook
 @onready var held_recipe_book_closed: Node3D = $Head/Camera3D/RightHandRig/HeldRecipeBookClosed
+@onready var held_matchbox: Node3D = $Head/Camera3D/RightHandRig/HeldMatchbox
+@onready var held_candle: Node3D = $Head/Camera3D/RightHandRig/HeldCandle
 @onready var flashlight: SpotLight3D = $Head/Camera3D/HandRig/Flashlight
 @onready var interaction_ray: RayCast3D = $Head/Camera3D/InteractionRay
+@onready var candle_placement_ray: RayCast3D = $Head/Camera3D/CandlePlacementRay
+@onready var candle_placement_preview: MeshInstance3D = $CandlePlacementPreview
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
 @onready var stamina_bar: ProgressBar = $StaminaUI/StaminaBar
 @onready var interaction_prompt: Label = $InteractionUI/InteractionPrompt
@@ -84,6 +96,7 @@ var _bob_phase := 0.0
 var _lean_amount := 0.0
 var _stamina := 100.0
 var _is_exhausted := false
+var _sprint_held := false
 var _full_stamina_flash_timer := 0.0
 var _ui_time := 0.0
 var _stamina_fill_style: StyleBoxFlat
@@ -116,7 +129,7 @@ var _inventory_ui_tween: Tween
 var _key_inventory: Dictionary = {}
 var _tool_inventory: Dictionary = {}
 @export_category("Debug")
-@export var debug_all_keys := true
+@export var debug_all_keys := false
 var _flashlight_holstered := true
 var _flashlight_was_on := true
 var _flashlight_available := true
@@ -127,6 +140,9 @@ var _monster_hits := 0
 var _monster_hit_cooldown := 0.0
 var _monster_restart_pending := false
 var _skill_check_active := false
+var _candle_placement_mode := false
+var _candle_placement_valid := false
+var _candle_placement_point := Vector3.ZERO
 var _walker_controller: Node3D
 var _walker_flashlight_was_drawn := false
 var _ladder_controller: Node3D
@@ -143,6 +159,12 @@ const ThrownBottleScene := preload("res://thrown_bottle.tscn")
 const DroppedFlashlightScene := preload("res://dropped_flashlight.tscn")
 const DroppedNoteScene := preload("res://dropped_note.tscn")
 const DroppedRecipeBookScene := preload("res://dropped_recipe_book.tscn")
+const MatchboxPickupScene := preload("res://house_props/matchbox_pickup.tscn")
+const CandlePickupScene := preload("res://house_props/candle_pickup.tscn")
+
+
+func notify_light_switched_on(source: Node3D) -> void:
+	light_switched_on.emit(source)
 const PlungerPickupScene := preload("res://house_props/toilet_plunger.tscn")
 const CrowbarPickupScene := preload("res://house_props/crowbar_pickup.tscn")
 const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
@@ -153,16 +175,33 @@ const INVENTORY_ITEM_NAMES := {
 	&"crowbar": "PALANCA",
 	&"note": "NOTA",
 	&"recipe_book": "RECETARIO",
+	&"matchbox": "CERILLAS",
+	&"candle": "VELA",
 }
 
 
 func _ready() -> void:
 	add_to_group(&"player")
+	_flashlight_available = starts_with_flashlight
+	_flashlight_was_on = false
+	_flashlight_holstered = true
+	_inventory_slots[0] = &"flashlight" if starts_with_flashlight else &""
+	if starts_with_matchbox:
+		_inventory_slots[1] = &"matchbox"
+		_inventory_item_data[1] = {"matches_remaining": 20}
+	if starts_with_lit_candle:
+		var candle_slot := 2 if starts_with_matchbox else 1
+		_inventory_slots[candle_slot] = &"candle"
+		_inventory_item_data[candle_slot] = {"burn_remaining": 420.0, "lit": true}
 	for child in $ZoomUI/ZoomMeter/ZoomSegments.get_children():
 		if child is ColorRect:
 			_zoom_segments.append(child as ColorRect)
 	hand_rig.visible = false
 	_held_note_rest_transform = held_note.transform
+	if held_matchbox.has_signal(&"state_changed"):
+		held_matchbox.connect(&"state_changed", Callable(self, &"_on_matchbox_state_changed"))
+	if held_candle.has_signal(&"state_changed"):
+		held_candle.connect(&"state_changed", Callable(self, &"_on_candle_state_changed"))
 	_held_recipe_book_rest_transform = held_recipe_book.transform
 	flashlight.visible = false
 	_camera_rest_position = camera.position
@@ -183,9 +222,23 @@ func _ready() -> void:
 	footstep_sound.stream = GameplaySounds.make_footstep()
 	if held_recipe_book.has_signal(&"page_turn_finished"):
 		held_recipe_book.connect(&"page_turn_finished", Callable(self, &"_on_recipe_page_turn_finished"))
+	if starts_with_lit_candle:
+		_equip_inventory_slot(2 if starts_with_matchbox else 1)
+	elif starts_with_matchbox:
+		_equip_inventory_slot(1)
 
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		var sprint_key_event := event as InputEventKey
+		var sprint_key := (
+			sprint_key_event.physical_keycode
+			if sprint_key_event.physical_keycode != 0
+			else sprint_key_event.keycode
+		)
+		if sprint_key == KEY_SHIFT:
+			_sprint_held = sprint_key_event.pressed
+
 	if event is InputEventKey and event.pressed and not event.echo:
 		var key_event := event as InputEventKey
 		var pressed_key := key_event.physical_keycode if key_event.physical_keycode != 0 else key_event.keycode
@@ -212,7 +265,19 @@ func _input(event: InputEvent) -> void:
 			_show_inventory_temporarily()
 			get_viewport().set_input_as_handled()
 			return
+		if pressed_key == KEY_Z and _held_item == &"candle":
+			held_candle.call(&"extinguish", true)
+			_update_interaction_prompt()
+			get_viewport().set_input_as_handled()
+			return
 		if pressed_key == KEY_G and not _skill_check_active:
+			if _held_item == &"candle":
+				if _candle_placement_mode:
+					_place_held_candle()
+				else:
+					_set_candle_placement_mode(true)
+				get_viewport().set_input_as_handled()
+				return
 			_drop_selected_inventory_item()
 			get_viewport().set_input_as_handled()
 			return
@@ -292,6 +357,16 @@ func _input(event: InputEvent) -> void:
 			_set_recipe_book_reading(not _recipe_book_reading)
 			get_viewport().set_input_as_handled()
 			return
+		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and _held_item == &"matchbox" and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			held_matchbox.call(&"draw_match")
+			_update_interaction_prompt()
+			get_viewport().set_input_as_handled()
+			return
+		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and _held_item == &"candle" and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			_try_ignite_held_candle()
+			_update_interaction_prompt()
+			get_viewport().set_input_as_handled()
+			return
 		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and _flashlight_available and not _flashlight_holstered and _selected_inventory_slot == 0:
 			flashlight.visible = not flashlight.visible
 			flashlight_click_sound.pitch_scale = randf_range(0.98, 1.02)
@@ -299,6 +374,11 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_LEFT:
+			if _held_item == &"matchbox" and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+				held_matchbox.call(&"strike_match")
+				_update_interaction_prompt()
+				get_viewport().set_input_as_handled()
+				return
 			if not _held_item.is_empty() and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 				_throw_held_item()
 				get_viewport().set_input_as_handled()
@@ -372,7 +452,7 @@ func _physics_process(delta: float) -> void:
 		_request_stance(Stance.STANDING)
 	var previous_stamina := _stamina
 	var wants_to_sprint := (
-		Input.is_action_pressed(&"sprint")
+		_sprint_held
 		and input_vector.length_squared() > 0.01
 		and _stance == Stance.STANDING
 		and _stance_transition_timer <= 0.0
@@ -403,10 +483,18 @@ func _physics_process(delta: float) -> void:
 		current_speed *= 0.45
 	var move_direction := (transform.basis * Vector3(input_vector.x, 0.0, input_vector.y)).normalized()
 	var target_velocity := move_direction * current_speed
+	var movement_acceleration := acceleration
+	var horizontal_velocity := Vector3(velocity.x, 0.0, velocity.z)
+	if is_sprinting and not move_direction.is_zero_approx() and horizontal_velocity.length_squared() > 0.01:
+		var direction_alignment := clampf(horizontal_velocity.normalized().dot(move_direction), -1.0, 1.0)
+		var turn_weight := clampf((1.0 - direction_alignment) / 0.5, 0.0, 1.0)
+		movement_acceleration = lerpf(acceleration, sprint_turn_acceleration, turn_weight)
 
-	velocity.x = move_toward(velocity.x, target_velocity.x, acceleration * delta)
-	velocity.z = move_toward(velocity.z, target_velocity.z, acceleration * delta)
+	velocity.x = move_toward(velocity.x, target_velocity.x, movement_acceleration * delta)
+	velocity.z = move_toward(velocity.z, target_velocity.z, movement_acceleration * delta)
 	move_and_slide()
+	_update_held_candle_motion(is_sprinting)
+	_update_candle_placement_preview()
 	_update_interaction_prompt()
 	_update_camera_motion(delta, input_vector, is_sprinting)
 	_update_footsteps(delta, input_vector, is_sprinting)
@@ -419,6 +507,11 @@ func _physics_process(delta: float) -> void:
 	_update_zoom_meter()
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		_sprint_held = false
+
+
 func _update_zoom_meter() -> void:
 	var zoom_amount := clampf(
 		inverse_lerp(zoom_max_fov, zoom_min_fov, camera.fov) * 100.0,
@@ -428,16 +521,18 @@ func _update_zoom_meter() -> void:
 	var lit_segments := roundi(zoom_amount * float(_zoom_segments.size()) / 100.0)
 	for index in _zoom_segments.size():
 		_zoom_segments[index].color = ZOOM_SEGMENT_ON if index < lit_segments else ZOOM_SEGMENT_OFF
-func _update_camera_motion(delta: float, input_vector: Vector2, is_sprinting: bool) -> void:
-	var is_walking := is_on_floor() and input_vector.length_squared() > 0.01
+func _update_camera_motion(delta: float, _input_vector: Vector2, _is_sprinting: bool) -> void:
+	var horizontal_speed := Vector2(velocity.x, velocity.z).length()
+	var is_walking := is_on_floor() and horizontal_speed > 0.12
 	var target_position := _camera_rest_position
 	var bob_roll := 0.0
 	var hand_bob_position := Vector3.ZERO
 	var hand_bob_roll := 0.0
 
 	if is_walking:
-		var bob_multiplier := sprint_bob_multiplier if is_sprinting else 1.0
-		var hand_bob_multiplier := 1.15 if is_sprinting else 1.0
+		var sprint_blend := clampf(inverse_lerp(move_speed, sprint_speed, horizontal_speed), 0.0, 1.0)
+		var bob_multiplier := lerpf(1.0, sprint_bob_multiplier, sprint_blend)
+		var hand_bob_multiplier := lerpf(1.0, 1.15, sprint_blend)
 		_bob_phase += delta * bob_frequency * bob_multiplier
 		target_position += Vector3(
 			cos(_bob_phase * 0.5) * bob_horizontal_amount * bob_multiplier,
@@ -512,6 +607,7 @@ func _show_inventory_temporarily() -> void:
 
 
 func _hide_all_held_visuals() -> void:
+	_set_candle_placement_mode(false)
 	_set_note_reading(false, true)
 	_set_recipe_book_reading(false, true)
 	held_can.visible = false
@@ -521,6 +617,13 @@ func _hide_all_held_visuals() -> void:
 	held_note.visible = false
 	held_recipe_book.visible = false
 	held_recipe_book_closed.visible = false
+	if held_matchbox.visible and held_matchbox.has_method(&"holster_match"):
+		held_matchbox.call(&"holster_match")
+	held_matchbox.visible = false
+	if held_candle.visible:
+		_sync_held_candle_data()
+	held_candle.visible = false
+	held_candle.process_mode = Node.PROCESS_MODE_DISABLED
 	right_hand.visible = false
 
 
@@ -621,6 +724,13 @@ func _equip_inventory_slot(slot_index: int) -> bool:
 				held_recipe_book.visible = false
 				held_recipe_book_closed.visible = true
 				_configure_held_recipe_book(_inventory_item_data[slot_index])
+			&"matchbox":
+				held_matchbox.visible = true
+				held_matchbox.call(&"configure_matchbox", _inventory_item_data[slot_index])
+			&"candle":
+				held_candle.process_mode = Node.PROCESS_MODE_INHERIT
+				held_candle.visible = true
+				held_candle.call(&"configure_candle", _inventory_item_data[slot_index])
 	_update_inventory_ui()
 	return true
 
@@ -724,6 +834,14 @@ func _update_footsteps(_delta: float, input_vector: Vector2, is_sprinting: bool)
 	footstep_sound.volume_db = volume + randf_range(-1.2, 0.8)
 	footstep_sound.pitch_scale = randf_range(0.88, 1.12)
 	footstep_sound.play()
+	var hearing_radius := 3.4
+	if is_sprinting:
+		hearing_radius = 5.2
+	elif _stance == Stance.CROUCHED:
+		hearing_radius = 1.35
+	elif _stance == Stance.PRONE:
+		hearing_radius = 0.65
+	footstep_heard.emit(global_position, hearing_radius)
 
 
 func _get_interactable() -> Node:
@@ -781,10 +899,42 @@ func _update_interaction_prompt() -> void:
 		note_controls_prompt.visible = true
 		note_controls_prompt.text = "G  SOLTAR LIBRO    %s" % ("Q/E  PAGINAS    RMB  CERRAR" if _recipe_book_reading else "RMB  ABRIR")
 		return
+	if _held_item == &"matchbox":
+		var match_target := _get_interactable()
+		if match_target != null:
+			var match_target_text := str(match_target.get_interaction_text(self))
+			interaction_prompt.text = match_target_text
+			interaction_prompt.visible = not match_target_text.is_empty()
+		else:
+			interaction_prompt.visible = false
+		note_controls_prompt.visible = true
+		note_controls_prompt.text = str(held_matchbox.call(&"get_status_text"))
+		return
+	if _held_item == &"candle":
+		var candle_target := _get_interactable()
+		if candle_target != null:
+			var candle_target_text := str(candle_target.get_interaction_text(self))
+			interaction_prompt.text = candle_target_text
+			interaction_prompt.visible = not candle_target_text.is_empty()
+		else:
+			interaction_prompt.visible = false
+		note_controls_prompt.visible = true
+		if _candle_placement_mode:
+			note_controls_prompt.text = (
+				"G  COLOCAR VELA"
+				if _candle_placement_valid
+				else "BUSCA UNA SUPERFICIE"
+			)
+		else:
+			note_controls_prompt.text = "%s    G  COLOCAR" % str(held_candle.call(&"get_status_text", _can_ignite_candle()))
+		return
 	var target := _get_interactable()
-	interaction_prompt.visible = target != null
 	if target != null:
-		interaction_prompt.text = target.get_interaction_text(self)
+		var prompt_text := str(target.get_interaction_text(self))
+		interaction_prompt.text = prompt_text
+		interaction_prompt.visible = not prompt_text.is_empty()
+	else:
+		interaction_prompt.visible = false
 
 
 func pick_up_item(item_type: StringName) -> bool:
@@ -824,6 +974,149 @@ func pick_up_recipe_book(data: Dictionary) -> bool:
 	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(held_recipe_book, "scale", _held_recipe_book_rest_transform.basis.get_scale(), 0.24)
 	return true
+
+
+func pick_up_matchbox(matches_remaining := 20) -> bool:
+	var data := {"matches_remaining": clampi(matches_remaining, 0, 20)}
+	if not _store_inventory_item(&"matchbox", data):
+		return false
+	held_matchbox.scale = Vector3.ZERO
+	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(held_matchbox, "scale", Vector3.ONE, 0.2)
+	return true
+
+
+func _on_matchbox_state_changed(data: Dictionary) -> void:
+	if _held_item != &"matchbox":
+		return
+	if _selected_inventory_slot > 0 and _selected_inventory_slot < _inventory_item_data.size():
+		_inventory_item_data[_selected_inventory_slot] = data.duplicate(true)
+	_update_inventory_ui()
+	_update_interaction_prompt()
+
+
+func pick_up_candle(data: Dictionary = {}, ignite_on_pickup := false) -> bool:
+	var candle_data := {
+		"burn_remaining": clampf(float(data.get("burn_remaining", 420.0)), 0.0, 420.0),
+		"lit": (bool(data.get("lit", false)) or ignite_on_pickup) and float(data.get("burn_remaining", 420.0)) > 0.0,
+	}
+	if not _store_inventory_item(&"candle", candle_data):
+		return false
+	held_candle.scale = Vector3.ZERO
+	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(held_candle, "scale", Vector3.ONE * 0.86, 0.2)
+	return true
+
+
+func _on_candle_state_changed(data: Dictionary) -> void:
+	if _held_item != &"candle":
+		return
+	if _selected_inventory_slot > 0 and _selected_inventory_slot < _inventory_item_data.size():
+		_inventory_item_data[_selected_inventory_slot] = data.duplicate(true)
+	_update_inventory_ui()
+	_update_interaction_prompt()
+
+
+func _sync_held_candle_data() -> void:
+	if _held_item != &"candle" or _selected_inventory_slot <= 0:
+		return
+	_inventory_item_data[_selected_inventory_slot] = held_candle.call(&"get_candle_data")
+
+
+func _update_held_candle_motion(is_sprinting: bool) -> void:
+	if _held_item != &"candle" or not held_candle.visible:
+		return
+	var horizontal_speed := Vector2(velocity.x, velocity.z).length()
+	var sprint_motion := clampf(inverse_lerp(move_speed, sprint_speed, horizontal_speed), 0.0, 1.0) if is_sprinting else 0.0
+	held_candle.call(&"set_motion_strength", sprint_motion)
+
+
+func _set_candle_placement_mode(active: bool) -> void:
+	_candle_placement_mode = active and _held_item == &"candle"
+	_candle_placement_valid = false
+	candle_placement_preview.visible = false
+	if _candle_placement_mode:
+		_update_candle_placement_preview()
+
+
+func _update_candle_placement_preview() -> void:
+	if not _candle_placement_mode or _held_item != &"candle":
+		candle_placement_preview.visible = false
+		_candle_placement_valid = false
+		return
+	candle_placement_ray.force_raycast_update()
+	if not candle_placement_ray.is_colliding():
+		candle_placement_preview.visible = false
+		_candle_placement_valid = false
+		return
+	var surface_normal := candle_placement_ray.get_collision_normal().normalized()
+	_candle_placement_point = candle_placement_ray.get_collision_point()
+	_candle_placement_valid = surface_normal.dot(Vector3.UP) >= 0.72
+	candle_placement_preview.visible = true
+	candle_placement_preview.global_position = _candle_placement_point + Vector3.UP * 0.17
+	candle_placement_preview.global_rotation = Vector3(0.0, rotation.y, 0.0)
+	var preview_material := candle_placement_preview.material_override as StandardMaterial3D
+	if preview_material == null:
+		preview_material = candle_placement_preview.get_active_material(0).duplicate() as StandardMaterial3D
+		candle_placement_preview.material_override = preview_material
+	preview_material.albedo_color = (
+		Color(0.18, 0.95, 0.42, 0.42)
+		if _candle_placement_valid
+		else Color(0.95, 0.16, 0.12, 0.38)
+	)
+
+
+func _place_held_candle() -> bool:
+	if not _candle_placement_mode or not _candle_placement_valid or _held_item != &"candle":
+		return false
+	_sync_held_candle_data()
+	var candle_data := _inventory_item_data[_selected_inventory_slot].duplicate(true)
+	var placed_candle := CandlePickupScene.instantiate() as RigidBody3D
+	get_tree().current_scene.add_child(placed_candle)
+	placed_candle.call(&"configure_candle", candle_data)
+	placed_candle.global_position = _candle_placement_point + Vector3.UP * 0.17
+	placed_candle.global_rotation = Vector3(0.0, rotation.y, 0.0)
+	placed_candle.call(&"set_placed")
+	_set_candle_placement_mode(false)
+	_clear_inventory_item(&"candle")
+	_return_to_flashlight_slot()
+	return true
+
+
+func _can_ignite_candle() -> bool:
+	for index in range(1, _inventory_slots.size()):
+		if index == _selected_inventory_slot:
+			continue
+		if _inventory_slots[index] == &"matchbox" and int(_inventory_item_data[index].get("matches_remaining", 0)) > 0:
+			return true
+		if _inventory_slots[index] == &"candle" and bool(_inventory_item_data[index].get("lit", false)):
+			return true
+	return false
+
+
+func _try_ignite_held_candle() -> bool:
+	if bool(held_candle.get("lit")) or float(held_candle.get("burn_remaining")) <= 0.0:
+		return false
+	var source_slot := -1
+	for index in range(1, _inventory_slots.size()):
+		if index == _selected_inventory_slot:
+			continue
+		if _inventory_slots[index] == &"candle" and bool(_inventory_item_data[index].get("lit", false)):
+			source_slot = index
+			break
+	if source_slot < 0:
+		for index in range(1, _inventory_slots.size()):
+			if index == _selected_inventory_slot:
+				continue
+			if _inventory_slots[index] == &"matchbox" and int(_inventory_item_data[index].get("matches_remaining", 0)) > 0:
+				source_slot = index
+				_inventory_item_data[index]["matches_remaining"] = int(_inventory_item_data[index].get("matches_remaining", 0)) - 1
+				break
+	if source_slot < 0:
+		return false
+	var ignited := bool(held_candle.call(&"ignite"))
+	_update_inventory_ui()
+	return ignited
 
 
 func _configure_held_recipe_book(data: Dictionary) -> void:
@@ -1095,6 +1388,21 @@ func _drop_selected_inventory_item() -> void:
 		dropped_item.angular_velocity = Vector3.ZERO
 		if item_type == &"bottle" and dropped_item.has_method(&"set_dropped_safely"):
 			dropped_item.call(&"set_dropped_safely")
+	elif item_type == &"matchbox":
+		var dropped_matchbox := MatchboxPickupScene.instantiate() as Area3D
+		scene_root.add_child(dropped_matchbox)
+		dropped_matchbox.call(&"configure_matchbox", item_data)
+		dropped_matchbox.global_position = drop_position + Vector3.UP * 0.08
+		dropped_matchbox.global_rotation = Vector3(0.0, rotation.y, 0.08)
+	elif item_type == &"candle":
+		_sync_held_candle_data()
+		item_data = _inventory_item_data[_selected_inventory_slot].duplicate(true)
+		var dropped_candle := CandlePickupScene.instantiate() as RigidBody3D
+		scene_root.add_child(dropped_candle)
+		dropped_candle.call(&"configure_candle", item_data)
+		dropped_candle.global_position = drop_position + Vector3.UP * 0.42
+		dropped_candle.global_rotation = Vector3(0.0, rotation.y, 0.0)
+		dropped_candle.call(&"set_dropped", velocity * 0.15)
 	else:
 		var pickup_scene: PackedScene = PlungerPickupScene if item_type == &"plunger" else CrowbarPickupScene
 		var dropped_pickup := pickup_scene.instantiate() as Node3D
@@ -1141,6 +1449,10 @@ func has_key(key_id: StringName) -> bool:
 	return debug_all_keys or (not key_id.is_empty() and _key_inventory.has(key_id))
 
 
+func is_crouched() -> bool:
+	return _stance == Stance.CROUCHED and _stance_transition_timer <= 0.0
+
+
 func add_tool(tool_id: StringName) -> bool:
 	if tool_id.is_empty():
 		return false
@@ -1150,6 +1462,54 @@ func add_tool(tool_id: StringName) -> bool:
 
 func has_tool(tool_id: StringName) -> bool:
 	return not tool_id.is_empty() and _tool_inventory.has(tool_id)
+
+
+func is_flashlight_on() -> bool:
+	return _flashlight_available and not _flashlight_holstered and flashlight.visible
+
+
+func has_lit_match_in_hand() -> bool:
+	return (
+		_held_item == &"matchbox"
+		and held_matchbox.visible
+		and bool(held_matchbox.get("match_out"))
+		and bool(held_matchbox.get("match_lit"))
+	)
+
+
+func get_flashlight_world_position() -> Vector3:
+	return flashlight.global_position
+
+
+func is_personal_light_on() -> bool:
+	return is_flashlight_on() or (
+		_held_item == &"matchbox"
+		and held_matchbox.visible
+		and bool(held_matchbox.get("match_lit"))
+	) or (
+		_held_item == &"candle"
+		and held_candle.visible
+		and bool(held_candle.get("lit"))
+	)
+
+
+func get_personal_light_world_position() -> Vector3:
+	if _held_item == &"matchbox" and held_matchbox.visible and bool(held_matchbox.get("match_lit")):
+		var match_light := held_matchbox.get_node_or_null("MatchRoot/Flame/MatchLight") as Node3D
+		if match_light != null:
+			return match_light.global_position
+	if _held_item == &"candle" and held_candle.visible and bool(held_candle.get("lit")):
+		var candle_light := held_candle.get_node_or_null("WickRoot/Flame/CandleLight") as Node3D
+		if candle_light != null:
+			return candle_light.global_position
+	return flashlight.global_position
+
+
+func consume_tool(tool_id: StringName) -> bool:
+	if tool_id.is_empty() or not _tool_inventory.has(tool_id):
+		return false
+	_tool_inventory.erase(tool_id)
+	return true
 
 
 func _throw_held_item() -> void:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3]
+[gd_scene load_steps=27 format=3]
 
 [ext_resource type="Script" path="res://player/player.gd" id="1_player"]
 [ext_resource type="ArrayMesh" path="res://ps2_objects/Flashlight/Flashlight.obj" id="2_flashlight_mesh"]
@@ -13,6 +13,8 @@
 [ext_resource type="PackedScene" path="res://house_props/note_paper_visual.tscn" id="11_note"]
 [ext_resource type="PackedScene" path="res://house_props/recipe_book_visual.tscn" id="12_recipe_book"]
 [ext_resource type="PackedScene" path="res://house_props/recipe_book_closed_visual.tscn" id="13_recipe_book_closed"]
+[ext_resource type="PackedScene" path="res://player/held_items/matchbox_held_visual.tscn" id="14_matchbox"]
+[ext_resource type="PackedScene" path="res://player/held_items/candle_held_visual.tscn" id="15_candle"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.34
@@ -44,6 +46,18 @@ radius = 0.067
 height = 0.134
 radial_segments = 10
 rings = 6
+
+[sub_resource type="StandardMaterial3D" id="CandlePlacementMaterial"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.18, 0.95, 0.42, 0.42)
+
+[sub_resource type="CylinderMesh" id="CandlePlacementMesh"]
+material = SubResource("CandlePlacementMaterial")
+top_radius = 0.075
+bottom_radius = 0.085
+height = 0.34
+radial_segments = 12
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_flashlight"]
 albedo_texture = ExtResource("3_flashlight_texture")
@@ -126,6 +140,12 @@ near = 0.05
 target_position = Vector3(0, 0, -2.35)
 collision_mask = 2
 collide_with_areas = true
+collide_with_bodies = true
+
+[node name="CandlePlacementRay" type="RayCast3D" parent="Head/Camera3D"]
+target_position = Vector3(0, 0, -3)
+collision_mask = 1
+collide_with_areas = false
 collide_with_bodies = true
 
 [node name="HandRig" type="Node3D" parent="Head/Camera3D"]
@@ -217,6 +237,23 @@ visible = false
 position = Vector3(0.29, -0.38, -0.56)
 rotation = Vector3(-1.08, 3.1415927, 0.08)
 scale = Vector3(0.62, 0.62, 0.62)
+
+[node name="HeldMatchbox" parent="Head/Camera3D/RightHandRig" instance=ExtResource("14_matchbox")]
+visible = false
+position = Vector3(0.37, -0.39, -0.47)
+rotation = Vector3(-0.18, -0.08, 0.16)
+scale = Vector3(0.9, 0.9, 0.9)
+
+[node name="HeldCandle" parent="Head/Camera3D/RightHandRig" instance=ExtResource("15_candle")]
+visible = false
+position = Vector3(0.36, -0.32, -0.44)
+rotation = Vector3(-0.08, -0.06, 0.12)
+scale = Vector3(0.86, 0.86, 0.86)
+
+[node name="CandlePlacementPreview" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("CandlePlacementMesh")
+cast_shadow = 0
 
 [node name="StaminaUI" type="CanvasLayer" parent="."]
 layer = 20

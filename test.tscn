@@ -121,15 +121,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.2, 0)
 
 [node name="Player" parent="." unique_id=546288329 instance=ExtResource("1_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 8.5)
+editor_description = "Spawn interior en el recibidor, detrás de la puerta principal."
+debug_all_keys = false
+starts_with_lit_candle = true
 
 [node name="MonsterGrandmother" parent="." instance=ExtResource("12_monster_grandmother")]
 position = Vector3(10.15, 4.35, 8.65)
 rotation = Vector3(0, -1.82, 0)
 
 [node name="ImportedGrandmotherGroundFloor" parent="." instance=ExtResource("15_imported_grandmother")]
-position = Vector3(10.15, 0.95, 8.65)
+position = Vector3(8.85, 4.35, 8.65)
 rotation = Vector3(0, -1.82, 0)
 remain_still = false
+dormant_until_door_opens = true
+activation_door_path = NodePath("House/Doors/MasterBedroomDoor/Hinge")
 
 [node name="PS2PostProcess" type="CanvasLayer" parent="." unique_id=13050641]
 layer = 100

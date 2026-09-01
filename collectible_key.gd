@@ -3,6 +3,7 @@ extends StaticBody3D
 @export var key_id: StringName = &"old_house_key"
 @export var key_name := "LLAVE ANTIGUA"
 @export var starts_hidden_until_revealed := false
+@export var requires_crouch := false
 
 var _collected := false
 var _revealing := false
@@ -19,12 +20,21 @@ func get_interaction_key() -> Key:
 	return KEY_F
 
 
-func get_interaction_text(_player: Node = null) -> String:
+func get_interaction_text(player: Node = null) -> String:
+	if not _player_meets_stance_requirement(player):
+		return ""
 	return "F  COGER %s" % key_name.to_upper()
 
 
 func interact(player: Node = null) -> bool:
-	if _collected or _revealing or not visible or player == null or not player.has_method(&"add_key"):
+	if (
+		_collected
+		or _revealing
+		or not visible
+		or not _player_meets_stance_requirement(player)
+		or player == null
+		or not player.has_method(&"add_key")
+	):
 		return false
 	if not player.add_key(key_id):
 		return false
@@ -36,6 +46,12 @@ func interact(player: Node = null) -> bool:
 	tween.tween_property(self, "scale", Vector3.ZERO, 0.22)
 	tween.chain().tween_callback(queue_free)
 	return true
+
+
+func _player_meets_stance_requirement(player: Node) -> bool:
+	if not requires_crouch:
+		return true
+	return player != null and player.has_method(&"is_crouched") and bool(player.call(&"is_crouched"))
 
 
 func reveal_from_toilet(start_global_position: Vector3, landing_global_position: Vector3) -> void:

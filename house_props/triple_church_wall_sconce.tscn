@@ -86,6 +86,9 @@ script = ExtResource("1_controller")
 light_paths = Array[NodePath]([NodePath("WarmLight")])
 glow_mesh_paths = Array[NodePath]([NodePath("Left/Glow"), NodePath("Center/Glow"), NodePath("Right/Glow")])
 
+[node name="GrandmotherAttractionPoint" type="Marker3D" parent="."]
+position = Vector3(0, -1, 1.4)
+
 [node name="Collision" type="CollisionShape3D" parent="." unique_id=266075478]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.079064935, 0.5998535, 0.1357251)
 shape = SubResource("mount_collision")

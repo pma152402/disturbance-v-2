@@ -8,19 +8,44 @@ func _init() -> void:
 		return
 
 	var house := house_scene.instantiate()
-	_check_door(house, "UpperChurchCorridorDoor", &"lower_north_wing_key", "LLAVE DEL ALA NORTE")
+	_check_door(house, "UpperNorthWingDoor", &"lower_north_wing_key", "LLAVE DEL ALA NORTE")
 	_check_door(house, "Doors/StorageDoorSouth", &"storage_key", "LLAVE DEL TRASTERO")
 	_check_door(house, "Doors/StorageDoorNorth", &"storage_key", "LLAVE DEL TRASTERO")
 	_check_door(house, "Doors/ChurchDoor", &"church_key", "LLAVE DE LA IGLESIA")
-	_check_door(house, "Doors/ChurchDoorSide", &"church_key", "LLAVE DE LA IGLESIA")
+	_check_door(house, "Doors/UpperNorthWingDoorMain", &"lower_north_wing_key", "LLAVE DEL ALA NORTE")
+	var upper_north_door := house.get_node_or_null("UpperNorthWingDoor") as Node3D
+	var upper_north_main_door := house.get_node_or_null("Doors/UpperNorthWingDoorMain") as Node3D
+	var lower_church_door := house.get_node_or_null("Doors/ChurchDoor") as Node3D
+	if (
+		upper_north_door == null
+		or upper_north_main_door == null
+		or upper_north_door.position.y < 4.0
+		or upper_north_main_door.position.y < 4.0
+	):
+		_fail("Las puertas del Ala Norte deben ser los accesos superiores")
+	if lower_church_door == null or lower_church_door.position.y > 0.1:
+		_fail("El acceso de Iglesia debe permanecer solo en la planta baja")
 	_check_door(house, "Doors/PuertaPrincipal", &"main_door_key", "LLAVE DE LA PUERTA PRINCIPAL")
-	_check_door(house, "Doors/PuertaSotano", &"basement_key", "LLAVE DEL SÓTANO")
+	var normal_basement_door := house.get_node_or_null("Doors/BasementDoor2")
+	if normal_basement_door == null or normal_basement_door.get_node_or_null("Hinge") == null:
+		_fail("La puerta interior del sótano debe seguir siendo una puerta normal")
+	var cellar_bulkhead := house.get_node_or_null("CellarBulkheadEntranceStaging")
+	if (
+		cellar_bulkhead == null
+		or cellar_bulkhead.get("required_key_id") != &"basement_key"
+		or cellar_bulkhead.get("required_key_name") != "LLAVE DEL SÓTANO"
+		or bool(cellar_bulkhead.get("starts_unlocked"))
+	):
+		_fail("El acceso CellarBulkhead debe empezar bloqueado con la llave del sótano")
 
 	_check_key(house, "LockedDoorKeys/LowerNorthWingKey", &"lower_north_wing_key", "LLAVE DEL ALA NORTE")
 	_check_key(house, "LockedDoorKeys/StorageKey", &"storage_key", "LLAVE DEL TRASTERO")
 	_check_key(house, "LockedDoorKeys/ChurchKey", &"church_key", "LLAVE DE LA IGLESIA")
 	_check_key(house, "LockedDoorKeys/MainDoorKey", &"main_door_key", "LLAVE DE LA PUERTA PRINCIPAL")
 	_check_key(house, "LockedDoorKeys/BasementKey", &"basement_key", "LLAVE DEL SÓTANO")
+	var main_door_key := house.get_node_or_null("LockedDoorKeys/MainDoorKey")
+	if main_door_key == null or not bool(main_door_key.get("requires_crouch")):
+		_fail("La llave exterior debe exigir que el jugador esté agachado")
 
 	print("OK: rutas de llaves y puertas verificadas")
 	house.free()

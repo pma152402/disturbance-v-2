@@ -42,6 +42,8 @@ rings = 5
 [node name="AntiqueFloorLamp" type="Node3D"]
 editor_description = "Lampara de pie antigua con base de metal, fuste fino, pantalla burdeos y bombilla encendida."
 script = ExtResource("1_script")
+[node name="GrandmotherAttractionPoint" type="Marker3D" parent="."]
+position = Vector3(0, 0, 0.8)
 [node name="Base" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.05, 0)
 mesh = SubResource("base")

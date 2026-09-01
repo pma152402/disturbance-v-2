@@ -1,6 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://c0yvflmylekwh"]
+[gd_scene format=3 uid="uid://c0yvflmylekwh"]
 
-[ext_resource type="Script" path="res://house_props/elderly_walker.gd" id="1_walker_script"]
+[ext_resource type="Script" uid="uid://rayhmxxnrrmf" path="res://house_props/elderly_walker.gd" id="1_walker_script"]
 
 [sub_resource type="BoxShape3D" id="Collision"]
 size = Vector3(0.95, 1.12, 0.68)
@@ -50,7 +50,6 @@ size = Vector3(0.72, 0.055, 0.36)
 [node name="ElderlyWalker" type="CharacterBody3D" unique_id=1293028053]
 editor_description = "Andador de anciano tubular con empunaduras, travesanos, asiento y dos ruedas delanteras."
 collision_layer = 3
-collision_mask = 1
 script = ExtResource("1_walker_script")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=368643569]
@@ -101,18 +100,18 @@ mesh = SubResource("GripMesh")
 transform = Transform3D(3.1391647e-07, -1, 0, 1, 3.1391647e-07, 0, 0, 0, 1, -0.45, 0.14, -0.25)
 mesh = SubResource("Wheel")
 
+[node name="LeftWheel2" type="MeshInstance3D" parent="." unique_id=2111154939]
+transform = Transform3D(2.1737922e-07, -0.9999999, 0, 0.6924747, 3.1391644e-07, 0, 0, 0, 0.72690177, -0.44451886, 0.10089004, 0.2259787)
+mesh = SubResource("Wheel")
+
+[node name="LeftWheel3" type="MeshInstance3D" parent="." unique_id=1342392173]
+transform = Transform3D(2.1737922e-07, -0.9999999, 0, 0.6924747, 3.1391644e-07, 0, 0, 0, 0.72690177, 0.44492006, 0.10089004, 0.2259787)
+mesh = SubResource("Wheel")
+
 [node name="RightWheel" type="MeshInstance3D" parent="." unique_id=217162107]
 transform = Transform3D(3.1391647e-07, -1, 0, 1, 3.1391647e-07, 0, 0, 0, 1, 0.45, 0.14, -0.25)
 mesh = SubResource("Wheel")
 
 [node name="FoldingSeat" type="MeshInstance3D" parent="." unique_id=2060116491]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0.04)
+transform = Transform3D(1, 0, 0, 0, 0.7029381, 0, 0, 0, 1.2986467, 0, 0.5782425, -0.0028115287)
 mesh = SubResource("Seat")
-
-[node name="RearLeftFoot" type="MeshInstance3D" parent="." unique_id=848087257]
-transform = Transform3D(1.35, 0, 0, 0, 0.12, 0, 0, 0, 1.35, -0.44, 0.055, 0.27)
-mesh = SubResource("GripMesh")
-
-[node name="RearRightFoot" type="MeshInstance3D" parent="." unique_id=675124934]
-transform = Transform3D(1.35, 0, 0, 0, 0.12, 0, 0, 0, 1.35, 0.44, 0.055, 0.27)
-mesh = SubResource("GripMesh")
