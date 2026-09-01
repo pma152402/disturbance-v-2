@@ -7,6 +7,7 @@ extends StaticBody3D
 		book_title = value
 		_queue_refresh()
 @export var pages: Array[RecipePage] = []
+@export_range(0.5, 2.35, 0.05, "suffix:m") var interaction_distance := 1.35
 
 @export_category("Aspecto")
 @export var cover_color := Color(0.28, 0.055, 0.038, 1.0):
@@ -45,6 +46,10 @@ func _queue_refresh() -> void:
 
 func get_interaction_key() -> Key:
 	return KEY_F
+
+
+func get_interaction_distance() -> float:
+	return interaction_distance
 
 
 func get_interaction_text(player: Node = null) -> String:

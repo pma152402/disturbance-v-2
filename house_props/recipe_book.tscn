@@ -1,62 +1,65 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene format=3 uid="uid://mwx7j38a26x7"]
 
-[ext_resource type="Script" path="res://house_props/recipe_book.gd" id="1_script"]
-[ext_resource type="Script" path="res://house_props/recipe_page.gd" id="2_page"]
+[ext_resource type="Script" uid="uid://ddbddbgj72i36" path="res://house_props/recipe_book.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://dcxhl3c7j63ij" path="res://house_props/recipe_page.gd" id="2_page"]
 [ext_resource type="PackedScene" path="res://house_props/recipe_book_closed_visual.tscn" id="3_visual"]
 
 [sub_resource type="Resource" id="RecipePage_1"]
 script = ExtResource("2_page")
-title = "TARTA DE MANZANA"
-text = "4 manzanas
-Harina y azucar
-Hornear 40 min."
+title = "PASTEL DE NATA I"
+text = "
+Batir la nata hasta que este montada.
+Agregar 3 huevos batidos
+Mezclar la harina con el resto de ingredientes"
 
 [sub_resource type="Resource" id="RecipePage_2"]
 script = ExtResource("2_page")
-title = "SOPA DE AJO"
-text = "Ajo y pan duro
-Anadir caldo
-Cocer 15 min."
+title = "PASTEL DE NATA II"
+text = "Agregar vainilla al gusto
+10 gramos de azucar
+Hornear a 180º durante 30min
+"
 
 [sub_resource type="Resource" id="RecipePage_3"]
 script = ExtResource("2_page")
-title = "TORTILLA"
-text = "Patata y cebolla
-Batir 4 huevos
-Cuajar despacio."
+title = "TORTILLA "
+text = "Freir patatas y cebolla
+Batir 4 huevos e integrarlos
+Cuajar la mezcla a fuego medio"
 
 [sub_resource type="Resource" id="RecipePage_4"]
 script = ExtResource("2_page")
 title = "CROQUETAS"
-text = "Bechamel espesa
-Anadir jamon
-Rebozar y freir."
+text = "Hacer una bechamel (ver Tomo de cocina II)
+Anadir jamón troceado
+Rebozar en pan rallado y freir"
 
 [sub_resource type="Resource" id="RecipePage_5"]
 script = ExtResource("2_page")
-title = "ARROZ CON LECHE"
-text = "Arroz y leche
-Azucar y canela
-Cocer lentamente."
+title = "TARTA DE LA ABUELA I"
+text = "Agregar la harina y los huevos
+Mezclar con azucar y leche
+Reservar la levadura y el chocolate"
 
 [sub_resource type="Resource" id="RecipePage_6"]
 script = ExtResource("2_page")
-title = "PAN CON TOMATE"
-text = "Tostar el pan
-Frotar tomate
-Aceite y sal."
+title = "TARTA DE LA ABUELA II"
+text = "Agregamos toda la mezcla con vainilla
+Preparamos una capa de nata
+Horneamos a 200º, 1 hora"
 
 [sub_resource type="BoxShape3D" id="Shape_book"]
 size = Vector3(0.46, 0.15, 0.64)
 
-[node name="RecipeBook" type="StaticBody3D"]
+[node name="RecipeBook" type="StaticBody3D" unique_id=531385450]
 editor_description = "Libro de recetas reutilizable. Edita Book Title y el array Pages desde el Inspector. Cada elemento RecipePage tiene titulo y texto multilinea."
 collision_layer = 3
 script = ExtResource("1_script")
 pages = Array[ExtResource("2_page")]([SubResource("RecipePage_1"), SubResource("RecipePage_2"), SubResource("RecipePage_3"), SubResource("RecipePage_4"), SubResource("RecipePage_5"), SubResource("RecipePage_6")])
 
-[node name="Visual" parent="." instance=ExtResource("3_visual")]
+[node name="Visual" parent="." unique_id=242822719 instance=ExtResource("3_visual")]
+book_title = "RECETAS DE LA ABUELA"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.075, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1551220037]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.075, 0)
 shape = SubResource("Shape_book")

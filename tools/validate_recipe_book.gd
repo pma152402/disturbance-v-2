@@ -17,9 +17,18 @@ func _run_validation() -> void:
 	current_scene = test_scene
 	var book := book_scene.instantiate()
 	var player := player_scene.instantiate()
+	var plunger_scene := load("res://house_props/toilet_plunger.tscn") as PackedScene
+	var plunger := plunger_scene.instantiate()
 	test_scene.add_child(book)
 	test_scene.add_child(player)
+	test_scene.add_child(plunger)
 	await process_frame
+	if not book.has_method(&"get_interaction_distance") or absf(float(book.call(&"get_interaction_distance")) - 1.35) > 0.01:
+		_fail("El recetario no exige acercarse para mostrar F")
+		return
+	if not plunger.has_method(&"get_interaction_distance") or absf(float(plunger.call(&"get_interaction_distance")) - 1.35) > 0.01:
+		_fail("El desatascador no exige acercarse para mostrar F")
+		return
 	if not bool(book.call(&"interact", player)):
 		_fail("F no recoge el libro de recetas")
 		return
@@ -32,9 +41,14 @@ func _run_validation() -> void:
 	if held_book.visible or not closed_book.visible:
 		_fail("El recetario no aparece cerrado al recogerlo")
 		return
-	if (held_book.get("pages") as Array).size() != 6:
+	var held_pages := held_book.get("pages") as Array
+	if held_pages.size() != 6:
 		_fail("El recetario no contiene seis paginas")
 		return
+	var expected_first_title := str(held_book.call(&"_fit_title_text", str((held_pages[0] as Dictionary).get("title", ""))))
+	var expected_third_title := str(held_book.call(&"_fit_title_text", str((held_pages[2] as Dictionary).get("title", ""))))
+	var expected_fifth_title := str(held_book.call(&"_fit_title_text", str((held_pages[4] as Dictionary).get("title", ""))))
+	var expected_sixth_title := str(held_book.call(&"_fit_title_text", str((held_pages[5] as Dictionary).get("title", ""))))
 	for body_path in [^"LeftPage/Paper/Body", ^"RightPage/Paper/Body", ^"TurningPage/PaperRoot/Paper/Body"]:
 		var body := held_book.get_node(body_path) as Label3D
 		if body.get_parent() is not MeshInstance3D or body.width > 270.0 or body.font_size != 20:
@@ -68,9 +82,9 @@ func _run_validation() -> void:
 			return
 	player.call(&"_turn_recipe_book_pages", 1)
 	if int(held_book.get("page_index")) != 2:
-		_fail("2 no avanza las paginas")
+		_fail("E no avanza al siguiente pliego")
 		return
-	if str(held_book.get_node("LeftPage/Paper/Title").text) != "TARTA DE MANZANA":
+	if str(held_book.get_node("LeftPage/Paper/Title").text) != expected_first_title:
 		_fail("El contenido cambia antes de terminar la animacion")
 		return
 	if not bool(held_book.call(&"is_page_turning")) or not held_book.get_node("TurningPage").visible:
@@ -100,7 +114,7 @@ func _run_validation() -> void:
 	if held_book.get_node("TurningPage").visible:
 		_fail("La hoja animada no termina correctamente")
 		return
-	if str(held_book.get_node("LeftPage/Paper/Title").text) != "TORTILLA":
+	if str(held_book.get_node("LeftPage/Paper/Title").text) != expected_third_title:
 		_fail("El contenido nuevo no aparece al terminar la animacion")
 		return
 	player.call(&"_turn_recipe_book_pages", -1)
@@ -112,11 +126,11 @@ func _run_validation() -> void:
 	if not animated_paper.global_transform.is_equal_approx(source_paper.global_transform):
 		_fail("La hoja animada inversa no comienza alineada con el libro abierto")
 		return
-	if str(held_book.get_node("LeftPage/Paper/Title").text) != "TORTILLA":
+	if str(held_book.get_node("LeftPage/Paper/Title").text) != expected_third_title:
 		_fail("El contenido cambia antes de terminar la animacion inversa")
 		return
 	await create_timer(0.5).timeout
-	if str(held_book.get_node("LeftPage/Paper/Title").text) != "TARTA DE MANZANA":
+	if str(held_book.get_node("LeftPage/Paper/Title").text) != expected_first_title:
 		_fail("El contenido anterior no aparece al terminar la animacion inversa")
 		return
 	player.call(&"_set_recipe_book_reading", true, false)
@@ -145,17 +159,31 @@ func _run_validation() -> void:
 	next_page_event.physical_keycode = KEY_E
 	player.call(&"_input", next_page_event)
 	if int(held_book.get("page_index")) != 2:
-		_fail("E no avanza las paginas con el libro abierto")
+		_fail("E no avanza al pliego 3-4")
 		return
-	await create_timer(0.5).timeout
+	player.call(&"_input", next_page_event)
+	await create_timer(1.0).timeout
+	if int(held_book.get("page_index")) != 4:
+		_fail("Una pulsacion de E durante el giro se pierde")
+		return
+	if str(held_book.get_node("LeftPage/Paper/Title").text) != expected_fifth_title:
+		_fail("No se puede ver la pagina 5 en su lado izquierdo")
+		return
+	if str(held_book.get_node("RightPage/Paper/Title").text) != expected_sixth_title:
+		_fail("No se puede ver la pagina 6 en su lado derecho")
+		return
 	var previous_page_event := InputEventKey.new()
 	previous_page_event.pressed = true
 	previous_page_event.physical_keycode = KEY_Q
 	player.call(&"_input", previous_page_event)
-	if int(held_book.get("page_index")) != 0:
-		_fail("Q no retrocede las paginas con el libro abierto")
+	if int(held_book.get("page_index")) != 2:
+		_fail("Q no retrocede al pliego 3-4")
 		return
-	await create_timer(0.5).timeout
+	player.call(&"_input", previous_page_event)
+	await create_timer(1.0).timeout
+	if int(held_book.get("page_index")) != 0:
+		_fail("Q no regresa al pliego 1-2")
+		return
 	player.call(&"_set_recipe_book_reading", false, true)
 	player.call(&"_turn_recipe_book_pages", 1)
 	player.call(&"_drop_selected_inventory_item")
@@ -181,8 +209,13 @@ func _run_validation() -> void:
 	if kitchen_book == null:
 		_fail("El libro no esta colocado en la cocina")
 		return
-	if kitchen_book.position.distance_to(Vector3(6.18, 1.007, -5.43)) > 0.01:
-		_fail("El libro no esta bien apoyado en la encimera")
+	var kitchen_book_data := kitchen_book.call(&"get_book_data") as Dictionary
+	var kitchen_pages := kitchen_book_data.get("pages", []) as Array
+	if kitchen_pages.size() != 6:
+		_fail("El libro colocado en la casa no hereda sus seis paginas")
+		return
+	if str((kitchen_pages[4] as Dictionary).get("title", "")) != "TARTA DE LA ABUELA I" or str((kitchen_pages[5] as Dictionary).get("title", "")) != "TARTA DE LA ABUELA II":
+		_fail("Faltan las dos recetas de Tarta de la Abuela en el libro de la casa")
 		return
 	house.free()
 	print("RECIPE_BOOK_VALIDATION_OK")

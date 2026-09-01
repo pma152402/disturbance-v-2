@@ -1,10 +1,16 @@
 extends StaticBody3D
 
+@export_range(0.5, 2.35, 0.05, "suffix:m") var interaction_distance := 1.35
+
 var _picked_up := false
 
 
 func get_interaction_key() -> Key:
 	return KEY_F
+
+
+func get_interaction_distance() -> float:
+	return interaction_distance
 
 
 func get_interaction_text(player: Node = null) -> String:

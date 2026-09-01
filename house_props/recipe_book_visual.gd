@@ -1,6 +1,8 @@
 @tool
 extends Node3D
 
+signal page_turn_finished
+
 @export var book_title := "RECETAS":
 	set(value):
 		book_title = value
@@ -53,7 +55,9 @@ func configure_book(data: Dictionary) -> void:
 	for page_data in data.get("pages", []):
 		if page_data is Dictionary:
 			pages.append((page_data as Dictionary).duplicate(true))
-	page_index = clampi(int(data.get("page_index", 0)), 0, maxi(0, pages.size() - 1))
+	var last_spread_index := maxi(0, pages.size() - 2)
+	last_spread_index -= last_spread_index % 2
+	page_index = clampi(int(data.get("page_index", 0)), 0, last_spread_index)
 	page_index -= page_index % 2
 	_refresh()
 
@@ -65,8 +69,9 @@ func turn_pages(direction: int) -> int:
 	if is_page_turning():
 		return page_index
 	var previous_index := page_index
-	var next_index := clampi(page_index + direction * 2, 0, maxi(0, pages.size() - 1))
-	next_index -= next_index % 2
+	var last_spread_index := maxi(0, pages.size() - 2)
+	last_spread_index -= last_spread_index % 2
+	var next_index := clampi(page_index + signi(direction) * 2, 0, last_spread_index)
 	if next_index == previous_index:
 		return page_index
 	_prepare_turning_page(previous_index + 1 if direction > 0 else previous_index)
@@ -154,6 +159,7 @@ func _animate_page_turn(direction: int) -> void:
 		turning_paper.transform = end_transform
 		_refresh()
 		turning_page.visible = false
+		page_turn_finished.emit()
 	)
 
 

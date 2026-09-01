@@ -111,6 +111,7 @@ var _note_read_tween: Tween
 var _recipe_book_reading := false
 var _held_recipe_book_rest_transform := Transform3D.IDENTITY
 var _recipe_book_read_tween: Tween
+var _queued_recipe_page_direction := 0
 var _inventory_ui_tween: Tween
 var _key_inventory: Dictionary = {}
 var _tool_inventory: Dictionary = {}
@@ -176,6 +177,8 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	holster_sound.stream = GameplaySounds.make_switch_click()
 	footstep_sound.stream = GameplaySounds.make_footstep()
+	if held_recipe_book.has_signal(&"page_turn_finished"):
+		held_recipe_book.connect(&"page_turn_finished", Callable(self, &"_on_recipe_page_turn_finished"))
 
 
 func _input(event: InputEvent) -> void:
@@ -520,6 +523,8 @@ func _set_recipe_book_reading(active: bool, immediate := false) -> void:
 	if active and _held_item != &"recipe_book":
 		return
 	_recipe_book_reading = active
+	if not active:
+		_queued_recipe_page_direction = 0
 	if is_instance_valid(_recipe_book_read_tween):
 		_recipe_book_read_tween.kill()
 	var target_position := Vector3(0.0, -0.09, -0.46) if active else _held_recipe_book_rest_transform.origin
@@ -699,9 +704,16 @@ func _get_interactable() -> Node:
 	if not interaction_ray.is_colliding():
 		return null
 	var collider := interaction_ray.get_collider() as Node
-	if collider != null and collider.has_method(&"interact"):
+	if collider != null and collider.has_method(&"interact") and _is_interactable_in_range(collider):
 		return collider
 	return null
+
+
+func _is_interactable_in_range(target: Node) -> bool:
+	if target == null or not target.has_method(&"get_interaction_distance"):
+		return true
+	var allowed_distance := maxf(0.0, float(target.call(&"get_interaction_distance")))
+	return interaction_ray.global_position.distance_to(interaction_ray.get_collision_point()) <= allowed_distance
 
 
 func _try_interact(pressed_key: Key) -> bool:
@@ -793,9 +805,26 @@ func _configure_held_recipe_book(data: Dictionary) -> void:
 func _turn_recipe_book_pages(direction: int) -> void:
 	if _held_item != &"recipe_book" or not held_recipe_book.has_method(&"turn_pages"):
 		return
+	if held_recipe_book.has_method(&"is_page_turning") and bool(held_recipe_book.call(&"is_page_turning")):
+		_queued_recipe_page_direction = signi(direction)
+		return
 	var new_page_index := int(held_recipe_book.call(&"turn_pages", direction))
 	if _selected_inventory_slot > 0 and _selected_inventory_slot < _inventory_item_data.size():
 		_inventory_item_data[_selected_inventory_slot]["page_index"] = new_page_index
+
+
+func _on_recipe_page_turn_finished() -> void:
+	if _queued_recipe_page_direction != 0:
+		call_deferred(&"_consume_queued_recipe_page_turn")
+
+
+func _consume_queued_recipe_page_turn() -> void:
+	if _queued_recipe_page_direction == 0:
+		return
+	var direction := _queued_recipe_page_direction
+	_queued_recipe_page_direction = 0
+	if _held_item == &"recipe_book" and _recipe_book_reading:
+		_turn_recipe_book_pages(direction)
 
 
 func pick_up_can() -> bool:
