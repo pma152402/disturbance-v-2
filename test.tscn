@@ -36,6 +36,9 @@ fog_light_color = Color(0.018, 0.021, 0.028, 1)
 fog_light_energy = 0.045
 fog_density = 0.11
 fog_sky_affect = 0.72
+adjustment_enabled = true
+adjustment_brightness = 0.869565
+adjustment_contrast = 1.0
 
 [sub_resource type="ShaderMaterial" id="Material_ps2"]
 shader = ExtResource("3_shader")
@@ -103,6 +106,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.5, 15, 27.5)
 
 [node name="OvercastLight" parent="Weather" index="6"]
 transform = Transform3D(0.8366349, 0.47093433, -0.27975512, -0.07252406, 0.60146344, 0.7956016, 0.5429386, -0.645339, 0.53735936, 0, 0, 0)
+light_energy = 0.52
 
 [node name="GroundFloorFlash" parent="Weather/InteriorLightning" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)

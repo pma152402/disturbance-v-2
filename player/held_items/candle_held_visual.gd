@@ -133,11 +133,7 @@ func _animate_flame() -> void:
 	var danger_blink := (sin(time * 18.0) * 0.5 + 0.5) * danger
 	var size_factor := maxf(0.22, (1.0 + calm_flicker + wind_flutter) * lerpf(1.0, 0.38, _flame_stress))
 	flame.scale = Vector3(size_factor * (1.0 + calm_flicker * 0.35), size_factor, size_factor)
-	flame.position = _flame_rest_position + Vector3(
-		sin(time * 18.0) * 0.009 * (0.25 + _flame_stress),
-		calm_flicker * 0.008,
-		0.0
-	)
+	flame.position = _flame_rest_position
 	flame.rotation.z = sin(time * 16.0) * 0.09 - _flame_stress * 0.58
 	flame.rotation.x = sin(time * 21.0 + 0.8) * 0.052 * (0.3 + _flame_stress)
 	_flame_material.albedo_color = Color(1.0, lerpf(0.58, 0.28, danger_blink), 0.06, lerpf(0.92, 0.48, danger_blink))

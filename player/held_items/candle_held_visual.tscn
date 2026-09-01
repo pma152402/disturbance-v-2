@@ -60,16 +60,16 @@ material_override = SubResource("wick_mat")
 mesh = SubResource("wick_mesh")
 
 [node name="Flame" type="Node3D" parent="WickRoot" unique_id=1004428804]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.085, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0484, 0)
 
 [node name="FlameMesh" type="MeshInstance3D" parent="WickRoot/Flame" unique_id=1327434300]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.039264083, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.039, 0)
 material_override = SubResource("flame_mat")
 cast_shadow = 0
 mesh = SubResource("flame_mesh")
 
 [node name="CandleLight" type="OmniLight3D" parent="WickRoot/Flame" unique_id=1081505754]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0398041, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
 light_color = Color(1, 0.52, 0.2, 1)
 light_energy = 1.8
 omni_range = 3.5
