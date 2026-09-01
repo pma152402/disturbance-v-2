@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://house_props/book_opening_wall_cabinet.gd" id="1_script"]
 [sub_resource type="StandardMaterial3D" id="cream"]
@@ -27,6 +27,24 @@ material = SubResource("inside")
 material = SubResource("wood")
 [sub_resource type="BoxMesh" id="metal_box"]
 material = SubResource("metal")
+[sub_resource type="StandardMaterial3D" id="ceramic"]
+albedo_color = Color(0.78, 0.75, 0.66, 1)
+roughness = 0.72
+[sub_resource type="CylinderMesh" id="cup"]
+material = SubResource("ceramic")
+top_radius = 0.1
+bottom_radius = 0.085
+height = 0.2
+radial_segments = 10
+[sub_resource type="StandardMaterial3D" id="jar_contents"]
+albedo_color = Color(0.44, 0.23, 0.07, 1)
+roughness = 0.9
+[sub_resource type="CylinderMesh" id="jar"]
+material = SubResource("jar_contents")
+top_radius = 0.105
+bottom_radius = 0.11
+height = 0.27
+radial_segments = 10
 [sub_resource type="BoxShape3D" id="body_collision"]
 size = Vector3(2.48, 0.95, 0.44)
 [sub_resource type="BoxShape3D" id="interaction_shape"]
@@ -109,6 +127,35 @@ mesh = SubResource("metal_box")
 position = Vector3(-0.02, 0.23, 0.015)
 scale = Vector3(0.055, 0.14, 0.07)
 mesh = SubResource("metal_box")
+
+[node name="CupLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.76, 0.19, -0.08)
+mesh = SubResource("cup")
+[node name="CupCenter" type="MeshInstance3D" parent="."]
+position = Vector3(-0.48, 0.19, -0.08)
+mesh = SubResource("cup")
+[node name="CupRight" type="MeshInstance3D" parent="."]
+position = Vector3(-0.2, 0.19, -0.08)
+mesh = SubResource("cup")
+[node name="PlateStack1" type="MeshInstance3D" parent="."]
+position = Vector3(0.55, 0.11, -0.07)
+scale = Vector3(1.55, 0.16, 1.55)
+mesh = SubResource("cup")
+[node name="PlateStack2" type="MeshInstance3D" parent="."]
+position = Vector3(0.55, 0.15, -0.07)
+scale = Vector3(1.55, 0.16, 1.55)
+mesh = SubResource("cup")
+[node name="JarUpperLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.72, 0.68, -0.07)
+mesh = SubResource("jar")
+[node name="JarUpperCenter" type="MeshInstance3D" parent="."]
+position = Vector3(-0.4, 0.68, -0.07)
+scale = Vector3(0.9, 0.84, 0.9)
+mesh = SubResource("jar")
+[node name="BowlUpper" type="MeshInstance3D" parent="."]
+position = Vector3(0.48, 0.61, -0.07)
+scale = Vector3(1.7, 0.3, 1.7)
+mesh = SubResource("cup")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]

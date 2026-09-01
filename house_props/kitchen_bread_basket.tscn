@@ -1,0 +1,69 @@
+[gd_scene load_steps=9 format=3]
+
+[sub_resource type="StandardMaterial3D" id="basket"]
+albedo_color = Color(0.38, 0.19, 0.065, 1)
+roughness = 0.96
+[sub_resource type="StandardMaterial3D" id="bread"]
+albedo_color = Color(0.72, 0.39, 0.12, 1)
+roughness = 0.9
+[sub_resource type="StandardMaterial3D" id="flour"]
+albedo_color = Color(0.94, 0.79, 0.55, 1)
+roughness = 0.95
+[sub_resource type="BoxMesh" id="box"]
+material = SubResource("basket")
+[sub_resource type="CapsuleMesh" id="loaf"]
+material = SubResource("bread")
+radius = 0.16
+height = 0.65
+radial_segments = 10
+rings = 5
+[sub_resource type="BoxMesh" id="score"]
+material = SubResource("flour")
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(0.95, 0.5, 0.68)
+[sub_resource type="CylinderMesh" id="roll"]
+material = SubResource("bread")
+top_radius = 0.13
+bottom_radius = 0.13
+height = 0.28
+radial_segments = 10
+
+[node name="KitchenBreadBasket" type="StaticBody3D"]
+editor_description = "Cesta trenzada con barra de pan marcada y dos bollos."
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.06, 0)
+scale = Vector3(0.85, 0.08, 0.58)
+mesh = SubResource("box")
+[node name="Back" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.18, 0.29)
+scale = Vector3(0.9, 0.28, 0.05)
+mesh = SubResource("box")
+[node name="Front" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.18, -0.29)
+scale = Vector3(0.9, 0.28, 0.05)
+mesh = SubResource("box")
+[node name="Loaf" type="MeshInstance3D" parent="."]
+position = Vector3(-0.08, 0.26, 0)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("loaf")
+[node name="Score1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.24, 0.39, -0.01)
+rotation = Vector3(0, 0.35, 0)
+scale = Vector3(0.04, 0.012, 0.2)
+mesh = SubResource("score")
+[node name="Score2" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 0.39, -0.01)
+rotation = Vector3(0, 0.35, 0)
+scale = Vector3(0.04, 0.012, 0.2)
+mesh = SubResource("score")
+[node name="Roll1" type="MeshInstance3D" parent="."]
+position = Vector3(0.31, 0.23, 0.12)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("roll")
+[node name="Roll2" type="MeshInstance3D" parent="."]
+position = Vector3(0.3, 0.23, -0.13)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("roll")
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.25, 0)
+shape = SubResource("collision")

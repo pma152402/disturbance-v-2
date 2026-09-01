@@ -1,0 +1,62 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://house_props/recipe_book.gd" id="1_script"]
+[ext_resource type="Script" path="res://house_props/recipe_page.gd" id="2_page"]
+[ext_resource type="PackedScene" path="res://house_props/recipe_book_closed_visual.tscn" id="3_visual"]
+
+[sub_resource type="Resource" id="RecipePage_1"]
+script = ExtResource("2_page")
+title = "TARTA DE MANZANA"
+text = "4 manzanas
+Harina y azucar
+Hornear 40 min."
+
+[sub_resource type="Resource" id="RecipePage_2"]
+script = ExtResource("2_page")
+title = "SOPA DE AJO"
+text = "Ajo y pan duro
+Anadir caldo
+Cocer 15 min."
+
+[sub_resource type="Resource" id="RecipePage_3"]
+script = ExtResource("2_page")
+title = "TORTILLA"
+text = "Patata y cebolla
+Batir 4 huevos
+Cuajar despacio."
+
+[sub_resource type="Resource" id="RecipePage_4"]
+script = ExtResource("2_page")
+title = "CROQUETAS"
+text = "Bechamel espesa
+Anadir jamon
+Rebozar y freir."
+
+[sub_resource type="Resource" id="RecipePage_5"]
+script = ExtResource("2_page")
+title = "ARROZ CON LECHE"
+text = "Arroz y leche
+Azucar y canela
+Cocer lentamente."
+
+[sub_resource type="Resource" id="RecipePage_6"]
+script = ExtResource("2_page")
+title = "PAN CON TOMATE"
+text = "Tostar el pan
+Frotar tomate
+Aceite y sal."
+
+[sub_resource type="BoxShape3D" id="Shape_book"]
+size = Vector3(0.46, 0.15, 0.64)
+
+[node name="RecipeBook" type="StaticBody3D"]
+editor_description = "Libro de recetas reutilizable. Edita Book Title y el array Pages desde el Inspector. Cada elemento RecipePage tiene titulo y texto multilinea."
+collision_layer = 3
+script = ExtResource("1_script")
+pages = Array[ExtResource("2_page")]([SubResource("RecipePage_1"), SubResource("RecipePage_2"), SubResource("RecipePage_3"), SubResource("RecipePage_4"), SubResource("RecipePage_5"), SubResource("RecipePage_6")])
+
+[node name="Visual" parent="." instance=ExtResource("3_visual")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.075, 0)
+shape = SubResource("Shape_book")

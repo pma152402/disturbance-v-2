@@ -1,0 +1,87 @@
+[gd_scene load_steps=12 format=3]
+
+[sub_resource type="StandardMaterial3D" id="glass"]
+transparency = 1
+albedo_color = Color(0.19, 0.28, 0.13, 0.72)
+roughness = 0.22
+[sub_resource type="StandardMaterial3D" id="oil"]
+albedo_color = Color(0.76, 0.48, 0.045, 0.9)
+roughness = 0.32
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.5, 0.025, 0.018, 1)
+roughness = 0.72
+[sub_resource type="StandardMaterial3D" id="salt"]
+albedo_color = Color(0.82, 0.83, 0.78, 1)
+roughness = 0.7
+[sub_resource type="StandardMaterial3D" id="dark"]
+albedo_color = Color(0.11, 0.075, 0.045, 1)
+roughness = 0.8
+[sub_resource type="CylinderMesh" id="bottle"]
+material = SubResource("glass")
+top_radius = 0.075
+bottom_radius = 0.12
+height = 0.58
+radial_segments = 12
+[sub_resource type="CylinderMesh" id="neck"]
+material = SubResource("glass")
+top_radius = 0.04
+bottom_radius = 0.055
+height = 0.18
+radial_segments = 10
+[sub_resource type="CylinderMesh" id="cap"]
+material = SubResource("red")
+top_radius = 0.045
+bottom_radius = 0.045
+height = 0.06
+radial_segments = 8
+[sub_resource type="CylinderMesh" id="shaker"]
+material = SubResource("salt")
+top_radius = 0.085
+bottom_radius = 0.1
+height = 0.28
+radial_segments = 10
+[sub_resource type="SphereMesh" id="pepper_top"]
+material = SubResource("dark")
+radius = 0.09
+height = 0.16
+radial_segments = 10
+rings = 5
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(0.78, 0.92, 0.45)
+
+[node name="KitchenCookingEssentials" type="StaticBody3D"]
+editor_description = "Aceitera de cristal, salero y molinillo de pimienta para la encimera."
+[node name="OilBottle" type="Node3D" parent="."]
+position = Vector3(-0.24, 0.3, 0)
+[node name="Bottle" type="MeshInstance3D" parent="OilBottle"]
+mesh = SubResource("bottle")
+[node name="OilCore" type="MeshInstance3D" parent="OilBottle"]
+position = Vector3(0, -0.03, 0)
+scale = Vector3(0.86, 0.78, 0.86)
+mesh = SubResource("bottle")
+material_override = SubResource("oil")
+[node name="Neck" type="MeshInstance3D" parent="OilBottle"]
+position = Vector3(0, 0.37, 0)
+mesh = SubResource("neck")
+[node name="Cap" type="MeshInstance3D" parent="OilBottle"]
+position = Vector3(0, 0.49, 0)
+mesh = SubResource("cap")
+[node name="SaltShaker" type="MeshInstance3D" parent="."]
+position = Vector3(0.08, 0.14, 0.02)
+mesh = SubResource("shaker")
+[node name="SaltCap" type="MeshInstance3D" parent="."]
+position = Vector3(0.08, 0.31, 0.02)
+scale = Vector3(1.7, 0.55, 1.7)
+mesh = SubResource("cap")
+material_override = SubResource("salt")
+[node name="PepperMill" type="MeshInstance3D" parent="."]
+position = Vector3(0.31, 0.19, -0.01)
+scale = Vector3(0.85, 1.35, 0.85)
+mesh = SubResource("shaker")
+material_override = SubResource("dark")
+[node name="PepperTop" type="MeshInstance3D" parent="."]
+position = Vector3(0.31, 0.41, -0.01)
+mesh = SubResource("pepper_top")
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.45, 0)
+shape = SubResource("collision")

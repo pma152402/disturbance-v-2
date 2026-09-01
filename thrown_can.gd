@@ -33,8 +33,8 @@ func get_interaction_key() -> Key:
 
 
 func get_interaction_text(player: Node = null) -> String:
-	if player != null and player.has_method(&"is_holding_item") and player.is_holding_item():
-		return "YA LLEVAS UN OBJETO"
+	if player != null and player.has_method(&"can_store_inventory_item") and not player.can_store_inventory_item():
+		return "INVENTARIO LLENO"
 	return "F  COGER LATA"
 
 

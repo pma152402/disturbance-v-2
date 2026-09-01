@@ -1,0 +1,423 @@
+extends Node3D
+
+## Adaptador visual del rig editable a los estados de monster_grandmother.gd.
+## Todas las poses son offsets sobre la colocacion guardada en la escena, de
+## modo que los ajustes manuales de brazos, manos y cabeza no se pierden.
+
+const STATE_PATROL := 0
+const STATE_INVESTIGATE := 1
+const STATE_CHASE := 2
+const STATE_SEARCH := 3
+const STATE_ATTACK := 4
+
+@export var idle_speed := 1.15
+@export var idle_arm_sway := 0.045
+@export var walk_arm_swing := 0.34
+@export var chase_arm_swing := 0.52
+@export var walk_bob_height := 0.018
+@export var pose_transition_speed := 9.0
+@export_range(1.0, 1.5, 0.01) var head_scale_multiplier := 1.12
+@export var head_down_offset := 0.5722
+@export var resting_hand_height := 0.92
+@export var resting_hand_width := 0.43
+@export var resting_hand_forward := 0.1
+
+@onready var _rig: Node3D = $CleanModel/EditableGrannyRig
+@onready var _head: Node3D = $CleanModel/EditableGrannyRig/HeadPivot
+@onready var _left_shoulder: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot
+@onready var _left_elbow: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot
+@onready var _left_wrist: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot
+@onready var _left_shoulder_joint: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftShoulderJoint
+@onready var _left_sleeve: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftDressSleeve
+@onready var _left_upper_arm: MeshInstance3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftUpperArm
+@onready var _left_forearm: MeshInstance3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftForearm
+@onready var _left_elbow_joint: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftElbowJoint
+@onready var _left_wrist_joint: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot/LeftWristJoint
+@onready var _right_shoulder: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot
+@onready var _right_elbow: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot
+@onready var _right_wrist: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot
+@onready var _right_shoulder_joint: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightShoulderJoint
+@onready var _right_sleeve: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightDressSleeve
+@onready var _right_upper_arm: MeshInstance3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightUpperArm
+@onready var _right_forearm: MeshInstance3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightForearm
+@onready var _right_elbow_joint: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightElbowJoint
+@onready var _right_wrist_joint: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot/RightWristJoint
+@onready var _neck_seal: Node3D = $SeamRepairs/NeckSeal
+
+var _body: CharacterBody3D
+var _player: CharacterBody3D
+var _phase := 0.0
+var _base_position := Vector3.ZERO
+var _base_head_position := Vector3.ZERO
+var _base_head_scale := Vector3.ONE
+var _base_rig_rotation := Quaternion.IDENTITY
+var _base_head_rotation := Quaternion.IDENTITY
+var _base_left_shoulder := Quaternion.IDENTITY
+var _base_left_elbow := Quaternion.IDENTITY
+var _base_left_wrist := Quaternion.IDENTITY
+var _base_right_shoulder := Quaternion.IDENTITY
+var _base_right_elbow := Quaternion.IDENTITY
+var _base_right_wrist := Quaternion.IDENTITY
+var _left_upper_rest_direction := Vector3.DOWN
+var _left_lower_rest_direction := Vector3.DOWN
+var _right_upper_rest_direction := Vector3.DOWN
+var _right_lower_rest_direction := Vector3.DOWN
+var _skin_material: StandardMaterial3D
+
+
+func _ready() -> void:
+	_body = get_parent() as CharacterBody3D
+	_player = get_tree().get_first_node_in_group(&"player") as CharacterBody3D
+	# El usuario puede recolocar cada pieza visual desde el editor. Ajustamos el
+	# origen de giro a la articulacion visible y restauramos inmediatamente las
+	# transformaciones globales de los hijos: la pose no cambia, solo se corrige
+	# el punto alrededor del que animara cada cadena.
+	_recenter_pivot(_left_shoulder, _left_shoulder_joint)
+	_recenter_pivot(_right_shoulder, _right_shoulder_joint)
+	_recenter_pivot(_left_elbow, _left_elbow_joint)
+	_recenter_pivot(_right_elbow, _right_elbow_joint)
+	_recenter_pivot(_left_wrist, _left_wrist_joint)
+	_recenter_pivot(_right_wrist, _right_wrist_joint)
+	_base_position = position
+	_base_head_position = _head.position
+	_base_head_scale = _head.scale
+	_head.scale = _base_head_scale * head_scale_multiplier
+	_neck_seal.visible = false
+	_remove_unused_hair_nodes()
+	_remove_round_joint_markers()
+	_left_sleeve.scale *= Vector3(0.92, 1.02, 0.88)
+	_right_sleeve.scale *= Vector3(0.92, 1.02, 0.88)
+	_refine_limb_shape(_left_upper_arm)
+	_refine_limb_shape(_left_forearm)
+	_refine_limb_shape(_right_upper_arm)
+	_refine_limb_shape(_right_forearm)
+	_apply_muted_skin_material()
+	_base_rig_rotation = _rig.quaternion
+	_base_head_rotation = _head.quaternion
+	_base_left_shoulder = _left_shoulder.quaternion
+	_base_left_elbow = _left_elbow.quaternion
+	_base_left_wrist = _left_wrist.quaternion
+	_base_right_shoulder = _right_shoulder.quaternion
+	_base_right_elbow = _right_elbow.quaternion
+	_base_right_wrist = _right_wrist.quaternion
+	_left_upper_rest_direction = (_left_shoulder.global_basis.inverse() * (_left_elbow.global_position - _left_shoulder.global_position)).normalized()
+	_left_lower_rest_direction = (_left_elbow.global_basis.inverse() * (_left_wrist.global_position - _left_elbow.global_position)).normalized()
+	_right_upper_rest_direction = (_right_shoulder.global_basis.inverse() * (_right_elbow.global_position - _right_shoulder.global_position)).normalized()
+	_right_lower_rest_direction = (_right_elbow.global_basis.inverse() * (_right_wrist.global_position - _right_elbow.global_position)).normalized()
+
+
+func _physics_process(delta: float) -> void:
+	if not is_instance_valid(_body):
+		return
+	if not is_instance_valid(_player):
+		_player = get_tree().get_first_node_in_group(&"player") as CharacterBody3D
+
+	var horizontal_speed := Vector2(_body.velocity.x, _body.velocity.z).length()
+	var chase_speed := maxf(float(_body.get("chase_speed")), 0.01)
+	var moving := clampf(horizontal_speed / chase_speed, 0.0, 1.0)
+	var state := int(_body.get("current_state"))
+	var waiting_covered_eyes := bool(_body.get("_waiting_covered_eyes"))
+	var duck_amount := clampf(float(_body.get("_duck_amount")), 0.0, 1.0)
+	var attack_timer := maxf(float(_body.get("_attack_timer")), 0.0)
+
+	var cadence := lerpf(idle_speed, 6.2, moving)
+	if state == STATE_CHASE:
+		cadence = lerpf(4.6, 8.2, moving)
+	_phase += delta * cadence
+
+	var player_distance := INF
+	if is_instance_valid(_player):
+		player_distance = _body.global_position.distance_to(_player.global_position)
+	var reaching := (
+		state == STATE_CHASE
+		and is_instance_valid(_player)
+		and player_distance >= 2.35
+		and player_distance <= 7.2
+		and absf(_player.global_position.y - _body.global_position.y) < 1.7
+	)
+
+	if waiting_covered_eyes:
+		_apply_covered_eyes_pose(delta)
+	elif state == STATE_ATTACK:
+		_apply_attack_pose(delta, attack_timer)
+	elif reaching:
+		_apply_reaching_pose(delta)
+	else:
+		_apply_locomotion_pose(delta, state, moving)
+
+	_lock_head_to_body()
+	_apply_body_motion(delta, state, moving, duck_amount, waiting_covered_eyes)
+
+
+func _apply_locomotion_pose(delta: float, state: int, moving: float) -> void:
+	# Pose compacta: las manos descansan junto a las caderas en lugar de
+	# conservar la T-pose del modelo. El IK mantiene cada brazo unido.
+	var side := (_left_shoulder.global_position - _right_shoulder.global_position).normalized()
+	var forward := _body.global_basis.z.normalized()
+	var stride := sin(_phase) * 0.11 * moving
+	var breathing := sin(_phase * 0.72) * 0.015 * (1.0 - moving)
+	var target_center := _body.global_position + Vector3.UP * (resting_hand_height + breathing)
+	target_center += forward * resting_hand_forward
+	var left_target := target_center + side * resting_hand_width + forward * stride
+	var right_target := target_center - side * resting_hand_width - forward * stride
+	_pose_arm_ik(
+		_left_shoulder, _left_elbow, _left_wrist,
+		_base_left_shoulder, _base_left_elbow,
+		_left_upper_rest_direction, _left_lower_rest_direction,
+		left_target, 1.0, delta, pose_transition_speed
+	)
+	_pose_arm_ik(
+		_right_shoulder, _right_elbow, _right_wrist,
+		_base_right_shoulder, _base_right_elbow,
+		_right_upper_rest_direction, _right_lower_rest_direction,
+		right_target, -1.0, delta, pose_transition_speed
+	)
+	_pose_node(_left_wrist, _offset_pose(_base_left_wrist, -0.08, 0.0, -0.12), delta, pose_transition_speed)
+	_pose_node(_right_wrist, _offset_pose(_base_right_wrist, -0.08, 0.0, 0.12), delta, pose_transition_speed)
+
+
+func _apply_covered_eyes_pose(delta: float) -> void:
+	var face_forward := _body.global_basis.z.normalized()
+	var face_right := _body.global_basis.x.normalized()
+	# El nodo de ojos del GLB conserva un origen exportado incorrecto; la cara
+	# visible esta centrada respecto a HeadPivot.
+	# El pivote de la muneca debe quedar por encima del ojo porque la palma del
+	# modelo cuelga unos centimetros por debajo de ese pivote.
+	var eye_center := _head.global_position + Vector3.UP * 0.235 + face_forward * 0.07
+	_pose_arm_ik(
+		_left_shoulder, _left_elbow, _left_wrist,
+		_base_left_shoulder, _base_left_elbow,
+		_left_upper_rest_direction, _left_lower_rest_direction,
+		eye_center + face_right * 0.115 + Vector3.DOWN * 0.035,
+		1.0, delta, 7.5
+	)
+	_pose_arm_ik(
+		_right_shoulder, _right_elbow, _right_wrist,
+		_base_right_shoulder, _base_right_elbow,
+		_right_upper_rest_direction, _right_lower_rest_direction,
+		eye_center - face_right * 0.115 + Vector3.DOWN * 0.035,
+		-1.0, delta, 7.5
+	)
+	_pose_node(_left_wrist, _offset_pose(_base_left_wrist, 0.08, 0.0, -0.18), delta, 8.0)
+	_pose_node(_right_wrist, _offset_pose(_base_right_wrist, 0.08, 0.0, 0.18), delta, 8.0)
+
+
+func _apply_reaching_pose(delta: float) -> void:
+	var target_center := _body.global_position + _body.global_basis.z * 1.1 + Vector3.UP * 1.08
+	var target_right := _body.global_basis.x.normalized()
+	if is_instance_valid(_player):
+		target_center = _player.global_position + Vector3.UP * 1.05
+		target_right = _player.global_basis.x.normalized()
+	_pose_arm_ik(
+		_left_shoulder, _left_elbow, _left_wrist,
+		_base_left_shoulder, _base_left_elbow,
+		_left_upper_rest_direction, _left_lower_rest_direction,
+		target_center + target_right * 0.18,
+		1.0, delta, 9.5
+	)
+	_pose_arm_ik(
+		_right_shoulder, _right_elbow, _right_wrist,
+		_base_right_shoulder, _base_right_elbow,
+		_right_upper_rest_direction, _right_lower_rest_direction,
+		target_center - target_right * 0.18,
+		-1.0, delta, 9.5
+	)
+	_pose_node(_left_wrist, _offset_pose(_base_left_wrist, 0.0, 0.0, -0.08), delta, 9.5)
+	_pose_node(_right_wrist, _offset_pose(_base_right_wrist, 0.0, 0.0, 0.08), delta, 9.5)
+
+
+func _apply_attack_pose(delta: float, attack_timer: float) -> void:
+	var progress := clampf(attack_timer / 0.72, 0.0, 1.0)
+	var thrust := sin(progress * PI)
+	var forward := _body.global_basis.z.normalized()
+	var right := _body.global_basis.x.normalized()
+	var target_center := _body.global_position + forward * lerpf(0.48, 1.25, thrust) + Vector3.UP * 1.08
+	if is_instance_valid(_player):
+		target_center = target_center.lerp(_player.global_position + Vector3.UP * 1.0, thrust * 0.85)
+	_pose_arm_ik(
+		_left_shoulder, _left_elbow, _left_wrist,
+		_base_left_shoulder, _base_left_elbow,
+		_left_upper_rest_direction, _left_lower_rest_direction,
+		target_center + right * 0.11,
+		1.0, delta, 16.0
+	)
+	_pose_arm_ik(
+		_right_shoulder, _right_elbow, _right_wrist,
+		_base_right_shoulder, _base_right_elbow,
+		_right_upper_rest_direction, _right_lower_rest_direction,
+		target_center - right * 0.11,
+		-1.0, delta, 16.0
+	)
+	_pose_node(_left_wrist, _offset_pose(_base_left_wrist, -0.1 * thrust, 0.0, -0.08), delta, 15.0)
+	_pose_node(_right_wrist, _offset_pose(_base_right_wrist, -0.1 * thrust, 0.0, 0.08), delta, 15.0)
+
+
+func _lock_head_to_body() -> void:
+	# Esta cabeza no tiene animacion independiente: conserva siempre el mismo
+	# transform local respecto al torso y acompana al cuerpo como una sola pieza.
+	_head.position = _base_head_position + Vector3(0.0, -head_down_offset, 0.0)
+	_head.quaternion = _base_head_rotation
+	_head.scale = _base_head_scale * head_scale_multiplier
+
+func _apply_body_motion(delta: float, state: int, moving: float, duck_amount: float, covered_eyes: bool) -> void:
+	var chase_amount := 1.0 if state == STATE_CHASE else 0.0
+	var attack_amount := 0.0
+	if state == STATE_ATTACK:
+		attack_amount = sin(clampf(float(_body.get("_attack_timer")) / 0.72, 0.0, 1.0) * PI)
+	var lean_x := -0.045 - chase_amount * 0.16 - duck_amount * 0.2 - attack_amount * 0.2
+	if covered_eyes:
+		lean_x = -0.18
+	var sway_z := sin(_phase * 0.5) * lerpf(0.012, 0.035, moving)
+	_pose_node(_rig, _offset_pose(_base_rig_rotation, lean_x, 0.0, sway_z), delta, 7.0)
+
+	var bob := (absf(sin(_phase)) - 0.5) * walk_bob_height * moving
+	var breathing := sin(Time.get_ticks_msec() * 0.0018) * 0.008
+	position = position.lerp(
+		_base_position + Vector3(0.0, bob + breathing - duck_amount * 0.38, 0.0),
+		minf(delta * 8.0, 1.0)
+	)
+
+
+func _remove_unused_hair_nodes() -> void:
+	for node_name in [&"HairCap", &"LeftHairTuft", &"RightHairTuft"]:
+		var hair := _head.get_node_or_null(NodePath(node_name))
+		if hair:
+			hair.free()
+
+
+func _remove_round_joint_markers() -> void:
+	# Estas piezas redondas eran guias del rig editable, no partes anatomicas.
+	for marker in [
+		_left_shoulder_joint, _left_elbow_joint, _left_wrist_joint,
+		_right_shoulder_joint, _right_elbow_joint, _right_wrist_joint,
+	]:
+		marker.visible = false
+	for side_path in [
+		"CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot",
+		"CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot",
+	]:
+		var wrist_root := get_node(side_path)
+		for child in wrist_root.get_children():
+			if "Knuckle" in child.name:
+				child.visible = false
+	for seal_name in [&"LeftArmpitSeal", &"RightArmpitSeal"]:
+		var seal := $SeamRepairs.get_node_or_null(NodePath(seal_name))
+		if seal:
+			seal.visible = false
+
+
+func _refine_limb_shape(limb: Node3D) -> void:
+	# Un poco mas largos para solapar el corte del codo y mas estrechos para
+	# recuperar una proporcion humana, sin volver a introducir bolas de union.
+	limb.scale *= Vector3(0.88, 1.18, 0.88)
+
+
+func _apply_muted_skin_material() -> void:
+	_skin_material = StandardMaterial3D.new()
+	_skin_material.albedo_color = Color(0.48, 0.34, 0.31, 1.0)
+	_skin_material.roughness = 0.96
+	for shoulder in [_left_shoulder, _right_shoulder]:
+		for mesh in _collect_meshes(shoulder):
+			if "DressSleeve" not in mesh.name:
+				mesh.material_override = _skin_material
+
+
+func _collect_meshes(root_node: Node) -> Array[MeshInstance3D]:
+	var result: Array[MeshInstance3D] = []
+	for child in root_node.get_children():
+		if child is MeshInstance3D:
+			result.append(child as MeshInstance3D)
+		result.append_array(_collect_meshes(child))
+	return result
+
+
+func _pose_wrists(delta: float, moving: float) -> void:
+	var wrist_roll := sin(_phase * 0.83) * 0.035 * lerpf(0.35, 1.0, moving)
+	_pose_node(_left_wrist, _offset_pose(_base_left_wrist, 0.0, 0.0, wrist_roll), delta, pose_transition_speed)
+	_pose_node(_right_wrist, _offset_pose(_base_right_wrist, 0.0, 0.0, -wrist_roll), delta, pose_transition_speed)
+
+
+func _offset_pose(base: Quaternion, x: float, y: float, z: float) -> Quaternion:
+	return (
+		base
+		* Quaternion(Vector3.RIGHT, x)
+		* Quaternion(Vector3.UP, y)
+		* Quaternion(Vector3.FORWARD, z)
+	).normalized()
+
+
+func _pose_node(node: Node3D, target: Quaternion, delta: float, speed: float) -> void:
+	node.quaternion = node.quaternion.slerp(target, minf(delta * speed, 1.0)).normalized()
+
+
+func _pose_arm_ik(
+	shoulder: Node3D,
+	elbow: Node3D,
+	wrist: Node3D,
+	base_shoulder: Quaternion,
+	base_elbow: Quaternion,
+	upper_rest_direction: Vector3,
+	lower_rest_direction: Vector3,
+	target_position: Vector3,
+	outward_side: float,
+	delta: float,
+	speed: float
+) -> void:
+	var shoulder_position := shoulder.global_position
+	var upper_length := shoulder_position.distance_to(elbow.global_position)
+	var lower_length := elbow.global_position.distance_to(wrist.global_position)
+	var shoulder_to_target := target_position - shoulder_position
+	var target_distance := shoulder_to_target.length()
+	if upper_length < 0.01 or lower_length < 0.01 or target_distance < 0.01:
+		return
+
+	var reach_min := absf(upper_length - lower_length) + 0.01
+	var reach_max := upper_length + lower_length - 0.01
+	var solved_distance := clampf(target_distance, reach_min, reach_max)
+	var target_direction := shoulder_to_target / target_distance
+	var solved_target := shoulder_position + target_direction * solved_distance
+	var along_distance := (
+		upper_length * upper_length
+		- lower_length * lower_length
+		+ solved_distance * solved_distance
+	) / (2.0 * solved_distance)
+	var bend_height := sqrt(maxf(0.0, upper_length * upper_length - along_distance * along_distance))
+	var outward := _body.global_basis.x.normalized() * outward_side
+	var bend_direction := outward - target_direction * outward.dot(target_direction)
+	if bend_direction.length_squared() < 0.001:
+		bend_direction = Vector3.UP.cross(target_direction)
+	bend_direction = bend_direction.normalized()
+	var elbow_target := shoulder_position + target_direction * along_distance + bend_direction * bend_height
+
+	var shoulder_parent := shoulder.get_parent() as Node3D
+	var shoulder_parent_basis := shoulder_parent.global_basis.orthonormalized()
+	var base_upper_parent_direction := (Basis(base_shoulder) * upper_rest_direction).normalized()
+	var desired_upper_parent_direction := (shoulder_parent_basis.inverse() * (elbow_target - shoulder_position).normalized()).normalized()
+	var shoulder_delta := Quaternion(base_upper_parent_direction, desired_upper_parent_direction)
+	var desired_shoulder := (shoulder_delta * base_shoulder).normalized()
+
+	var desired_shoulder_global_basis := shoulder_parent_basis * Basis(desired_shoulder)
+	var base_lower_shoulder_direction := (Basis(base_elbow) * lower_rest_direction).normalized()
+	var desired_lower_shoulder_direction := (desired_shoulder_global_basis.inverse() * (solved_target - elbow_target).normalized()).normalized()
+	var elbow_delta := Quaternion(base_lower_shoulder_direction, desired_lower_shoulder_direction)
+	var desired_elbow := (elbow_delta * base_elbow).normalized()
+
+	_pose_node(shoulder, desired_shoulder, delta, speed)
+	_pose_node(elbow, desired_elbow, delta, speed + 1.0)
+
+
+func _recenter_pivot(pivot: Node3D, visible_joint: Node3D) -> void:
+	if not is_instance_valid(pivot) or not is_instance_valid(visible_joint):
+		return
+	var joint_position := visible_joint.global_position
+	var child_transforms: Array[Transform3D] = []
+	for child in pivot.get_children():
+		if child is Node3D:
+			child_transforms.append((child as Node3D).global_transform)
+		else:
+			child_transforms.append(Transform3D.IDENTITY)
+	pivot.global_position = joint_position
+	for child_index in pivot.get_child_count():
+		var child := pivot.get_child(child_index)
+		if child is Node3D:
+			(child as Node3D).global_transform = child_transforms[child_index]

@@ -1,0 +1,152 @@
+[gd_scene format=3 uid="uid://dg58sthqwfhpu"]
+
+[ext_resource type="Script" uid="uid://gf12fei7v2an" path="res://house_props/editable_wall_note.gd" id="1_script"]
+[ext_resource type="FontFile" uid="uid://b60wwt30lnp8h" path="res://assets/fonts/PressStart2P-Regular.ttf" id="2_font"]
+
+[sub_resource type="StandardMaterial3D" id="Material_shadow"]
+transparency = 1
+albedo_color = Color(0.075, 0.06, 0.045, 0.72)
+
+[sub_resource type="BoxMesh" id="Mesh_shadow"]
+material = SubResource("Material_shadow")
+size = Vector3(0.85, 1.05, 0.012)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rjdl8"]
+albedo_color = Color(0.86, 0.8, 0.64, 1)
+roughness = 0.94
+
+[sub_resource type="StandardMaterial3D" id="Material_paper"]
+albedo_color = Color(0.78, 0.72, 0.57, 1)
+roughness = 0.94
+
+[sub_resource type="BoxMesh" id="Mesh_paper"]
+material = SubResource("Material_paper")
+size = Vector3(0.82, 1.02, 0.018)
+
+[sub_resource type="StandardMaterial3D" id="Material_crease"]
+transparency = 1
+albedo_color = Color(0.48, 0.42, 0.31, 0.42)
+
+[sub_resource type="BoxMesh" id="Mesh_crease_horizontal"]
+material = SubResource("Material_crease")
+size = Vector3(0.68, 0.006, 0.004)
+
+[sub_resource type="StandardMaterial3D" id="Material_nail"]
+albedo_color = Color(0.3, 0.31, 0.29, 1)
+metallic = 0.78
+roughness = 0.34
+
+[sub_resource type="CylinderMesh" id="Mesh_nail_shaft"]
+material = SubResource("Material_nail")
+top_radius = 0.014
+bottom_radius = 0.014
+height = 0.1408789
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_nail_head"]
+material = SubResource("Material_nail")
+top_radius = 0.052
+bottom_radius = 0.052
+height = 0.026
+radial_segments = 12
+rings = 1
+
+[sub_resource type="BoxShape3D" id="Shape_note"]
+size = Vector3(0.28, 0.31, 0.035)
+
+[node name="EditableWallNote" type="StaticBody3D" unique_id=1977493781]
+editor_description = "Nota mural reutilizable. Edita Note Title y Note Text desde el Inspector. Incluye papel, escritura y clavo independientes."
+collision_layer = 3
+script = ExtResource("1_script")
+
+[node name="PaperShadow" type="MeshInstance3D" parent="." unique_id=974154034]
+transform = Transform3D(0.3133589, 0, 0, 0, 0.2767291, 0, 0, 0, 0.82743573, 0.0074428925, 0.09284125, -0.01215926)
+cast_shadow = 0
+mesh = SubResource("Mesh_shadow")
+
+[node name="Paper" type="MeshInstance3D" parent="." unique_id=880665275]
+transform = Transform3D(0.3133589, 0, 0, 0, 0.2767291, 0, 0, 0, 0.82743573, 0.0018024328, 0.09782239, 0.001209233)
+material_override = SubResource("StandardMaterial3D_rjdl8")
+mesh = SubResource("Mesh_paper")
+
+[node name="Creases" type="Node3D" parent="." unique_id=1758722271]
+
+[node name="Upper" type="MeshInstance3D" parent="Creases" unique_id=704841464]
+transform = Transform3D(0.3252049, 0.004402911, 0, -0.005331822, 0.26854762, 0, 0, 0, 0.39975792, 0.0065028165, 0.16634911, 0.008671405)
+cast_shadow = 0
+mesh = SubResource("Mesh_crease_horizontal")
+
+[node name="Upper2" type="MeshInstance3D" parent="Creases" unique_id=1837354127]
+transform = Transform3D(0.3252049, 0.004402911, 0, -0.005331822, 0.26854762, 0, 0, 0, 0.39975792, 0.0065028165, 0.14038163, 0.008671405)
+cast_shadow = 0
+mesh = SubResource("Mesh_crease_horizontal")
+
+[node name="Upper3" type="MeshInstance3D" parent="Creases" unique_id=78678777]
+transform = Transform3D(0.3252049, 0.004402911, 0, -0.005331822, 0.26854762, 0, 0, 0, 0.39975792, 0.0065028165, 0.111755505, 0.008671405)
+cast_shadow = 0
+mesh = SubResource("Mesh_crease_horizontal")
+
+[node name="Upper4" type="MeshInstance3D" parent="Creases" unique_id=1132046591]
+transform = Transform3D(0.3252049, 0.004402911, 0, -0.005331822, 0.26854762, 0, 0, 0, 0.39975792, 0.0065028165, 0.082587495, 0.008671405)
+cast_shadow = 0
+mesh = SubResource("Mesh_crease_horizontal")
+
+[node name="Upper5" type="MeshInstance3D" parent="Creases" unique_id=590631181]
+transform = Transform3D(0.3252049, 0.004402911, 0, -0.005331822, 0.26854762, 0, 0, 0, 0.39975792, 0.0065028165, 0.052346997, 0.008671405)
+cast_shadow = 0
+mesh = SubResource("Mesh_crease_horizontal")
+
+[node name="Upper6" type="MeshInstance3D" parent="Creases" unique_id=2053625215]
+transform = Transform3D(0.3252049, 0.004402911, 0, -0.005331822, 0.26854762, 0, 0, 0, 0.39975792, 0.0065028165, 0.023154177, 0.008671405)
+cast_shadow = 0
+mesh = SubResource("Mesh_crease_horizontal")
+
+[node name="Upper7" type="MeshInstance3D" parent="Creases" unique_id=110327401]
+transform = Transform3D(0.3252049, 0.004402911, 0, -0.005331822, 0.26854762, 0, 0, 0, 0.39975792, 0.0065028165, -0.006052263, 0.008671405)
+cast_shadow = 0
+mesh = SubResource("Mesh_crease_horizontal")
+
+[node name="Upper8" type="MeshInstance3D" parent="Creases" unique_id=1515865951]
+transform = Transform3D(0.3252049, 0.004402911, 0, -0.005331822, 0.26854762, 0, 0, 0, 0.39975792, 0.0065028165, 0.19548815, 0.008671405)
+cast_shadow = 0
+mesh = SubResource("Mesh_crease_horizontal")
+
+[node name="Writing" type="Node3D" parent="." unique_id=1197586631]
+
+[node name="Title" type="Label3D" parent="Writing" unique_id=1591594613]
+transform = Transform3D(0.3133589, 0, 0, 0, 0.2767291, 0, 0, 0, 0.39975798, 0.0018024328, 0.18499207, 0.016200295)
+pixel_size = 0.0022
+modulate = Color(0.055, 0.042, 0.028, 1)
+text = "AVISO"
+font = ExtResource("2_font")
+font_size = 34
+outline_size = 0
+width = 320.0
+
+[node name="Body" type="Label3D" parent="Writing" unique_id=698904496]
+transform = Transform3D(0.3133589, 0, 0, 0, 0.2767291, 0, 0, 0, 0.39975798, 0.0018024328, 0.08536957, 0.016200295)
+pixel_size = 0.0022
+modulate = Color(0.055, 0.042, 0.028, 1)
+text = "NO OLVIDES CERRAR
+LA PUERTA."
+font = ExtResource("2_font")
+font_size = 23
+outline_size = 0
+autowrap_mode = 3
+width = 300.0
+
+[node name="Nail" type="Node3D" parent="." unique_id=1713618342]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.445, 0.01)
+
+[node name="Shaft" type="MeshInstance3D" parent="Nail" unique_id=2046343347]
+transform = Transform3D(0.3133589, 0, 0, 0, -1.4471144e-06, -0.27672982, 0, 0.39975643, -1.0017592e-06, 0.0018024328, -0.22403312, -0.00951235)
+mesh = SubResource("Mesh_nail_shaft")
+
+[node name="Head" type="MeshInstance3D" parent="Nail" unique_id=1713500586]
+transform = Transform3D(0.3133589, 0, 0, 0, -1.4471144e-06, -0.27672982, 0, 0.39975643, -1.0017592e-06, 0.0018024328, -0.22403315, 0.020445263)
+mesh = SubResource("Mesh_nail_head")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=638211494]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.002, 0.098, 0.003)
+shape = SubResource("Shape_note")

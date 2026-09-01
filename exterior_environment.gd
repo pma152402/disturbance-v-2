@@ -150,6 +150,9 @@ func _add_outer_vegetation(transforms: Array[Transform3D], rng: RandomNumberGene
 			continue
 		if plant_position.z > 23.5 and absf(plant_position.x) < 7.5:
 			continue
+		# El arroyo tiene sus propios juncos y rocas: evita hierba atravesando el agua.
+		if plant_position.z > 30.0 and plant_position.z < 38.0 and absf(plant_position.x) < 23.0:
+			continue
 		var plant_scale := rng.randf_range(min_scale, max_scale)
 		var plant_basis := Basis(Vector3.UP, rng.randf_range(0.0, TAU)).scaled(Vector3(plant_scale * width_factor, rng.randf_range(0.82, 1.28) * plant_scale * height_factor, plant_scale * width_factor))
 		transforms.append(Transform3D(plant_basis, plant_position))
@@ -168,9 +171,12 @@ func _add_forest_outside_fence(transforms: Array[Transform3D], rng: RandomNumber
 		# Preserve the route leading through the south gate.
 		if tree_position.z > 23.5 and absf(tree_position.x) < 7.5:
 			continue
+		if tree_position.z > 29.5 and tree_position.z < 38.5 and absf(tree_position.x) < 24.0:
+			continue
 		var too_close := false
 		for existing_transform in transforms:
-			if existing_transform.origin.distance_squared_to(tree_position) < 5.76:
+			var existing_flat := Vector2(existing_transform.origin.x, existing_transform.origin.z)
+			if existing_flat.distance_squared_to(Vector2(tree_position.x, tree_position.z)) < 5.76:
 				too_close = true
 				break
 		if too_close:

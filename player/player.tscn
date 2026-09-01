@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=24 format=3]
 
 [ext_resource type="Script" path="res://player/player.gd" id="1_player"]
 [ext_resource type="ArrayMesh" path="res://ps2_objects/Flashlight/Flashlight.obj" id="2_flashlight_mesh"]
@@ -10,6 +10,9 @@
 [ext_resource type="AudioStream" path="res://sounds/interactions/light_switch_on.wav" id="8_light_switch"]
 [ext_resource type="PackedScene" path="res://player/held_items/plunger.tscn" id="9_plunger"]
 [ext_resource type="PackedScene" path="res://player/held_items/crowbar.tscn" id="10_crowbar"]
+[ext_resource type="PackedScene" path="res://house_props/note_paper_visual.tscn" id="11_note"]
+[ext_resource type="PackedScene" path="res://house_props/recipe_book_visual.tscn" id="12_recipe_book"]
+[ext_resource type="PackedScene" path="res://house_props/recipe_book_closed_visual.tscn" id="13_recipe_book_closed"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.34
@@ -66,6 +69,22 @@ corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inventory_slot"]
+bg_color = Color(0.025, 0.03, 0.025, 0.38)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.86, 0.9, 0.83, 0.62)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_flashlight_icon"]
+atlas = ExtResource("3_flashlight_texture")
+region = Rect2(78, 0, 82, 256)
 
 [node name="Player" type="CharacterBody3D"]
 floor_snap_length = 0.32
@@ -145,42 +164,59 @@ spot_range = 21.0
 spot_attenuation = 0.28
 spot_angle = 29.0
 
-[node name="LeftHandRig" type="Node3D" parent="Head/Camera3D"]
+[node name="RightHandRig" type="Node3D" parent="Head/Camera3D"]
 
-[node name="LeftHand" type="MeshInstance3D" parent="Head/Camera3D/LeftHandRig"]
+[node name="RightHand" type="MeshInstance3D" parent="Head/Camera3D/RightHandRig"]
 visible = false
-position = Vector3(-0.31, -0.46, -0.09)
-rotation = Vector3(-0.78, 0.08, 0.08)
+position = Vector3(0.31, -0.46, -0.09)
+rotation = Vector3(-0.78, -0.08, -0.08)
 scale = Vector3(0.62, 0.62, 0.62)
 mesh = SubResource("BoxMesh_hand")
 cast_shadow = 0
 
-[node name="HandBall" type="MeshInstance3D" parent="Head/Camera3D/LeftHandRig/LeftHand"]
+[node name="HandBall" type="MeshInstance3D" parent="Head/Camera3D/RightHandRig/RightHand"]
 position = Vector3(0, 0.34, 0)
 mesh = SubResource("SphereMesh_hand")
 cast_shadow = 0
 
-[node name="HeldCan" parent="Head/Camera3D/LeftHandRig" instance=ExtResource("4_can_visual")]
+[node name="HeldCan" parent="Head/Camera3D/RightHandRig" instance=ExtResource("4_can_visual")]
 visible = false
-position = Vector3(-0.35, -0.29, -0.38)
-rotation = Vector3(0.16, 0, -0.18)
+position = Vector3(0.35, -0.29, -0.38)
+rotation = Vector3(0.16, 0, 0.18)
 
-[node name="HeldBottle" parent="Head/Camera3D/LeftHandRig" instance=ExtResource("5_bottle_visual")]
+[node name="HeldBottle" parent="Head/Camera3D/RightHandRig" instance=ExtResource("5_bottle_visual")]
 visible = false
-position = Vector3(-0.35, -0.37, -0.38)
-rotation = Vector3(0.12, 0, -0.16)
+position = Vector3(0.35, -0.37, -0.38)
+rotation = Vector3(0.12, 0, 0.16)
 
-[node name="HeldPlunger" parent="Head/Camera3D/LeftHandRig" instance=ExtResource("9_plunger")]
+[node name="HeldPlunger" parent="Head/Camera3D/RightHandRig" instance=ExtResource("9_plunger")]
 visible = false
-position = Vector3(-0.42, -0.57, -0.48)
-rotation = Vector3(-0.42, 0.08, -0.34)
+position = Vector3(0.42, -0.57, -0.48)
+rotation = Vector3(-0.42, -0.08, 0.34)
 scale = Vector3(0.72, 0.72, 0.72)
 
-[node name="HeldCrowbar" parent="Head/Camera3D/LeftHandRig" instance=ExtResource("10_crowbar")]
+[node name="HeldCrowbar" parent="Head/Camera3D/RightHandRig" instance=ExtResource("10_crowbar")]
 visible = false
-position = Vector3(-0.43, -0.62, -0.5)
-rotation = Vector3(-0.5, 0.08, -0.4)
+position = Vector3(0.43, -0.62, -0.5)
+rotation = Vector3(-0.5, -0.08, 0.4)
 scale = Vector3(0.58, 0.58, 0.58)
+
+[node name="HeldNote" parent="Head/Camera3D/RightHandRig" instance=ExtResource("11_note")]
+visible = false
+position = Vector3(0.38, -0.38, -0.48)
+rotation = Vector3(-0.12, -0.16, 0.14)
+
+[node name="HeldRecipeBook" parent="Head/Camera3D/RightHandRig" instance=ExtResource("12_recipe_book")]
+visible = false
+position = Vector3(0.29, -0.38, -0.56)
+rotation = Vector3(-1.08, 3.1415927, 0.08)
+scale = Vector3(0.62, 0.62, 0.62)
+
+[node name="HeldRecipeBookClosed" parent="Head/Camera3D/RightHandRig" instance=ExtResource("13_recipe_book_closed")]
+visible = false
+position = Vector3(0.29, -0.38, -0.56)
+rotation = Vector3(-1.08, 3.1415927, 0.08)
+scale = Vector3(0.62, 0.62, 0.62)
 
 [node name="StaminaUI" type="CanvasLayer" parent="."]
 layer = 20
@@ -204,6 +240,98 @@ theme_override_styles/background = SubResource("StyleBoxFlat_stamina_background"
 theme_override_styles/fill = SubResource("StyleBoxFlat_stamina_fill")
 value = 100.0
 show_percentage = false
+
+[node name="InventoryUI" type="CanvasLayer" parent="."]
+layer = 101
+
+[node name="InventorySlots" type="HBoxContainer" parent="InventoryUI"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -158.0
+offset_top = -94.0
+offset_right = 158.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="Slot1" type="PanelContainer" parent="InventoryUI/InventorySlots"]
+custom_minimum_size = Vector2(102, 44)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_inventory_slot")
+
+[node name="Content" type="Control" parent="InventoryUI/InventorySlots/Slot1"]
+custom_minimum_size = Vector2(100, 42)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="InventoryUI/InventorySlots/Slot1/Content"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 4.0
+offset_right = 22.0
+offset_bottom = 19.0
+theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.94)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("6_pixel_font")
+theme_override_font_sizes/font_size = 8
+text = "1"
+
+[node name="FlashlightIcon" type="TextureRect" parent="InventoryUI/InventorySlots/Slot1/Content"]
+layout_mode = 0
+offset_left = 29.0
+offset_top = -13.0
+offset_right = 78.0
+offset_bottom = 59.0
+rotation = -0.680678
+pivot_offset = Vector2(24.5, 36)
+mouse_filter = 2
+texture = SubResource("AtlasTexture_flashlight_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Slot2" type="PanelContainer" parent="InventoryUI/InventorySlots"]
+custom_minimum_size = Vector2(102, 44)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_inventory_slot")
+
+[node name="Label" type="Label" parent="InventoryUI/InventorySlots/Slot2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.94)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("6_pixel_font")
+theme_override_font_sizes/font_size = 8
+text = "2\nVACIO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot3" type="PanelContainer" parent="InventoryUI/InventorySlots"]
+custom_minimum_size = Vector2(102, 44)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_inventory_slot")
+
+[node name="Label" type="Label" parent="InventoryUI/InventorySlots/Slot3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.94)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("6_pixel_font")
+theme_override_font_sizes/font_size = 8
+text = "3\nVACIO"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="ZoomUI" type="CanvasLayer" parent="."]
 layer = 101
@@ -387,4 +515,29 @@ theme_override_constants/outline_size = 2
 theme_override_fonts/font = ExtResource("6_pixel_font")
 theme_override_font_sizes/font_size = 12
 text = "F  COGER OBJETO"
+horizontal_alignment = 1
+
+[node name="NoteControlsPrompt" type="Label" parent="InteractionUI"]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -360.0
+offset_top = -42.0
+offset_right = 360.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.88, 0.96)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.96)
+theme_override_colors/font_outline_color = Color(0.015, 0.018, 0.015, 0.98)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("6_pixel_font")
+theme_override_font_sizes/font_size = 10
+text = "G  SOLTAR NOTA    RMB  AMPLIAR"
 horizontal_alignment = 1

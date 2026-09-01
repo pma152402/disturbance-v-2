@@ -46,17 +46,33 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
 @onready var hand_rig: Node3D = $Head/Camera3D/HandRig
-@onready var left_hand_rig: Node3D = $Head/Camera3D/LeftHandRig
-@onready var left_hand: MeshInstance3D = $Head/Camera3D/LeftHandRig/LeftHand
-@onready var held_can: Node3D = $Head/Camera3D/LeftHandRig/HeldCan
-@onready var held_bottle: Node3D = $Head/Camera3D/LeftHandRig/HeldBottle
-@onready var held_plunger: Node3D = $Head/Camera3D/LeftHandRig/HeldPlunger
-@onready var held_crowbar: Node3D = $Head/Camera3D/LeftHandRig/HeldCrowbar
+@onready var right_hand_rig: Node3D = $Head/Camera3D/RightHandRig
+@onready var right_hand: MeshInstance3D = $Head/Camera3D/RightHandRig/RightHand
+@onready var held_can: Node3D = $Head/Camera3D/RightHandRig/HeldCan
+@onready var held_bottle: Node3D = $Head/Camera3D/RightHandRig/HeldBottle
+@onready var held_plunger: Node3D = $Head/Camera3D/RightHandRig/HeldPlunger
+@onready var held_crowbar: Node3D = $Head/Camera3D/RightHandRig/HeldCrowbar
+@onready var held_note: Node3D = $Head/Camera3D/RightHandRig/HeldNote
+@onready var held_recipe_book: Node3D = $Head/Camera3D/RightHandRig/HeldRecipeBook
+@onready var held_recipe_book_closed: Node3D = $Head/Camera3D/RightHandRig/HeldRecipeBookClosed
 @onready var flashlight: SpotLight3D = $Head/Camera3D/HandRig/Flashlight
 @onready var interaction_ray: RayCast3D = $Head/Camera3D/InteractionRay
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
 @onready var stamina_bar: ProgressBar = $StaminaUI/StaminaBar
 @onready var interaction_prompt: Label = $InteractionUI/InteractionPrompt
+@onready var note_controls_prompt: Label = $InteractionUI/NoteControlsPrompt
+@onready var inventory_slots_ui: HBoxContainer = $InventoryUI/InventorySlots
+@onready var inventory_panels: Array[PanelContainer] = [
+	$InventoryUI/InventorySlots/Slot1,
+	$InventoryUI/InventorySlots/Slot2,
+	$InventoryUI/InventorySlots/Slot3,
+]
+@onready var inventory_labels: Array[Label] = [
+	$InventoryUI/InventorySlots/Slot1/Content/Label,
+	$InventoryUI/InventorySlots/Slot2/Label,
+	$InventoryUI/InventorySlots/Slot3/Label,
+]
+@onready var inventory_flashlight_icon: TextureRect = $InventoryUI/InventorySlots/Slot1/Content/FlashlightIcon
 @onready var holster_sound: AudioStreamPlayer = $HolsterSound
 @onready var switch_sound: AudioStreamPlayer = $SwitchSound
 @onready var flashlight_click_sound: AudioStreamPlayer = $FlashlightClickSound
@@ -86,6 +102,16 @@ var _jump_phase := JumpPhase.IDLE
 var _jump_timer := 0.0
 var _jump_start_head_y := 0.9
 var _held_item: StringName = &""
+var _inventory_slots: Array[StringName] = [&"flashlight", &"", &""]
+var _inventory_item_data: Array[Dictionary] = [{}, {}, {}]
+var _selected_inventory_slot := 0
+var _note_reading := false
+var _held_note_rest_transform := Transform3D.IDENTITY
+var _note_read_tween: Tween
+var _recipe_book_reading := false
+var _held_recipe_book_rest_transform := Transform3D.IDENTITY
+var _recipe_book_read_tween: Tween
+var _inventory_ui_tween: Tween
 var _key_inventory: Dictionary = {}
 var _tool_inventory: Dictionary = {}
 @export_category("Debug")
@@ -101,6 +127,7 @@ var _monster_hit_cooldown := 0.0
 var _monster_restart_pending := false
 var _skill_check_active := false
 var _walker_controller: Node3D
+var _walker_flashlight_was_drawn := false
 var _ladder_controller: Node3D
 
 const ZOOM_SEGMENT_ON := Color(0.86, 0.9, 0.83, 0.92)
@@ -109,7 +136,19 @@ const ZOOM_SEGMENT_OFF := Color(0.20, 0.23, 0.20, 0.42)
 const ThrownCanScene := preload("res://thrown_can.tscn")
 const ThrownBottleScene := preload("res://thrown_bottle.tscn")
 const DroppedFlashlightScene := preload("res://dropped_flashlight.tscn")
+const DroppedNoteScene := preload("res://dropped_note.tscn")
+const DroppedRecipeBookScene := preload("res://dropped_recipe_book.tscn")
+const PlungerPickupScene := preload("res://house_props/toilet_plunger.tscn")
+const CrowbarPickupScene := preload("res://house_props/crowbar_pickup.tscn")
 const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
+const INVENTORY_ITEM_NAMES := {
+	&"can": "LATA",
+	&"bottle": "BOTELLA",
+	&"plunger": "DESATASCADOR",
+	&"crowbar": "PALANCA",
+	&"note": "NOTA",
+	&"recipe_book": "RECETARIO",
+}
 
 
 func _ready() -> void:
@@ -118,6 +157,8 @@ func _ready() -> void:
 		if child is ColorRect:
 			_zoom_segments.append(child as ColorRect)
 	hand_rig.visible = false
+	_held_note_rest_transform = held_note.transform
+	_held_recipe_book_rest_transform = held_recipe_book.transform
 	flashlight.visible = false
 	_camera_rest_position = camera.position
 	_stamina = max_stamina
@@ -129,6 +170,9 @@ func _ready() -> void:
 	camera.fov = zoom_max_fov
 	_zoom_fov_target = zoom_max_fov
 	_update_zoom_meter()
+	_update_inventory_ui()
+	inventory_slots_ui.visible = false
+	inventory_slots_ui.modulate.a = 0.0
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	holster_sound.stream = GameplaySounds.make_switch_click()
 	footstep_sound.stream = GameplaySounds.make_footstep()
@@ -144,6 +188,19 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			get_tree().call_deferred(&"reload_current_scene")
 			return
+		if _held_item == &"recipe_book" and _recipe_book_reading and pressed_key in [KEY_Q, KEY_E]:
+			_turn_recipe_book_pages(-1 if pressed_key == KEY_Q else 1)
+			get_viewport().set_input_as_handled()
+			return
+		if pressed_key in [KEY_1, KEY_2, KEY_3]:
+			_select_inventory_slot(pressed_key - KEY_1)
+			_show_inventory_temporarily()
+			get_viewport().set_input_as_handled()
+			return
+		if pressed_key == KEY_G and not _skill_check_active:
+			_drop_selected_inventory_item()
+			get_viewport().set_input_as_handled()
+			return
 		if pressed_key == KEY_F and is_instance_valid(_ladder_controller):
 			_ladder_controller.call(&"stop_climbing", false)
 			get_viewport().set_input_as_handled()
@@ -153,10 +210,6 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 		if pressed_key == KEY_F and _try_interact(pressed_key):
-			get_viewport().set_input_as_handled()
-			return
-		if pressed_key == KEY_L:
-			_toggle_flashlight_holster()
 			get_viewport().set_input_as_handled()
 			return
 		if pressed_key == KEY_CTRL:
@@ -216,7 +269,15 @@ func _input(event: InputEvent) -> void:
 				_zoom_fov_target = clampf(_zoom_fov_target + wheel_amount, zoom_min_fov, zoom_max_fov)
 				get_viewport().set_input_as_handled()
 				return
-		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and _flashlight_available and not _flashlight_holstered:
+		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and _held_item == &"note" and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			_set_note_reading(not _note_reading)
+			get_viewport().set_input_as_handled()
+			return
+		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and _held_item == &"recipe_book" and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			_set_recipe_book_reading(not _recipe_book_reading)
+			get_viewport().set_input_as_handled()
+			return
+		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and _flashlight_available and not _flashlight_holstered and _selected_inventory_slot == 0:
 			flashlight.visible = not flashlight.visible
 			flashlight_click_sound.pitch_scale = randf_range(0.98, 1.02)
 			flashlight_click_sound.play()
@@ -362,8 +423,8 @@ func _update_camera_motion(delta: float, input_vector: Vector2, is_sprinting: bo
 		)
 		hand_bob_roll = -sin(_bob_phase * 0.5) * deg_to_rad(bob_roll_degrees) * hand_bob_multiplier
 
-	var lean_input := Input.get_axis(&"lean_left", &"lean_right")
-	_lean_amount = move_toward(_lean_amount, lean_input, lean_speed * delta)
+	var lean_input := 0.0 if _recipe_book_reading else Input.get_axis(&"lean_left", &"lean_right")
+	_lean_amount = 0.0 if _recipe_book_reading else move_toward(_lean_amount, lean_input, lean_speed * delta)
 	target_position.x += _lean_amount * lean_distance
 	var target_roll := bob_roll - _lean_amount * deg_to_rad(lean_angle_degrees)
 
@@ -375,26 +436,215 @@ func _update_camera_motion(delta: float, input_vector: Vector2, is_sprinting: bo
 		_hand_yaw = lerpf(_hand_yaw, 0.0, minf(delta * hand_return_speed, 1.0))
 		_hand_pitch = lerpf(_hand_pitch, 0.0, minf(delta * hand_return_speed, 1.0))
 	hand_rig.position = hand_rig.position.lerp(hand_bob_position, minf(delta * 14.0, 1.0))
-	var left_vertical_bob := Vector3(0.0, -hand_bob_position.y * 0.72, 0.0)
-	left_hand_rig.position = left_hand_rig.position.lerp(left_vertical_bob, minf(delta * 14.0, 1.0))
+	var right_vertical_bob := Vector3(0.0, -hand_bob_position.y * 0.72, 0.0)
+	right_hand_rig.position = right_hand_rig.position.lerp(right_vertical_bob, minf(delta * 14.0, 1.0))
 	var target_hand_rotation := Vector3(_hand_pitch, _hand_yaw, hand_bob_roll)
 	hand_rig.rotation = hand_rig.rotation.lerp(target_hand_rotation, minf(delta * 12.0, 1.0))
-	left_hand_rig.rotation.z = lerpf(left_hand_rig.rotation.z, 0.0, minf(delta * 12.0, 1.0))
+	right_hand_rig.rotation.z = lerpf(right_hand_rig.rotation.z, 0.0, minf(delta * 12.0, 1.0))
 
 
-func _toggle_flashlight_holster() -> void:
-	if not _flashlight_available:
-		return
-	_flashlight_holstered = not _flashlight_holstered
-	if _flashlight_holstered:
+func _select_inventory_slot(slot_index: int) -> void:
+	if slot_index == 0 and _selected_inventory_slot == 0 and not _flashlight_holstered:
 		_flashlight_was_on = flashlight.visible
 		flashlight.visible = false
 		hand_rig.visible = false
+		_flashlight_holstered = true
+		_update_inventory_ui()
 	else:
+		_equip_inventory_slot(slot_index)
+	if slot_index == 0 and _flashlight_available:
+		holster_sound.pitch_scale = randf_range(0.97, 1.03)
+		holster_sound.play()
+
+
+func _inventory_item_name(item_type: StringName) -> String:
+	return INVENTORY_ITEM_NAMES.get(item_type, "VACIO") as String
+
+
+func _update_inventory_ui() -> void:
+	for index in range(_inventory_slots.size()):
+		inventory_labels[index].text = str(index + 1) if index == 0 else "%d\n%s" % [index + 1, _inventory_item_name(_inventory_slots[index])]
+		inventory_panels[index].modulate = Color(1.0, 1.0, 1.0, 0.78 if index == _selected_inventory_slot else 0.32)
+	inventory_flashlight_icon.visible = _inventory_slots[0] == &"flashlight"
+
+
+func _show_inventory_temporarily() -> void:
+	if is_instance_valid(_inventory_ui_tween):
+		_inventory_ui_tween.kill()
+	inventory_slots_ui.visible = true
+	_inventory_ui_tween = create_tween()
+	_inventory_ui_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_inventory_ui_tween.tween_property(inventory_slots_ui, "modulate:a", 1.0, 0.18)
+	_inventory_ui_tween.tween_interval(2.15)
+	_inventory_ui_tween.set_ease(Tween.EASE_IN)
+	_inventory_ui_tween.tween_property(inventory_slots_ui, "modulate:a", 0.0, 0.55)
+	_inventory_ui_tween.tween_callback(func() -> void: inventory_slots_ui.visible = false)
+
+
+func _hide_all_held_visuals() -> void:
+	_set_note_reading(false, true)
+	_set_recipe_book_reading(false, true)
+	held_can.visible = false
+	held_bottle.visible = false
+	held_plunger.visible = false
+	held_crowbar.visible = false
+	held_note.visible = false
+	held_recipe_book.visible = false
+	held_recipe_book_closed.visible = false
+	right_hand.visible = false
+
+
+func _set_note_reading(active: bool, immediate := false) -> void:
+	if active and _held_item != &"note":
+		return
+	_note_reading = active
+	if is_instance_valid(_note_read_tween):
+		_note_read_tween.kill()
+	var target_position := Vector3(0.0, -0.005, -0.24) if active else _held_note_rest_transform.origin
+	var target_rotation := Vector3.ZERO if active else _held_note_rest_transform.basis.get_euler()
+	var target_scale := Vector3.ONE * 1.28 if active else _held_note_rest_transform.basis.get_scale()
+	if immediate:
+		held_note.position = target_position
+		held_note.rotation = target_rotation
+		held_note.scale = target_scale
+	else:
+		_note_read_tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		_note_read_tween.set_parallel(true)
+		_note_read_tween.tween_property(held_note, "position", target_position, 0.2)
+		_note_read_tween.tween_property(held_note, "rotation", target_rotation, 0.2)
+		_note_read_tween.tween_property(held_note, "scale", target_scale, 0.2)
+	right_hand.visible = not active and _held_item == &"note"
+
+
+func _set_recipe_book_reading(active: bool, immediate := false) -> void:
+	if active and _held_item != &"recipe_book":
+		return
+	_recipe_book_reading = active
+	if is_instance_valid(_recipe_book_read_tween):
+		_recipe_book_read_tween.kill()
+	var target_position := Vector3(0.0, -0.09, -0.46) if active else _held_recipe_book_rest_transform.origin
+	var target_rotation := _held_recipe_book_rest_transform.basis.get_euler()
+	var target_scale := Vector3.ONE * 0.9 if active else _held_recipe_book_rest_transform.basis.get_scale()
+	if immediate:
+		held_recipe_book.position = target_position
+		held_recipe_book.rotation = target_rotation
+		held_recipe_book.scale = target_scale
+		held_recipe_book.visible = active and _held_item == &"recipe_book"
+		held_recipe_book_closed.visible = not active and _held_item == &"recipe_book"
+	else:
+		if active:
+			held_recipe_book.visible = true
+			held_recipe_book_closed.visible = false
+			held_recipe_book.position = target_position
+			held_recipe_book.rotation = target_rotation
+			held_recipe_book.scale = Vector3(0.06, target_scale.y, target_scale.z)
+		_recipe_book_read_tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		_recipe_book_read_tween.set_parallel(true)
+		_recipe_book_read_tween.tween_property(held_recipe_book, "position", target_position, 0.22)
+		_recipe_book_read_tween.tween_property(held_recipe_book, "rotation", target_rotation, 0.22)
+		_recipe_book_read_tween.tween_property(held_recipe_book, "scale", target_scale if active else Vector3(0.06, target_scale.y, target_scale.z), 0.22)
+		if not active:
+			_recipe_book_read_tween.chain().tween_callback(func() -> void:
+				held_recipe_book.visible = false
+				held_recipe_book.scale = target_scale
+				held_recipe_book_closed.visible = _held_item == &"recipe_book"
+				right_hand.visible = _held_item == &"recipe_book"
+			)
+	right_hand.visible = immediate and not active and _held_item == &"recipe_book"
+
+
+func _equip_inventory_slot(slot_index: int) -> bool:
+	if slot_index < 0 or slot_index >= _inventory_slots.size():
+		return false
+	var item_type := _inventory_slots[slot_index]
+	if _selected_inventory_slot == 0 and not _flashlight_holstered:
+		_flashlight_was_on = flashlight.visible
+	flashlight.visible = false
+	hand_rig.visible = false
+	_hide_all_held_visuals()
+	_held_item = &""
+	_selected_inventory_slot = slot_index
+	if item_type.is_empty():
+		_flashlight_holstered = true
+	elif item_type == &"flashlight":
+		if not _flashlight_available:
+			_update_inventory_ui()
+			return false
+		_flashlight_holstered = false
 		hand_rig.visible = true
 		flashlight.visible = _flashlight_was_on
-	holster_sound.pitch_scale = randf_range(0.97, 1.03)
-	holster_sound.play()
+	else:
+		_flashlight_holstered = true
+		_held_item = item_type
+		right_hand.visible = true
+		match item_type:
+			&"can": held_can.visible = true
+			&"bottle": held_bottle.visible = true
+			&"plunger": held_plunger.visible = true
+			&"crowbar": held_crowbar.visible = true
+			&"note":
+				held_note.visible = true
+				_configure_held_note(_inventory_item_data[slot_index])
+			&"recipe_book":
+				held_recipe_book.visible = false
+				held_recipe_book_closed.visible = true
+				_configure_held_recipe_book(_inventory_item_data[slot_index])
+	_update_inventory_ui()
+	return true
+
+
+func _find_empty_inventory_slot() -> int:
+	for index in range(1, _inventory_slots.size()):
+		if _inventory_slots[index].is_empty():
+			return index
+	return -1
+
+
+func can_store_inventory_item() -> bool:
+	return _find_empty_inventory_slot() >= 0
+
+
+func _store_inventory_item(item_type: StringName, item_data: Dictionary = {}) -> bool:
+	var slot_index := _find_empty_inventory_slot()
+	if slot_index < 0:
+		return false
+	_inventory_slots[slot_index] = item_type
+	_inventory_item_data[slot_index] = item_data.duplicate(true)
+	return _equip_inventory_slot(slot_index)
+
+
+func _clear_inventory_item(item_type: StringName) -> bool:
+	if (
+		_selected_inventory_slot > 0
+		and _selected_inventory_slot < _inventory_slots.size()
+		and _inventory_slots[_selected_inventory_slot] == item_type
+	):
+		_inventory_slots[_selected_inventory_slot] = &""
+		_inventory_item_data[_selected_inventory_slot] = {}
+		_update_inventory_ui()
+		return true
+	for index in range(1, _inventory_slots.size()):
+		if _inventory_slots[index] == item_type:
+			_inventory_slots[index] = &""
+			_inventory_item_data[index] = {}
+			_update_inventory_ui()
+			return true
+	return false
+
+
+func _return_to_flashlight_slot() -> void:
+	if _flashlight_available and _inventory_slots[0] == &"flashlight":
+		_selected_inventory_slot = 0
+		_held_item = &""
+		_hide_all_held_visuals()
+		flashlight.visible = false
+		hand_rig.visible = false
+		_flashlight_holstered = true
+		_update_inventory_ui()
+	else:
+		_held_item = &""
+		_hide_all_held_visuals()
+		_update_inventory_ui()
 
 
 func play_switch_sound() -> void:
@@ -410,7 +660,14 @@ func set_plunger_minigame_pose(active: bool) -> void:
 	if _held_item != &"plunger":
 		return
 	held_plunger.visible = not active
-	left_hand.visible = not active
+	right_hand.visible = not active
+
+
+func set_crowbar_minigame_pose(active: bool) -> void:
+	if _held_item != &"crowbar":
+		return
+	held_crowbar.visible = not active
+	right_hand.visible = not active
 
 
 func _update_footsteps(_delta: float, input_vector: Vector2, is_sprinting: bool) -> void:
@@ -462,6 +719,7 @@ func _try_interact(pressed_key: Key) -> bool:
 
 
 func _update_interaction_prompt() -> void:
+	note_controls_prompt.visible = false
 	if is_instance_valid(_ladder_controller):
 		interaction_prompt.visible = true
 		interaction_prompt.text = "F  SOLTAR ESCALERA"
@@ -470,6 +728,16 @@ func _update_interaction_prompt() -> void:
 		interaction_prompt.visible = true
 		interaction_prompt.text = "F  SOLTAR ANDADOR"
 		return
+	if _held_item == &"note":
+		interaction_prompt.visible = false
+		note_controls_prompt.visible = true
+		note_controls_prompt.text = "G  SOLTAR NOTA    RMB  %s" % ("CERRAR" if _note_reading else "AMPLIAR")
+		return
+	if _held_item == &"recipe_book":
+		interaction_prompt.visible = false
+		note_controls_prompt.visible = true
+		note_controls_prompt.text = "G  SOLTAR LIBRO    %s" % ("Q/E  PAGINAS    RMB  CERRAR" if _recipe_book_reading else "RMB  ABRIR")
+		return
 	var target := _get_interactable()
 	interaction_prompt.visible = target != null
 	if target != null:
@@ -477,16 +745,57 @@ func _update_interaction_prompt() -> void:
 
 
 func pick_up_item(item_type: StringName) -> bool:
-	if not _held_item.is_empty() or item_type not in [&"can", &"bottle"]:
+	if item_type not in [&"can", &"bottle"] or not _store_inventory_item(item_type):
 		return false
-	_held_item = item_type
-	left_hand.visible = true
 	var held_visual := held_can if item_type == &"can" else held_bottle
-	held_visual.visible = true
 	held_visual.scale = Vector3.ZERO
 	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(held_visual, "scale", Vector3.ONE, 0.2)
 	return true
+
+
+func pick_up_note(title: String, text: String, paper_color: Color, ink_color: Color) -> bool:
+	var note_data := {
+		"title": title,
+		"text": text,
+		"paper_color": paper_color,
+		"ink_color": ink_color,
+	}
+	if not _store_inventory_item(&"note", note_data):
+		return false
+	held_note.scale = Vector3.ZERO
+	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(held_note, "scale", Vector3.ONE, 0.22)
+	return true
+
+
+func _configure_held_note(data: Dictionary) -> void:
+	if held_note.has_method(&"configure_note"):
+		held_note.call(&"configure_note", data)
+
+
+func pick_up_recipe_book(data: Dictionary) -> bool:
+	if not _store_inventory_item(&"recipe_book", data):
+		return false
+	held_recipe_book.scale = Vector3.ZERO
+	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(held_recipe_book, "scale", _held_recipe_book_rest_transform.basis.get_scale(), 0.24)
+	return true
+
+
+func _configure_held_recipe_book(data: Dictionary) -> void:
+	if held_recipe_book.has_method(&"configure_book"):
+		held_recipe_book.call(&"configure_book", data)
+	if held_recipe_book_closed.has_method(&"configure_book"):
+		held_recipe_book_closed.call(&"configure_book", data)
+
+
+func _turn_recipe_book_pages(direction: int) -> void:
+	if _held_item != &"recipe_book" or not held_recipe_book.has_method(&"turn_pages"):
+		return
+	var new_page_index := int(held_recipe_book.call(&"turn_pages", direction))
+	if _selected_inventory_slot > 0 and _selected_inventory_slot < _inventory_item_data.size():
+		_inventory_item_data[_selected_inventory_slot]["page_index"] = new_page_index
 
 
 func pick_up_can() -> bool:
@@ -508,7 +817,12 @@ func is_holding_item_type(item_type: StringName) -> bool:
 func begin_moving_walker(walker: Node3D) -> bool:
 	if walker == null or is_instance_valid(_walker_controller) or is_instance_valid(_ladder_controller) or not _held_item.is_empty():
 		return false
-	_drop_flashlight()
+	_walker_flashlight_was_drawn = _selected_inventory_slot == 0 and _flashlight_available and not _flashlight_holstered
+	if _walker_flashlight_was_drawn:
+		_flashlight_was_on = flashlight.visible
+		flashlight.visible = false
+		hand_rig.visible = false
+		_flashlight_holstered = true
 	_walker_controller = walker
 	_jump_phase = JumpPhase.IDLE
 	velocity = Vector3.ZERO
@@ -530,6 +844,9 @@ func end_moving_walker(walker: Node3D) -> void:
 	remove_collision_exception_with(walker)
 	_walker_controller = null
 	velocity = Vector3.ZERO
+	if _walker_flashlight_was_drawn and _flashlight_available:
+		_equip_inventory_slot(0)
+	_walker_flashlight_was_drawn = false
 
 
 func begin_climbing_ladder(ladder: Node3D) -> bool:
@@ -568,12 +885,8 @@ func end_climbing_ladder(ladder: Node3D, launch_velocity := Vector3.ZERO) -> voi
 
 
 func pick_up_plunger() -> bool:
-	if not _held_item.is_empty():
+	if not _store_inventory_item(&"plunger"):
 		return false
-	_drop_flashlight()
-	_held_item = &"plunger"
-	left_hand.visible = true
-	held_plunger.visible = true
 	held_plunger.scale = Vector3.ZERO
 	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(held_plunger, "scale", Vector3(0.72, 0.72, 0.72), 0.24)
@@ -581,13 +894,9 @@ func pick_up_plunger() -> bool:
 
 
 func pick_up_crowbar() -> bool:
-	if not _held_item.is_empty():
+	if not _store_inventory_item(&"crowbar"):
 		return false
-	_drop_flashlight()
 	add_tool(&"crowbar")
-	_held_item = &"crowbar"
-	left_hand.visible = true
-	held_crowbar.visible = true
 	held_crowbar.scale = Vector3.ONE * 0.03
 	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(held_crowbar, "scale", Vector3(0.58, 0.58, 0.58), 0.24)
@@ -597,30 +906,97 @@ func pick_up_crowbar() -> bool:
 func consume_held_item(item_type: StringName) -> bool:
 	if _held_item != item_type:
 		return false
+	_clear_inventory_item(item_type)
+	_tool_inventory.erase(item_type)
 	_held_item = &""
 	if item_type == &"plunger":
 		held_plunger.visible = false
 	elif item_type == &"crowbar":
 		held_crowbar.visible = false
-	left_hand.visible = false
+	right_hand.visible = false
+	_return_to_flashlight_slot()
 	return true
 
 
 func recover_flashlight(was_on: bool) -> bool:
-	if _flashlight_available or not _held_item.is_empty():
+	if _flashlight_available:
 		return false
 	_flashlight_available = true
-	_flashlight_holstered = false
 	_flashlight_was_on = was_on
-	hand_rig.visible = true
-	flashlight.visible = was_on
+	_inventory_slots[0] = &"flashlight"
+	_flashlight_holstered = true
+	flashlight.visible = false
+	hand_rig.visible = false
+	_update_inventory_ui()
 	return true
+
+
+func _drop_selected_inventory_item() -> void:
+	if _selected_inventory_slot < 0 or _selected_inventory_slot >= _inventory_slots.size():
+		return
+	var item_type := _inventory_slots[_selected_inventory_slot]
+	var item_data := _inventory_item_data[_selected_inventory_slot].duplicate(true)
+	if item_type.is_empty():
+		return
+	if item_type == &"flashlight":
+		_drop_flashlight()
+		return
+
+	var scene_root := get_tree().current_scene
+	if scene_root == null:
+		return
+	var forward := -camera.global_basis.z.normalized()
+	forward.y = 0.0
+	if forward.length_squared() < 0.01:
+		forward = -global_basis.z.normalized()
+	else:
+		forward = forward.normalized()
+	var drop_position := global_position + forward * 0.7 + Vector3.UP * 0.12
+
+	if item_type == &"note":
+		var dropped_note := DroppedNoteScene.instantiate() as RigidBody3D
+		scene_root.add_child(dropped_note)
+		if dropped_note.has_method(&"configure_note"):
+			dropped_note.call(&"configure_note", item_data)
+		dropped_note.global_position = camera.global_position + (-camera.global_basis.z.normalized()) * 0.62 + Vector3.DOWN * 0.12
+		dropped_note.global_basis = camera.global_basis
+		dropped_note.linear_velocity = velocity * 0.18 + (-camera.global_basis.z.normalized()) * 0.32 + Vector3.UP * 0.12
+		dropped_note.angular_velocity = Vector3(randf_range(-0.7, 0.7), randf_range(-0.35, 0.35), randf_range(-0.9, 0.9))
+	elif item_type == &"recipe_book":
+		var dropped_book := DroppedRecipeBookScene.instantiate() as RigidBody3D
+		scene_root.add_child(dropped_book)
+		if dropped_book.has_method(&"configure_book"):
+			dropped_book.call(&"configure_book", item_data)
+		dropped_book.global_position = drop_position + Vector3.UP * 0.34
+		dropped_book.global_rotation = Vector3(0.08, rotation.y, -0.12)
+		dropped_book.linear_velocity = velocity * 0.12 + forward * 0.2
+		dropped_book.angular_velocity = Vector3(randf_range(-0.4, 0.4), randf_range(-0.35, 0.35), randf_range(-0.5, 0.5))
+	elif item_type in [&"can", &"bottle"]:
+		var dropped_scene: PackedScene = ThrownCanScene if item_type == &"can" else ThrownBottleScene
+		var dropped_item := dropped_scene.instantiate() as RigidBody3D
+		scene_root.add_child(dropped_item)
+		dropped_item.global_position = drop_position + Vector3.UP * 0.32
+		dropped_item.global_rotation = Vector3(0.08, rotation.y, -0.18)
+		dropped_item.linear_velocity = Vector3.ZERO
+		dropped_item.angular_velocity = Vector3.ZERO
+		if item_type == &"bottle" and dropped_item.has_method(&"set_dropped_safely"):
+			dropped_item.call(&"set_dropped_safely")
+	else:
+		var pickup_scene: PackedScene = PlungerPickupScene if item_type == &"plunger" else CrowbarPickupScene
+		var dropped_pickup := pickup_scene.instantiate() as Node3D
+		scene_root.add_child(dropped_pickup)
+		dropped_pickup.global_position = drop_position
+		dropped_pickup.rotation = Vector3(0.0, rotation.y, 0.12 if item_type == &"crowbar" else 0.0)
+
+	_clear_inventory_item(item_type)
+	_tool_inventory.erase(item_type)
+	_return_to_flashlight_slot()
 
 
 func _drop_flashlight() -> void:
 	if not _flashlight_available:
 		return
-	var was_on := flashlight.visible
+	var was_on := flashlight.visible if not _flashlight_holstered else _flashlight_was_on
 	var dropped := DroppedFlashlightScene.instantiate() as RigidBody3D
 	get_tree().current_scene.add_child(dropped)
 	var forward := -camera.global_basis.z.normalized()
@@ -632,10 +1008,12 @@ func _drop_flashlight() -> void:
 	dropped.angular_velocity = Vector3.ZERO
 	dropped.call(&"set_light_enabled", was_on)
 	_flashlight_available = false
+	_inventory_slots[0] = &""
 	_flashlight_holstered = true
 	_flashlight_was_on = was_on
 	flashlight.visible = false
 	hand_rig.visible = false
+	_update_inventory_ui()
 
 
 func add_key(key_id: StringName) -> bool:
@@ -663,22 +1041,25 @@ func has_tool(tool_id: StringName) -> bool:
 func _throw_held_item() -> void:
 	if _held_item.is_empty():
 		return
-	if _held_item == &"plunger":
+	if _held_item not in [&"can", &"bottle"]:
 		return
-	var thrown_scene: PackedScene = ThrownCanScene if _held_item == &"can" else ThrownBottleScene
+	var thrown_type := _held_item
+	var thrown_scene: PackedScene = ThrownCanScene if thrown_type == &"can" else ThrownBottleScene
+	_clear_inventory_item(thrown_type)
 	_held_item = &""
 	held_can.visible = false
 	held_bottle.visible = false
-	left_hand.visible = false
+	right_hand.visible = false
 	var thrown_item := thrown_scene.instantiate() as RigidBody3D
 	get_tree().current_scene.add_child(thrown_item)
 	var forward := -camera.global_basis.z.normalized()
-	var left := -camera.global_basis.x.normalized()
-	thrown_item.global_position = camera.global_position + forward * 0.68 + left * 0.13
+	var right := camera.global_basis.x.normalized()
+	thrown_item.global_position = camera.global_position + forward * 0.68 + right * 0.13
 	thrown_item.global_rotation = Vector3(0.15, rotation.y, -0.25)
 	thrown_item.linear_velocity = velocity * 0.35
 	thrown_item.apply_central_impulse(forward * can_throw_force + Vector3.UP * can_throw_upward_force)
 	thrown_item.apply_torque_impulse(Vector3(0.45, 0.8, -0.55))
+	_return_to_flashlight_slot()
 
 func _request_stance(target_stance: Stance) -> void:
 	if _stance_transition_timer > 0.0 or target_stance == _stance:

@@ -10,8 +10,8 @@ var _is_open := false
 
 func _process(delta: float) -> void:
 	var target_angle := deg_to_rad(open_angle_degrees) if _is_open else 0.0
-	left_door.rotation.y = lerp_angle(left_door.rotation.y, -target_angle, minf(delta * opening_speed, 1.0))
-	right_door.rotation.y = lerp_angle(right_door.rotation.y, target_angle, minf(delta * opening_speed, 1.0))
+	left_door.rotation.y = lerp_angle(left_door.rotation.y, target_angle, minf(delta * opening_speed, 1.0))
+	right_door.rotation.y = lerp_angle(right_door.rotation.y, -target_angle, minf(delta * opening_speed, 1.0))
 
 func get_interaction_text(_player: Node = null) -> String:
 	return "F  CERRAR ARMARIO" if _is_open else "F  ABRIR ARMARIO"

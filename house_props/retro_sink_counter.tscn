@@ -1,11 +1,25 @@
 [gd_scene format=3 uid="uid://cyjgii5dmtwrp"]
 
+[ext_resource type="Script" uid="uid://c7di1psgb3n2b" path="res://house_props/double_cabinet_doors.gd" id="1_doors"]
+
+[sub_resource type="StandardMaterial3D" id="inside"]
+albedo_color = Color(0.135, 0.14, 0.115, 1)
+roughness = 0.96
+
+[sub_resource type="BoxMesh" id="inside_box"]
+material = SubResource("inside")
+
 [sub_resource type="StandardMaterial3D" id="cream"]
 albedo_color = Color(0.72, 0.69, 0.59, 1)
 roughness = 0.74
 
 [sub_resource type="BoxMesh" id="cream_box"]
 material = SubResource("cream")
+size = Vector3(1.0300293, 1.4569092, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fhnbp"]
+material = SubResource("cream")
+size = Vector3(1.0300293, 1.4422607, 1)
 
 [sub_resource type="StandardMaterial3D" id="metal"]
 albedo_color = Color(0.46, 0.48, 0.45, 1)
@@ -26,8 +40,13 @@ ring_segments = 16
 albedo_color = Color(0.34, 0.42, 0.35, 1)
 roughness = 0.68
 
-[sub_resource type="BoxMesh" id="sage_box"]
+[sub_resource type="BoxMesh" id="BoxMesh_urirg"]
 material = SubResource("sage")
+size = Vector3(1.0925293, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sagdk"]
+material = SubResource("sage")
+size = Vector3(1.0776367, 1, 1)
 
 [sub_resource type="CylinderMesh" id="faucet"]
 material = SubResource("metal")
@@ -43,14 +62,48 @@ bottom_radius = 0.055
 height = 0.05
 radial_segments = 10
 
+[sub_resource type="StandardMaterial3D" id="blue_plastic"]
+albedo_color = Color(0.08, 0.25, 0.43, 1)
+roughness = 0.76
+
+[sub_resource type="CylinderMesh" id="cleaner_bottle"]
+top_radius = 0.055
+bottom_radius = 0.105
+height = 0.38
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="red_plastic"]
+albedo_color = Color(0.53, 0.055, 0.025, 1)
+roughness = 0.78
+
 [sub_resource type="BoxShape3D" id="collision"]
 size = Vector3(1.6, 1.04, 0.73)
 
 [node name="RetroSinkCounter" type="StaticBody3D" unique_id=279619571]
 editor_description = "Modulo fregadero coordinado con seno metalico, grifo alto, dos mandos y puertas inferiores."
+collision_layer = 3
+script = ExtResource("1_doors")
 
-[node name="CabinetBody" type="MeshInstance3D" parent="." unique_id=1464957536]
-transform = Transform3D(1.5, 0, 0, 0, 0.9, 0, 0, 0, 0.65, 0, 0.48, 0)
+[node name="CabinetInterior" type="Node3D" parent="." unique_id=1566854883]
+
+[node name="DarkBacking" type="MeshInstance3D" parent="CabinetInterior" unique_id=1347972676]
+transform = Transform3D(1.35, 0, 0, 0, 0.72, 0, 0, 0, 0.045, 0, 0.46, 0.28)
+mesh = SubResource("inside_box")
+
+[node name="BottomBoard" type="MeshInstance3D" parent="CabinetInterior" unique_id=228425199]
+transform = Transform3D(1.45, 0, 0, 0, 0.08, 0, 0, 0, 0.6, 0, 0.09, 0)
+mesh = SubResource("cream_box")
+
+[node name="LeftSide" type="MeshInstance3D" parent="CabinetInterior" unique_id=76791822]
+transform = Transform3D(0.08, 0, 0, 0, 0.75, 0, 0, 0, 0.6, -0.73, 0.44329163, 0)
+mesh = SubResource("cream_box")
+
+[node name="RightSide" type="MeshInstance3D" parent="CabinetInterior" unique_id=942514171]
+transform = Transform3D(0.08, 0, 0, 0, 0.75, 0, 0, 0, 0.6, 0.73, 0.43779847, 0)
+mesh = SubResource("BoxMesh_fhnbp")
+
+[node name="TopRail" type="MeshInstance3D" parent="CabinetInterior" unique_id=2146575299]
+transform = Transform3D(1.36, 0, 0, 0, 0.09, 0, 0, 0, 0.56, -0.007802734, 0.8625659, -0.02)
 mesh = SubResource("cream_box")
 
 [node name="CounterTop" type="MeshInstance3D" parent="." unique_id=588917531]
@@ -61,13 +114,19 @@ mesh = SubResource("metal_box")
 transform = Transform3D(1.1, 0, 0, 0, 1, 0, 0, 0, 0.82, -0.2, 1.02, -0.03)
 mesh = SubResource("sink_rim")
 
-[node name="LeftDoor" type="MeshInstance3D" parent="." unique_id=1608650786]
-transform = Transform3D(0.64, 0, 0, 0, 0.67, 0, 0, 0, 0.045, -0.38, 0.48, -0.35)
-mesh = SubResource("sage_box")
+[node name="LeftDoorPivot" type="Node3D" parent="." unique_id=1247693352]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0, -0.35)
 
-[node name="RightDoor" type="MeshInstance3D" parent="." unique_id=26199102]
-transform = Transform3D(0.64, 0, 0, 0, 0.67, 0, 0, 0, 0.045, 0.38, 0.48, -0.35)
-mesh = SubResource("sage_box")
+[node name="LeftDoor" type="MeshInstance3D" parent="LeftDoorPivot" unique_id=1608650786]
+transform = Transform3D(0.64, 0, 0, 0, 0.67, 0, 0, 0, 0.045, 0.34960938, 0.48, 0.025653541)
+mesh = SubResource("BoxMesh_urirg")
+
+[node name="RightDoorPivot" type="Node3D" parent="." unique_id=485209700]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0, -0.35)
+
+[node name="RightDoor" type="MeshInstance3D" parent="RightDoorPivot" unique_id=26199102]
+transform = Transform3D(0.64, 0, 0, 0, 0.67, 0, 0, 0, 0.045, -0.34484375, 0.48, 0.025653541)
+mesh = SubResource("BoxMesh_sagdk")
 
 [node name="FaucetStem" type="MeshInstance3D" parent="." unique_id=822969942]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 1.2, 0.15)
@@ -88,6 +147,36 @@ mesh = SubResource("knob")
 [node name="ColdKnob2" type="MeshInstance3D" parent="." unique_id=335042638]
 transform = Transform3D(0.49779895, 0, 0, 0, 1, 0, 0, 0, 0.51951194, 0.006523654, 1.354558, -0.05354412)
 mesh = SubResource("knob")
+
+[node name="UnderSinkContents" type="Node3D" parent="." unique_id=1277396272]
+
+[node name="DrainPipeVertical" type="MeshInstance3D" parent="UnderSinkContents" unique_id=989020734]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0.63, 0.12)
+mesh = SubResource("faucet")
+
+[node name="DrainTrap" type="MeshInstance3D" parent="UnderSinkContents" unique_id=1666250760]
+transform = Transform3D(-3.8009894e-06, -1.15, 0, 1.05, -4.1629887e-06, 0, 0, 0, 1.05, 0.11, 0.43, 0.1)
+mesh = SubResource("faucet")
+
+[node name="BlueCleaner" type="MeshInstance3D" parent="UnderSinkContents" unique_id=242087687]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.37, 0.29, -0.05)
+material_override = SubResource("blue_plastic")
+mesh = SubResource("cleaner_bottle")
+
+[node name="BlueCap" type="MeshInstance3D" parent="UnderSinkContents" unique_id=303006959]
+transform = Transform3D(0.8, 0, 0, 0, 0.3, 0, 0, 0, 0.8, -0.37, 0.51, -0.05)
+material_override = SubResource("cream")
+mesh = SubResource("knob")
+
+[node name="RedCleaner" type="MeshInstance3D" parent="UnderSinkContents" unique_id=1159667580]
+transform = Transform3D(0.9, 0, 0, 0, 0.92, 0, 0, 0, 0.9, 0.36, 0.29, -0.03)
+material_override = SubResource("red_plastic")
+mesh = SubResource("cleaner_bottle")
+
+[node name="FoldedCleaningCloth" type="MeshInstance3D" parent="UnderSinkContents" unique_id=1709035612]
+transform = Transform3D(0.347483, 0, -0.028730929, 0, 0.055, 0, 0.04189927, 0, 0.23827407, 0.31, 0.16, -0.08)
+material_override = SubResource("sage")
+mesh = SubResource("cream_box")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=685808507]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52, 0)

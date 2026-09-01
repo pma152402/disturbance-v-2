@@ -1,0 +1,65 @@
+[gd_scene load_steps=9 format=3]
+
+[sub_resource type="StandardMaterial3D" id="milk"]
+albedo_color = Color(0.83, 0.88, 0.83, 1)
+roughness = 0.86
+[sub_resource type="StandardMaterial3D" id="blue"]
+albedo_color = Color(0.12, 0.28, 0.48, 1)
+roughness = 0.8
+[sub_resource type="StandardMaterial3D" id="flour"]
+albedo_color = Color(0.72, 0.61, 0.42, 1)
+roughness = 1.0
+[sub_resource type="StandardMaterial3D" id="pasta"]
+albedo_color = Color(0.65, 0.08, 0.025, 1)
+roughness = 0.82
+[sub_resource type="BoxMesh" id="box"]
+[sub_resource type="CylinderMesh" id="cap"]
+material = SubResource("blue")
+top_radius = 0.04
+bottom_radius = 0.04
+height = 0.04
+radial_segments = 8
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(1.05, 0.85, 0.45)
+[sub_resource type="BoxMesh" id="label"]
+material = SubResource("blue")
+
+[node name="KitchenPantryPackages" type="StaticBody3D"]
+editor_description = "Leche, harina y pasta como paquetes separados de despensa antigua."
+[node name="MilkCarton" type="MeshInstance3D" parent="."]
+position = Vector3(-0.34, 0.36, 0)
+scale = Vector3(0.24, 0.7, 0.24)
+mesh = SubResource("box")
+material_override = SubResource("milk")
+[node name="MilkLabel" type="MeshInstance3D" parent="."]
+position = Vector3(-0.34, 0.38, -0.125)
+scale = Vector3(0.18, 0.2, 0.012)
+mesh = SubResource("label")
+[node name="MilkCap" type="MeshInstance3D" parent="."]
+position = Vector3(-0.34, 0.74, 0)
+mesh = SubResource("cap")
+[node name="FlourBag" type="MeshInstance3D" parent="."]
+position = Vector3(0.02, 0.3, 0.01)
+rotation = Vector3(0, 0, -0.04)
+scale = Vector3(0.3, 0.58, 0.22)
+mesh = SubResource("box")
+material_override = SubResource("flour")
+[node name="FlourFold" type="MeshInstance3D" parent="."]
+position = Vector3(0.02, 0.61, 0.01)
+scale = Vector3(0.26, 0.05, 0.2)
+mesh = SubResource("box")
+material_override = SubResource("flour")
+[node name="PastaBox" type="MeshInstance3D" parent="."]
+position = Vector3(0.37, 0.31, 0)
+rotation = Vector3(0, 0, 0.025)
+scale = Vector3(0.24, 0.62, 0.16)
+mesh = SubResource("box")
+material_override = SubResource("pasta")
+[node name="PastaLabel" type="MeshInstance3D" parent="."]
+position = Vector3(0.37, 0.33, -0.085)
+scale = Vector3(0.16, 0.25, 0.012)
+mesh = SubResource("box")
+material_override = SubResource("milk")
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.42, 0)
+shape = SubResource("collision")

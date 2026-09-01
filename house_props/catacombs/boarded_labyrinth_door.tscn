@@ -20,7 +20,7 @@ radial_segments = 7
 
 [node name="BoardedLabyrinthDoor" type="CharacterBody3D" unique_id=1679495732]
 editor_description = "Cuatro tablones clavados bloquean la puerta del laberinto. Requieren la palanca para retirarse."
-collision_layer = 2
+collision_layer = 3
 script = ExtResource("1_script")
 
 [node name="Collision" type="CollisionShape3D" parent="." unique_id=543393554]

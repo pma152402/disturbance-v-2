@@ -1,0 +1,67 @@
+[gd_scene load_steps=10 format=3]
+
+[sub_resource type="StandardMaterial3D" id="ceramic"]
+albedo_color = Color(0.72, 0.64, 0.43, 1)
+roughness = 0.78
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.55, 0.035, 0.025, 1)
+roughness = 0.7
+[sub_resource type="StandardMaterial3D" id="orange"]
+albedo_color = Color(0.9, 0.29, 0.035, 1)
+roughness = 0.86
+[sub_resource type="StandardMaterial3D" id="green"]
+albedo_color = Color(0.25, 0.42, 0.09, 1)
+roughness = 0.82
+[sub_resource type="StandardMaterial3D" id="stem"]
+albedo_color = Color(0.2, 0.09, 0.025, 1)
+roughness = 0.9
+[sub_resource type="CylinderMesh" id="bowl"]
+material = SubResource("ceramic")
+top_radius = 0.42
+bottom_radius = 0.25
+height = 0.18
+radial_segments = 16
+[sub_resource type="SphereMesh" id="fruit"]
+radius = 0.13
+height = 0.25
+radial_segments = 10
+rings = 6
+[sub_resource type="CylinderMesh" id="stem_mesh"]
+material = SubResource("stem")
+top_radius = 0.012
+bottom_radius = 0.015
+height = 0.11
+radial_segments = 6
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(0.9, 0.45, 0.9)
+
+[node name="KitchenFruitBowl" type="StaticBody3D"]
+editor_description = "Frutero de ceramica con manzanas y naranjas separadas."
+[node name="Bowl" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.1, 0)
+mesh = SubResource("bowl")
+[node name="Apple1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.17, 0.28, 0.03)
+mesh = SubResource("fruit")
+material_override = SubResource("red")
+[node name="Stem" type="MeshInstance3D" parent="Apple1"]
+position = Vector3(0, 0.16, 0)
+rotation = Vector3(0, 0, 0.2)
+mesh = SubResource("stem_mesh")
+[node name="Apple2" type="MeshInstance3D" parent="."]
+position = Vector3(0.12, 0.31, 0.1)
+scale = Vector3(1, 1.08, 1)
+mesh = SubResource("fruit")
+material_override = SubResource("green")
+[node name="Orange1" type="MeshInstance3D" parent="."]
+position = Vector3(0.19, 0.25, -0.13)
+mesh = SubResource("fruit")
+material_override = SubResource("orange")
+[node name="Orange2" type="MeshInstance3D" parent="."]
+position = Vector3(-0.08, 0.39, -0.12)
+scale = Vector3(0.92, 0.92, 0.92)
+mesh = SubResource("fruit")
+material_override = SubResource("orange")
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.22, 0)
+shape = SubResource("collision")

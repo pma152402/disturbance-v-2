@@ -1,0 +1,169 @@
+[gd_scene format=3 uid="uid://mqwlcrku7kam"]
+
+[ext_resource type="Script" uid="uid://bgpxedl2b42by" path="res://house_props/recipe_book_visual.gd" id="1_script"]
+[ext_resource type="FontFile" uid="uid://b60wwt30lnp8h" path="res://assets/fonts/PressStart2P-Regular.ttf" id="2_font"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bdamg"]
+albedo_color = Color(0.28, 0.055, 0.038, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="Material_cover"]
+albedo_color = Color(0.28, 0.055, 0.038, 1)
+roughness = 0.88
+
+[sub_resource type="BoxMesh" id="Mesh_cover"]
+material = SubResource("Material_cover")
+size = Vector3(0.59, 0.015, 0.43)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ul0t"]
+albedo_color = Color(0.28, 0.055, 0.038, 1)
+roughness = 0.88
+
+[sub_resource type="BoxMesh" id="Mesh_spine"]
+material = SubResource("Material_cover")
+size = Vector3(0.035, 0.035, 0.43)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qi21e"]
+albedo_color = Color(0.82, 0.75, 0.58, 1)
+
+[sub_resource type="StandardMaterial3D" id="Material_paper"]
+albedo_color = Color(0.82, 0.75, 0.58, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_page"]
+material = SubResource("Material_paper")
+size = Vector3(0.278, 0.008, 0.395)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q4tmy"]
+albedo_color = Color(0.82, 0.75, 0.58, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ykosf"]
+albedo_color = Color(0.82, 0.75, 0.58, 1)
+
+[node name="RecipeBookVisual" type="Node3D" unique_id=551794116]
+script = ExtResource("1_script")
+
+[node name="BottomCover" type="MeshInstance3D" parent="." unique_id=248064121]
+transform = Transform3D(-0.99995244, -0.004773788, 0.0085013695, -0.008600674, 0.8425849, -0.5384947, -0.0045924634, -0.5385422, -0.8425859, -0.047559194, -0.012663648, 0.018849105)
+material_override = SubResource("StandardMaterial3D_bdamg")
+mesh = SubResource("Mesh_cover")
+
+[node name="Spine" type="MeshInstance3D" parent="." unique_id=1731095292]
+transform = Transform3D(-0.9994514, -0.004493297, 0.007719852, -0.008596364, 0.7930776, -0.48899174, -0.0045901625, -0.50689936, -0.7651283, -0.04767376, -0.008836399, 0.013204738)
+material_override = SubResource("StandardMaterial3D_8ul0t")
+mesh = SubResource("Mesh_spine")
+
+[node name="LeftPage" type="Node3D" parent="." unique_id=1405844136]
+transform = Transform3D(0.9996875, 0.024997396, 0, -0.024997396, 0.9996875, 0, 0, 0, 1, -0.143, 0, 0)
+
+[node name="Paper" type="MeshInstance3D" parent="LeftPage" unique_id=1519731377]
+transform = Transform3D(-0.99846697, -0.050809674, 0.021959677, -0.054636553, 0.8410991, -0.5381141, 0.008871125, -0.5384886, -0.84258616, 0.23818028, 0.009689689, 0.009812066)
+material_override = SubResource("StandardMaterial3D_qi21e")
+mesh = SubResource("Mesh_page")
+
+[node name="Title" type="Label3D" parent="LeftPage/Paper"]
+position = Vector3(0, 0.0045, -0.145)
+rotation = Vector3(-1.5707963, 0, 0)
+pixel_size = 0.000975
+modulate = Color(0.07, 0.045, 0.025, 1)
+text = "RECETAS"
+font = ExtResource("2_font")
+font_size = 22
+outline_size = 0
+autowrap_mode = 3
+width = 270.0
+horizontal_alignment = 1
+
+[node name="Body" type="Label3D" parent="LeftPage/Paper"]
+position = Vector3(0, 0.0045, -0.005)
+rotation = Vector3(-1.5707963, 0, 0)
+pixel_size = 0.0009
+modulate = Color(0.07, 0.045, 0.025, 1)
+font = ExtResource("2_font")
+font_size = 20
+outline_size = 0
+autowrap_mode = 3
+width = 270.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RightPage" type="Node3D" parent="." unique_id=2128725630]
+transform = Transform3D(0.9996875, -0.024997396, 0, 0.024997396, 0.9996875, 0, 0, 0, 1, 0.143, 0, 0)
+
+[node name="Paper" type="MeshInstance3D" parent="RightPage" unique_id=1205925094]
+transform = Transform3D(-0.9991354, 0.041278817, -0.004962258, 0.037451938, 0.8417676, -0.538539, -0.01805318, -0.538259, -0.8425859, -0.33350217, 0.009612674, 0.008498623)
+material_override = SubResource("StandardMaterial3D_q4tmy")
+mesh = SubResource("Mesh_page")
+
+[node name="Title" type="Label3D" parent="RightPage/Paper"]
+position = Vector3(0, 0.0045, -0.145)
+rotation = Vector3(-1.5707963, 0, 0)
+pixel_size = 0.000975
+modulate = Color(0.07, 0.045, 0.025, 1)
+font = ExtResource("2_font")
+font_size = 22
+outline_size = 0
+autowrap_mode = 3
+width = 270.0
+horizontal_alignment = 1
+
+[node name="Body" type="Label3D" parent="RightPage/Paper"]
+position = Vector3(0, 0.0045, -0.005)
+rotation = Vector3(-1.5707963, 0, 0)
+pixel_size = 0.0009
+modulate = Color(0.07, 0.045, 0.025, 1)
+font = ExtResource("2_font")
+font_size = 20
+outline_size = 0
+autowrap_mode = 3
+width = 270.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PageCounter" type="Label3D" parent="RightPage/Paper"]
+position = Vector3(0, 0.0048, 0.174)
+rotation = Vector3(-1.5707963, 0, 0)
+pixel_size = 0.0007
+modulate = Color(0.07, 0.045, 0.025, 1)
+text = "1-2 / 6"
+font = ExtResource("2_font")
+font_size = 14
+outline_size = 0
+width = 270.0
+horizontal_alignment = 1
+
+[node name="TurningPage" type="Node3D" parent="." unique_id=1033803259]
+position = Vector3(0, 0.004, 0)
+visible = false
+
+[node name="PaperRoot" type="Node3D" parent="TurningPage" unique_id=914163666]
+position = Vector3(0.143, 0, 0)
+
+[node name="Paper" type="MeshInstance3D" parent="TurningPage/PaperRoot" unique_id=1145959927]
+material_override = SubResource("StandardMaterial3D_ykosf")
+mesh = SubResource("Mesh_page")
+
+[node name="Title" type="Label3D" parent="TurningPage/PaperRoot/Paper"]
+position = Vector3(0, 0.0045, -0.145)
+rotation = Vector3(-1.5707963, 0, 0)
+pixel_size = 0.000975
+modulate = Color(0.07, 0.045, 0.025, 1)
+text = "RECETA"
+font = ExtResource("2_font")
+font_size = 22
+outline_size = 0
+autowrap_mode = 3
+width = 270.0
+horizontal_alignment = 1
+
+[node name="Body" type="Label3D" parent="TurningPage/PaperRoot/Paper"]
+position = Vector3(0, 0.0045, -0.005)
+rotation = Vector3(-1.5707963, 0, 0)
+pixel_size = 0.0009
+modulate = Color(0.07, 0.045, 0.025, 1)
+font = ExtResource("2_font")
+font_size = 20
+outline_size = 0
+autowrap_mode = 3
+width = 270.0
+horizontal_alignment = 1
+vertical_alignment = 1

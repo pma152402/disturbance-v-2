@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://house_props/recipe_book_closed_visual.gd" id="1_script"]
+[ext_resource type="FontFile" uid="uid://b60wwt30lnp8h" path="res://assets/fonts/PressStart2P-Regular.ttf" id="2_font"]
+
+[sub_resource type="StandardMaterial3D" id="Material_cover"]
+albedo_color = Color(0.28, 0.055, 0.038, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="Material_pages"]
+albedo_color = Color(0.82, 0.75, 0.58, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_cover"]
+material = SubResource("Material_cover")
+size = Vector3(0.46, 0.025, 0.64)
+
+[sub_resource type="BoxMesh" id="Mesh_pages"]
+material = SubResource("Material_pages")
+size = Vector3(0.425, 0.09, 0.59)
+
+[sub_resource type="BoxMesh" id="Mesh_spine"]
+material = SubResource("Material_cover")
+size = Vector3(0.038, 0.15, 0.64)
+
+[node name="RecipeBookClosedVisual" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="BottomCover" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.0125, 0)
+mesh = SubResource("Mesh_cover")
+
+[node name="Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.075, 0)
+mesh = SubResource("Mesh_pages")
+
+[node name="TopCover" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.1375, 0)
+mesh = SubResource("Mesh_cover")
+
+[node name="Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.211, 0.075, 0)
+mesh = SubResource("Mesh_spine")
+
+[node name="Title" type="Label3D" parent="."]
+position = Vector3(0.018, 0.152, 0)
+rotation = Vector3(-1.5707963, 0, 0)
+pixel_size = 0.00082
+modulate = Color(0.88, 0.72, 0.38, 1)
+text = "RECETAS"
+font = ExtResource("2_font")
+font_size = 23
+outline_size = 0
+width = 450.0
+horizontal_alignment = 1

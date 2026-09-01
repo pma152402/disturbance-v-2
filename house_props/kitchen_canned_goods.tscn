@@ -1,0 +1,79 @@
+[gd_scene load_steps=9 format=3]
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.48, 0.5, 0.47, 1)
+metallic = 0.72
+roughness = 0.34
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.58, 0.045, 0.025, 1)
+roughness = 0.77
+[sub_resource type="StandardMaterial3D" id="green"]
+albedo_color = Color(0.19, 0.34, 0.12, 1)
+roughness = 0.8
+[sub_resource type="StandardMaterial3D" id="yellow"]
+albedo_color = Color(0.72, 0.48, 0.08, 1)
+roughness = 0.82
+[sub_resource type="CylinderMesh" id="can"]
+material = SubResource("metal")
+top_radius = 0.105
+bottom_radius = 0.105
+height = 0.28
+radial_segments = 12
+[sub_resource type="CylinderMesh" id="label"]
+top_radius = 0.108
+bottom_radius = 0.108
+height = 0.19
+radial_segments = 12
+[sub_resource type="TorusMesh" id="rim"]
+material = SubResource("metal")
+inner_radius = 0.086
+outer_radius = 0.108
+rings = 10
+ring_segments = 5
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(0.9, 0.65, 0.55)
+
+[node name="KitchenCannedGoods" type="StaticBody3D"]
+editor_description = "Grupo de conservas antiguas apiladas con etiquetas de distintos colores y bordes metalicos."
+[node name="Can1" type="Node3D" parent="."]
+position = Vector3(-0.25, 0.14, 0.1)
+[node name="Body" type="MeshInstance3D" parent="Can1"]
+mesh = SubResource("can")
+[node name="Label" type="MeshInstance3D" parent="Can1"]
+mesh = SubResource("label")
+material_override = SubResource("red")
+[node name="TopRim" type="MeshInstance3D" parent="Can1"]
+position = Vector3(0, 0.14, 0)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("rim")
+[node name="Can2" type="Node3D" parent="."]
+position = Vector3(0, 0.14, 0.1)
+[node name="Body" type="MeshInstance3D" parent="Can2"]
+mesh = SubResource("can")
+[node name="Label" type="MeshInstance3D" parent="Can2"]
+mesh = SubResource("label")
+material_override = SubResource("green")
+[node name="Can3" type="Node3D" parent="."]
+position = Vector3(0.25, 0.14, 0.1)
+[node name="Body" type="MeshInstance3D" parent="Can3"]
+mesh = SubResource("can")
+[node name="Label" type="MeshInstance3D" parent="Can3"]
+mesh = SubResource("label")
+material_override = SubResource("yellow")
+[node name="Can4" type="Node3D" parent="."]
+position = Vector3(-0.13, 0.43, 0.08)
+[node name="Body" type="MeshInstance3D" parent="Can4"]
+mesh = SubResource("can")
+[node name="Label" type="MeshInstance3D" parent="Can4"]
+mesh = SubResource("label")
+material_override = SubResource("yellow")
+[node name="Can5" type="Node3D" parent="."]
+position = Vector3(0.13, 0.43, 0.08)
+[node name="Body" type="MeshInstance3D" parent="Can5"]
+mesh = SubResource("can")
+[node name="Label" type="MeshInstance3D" parent="Can5"]
+mesh = SubResource("label")
+material_override = SubResource("red")
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.32, 0.08)
+shape = SubResource("collision")

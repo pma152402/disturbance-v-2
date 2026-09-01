@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://bhq6eti3xlyrw"]
+
+[sub_resource type="StandardMaterial3D" id="cardboard"]
+albedo_color = Color(0.48, 0.44, 0.31, 1)
+
+[sub_resource type="BoxMesh" id="box"]
+material = SubResource("cardboard")
+size = Vector3(1, 1.6699219, 1)
+
+[sub_resource type="StandardMaterial3D" id="egg_white"]
+albedo_color = Color(0.88, 0.82, 0.68, 1)
+roughness = 0.86
+
+[sub_resource type="SphereMesh" id="egg"]
+radius = 0.09
+height = 0.2
+radial_segments = 9
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="egg_brown"]
+albedo_color = Color(0.58, 0.34, 0.16, 1)
+roughness = 0.9
+
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(0.78, 0.35, 0.5)
+
+[node name="KitchenEggCarton" type="StaticBody3D" unique_id=1694633601]
+editor_description = "Huevera abierta de carton con seis huevos individualizados."
+
+[node name="CartonBase" type="MeshInstance3D" parent="." unique_id=1825092418]
+transform = Transform3D(0.76, 0, 0, 0, 0.08, 0, 0, 0, 0.46, 0, 0.023203127, 0)
+mesh = SubResource("box")
+
+[node name="Lid" type="MeshInstance3D" parent="." unique_id=1058232244]
+transform = Transform3D(0.76, 0, 0, 0, 0.03980419, 0.24207456, 0, -0.03025932, 0.31843352, 0, 0.14872962, 0.28)
+mesh = SubResource("box")
+
+[node name="Egg1" type="MeshInstance3D" parent="." unique_id=1473402088]
+transform = Transform3D(1, 0, 0, 0, 1.28, 0, 0, 0, 1, -0.25, 0.08560796, -0.14084832)
+material_override = SubResource("egg_white")
+mesh = SubResource("egg")
+
+[node name="Egg2" type="MeshInstance3D" parent="." unique_id=872699461]
+transform = Transform3D(1, 0, 0, 0, 1.28, 0, 0, 0, 1, 0, 0.08560796, -0.14084832)
+material_override = SubResource("egg_brown")
+mesh = SubResource("egg")
+
+[node name="Egg3" type="MeshInstance3D" parent="." unique_id=429770781]
+transform = Transform3D(1, 0, 0, 0, 1.28, 0, 0, 0, 1, 0.25, 0.08560796, -0.14084832)
+material_override = SubResource("egg_white")
+mesh = SubResource("egg")
+
+[node name="Egg4" type="MeshInstance3D" parent="." unique_id=1810331536]
+transform = Transform3D(1, 0, 0, 0, 1.28, 0, 0, 0, 1, -0.25, 0.08560796, 0.079151675)
+material_override = SubResource("egg_brown")
+mesh = SubResource("egg")
+
+[node name="Egg5" type="MeshInstance3D" parent="." unique_id=1900137146]
+transform = Transform3D(1, 0, 0, 0, 1.28, 0, 0, 0, 1, 0, 0.08560796, 0.079151675)
+material_override = SubResource("egg_white")
+mesh = SubResource("egg")
+
+[node name="Egg6" type="MeshInstance3D" parent="." unique_id=1654251702]
+transform = Transform3D(1, 0, 0, 0, 1.28, 0, 0, 0, 1, 0.25, 0.08560796, 0.079151675)
+material_override = SubResource("egg_brown")
+mesh = SubResource("egg")
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=424134356]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12099075, 0.08)
+shape = SubResource("collision")

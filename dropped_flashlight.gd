@@ -12,9 +12,7 @@ func get_interaction_key() -> Key:
 	return KEY_F
 
 
-func get_interaction_text(player: Node = null) -> String:
-	if player != null and player.has_method(&"is_holding_item") and player.is_holding_item():
-		return "TIENES LAS MANOS OCUPADAS"
+func get_interaction_text(_player: Node = null) -> String:
 	return "F  COGER LINTERNA"
 
 

@@ -1,0 +1,77 @@
+[gd_scene load_steps=10 format=3]
+
+[sub_resource type="StandardMaterial3D" id="glass"]
+transparency = 1
+albedo_color = Color(0.73, 0.76, 0.68, 0.56)
+roughness = 0.2
+[sub_resource type="StandardMaterial3D" id="lid"]
+albedo_color = Color(0.2, 0.18, 0.14, 1)
+metallic = 0.45
+roughness = 0.45
+[sub_resource type="StandardMaterial3D" id="paprika"]
+albedo_color = Color(0.57, 0.07, 0.02, 1)
+roughness = 0.88
+[sub_resource type="StandardMaterial3D" id="herbs"]
+albedo_color = Color(0.18, 0.27, 0.08, 1)
+roughness = 0.95
+[sub_resource type="StandardMaterial3D" id="rice"]
+albedo_color = Color(0.77, 0.7, 0.52, 1)
+roughness = 0.9
+[sub_resource type="CylinderMesh" id="jar"]
+material = SubResource("glass")
+top_radius = 0.1
+bottom_radius = 0.11
+height = 0.32
+radial_segments = 10
+[sub_resource type="CylinderMesh" id="fill"]
+top_radius = 0.085
+bottom_radius = 0.095
+height = 0.2
+radial_segments = 10
+[sub_resource type="CylinderMesh" id="lid_mesh"]
+material = SubResource("lid")
+top_radius = 0.11
+bottom_radius = 0.11
+height = 0.055
+radial_segments = 10
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(0.82, 0.48, 0.36)
+
+[node name="KitchenSpiceJarSet" type="StaticBody3D"]
+editor_description = "Tres tarros de despensa de cristal con pimenton, hierbas y arroz."
+[node name="PaprikaJar" type="Node3D" parent="."]
+position = Vector3(-0.25, 0.16, 0)
+[node name="Glass" type="MeshInstance3D" parent="PaprikaJar"]
+mesh = SubResource("jar")
+[node name="Contents" type="MeshInstance3D" parent="PaprikaJar"]
+position = Vector3(0, -0.04, 0)
+mesh = SubResource("fill")
+material_override = SubResource("paprika")
+[node name="Lid" type="MeshInstance3D" parent="PaprikaJar"]
+position = Vector3(0, 0.18, 0)
+mesh = SubResource("lid_mesh")
+[node name="HerbJar" type="Node3D" parent="."]
+position = Vector3(0, 0.16, 0)
+[node name="Glass" type="MeshInstance3D" parent="HerbJar"]
+mesh = SubResource("jar")
+[node name="Contents" type="MeshInstance3D" parent="HerbJar"]
+position = Vector3(0, -0.04, 0)
+mesh = SubResource("fill")
+material_override = SubResource("herbs")
+[node name="Lid" type="MeshInstance3D" parent="HerbJar"]
+position = Vector3(0, 0.18, 0)
+mesh = SubResource("lid_mesh")
+[node name="RiceJar" type="Node3D" parent="."]
+position = Vector3(0.25, 0.16, 0)
+[node name="Glass" type="MeshInstance3D" parent="RiceJar"]
+mesh = SubResource("jar")
+[node name="Contents" type="MeshInstance3D" parent="RiceJar"]
+position = Vector3(0, -0.04, 0)
+mesh = SubResource("fill")
+material_override = SubResource("rice")
+[node name="Lid" type="MeshInstance3D" parent="RiceJar"]
+position = Vector3(0, 0.18, 0)
+mesh = SubResource("lid_mesh")
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.24, 0)
+shape = SubResource("collision")

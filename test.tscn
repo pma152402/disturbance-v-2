@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" path="res://runtime_house_navigation.tscn" id="11_runtime_navigation"]
 [ext_resource type="PackedScene" path="res://monster_grandmother.tscn" id="12_monster_grandmother"]
 [ext_resource type="PackedScene" path="res://runtime_catacomb_navigation.tscn" id="13_catacomb_navigation"]
+[ext_resource type="PackedScene" path="res://monster_grandmother_imported.tscn" id="15_imported_grandmother"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_storm"]
 panorama = ExtResource("5_storm_panorama")
@@ -124,6 +125,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 8.5)
 [node name="MonsterGrandmother" parent="." instance=ExtResource("12_monster_grandmother")]
 position = Vector3(10.15, 4.35, 8.65)
 rotation = Vector3(0, -1.82, 0)
+
+[node name="ImportedGrandmotherGroundFloor" parent="." instance=ExtResource("15_imported_grandmother")]
+position = Vector3(10.15, 0.95, 8.65)
+rotation = Vector3(0, -1.82, 0)
+remain_still = false
 
 [node name="PS2PostProcess" type="CanvasLayer" parent="." unique_id=13050641]
 layer = 100

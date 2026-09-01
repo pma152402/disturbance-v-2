@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="ArrayMesh" path="res://exterior_tree_mesh.tres" id="2_tree_mesh"]
 [ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera4.jpg" id="3_wood"]
 [ext_resource type="Script" path="res://exterior_environment.gd" id="4_script"]
 [ext_resource type="ArrayMesh" path="res://exterior_grass_mesh.tres" id="5_grass_mesh"]
 [ext_resource type="PackedScene" path="res://house_props/large_dead_entry_tree.tscn" id="6_dead_tree"]
+[ext_resource type="PackedScene" path="res://exterior_landscape.tscn" id="7_landscape"]
 
 [sub_resource type="StandardMaterial3D" id="Material_fence"]
 albedo_color = Color(0.28, 0.2, 0.13, 1)
@@ -42,7 +43,7 @@ albedo_color = Color(0.055, 0.115, 0.052, 1)
 roughness = 1.0
 
 [node name="ExteriorEnvironment" type="Node3D"]
-editor_description = "Exterior optimizado: un solo mesh de vallado y 220 arboles instanciados mediante MultiMesh."
+editor_description = "Exterior optimizado: vallado, bosque, vegetacion y paisaje ampliado con puente, arroyo y relieve."
 script = ExtResource("4_script")
 tree_mesh = ExtResource("2_tree_mesh")
 grass_mesh = ExtResource("5_grass_mesh")
@@ -119,3 +120,5 @@ custom_aabb = AABB(-53, 0, -53, 106, 1.2, 106)
 [node name="LargeDeadEntryTree" parent="." instance=ExtResource("6_dead_tree")]
 position = Vector3(-7.8, 0, 20.2)
 rotation = Vector3(0, 0.38, 0)
+
+[node name="Landscape" parent="." instance=ExtResource("7_landscape")]

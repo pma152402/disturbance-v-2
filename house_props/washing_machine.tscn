@@ -1,4 +1,6 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://house_props/washing_machine.gd" id="1_script"]
 
 [sub_resource type="StandardMaterial3D" id="Material_body"]
 albedo_color = Color(0.72, 0.74, 0.72, 1)
@@ -68,6 +70,8 @@ size = Vector3(1.18, 1.52, 1.02)
 
 [node name="WashingMachine" type="StaticBody3D"]
 editor_description = "Lavadora compacta estilo PS2, con puerta, cristal, selector y cajetin separados para poder editarlos."
+collision_layer = 3
+script = ExtResource("1_script")
 
 [node name="Body" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.76, 0)
@@ -104,3 +108,7 @@ mesh = SubResource("Mesh_button")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.76, 0)
 shape = SubResource("Shape_body")
+
+[node name="ControlAudio" type="AudioStreamPlayer3D" parent="."]
+unit_size = 1.5
+max_distance = 9.0

@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://dropped_note.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://house_props/note_paper_visual.tscn" id="2_visual"]
+
+[sub_resource type="BoxShape3D" id="Shape_note"]
+size = Vector3(0.26, 0.3, 0.008)
+
+[node name="DroppedNote" type="RigidBody3D"]
+collision_layer = 3
+collision_mask = 1
+mass = 0.035
+gravity_scale = 0.72
+linear_damp = 0.42
+angular_damp = 1.15
+contact_monitor = true
+max_contacts_reported = 4
+script = ExtResource("1_script")
+
+[node name="PaperVisual" parent="." instance=ExtResource("2_visual")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_note")

@@ -1,68 +1,196 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene format=3 uid="uid://c5h0feik4wva8"]
+
+[ext_resource type="Script" uid="uid://c7di1psgb3n2b" path="res://house_props/double_cabinet_doors.gd" id="1_doors"]
+
+[sub_resource type="StandardMaterial3D" id="inside"]
+albedo_color = Color(0.16, 0.145, 0.11, 1)
+roughness = 0.94
+
+[sub_resource type="BoxMesh" id="inside_box"]
+material = SubResource("inside")
+size = Vector3(1, 1.3276367, 1)
 
 [sub_resource type="StandardMaterial3D" id="cream"]
 albedo_color = Color(0.72, 0.69, 0.59, 1)
 roughness = 0.74
-[sub_resource type="StandardMaterial3D" id="sage"]
-albedo_color = Color(0.34, 0.42, 0.35, 1)
-roughness = 0.7
-[sub_resource type="StandardMaterial3D" id="wood"]
-albedo_color = Color(0.31, 0.19, 0.1, 1)
-roughness = 0.82
+
+[sub_resource type="BoxMesh" id="cream_box"]
+material = SubResource("cream")
+
+[sub_resource type="BoxMesh" id="BoxMesh_vpsaq"]
+material = SubResource("cream")
+size = Vector3(1, 1.2539063, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mmvqq"]
+material = SubResource("cream")
+size = Vector3(1, 1.2423096, 1)
+
 [sub_resource type="StandardMaterial3D" id="top"]
 albedo_color = Color(0.48, 0.43, 0.34, 1)
 roughness = 0.6
-[sub_resource type="BoxMesh" id="cream_box"]
-material = SubResource("cream")
-[sub_resource type="BoxMesh" id="sage_box"]
-material = SubResource("sage")
+
 [sub_resource type="BoxMesh" id="top_box"]
 material = SubResource("top")
+
+[sub_resource type="BoxMesh" id="BoxMesh_vptmb"]
+material = SubResource("top")
+size = Vector3(0.84628296, 1.9654846, 0.85305786)
+
+[sub_resource type="StandardMaterial3D" id="sage"]
+albedo_color = Color(0.34, 0.42, 0.35, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="sage_box"]
+material = SubResource("sage")
+size = Vector3(1.0614624, 1.0258789, 1)
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.31, 0.19, 0.1, 1)
+roughness = 0.82
+
 [sub_resource type="BoxMesh" id="wood_box"]
 material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="BoxMesh_81h4a"]
+material = SubResource("sage")
+size = Vector3(1.0725098, 1.0253906, 1)
+
+[sub_resource type="StandardMaterial3D" id="ceramic"]
+albedo_color = Color(0.78, 0.74, 0.63, 1)
+roughness = 0.72
+
+[sub_resource type="CylinderMesh" id="plate"]
+material = SubResource("ceramic")
+top_radius = 0.18
+bottom_radius = 0.18
+height = 0.025
+radial_segments = 14
+
+[sub_resource type="StandardMaterial3D" id="pot_metal"]
+albedo_color = Color(0.3, 0.31, 0.29, 1)
+metallic = 0.72
+roughness = 0.38
+
+[sub_resource type="CylinderMesh" id="pot"]
+material = SubResource("pot_metal")
+top_radius = 0.18
+bottom_radius = 0.16
+height = 0.22
+radial_segments = 12
+
+[sub_resource type="BoxMesh" id="metal_box"]
+material = SubResource("pot_metal")
 
 [sub_resource type="BoxShape3D" id="collision"]
 size = Vector3(1.56, 1.02, 0.7)
 
-[node name="RetroKitchenCounter" type="StaticBody3D"]
+[node name="RetroKitchenCounter" type="StaticBody3D" unique_id=1853763903]
 editor_description = "Encimera modular antigua con dos puertas, cajon, zocalo, tablero grueso y tiradores."
-[node name="CabinetBody" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.48, 0)
-scale = Vector3(1.45, 0.9, 0.62)
+collision_layer = 3
+script = ExtResource("1_doors")
+
+[node name="CabinetInterior" type="Node3D" parent="." unique_id=81934988]
+
+[node name="DarkBacking" type="MeshInstance3D" parent="CabinetInterior" unique_id=227495299]
+transform = Transform3D(1.3, 0, 0, 0, 0.62, 0, 0, 0, 0.045, 0, 0.5315674, 0.27)
+mesh = SubResource("inside_box")
+
+[node name="BottomBoard" type="MeshInstance3D" parent="CabinetInterior" unique_id=625849133]
+transform = Transform3D(1.4, 0, 0, 0, 0.08, 0, 0, 0, 0.58, 0, 0.11, 0)
 mesh = SubResource("cream_box")
-[node name="CounterTop" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.96, -0.01)
-scale = Vector3(1.56, 0.09, 0.7)
+
+[node name="LeftSide" type="MeshInstance3D" parent="CabinetInterior" unique_id=1297551288]
+transform = Transform3D(0.08, 0, 0, 0, 0.66, 0, 0, 0, 0.58, -0.7, 0.51378906, 0)
+mesh = SubResource("BoxMesh_vpsaq")
+
+[node name="RightSide" type="MeshInstance3D" parent="CabinetInterior" unique_id=2134446539]
+transform = Transform3D(0.08, 0, 0, 0, 0.66, 0, 0, 0, 0.58, 0.7, 0.5099622, 0)
+mesh = SubResource("BoxMesh_mmvqq")
+
+[node name="CenterDivider" type="MeshInstance3D" parent="CabinetInterior" unique_id=650207657]
+transform = Transform3D(0.055, 0, 0, 0, 0.61, 0, 0, 0, 0.52, 0, 0.43, 0.02)
+mesh = SubResource("cream_box")
+
+[node name="Shelf" type="MeshInstance3D" parent="CabinetInterior" unique_id=790090160]
+transform = Transform3D(1.32, 0, 0, 0, 0.045, 0, 0, 0, 0.5, 0, 0.41, 0.02)
+mesh = SubResource("cream_box")
+
+[node name="CounterTop" type="MeshInstance3D" parent="." unique_id=1762997743]
+transform = Transform3D(1.56, 0, 0, 0, 0.09, 0, 0, 0, 0.7, 0, 0.96, -0.01)
 mesh = SubResource("top_box")
-[node name="LeftDoor" type="MeshInstance3D" parent="."]
-position = Vector3(-0.37, 0.42, -0.33)
-scale = Vector3(0.63, 0.58, 0.045)
+
+[node name="CounterTop2" type="MeshInstance3D" parent="." unique_id=806071694]
+transform = Transform3D(1.56, 0, 0, 0, 0.09, 0, 0, 0, 0.7, -0.0009759527, 0.81996995, -0.009754334)
+mesh = SubResource("BoxMesh_vptmb")
+
+[node name="LeftDoorPivot" type="Node3D" parent="." unique_id=1896221421]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.685, 0, -0.33)
+
+[node name="LeftDoor" type="MeshInstance3D" parent="LeftDoorPivot" unique_id=1462220976]
+transform = Transform3D(0.63, 0, 0, 0, 0.58, 0, 0, 0, 0.045, 0.33436066, 0.42750487, 0.006019473)
 mesh = SubResource("sage_box")
-[node name="RightDoor" type="MeshInstance3D" parent="."]
-position = Vector3(0.37, 0.42, -0.33)
-scale = Vector3(0.63, 0.58, 0.045)
-mesh = SubResource("sage_box")
-[node name="TopDrawer" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.78, -0.33)
-scale = Vector3(1.34, 0.18, 0.045)
-mesh = SubResource("cream_box")
-[node name="DrawerHandle" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.78, -0.38)
-scale = Vector3(0.28, 0.035, 0.035)
-mesh = SubResource("wood_box")
-[node name="LeftHandle" type="MeshInstance3D" parent="."]
-position = Vector3(-0.12, 0.48, -0.38)
-scale = Vector3(0.04, 0.18, 0.035)
-mesh = SubResource("wood_box")
-[node name="RightHandle" type="MeshInstance3D" parent="."]
-position = Vector3(0.12, 0.48, -0.38)
-scale = Vector3(0.04, 0.18, 0.035)
-mesh = SubResource("wood_box")
-[node name="Kickboard" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.08, -0.25)
-scale = Vector3(1.3, 0.12, 0.08)
+
+[node name="LeftHandle" type="MeshInstance3D" parent="LeftDoorPivot" unique_id=1145736385]
+transform = Transform3D(0.04, 0, 0, 0, 0.18, 0, 0, 0, 0.035, 0.565, 0.48, -0.04398054)
 mesh = SubResource("wood_box")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.51, -0.01)
+[node name="RightDoorPivot" type="Node3D" parent="." unique_id=1257891767]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.685, 0, -0.33)
+
+[node name="RightDoor" type="MeshInstance3D" parent="RightDoorPivot" unique_id=1320220735]
+transform = Transform3D(0.63, 0, 0, 0, 0.58, 0, 0, 0, 0.045, -0.33784056, 0.42736328, 0.006019473)
+mesh = SubResource("BoxMesh_81h4a")
+
+[node name="RightHandle" type="MeshInstance3D" parent="RightDoorPivot" unique_id=1265281834]
+transform = Transform3D(0.04, 0, 0, 0, 0.18, 0, 0, 0, 0.035, -0.565, 0.48, -0.04398054)
+mesh = SubResource("wood_box")
+
+[node name="TopDrawer" type="MeshInstance3D" parent="." unique_id=2123282068]
+transform = Transform3D(1.34, 0, 0, 0, 0.18, 0, 0, 0, 0.045, 0, 0.8193693, -0.33)
+mesh = SubResource("cream_box")
+
+[node name="DrawerHandle" type="MeshInstance3D" parent="." unique_id=1852381715]
+transform = Transform3D(0.28, 0, 0, 0, 0.035, 0, 0, 0, 0.035, 0, 0.8193693, -0.38)
+mesh = SubResource("wood_box")
+
+[node name="Kickboard" type="MeshInstance3D" parent="." unique_id=1804276460]
+transform = Transform3D(1.3, 0, 0, 0, 0.12, 0, 0, 0, 0.08, 0, 0.08, -0.23322165)
+mesh = SubResource("wood_box")
+
+[node name="Contents" type="Node3D" parent="." unique_id=162651275]
+
+[node name="Plate1" type="MeshInstance3D" parent="Contents" unique_id=773918866]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34, 0.47, -0.05)
+mesh = SubResource("plate")
+
+[node name="Plate2" type="MeshInstance3D" parent="Contents" unique_id=744632224]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34, 0.5, -0.05)
+mesh = SubResource("plate")
+
+[node name="Plate3" type="MeshInstance3D" parent="Contents" unique_id=1363278238]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34, 0.53, -0.05)
+mesh = SubResource("plate")
+
+[node name="SmallPot" type="MeshInstance3D" parent="Contents" unique_id=1507629325]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34, 0.54, 0.02)
+mesh = SubResource("pot")
+
+[node name="PotHandle" type="MeshInstance3D" parent="Contents" unique_id=840549375]
+transform = Transform3D(0.3, 0, 0, 0, 0.045, 0, 0, 0, 0.055, 0.54, 0.56, -0.01)
+mesh = SubResource("metal_box")
+
+[node name="BowlLower" type="MeshInstance3D" parent="Contents" unique_id=996492492]
+transform = Transform3D(0.82, 0, 0, 0, 2.2, 0, 0, 0, 0.82, -0.34, 0.23, 0.02)
+mesh = SubResource("plate")
+
+[node name="PanLower" type="MeshInstance3D" parent="Contents" unique_id=1768191550]
+transform = Transform3D(1.15, 0, 0, 0, 1.8, 0, 0, 0, 1.15, 0.31, 0.25, 0.02)
+mesh = SubResource("plate")
+
+[node name="PanHandle" type="MeshInstance3D" parent="Contents" unique_id=417233079]
+transform = Transform3D(0.33450687, 0, -0.010741775, 0, 0.04, 0, 0.06087006, 0, 0.05903062, 0.53, 0.25, 0.01)
+mesh = SubResource("metal_box")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=542678578]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.51, -0.01)
 shape = SubResource("collision")
