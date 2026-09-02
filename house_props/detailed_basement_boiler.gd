@@ -10,7 +10,8 @@ const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
 enum BoilerState { OFF, RUNNING, CLOGGED }
 
 @export_range(0.0, 100.0, 1.0) var temperature_percent := 0.0
-@export var physical_valve_game_enabled := true
+# true: activa el puzle fisico. false: carga directamente el resultado resuelto.
+var boiler_puzzle_enabled := false
 @export_range(0.1, 10.0, 0.1) var temperature_response_speed := 2.8
 @export_range(1.0, 60.0, 1.0) var needle_spring_strength := 30.0
 @export_range(1.0, 20.0, 0.5) var needle_damping := 8.5
@@ -66,7 +67,12 @@ func _find_primary_smoke_emitter() -> CPUParticles3D:
 func _ready() -> void:
 	_build_gauge_color_sectors()
 	_create_smoke_ramps()
-	_apply_boiler_state()
+	if boiler_puzzle_enabled:
+		_apply_boiler_state()
+	else:
+		# Evita incluso un fotograma de humo antes de localizar las valvulas.
+		temperature_percent = 9.0
+		_set_runtime_boiler_state(BoilerState.OFF)
 	_needle_temperature = temperature_percent
 	_target_temperature = temperature_percent
 	_control_audio = AudioStreamPlayer3D.new()
@@ -74,7 +80,7 @@ func _ready() -> void:
 	_control_audio.volume_db = -3.0
 	_control_audio.stream = GameplaySounds.make_switch_click()
 	add_child(_control_audio)
-	call_deferred(&"_discover_physical_valves")
+	call_deferred(&"_configure_boiler_puzzle")
 
 
 func _exit_tree() -> void:
@@ -91,22 +97,11 @@ func uses_switch_sound() -> bool:
 
 
 func get_interaction_text(_player: Node = null) -> String:
-	if physical_valve_game_enabled:
-		return ""
-	if _minigame_active:
-		return ""
-	if _puzzle_completed:
-		return "CALDERA ESTABLE"
-	return "F  REGULAR CALDERA"
+	return ""
 
 
 func interact(player: Node = null) -> bool:
-	if physical_valve_game_enabled:
-		return false
-	if _minigame_active or _puzzle_completed:
-		return true
-	_start_minigame(player)
-	return true
+	return false
 
 
 func _start_minigame(player: Node) -> void:
@@ -188,9 +183,40 @@ func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		_apply_temperature_to_gauge()
 		return
-	if physical_valve_game_enabled:
+	if boiler_puzzle_enabled:
 		_update_temperature_from_valves(delta)
 	_update_needle_animation(delta)
+
+
+func _configure_boiler_puzzle() -> void:
+	_discover_physical_valves()
+	if not _valves_discovered:
+		return
+	for valve in [_water_valve, _air_intake_valve, _air_outlet_valve]:
+		valve.set("interaction_enabled", boiler_puzzle_enabled)
+	if boiler_puzzle_enabled:
+		_puzzle_completed = false
+		return
+
+	# Estado resuelto: cada rueda apunta exactamente a su valor correcto.
+	for valve in [_water_valve, _air_intake_valve, _air_outlet_valve]:
+		var correct_openness := float(valve.get("correct_percentage")) / 100.0
+		valve.call(&"set_openness", correct_openness, true)
+	var water := float(_water_valve.call(&"get_openness"))
+	var air_intake := float(_air_intake_valve.call(&"get_openness"))
+	var air_outlet := float(_air_outlet_valve.call(&"get_openness"))
+	var solved_temperature := clampf(
+		21.0 + air_intake * 65.0 - water * 30.0 - air_outlet * 25.0,
+		0.0,
+		GREEN_END_PERCENT
+	)
+	temperature_percent = solved_temperature
+	_target_temperature = solved_temperature
+	_needle_temperature = solved_temperature
+	_needle_velocity = 0.0
+	_apply_temperature_to_gauge(_needle_temperature)
+	_set_runtime_boiler_state(BoilerState.OFF)
+	_puzzle_completed = true
 
 
 func _discover_physical_valves() -> void:

@@ -1,5 +1,7 @@
 extends StaticBody3D
 
+const MAX_ACTIVE_WALL_LIGHTS := 3
+
 @export var assigned_lamps: Array[NodePath] = []
 @export var switch_on_sound: AudioStream
 @export var switch_off_sound: AudioStream
@@ -9,8 +11,13 @@ extends StaticBody3D
 
 var _rocker_tween: Tween
 
+# Historial comun para todos los interruptores de pared. Cada entrada es una
+# bombilla, no un interruptor, por lo que un interruptor doble ocupa 2 huecos.
+static var _active_wall_lamps: Array[WeakRef] = []
+
 
 func _ready() -> void:
+	add_to_group(&"wall_light_switches")
 	# Las lamparas terminan su propio _ready primero; despues reflejamos su estado real.
 	call_deferred(&"_sync_rocker_with_lamps")
 
@@ -39,12 +46,46 @@ func interact(player: Node = null) -> bool:
 		return false
 	var now_on := not _are_all_lamps_on(lamps)
 	for lamp: Node in lamps:
-		lamp.call("set_lamp_enabled", now_on)
+		if now_on:
+			_turn_on_and_remember(lamp)
+		else:
+			_forget_lamp(lamp)
+			lamp.call("set_lamp_enabled", false)
 		if now_on and player != null and player.has_method(&"notify_light_switched_on") and lamp is Node3D:
 			player.call(&"notify_light_switched_on", lamp as Node3D)
 	_set_rocker_position(now_on, true)
 	_play_switch_sound(now_on)
+	call_deferred(&"_sync_all_wall_switches")
 	return true
+
+
+func _turn_on_and_remember(lamp: Node) -> void:
+	_forget_lamp(lamp)
+	lamp.call(&"set_lamp_enabled", true)
+	_active_wall_lamps.append(weakref(lamp))
+	_cleanup_light_history()
+	while _active_wall_lamps.size() > MAX_ACTIVE_WALL_LIGHTS:
+		var oldest_ref: WeakRef = _active_wall_lamps.pop_front()
+		var oldest_lamp := oldest_ref.get_ref() as Node
+		if is_instance_valid(oldest_lamp):
+			oldest_lamp.call(&"set_lamp_enabled", false)
+
+
+func _forget_lamp(lamp: Node) -> void:
+	for index in range(_active_wall_lamps.size() - 1, -1, -1):
+		var remembered: Node = _active_wall_lamps[index].get_ref() as Node
+		if not is_instance_valid(remembered) or remembered == lamp:
+			_active_wall_lamps.remove_at(index)
+
+
+func _cleanup_light_history() -> void:
+	for index in range(_active_wall_lamps.size() - 1, -1, -1):
+		if not is_instance_valid(_active_wall_lamps[index].get_ref()):
+			_active_wall_lamps.remove_at(index)
+
+
+func _sync_all_wall_switches() -> void:
+	get_tree().call_group(&"wall_light_switches", &"_sync_rocker_with_lamps")
 
 
 func _sync_rocker_with_lamps() -> void:

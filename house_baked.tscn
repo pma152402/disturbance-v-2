@@ -5533,7 +5533,8 @@ transform = Transform3D(0.74419904, 0, -0.004043728, 0, 0.99999994, 0, 0.0029890
 [node name="DetailedBasementBoiler" parent="." unique_id=802718158 instance=ExtResource("201_basement_boiler")]
 transform = Transform3D(-5.9585044e-08, 0, 1.2063283, 0, 1.2385339, 0, -1.3631469, 0, -5.2730286e-08, -10.513275, -7.3772693, 2.9653254)
 collision_layer = 1
-temperature_percent = 88.0
+temperature_percent = 9.25
+boiler_state = 0
 
 [node name="DetailedBasementBoiler2" parent="." unique_id=2062979178 instance=ExtResource("188_tjyac")]
 transform = Transform3D(1.4014965, 0, 0, 0, 0.004224288, 1.0786486, 0, -1.2922353, 0.0035260783, -10.734894, -3.3787987, 4.822676)
@@ -5568,6 +5569,12 @@ transform = Transform3D(1.4014965, 0, 0, 0, -1.4431093, -0.01859965, 0, 0.023820
 [node name="DetailedBasementBoiler3" parent="." unique_id=1702850109 instance=ExtResource("188_tjyac")]
 transform = Transform3D(0.018696139, -0.23079732, 0.003539964, 2.9811528e-11, 0.0007545372, 1.0829909, -1.4146202, -0.0030502994, 4.6785208e-05, -10.627415, -3.3787987, 4.9305973)
 
+[node name="DetailedBasementBoiler7" parent="." unique_id=184327393 instance=ExtResource("188_tjyac")]
+transform = Transform3D(0.018615805, -0.31371418, 0.0035361978, 2.9683436e-11, 0.0010256142, 1.0818386, -1.4085418, -0.0041461578, 4.6735437e-05, -5.923191, 0.7808255, 10.88265)
+
+[node name="DetailedBasementBoiler19" parent="." unique_id=1088547983 instance=ExtResource("188_tjyac")]
+transform = Transform3D(0.018615805, -0.31371418, 0.0035361978, 2.9683436e-11, 0.0010256142, 1.0818386, -1.4085418, -0.0041461578, 4.6735437e-05, -5.923191, 0.5062196, 10.88265)
+
 [node name="DetailedBasementBoiler15" parent="." unique_id=1644917102 instance=ExtResource("188_tjyac")]
 transform = Transform3D(0.01847907, -0.49562082, 0.0035297703, 2.946541e-11, 0.0016203149, 1.0798724, -1.398196, -0.0065503004, 4.6650483e-05, -3.783381, -0.6368666, 0.7094835)
 
@@ -5589,6 +5596,21 @@ transform = Transform3D(4.8826514e-05, 0.00012997609, 1.2458289, -0.019436123, 0
 [node name="DetailedBasementBoiler4" parent="." unique_id=1619696539 instance=ExtResource("188_tjyac")]
 transform = Transform3D(1.4014965, 0, 0, 0, 0.0040940004, 1.078539, 0, -1.2523797, 0.0035257202, -3.768801, -2.3120723, 4.5012817)
 
+[node name="DetailedBasementBoiler20" parent="." unique_id=1274733513 instance=ExtResource("188_tjyac")]
+transform = Transform3D(1.4014965, 0, 0, 0, 0.007874118, 1.0749209, 0, -2.4087405, 0.0035138922, 3.2347376, 3.8866816, 1.7487133)
+
+[node name="DetailedBasementBoiler21" parent="." unique_id=1385326922 instance=ExtResource("188_tjyac")]
+transform = Transform3D(0.01338685, -1.7509582, 0.003516551, 4.893458e-11, 0.0057241097, 1.0757843, -1.3846277, -0.01692884, 3.3999037e-05, 2.8530936, 3.8866816, -6.260685)
+
+[node name="DetailedBasementBoiler30" parent="." unique_id=202633774 instance=ExtResource("188_tjyac")]
+transform = Transform3D(0.030841447, -0.16622077, 0.0035297615, 9.003511e-11, 0.00054350356, 1.080037, -1.4005679, -0.0036603194, 7.772815e-05, -2.6586735, 2.5693927, -6.29728)
+
+[node name="DetailedBasementBoiler22" parent="." unique_id=767975026 instance=ExtResource("188_tjyac")]
+transform = Transform3D(0.0001997164, -0.013834251, -1.0857935, 0.0134700835, -0.7644599, 0.019648964, -1.3933898, -0.0073922216, 3.4320678e-05, -2.9113195, 3.6962764, -6.293343)
+
+[node name="DetailedBasementBoiler29" parent="." unique_id=1896372516 instance=ExtResource("188_tjyac")]
+transform = Transform3D(0.00020095686, -0.0049471566, -1.0984166, 0.013553747, -0.27337244, 0.019877395, -1.4020442, -0.0026434737, 3.4719676e-05, -3.290837, 2.396352, -6.293343)
+
 [node name="BareHangingCeilingBulb" parent="." unique_id=1955128025 instance=ExtResource("191_2hixs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.297125, -3.0778754, 2.4576726)
 
@@ -5608,6 +5630,7 @@ transform = Transform3D(0.82156986, 0, -0.5701079, 0, 1, 0, 0.5701079, 0, 0.8215
 transform = Transform3D(-0.01011767, 0, 0.9907086, 0, 0.5316064, 0, -0.5584845, 0, -0.017947968, -10.651108, -6.235081, 1.4804325)
 initial_percentage = 15.0
 randomize_initial_openness = false
+interaction_enabled = false
 
 [node name="WaterValveSign" parent="." unique_id=387092292 instance=ExtResource("192_valve_sign")]
 transform = Transform3D(-0.01011767, 0, 0.9907086, 0, 0.5316064, 0, -0.5584845, 0, -0.017947968, -10.616021, -6.0722547, 1.5756009)
@@ -5623,6 +5646,7 @@ transform = Transform3D(-0.01011767, 0, 0.9907086, 0, 0.5316064, 0, -0.5584845, 
 initial_percentage = 15.0
 randomize_initial_openness = false
 correct_percentage = 80.0
+interaction_enabled = false
 valve_role = 2
 
 [node name="AirOutletValveSign" parent="." unique_id=635842445 instance=ExtResource("192_valve_sign")]
@@ -5640,6 +5664,7 @@ transform = Transform3D(-0.01011767, 0, 0.9907086, 0, 0.5316064, 0, -0.5584845, 
 initial_percentage = 90.0
 randomize_initial_openness = false
 correct_percentage = 45.0
+interaction_enabled = false
 valve_role = 1
 
 [node name="AirIntakeValveSign" parent="." unique_id=1526233263 instance=ExtResource("192_valve_sign")]
