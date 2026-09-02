@@ -84,6 +84,7 @@ func _get_controlled_lamps() -> Array[Node]:
 
 func _are_all_lamps_on(lamps: Array[Node]) -> bool:
 	for lamp: Node in lamps:
-		if not bool(lamp.get("is_on")):
+		var requested_on := bool(lamp.call(&"get_requested_lamp_state")) if lamp.has_method(&"get_requested_lamp_state") else bool(lamp.get("is_on"))
+		if not requested_on:
 			return false
 	return true

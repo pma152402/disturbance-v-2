@@ -1,0 +1,89 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://house_props/light_panel_fuse.gd" id="1_script"]
+
+[sub_resource type="PrismMesh" id="shard_mesh"]
+size = Vector3(0.052, 0.105, 0.018)
+
+[sub_resource type="StandardMaterial3D" id="broken_glass_mat"]
+transparency = 1
+albedo_color = Color(0.68, 0.8, 0.73, 0.48)
+metallic = 0.12
+roughness = 0.12
+
+[sub_resource type="StandardMaterial3D" id="contact_mat"]
+albedo_color = Color(0.48, 0.31, 0.12, 1)
+metallic = 0.86
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="burnt_mat"]
+albedo_color = Color(0.018, 0.012, 0.009, 1)
+roughness = 0.96
+
+[sub_resource type="CylinderMesh" id="contact_mesh"]
+top_radius = 0.061
+bottom_radius = 0.061
+height = 0.055
+radial_segments = 10
+
+[sub_resource type="CapsuleShape3D" id="collision_shape"]
+radius = 0.08
+height = 0.3
+
+[node name="FuseBulb" type="StaticBody3D"]
+editor_description = "Componente del fusible roto, conservado a partir de la referencia colocada en el panel."
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_script")
+fuse_condition = 1
+
+[node name="ContactB" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.13, 0)
+material_override = SubResource("contact_mat")
+mesh = SubResource("contact_mesh")
+
+[node name="BrokenGlass" type="Node3D" parent="."]
+
+[node name="LowerShellLeft" type="MeshInstance3D" parent="BrokenGlass"]
+transform = Transform3D(0.829116, 0.052682973, -0.3376622, -0.05944998, 0.9902749, -0.03561156, 0.2820596, 0.05385923, 0.9850538, 0.017036289, -0.065, -0.039585292)
+material_override = SubResource("broken_glass_mat")
+mesh = SubResource("shard_mesh")
+
+[node name="LowerShellLeft2" type="MeshInstance3D" parent="BrokenGlass"]
+transform = Transform3D(0.80845, 0.075135976, 0.39816773, -0.05944999, 0.990275, -0.03561156, -0.33674854, 0.005558647, 0.96218973, -0.011649519, -0.065, -0.041133404)
+material_override = SubResource("broken_glass_mat")
+mesh = SubResource("shard_mesh")
+
+[node name="LowerShellLeft3" type="MeshInstance3D" parent="BrokenGlass"]
+transform = Transform3D(-0.0059715873, 0.03298258, 1.0736612, -0.046648774, 0.9768282, -0.03671834, -0.68717474, -0.06659846, -0.006837257, 0.04474318, -0.065, 0.0029134452)
+material_override = SubResource("broken_glass_mat")
+mesh = SubResource("shard_mesh")
+
+[node name="LowerShellRight" type="MeshInstance3D" parent="BrokenGlass"]
+transform = Transform3D(0.80299354, -0.24500377, 0.3404319, 0.17357175, 1.0508602, 0.119712204, -0.31539544, -0.04545667, 0.93261737, -0.0061380565, -0.058, 0.037668496)
+material_override = SubResource("broken_glass_mat")
+mesh = SubResource("shard_mesh")
+
+[node name="LooseShardBottom" type="MeshInstance3D" parent="BrokenGlass"]
+transform = Transform3D(0.37099504, -0.06575231, -0.10561468, 0.05439188, 0.4552374, -0.0068615526, 0.061678074, -0.0059575886, 0.6413255, -0.028606713, -0.07979816, 0.0408186)
+material_override = SubResource("broken_glass_mat")
+mesh = SubResource("shard_mesh")
+
+[node name="LooseShardBottom2" type="MeshInstance3D" parent="BrokenGlass"]
+transform = Transform3D(-0.029131863, 0.0002082428, -0.64808697, 0.05439188, 0.45523745, -0.006861551, 0.37495723, -0.06602134, -0.049357057, -0.049090922, -0.07979816, 0.009183854)
+material_override = SubResource("broken_glass_mat")
+mesh = SubResource("shard_mesh")
+
+[node name="LooseShardBottom3" type="MeshInstance3D" parent="BrokenGlass"]
+transform = Transform3D(0.022970764, 0.0026945425, 0.6488001, 0.07175413, 0.4516555, -0.011178422, -0.37245628, 0.08717816, 0.037860405, -0.049090922, -0.07979816, -0.0050005913)
+material_override = SubResource("broken_glass_mat")
+mesh = SubResource("shard_mesh")
+
+[node name="BrokenFilament" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.07378828, 0.12174012, 0, -0.013427219, 0.66901374, 0, 0, 0, 0.075, -0.006000012, -0.08959252, 0.004000008)
+material_override = SubResource("burnt_mat")
+mesh = SubResource("contact_mesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, -0.025, 0)
+shape = SubResource("collision_shape")

@@ -69,6 +69,7 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var interaction_ray: RayCast3D = $Head/Camera3D/InteractionRay
 @onready var candle_placement_ray: RayCast3D = $Head/Camera3D/CandlePlacementRay
 @onready var candle_placement_preview: MeshInstance3D = $CandlePlacementPreview
+@onready var candle_forward_light: SpotLight3D = $Head/Camera3D/RightHandRig/HeldCandle/WickRoot/Flame/ForwardLight
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
 @onready var stamina_bar: ProgressBar = $StaminaUI/StaminaBar
 @onready var interaction_prompt: Label = $InteractionUI/InteractionPrompt
@@ -115,6 +116,7 @@ var _jump_phase := JumpPhase.IDLE
 var _jump_timer := 0.0
 var _jump_start_head_y := 0.9
 var _held_item: StringName = &""
+var _right_hand_rest_transform := Transform3D.IDENTITY
 var _inventory_slots: Array[StringName] = [&"flashlight", &"", &""]
 var _inventory_item_data: Array[Dictionary] = [{}, {}, {}]
 var _selected_inventory_slot := 0
@@ -145,6 +147,7 @@ var _candle_placement_valid := false
 var _candle_placement_point := Vector3.ZERO
 var _walker_controller: Node3D
 var _walker_flashlight_was_drawn := false
+var _walker_flashlight_slot := -1
 var _ladder_controller: Node3D
 var _freezer_controller: Node3D
 var _freezer_previous_stance := Stance.STANDING
@@ -161,6 +164,8 @@ const DroppedNoteScene := preload("res://dropped_note.tscn")
 const DroppedRecipeBookScene := preload("res://dropped_recipe_book.tscn")
 const MatchboxPickupScene := preload("res://house_props/matchbox_pickup.tscn")
 const CandlePickupScene := preload("res://house_props/candle_pickup.tscn")
+const GoodPanelFuseScene := preload("res://house_props/light_panel_fuse_good.tscn")
+const BrokenPanelFuseScene := preload("res://house_props/light_panel_fuse_broken.tscn")
 
 
 func notify_light_switched_on(source: Node3D) -> void:
@@ -177,6 +182,8 @@ const INVENTORY_ITEM_NAMES := {
 	&"recipe_book": "RECETARIO",
 	&"matchbox": "CERILLAS",
 	&"candle": "VELA",
+	&"panel_fuse_good": "FUSIBLE BUENO",
+	&"panel_fuse_broken": "FUSIBLE ROTO",
 }
 
 
@@ -185,18 +192,27 @@ func _ready() -> void:
 	_flashlight_available = starts_with_flashlight
 	_flashlight_was_on = false
 	_flashlight_holstered = true
-	_inventory_slots[0] = &"flashlight" if starts_with_flashlight else &""
+	_inventory_slots = [&"", &"", &""]
+	_inventory_item_data = [{}, {}, {}]
+	var next_initial_slot := 0
+	var initial_slot_to_equip := -1
+	if starts_with_flashlight:
+		_inventory_slots[next_initial_slot] = &"flashlight"
+		next_initial_slot += 1
 	if starts_with_matchbox:
-		_inventory_slots[1] = &"matchbox"
-		_inventory_item_data[1] = {"matches_remaining": 20}
+		_inventory_slots[next_initial_slot] = &"matchbox"
+		_inventory_item_data[next_initial_slot] = {"matches_remaining": 20}
+		initial_slot_to_equip = next_initial_slot
+		next_initial_slot += 1
 	if starts_with_lit_candle:
-		var candle_slot := 2 if starts_with_matchbox else 1
-		_inventory_slots[candle_slot] = &"candle"
-		_inventory_item_data[candle_slot] = {"burn_remaining": 420.0, "lit": true}
+		_inventory_slots[next_initial_slot] = &"candle"
+		_inventory_item_data[next_initial_slot] = {"burn_remaining": 420.0, "lit": true}
+		initial_slot_to_equip = next_initial_slot
 	for child in $ZoomUI/ZoomMeter/ZoomSegments.get_children():
 		if child is ColorRect:
 			_zoom_segments.append(child as ColorRect)
 	hand_rig.visible = false
+	_right_hand_rest_transform = right_hand.transform
 	_held_note_rest_transform = held_note.transform
 	if held_matchbox.has_signal(&"state_changed"):
 		held_matchbox.connect(&"state_changed", Callable(self, &"_on_matchbox_state_changed"))
@@ -222,10 +238,8 @@ func _ready() -> void:
 	footstep_sound.stream = GameplaySounds.make_footstep()
 	if held_recipe_book.has_signal(&"page_turn_finished"):
 		held_recipe_book.connect(&"page_turn_finished", Callable(self, &"_on_recipe_page_turn_finished"))
-	if starts_with_lit_candle:
-		_equip_inventory_slot(2 if starts_with_matchbox else 1)
-	elif starts_with_matchbox:
-		_equip_inventory_slot(1)
+	if initial_slot_to_equip >= 0:
+		_equip_inventory_slot(initial_slot_to_equip)
 
 
 func _input(event: InputEvent) -> void:
@@ -272,10 +286,7 @@ func _input(event: InputEvent) -> void:
 			return
 		if pressed_key == KEY_G and not _skill_check_active:
 			if _held_item == &"candle":
-				if _candle_placement_mode:
-					_place_held_candle()
-				else:
-					_set_candle_placement_mode(true)
+				_set_candle_placement_mode(not _candle_placement_mode)
 				get_viewport().set_input_as_handled()
 				return
 			_drop_selected_inventory_item()
@@ -367,13 +378,17 @@ func _input(event: InputEvent) -> void:
 			_update_interaction_prompt()
 			get_viewport().set_input_as_handled()
 			return
-		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and _flashlight_available and not _flashlight_holstered and _selected_inventory_slot == 0:
+		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and _flashlight_available and not _flashlight_holstered and _inventory_slots[_selected_inventory_slot] == &"flashlight":
 			flashlight.visible = not flashlight.visible
 			flashlight_click_sound.pitch_scale = randf_range(0.98, 1.02)
 			flashlight_click_sound.play()
 			get_viewport().set_input_as_handled()
 			return
 		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_LEFT:
+			if _held_item == &"candle" and _candle_placement_mode and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+				_place_held_candle()
+				get_viewport().set_input_as_handled()
+				return
 			if _held_item == &"matchbox" and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 				held_matchbox.call(&"strike_match")
 				_update_interaction_prompt()
@@ -494,6 +509,7 @@ func _physics_process(delta: float) -> void:
 	velocity.z = move_toward(velocity.z, target_velocity.z, movement_acceleration * delta)
 	move_and_slide()
 	_update_held_candle_motion(is_sprinting)
+	_update_held_match_motion(is_sprinting)
 	_update_candle_placement_preview()
 	_update_interaction_prompt()
 	_update_camera_motion(delta, input_vector, is_sprinting)
@@ -565,11 +581,13 @@ func _update_camera_motion(delta: float, _input_vector: Vector2, _is_sprinting: 
 	right_hand_rig.position = right_hand_rig.position.lerp(right_vertical_bob, minf(delta * 14.0, 1.0))
 	var target_hand_rotation := Vector3(_hand_pitch, _hand_yaw, hand_bob_roll)
 	hand_rig.rotation = hand_rig.rotation.lerp(target_hand_rotation, minf(delta * 12.0, 1.0))
-	right_hand_rig.rotation.z = lerpf(right_hand_rig.rotation.z, 0.0, minf(delta * 12.0, 1.0))
+	var right_hand_target_rotation := target_hand_rotation if _held_item == &"candle" else Vector3.ZERO
+	right_hand_rig.rotation = right_hand_rig.rotation.lerp(right_hand_target_rotation, minf(delta * 12.0, 1.0))
 
 
 func _select_inventory_slot(slot_index: int) -> void:
-	if slot_index == 0 and _selected_inventory_slot == 0 and not _flashlight_holstered:
+	var selecting_flashlight := _inventory_slots[slot_index] == &"flashlight"
+	if selecting_flashlight and _selected_inventory_slot == slot_index and not _flashlight_holstered:
 		_flashlight_was_on = flashlight.visible
 		flashlight.visible = false
 		hand_rig.visible = false
@@ -577,7 +595,7 @@ func _select_inventory_slot(slot_index: int) -> void:
 		_update_inventory_ui()
 	else:
 		_equip_inventory_slot(slot_index)
-	if slot_index == 0 and _flashlight_available:
+	if selecting_flashlight and _flashlight_available:
 		holster_sound.pitch_scale = randf_range(0.97, 1.03)
 		holster_sound.play()
 
@@ -588,9 +606,9 @@ func _inventory_item_name(item_type: StringName) -> String:
 
 func _update_inventory_ui() -> void:
 	for index in range(_inventory_slots.size()):
-		inventory_labels[index].text = str(index + 1) if index == 0 else "%d\n%s" % [index + 1, _inventory_item_name(_inventory_slots[index])]
+		inventory_labels[index].text = "%d\n%s" % [index + 1, _inventory_item_name(_inventory_slots[index])]
 		inventory_panels[index].modulate = Color(1.0, 1.0, 1.0, 0.78 if index == _selected_inventory_slot else 0.32)
-	inventory_flashlight_icon.visible = _inventory_slots[0] == &"flashlight"
+	inventory_flashlight_icon.visible = false
 
 
 func _show_inventory_temporarily() -> void:
@@ -624,7 +642,9 @@ func _hide_all_held_visuals() -> void:
 		_sync_held_candle_data()
 	held_candle.visible = false
 	held_candle.process_mode = Node.PROCESS_MODE_DISABLED
+	candle_forward_light.visible = false
 	right_hand.visible = false
+	right_hand.transform = _right_hand_rest_transform
 
 
 func _set_note_reading(active: bool, immediate := false) -> void:
@@ -692,7 +712,7 @@ func _equip_inventory_slot(slot_index: int) -> bool:
 	if slot_index < 0 or slot_index >= _inventory_slots.size():
 		return false
 	var item_type := _inventory_slots[slot_index]
-	if _selected_inventory_slot == 0 and not _flashlight_holstered:
+	if _inventory_slots[_selected_inventory_slot] == &"flashlight" and not _flashlight_holstered:
 		_flashlight_was_on = flashlight.visible
 	flashlight.visible = false
 	hand_rig.visible = false
@@ -728,15 +748,17 @@ func _equip_inventory_slot(slot_index: int) -> bool:
 				held_matchbox.visible = true
 				held_matchbox.call(&"configure_matchbox", _inventory_item_data[slot_index])
 			&"candle":
+				_set_candle_hand_pose()
 				held_candle.process_mode = Node.PROCESS_MODE_INHERIT
 				held_candle.visible = true
 				held_candle.call(&"configure_candle", _inventory_item_data[slot_index])
+				_update_candle_forward_light()
 	_update_inventory_ui()
 	return true
 
 
 func _find_empty_inventory_slot() -> int:
-	for index in range(1, _inventory_slots.size()):
+	for index in range(_inventory_slots.size()):
 		if _inventory_slots[index].is_empty():
 			return index
 	return -1
@@ -744,6 +766,27 @@ func _find_empty_inventory_slot() -> int:
 
 func can_store_inventory_item() -> bool:
 	return _find_empty_inventory_slot() >= 0
+
+
+func pick_up_panel_fuse(condition: int) -> bool:
+	var item_type: StringName = &"panel_fuse_good" if condition == 0 else &"panel_fuse_broken"
+	return _store_inventory_item(item_type, {"condition": condition})
+
+
+func has_selected_panel_fuse() -> bool:
+	if _selected_inventory_slot < 0 or _selected_inventory_slot >= _inventory_slots.size():
+		return false
+	return _inventory_slots[_selected_inventory_slot] in [&"panel_fuse_good", &"panel_fuse_broken"]
+
+
+func take_selected_panel_fuse() -> int:
+	if not has_selected_panel_fuse():
+		return -1
+	var item_type := _inventory_slots[_selected_inventory_slot]
+	var condition := 0 if item_type == &"panel_fuse_good" else 1
+	_clear_inventory_item(item_type)
+	_equip_inventory_slot(_selected_inventory_slot)
+	return condition
 
 
 func _store_inventory_item(item_type: StringName, item_data: Dictionary = {}) -> bool:
@@ -757,7 +800,7 @@ func _store_inventory_item(item_type: StringName, item_data: Dictionary = {}) ->
 
 func _clear_inventory_item(item_type: StringName) -> bool:
 	if (
-		_selected_inventory_slot > 0
+		_selected_inventory_slot >= 0
 		and _selected_inventory_slot < _inventory_slots.size()
 		and _inventory_slots[_selected_inventory_slot] == item_type
 	):
@@ -765,7 +808,7 @@ func _clear_inventory_item(item_type: StringName) -> bool:
 		_inventory_item_data[_selected_inventory_slot] = {}
 		_update_inventory_ui()
 		return true
-	for index in range(1, _inventory_slots.size()):
+	for index in range(_inventory_slots.size()):
 		if _inventory_slots[index] == item_type:
 			_inventory_slots[index] = &""
 			_inventory_item_data[index] = {}
@@ -775,8 +818,9 @@ func _clear_inventory_item(item_type: StringName) -> bool:
 
 
 func _return_to_flashlight_slot() -> void:
-	if _flashlight_available and _inventory_slots[0] == &"flashlight":
-		_selected_inventory_slot = 0
+	var flashlight_slot := _inventory_slots.find(&"flashlight")
+	if _flashlight_available and flashlight_slot >= 0:
+		_selected_inventory_slot = flashlight_slot
 		_held_item = &""
 		_hide_all_held_visuals()
 		flashlight.visible = false
@@ -921,9 +965,9 @@ func _update_interaction_prompt() -> void:
 		note_controls_prompt.visible = true
 		if _candle_placement_mode:
 			note_controls_prompt.text = (
-				"G  COLOCAR VELA"
+				"LMB  COLOCAR VELA    G  CANCELAR"
 				if _candle_placement_valid
-				else "BUSCA UNA SUPERFICIE"
+				else "BUSCA UNA SUPERFICIE    G  CANCELAR"
 			)
 		else:
 			note_controls_prompt.text = "%s    G  COLOCAR" % str(held_candle.call(&"get_status_text", _can_ignite_candle()))
@@ -989,7 +1033,7 @@ func pick_up_matchbox(matches_remaining := 20) -> bool:
 func _on_matchbox_state_changed(data: Dictionary) -> void:
 	if _held_item != &"matchbox":
 		return
-	if _selected_inventory_slot > 0 and _selected_inventory_slot < _inventory_item_data.size():
+	if _selected_inventory_slot >= 0 and _selected_inventory_slot < _inventory_item_data.size():
 		_inventory_item_data[_selected_inventory_slot] = data.duplicate(true)
 	_update_inventory_ui()
 	_update_interaction_prompt()
@@ -1011,14 +1055,15 @@ func pick_up_candle(data: Dictionary = {}, ignite_on_pickup := false) -> bool:
 func _on_candle_state_changed(data: Dictionary) -> void:
 	if _held_item != &"candle":
 		return
-	if _selected_inventory_slot > 0 and _selected_inventory_slot < _inventory_item_data.size():
+	if _selected_inventory_slot >= 0 and _selected_inventory_slot < _inventory_item_data.size():
 		_inventory_item_data[_selected_inventory_slot] = data.duplicate(true)
+	_update_candle_forward_light()
 	_update_inventory_ui()
 	_update_interaction_prompt()
 
 
 func _sync_held_candle_data() -> void:
-	if _held_item != &"candle" or _selected_inventory_slot <= 0:
+	if _held_item != &"candle" or _selected_inventory_slot < 0:
 		return
 	_inventory_item_data[_selected_inventory_slot] = held_candle.call(&"get_candle_data")
 
@@ -1029,6 +1074,29 @@ func _update_held_candle_motion(is_sprinting: bool) -> void:
 	var horizontal_speed := Vector2(velocity.x, velocity.z).length()
 	var sprint_motion := clampf(inverse_lerp(move_speed, sprint_speed, horizontal_speed), 0.0, 1.0) if is_sprinting else 0.0
 	held_candle.call(&"set_motion_strength", sprint_motion)
+	_update_candle_forward_light()
+
+
+func _update_held_match_motion(is_sprinting: bool) -> void:
+	if _held_item != &"matchbox" or not held_matchbox.visible:
+		return
+	var horizontal_speed := Vector2(velocity.x, velocity.z).length()
+	var sprint_motion := clampf(inverse_lerp(move_speed, sprint_speed, horizontal_speed), 0.0, 1.0) if is_sprinting else 0.0
+	held_matchbox.call(&"set_motion_strength", sprint_motion)
+
+
+func _update_candle_forward_light() -> void:
+	candle_forward_light.visible = (
+		_held_item == &"candle"
+		and held_candle.visible
+		and bool(held_candle.get("lit"))
+	)
+
+
+func _set_candle_hand_pose() -> void:
+	right_hand.position = Vector3(0.37, -0.37, -0.14)
+	right_hand.rotation = Vector3(-1.48, -0.08, -0.08)
+	right_hand.scale = Vector3.ONE * 0.4
 
 
 func _set_candle_placement_mode(active: bool) -> void:
@@ -1084,7 +1152,7 @@ func _place_held_candle() -> bool:
 
 
 func _can_ignite_candle() -> bool:
-	for index in range(1, _inventory_slots.size()):
+	for index in range(_inventory_slots.size()):
 		if index == _selected_inventory_slot:
 			continue
 		if _inventory_slots[index] == &"matchbox" and int(_inventory_item_data[index].get("matches_remaining", 0)) > 0:
@@ -1098,14 +1166,14 @@ func _try_ignite_held_candle() -> bool:
 	if bool(held_candle.get("lit")) or float(held_candle.get("burn_remaining")) <= 0.0:
 		return false
 	var source_slot := -1
-	for index in range(1, _inventory_slots.size()):
+	for index in range(_inventory_slots.size()):
 		if index == _selected_inventory_slot:
 			continue
 		if _inventory_slots[index] == &"candle" and bool(_inventory_item_data[index].get("lit", false)):
 			source_slot = index
 			break
 	if source_slot < 0:
-		for index in range(1, _inventory_slots.size()):
+		for index in range(_inventory_slots.size()):
 			if index == _selected_inventory_slot:
 				continue
 			if _inventory_slots[index] == &"matchbox" and int(_inventory_item_data[index].get("matches_remaining", 0)) > 0:
@@ -1133,7 +1201,7 @@ func _turn_recipe_book_pages(direction: int) -> void:
 		_queued_recipe_page_direction = signi(direction)
 		return
 	var new_page_index := int(held_recipe_book.call(&"turn_pages", direction))
-	if _selected_inventory_slot > 0 and _selected_inventory_slot < _inventory_item_data.size():
+	if _selected_inventory_slot >= 0 and _selected_inventory_slot < _inventory_item_data.size():
 		_inventory_item_data[_selected_inventory_slot]["page_index"] = new_page_index
 
 
@@ -1170,7 +1238,8 @@ func is_holding_item_type(item_type: StringName) -> bool:
 func begin_moving_walker(walker: Node3D) -> bool:
 	if walker == null or is_instance_valid(_walker_controller) or is_instance_valid(_ladder_controller) or not _held_item.is_empty():
 		return false
-	_walker_flashlight_was_drawn = _selected_inventory_slot == 0 and _flashlight_available and not _flashlight_holstered
+	_walker_flashlight_was_drawn = _inventory_slots[_selected_inventory_slot] == &"flashlight" and _flashlight_available and not _flashlight_holstered
+	_walker_flashlight_slot = _selected_inventory_slot if _walker_flashlight_was_drawn else -1
 	if _walker_flashlight_was_drawn:
 		_flashlight_was_on = flashlight.visible
 		flashlight.visible = false
@@ -1197,9 +1266,10 @@ func end_moving_walker(walker: Node3D) -> void:
 	remove_collision_exception_with(walker)
 	_walker_controller = null
 	velocity = Vector3.ZERO
-	if _walker_flashlight_was_drawn and _flashlight_available:
-		_equip_inventory_slot(0)
+	if _walker_flashlight_was_drawn and _flashlight_available and _walker_flashlight_slot >= 0:
+		_equip_inventory_slot(_walker_flashlight_slot)
 	_walker_flashlight_was_drawn = false
+	_walker_flashlight_slot = -1
 
 
 func begin_climbing_ladder(ladder: Node3D) -> bool:
@@ -1328,9 +1398,13 @@ func consume_held_item(item_type: StringName) -> bool:
 func recover_flashlight(was_on: bool) -> bool:
 	if _flashlight_available:
 		return false
+	var flashlight_slot := _find_empty_inventory_slot()
+	if flashlight_slot < 0:
+		return false
 	_flashlight_available = true
 	_flashlight_was_on = was_on
-	_inventory_slots[0] = &"flashlight"
+	_inventory_slots[flashlight_slot] = &"flashlight"
+	_inventory_item_data[flashlight_slot] = {}
 	_flashlight_holstered = true
 	flashlight.visible = false
 	hand_rig.visible = false
@@ -1403,6 +1477,12 @@ func _drop_selected_inventory_item() -> void:
 		dropped_candle.global_position = drop_position + Vector3.UP * 0.42
 		dropped_candle.global_rotation = Vector3(0.0, rotation.y, 0.0)
 		dropped_candle.call(&"set_dropped", velocity * 0.15)
+	elif item_type in [&"panel_fuse_good", &"panel_fuse_broken"]:
+		var fuse_scene: PackedScene = GoodPanelFuseScene if item_type == &"panel_fuse_good" else BrokenPanelFuseScene
+		var dropped_fuse := fuse_scene.instantiate() as StaticBody3D
+		scene_root.add_child(dropped_fuse)
+		dropped_fuse.global_position = camera.global_position + (-camera.global_basis.z.normalized()) * 0.7 + Vector3.DOWN * 0.15
+		dropped_fuse.global_rotation = Vector3(0.0, rotation.y, 0.0)
 	else:
 		var pickup_scene: PackedScene = PlungerPickupScene if item_type == &"plunger" else CrowbarPickupScene
 		var dropped_pickup := pickup_scene.instantiate() as Node3D
@@ -1430,7 +1510,8 @@ func _drop_flashlight() -> void:
 	dropped.angular_velocity = Vector3.ZERO
 	dropped.call(&"set_light_enabled", was_on)
 	_flashlight_available = false
-	_inventory_slots[0] = &""
+	_inventory_slots[_selected_inventory_slot] = &""
+	_inventory_item_data[_selected_inventory_slot] = {}
 	_flashlight_holstered = true
 	_flashlight_was_on = was_on
 	flashlight.visible = false
@@ -1474,6 +1555,14 @@ func has_lit_match_in_hand() -> bool:
 		and held_matchbox.visible
 		and bool(held_matchbox.get("match_out"))
 		and bool(held_matchbox.get("match_lit"))
+	)
+
+
+func has_lit_candle_in_hand() -> bool:
+	return (
+		_held_item == &"candle"
+		and held_candle.visible
+		and bool(held_candle.get("lit"))
 	)
 
 

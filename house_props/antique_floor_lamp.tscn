@@ -7,7 +7,8 @@ albedo_color = Color(0.24, 0.16, 0.06, 1)
 metallic = 0.68
 roughness = 0.36
 [sub_resource type="StandardMaterial3D" id="shade"]
-albedo_color = Color(0.42, 0.09, 0.075, 1)
+transparency = 1
+albedo_color = Color(0.42, 0.09, 0.075, 0.58)
 roughness = 0.92
 [sub_resource type="StandardMaterial3D" id="glow"]
 albedo_color = Color(1, 0.69, 0.34, 1)

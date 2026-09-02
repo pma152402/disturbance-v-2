@@ -9,6 +9,7 @@ signal state_changed(data: Dictionary)
 @onready var flame: Node3D = $WickRoot/Flame
 @onready var flame_mesh: MeshInstance3D = $WickRoot/Flame/FlameMesh
 @onready var candle_light: OmniLight3D = $WickRoot/Flame/CandleLight
+@onready var forward_light: SpotLight3D = $WickRoot/Flame/ForwardLight
 @onready var smoke: Node3D = $WickRoot/Smoke
 
 var lit := false
@@ -140,6 +141,8 @@ func _animate_flame() -> void:
 	_flame_material.emission = Color(1.0, lerpf(0.24, 0.08, danger_blink), 0.015, 1.0)
 	candle_light.light_color = Color(1.0, lerpf(0.52, 0.24, danger_blink), 0.12, 1.0)
 	candle_light.light_energy = (1.75 + calm_flicker * 2.0 - _flame_stress * 0.38) * lerpf(1.0, 0.62, danger_blink)
+	forward_light.light_color = candle_light.light_color
+	forward_light.light_energy = (1.45 + calm_flicker * 0.8) * lerpf(1.0, 0.68, danger_blink)
 
 
 func _start_smoke() -> void:

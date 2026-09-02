@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://rpkni3db60eq"]
+
+[ext_resource type="Script" uid="uid://bdu5lh6fa2gf8" path="res://house_props/wall_hole.gd" id="1"]
+
+[sub_resource type="StandardMaterial3D" id="void_mat"]
+shading_mode = 0
+albedo_color = Color(0.003, 0.0025, 0.002, 1)
+
+[sub_resource type="QuadMesh" id="void_mesh"]
+size = Vector2(1.62, 1.62)
+
+[sub_resource type="StandardMaterial3D" id="inner_mat"]
+albedo_color = Color(0.055, 0.038, 0.026, 1)
+
+[sub_resource type="TorusMesh" id="rim_mesh"]
+inner_radius = 0.72
+outer_radius = 0.92
+rings = 12
+ring_segments = 7
+
+[node name="WallHole" type="Node3D" unique_id=289227473]
+editor_description = "Agujero visual reutilizable. Coloca el origen sobre la pared y orienta el eje +Z hacia la habitación. Ajusta hole_radius, vertical_ratio y wall_offset desde el inspector."
+script = ExtResource("1")
+
+[node name="VisualRoot" type="Node3D" parent="." unique_id=1346165142]
+transform = Transform3D(0.48, 0, 0, 0, 0.3936, 0, 0, 0, 0.48, 0, 0, 0.012)
+
+[node name="DarkVoid" type="MeshInstance3D" parent="VisualRoot" unique_id=2015554342]
+transform = Transform3D(0.887814, 0, 0, 0, 0.59487194, 0, 0, 0, 1, 0, 0, 0.0020000003)
+material_override = SubResource("void_mat")
+cast_shadow = 0
+mesh = SubResource("void_mesh")
+
+[node name="DarkVoid2" type="MeshInstance3D" parent="VisualRoot" unique_id=919505875]
+transform = Transform3D(-0.011464486, 0.7613939, 0, -0.7833108, -0.011143712, 0, 0, 0, 1, 0, 0, 0.0020000003)
+material_override = SubResource("void_mat")
+cast_shadow = 0
+mesh = SubResource("void_mesh")
+
+[node name="DarkVoid3" type="MeshInstance3D" parent="VisualRoot" unique_id=246496932]
+transform = Transform3D(-0.013662734, 0.5620535, 0, -0.933506, -0.00822618, 0, 0, 0, 1, 0, 0, 0.0020000003)
+material_override = SubResource("void_mat")
+cast_shadow = 0
+mesh = SubResource("void_mesh")
+
+[node name="DarkVoid4" type="MeshInstance3D" parent="VisualRoot" unique_id=1959807036]
+transform = Transform3D(-0.014590046, 0.23463438, 0, -0.9968645, -0.0034340944, 0, 0, 0, 1, 0, 0, 0.0020000003)
+material_override = SubResource("void_mat")
+cast_shadow = 0
+mesh = SubResource("void_mesh")
+
+[node name="InnerRim" type="MeshInstance3D" parent="VisualRoot" unique_id=1709213122]
+transform = Transform3D(0.96, 0, 0, 0, 7.54979e-08, -1.08, 0, 1, 8.1537735e-08, 0, 0, 0.008)
+material_override = SubResource("inner_mat")
+cast_shadow = 0
+mesh = SubResource("rim_mesh")
+
+[node name="Chips" type="Node3D" parent="VisualRoot" unique_id=655978376]

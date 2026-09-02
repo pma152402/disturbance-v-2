@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://house_props/light_panel_fuse.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="glass_mat"]
+transparency = 1
+albedo_color = Color(0.72, 0.82, 0.74, 0.34)
+metallic = 0.08
+roughness = 0.18
+
+[sub_resource type="CapsuleMesh" id="fuse_mesh"]
+radius = 0.052
+height = 0.31
+radial_segments = 10
+rings = 3
+
+[sub_resource type="StandardMaterial3D" id="contact_mat"]
+albedo_color = Color(0.48, 0.31, 0.12, 1)
+metallic = 0.86
+roughness = 0.3
+
+[sub_resource type="CylinderMesh" id="contact_mesh"]
+top_radius = 0.061
+bottom_radius = 0.061
+height = 0.055
+radial_segments = 10
+
+[sub_resource type="CapsuleShape3D" id="collision_shape"]
+radius = 0.068
+height = 0.34
+
+[node name="FuseBulb" type="StaticBody3D"]
+editor_description = "Componente base del fusible en buen estado, conservado a partir de la copia de referencia exterior."
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_script")
+
+[node name="Glass" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.009058062, -0.999959, 0, 0.999959, -0.009058062, 0, 2.9802322e-08, 0)
+material_override = SubResource("glass_mat")
+mesh = SubResource("fuse_mesh")
+
+[node name="ContactA" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.009058062, -0.999959, 0, 0.999959, -0.009058062, 0, -0.0011775196, 0.12999464)
+material_override = SubResource("contact_mat")
+mesh = SubResource("contact_mesh")
+
+[node name="Filament" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.21552955, 0, 0, 0, -0.042756546, -0.17399314, 0, 4.720082, -0.0015761051, 0, -0.0011775196, -0.00422506)
+material_override = SubResource("contact_mat")
+mesh = SubResource("contact_mesh")
+
+[node name="ContactB" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.009058062, -0.999959, 0, 0.999959, -0.009058062, 0, 0.0011775792, -0.1299947)
+material_override = SubResource("contact_mat")
+mesh = SubResource("contact_mesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+rotation = Vector3(1.5707963, 0, 0)
+shape = SubResource("collision_shape")

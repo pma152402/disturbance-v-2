@@ -46,6 +46,17 @@ height = 0.105
 radial_segments = 8
 rings = 5
 
+[sub_resource type="StandardMaterial3D" id="smoke_mat"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.24, 0.25, 0.26, 0.38)
+
+[sub_resource type="SphereMesh" id="smoke_mesh"]
+radius = 0.018
+height = 0.035
+radial_segments = 7
+rings = 4
+
 [node name="HeldMatchbox" type="Node3D" unique_id=837092785]
 script = ExtResource("1")
 
@@ -80,11 +91,36 @@ cast_shadow = 0
 mesh = SubResource("flame_mesh")
 
 [node name="MatchLight" type="OmniLight3D" parent="MatchRoot/Flame" unique_id=1028786186]
-light_color = Color(1, 0.48, 0.16, 1)
-light_energy = 2.3
-shadow_enabled = true
-omni_range = 4.2
-omni_attenuation = 1.35
+light_color = Color(1, 0.52, 0.2, 1)
+light_energy = 1.8
+shadow_enabled = false
+omni_range = 3.5
+omni_attenuation = 1.45
+
+[node name="ForwardLight" type="SpotLight3D" parent="MatchRoot/Flame"]
+position = Vector3(0, 0.025, -0.04)
+light_color = Color(1, 0.55, 0.22, 1)
+light_energy = 1.45
+shadow_enabled = false
+spot_range = 5.2
+spot_attenuation = 1.15
+spot_angle = 48.0
+
+[node name="Smoke" type="Node3D" parent="MatchRoot"]
+position = Vector3(0, 0.37, 0)
+visible = false
+
+[node name="Puff1" type="MeshInstance3D" parent="MatchRoot/Smoke"]
+material_override = SubResource("smoke_mat")
+cast_shadow = 0
+mesh = SubResource("smoke_mesh")
+
+[node name="Puff2" type="MeshInstance3D" parent="MatchRoot/Smoke"]
+position = Vector3(0.012, 0.025, 0)
+scale = Vector3(0.72, 0.72, 0.72)
+material_override = SubResource("smoke_mat")
+cast_shadow = 0
+mesh = SubResource("smoke_mesh")
 
 [node name="StrikeGlow" type="OmniLight3D" parent="." unique_id=591067190]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0)

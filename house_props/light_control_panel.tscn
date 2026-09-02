@@ -1,0 +1,467 @@
+[gd_scene format=3 uid="uid://daoslaeqhg2tm"]
+
+[ext_resource type="Script" uid="uid://byccr2vej0jnv" path="res://house_props/light_control_panel.gd" id="1"]
+[ext_resource type="PackedScene" path="res://house_props/light_panel_fuse_good.tscn" id="2_good"]
+[ext_resource type="PackedScene" path="res://house_props/light_panel_fuse_broken.tscn" id="3_broken"]
+[ext_resource type="Script" path="res://house_props/light_panel_switch.gd" id="4_switch"]
+[ext_resource type="Script" path="res://house_props/light_panel_socket.gd" id="5_socket"]
+
+[sub_resource type="StandardMaterial3D" id="cabinet_mat"]
+albedo_color = Color(0.6094355, 0.65540504, 0.63237137, 1)
+metallic = 0.72
+roughness = 0.68
+
+[sub_resource type="BoxMesh" id="cabinet_mesh"]
+size = Vector3(1.12, 1.42, 0.18)
+
+[sub_resource type="StandardMaterial3D" id="face_mat"]
+albedo_color = Color(0.74573416, 0.76541555, 0.7408108, 1)
+metallic = 0.55
+roughness = 0.74
+
+[sub_resource type="BoxMesh" id="face_mesh"]
+size = Vector3(1.02, 1.31, 0.045)
+
+[sub_resource type="StandardMaterial3D" id="trim_mat"]
+albedo_color = Color(0.055, 0.06, 0.055, 1)
+metallic = 0.82
+roughness = 0.42
+
+[sub_resource type="BoxMesh" id="rail_mesh"]
+size = Vector3(0.92, 0.035, 0.025)
+
+[sub_resource type="StandardMaterial3D" id="bakelite_mat"]
+albedo_color = Color(0.58478, 0.5322713, 0.4703486, 1)
+roughness = 0.86
+
+[sub_resource type="BoxMesh" id="switch_base_mesh"]
+size = Vector3(0.28, 0.25, 0.055)
+
+[sub_resource type="StandardMaterial3D" id="contact_mat"]
+albedo_color = Color(0.48, 0.31, 0.12, 1)
+metallic = 0.86
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="lever_mesh"]
+size = Vector3(0.055, 0.16, 0.055)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ocadl"]
+albedo_color = Color(0.08, 0.11, 0.08, 1)
+metallic = 0.72
+roughness = 0.46
+
+[sub_resource type="SphereMesh" id="pilot_mesh"]
+radius = 0.035
+height = 0.07
+radial_segments = 8
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="status_red_mat"]
+albedo_color = Color(0.12, 0.004, 0.002, 1)
+emission_enabled = true
+emission = Color(1, 0.035, 0.015, 1)
+emission_energy_multiplier = 0.0
+roughness = 0.22
+
+[sub_resource type="StandardMaterial3D" id="status_green_mat"]
+albedo_color = Color(0.007, 0.12, 0.019, 1)
+emission_enabled = true
+emission = Color(0.06, 1, 0.16, 1)
+emission_energy_multiplier = 0.0
+roughness = 0.22
+
+[sub_resource type="SphereMesh" id="status_bulb_mesh"]
+radius = 0.045
+height = 0.09
+radial_segments = 16
+rings = 8
+
+[sub_resource type="TorusMesh" id="socket_mesh"]
+inner_radius = 0.065
+outer_radius = 0.095
+rings = 10
+ring_segments = 7
+
+[sub_resource type="CylinderMesh" id="screw_mesh"]
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.018
+radial_segments = 8
+
+[sub_resource type="BoxShape3D" id="switch_collision"]
+size = Vector3(0.085, 0.17, 0.09)
+
+[sub_resource type="CylinderShape3D" id="socket_collision"]
+radius = 0.105
+height = 0.1
+
+[node name="LightControlPanel" type="Node3D" unique_id=969548015]
+editor_description = "Panel mural de control de luces. El frente mira hacia +Z. Incluye cuatro interruptores y cuatro fusibles alargados configurables desde el script."
+script = ExtResource("1")
+debug_bypass_panel = false
+installed_fuses = Array[bool]([true, true, true, false])
+fuse_conditions = Array[int]([0, 1, 1, -1])
+
+[node name="Cabinet" type="MeshInstance3D" parent="." unique_id=319137549]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.07)
+material_override = SubResource("cabinet_mat")
+mesh = SubResource("cabinet_mesh")
+
+[node name="Face" type="Node3D" parent="." unique_id=119545998]
+
+[node name="Plate" type="MeshInstance3D" parent="Face" unique_id=1672209500]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.035)
+material_override = SubResource("face_mat")
+mesh = SubResource("face_mesh")
+
+[node name="TopRail" type="MeshInstance3D" parent="Face" unique_id=2112645787]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0.066)
+material_override = SubResource("trim_mat")
+mesh = SubResource("rail_mesh")
+
+[node name="MiddleRail" type="MeshInstance3D" parent="Face" unique_id=2142741010]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.23870912, 0.066)
+material_override = SubResource("trim_mat")
+mesh = SubResource("rail_mesh")
+
+[node name="StatusIndicators" type="Node3D" parent="Face"]
+
+[node name="RedBezel" type="MeshInstance3D" parent="Face/StatusIndicators"]
+position = Vector3(-0.11, 0.59, 0.078)
+rotation = Vector3(1.5707963, 0, 0)
+scale = Vector3(0.66, 0.66, 0.66)
+material_override = SubResource("trim_mat")
+mesh = SubResource("socket_mesh")
+
+[node name="RedBulb" type="MeshInstance3D" parent="Face/StatusIndicators"]
+position = Vector3(-0.11, 0.59, 0.095)
+material_override = SubResource("status_red_mat")
+mesh = SubResource("status_bulb_mesh")
+
+[node name="RedLight" type="OmniLight3D" parent="Face/StatusIndicators"]
+visible = false
+position = Vector3(-0.11, 0.59, 0.16)
+light_color = Color(1, 0.045, 0.02, 1)
+light_energy = 0.28
+omni_range = 0.55
+shadow_enabled = false
+
+[node name="GreenBezel" type="MeshInstance3D" parent="Face/StatusIndicators"]
+position = Vector3(0.11, 0.59, 0.078)
+rotation = Vector3(1.5707963, 0, 0)
+scale = Vector3(0.66, 0.66, 0.66)
+material_override = SubResource("trim_mat")
+mesh = SubResource("socket_mesh")
+
+[node name="GreenBulb" type="MeshInstance3D" parent="Face/StatusIndicators"]
+position = Vector3(0.11, 0.59, 0.095)
+material_override = SubResource("status_green_mat")
+mesh = SubResource("status_bulb_mesh")
+
+[node name="GreenLight" type="OmniLight3D" parent="Face/StatusIndicators"]
+visible = false
+position = Vector3(0.11, 0.59, 0.16)
+light_color = Color(0.06, 1, 0.16, 1)
+light_energy = 0.28
+omni_range = 0.55
+shadow_enabled = false
+
+[node name="Switches" type="Node3D" parent="Face" unique_id=1583501463]
+
+[node name="Switch1" type="Node3D" parent="Face/Switches" unique_id=1594656164]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.31, 0.085)
+
+[node name="Base" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=875380963]
+material_override = SubResource("bakelite_mat")
+mesh = SubResource("switch_base_mesh")
+
+[node name="InteractBody" type="StaticBody3D" parent="Face/Switches/Switch1"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("4_switch")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Face/Switches/Switch1/InteractBody"]
+position = Vector3(0, 0, 0.092)
+shape = SubResource("switch_collision")
+
+[node name="Lever" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=559252049]
+transform = Transform3D(1.5328443, 0, 0, 0, 0.888919, -0.4627809, 0, 0.4627809, 0.888919, -0.00054234266, 0.0003145635, 0.030665122)
+material_override = SubResource("contact_mat")
+mesh = SubResource("lever_mesh")
+
+[node name="Lever4" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=1085631562]
+transform = Transform3D(1.5328444, 0, 0, 0, 0.91307956, 0.41307282, 0, -0.41307282, 0.91307956, -0.00054234266, -0.29337102, 0.030665122)
+material_override = SubResource("contact_mat")
+mesh = SubResource("lever_mesh")
+
+[node name="Lever2" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=1784712923]
+transform = Transform3D(1.5328444, 0, 0, 0, 0.91307956, 0.41307282, 0, -0.41307282, 0.91307956, 0.49045694, 0.0003145635, 0.030665122)
+material_override = SubResource("contact_mat")
+mesh = SubResource("lever_mesh")
+
+[node name="Lever3" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=1258698405]
+transform = Transform3D(1.5328444, 0, 0, 0, 0.91307956, 0.41307282, 0, -0.41307282, 0.91307956, 0.49239, -0.2902419, 0.030665122)
+material_override = SubResource("contact_mat")
+mesh = SubResource("lever_mesh")
+
+[node name="Pilot" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=1893215471]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, 0.09, 0.06999999, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Pilot2" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=357459645]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, -0.094560504, 0.06999999, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Pilot3" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=902468111]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, -0.094560504, -0.07625431, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Pilot4" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=1216439175]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, 0.09385271, -0.07625431, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Pilot9" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=2066677759]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, 0.09, -0.2123077, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Pilot10" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=566004075]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, -0.094560504, -0.2123077, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Pilot11" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=1936481786]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, -0.094560504, -0.358562, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Pilot12" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=815925424]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, 0.09385271, -0.358562, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Pilot13" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=1431661240]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, 0.58191365, -0.21063444, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Pilot14" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=1803644908]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, 0.39735314, -0.21063444, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Pilot15" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=400159589]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, 0.39735314, -0.3568887, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Pilot16" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=2133363213]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, 0.5857664, -0.3568887, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Pilot5" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=199020838]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, 0.5793113, 0.06999999, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Pilot6" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=305002505]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, 0.3947508, 0.06999999, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Pilot7" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=1193066259]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, 0.3947508, -0.07625431, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Pilot8" type="MeshInstance3D" parent="Face/Switches/Switch1" unique_id=1940606942]
+transform = Transform3D(0.69528484, 0, 0, 0, 0.7427364, 0, 0, 0, 0.42160708, 0.58316404, -0.07625431, 0.04845906)
+material_override = SubResource("StandardMaterial3D_ocadl")
+mesh = SubResource("pilot_mesh")
+metadata/unique_pilot_material = true
+
+[node name="Switch2" type="Node3D" parent="Face/Switches" unique_id=857863057]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.31, 0.085)
+
+[node name="Base" type="MeshInstance3D" parent="Face/Switches/Switch2" unique_id=1825377465]
+material_override = SubResource("bakelite_mat")
+mesh = SubResource("switch_base_mesh")
+[node name="InteractBody" type="StaticBody3D" parent="Face/Switches/Switch2"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("4_switch")
+switch_index = 1
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Face/Switches/Switch2/InteractBody"]
+position = Vector3(0, 0, 0.092)
+shape = SubResource("switch_collision")
+
+[node name="Switch3" type="Node3D" parent="Face/Switches" unique_id=977176973]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.02, 0.085)
+
+[node name="Base" type="MeshInstance3D" parent="Face/Switches/Switch3" unique_id=542730213]
+material_override = SubResource("bakelite_mat")
+mesh = SubResource("switch_base_mesh")
+[node name="InteractBody" type="StaticBody3D" parent="Face/Switches/Switch3"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("4_switch")
+switch_index = 2
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Face/Switches/Switch3/InteractBody"]
+position = Vector3(0, 0, 0.092)
+shape = SubResource("switch_collision")
+
+[node name="Switch4" type="Node3D" parent="Face/Switches" unique_id=1445436884]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.02, 0.085)
+
+[node name="Base" type="MeshInstance3D" parent="Face/Switches/Switch4" unique_id=2121325341]
+material_override = SubResource("bakelite_mat")
+mesh = SubResource("switch_base_mesh")
+[node name="InteractBody" type="StaticBody3D" parent="Face/Switches/Switch4"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("4_switch")
+switch_index = 3
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Face/Switches/Switch4/InteractBody"]
+position = Vector3(0, 0, 0.092)
+shape = SubResource("switch_collision")
+
+[node name="FuseBank" type="Node3D" parent="Face" unique_id=1165647063]
+
+[node name="Fuse1" type="Node3D" parent="Face/FuseBank" unique_id=218051679]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.36, -0.43, 0.09)
+
+[node name="Socket" type="MeshInstance3D" parent="Face/FuseBank/Fuse1" unique_id=1757293615]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0)
+material_override = SubResource("trim_mat")
+mesh = SubResource("socket_mesh")
+[node name="SocketInteract" type="StaticBody3D" parent="Face/FuseBank/Fuse1"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("5_socket")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Face/FuseBank/Fuse1/SocketInteract"]
+position = Vector3(0, 0, 0.045)
+rotation = Vector3(1.5707963, 0, 0)
+shape = SubResource("socket_collision")
+
+[node name="FuseBulb" parent="Face/FuseBank/Fuse1" instance=ExtResource("2_good")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.12005566)
+visible = true
+fuse_condition = 0
+
+[node name="Fuse2" type="Node3D" parent="Face/FuseBank" unique_id=348003180]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, -0.43, 0.09)
+
+[node name="Socket" type="MeshInstance3D" parent="Face/FuseBank/Fuse2" unique_id=1998661364]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0)
+material_override = SubResource("trim_mat")
+mesh = SubResource("socket_mesh")
+[node name="SocketInteract" type="StaticBody3D" parent="Face/FuseBank/Fuse2"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("5_socket")
+slot_index = 1
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Face/FuseBank/Fuse2/SocketInteract"]
+position = Vector3(0, 0, 0.045)
+rotation = Vector3(1.5707963, 0, 0)
+shape = SubResource("socket_collision")
+
+[node name="FuseBulb" parent="Face/FuseBank/Fuse2" instance=ExtResource("3_broken")]
+transform = Transform3D(0.23283982, 0.007449953, -0.9724866, -0.9725151, 0.0017836696, -0.232833, 0, 0.9999707, 0.0076605007, 0.0022248, 0.00086578727, 0.12498674)
+
+[node name="Fuse3" type="Node3D" parent="Face/FuseBank" unique_id=1398280871]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, -0.43, 0.09)
+
+[node name="Socket" type="MeshInstance3D" parent="Face/FuseBank/Fuse3" unique_id=666730806]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0)
+material_override = SubResource("trim_mat")
+mesh = SubResource("socket_mesh")
+[node name="SocketInteract" type="StaticBody3D" parent="Face/FuseBank/Fuse3"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("5_socket")
+slot_index = 2
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Face/FuseBank/Fuse3/SocketInteract"]
+position = Vector3(0, 0, 0.045)
+rotation = Vector3(1.5707963, 0, 0)
+shape = SubResource("socket_collision")
+
+[node name="FuseBulb" parent="Face/FuseBank/Fuse3" instance=ExtResource("3_broken")]
+transform = Transform3D(0.23283982, 0.007449953, -0.9724866, -0.9725151, 0.0017836696, -0.232833, 0, 0.9999707, 0.0076605007, 0.0022248, 0.00086578727, 0.12498674)
+
+[node name="Fuse4" type="Node3D" parent="Face/FuseBank" unique_id=1687260344]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36, -0.43, 0.09)
+
+[node name="Socket" type="MeshInstance3D" parent="Face/FuseBank/Fuse4" unique_id=546236858]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0)
+material_override = SubResource("trim_mat")
+mesh = SubResource("socket_mesh")
+[node name="SocketInteract" type="StaticBody3D" parent="Face/FuseBank/Fuse4"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("5_socket")
+slot_index = 3
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Face/FuseBank/Fuse4/SocketInteract"]
+position = Vector3(0, 0, 0.045)
+rotation = Vector3(1.5707963, 0, 0)
+shape = SubResource("socket_collision")
+
+[node name="Screws" type="Node3D" parent="Face" unique_id=683488827]
+
+[node name="TL" type="MeshInstance3D" parent="Face/Screws" unique_id=1157689764]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, -0.47, 0.6, 0.07)
+material_override = SubResource("trim_mat")
+mesh = SubResource("screw_mesh")
+
+[node name="TL2" type="MeshInstance3D" parent="Face/Screws" unique_id=143652137]
+transform = Transform3D(3.4357214, 0, 0, 0, 7.5497894e-08, -3.4008236, 0, 0.99999994, 2.5675504e-07, 0.12175509, -0.4386255, 0.07)
+material_override = SubResource("trim_mat")
+mesh = SubResource("screw_mesh")
+
+[node name="TL3" type="MeshInstance3D" parent="Face/Screws" unique_id=1757558849]
+transform = Transform3D(3.4357214, 0, 0, 0, 7.5497894e-08, -3.4008236, 0, 0.99999994, 2.5675504e-07, -0.11073023, -0.4386255, 0.07)
+material_override = SubResource("trim_mat")
+mesh = SubResource("screw_mesh")
+
+[node name="TL4" type="MeshInstance3D" parent="Face/Screws" unique_id=1394079073]
+transform = Transform3D(3.4357214, 0, 0, 0, 7.5497894e-08, -3.4008236, 0, 0.99999994, 2.5675504e-07, -0.36377347, -0.4386255, 0.07)
+material_override = SubResource("trim_mat")
+mesh = SubResource("screw_mesh")
+
+[node name="TL5" type="MeshInstance3D" parent="Face/Screws" unique_id=753549622]
+transform = Transform3D(3.4357214, 0, 0, 0, 7.5497894e-08, -3.4008236, 0, 0.99999994, 2.5675504e-07, 0.36333537, -0.4386255, 0.07)
+material_override = SubResource("trim_mat")
+mesh = SubResource("screw_mesh")
+
+[node name="TR" type="MeshInstance3D" parent="Face/Screws" unique_id=78121030]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0.47, 0.6, 0.07)
+material_override = SubResource("trim_mat")
+mesh = SubResource("screw_mesh")
+
+[node name="BL" type="MeshInstance3D" parent="Face/Screws" unique_id=637672979]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, -0.47, -0.6, 0.07)
+material_override = SubResource("trim_mat")
+mesh = SubResource("screw_mesh")
+
+[node name="BR" type="MeshInstance3D" parent="Face/Screws" unique_id=1947372666]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0.47, -0.6, 0.07)
+material_override = SubResource("trim_mat")
+mesh = SubResource("screw_mesh")
