@@ -494,6 +494,22 @@ func _physics_process(delta: float) -> void:
 		if _is_exhausted and _stamina >= exhausted_recovery_threshold:
 			_is_exhausted = false
 	stance_indicator.call(&"set_running", is_sprinting)
+	var is_walking_upright := (
+		not is_sprinting
+		and input_vector.length_squared() > 0.01
+		and _stance == Stance.STANDING
+		and _stance_transition_timer <= 0.0
+		and _jump_phase == JumpPhase.IDLE
+	)
+	stance_indicator.call(&"set_walking", is_walking_upright)
+	var is_moving_in_stance := (
+		not is_sprinting
+		and input_vector.length_squared() > 0.01
+		and _stance_transition_timer <= 0.0
+		and _jump_phase == JumpPhase.IDLE
+	)
+	stance_indicator.call(&"set_crouch_moving", is_moving_in_stance and _stance == Stance.CROUCHED)
+	stance_indicator.call(&"set_prone_moving", is_moving_in_stance and _stance == Stance.PRONE)
 
 	var current_speed := move_speed
 	if is_sprinting:
