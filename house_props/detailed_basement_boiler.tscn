@@ -235,9 +235,10 @@ size = Vector3(0.32, 0.42, 0.38)
 
 [node name="DetailedBasementBoiler" type="StaticBody3D" unique_id=2062979178]
 editor_description = "Caldera antigua de sótano con depósito, hogar, manómetro, válvulas, tuberías y chimenea."
+collision_layer = 3
 script = ExtResource("1_boiler")
-temperature_percent = 48.0
-boiler_state = 1
+temperature_percent = 84.0
+boiler_state = 2
 
 [node name="Tank" type="MeshInstance3D" parent="." unique_id=1311562742]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
@@ -346,7 +347,19 @@ material_override = SubResource("Brass")
 mesh = SubResource("BoxMesh")
 
 [node name="LeftConnector" type="MeshInstance3D" parent="." unique_id=1574655623]
-transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, -0.72, 1.73, 0)
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, -0.6542919, 1.73, 0)
+mesh = SubResource("SmallPipeMesh")
+
+[node name="LeftConnector3" type="MeshInstance3D" parent="." unique_id=513903542]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, -0.6542919, 1.73, -0.10076508)
+mesh = SubResource("SmallPipeMesh")
+
+[node name="LeftConnector4" type="MeshInstance3D" parent="." unique_id=1012171396]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, -0.6542919, 0.96743715, -0.10076508)
+mesh = SubResource("SmallPipeMesh")
+
+[node name="LeftConnector2" type="MeshInstance3D" parent="." unique_id=765915126]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, -0.6542919, 0.96863866, 0)
 mesh = SubResource("SmallPipeMesh")
 
 [node name="Gauge" type="MeshInstance3D" parent="." unique_id=1889238494]
@@ -354,11 +367,11 @@ transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 1.57,
 mesh = SubResource("GaugeMesh")
 
 [node name="GaugeBezel" type="MeshInstance3D" parent="." unique_id=2113242847]
-transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 1.57, 0.676)
+transform = Transform3D(1, 0, 0, 0, 1.3396189e-07, -1, 0, 1.774379, 7.54979e-08, 0, 1.57, 0.656713)
 mesh = SubResource("GaugeBezelMesh")
 
 [node name="GaugeColorSectors" type="MeshInstance3D" parent="." unique_id=244819689]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.57, 0.684)
+transform = Transform3D(1.06601, 0, 0, 0, 1.0581477, 0, 0, 0, 1.135395, 0, 1.57, 0.6741316)
 mesh = SubResource("ArrayMesh_imepw")
 
 [node name="GaugeNeedlePivot" type="Node3D" parent="." unique_id=1056404841]
@@ -378,6 +391,54 @@ mesh = SubResource("LatchHubMesh")
 
 [node name="DoorAirVent" type="MeshInstance3D" parent="." unique_id=2116361619]
 transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0.72, 0.79)
+mesh = SubResource("VentMesh")
+
+[node name="DoorAirVent2" type="MeshInstance3D" parent="." unique_id=939688980]
+transform = Transform3D(0.33363804, 0.7824563, 2.9427921e-08, 2.5269799e-15, 7.549789e-08, -0.4981551, -0.41923064, 0.6227054, 2.341974e-08, 0.49955863, 0.8053447, 0.41952056)
+mesh = SubResource("VentMesh")
+
+[node name="DoorAirVent3" type="MeshInstance3D" parent="." unique_id=2091131220]
+transform = Transform3D(0.15812874, 0.955456, 3.5934377e-08, 6.1145064e-15, 7.549789e-08, -0.49815503, -0.5119218, 0.29513305, 1.109985e-08, 0.6128899, 0.8053447, 0.21882418)
+mesh = SubResource("VentMesh")
+
+[node name="DoorAirVent5" type="MeshInstance3D" parent="." unique_id=857774187]
+transform = Transform3D(-0.15266417, 0.958547, 3.605063e-08, 2.0486513e-15, 7.549788e-08, -0.4981551, -0.513578, -0.28493398, -1.07162705e-08, 0.6130794, 0.8053447, -0.21830225)
+mesh = SubResource("VentMesh")
+
+[node name="DoorAirVent4" type="MeshInstance3D" parent="." unique_id=818301528]
+transform = Transform3D(0.0010849088, 0.99999785, 3.7609585e-08, 2.048651e-15, 7.549788e-08, -0.4981551, -0.53578687, 0.002024889, 7.6153306e-11, 0.65289754, 0.8053447, -0.0028514564)
+mesh = SubResource("VentMesh")
+
+[node name="DoorAirVent6" type="MeshInstance3D" parent="." unique_id=895075787]
+transform = Transform3D(-0.33382535, 0.78217804, 2.9417443e-08, 5.1249144e-15, 7.549788e-08, -0.4981551, -0.41908163, -0.6230549, -2.3432893e-08, 0.49890924, 0.8053447, -0.4227699)
+mesh = SubResource("VentMesh")
+
+[node name="DoorAirVent7" type="MeshInstance3D" parent="." unique_id=1334354195]
+transform = Transform3D(-0.4634815, 0.5016916, 1.8868455e-08, 3.349755e-15, 7.549788e-08, -0.4981551, -0.26880032, -0.8650465, -3.2534103e-08, 0.32870537, 0.8053447, -0.57818437)
+mesh = SubResource("VentMesh")
+
+[node name="DoorAirVent8" type="MeshInstance3D" parent="." unique_id=2073319608]
+transform = Transform3D(-0.44260043, -0.56356144, -2.1195365e-08, 7.668933e-15, 7.549787e-08, -0.49815503, 0.3019495, -0.8260738, -3.1068357e-08, -0.3242817, 0.8053447, -0.5743715)
+mesh = SubResource("VentMesh")
+
+[node name="DoorAirVent9" type="MeshInstance3D" parent="." unique_id=752117777]
+transform = Transform3D(-0.30230945, -0.8256152, -3.1051083e-08, 3.7329144e-15, 7.549787e-08, -0.4981551, 0.44235483, -0.56423324, -2.1220616e-08, -0.5234027, 0.8053447, -0.42055023)
+mesh = SubResource("VentMesh")
+
+[node name="DoorAirVent10" type="MeshInstance3D" parent="." unique_id=1604708790]
+transform = Transform3D(-0.005878605, -0.9999397, -3.760739e-08, 4.2079167e-16, 7.54979e-08, -0.49815515, 0.5357557, -0.010971777, -4.126477e-10, -0.6638036, 0.8053447, 0.0009852424)
+mesh = SubResource("VentMesh")
+
+[node name="DoorAirVent11" type="MeshInstance3D" parent="." unique_id=791073324]
+transform = Transform3D(-0.1593261, -0.9547631, -3.59083e-08, 1.1424732e-15, 7.549788e-08, -0.4981551, 0.5115506, -0.2973677, -1.1183893e-08, -0.6280287, 0.8053447, -0.21483111)
+mesh = SubResource("VentMesh")
+
+[node name="DoorAirVent12" type="MeshInstance3D" parent="." unique_id=2134270024]
+transform = Transform3D(0.19511358, -0.93133545, -3.50272e-08, 9.785602e-15, 7.549788e-08, -0.4981551, 0.49899843, 0.36416185, 1.3696017e-08, -0.61540407, 0.8053447, 0.21746534)
+mesh = SubResource("VentMesh")
+
+[node name="DoorAirVent13" type="MeshInstance3D" parent="." unique_id=1763971800]
+transform = Transform3D(0.36338043, -0.7348616, -2.7637903e-08, -1.5101299e-15, 7.549786e-08, -0.49815497, 0.39372995, 0.6782168, 2.5507488e-08, -0.51205766, 0.8053447, 0.42473054)
 mesh = SubResource("VentMesh")
 
 [node name="DoorAirVentSlotA" type="MeshInstance3D" parent="." unique_id=1191256109]
@@ -426,28 +487,6 @@ mesh = SubResource("DoorBoltMesh")
 [node name="DoorBoltBottom4" type="MeshInstance3D" parent="." unique_id=904382519]
 transform = Transform3D(-0.7302773, 0.68315095, 0, -0.68315095, -0.7302773, 0, 0, 0, 0.55, -0.22228235, 1.1479942, 0.70779735)
 mesh = SubResource("DoorBoltMesh")
-
-[node name="RightPipe" type="MeshInstance3D" parent="." unique_id=2138024597]
-transform = Transform3D(0.78, 0, 0, 0, 1.25, 0, 0, 0, 0.78, 0.79, 1.35, -0.05)
-mesh = SubResource("PipeMesh")
-
-[node name="RightConnector" type="MeshInstance3D" parent="." unique_id=1777116206]
-transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, 0.71, 1.63, 0)
-mesh = SubResource("SmallPipeMesh")
-
-[node name="ValveStem" type="MeshInstance3D" parent="." unique_id=1916196091]
-transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, 0.83, 2.03, -0.05)
-mesh = SubResource("SmallPipeMesh")
-
-[node name="ValveHandleB" type="MeshInstance3D" parent="." unique_id=1703640964]
-transform = Transform3D(0.55, 0, 0, 0, 1.2834644e-08, -0.55, 0, 0.17, 4.1523847e-08, 0.83, 2.27, -0.05)
-material_override = SubResource("Rust")
-mesh = SubResource("RingMesh")
-
-[node name="ValveHandleA" type="MeshInstance3D" parent="." unique_id=2011520360]
-transform = Transform3D(4.1523847e-08, -0.17, 0, 0.55, 1.2834644e-08, 0, 0, 0, 0.55, 0.83, 2.27, -0.05)
-material_override = SubResource("Rust")
-mesh = SubResource("RingMesh")
 
 [node name="FootRight" type="MeshInstance3D" parent="." unique_id=1592949551]
 transform = Transform3D(0.32, 0, 0, 0, 0.42, 0, 0, 0, 0.38, 0.43, 0.21, 0)

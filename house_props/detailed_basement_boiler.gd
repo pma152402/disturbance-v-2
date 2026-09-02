@@ -2,10 +2,18 @@
 extends StaticBody3D
 
 signal boiler_state_changed(previous_state: BoilerState, new_state: BoilerState)
+signal puzzle_completed
+
+const MinigameScene := preload("res://boiler_minigame.tscn")
+const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
 
 enum BoilerState { OFF, RUNNING, CLOGGED }
 
 @export_range(0.0, 100.0, 1.0) var temperature_percent := 0.0
+@export var physical_valve_game_enabled := true
+@export_range(0.1, 10.0, 0.1) var temperature_response_speed := 2.8
+@export_range(1.0, 60.0, 1.0) var needle_spring_strength := 30.0
+@export_range(1.0, 20.0, 0.5) var needle_damping := 8.5
 @export var boiler_state: BoilerState = BoilerState.CLOGGED:
 	get:
 		return _boiler_state
@@ -19,6 +27,9 @@ enum BoilerState { OFF, RUNNING, CLOGGED }
 
 const GAUGE_COLD_ANGLE := deg_to_rad(90.0)
 const GAUGE_HOT_ANGLE := deg_to_rad(-90.0)
+const GREEN_END_PERCENT := 12.5
+const YELLOW_END_PERCENT := 41.6667
+const ORANGE_END_PERCENT := 70.8333
 const GAUGE_SECTOR_COLORS := [
 	Color(0.015, 0.92, 0.075, 1.0),
 	Color(1.0, 0.9, 0.025, 1.0),
@@ -29,6 +40,20 @@ const GAUGE_SECTOR_COLORS := [
 var _running_smoke_ramp: Gradient
 var _clogged_smoke_ramp: Gradient
 var _boiler_state: BoilerState = BoilerState.CLOGGED
+var _minigame_active := false
+var _puzzle_completed := false
+var _active_player: Node
+var _active_layer: CanvasLayer
+var _player_was_processing_input := true
+var _player_was_processing_physics := true
+var _control_audio: AudioStreamPlayer3D
+var _water_valve: Node
+var _air_intake_valve: Node
+var _air_outlet_valve: Node
+var _valves_discovered := false
+var _needle_temperature := 0.0
+var _needle_velocity := 0.0
+var _target_temperature := 48.0
 
 
 func _find_primary_smoke_emitter() -> CPUParticles3D:
@@ -42,16 +67,222 @@ func _ready() -> void:
 	_build_gauge_color_sectors()
 	_create_smoke_ramps()
 	_apply_boiler_state()
+	_needle_temperature = temperature_percent
+	_target_temperature = temperature_percent
+	_control_audio = AudioStreamPlayer3D.new()
+	_control_audio.max_distance = 12.0
+	_control_audio.volume_db = -3.0
+	_control_audio.stream = GameplaySounds.make_switch_click()
+	add_child(_control_audio)
+	call_deferred(&"_discover_physical_valves")
 
 
-func _process(_delta: float) -> void:
+func _exit_tree() -> void:
+	if _minigame_active:
+		_restore_player()
+
+
+func get_interaction_key() -> Key:
+	return KEY_F
+
+
+func uses_switch_sound() -> bool:
+	return false
+
+
+func get_interaction_text(_player: Node = null) -> String:
+	if physical_valve_game_enabled:
+		return ""
+	if _minigame_active:
+		return ""
+	if _puzzle_completed:
+		return "CALDERA ESTABLE"
+	return "F  REGULAR CALDERA"
+
+
+func interact(player: Node = null) -> bool:
+	if physical_valve_game_enabled:
+		return false
+	if _minigame_active or _puzzle_completed:
+		return true
+	_start_minigame(player)
+	return true
+
+
+func _start_minigame(player: Node) -> void:
+	_minigame_active = true
+	_active_player = player
+	_change_boiler_state(BoilerState.CLOGGED)
+	_active_layer = MinigameScene.instantiate() as CanvasLayer
+	get_tree().current_scene.add_child(_active_layer)
+	var minigame := _active_layer.get_node("BoilerMinigame")
+	minigame.completed.connect(_on_minigame_completed)
+	minigame.cancelled.connect(_on_minigame_cancelled)
+	minigame.values_changed.connect(_on_minigame_values_changed)
+	minigame.action_used.connect(_on_minigame_action_used)
+	_lock_player()
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+
+func _lock_player() -> void:
+	if not is_instance_valid(_active_player):
+		return
+	_player_was_processing_input = _active_player.is_processing_input()
+	_player_was_processing_physics = _active_player.is_physics_processing()
+	if _active_player.has_method(&"set_skill_check_active"):
+		_active_player.call(&"set_skill_check_active", true)
+	if _active_player is CharacterBody3D:
+		(_active_player as CharacterBody3D).velocity = Vector3.ZERO
+	_active_player.set_process_input(false)
+	_active_player.set_physics_process(false)
+
+
+func _restore_player() -> void:
+	if is_instance_valid(_active_player):
+		_active_player.set_process_input(_player_was_processing_input)
+		_active_player.set_physics_process(_player_was_processing_physics)
+		if _active_player.has_method(&"set_skill_check_active"):
+			_active_player.call(&"set_skill_check_active", false)
+	_active_player = null
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+
+func _on_minigame_values_changed(new_temperature: float, blockage: float) -> void:
+	set_temperature(new_temperature)
+	if blockage <= 0.0 and _boiler_state == BoilerState.CLOGGED:
+		_change_boiler_state(BoilerState.RUNNING)
+
+
+func _on_minigame_action_used(action: StringName) -> void:
+	if not is_instance_valid(_control_audio):
+		return
+	match action:
+		&"fuel": _control_audio.pitch_scale = 0.78
+		&"vent": _control_audio.pitch_scale = 1.28
+		&"pump": _control_audio.pitch_scale = 0.58
+		_: _control_audio.pitch_scale = 0.42
+	_control_audio.play()
+
+
+func _on_minigame_completed() -> void:
+	_puzzle_completed = true
+	_minigame_active = false
+	_change_boiler_state(BoilerState.RUNNING)
+	set_temperature(28.0)
+	_restore_player()
+	if is_instance_valid(_active_layer):
+		_active_layer.queue_free()
+	_active_layer = null
+	puzzle_completed.emit()
+
+
+func _on_minigame_cancelled() -> void:
+	_minigame_active = false
+	_restore_player()
+	if is_instance_valid(_active_layer):
+		_active_layer.queue_free()
+	_active_layer = null
+
+
+func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		_apply_temperature_to_gauge()
+		return
+	if physical_valve_game_enabled:
+		_update_temperature_from_valves(delta)
+	_update_needle_animation(delta)
+
+
+func _discover_physical_valves() -> void:
+	_water_valve = null
+	_air_intake_valve = null
+	_air_outlet_valve = null
+	for candidate in get_tree().get_nodes_in_group(&"boiler_valve"):
+		if not is_instance_valid(candidate):
+			continue
+		match int(candidate.get("valve_role")):
+			0:
+				_water_valve = candidate
+			1:
+				_air_intake_valve = candidate
+			2:
+				_air_outlet_valve = candidate
+	_valves_discovered = (
+		is_instance_valid(_water_valve)
+		and is_instance_valid(_air_intake_valve)
+		and is_instance_valid(_air_outlet_valve)
+	)
+
+
+func _update_temperature_from_valves(delta: float) -> void:
+	if not _valves_discovered:
+		_discover_physical_valves()
+		if not _valves_discovered:
+			return
+	var water := float(_water_valve.call(&"get_openness"))
+	var air_intake := float(_air_intake_valve.call(&"get_openness"))
+	var air_outlet := float(_air_outlet_valve.call(&"get_openness"))
+
+	# Equilibrio termico: el aire de entrada aviva el fuego; el agua y la
+	# salida de gases extraen calor. La solucion 70/45/80 queda en el verde reducido.
+	_target_temperature = clampf(
+		21.0
+		+ air_intake * 65.0
+		- water * 30.0
+		- air_outlet * 25.0,
+		0.0,
+		100.0
+	)
+	var response_weight := 1.0 - exp(-temperature_response_speed * delta)
+	temperature_percent = lerpf(temperature_percent, _target_temperature, response_weight)
+	_update_smoke_from_temperature()
+
+
+func _update_smoke_from_temperature() -> void:
+	# Verde: nada. Amarillo: humo ligero. Naranja/rojo: humo abundante.
+	# Los pequeños márgenes al salir impiden parpadeos en las fronteras.
+	if temperature_percent >= YELLOW_END_PERCENT and _boiler_state != BoilerState.CLOGGED:
+		_set_runtime_boiler_state(BoilerState.CLOGGED)
+	elif temperature_percent <= GREEN_END_PERCENT and _boiler_state != BoilerState.OFF:
+		_set_runtime_boiler_state(BoilerState.OFF)
+	elif _boiler_state == BoilerState.OFF and temperature_percent > GREEN_END_PERCENT + 1.5:
+		_set_runtime_boiler_state(BoilerState.RUNNING)
+	elif _boiler_state == BoilerState.CLOGGED and temperature_percent < YELLOW_END_PERCENT - 2.5:
+		_set_runtime_boiler_state(BoilerState.RUNNING)
+
+
+func _set_runtime_boiler_state(next_state: BoilerState) -> void:
+	var previous_state := _boiler_state
+	_boiler_state = next_state
+	match _boiler_state:
+		BoilerState.OFF:
+			_stop_smoke(firebox_smoke)
+			_stop_smoke(firebox_smoke_leak)
+		BoilerState.RUNNING:
+			_configure_running_smoke()
+			_stop_smoke(firebox_smoke_leak)
+		BoilerState.CLOGGED:
+			_configure_clogged_smoke()
+	if previous_state != _boiler_state:
+		boiler_state_changed.emit(previous_state, _boiler_state)
+
+
+func _update_needle_animation(delta: float) -> void:
+	# Resorte amortiguado: responde enseguida, pero conserva peso e inercia.
+	var safe_delta := minf(delta, 0.05)
+	var error := temperature_percent - _needle_temperature
+	_needle_velocity += error * needle_spring_strength * safe_delta
+	_needle_velocity *= exp(-needle_damping * safe_delta)
+	_needle_temperature = clampf(_needle_temperature + _needle_velocity * safe_delta, 0.0, 100.0)
+	_apply_temperature_to_gauge(_needle_temperature)
 
 
 func set_temperature(value: float) -> void:
 	temperature_percent = clampf(value, 0.0, 100.0)
-	_apply_temperature_to_gauge()
+	_target_temperature = temperature_percent
+	if Engine.is_editor_hint() or not is_node_ready():
+		_needle_temperature = temperature_percent
+		_apply_temperature_to_gauge(_needle_temperature)
 
 
 func change_boiler_state(value: int) -> void:
@@ -173,14 +404,17 @@ func _build_gauge_color_sectors() -> void:
 	var inner_radius := 0.026
 	var start_angle := deg_to_rad(180.0)
 	var end_angle := deg_to_rad(0.0)
-	var sector_width := (start_angle - end_angle) / 4.0
+	var total_width := start_angle - end_angle
+	var sector_fractions: Array[float] = [0.125, 0.2916667, 0.2916667, 0.2916666]
 	var subdivisions := 4
+	var consumed_fraction := 0.0
 
 	for sector_index in range(4):
 		var surface_tool := SurfaceTool.new()
 		surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
-		var sector_start := start_angle - sector_width * float(sector_index)
-		var sector_end := sector_start - sector_width
+		var sector_width: float = total_width * sector_fractions[sector_index]
+		var sector_start := start_angle - total_width * consumed_fraction
+		var sector_end: float = sector_start - sector_width
 		for step in range(subdivisions):
 			var amount_a := float(step) / float(subdivisions)
 			var amount_b := float(step + 1) / float(subdivisions)
@@ -205,14 +439,16 @@ func _build_gauge_color_sectors() -> void:
 		sector_material.emission = GAUGE_SECTOR_COLORS[sector_index]
 		sector_material.emission_energy_multiplier = 0.32
 		sector_mesh.surface_set_material(sector_index, sector_material)
+		consumed_fraction += sector_fractions[sector_index]
 
 	gauge_color_sectors.mesh = sector_mesh
 
 
-func _apply_temperature_to_gauge() -> void:
+func _apply_temperature_to_gauge(display_temperature := -1.0) -> void:
 	if not is_instance_valid(gauge_needle_pivot):
 		return
-	var normalized_temperature := temperature_percent / 100.0
+	var shown_temperature := temperature_percent if display_temperature < 0.0 else display_temperature
+	var normalized_temperature := shown_temperature / 100.0
 	gauge_needle_pivot.rotation.z = lerpf(
 		GAUGE_COLD_ANGLE,
 		GAUGE_HOT_ANGLE,

@@ -148,6 +148,7 @@ var _monster_hits := 0
 var _monster_hit_cooldown := 0.0
 var _monster_restart_pending := false
 var _skill_check_active := false
+var _active_valve: Node3D
 var _candle_placement_mode := false
 var _candle_placement_valid := false
 var _candle_placement_point := Vector3.ZERO
@@ -265,6 +266,11 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		var key_event := event as InputEventKey
 		var pressed_key := key_event.physical_keycode if key_event.physical_keycode != 0 else key_event.keycode
+		if is_instance_valid(_active_valve):
+			if pressed_key in [KEY_F, KEY_ESCAPE]:
+				end_valve_manipulation()
+				get_viewport().set_input_as_handled()
+			return
 		if _skill_check_active and pressed_key in [KEY_F, KEY_SPACE]:
 			return
 		if pressed_key == KEY_SHIFT and _stance != Stance.STANDING and _stance_transition_timer <= 0.0:
@@ -335,6 +341,9 @@ func _input(event: InputEvent) -> void:
 
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		var mouse_motion := event as InputEventMouseMotion
+		if is_instance_valid(_active_valve):
+			get_viewport().set_input_as_handled()
+			return
 		_is_aiming_hand = Input.is_key_pressed(KEY_ALT)
 		var zoom_sensitivity_scale := clampf(camera.fov / 75.0, 0.42, 1.2)
 		# Normal camera look remains active even while Alt controls the hand.
@@ -363,6 +372,15 @@ func _input(event: InputEvent) -> void:
 
 	if event is InputEventMouseButton:
 		var mouse_button := event as InputEventMouseButton
+		if mouse_button.pressed and is_instance_valid(_active_valve):
+			if mouse_button.button_index == MOUSE_BUTTON_WHEEL_UP:
+				_active_valve.call(&"adjust_with_mouse_wheel", 1.0)
+				get_viewport().set_input_as_handled()
+				return
+			if mouse_button.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				_active_valve.call(&"adjust_with_mouse_wheel", -1.0)
+				get_viewport().set_input_as_handled()
+				return
 		if mouse_button.pressed and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			var wheel_amount := maxf(mouse_button.factor, 1.0) * zoom_step
 			if mouse_button.button_index == MOUSE_BUTTON_WHEEL_UP:
@@ -433,6 +451,11 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector3.ZERO
 		_update_interaction_prompt()
 		_update_camera_motion(delta, Vector2.ZERO, false)
+		return
+	if is_instance_valid(_active_valve):
+		velocity = Vector3.ZERO
+		_update_camera_motion(delta, Vector2.ZERO, false)
+		_update_valve_prompt()
 		return
 	if is_instance_valid(_ladder_controller):
 		var ladder_input := Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
@@ -908,6 +931,28 @@ func play_switch_sound() -> void:
 
 func set_skill_check_active(active: bool) -> void:
 	_skill_check_active = active
+
+
+func begin_valve_manipulation(valve: Node3D) -> void:
+	if not is_instance_valid(valve):
+		return
+	if is_instance_valid(_active_valve) and _active_valve != valve:
+		end_valve_manipulation()
+	_active_valve = valve
+	_skill_check_active = true
+
+
+func end_valve_manipulation() -> void:
+	if is_instance_valid(_active_valve) and _active_valve.has_method(&"end_manipulation"):
+		_active_valve.call(&"end_manipulation")
+	_active_valve = null
+	_skill_check_active = false
+
+
+func _update_valve_prompt() -> void:
+	var percentage := roundi(float(_active_valve.call(&"get_openness")) * 100.0)
+	interaction_prompt.text = "RUEDA RATON  REGULAR  |  F  SOLTAR  [%d%%]" % percentage
+	interaction_prompt.visible = true
 
 
 func set_plunger_minigame_pose(active: bool) -> void:
