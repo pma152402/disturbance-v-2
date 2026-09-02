@@ -280,18 +280,17 @@ value = 100.0
 show_percentage = false
 
 [node name="StanceUI" type="CanvasLayer" parent="."]
-layer = 102
+layer = 127
 
 [node name="StanceIndicator" type="Control" parent="StanceUI"]
-anchors_preset = 3
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 22.0
-offset_top = -152.0
-offset_right = 150.0
-offset_bottom = -24.0
-grow_vertical = 0
+modulate = Color(1, 1, 1, 0.8)
+texture_filter = 1
+offset_left = 297.0
+offset_top = 54.0
+offset_right = 371.0
+offset_bottom = 134.0
 mouse_filter = 2
+z_index = 100
 script = ExtResource("16_stance_indicator")
 
 [node name="InventoryUI" type="CanvasLayer" parent="."]

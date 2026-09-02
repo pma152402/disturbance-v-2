@@ -493,6 +493,7 @@ func _physics_process(delta: float) -> void:
 		_stamina = minf(max_stamina, _stamina + stamina_recovery_per_second * delta)
 		if _is_exhausted and _stamina >= exhausted_recovery_threshold:
 			_is_exhausted = false
+	stance_indicator.call(&"set_running", is_sprinting)
 
 	var current_speed := move_speed
 	if is_sprinting:

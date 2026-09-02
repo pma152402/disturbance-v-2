@@ -349,9 +349,9 @@ text = "● REC"
 [node name="TapeMode" type="Label" parent="PS2PostProcess/CameraHUD" unique_id=1770821697]
 layout_mode = 0
 offset_left = 40.0
-offset_top = 90.0
-offset_right = 390.0
-offset_bottom = 142.0
+offset_top = 93.0
+offset_right = 244.0
+offset_bottom = 147.0
 theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.86)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
 theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.02, 0.96)
@@ -359,8 +359,24 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
 theme_override_fonts/font = ExtResource("8_pixel_font")
-theme_override_font_sizes/font_size = 34
-text = "CAM 01   SP"
+theme_override_font_sizes/font_size = 38
+text = "CAM 01"
+
+[node name="TapeSpeed" type="Label" parent="PS2PostProcess/CameraHUD"]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 95.0
+offset_right = 476.0
+offset_bottom = 147.0
+theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.86)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.02, 0.96)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("8_pixel_font")
+theme_override_font_sizes/font_size = 36
+text = "SP"
 
 [node name="Battery" type="Label" parent="PS2PostProcess/CameraHUD" unique_id=1680557512]
 layout_mode = 1
