@@ -1,0 +1,173 @@
+[gd_scene format=3 uid="uid://h8jpmcuhg4or"]
+
+[sub_resource type="StandardMaterial3D" id="Iron"]
+albedo_color = Color(0.105, 0.115, 0.105, 1)
+metallic = 0.72
+roughness = 0.68
+
+[sub_resource type="CylinderMesh" id="TankMesh"]
+material = SubResource("Iron")
+top_radius = 0.67
+bottom_radius = 0.67
+height = 1.85
+radial_segments = 18
+
+[sub_resource type="CylinderShape3D" id="TankShape"]
+height = 1.85
+radius = 0.67
+
+[sub_resource type="StandardMaterial3D" id="Rust"]
+albedo_color = Color(0.26, 0.085, 0.025, 1)
+metallic = 0.38
+roughness = 0.92
+
+[sub_resource type="CylinderMesh" id="RingMesh"]
+material = SubResource("Rust")
+top_radius = 0.72
+bottom_radius = 0.72
+height = 0.09
+radial_segments = 18
+
+[sub_resource type="CylinderMesh" id="DoorMesh"]
+material = SubResource("Rust")
+top_radius = 0.43
+bottom_radius = 0.43
+height = 0.075
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="Dark"]
+albedo_color = Color(0.018, 0.014, 0.011, 1)
+roughness = 0.96
+
+[sub_resource type="CylinderMesh" id="PipeMesh"]
+material = SubResource("Iron")
+top_radius = 0.095
+bottom_radius = 0.095
+height = 1.25
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="Brass"]
+albedo_color = Color(0.43, 0.28, 0.075, 1)
+metallic = 0.82
+roughness = 0.36
+
+[sub_resource type="BoxMesh" id="BoxMesh"]
+material = SubResource("Iron")
+
+[sub_resource type="CylinderMesh" id="SmallPipeMesh"]
+material = SubResource("Brass")
+top_radius = 0.055
+bottom_radius = 0.055
+height = 0.48
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="GaugeFace"]
+albedo_color = Color(0.64, 0.59, 0.45, 1)
+roughness = 0.72
+
+[sub_resource type="CylinderMesh" id="GaugeMesh"]
+material = SubResource("GaugeFace")
+top_radius = 0.16
+bottom_radius = 0.16
+height = 0.045
+radial_segments = 16
+
+[sub_resource type="BoxShape3D" id="FootShape"]
+size = Vector3(0.32, 0.42, 0.38)
+
+[node name="DetailedBasementBoiler" type="StaticBody3D" unique_id=2062979178]
+editor_description = "Caldera antigua de sótano con depósito, hogar, manómetro, válvulas, tuberías y chimenea."
+
+[node name="Tank" type="MeshInstance3D" parent="." unique_id=1311562742]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+mesh = SubResource("TankMesh")
+
+[node name="TankCollision" type="CollisionShape3D" parent="." unique_id=1707258648]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("TankShape")
+
+[node name="LowerBand" type="MeshInstance3D" parent="." unique_id=915905460]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.67, 0)
+mesh = SubResource("RingMesh")
+
+[node name="UpperBand" type="MeshInstance3D" parent="." unique_id=1960980097]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.83, 0)
+mesh = SubResource("RingMesh")
+
+[node name="FireboxDoor" type="MeshInstance3D" parent="." unique_id=1499979366]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0.9, 0.655)
+mesh = SubResource("DoorMesh")
+
+[node name="FireboxOpening" type="MeshInstance3D" parent="." unique_id=1158287975]
+transform = Transform3D(0.73, 0, 0, 0, 5.511347e-08, -0.55, 0, 0.73, 4.1523847e-08, 0, 0.9, 0.699)
+material_override = SubResource("Dark")
+mesh = SubResource("DoorMesh")
+
+[node name="Chimney" type="MeshInstance3D" parent="." unique_id=590962769]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.48, -0.18)
+mesh = SubResource("PipeMesh")
+
+[node name="LeftPipe" type="MeshInstance3D" parent="." unique_id=159858177]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, 1.52, -0.05)
+mesh = SubResource("PipeMesh")
+
+[node name="DoorHingeLeft" type="MeshInstance3D" parent="." unique_id=1047741526]
+transform = Transform3D(0.09, 0, 0, 0, 0.32, 0, 0, 0, 0.08, -0.39, 0.9, 0.735)
+material_override = SubResource("Brass")
+mesh = SubResource("BoxMesh")
+
+[node name="LeftConnector" type="MeshInstance3D" parent="." unique_id=1574655623]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, -0.72, 1.73, 0)
+mesh = SubResource("SmallPipeMesh")
+
+[node name="Gauge" type="MeshInstance3D" parent="." unique_id=1889238494]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 1.57, 0.67)
+mesh = SubResource("GaugeMesh")
+
+[node name="DoorLatch" type="MeshInstance3D" parent="." unique_id=289980693]
+transform = Transform3D(0.26302436, -0.018859379, 0, 0.096011385, 0.0516655, 0, 0, 0, 0.055, 0.41, 0.9, 0.75)
+material_override = SubResource("Brass")
+mesh = SubResource("BoxMesh")
+
+[node name="GaugeNeedle" type="MeshInstance3D" parent="." unique_id=1004351183]
+transform = Transform3D(0.01534544, 0.06272247, 0, -0.009408371, 0.10230294, 0, 0, 0, 0.018, 0.025, 1.58, 0.702)
+material_override = SubResource("Dark")
+mesh = SubResource("BoxMesh")
+
+[node name="RightPipe" type="MeshInstance3D" parent="." unique_id=2138024597]
+transform = Transform3D(0.78, 0, 0, 0, 1.25, 0, 0, 0, 0.78, 0.79, 1.35, -0.05)
+mesh = SubResource("PipeMesh")
+
+[node name="RightConnector" type="MeshInstance3D" parent="." unique_id=1777116206]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, 0.71, 1.63, 0)
+mesh = SubResource("SmallPipeMesh")
+
+[node name="ValveStem" type="MeshInstance3D" parent="." unique_id=1916196091]
+transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, 0.83, 2.03, -0.05)
+mesh = SubResource("SmallPipeMesh")
+
+[node name="ValveHandleB" type="MeshInstance3D" parent="." unique_id=1703640964]
+transform = Transform3D(0.55, 0, 0, 0, 1.2834644e-08, -0.55, 0, 0.17, 4.1523847e-08, 0.83, 2.27, -0.05)
+material_override = SubResource("Rust")
+mesh = SubResource("RingMesh")
+
+[node name="ValveHandleA" type="MeshInstance3D" parent="." unique_id=2011520360]
+transform = Transform3D(4.1523847e-08, -0.17, 0, 0.55, 1.2834644e-08, 0, 0, 0, 0.55, 0.83, 2.27, -0.05)
+material_override = SubResource("Rust")
+mesh = SubResource("RingMesh")
+
+[node name="FootRight" type="MeshInstance3D" parent="." unique_id=1592949551]
+transform = Transform3D(0.32, 0, 0, 0, 0.42, 0, 0, 0, 0.38, 0.43, 0.21, 0)
+mesh = SubResource("BoxMesh")
+
+[node name="FootRightCollision" type="CollisionShape3D" parent="." unique_id=412049350]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.43, 0.21, 0)
+shape = SubResource("FootShape")
+
+[node name="FootLeft" type="MeshInstance3D" parent="." unique_id=1058980838]
+transform = Transform3D(0.32, 0, 0, 0, 0.42, 0, 0, 0, 0.38, -0.43, 0.21, 0)
+mesh = SubResource("BoxMesh")
+
+[node name="FootLeftCollision" type="CollisionShape3D" parent="." unique_id=1512382412]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.43, 0.21, 0)
+shape = SubResource("FootShape")

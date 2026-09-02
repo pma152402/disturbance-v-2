@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://bbv1373bi4osy"]
+
+[sub_resource type="StandardMaterial3D" id="IronMaterial"]
+albedo_color = Color(0.055, 0.048, 0.043, 1)
+metallic = 0.82
+roughness = 0.42
+
+[sub_resource type="CylinderMesh" id="PostMesh"]
+material = SubResource("IronMaterial")
+top_radius = 0.038
+bottom_radius = 0.048
+height = 0.91
+radial_segments = 10
+rings = 2
+
+[sub_resource type="StandardMaterial3D" id="IronEdgeMaterial"]
+albedo_color = Color(0.13, 0.095, 0.067, 1)
+metallic = 0.68
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="CapMesh"]
+material = SubResource("IronEdgeMaterial")
+top_radius = 0.056
+bottom_radius = 0.056
+height = 0.035
+radial_segments = 12
+
+[sub_resource type="BoxMesh" id="TopRailMesh"]
+material = SubResource("IronEdgeMaterial")
+size = Vector3(0.09, 0.085, 0.6)
+
+[sub_resource type="BoxMesh" id="LowerRailMesh"]
+material = SubResource("IronMaterial")
+size = Vector3(0.05, 0.05, 0.59)
+
+[sub_resource type="BoxShape3D" id="BarrierShape"]
+size = Vector3(0.12, 0.6407385, 0.5331555)
+
+[node name="ManualThreeStepGuardrail" type="Node3D" unique_id=900600466]
+editor_description = "Barandilla artesanal para el borde derecho del tramo modular de tres peldaños. Incluye postes, doble travesaño y barrera física continua."
+
+[node name="Rail" type="Node3D" parent="." unique_id=615839072]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.91, 0, 0)
+
+[node name="BottomPost" type="MeshInstance3D" parent="Rail" unique_id=1730119493]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, -0.49)
+mesh = SubResource("PostMesh")
+
+[node name="BottomCap" type="MeshInstance3D" parent="Rail" unique_id=903707917]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02, -0.49)
+mesh = SubResource("CapMesh")
+
+[node name="MiddlePost" type="MeshInstance3D" parent="Rail" unique_id=1928572706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, -0.735)
+mesh = SubResource("PostMesh")
+
+[node name="MiddleCap" type="MeshInstance3D" parent="Rail" unique_id=1177259464]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.19, -0.735)
+mesh = SubResource("CapMesh")
+
+[node name="TopPost" type="MeshInstance3D" parent="Rail" unique_id=365193499]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.885, -0.98)
+mesh = SubResource("PostMesh")
+
+[node name="TopCap" type="MeshInstance3D" parent="Rail" unique_id=1236800909]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.355, -0.98)
+mesh = SubResource("CapMesh")
+
+[node name="TopRail" type="MeshInstance3D" parent="Rail" unique_id=1931031033]
+transform = Transform3D(1, 0, 0, 0, 0.8253356, -0.5646425, 0, 0.5646425, 0.8253356, 0, 1.19, -0.735)
+mesh = SubResource("TopRailMesh")
+
+[node name="LowerRail" type="MeshInstance3D" parent="Rail" unique_id=1849779822]
+transform = Transform3D(1, 0, 0, 0, 0.8253356, -0.5646425, 0, 0.5646425, 0.8253356, 0, 0.82, -0.735)
+mesh = SubResource("LowerRailMesh")
+
+[node name="CollisionBarrier" type="StaticBody3D" parent="Rail" unique_id=131462029]
+transform = Transform3D(1, 0, 0, 0, 0.8253356, -0.5646425, 0, 0.5646425, 0.8253356, 0, 0.91, -0.735)
+
+[node name="Shape" type="CollisionShape3D" parent="Rail/CollisionBarrier" unique_id=723312954]
+transform = Transform3D(1, 0, 0, 0, 0.814015, 0.58084387, 0, -0.58084387, 0.814015, 0.025686026, -0.13683215, 0.0921824)
+shape = SubResource("BarrierShape")

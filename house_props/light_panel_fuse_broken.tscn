@@ -30,10 +30,12 @@ radial_segments = 10
 radius = 0.08
 height = 0.3
 
-[node name="FuseBulb" type="StaticBody3D"]
+[node name="FuseBulb" type="RigidBody3D"]
 editor_description = "Componente del fusible roto, conservado a partir de la referencia colocada en el panel."
 collision_layer = 2
-collision_mask = 0
+collision_mask = 1
+mass = 0.1
+freeze = true
 script = ExtResource("1_script")
 fuse_condition = 1
 

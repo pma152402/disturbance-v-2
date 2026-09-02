@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://house_props/recipe_book_closed_visual.tscn" id="13_recipe_book_closed"]
 [ext_resource type="PackedScene" path="res://player/held_items/matchbox_held_visual.tscn" id="14_matchbox"]
 [ext_resource type="PackedScene" path="res://player/held_items/candle_held_visual.tscn" id="15_candle"]
+[ext_resource type="Script" path="res://player/stance_indicator.gd" id="16_stance_indicator"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.34
@@ -278,8 +279,23 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_stamina_fill")
 value = 100.0
 show_percentage = false
 
+[node name="StanceUI" type="CanvasLayer" parent="."]
+layer = 102
+
+[node name="StanceIndicator" type="Control" parent="StanceUI"]
+anchors_preset = 3
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_top = -152.0
+offset_right = 150.0
+offset_bottom = -24.0
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("16_stance_indicator")
+
 [node name="InventoryUI" type="CanvasLayer" parent="."]
-layer = 101
+layer = 102
 
 [node name="InventorySlots" type="HBoxContainer" parent="InventoryUI"]
 anchors_preset = 7
@@ -372,7 +388,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ZoomUI" type="CanvasLayer" parent="."]
-layer = 101
+layer = 102
 
 [node name="ZoomMeter" type="Control" parent="ZoomUI"]
 layout_mode = 3
@@ -528,7 +544,7 @@ text = "+"
 horizontal_alignment = 1
 
 [node name="InteractionUI" type="CanvasLayer" parent="."]
-layer = 101
+layer = 102
 
 [node name="InteractionPrompt" type="Label" parent="InteractionUI"]
 visible = false

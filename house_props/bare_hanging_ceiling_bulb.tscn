@@ -1,0 +1,130 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://house_props/grandma_ceiling_lamp.gd" id="1_controller"]
+[ext_resource type="Script" path="res://flickering_light.gd" id="2_flicker"]
+[ext_resource type="AudioStream" path="res://sounds/objects/light_flicker.mp3" id="3_audio"]
+[ext_resource type="Script" path="res://sounds/objects/flicker_sound_player.gd" id="4_audio_script"]
+
+[sub_resource type="StandardMaterial3D" id="DarkMetal"]
+albedo_color = Color(0.075, 0.065, 0.055, 1)
+metallic = 0.72
+roughness = 0.48
+
+[sub_resource type="StandardMaterial3D" id="CordMaterial"]
+albedo_color = Color(0.025, 0.022, 0.019, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="CeramicMaterial"]
+albedo_color = Color(0.42, 0.38, 0.3, 1)
+roughness = 0.72
+
+[sub_resource type="StandardMaterial3D" id="BulbMaterial"]
+transparency = 1
+albedo_color = Color(0.34, 0.3, 0.23, 0.72)
+roughness = 0.22
+emission_enabled = true
+emission = Color(1, 0.55, 0.2, 1)
+emission_energy_multiplier = 2.4
+
+[sub_resource type="CylinderMesh" id="CanopyMesh"]
+material = SubResource("DarkMetal")
+top_radius = 0.11
+bottom_radius = 0.2
+height = 0.09
+radial_segments = 16
+
+[sub_resource type="CylinderMesh" id="CordMesh"]
+material = SubResource("CordMaterial")
+top_radius = 0.014
+bottom_radius = 0.014
+height = 0.72
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="SocketMesh"]
+material = SubResource("CeramicMaterial")
+top_radius = 0.072
+bottom_radius = 0.102
+height = 0.19
+radial_segments = 16
+
+[sub_resource type="TorusMesh" id="SocketRingMesh"]
+material = SubResource("DarkMetal")
+inner_radius = 0.075
+outer_radius = 0.105
+rings = 16
+ring_segments = 8
+
+[sub_resource type="SphereMesh" id="BulbMesh"]
+material = SubResource("BulbMaterial")
+radius = 0.115
+height = 0.29
+radial_segments = 16
+rings = 9
+
+[node name="BareHangingCeilingBulb" type="Node3D" groups=["basement_lights"]]
+editor_description = "Bombilla sencilla de sótano: florón metálico, cable negro, casquillo cerámico y bombilla desnuda. Compatible con interruptores y el cuadro eléctrico."
+script = ExtResource("1_controller")
+
+[node name="CeilingCanopy" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.045, 0)
+mesh = SubResource("CanopyMesh")
+
+[node name="HangingCord" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.43, 0)
+mesh = SubResource("CordMesh")
+
+[node name="CeramicSocket" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.84, 0)
+mesh = SubResource("SocketMesh")
+
+[node name="SocketRingTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.79, 0)
+mesh = SubResource("SocketRingMesh")
+
+[node name="SocketRingBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.91, 0)
+mesh = SubResource("SocketRingMesh")
+
+[node name="WarmBulb" type="MeshInstance3D" parent="."]
+position = Vector3(0, -1.055, 0)
+mesh = SubResource("BulbMesh")
+
+[node name="GentleWarmGlow" type="OmniLight3D" parent="."]
+position = Vector3(0, -1.08, 0)
+script = ExtResource("2_flicker")
+light_color = Color(1, 0.68, 0.34, 1)
+light_energy = 3.7
+omni_range = 7.0
+omni_attenuation = 1.45
+shadow_enabled = true
+base_energy = 3.7
+flicker_speed = 3.0
+flicker_strength = 0.08
+blackout_min_duration = 0.07
+blackout_max_duration = 0.14
+fixture_path = NodePath("../WarmBulb")
+flicker_sound_path = NodePath("../FlickerSound")
+
+[node name="DownwardHalo" type="SpotLight3D" parent="."]
+position = Vector3(0, -1.04, 0)
+rotation = Vector3(-1.570796, 0, 0)
+light_color = Color(1, 0.71, 0.4, 1)
+light_energy = 2.7
+shadow_enabled = true
+shadow_bias = 0.04
+shadow_normal_bias = 1.15
+shadow_blur = 2.0
+spot_range = 7.5
+spot_attenuation = 0.58
+spot_angle = 52.0
+
+[node name="FlickerSound" type="AudioStreamPlayer3D" parent="."]
+position = Vector3(0, -1.0, 0)
+stream = ExtResource("3_audio")
+volume_db = -10.0
+unit_size = 4.0
+max_distance = 15.0
+attenuation_model = 1
+script = ExtResource("4_audio_script")
+clip_start = 1.15
+clip_duration = 0.55

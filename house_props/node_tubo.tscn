@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://b21pfu7vno0wl"]
+
+[sub_resource type="StandardMaterial3D" id="Iron"]
+albedo_color = Color(0.105, 0.115, 0.105, 1)
+metallic = 0.72
+roughness = 0.68
+
+[sub_resource type="CylinderMesh" id="PipeMesh"]
+material = SubResource("Iron")
+top_radius = 0.095
+bottom_radius = 0.095
+height = 3.3374023
+radial_segments = 10
+
+[node name="DetailedBasementBoiler" type="StaticBody3D" unique_id=2062979178]
+editor_description = "Caldera antigua de sótano con depósito, hogar, manómetro, válvulas, tuberías y chimenea."
+
+[node name="Chimney" type="MeshInstance3D" parent="." unique_id=590962769]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5690057, -0.18)
+mesh = SubResource("PipeMesh")

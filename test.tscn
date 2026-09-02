@@ -2,18 +2,22 @@
 
 [ext_resource type="PackedScene" path="res://player/player.tscn" id="1_player"]
 [ext_resource type="PackedScene" uid="uid://bjgpno8nlgeck" path="res://house_baked.tscn" id="2_house"]
+[ext_resource type="Shader" uid="uid://bbxgyysxfxodx" path="res://pastel_wall_band.gdshader" id="3_mhym6"]
 [ext_resource type="Shader" uid="uid://dosdd5ab7itct" path="res://ps2_postprocess.gdshader" id="3_shader"]
+[ext_resource type="Shader" path="res://ps2_distortion.gdshader" id="3_distortion"]
+[ext_resource type="PackedScene" uid="uid://bmv8lak4eivgw" path="res://house_props/straight_three_step_section.tscn" id="4_uty7l"]
 [ext_resource type="PackedScene" path="res://rainy_weather.tscn" id="4_weather"]
+[ext_resource type="Texture2D" uid="uid://be4d12e4gghv3" path="res://ps2_house/textures/Pasto1.jpg" id="5_a3se8"]
 [ext_resource type="Texture2D" uid="uid://cindg1vkxwdrc" path="res://assets/environment/storm_landscape_panorama.png" id="5_storm_panorama"]
 [ext_resource type="PackedScene" path="res://exterior_environment.tscn" id="6_exterior"]
 [ext_resource type="Script" uid="uid://b8mkr502lfbrl" path="res://found_footage_overlay.gd" id="7_footage_overlay"]
 [ext_resource type="FontFile" uid="uid://b60wwt30lnp8h" path="res://assets/fonts/PressStart2P-Regular.ttf" id="8_pixel_font"]
 [ext_resource type="PackedScene" path="res://sounds/ambient/rain/rain_ambience.tscn" id="9_rain_ambience"]
-[ext_resource type="Script" path="res://sounds/ambient/indoor_weather_audio.gd" id="10_indoor_weather"]
+[ext_resource type="Script" uid="uid://4dg6d2nyvkm" path="res://sounds/ambient/indoor_weather_audio.gd" id="10_indoor_weather"]
 [ext_resource type="PackedScene" path="res://runtime_house_navigation.tscn" id="11_runtime_navigation"]
-[ext_resource type="PackedScene" path="res://monster_grandmother.tscn" id="12_monster_grandmother"]
+[ext_resource type="PackedScene" uid="uid://d2nkf5x4tmuwa" path="res://monster_grandmother.tscn" id="12_monster_grandmother"]
 [ext_resource type="PackedScene" path="res://runtime_catacomb_navigation.tscn" id="13_catacomb_navigation"]
-[ext_resource type="PackedScene" path="res://monster_grandmother_imported.tscn" id="15_imported_grandmother"]
+[ext_resource type="PackedScene" uid="uid://btj1tf3hf2k6t" path="res://monster_grandmother_imported.tscn" id="15_imported_grandmother"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_storm"]
 panorama = ExtResource("5_storm_panorama")
@@ -38,7 +42,33 @@ fog_density = 0.11
 fog_sky_affect = 0.72
 adjustment_enabled = true
 adjustment_brightness = 0.869565
-adjustment_contrast = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uty7l"]
+render_priority = 0
+shader = ExtResource("3_mhym6")
+shader_parameter/upper_white = Color(0.96, 0.955, 0.94, 1)
+shader_parameter/lower_pastel_blue = Color(0.89, 0.885, 0.86, 1)
+shader_parameter/lower_stripe_blue = Color(0.8, 0.795, 0.77, 1)
+shader_parameter/border_blue = Color(0.85, 0.84, 0.81, 1)
+shader_parameter/stripe_width = 0.32
+shader_parameter/border_width = 0.075
+shader_parameter/ground_band_top = 1.38
+shader_parameter/upper_floor_start = 4.1
+shader_parameter/upper_band_top = 5.48
+
+[sub_resource type="StandardMaterial3D" id="Material_wet_ground"]
+albedo_color = Color(0.42, 0.52, 0.34, 1)
+albedo_texture = ExtResource("5_a3se8")
+metallic = 0.06
+roughness = 0.7
+uv1_scale = Vector3(18, 18, 18)
+uv1_triplanar = true
+uv1_world_triplanar = true
+texture_filter = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_uty7l"]
+material = SubResource("Material_wet_ground")
+size = Vector3(3.2, 0.16, 40.838898)
 
 [sub_resource type="ShaderMaterial" id="Material_ps2"]
 shader = ExtResource("3_shader")
@@ -51,6 +81,10 @@ shader_parameter/vignette_strength = 0.94
 shader_parameter/vignette_inner = 0.07
 shader_parameter/vignette_outer = 0.47
 
+[sub_resource type="ShaderMaterial" id="Material_ps2_distortion"]
+shader = ExtResource("3_distortion")
+shader_parameter/fisheye_strength = 0.007
+
 [node name="ThreeStoreyHouse" type="Node3D" unique_id=1539321156]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2005037581]
@@ -58,18 +92,7 @@ environment = SubResource("Environment_house")
 
 [node name="House" parent="." unique_id=2054551697 instance=ExtResource("2_house")]
 
-[node name="KitchenChairB2" parent="House/FurnitureAndPickups" parent_id_path=PackedInt32Array(2054551697, 837016754) index="2" unique_id=2081601524]
-transform = Transform3D(0.97682786, 0, 0.21402662, 0, 1, 0, -0.21402662, 0, 0.97682786, 8.598674, 0.0048219264, 2.8929503)
-
-[node name="LivingRoomWallClock" parent="House/FurnitureAndPickups" parent_id_path=PackedInt32Array(2054551697, 837016754) index="11"]
-transform = Transform3D(0.8996488, 0, -0.025142336, 0, 0.9, 0, 0.025142336, 0, 0.8996488, 6.945027, 3.0062962, 2.2190597)
-
 [node name="Weather" parent="." unique_id=73805243 instance=ExtResource("4_weather")]
-
-[node name="RainAmbience" parent="." instance=ExtResource("9_rain_ambience")]
-
-[node name="IndoorWeatherAudio" type="Node" parent="."]
-script = ExtResource("10_indoor_weather")
 
 [node name="ExteriorGround" parent="Weather" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
@@ -104,9 +127,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.5, 15, 27.5)
 [node name="EastRain" parent="Weather/Rain" index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.5, 15, 27.5)
 
+[node name="HouseRoofRainOccluder" parent="Weather/Rain" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+
+[node name="ConnectorRoofRainOccluder" parent="Weather/Rain" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 4, -16.4)
+
+[node name="ChurchRoofRainOccluder" parent="Weather/Rain" index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 4.5, -30)
+
 [node name="OvercastLight" parent="Weather" index="6"]
 transform = Transform3D(0.8366349, 0.47093433, -0.27975512, -0.07252406, 0.60146344, 0.7956016, 0.5429386, -0.645339, 0.53735936, 0, 0, 0)
-light_energy = 0.52
 
 [node name="GroundFloorFlash" parent="Weather/InteriorLightning" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -117,32 +148,168 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, 0)
 [node name="BasementFlash" parent="Weather/InteriorLightning" index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.2, 0)
 
+[node name="ThunderFragmentPlayer" parent="Weather" index="8"]
+bus = &"Master"
+
+[node name="GroundWest" parent="Weather/CellarGroundCutout" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.6, -0.1, 0)
+
+[node name="ChurchAccessWestNorth" parent="Weather/CellarGroundCutout" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.77, -0.1, -48.6)
+
+[node name="ChurchAccessWestSouth" parent="Weather/CellarGroundCutout" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.77, -0.1, 7.6)
+
+[node name="ChurchAccessCenterNorth" parent="Weather/CellarGroundCutout" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74, -0.1, -48.6)
+
+[node name="GroundEast" parent="Weather/CellarGroundCutout" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.43, -0.1, 0)
+
+[node name="GroundNorth" parent="Weather/CellarGroundCutout" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74, -0.1, -19.38055)
+mesh = SubResource("BoxMesh_uty7l")
+
+[node name="GroundSouth" parent="Weather/CellarGroundCutout" index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74, -0.1, 30.04)
+
+[node name="DirtWest" parent="Weather/CellarGroundCutout" index="7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.52, -0.012, 0)
+
+[node name="DirtEast" parent="Weather/CellarGroundCutout" index="8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.78, -0.012, 0)
+
+[node name="DirtNorth" parent="Weather/CellarGroundCutout" index="9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74, -0.012, -10.76)
+
+[node name="DirtSouth" parent="Weather/CellarGroundCutout" index="10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74, -0.012, 14.39)
+
+[node name="CollarGroundWest" parent="Weather/CellarGroundCutout" index="11"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2025, -0.1, 3.63)
+
+[node name="CollarGroundEast" parent="Weather/CellarGroundCutout" index="12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2775, -0.1, 3.63)
+
+[node name="CollarGroundNorth" parent="Weather/CellarGroundCutout" index="13"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74, -0.1, 0.905437)
+
+[node name="CollarGroundSouth" parent="Weather/CellarGroundCutout" index="14"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74, -0.1, 4.94)
+
+[node name="CollarDirtWest" parent="Weather/CellarGroundCutout" index="15"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.22501, -0.012, 2.7330549)
+
+[node name="CollarDirtEast" parent="Weather/CellarGroundCutout" index="16"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.19, -0.012, 3.3)
+
+[node name="CollarDirtNorth" parent="Weather/CellarGroundCutout" index="17"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74, -0.012, 0.2738253)
+
+[node name="CollarDirtSouth" parent="Weather/CellarGroundCutout" index="18"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74, -0.012, 4.7)
+
+[node name="West" parent="Weather/CellarGroundCutout/GroundCutoutCollision" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.6, -0.1, 0)
+
+[node name="ChurchAccessWestNorth" parent="Weather/CellarGroundCutout/GroundCutoutCollision" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.77, -0.1, -48.6)
+
+[node name="ChurchAccessWestSouth" parent="Weather/CellarGroundCutout/GroundCutoutCollision" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.77, -0.1, 7.6)
+
+[node name="ChurchAccessCenterNorth" parent="Weather/CellarGroundCutout/GroundCutoutCollision" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74, -0.1, -48.6)
+
+[node name="East" parent="Weather/CellarGroundCutout/GroundCutoutCollision" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.43, -0.1, 0)
+
+[node name="North" parent="Weather/CellarGroundCutout/GroundCutoutCollision" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.96813726, -5.74, -0.1, -19.293678)
+
+[node name="South" parent="Weather/CellarGroundCutout/GroundCutoutCollision" index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74, -0.1, 30.04)
+
+[node name="CollarWest" parent="Weather/CellarGroundCutout/GroundCutoutCollision" index="7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2025, -0.1, 3.63)
+
+[node name="CollarEast" parent="Weather/CellarGroundCutout/GroundCutoutCollision" index="8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2775, -0.1, 3.63)
+
+[node name="CollarNorth" parent="Weather/CellarGroundCutout/GroundCutoutCollision" index="9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.728386, -0.1, 0.8835218)
+
+[node name="CollarSouth" parent="Weather/CellarGroundCutout/GroundCutoutCollision" index="10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74, -0.1, 4.94)
+
+[node name="RainAmbience" parent="." unique_id=81507758 instance=ExtResource("9_rain_ambience")]
+bus = &"Weather"
+
+[node name="IndoorWeatherAudio" type="Node" parent="." unique_id=450258088]
+script = ExtResource("10_indoor_weather")
+
 [node name="ExteriorEnvironment" parent="." unique_id=1088491580 instance=ExtResource("6_exterior")]
 
-[node name="RuntimeHouseNavigation" parent="." instance=ExtResource("11_runtime_navigation")]
+[node name="RuntimeHouseNavigation" parent="." unique_id=187039915 instance=ExtResource("11_runtime_navigation")]
 
-[node name="RuntimeCatacombNavigation" parent="." instance=ExtResource("13_catacomb_navigation")]
+[node name="RuntimeCatacombNavigation" parent="." unique_id=194099012 instance=ExtResource("13_catacomb_navigation")]
 
 [node name="Player" parent="." unique_id=546288329 instance=ExtResource("1_player")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -8.38, 1, 3.18)
 editor_description = "Spawn exterior frente a la entrada del sótano, mirando hacia la trampilla."
-debug_all_keys = false
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -8.38, 1, 3.18)
 starts_with_lit_candle = true
 starts_with_basement_key = true
 
-[node name="MonsterGrandmother" parent="." instance=ExtResource("12_monster_grandmother")]
-position = Vector3(10.15, 4.35, 8.65)
-rotation = Vector3(0, -1.82, 0)
+[node name="MonsterGrandmother" parent="." unique_id=889727421 instance=ExtResource("12_monster_grandmother")]
+transform = Transform3D(-0.24663237, 0, -0.9691091, 0, 1, 0, 0.9691091, 0, -0.24663237, 10.15, 4.35, 8.65)
 
-[node name="ImportedGrandmotherGroundFloor" parent="." instance=ExtResource("15_imported_grandmother")]
-position = Vector3(8.85, 4.35, 8.65)
-rotation = Vector3(0, -1.82, 0)
+[node name="ImportedGrandmotherGroundFloor" parent="." unique_id=1485663130 instance=ExtResource("15_imported_grandmother")]
+transform = Transform3D(-0.24663237, 0, -0.9691091, 0, 1, 0, 0.9691091, 0, -0.24663237, 8.85, 4.35, 8.65)
 remain_still = false
 dormant_until_door_opens = true
 activation_door_path = NodePath("House/Doors/MasterBedroomDoor/Hinge")
+close_player_distance = 1.2
+close_player_memory_seconds = 0.85
+light_detection_distance = 13.0
+same_floor_player_tolerance = 1.35
+same_floor_light_tolerance = 4.4
+flashlight_memory_seconds = 2.4
+static_light_memory_seconds = 0.8
+light_wander_radius = 1.15
+static_light_attention_seconds = 5.0
+static_light_approach_timeout = 8.0
+player_pursuit_break_distance = 8.0
+player_hidden_memory_seconds = 1.8
+dark_player_pursuit_break_distance = 4.8
+dark_player_hidden_memory_seconds = 0.65
+footstep_interest_seconds = 1.6
+reveal_after_seconds = 20.0
+reveal_live_seconds = 1.0
+reveal_reset_distance = 6.0
+reveal_search_seconds = 12.0
+patrol_offset_a = Vector3(-4.2, 0, 0)
+patrol_offset_b = Vector3(1.8, 0, -4.6)
+patrol_wait_min = 1.4
+patrol_wait_max = 5.0
+patrol_travel_timeout = 10.0
+
+[node name="PS2Distortion" type="CanvasLayer" parent="."]
+layer = 99
+
+[node name="ScreenDistortion" type="ColorRect" parent="PS2Distortion"]
+material = SubResource("Material_ps2_distortion")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="PS2PostProcess" type="CanvasLayer" parent="." unique_id=13050641]
-layer = 100
+layer = 101
+
+[node name="FilteredSceneCapture" type="BackBufferCopy" parent="PS2PostProcess"]
+copy_mode = 1
 
 [node name="ScreenFilter" type="ColorRect" parent="PS2PostProcess" unique_id=1354811659]
 material = SubResource("Material_ps2")
@@ -240,5 +407,4 @@ theme_override_font_sizes/font_size = 30
 text = "20/08/2026  00:00:00"
 horizontal_alignment = 2
 
-[editable path="House"]
 [editable path="Weather"]

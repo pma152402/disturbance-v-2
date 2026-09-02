@@ -4,6 +4,10 @@ extends Node
 ## El cambio es progresivo para que atravesar una puerta no produzca un corte.
 
 const EXPLICIT_INDOOR_VOLUMES: Array[AABB] = [
+	# Hueco de la escalera del sotano de la casa. Sube solo lo suficiente para
+	# iniciar la transicion tras bajar los primeros peldaños, sin alcanzar al
+	# jugador que camina por el cesped situado encima.
+	AABB(Vector3(-9.45, -19.5, 0.15), Vector3(6.4, 20.15, 6.85)),
 	# Sala inferior de la iglesia, cuyo acceso abierto deja escapar el rayo vertical.
 	AABB(Vector3(-12.4, -4.5, -42.6), Vector3(8.8, 5.2, 4.8)),
 	# Descenso localizado. No se extiende hasta el exterior situado sobre el sotano.

@@ -29,10 +29,12 @@ radial_segments = 10
 radius = 0.068
 height = 0.34
 
-[node name="FuseBulb" type="StaticBody3D"]
+[node name="FuseBulb" type="RigidBody3D"]
 editor_description = "Componente base del fusible en buen estado, conservado a partir de la copia de referencia exterior."
 collision_layer = 2
-collision_mask = 0
+collision_mask = 1
+mass = 0.12
+freeze = true
 script = ExtResource("1_script")
 
 [node name="Glass" type="MeshInstance3D" parent="."]

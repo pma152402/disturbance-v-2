@@ -5,8 +5,8 @@ signal footstep_heard(world_position: Vector3, hearing_radius: float)
 
 @export var move_speed := 1.4
 @export var sprint_speed := 3.6
-@export var crouch_speed := 1.55
-@export var prone_speed := 0.8
+@export var crouch_speed := 1.0
+@export var prone_speed := 0.55
 @export var acceleration := 5.0
 @export var sprint_turn_acceleration := 20.0
 @export var mouse_sensitivity := 0.0022
@@ -73,6 +73,7 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var candle_forward_light: SpotLight3D = $Head/Camera3D/RightHandRig/HeldCandle/WickRoot/Flame/ForwardLight
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
 @onready var stamina_bar: ProgressBar = $StaminaUI/StaminaBar
+@onready var stance_indicator: Control = $StanceUI/StanceIndicator
 @onready var interaction_prompt: Label = $InteractionUI/InteractionPrompt
 @onready var note_controls_prompt: Label = $InteractionUI/NoteControlsPrompt
 @onready var inventory_slots_ui: HBoxContainer = $InventoryUI/InventorySlots
@@ -237,6 +238,7 @@ func _ready() -> void:
 	inventory_slots_ui.visible = false
 	inventory_slots_ui.modulate.a = 0.0
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	stance_indicator.call(&"set_stance", _stance)
 	holster_sound.stream = GameplaySounds.make_switch_click()
 	footstep_sound.stream = GameplaySounds.make_footstep()
 	if held_recipe_book.has_signal(&"page_turn_finished"):
@@ -261,6 +263,10 @@ func _input(event: InputEvent) -> void:
 		var pressed_key := key_event.physical_keycode if key_event.physical_keycode != 0 else key_event.keycode
 		if _skill_check_active and pressed_key in [KEY_F, KEY_SPACE]:
 			return
+		if pressed_key == KEY_SHIFT and _stance != Stance.STANDING and _stance_transition_timer <= 0.0:
+			# Shift prioriza levantarse. Si se mantiene pulsado, el sprint empieza
+			# solamente cuando termina la transicion a la postura de pie.
+			_request_stance(Stance.STANDING)
 		if pressed_key == KEY_R:
 			get_viewport().set_input_as_handled()
 			get_tree().call_deferred(&"reload_current_scene")
@@ -464,7 +470,7 @@ func _physics_process(delta: float) -> void:
 	_update_auto_prone(input_vector)
 	if (
 		Input.is_action_just_pressed(&"sprint")
-		and _stance == Stance.CROUCHED
+		and _stance != Stance.STANDING
 		and _stance_transition_timer <= 0.0
 	):
 		_request_stance(Stance.STANDING)
@@ -1362,6 +1368,7 @@ func _set_stance_immediate(target_stance: Stance) -> void:
 	_pending_stance = target_stance
 	_stance_transition_timer = 0.0
 	_stance_transition_elapsed = 0.0
+	stance_indicator.call(&"set_stance", _stance)
 
 
 func pick_up_plunger() -> bool:
@@ -1482,10 +1489,11 @@ func _drop_selected_inventory_item() -> void:
 		dropped_candle.call(&"set_dropped", velocity * 0.15)
 	elif item_type in [&"panel_fuse_good", &"panel_fuse_broken"]:
 		var fuse_scene: PackedScene = GoodPanelFuseScene if item_type == &"panel_fuse_good" else BrokenPanelFuseScene
-		var dropped_fuse := fuse_scene.instantiate() as StaticBody3D
+		var dropped_fuse := fuse_scene.instantiate() as RigidBody3D
 		scene_root.add_child(dropped_fuse)
-		dropped_fuse.global_position = camera.global_position + (-camera.global_basis.z.normalized()) * 0.7 + Vector3.DOWN * 0.15
-		dropped_fuse.global_rotation = Vector3(0.0, rotation.y, 0.0)
+		dropped_fuse.global_position = camera.global_position + (-camera.global_basis.z.normalized()) * 0.62 + Vector3.DOWN * 0.18
+		dropped_fuse.global_rotation = Vector3(0.15, rotation.y, 0.35)
+		dropped_fuse.call(&"set_dropped", velocity * 0.15 + forward * 0.35)
 	else:
 		var pickup_scene: PackedScene = PlungerPickupScene if item_type == &"plunger" else CrowbarPickupScene
 		var dropped_pickup := pickup_scene.instantiate() as Node3D
@@ -1675,7 +1683,18 @@ func _stance_fits_at(target_stance: Stance, world_offset: Vector3) -> bool:
 	test_capsule.height = values.y
 	var query := PhysicsShapeQueryParameters3D.new()
 	query.shape = test_capsule
-	query.transform = Transform3D(global_basis, global_position + world_offset + global_basis * Vector3(0.0, values.z, 0.0))
+	# La base de todas las posturas queda casi tangente al suelo. Al consultar la
+	# forma exactamente ahi, algunas superficies cuentan ese contacto como una
+	# penetracion y bloquean cualquier postura mas alta. Este pequeño margen solo
+	# se usa en la prueba; la capsula real conserva su posicion correcta.
+	var clearance_origin := (
+		global_position
+		+ world_offset
+		+ global_basis * Vector3(0.0, values.z, 0.0)
+		+ Vector3.UP * 0.055
+	)
+	query.transform = Transform3D(global_basis, clearance_origin)
+	query.margin = 0.001
 	query.collision_mask = collision_mask
 	query.collide_with_areas = false
 	query.collide_with_bodies = true
@@ -1690,12 +1709,14 @@ func _update_stance_transition(delta: float) -> void:
 	_stance_transition_timer = maxf(0.0, _stance_transition_duration - _stance_transition_elapsed)
 	var progress := clampf(_stance_transition_elapsed / _stance_transition_duration, 0.0, 1.0)
 	var eased_progress := progress * progress * (3.0 - 2.0 * progress)
+	stance_indicator.call(&"set_transition", _stance, _pending_stance, eased_progress)
 	var capsule := collision_shape.shape as CapsuleShape3D
 	head.position.y = lerpf(_stance_start_values.x, _stance_target_values.x, eased_progress)
 	capsule.height = lerpf(_stance_start_values.y, _stance_target_values.y, eased_progress)
 	collision_shape.position.y = lerpf(_stance_start_values.z, _stance_target_values.z, eased_progress)
 	if progress >= 1.0:
 		_stance = _pending_stance
+		stance_indicator.call(&"set_stance", _stance)
 
 
 func _get_stance_values(target_stance: Stance) -> Vector3:

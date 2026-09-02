@@ -5,7 +5,6 @@ uniform float pixel_size : hint_range(1.0, 24.0, 1.0) = 8.0;
 uniform float color_levels : hint_range(5.0, 64.0, 1.0) = 24.0;
 uniform float chromatic_aberration : hint_range(0.0, 9.0, 0.1) = 1.2;
 uniform float scanline_strength : hint_range(0.0, 0.6, 0.01) = 0.09;
-uniform float fisheye_strength : hint_range(0.0, 0.03, 0.001) = 0.007;
 uniform float vignette_strength : hint_range(0.0, 0.98, 0.01) = 0.94;
 uniform float vignette_inner : hint_range(0.0, 0.6, 0.01) = 0.07;
 uniform float vignette_outer : hint_range(0.2, 1.2, 0.01) = 0.47;
@@ -21,16 +20,6 @@ void fragment() {
 	float screen_aspect = SCREEN_PIXEL_SIZE.y / SCREEN_PIXEL_SIZE.x;
 	lens_center.x *= screen_aspect;
 	float lens_radius = dot(lens_center, lens_center);
-	vec2 lens_direction = vec2(lens_center.x / screen_aspect, lens_center.y);
-	uv += lens_direction * lens_radius * fisheye_strength;
-	float horizontal_band = floor(uv.y * 105.0);
-	float random_tear = step(0.965, hash21(vec2(frame * 0.17, horizontal_band)));
-	uv.x += sin(uv.y * 18.0 + TIME * 1.7) * 0.00085;
-	uv.x += random_tear * (hash21(vec2(horizontal_band, frame)) - 0.5) * 0.006;
-	float interlace_shift = mod(floor(FRAGCOORD.y), 2.0) * SCREEN_PIXEL_SIZE.x * sin(frame * 0.37) * 1.5;
-	uv.x += interlace_shift;
-	float head_switch = smoothstep(0.82, 0.99, uv.y);
-	uv.x += head_switch * sin(uv.y * 170.0 + TIME * 13.0) * 0.0028;
 
 	vec2 block = SCREEN_PIXEL_SIZE * pixel_size;
 	uv = floor(uv / block) * block + block * 0.5;

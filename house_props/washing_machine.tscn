@@ -25,6 +25,16 @@ roughness = 0.38
 albedo_color = Color(0.58, 0.09, 0.065, 1)
 roughness = 0.55
 
+[sub_resource type="StandardMaterial3D" id="Material_drum"]
+albedo_color = Color(0.012, 0.016, 0.017, 1)
+metallic = 0.48
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Material_drum_lip"]
+albedo_color = Color(0.095, 0.105, 0.102, 1)
+metallic = 0.7
+roughness = 0.36
+
 [sub_resource type="BoxMesh" id="Mesh_body"]
 material = SubResource("Material_body")
 size = Vector3(1.18, 1.52, 1.02)
@@ -65,6 +75,20 @@ bottom_radius = 0.045
 height = 0.06
 radial_segments = 10
 
+[sub_resource type="CylinderMesh" id="Mesh_drum_void"]
+material = SubResource("Material_drum")
+top_radius = 0.3
+bottom_radius = 0.25
+height = 0.18
+radial_segments = 24
+
+[sub_resource type="TorusMesh" id="Mesh_drum_lip"]
+material = SubResource("Material_drum_lip")
+inner_radius = 0.29
+outer_radius = 0.345
+rings = 16
+ring_segments = 24
+
 [sub_resource type="BoxShape3D" id="Shape_body"]
 size = Vector3(1.18, 1.52, 1.02)
 
@@ -85,13 +109,27 @@ mesh = SubResource("Mesh_panel")
 position = Vector3(-0.34, 1.34, -0.565)
 mesh = SubResource("Mesh_drawer")
 
-[node name="DoorRing" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.72, -0.56)
+[node name="DrumOpening" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.72, -0.555)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("Mesh_drum_void")
+cast_shadow = 0
+
+[node name="DrumLip" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.72, -0.582)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("Mesh_drum_lip")
+
+[node name="DoorPivot" type="Node3D" parent="."]
+position = Vector3(-0.43, 0.72, -0.56)
+
+[node name="DoorRing" type="MeshInstance3D" parent="DoorPivot"]
+position = Vector3(0.43, 0, 0)
 rotation = Vector3(1.570796, 0, 0)
 mesh = SubResource("Mesh_door_ring")
 
-[node name="DoorGlass" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.72, -0.585)
+[node name="DoorGlass" type="MeshInstance3D" parent="DoorPivot"]
+position = Vector3(0.43, 0, -0.025)
 rotation = Vector3(1.570796, 0, 0)
 mesh = SubResource("Mesh_glass")
 
