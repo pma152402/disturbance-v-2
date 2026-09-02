@@ -1388,7 +1388,10 @@ size = Vector3(1, 1.4483643, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wguai"]
 material = SubResource("StandardMaterial3D_k2h41")
-size = Vector3(1, 1.435669, 1)
+size = Vector3(1, 1.3252563, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ib71f"]
+size = Vector3(1, 0.8989258, 1)
 
 [sub_resource type="StandardMaterial3D" id="wood"]
 albedo_color = Color(0.16, 0.075, 0.035, 1)
@@ -1416,6 +1419,20 @@ size = Vector3(0.61083984, 0.22557068, 1.0025635)
 [sub_resource type="BoxMesh" id="BoxMesh_t4t8f"]
 material = SubResource("wood")
 size = Vector3(0.61083984, 0.43297958, 1.0025635)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yl2gr"]
+size = Vector3(0.19334316, 0.37957764, 0.99072266)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6y63m"]
+size = Vector3(0.19918633, 0.4271698, 0.99072266)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jx5v6"]
+size = Vector3(0.19918633, 0.37252808, 0.99072266)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yb3dn"]
+size = Vector3(0.22164512, 0.910141, 0.99072266)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2afeb"]
 
 [node name="EditableTwoStoreyHouse" type="Node3D" unique_id=1251538920]
 script = ExtResource("38_wall_band_applier")
@@ -4689,6 +4706,9 @@ transform = Transform3D(-0.007681587, 0, 0.9219743, 0, 1.0653598, 0, -0.7456273,
 [node name="StraightThreeStepSection6" parent="FurnitureAndPickups" unique_id=1335927006 instance=ExtResource("162_pi34i")]
 transform = Transform3D(-0.010111108, 0, 2.0642118, 0, 1.0653598, 0, -0.98145324, 0, -0.021265885, -8.190789, -4.1567793, 1.4709499)
 
+[node name="StraightThreeStepSection7" parent="FurnitureAndPickups" unique_id=63086441 instance=ExtResource("162_pi34i")]
+transform = Transform3D(-0.010111108, 0, 2.0642118, 0, 1.0653598, 0, -0.98145324, 0, -0.021265885, -8.190789, -4.1567793, 1.4709499)
+
 [node name="StraightThreeStepSection8" parent="FurnitureAndPickups" unique_id=567803212 instance=ExtResource("162_pi34i")]
 transform = Transform3D(-0.010156371, 0, 1.4436307, 0, 1.1056573, 0, -0.98584676, 0, -0.014872546, -7.607719, -6.2970834, 5.9828877)
 
@@ -4827,7 +4847,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.9999997, 0, 0, -2.8088036)
 shape = SubResource("shape")
 
 [node name="CeilingWest" parent="BasementAccessAndInitialRoom" index="5" unique_id=842795515]
-transform = Transform3D(4.4, 0, 0, 0, 0.22, 0, 0, 0, 8, -4.203399, -1.92, 0)
+transform = Transform3D(4.4, 0, 0, 0, 0.22, 0, 0, 0, 8, -4.5040717, -1.92, 0)
 
 [node name="Mesh" parent="BasementAccessAndInitialRoom/CeilingWest" index="0" unique_id=329310712]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.99998695, -0.32295752, 0, -0.09830797)
@@ -4860,14 +4880,14 @@ shape = SubResource("shape")
 transform = Transform3D(7.0383253, 0, 0, 0, 0.22, 0, 0, 0, 2.4, -0.45521212, -1.776198, 2.9194448)
 
 [node name="Mesh" parent="BasementAccessAndInitialRoom/CeilingSouth" index="0" unique_id=1956041103]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.35723376)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5897264, -0.3572333)
 
 [node name="Collision" parent="BasementAccessAndInitialRoom/CeilingSouth" index="1" unique_id=928370375]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.327693)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5722866, -0.25195074)
 shape = SubResource("shape")
 
 [node name="ShaftWest" parent="BasementAccessAndInitialRoom" index="9" unique_id=1546785413]
-transform = Transform3D(0.1988939, 0.8761676, 0, -0.09402774, 1.8533297, 0, 0, 0, 4.8554893, -2.9555783, -0.9, 0)
+transform = Transform3D(0.1988939, 0.8761676, 0, -0.09402774, 1.8533297, 0, 0, 0, 4.8554893, -3.3001285, -0.9, 0)
 
 [node name="Mesh" parent="BasementAccessAndInitialRoom/ShaftWest" index="0" unique_id=1633898511]
 transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.1693051, 0, 0.22070313, -0.037353516)
@@ -4903,12 +4923,12 @@ shape = SubResource("shape")
 transform = Transform3D(5.8546844, 0, 0, 0, 2.05, 0, 0, 0, 0.22, -0.3100381, -0.9, 0.84263015)
 
 [node name="Mesh" parent="BasementAccessAndInitialRoom/ShaftNorth2" index="0" unique_id=265221435]
-transform = Transform3D(0.99999964, 0, 0, 0, 1, 0, 0, 0, 1.2662565, -0.08901906, 0.28915256, 0.78090477)
+transform = Transform3D(0.99999964, 0, 0, 0, 1, 0, 0, 0, 1.2662565, -0.08901906, 0.34435892, 0.7809086)
 mesh = SubResource("BoxMesh_wguai")
 
 [node name="Collision" parent="BasementAccessAndInitialRoom/ShaftNorth2" index="1" unique_id=733171672]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.0000006, 0, 0, 0.6072922)
-shape = SubResource("shape")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.0000027, 0, 0.14236063, 0.6072922)
+shape = SubResource("BoxShape3D_ib71f")
 
 [node name="NorthBeam" parent="BasementAccessAndInitialRoom" index="13" unique_id=1088197713]
 transform = Transform3D(11.4, 0, 0, 0, 0.28, 0, 0, 0, 0.3, 0, -2.25, -3.4515204)
@@ -4979,6 +4999,37 @@ mesh = SubResource("BoxMesh_tkxxf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.5748353)
 shape = SubResource("shape")
 
+[node name="BasementStairContinuousCollider" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=319338263]
+editor_description = "Único cuerpo físico de la escalera del sótano. Sus superficies forman rampas continuas; los peldaños son solo visuales."
+
+[node name="RampSurface01" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/BasementStairContinuousCollider" unique_id=125320612]
+transform = Transform3D(14.392583, -0.005557173, -0.08117679, -8.520976, -0.009386499, -0.13711385, -3.9608756e-09, 3.288124, -0.00052860944, 0.31563616, -5.5617733, 2.1719992)
+shape = SubResource("BoxShape3D_yl2gr")
+
+[node name="RampSurface07" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/BasementStairContinuousCollider" unique_id=1269527692]
+transform = Transform3D(13.418697, -0.006511708, -0.0951202, -9.98459, -0.008751356, -0.12783593, -7.620338e-09, 3.2881246, -0.0005286095, -0.016935825, -0.1560173, -0.33047724)
+shape = SubResource("BoxShape3D_6y63m")
+
+[node name="RampSurface02" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/BasementStairContinuousCollider" unique_id=1767655250]
+transform = Transform3D(-0.9155894, -3.2568426, -0.0013967037, -10.340846, 0.102876514, -0.119561195, 17.500446, -0.10960304, -0.07072065, -2.0210075, -3.64893, 0.20799518)
+shape = SubResource("BoxShape3D_yl2gr")
+
+[node name="RampSurface03" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/BasementStairContinuousCollider" unique_id=1887984204]
+transform = Transform3D(7.749789, -0.0009162372, -0.0137902675, -0.65319115, -0.010870744, -0.16361494, -3.367619e-09, 3.2884564, -0.0005447092, -1.8348932, -4.6543307, 2.1719992)
+shape = SubResource("BoxShape3D_yl2gr")
+
+[node name="RampSurface04" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/BasementStairContinuousCollider" unique_id=989421269]
+transform = Transform3D(17.068237, 0.008792891, 0.0933606, 13.953107, -0.010755963, -0.11420403, -8.07065e-09, 4.187749, -0.00048935245, -1.3439479, -2.4162297, -2.366652)
+shape = SubResource("BoxShape3D_jx5v6")
+
+[node name="RampSurface05" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/BasementStairContinuousCollider" unique_id=929972331]
+transform = Transform3D(9.163285, -0.008919169, -0.005503226, -0.33550584, -0.23946528, -0.15031157, 0.00033130223, 4.1861253, -0.008610228, -2.55553, -2.5468793, -2.2887154)
+shape = SubResource("BoxShape3D_yl2gr")
+
+[node name="RampSurface06" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/BasementStairContinuousCollider" unique_id=517154397]
+transform = Transform3D(9.169393, -0.008714648, -0.00024352921, -0.01484862, -0.0060102604, -0.15065818, 0.019036354, 4.192964, -0.0002164645, 1.3480186, -1.0288306, -1.1757967)
+shape = SubResource("BoxShape3D_yb3dn")
+
 [node name="ShaftNorth4" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=381395285]
 transform = Transform3D(11.854956, 0, 0, 0, 3.291153, 0, 0, 0, 0.22, 0, -4.6697273, 3.7111719)
 
@@ -4988,7 +5039,7 @@ mesh = SubResource("BoxMesh_tkxxf")
 
 [node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth4" unique_id=92128513]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.5748386)
-shape = SubResource("shape")
+shape = SubResource("BoxShape3D_2afeb")
 
 [node name="ShaftNorth5" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=789699368]
 transform = Transform3D(-0.13048726, 0, -0.22090846, 0, 3.2911534, 0, 8.554014, 0, -0.0033698487, -5.7664533, -4.6697273, -0.074920416)
@@ -5370,6 +5421,9 @@ transform = Transform3D(0.0015720874, 0, 1.0067632, 0, 0.9999999, 0, -0.7442034,
 [node name="StraightThreeStepSection22" parent="." unique_id=1904757160 instance=ExtResource("186_jjyb4")]
 transform = Transform3D(0.0015720874, 0, 1.0067632, 0, 0.9999999, 0, -0.7442034, 0, 0.0021267831, -4.944249, -7.1249886, 5.9386363)
 
+[node name="StraightThreeStepSection23" parent="." unique_id=1878149816 instance=ExtResource("186_jjyb4")]
+transform = Transform3D(0.0015720874, 0, 1.0067632, 0, 0.9999999, 0, -0.7442034, 0, 0.0021267831, -4.7149796, -7.285418, 5.9386363)
+
 [node name="StraightThreeStepSection18" parent="." unique_id=1016130110 instance=ExtResource("186_jjyb4")]
 transform = Transform3D(0.74419904, 0, -0.004043728, 0, 0.99999994, 0, 0.0029890966, 0, 1.0067574, -7.78252, -5.5033097, 4.7023735)
 
@@ -5505,8 +5559,8 @@ transform = Transform3D(0.018389942, -0.5167974, 0.0035256243, 2.9323287e-11, 0.
 [node name="DetailedBasementBoiler14" parent="." unique_id=88418878 instance=ExtResource("188_tjyac")]
 transform = Transform3D(0.018524826, -0.22999527, 0.0035320201, 2.953836e-11, 0.00075191504, 1.0805606, -1.4016578, -0.0030396993, 4.668022e-05, -8.764398, -3.097385, 0.7219446)
 
-[node name="DetailedBasementBoiler7" parent="." unique_id=1945489019 instance=ExtResource("188_tjyac")]
-transform = Transform3D(0.01505757, -0.18344298, -0.62672293, 0.010794564, -0.1306019, 0.8802915, -1.401829, -0.002976106, 4.6681642e-05, -9.39658, -3.0085204, 0.7111952)
+[node name="DetailedBasementBoiler18" parent="." unique_id=1690473553 instance=ExtResource("188_tjyac")]
+transform = Transform3D(0.015956223, -0.15502147, -0.55079037, 0.009515099, -0.09175752, 0.9305422, -1.4056734, -0.0023808067, 4.671304e-05, -9.4999895, -3.1113865, 0.7090896)
 
 [node name="DetailedBasementBoiler5" parent="." unique_id=1765570545 instance=ExtResource("188_tjyac")]
 transform = Transform3D(0.018696139, -0.23079732, 0.003539964, 2.9811528e-11, 0.0007545372, 1.0829909, -1.4146202, -0.0030502994, 4.6785208e-05, -10.627415, -3.3787987, 4.572375)

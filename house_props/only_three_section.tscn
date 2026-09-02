@@ -8,35 +8,23 @@ roughness = 0.9
 material = SubResource("StepMaterial")
 size = Vector3(1.75, 0.16, 0.62)
 
-[sub_resource type="BoxShape3D" id="StepShape"]
-size = Vector3(1.75, 0.16, 0.62)
-
 [node name="StraightThreeStepSection" type="Node3D" unique_id=402785590]
-editor_description = "Componente modular de tres peldaños rectos. Duplica el componente y encaja el peldaño superior con el inferior del siguiente tramo."
+editor_description = "Componente visual de tres peldaños. La colisión transitable pertenece a la rampa continua de la escalera."
 
-[node name="Step01" type="StaticBody3D" parent="." unique_id=291779524]
+[node name="Step01" type="Node3D" parent="." unique_id=291779524]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07451129, -0.5139546)
 
 [node name="Tread" type="MeshInstance3D" parent="Step01" unique_id=1656384061]
 mesh = SubResource("StepMesh")
 
-[node name="Collision" type="CollisionShape3D" parent="Step01" unique_id=1593383554]
-shape = SubResource("StepShape")
-
-[node name="Step02" type="StaticBody3D" parent="." unique_id=1207526681]
+[node name="Step02" type="Node3D" parent="." unique_id=1207526681]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23634756, -0.74250567)
 
 [node name="Tread" type="MeshInstance3D" parent="Step02" unique_id=992390740]
 mesh = SubResource("StepMesh")
 
-[node name="Collision" type="CollisionShape3D" parent="Step02" unique_id=439417155]
-shape = SubResource("StepShape")
-
-[node name="Step03" type="StaticBody3D" parent="." unique_id=1218447288]
+[node name="Step03" type="Node3D" parent="." unique_id=1218447288]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -0.96)
 
 [node name="Tread" type="MeshInstance3D" parent="Step03" unique_id=509184005]
 mesh = SubResource("StepMesh")
-
-[node name="Collision" type="CollisionShape3D" parent="Step03" unique_id=994489772]
-shape = SubResource("StepShape")

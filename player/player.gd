@@ -9,6 +9,7 @@ signal footstep_heard(world_position: Vector3, hearing_radius: float)
 @export var prone_speed := 0.55
 @export var acceleration := 5.0
 @export var sprint_turn_acceleration := 20.0
+@export_range(0.0, 1.5, 0.05) var max_step_height := 0.85
 @export var mouse_sensitivity := 0.0022
 @export var zoom_min_fov := 35.0
 @export var zoom_max_fov := 95.0
@@ -533,7 +534,9 @@ func _physics_process(delta: float) -> void:
 
 	velocity.x = move_toward(velocity.x, target_velocity.x, movement_acceleration * delta)
 	velocity.z = move_toward(velocity.z, target_velocity.z, movement_acceleration * delta)
-	move_and_slide()
+	var horizontal_motion := Vector3(velocity.x, 0.0, velocity.z) * delta
+	if not _try_step_up(horizontal_motion):
+		move_and_slide()
 	_update_held_candle_motion(is_sprinting)
 	_update_held_match_motion(is_sprinting)
 	_update_candle_placement_preview()
@@ -547,6 +550,41 @@ func _physics_process(delta: float) -> void:
 	var zoom_weight := 1.0 - exp(-zoom_smoothing * delta)
 	camera.fov = lerpf(camera.fov, desired_fov, zoom_weight)
 	_update_zoom_meter()
+
+
+func _try_step_up(horizontal_motion: Vector3) -> bool:
+	if not is_on_floor() or horizontal_motion.length_squared() < 0.000001:
+		return false
+	# Solo intentamos subir cuando el desplazamiento normal encuentra un borde.
+	if not test_move(global_transform, horizontal_motion):
+		return false
+	var parameters := PhysicsTestMotionParameters3D.new()
+	parameters.margin = 0.002
+	parameters.recovery_as_collision = false
+	parameters.from = global_transform
+	parameters.motion = Vector3.UP * max_step_height
+	if PhysicsServer3D.body_test_motion(get_rid(), parameters):
+		return false
+	var raised_transform := global_transform
+	raised_transform.origin += Vector3.UP * max_step_height
+	parameters.from = raised_transform
+	parameters.motion = horizontal_motion
+	if PhysicsServer3D.body_test_motion(get_rid(), parameters):
+		return false
+	var advanced_transform := raised_transform
+	advanced_transform.origin += horizontal_motion
+	parameters.from = advanced_transform
+	parameters.motion = Vector3.DOWN * (max_step_height + floor_snap_length)
+	var landing := PhysicsTestMotionResult3D.new()
+	if not PhysicsServer3D.body_test_motion(get_rid(), parameters, landing):
+		return false
+	var landing_normal := landing.get_collision_normal()
+	if landing_normal.dot(Vector3.UP) < cos(floor_max_angle):
+		return false
+	advanced_transform.origin += landing.get_travel()
+	global_transform = advanced_transform
+	velocity.y = 0.0
+	return true
 
 
 func _notification(what: int) -> void:

@@ -102,7 +102,7 @@ atlas = ExtResource("3_flashlight_texture")
 region = Rect2(78, 0, 82, 256)
 
 [node name="Player" type="CharacterBody3D"]
-floor_snap_length = 0.32
+floor_snap_length = 0.48
 script = ExtResource("1_player")
 
 [node name="HolsterSound" type="AudioStreamPlayer" parent="."]
