@@ -117,7 +117,13 @@ stream = ExtResource("7_flashlight_click")
 volume_db = -9.0
 
 [node name="FootstepSound" type="AudioStreamPlayer" parent="."]
-volume_db = -13.0
+volume_db = -6.0
+
+[node name="FootstepSurfaceRay" type="RayCast3D" parent="."]
+target_position = Vector3(0, -1.45, 0)
+collision_mask = 1
+collide_with_areas = false
+collide_with_bodies = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.15, 0)

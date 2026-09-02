@@ -23,7 +23,8 @@ signal footstep_heard(world_position: Vector3, hearing_radius: float)
 @export var sprint_bob_multiplier := 1.38
 @export var lean_distance := 0.48
 @export var lean_angle_degrees := 16.0
-@export var lean_speed := 7.0
+@export var lean_speed := 1.65
+@export var lean_return_speed := 3.4
 @export var max_stamina := 100.0
 @export var stamina_drain_per_second := 4.3
 @export var stamina_recovery_per_second := 6.0
@@ -93,6 +94,7 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var switch_sound: AudioStreamPlayer = $SwitchSound
 @onready var flashlight_click_sound: AudioStreamPlayer = $FlashlightClickSound
 @onready var footstep_sound: AudioStreamPlayer = $FootstepSound
+@onready var footstep_surface_ray: RayCast3D = $FootstepSurfaceRay
 
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 var _camera_rest_position: Vector3
@@ -140,6 +142,7 @@ var _flashlight_was_on := true
 var _flashlight_available := true
 var _zoom_fov_target := 95.0
 var _last_footstep_beat := -1
+var _current_footstep_surface: StringName = &"normal"
 var _zoom_segments: Array[ColorRect] = []
 var _monster_hits := 0
 var _monster_hit_cooldown := 0.0
@@ -211,7 +214,7 @@ func _ready() -> void:
 		next_initial_slot += 1
 	if starts_with_lit_candle:
 		_inventory_slots[next_initial_slot] = &"candle"
-		_inventory_item_data[next_initial_slot] = {"burn_remaining": 420.0, "lit": true}
+		_inventory_item_data[next_initial_slot] = {"burn_remaining": 840.0, "lit": true}
 		initial_slot_to_equip = next_initial_slot
 	for child in $ZoomUI/ZoomMeter/ZoomSegments.get_children():
 		if child is ColorRect:
@@ -241,7 +244,7 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	stance_indicator.call(&"set_stance", _stance)
 	holster_sound.stream = GameplaySounds.make_switch_click()
-	footstep_sound.stream = GameplaySounds.make_footstep()
+	footstep_sound.stream = GameplaySounds.make_footstep_normal()
 	if held_recipe_book.has_signal(&"page_turn_finished"):
 		held_recipe_book.connect(&"page_turn_finished", Callable(self, &"_on_recipe_page_turn_finished"))
 	if initial_slot_to_equip >= 0:
@@ -629,7 +632,8 @@ func _update_camera_motion(delta: float, _input_vector: Vector2, _is_sprinting: 
 
 	var lock_lean := _recipe_book_reading or is_instance_valid(_freezer_controller)
 	var lean_input := 0.0 if lock_lean else Input.get_axis(&"lean_left", &"lean_right")
-	_lean_amount = 0.0 if lock_lean else move_toward(_lean_amount, lean_input, lean_speed * delta)
+	var current_lean_speed := lean_return_speed if is_zero_approx(lean_input) else lean_speed
+	_lean_amount = move_toward(_lean_amount, lean_input, current_lean_speed * delta)
 	target_position.x += _lean_amount * lean_distance
 	var target_roll := bob_roll - _lean_amount * deg_to_rad(lean_angle_degrees)
 
@@ -932,15 +936,22 @@ func _update_footsteps(_delta: float, input_vector: Vector2, is_sprinting: bool)
 		return
 	_last_footstep_beat = current_beat
 
-	var volume := -25.0
+	var surface := _detect_footstep_surface()
+	if surface != _current_footstep_surface:
+		_current_footstep_surface = surface
+		footstep_sound.stream = _get_footstep_stream(surface)
+
+	var volume := -7.0
 	if is_sprinting:
-		volume = -20.5
+		volume = -3.0
 	elif _stance == Stance.CROUCHED:
-		volume = -29.0
+		volume = -12.0
 	elif _stance == Stance.PRONE:
-		volume = -32.0
+		volume = -18.0
+	if surface == &"wood":
+		volume += 1.5
 	footstep_sound.volume_db = volume + randf_range(-1.2, 0.8)
-	footstep_sound.pitch_scale = randf_range(0.88, 1.12)
+	footstep_sound.pitch_scale = randf_range(0.92, 1.08)
 	footstep_sound.play()
 	var hearing_radius := 3.4
 	if is_sprinting:
@@ -950,6 +961,48 @@ func _update_footsteps(_delta: float, input_vector: Vector2, is_sprinting: bool)
 	elif _stance == Stance.PRONE:
 		hearing_radius = 0.65
 	footstep_heard.emit(global_position, hearing_radius)
+
+
+func _detect_footstep_surface() -> StringName:
+	footstep_surface_ray.force_raycast_update()
+	if not footstep_surface_ray.is_colliding():
+		return &"normal"
+	var surface_node := footstep_surface_ray.get_collider() as Node
+	var levels_checked := 0
+	while surface_node != null and levels_checked < 6:
+		if surface_node.has_meta(&"footstep_surface"):
+			var explicit_surface := StringName(str(surface_node.get_meta(&"footstep_surface")).to_lower())
+			if explicit_surface in [&"normal", &"wood", &"outdoor"]:
+				return explicit_surface
+		if surface_node.is_in_group(&"footstep_wood"):
+			return &"wood"
+		if surface_node.is_in_group(&"footstep_outdoor"):
+			return &"outdoor"
+		var node_name := String(surface_node.name).to_lower()
+		if _contains_surface_keyword(node_name, ["stair", "step", "wood", "madera", "tread", "pelda"]):
+			return &"wood"
+		if _contains_surface_keyword(node_name, ["exterior", "yard", "dirt", "grass", "ground", "garden", "weather", "outside", "path"]):
+			return &"outdoor"
+		surface_node = surface_node.get_parent()
+		levels_checked += 1
+	return &"normal"
+
+
+func _contains_surface_keyword(text: String, keywords: Array[String]) -> bool:
+	for keyword in keywords:
+		if text.contains(keyword):
+			return true
+	return false
+
+
+func _get_footstep_stream(surface: StringName) -> AudioStreamWAV:
+	match surface:
+		&"wood":
+			return GameplaySounds.make_footstep_wood()
+		&"outdoor":
+			return GameplaySounds.make_footstep_outdoor()
+		_:
+			return GameplaySounds.make_footstep_normal()
 
 
 func _get_interactable() -> Node:
@@ -1105,8 +1158,8 @@ func _on_matchbox_state_changed(data: Dictionary) -> void:
 
 func pick_up_candle(data: Dictionary = {}, ignite_on_pickup := false) -> bool:
 	var candle_data := {
-		"burn_remaining": clampf(float(data.get("burn_remaining", 420.0)), 0.0, 420.0),
-		"lit": (bool(data.get("lit", false)) or ignite_on_pickup) and float(data.get("burn_remaining", 420.0)) > 0.0,
+		"burn_remaining": clampf(float(data.get("burn_remaining", 840.0)), 0.0, 840.0),
+		"lit": (bool(data.get("lit", false)) or ignite_on_pickup) and float(data.get("burn_remaining", 840.0)) > 0.0,
 	}
 	if not _store_inventory_item(&"candle", candle_data):
 		return false

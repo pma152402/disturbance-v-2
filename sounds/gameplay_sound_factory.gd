@@ -4,7 +4,9 @@ extends RefCounted
 const MIX_RATE := 22050
 
 static var _switch_click_cache: AudioStreamWAV
-static var _footstep_cache: AudioStreamWAV
+static var _footstep_normal_cache: AudioStreamWAV
+static var _footstep_wood_cache: AudioStreamWAV
+static var _footstep_outdoor_cache: AudioStreamWAV
 static var _can_impact_cache: AudioStreamWAV
 static var _glass_break_cache: AudioStreamWAV
 static var _door_open_cache: AudioStreamWAV
@@ -35,9 +37,13 @@ static func make_switch_click() -> AudioStreamWAV:
 
 
 static func make_footstep() -> AudioStreamWAV:
-	if _footstep_cache != null:
-		return _footstep_cache
-	var duration := 0.16
+	return make_footstep_normal()
+
+
+static func make_footstep_normal() -> AudioStreamWAV:
+	if _footstep_normal_cache != null:
+		return _footstep_normal_cache
+	var duration := 0.19
 	var sample_count := int(MIX_RATE * duration)
 	var samples := PackedFloat32Array()
 	samples.resize(sample_count)
@@ -47,15 +53,63 @@ static func make_footstep() -> AudioStreamWAV:
 	for index in sample_count:
 		var time := float(index) / MIX_RATE
 		smoothed_noise = lerpf(smoothed_noise, rng.randf_range(-1.0, 1.0), 0.16)
-		var heel := sin(TAU * (92.0 - time * 170.0) * time) * exp(-time * 29.0)
+		var heel := sin(TAU * (104.0 - time * 170.0) * time) * exp(-time * 25.0)
 		var sole_time := maxf(time - 0.045, 0.0)
-		var sole := sin(TAU * 58.0 * sole_time) * exp(-sole_time * 34.0)
+		var sole := sin(TAU * 64.0 * sole_time) * exp(-sole_time * 30.0)
 		if time < 0.045:
 			sole = 0.0
 		var texture := smoothed_noise * exp(-time * 18.0)
-		samples[index] = clampf(heel * 0.42 + sole * 0.22 + texture * 0.28, -1.0, 1.0)
-	_footstep_cache = _stream_from_samples(samples)
-	return _footstep_cache
+		samples[index] = clampf(heel * 0.62 + sole * 0.32 + texture * 0.34, -1.0, 1.0)
+	_footstep_normal_cache = _stream_from_samples(samples)
+	return _footstep_normal_cache
+
+
+static func make_footstep_wood() -> AudioStreamWAV:
+	if _footstep_wood_cache != null:
+		return _footstep_wood_cache
+	var duration := 0.24
+	var sample_count := int(MIX_RATE * duration)
+	var samples := PackedFloat32Array()
+	samples.resize(sample_count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 73103
+	var smoothed_noise := 0.0
+	for index in sample_count:
+		var time := float(index) / MIX_RATE
+		smoothed_noise = lerpf(smoothed_noise, rng.randf_range(-1.0, 1.0), 0.11)
+		var knock := sin(TAU * (185.0 - time * 210.0) * time) * exp(-time * 23.0)
+		var board := sin(TAU * 345.0 * time + 0.25) * exp(-time * 17.0)
+		var creak := sin(TAU * (92.0 + sin(time * 31.0) * 18.0) * time) * exp(-time * 11.0)
+		var grain := smoothed_noise * exp(-time * 22.0)
+		samples[index] = clampf(knock * 0.62 + board * 0.27 + creak * 0.18 + grain * 0.2, -1.0, 1.0)
+	_footstep_wood_cache = _stream_from_samples(samples)
+	return _footstep_wood_cache
+
+
+static func make_footstep_outdoor() -> AudioStreamWAV:
+	if _footstep_outdoor_cache != null:
+		return _footstep_outdoor_cache
+	var duration := 0.23
+	var sample_count := int(MIX_RATE * duration)
+	var samples := PackedFloat32Array()
+	samples.resize(sample_count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 61847
+	var coarse_noise := 0.0
+	var fine_noise := 0.0
+	for index in sample_count:
+		var time := float(index) / MIX_RATE
+		coarse_noise = lerpf(coarse_noise, rng.randf_range(-1.0, 1.0), 0.09)
+		fine_noise = lerpf(fine_noise, rng.randf_range(-1.0, 1.0), 0.32)
+		var thump := sin(TAU * (78.0 - time * 95.0) * time) * exp(-time * 24.0)
+		var crunch := (coarse_noise * 0.72 + fine_noise * 0.28) * exp(-time * 15.0)
+		var second_crunch_time := maxf(time - 0.055, 0.0)
+		var second_crunch := fine_noise * exp(-second_crunch_time * 24.0)
+		if time < 0.055:
+			second_crunch = 0.0
+		samples[index] = clampf(thump * 0.45 + crunch * 0.62 + second_crunch * 0.22, -1.0, 1.0)
+	_footstep_outdoor_cache = _stream_from_samples(samples)
+	return _footstep_outdoor_cache
 
 
 static func make_can_impact() -> AudioStreamWAV:

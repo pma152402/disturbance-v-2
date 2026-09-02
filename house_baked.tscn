@@ -3930,7 +3930,7 @@ transform = Transform3D(1, 0, 0, 0, 1.0191776, 0, 0, 0, 1, 12.579873, 0, 10.5831
 transform = Transform3D(1, 0, 0, 0, 1.0191776, 0, 0, 0, 1, -6.578674, 0, 12.195984)
 
 [node name="FlutedTuscanColumnSample8" parent="NewFrontHouseDecor" unique_id=928357783 instance=ExtResource("185_round_column")]
-transform = Transform3D(1, 0, 0, 0, 1.0191776, 0, 0, 0, 1, -4.8914895, 0, 0.94660974)
+transform = Transform3D(1, 0, 0, 0, 1.0191776, 0, 0, 0, 1, -4.8914895, 0, 0.21526992)
 
 [node name="FlutedTuscanColumnSample17" parent="NewFrontHouseDecor" unique_id=1296595597 instance=ExtResource("185_round_column")]
 transform = Transform3D(1, 0, 0, 0, 1.0191776, 0, 0, 0, 1, -4.8914895, 0, -5.809737)
@@ -5378,6 +5378,7 @@ transform = Transform3D(0.40824473, 0.52126706, 0.74941117, -0.9109144, 0.178877
 
 [node name="LightControlPanel" parent="." unique_id=969548015 instance=ExtResource("183_pi34i")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.262446, -5.889793, -0.20103908)
+debug_bypass_panel = true
 
 [node name="StraightThreeStepSection" parent="." unique_id=1353533570 instance=ExtResource("186_jjyb4")]
 transform = Transform3D(-0.02409751, 0, 0.99396586, 0, 1, 0, -0.81125987, 0, -0.029524574, -6.000091, -0.8758301, 3.4324799)

@@ -2,7 +2,7 @@ extends Node3D
 
 signal state_changed(data: Dictionary)
 
-@export var burn_duration := 420.0
+@export var burn_duration := 840.0
 
 @onready var wax: MeshInstance3D = $Wax
 @onready var wick_root: Node3D = $WickRoot
@@ -13,11 +13,11 @@ signal state_changed(data: Dictionary)
 @onready var smoke: Node3D = $WickRoot/Smoke
 
 var lit := false
-var burn_remaining := 420.0
+var burn_remaining := 840.0
 var _state_emit_timer := 0.0
 var _motion_strength := 0.0
 var _run_extinguish_exposure := 0.0
-var _extinguish_threshold := 5.5
+var _extinguish_threshold := 7.0
 var _flame_stress := 0.0
 var _flame_rest_position := Vector3.ZERO
 var _smoke_rest_position := Vector3.ZERO
@@ -67,7 +67,7 @@ func configure_candle(data: Dictionary) -> void:
 	_state_emit_timer = 0.0
 	_run_extinguish_exposure = 0.0
 	_flame_stress = 0.0
-	_extinguish_threshold = randf_range(4.0, 7.0)
+	_extinguish_threshold = randf_range(5.5, 8.5)
 	_apply_visual_state()
 
 
@@ -77,7 +77,7 @@ func ignite() -> bool:
 	lit = true
 	_run_extinguish_exposure = 0.0
 	_flame_stress = 0.0
-	_extinguish_threshold = randf_range(4.0, 7.0)
+	_extinguish_threshold = randf_range(5.5, 8.5)
 	_apply_visual_state()
 	_emit_state()
 	return true
@@ -140,9 +140,9 @@ func _animate_flame() -> void:
 	_flame_material.albedo_color = Color(1.0, lerpf(0.58, 0.28, danger_blink), 0.06, lerpf(0.92, 0.48, danger_blink))
 	_flame_material.emission = Color(1.0, lerpf(0.24, 0.08, danger_blink), 0.015, 1.0)
 	candle_light.light_color = Color(1.0, lerpf(0.52, 0.24, danger_blink), 0.12, 1.0)
-	candle_light.light_energy = (1.75 + calm_flicker * 2.0 - _flame_stress * 0.38) * lerpf(1.0, 0.62, danger_blink)
+	candle_light.light_energy = (2.25 + calm_flicker * 2.15 - _flame_stress * 0.42) * lerpf(1.0, 0.62, danger_blink)
 	forward_light.light_color = candle_light.light_color
-	forward_light.light_energy = (1.45 + calm_flicker * 0.8) * lerpf(1.0, 0.68, danger_blink)
+	forward_light.light_energy = (1.9 + calm_flicker * 0.95) * lerpf(1.0, 0.68, danger_blink)
 
 
 func _start_smoke() -> void:

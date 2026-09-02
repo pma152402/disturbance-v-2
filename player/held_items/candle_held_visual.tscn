@@ -71,17 +71,17 @@ mesh = SubResource("flame_mesh")
 [node name="CandleLight" type="OmniLight3D" parent="WickRoot/Flame" unique_id=1081505754]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
 light_color = Color(1, 0.52, 0.2, 1)
-light_energy = 1.8
-omni_range = 3.5
+light_energy = 2.25
+omni_range = 3.9
 omni_attenuation = 1.45
 
 [node name="ForwardLight" type="SpotLight3D" parent="WickRoot/Flame"]
 position = Vector3(0, 0.025, -0.04)
 light_color = Color(1, 0.55, 0.22, 1)
-light_energy = 1.45
+light_energy = 1.9
 shadow_enabled = false
-spot_range = 5.2
-spot_attenuation = 1.15
+spot_range = 5.45
+spot_attenuation = 1.08
 spot_angle = 48.0
 
 [node name="Smoke" type="Node3D" parent="WickRoot" unique_id=228597783]

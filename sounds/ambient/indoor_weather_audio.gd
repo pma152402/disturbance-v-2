@@ -24,24 +24,26 @@ const EXPLICIT_INDOOR_VOLUMES: Array[AABB] = [
 @export var shelter_probe_start_height := 0.35
 @export var shelter_probe_height := 24.0
 @export_group("Acoustics")
-@export_range(100.0, 20000.0, 10.0) var indoor_cutoff_hz := 2100.0
+@export_range(100.0, 20000.0, 10.0) var indoor_cutoff_hz := 1450.0
+@export_range(100.0, 20000.0, 10.0) var basement_cutoff_hz := 680.0
 @export_range(100.0, 20000.0, 10.0) var outdoor_cutoff_hz := 20000.0
-@export_range(-24.0, 0.0, 0.1) var indoor_volume_db := -5.5
+@export_range(-30.0, 0.0, 0.1) var indoor_volume_db := -10.0
+@export_range(-30.0, 0.0, 0.1) var basement_volume_db := -16.0
 @export_range(-24.0, 6.0, 0.1) var outdoor_volume_db := 0.0
 @export_range(0.1, 10.0, 0.1) var transition_speed := 1.8
 
 var _player: Node3D
 var _weather_bus_index := -1
 var _low_pass: AudioEffectLowPassFilter
-var _indoor_blend := 0.0
+var _acoustic_blend := 0.0
 
 
 func _ready() -> void:
 	_player = get_node_or_null(player_path) as Node3D
 	_setup_weather_bus()
 	if _player != null:
-		_indoor_blend = 1.0 if _is_inside_house(_player.global_position) else 0.0
-	_apply_acoustics(_indoor_blend)
+		_acoustic_blend = _get_acoustic_level(_player.global_position)
+	_apply_acoustics(_acoustic_blend)
 
 
 func _process(delta: float) -> void:
@@ -50,9 +52,9 @@ func _process(delta: float) -> void:
 		if _player == null:
 			return
 
-	var target := 1.0 if _is_inside_house(_player.global_position) else 0.0
-	_indoor_blend = move_toward(_indoor_blend, target, transition_speed * delta)
-	_apply_acoustics(smoothstep(0.0, 1.0, _indoor_blend))
+	var target := _get_acoustic_level(_player.global_position)
+	_acoustic_blend = move_toward(_acoustic_blend, target, transition_speed * delta)
+	_apply_acoustics(_acoustic_blend)
 
 
 func _exit_tree() -> void:
@@ -93,6 +95,14 @@ func _is_inside_explicit_volume(position: Vector3) -> bool:
 	return false
 
 
+func _get_acoustic_level(position: Vector3) -> float:
+	if not _is_inside_house(position):
+		return 0.0
+	# Bajo la cota del terreno hay una segunda capa de amortiguacion. De este
+	# modo el sotano y las catacumbas no suenan como una habitacion con ventanas.
+	return 2.0 if position.y < -0.75 else 1.0
+
+
 func _setup_weather_bus() -> void:
 	_weather_bus_index = AudioServer.get_bus_index(bus_name)
 	if _weather_bus_index < 0:
@@ -116,9 +126,18 @@ func _apply_acoustics(blend: float) -> void:
 	if _weather_bus_index < 0 or _low_pass == null:
 		return
 
-	# Interpolacion logaritmica: el barrido de frecuencias suena natural al oido.
-	_low_pass.cutoff_hz = exp(lerpf(log(outdoor_cutoff_hz), log(indoor_cutoff_hz), blend))
-	AudioServer.set_bus_volume_db(
-		_weather_bus_index,
-		lerpf(outdoor_volume_db, indoor_volume_db, blend)
-	)
+	# Dos tramos: exterior -> interior y, por debajo del terreno, interior ->
+	# sotano. La frecuencia se interpola logaritmicamente para evitar barridos
+	# artificiales al cruzar puertas o bajar escaleras.
+	var cutoff_hz: float
+	var volume_db: float
+	if blend <= 1.0:
+		var indoor_amount := smoothstep(0.0, 1.0, clampf(blend, 0.0, 1.0))
+		cutoff_hz = exp(lerpf(log(outdoor_cutoff_hz), log(indoor_cutoff_hz), indoor_amount))
+		volume_db = lerpf(outdoor_volume_db, indoor_volume_db, indoor_amount)
+	else:
+		var basement_amount := smoothstep(0.0, 1.0, clampf(blend - 1.0, 0.0, 1.0))
+		cutoff_hz = exp(lerpf(log(indoor_cutoff_hz), log(basement_cutoff_hz), basement_amount))
+		volume_db = lerpf(indoor_volume_db, basement_volume_db, basement_amount)
+	_low_pass.cutoff_hz = cutoff_hz
+	AudioServer.set_bus_volume_db(_weather_bus_index, volume_db)
