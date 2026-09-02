@@ -47,6 +47,7 @@ signal footstep_heard(world_position: Vector3, hearing_radius: float)
 @export var starts_with_flashlight := false
 @export var starts_with_matchbox := false
 @export var starts_with_lit_candle := false
+@export var starts_with_basement_key := false
 
 enum Stance { STANDING, CROUCHED, PRONE }
 enum JumpPhase { IDLE, WINDUP, RECOVERING }
@@ -189,6 +190,8 @@ const INVENTORY_ITEM_NAMES := {
 
 func _ready() -> void:
 	add_to_group(&"player")
+	if starts_with_basement_key:
+		add_key(&"basement_key")
 	_flashlight_available = starts_with_flashlight
 	_flashlight_was_on = false
 	_flashlight_holstered = true

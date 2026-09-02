@@ -1,7 +1,5 @@
 [gd_scene format=3 uid="uid://cupg271pac7v"]
 
-[ext_resource type="PackedScene" uid="uid://covsipnm1vl7v" path="res://house_props/detailed_spiral_staircase.tscn" id="1_spiral"]
-
 [sub_resource type="StandardMaterial3D" id="floor_mat"]
 albedo_color = Color(0.13, 0.115, 0.095, 1)
 roughness = 0.96
@@ -26,10 +24,7 @@ roughness = 0.92
 material = SubResource("wood")
 
 [node name="BasementAccessAndInitialRoom" type="Node3D" unique_id=163969638]
-editor_description = "Hueco real bajo las puertas exteriores, escalera de caracol descendente y primera sala del sotano. Techo dividido alrededor del pozo."
-
-[node name="BasementSpiralStaircase" parent="." unique_id=708787101 instance=ExtResource("1_spiral")]
-transform = Transform3D(-0.8457234, 0, 0.3078181, 0, 1, 0, -0.3078181, 0, -0.8457234, 0, -6.05, 0)
+editor_description = "Hueco real bajo las puertas exteriores y primera sala del sotano. El acceso queda libre para construir la escalera manualmente."
 
 [node name="Floor" type="StaticBody3D" parent="." unique_id=1258653049]
 transform = Transform3D(12, 0, 0, 0, 0.22, 0, 0, 0, 8, 0, -6.18, 0)
@@ -155,5 +150,3 @@ mesh = SubResource("wood_box")
 [node name="SouthBeam" type="MeshInstance3D" parent="." unique_id=210124069]
 transform = Transform3D(11.4, 0, 0, 0, 0.28, 0, 0, 0, 0.3, 0, -2.25, 2.2)
 mesh = SubResource("wood_box")
-
-[editable path="BasementSpiralStaircase"]

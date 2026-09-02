@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3]
+
+[sub_resource type="StandardMaterial3D" id="RailMaterial"]
+albedo_color = Color(0.12, 0.052, 0.022, 1)
+roughness = 0.88
+
+[sub_resource type="CylinderMesh" id="PostMesh"]
+material = SubResource("RailMaterial")
+top_radius = 0.045
+bottom_radius = 0.052
+height = 1.02
+radial_segments = 10
+
+[sub_resource type="BoxMesh" id="RailMesh"]
+material = SubResource("RailMaterial")
+size = Vector3(0.1, 0.1, 1.56)
+
+[sub_resource type="BoxShape3D" id="RailShape"]
+size = Vector3(0.12, 0.12, 1.56)
+
+[node name="DescendingStraightGuardrail" type="Node3D"]
+editor_description = "Barandilla modular recta para acompañar un tramo de tres escalones. Desciende hacia +Z."
+
+[node name="PostTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.91, -0.48)
+mesh = SubResource("PostMesh")
+
+[node name="PostMiddle" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.71, 0)
+mesh = SubResource("PostMesh")
+
+[node name="PostBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.51, 0.48)
+mesh = SubResource("PostMesh")
+
+[node name="TopRail" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.13, 0)
+rotation = Vector3(0.394791, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="TopRail"]
+mesh = SubResource("RailMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="TopRail"]
+shape = SubResource("RailShape")
+
+[node name="LowerRail" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.76, 0)
+rotation = Vector3(0.394791, 0, 0)
+mesh = SubResource("RailMesh")
+scale = Vector3(0.72, 0.72, 1)
