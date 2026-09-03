@@ -199,6 +199,7 @@
 [ext_resource type="PackedScene" path="res://house_props/wall_scratch_1.tscn" id="197_yb3dn"]
 [ext_resource type="PackedScene" path="res://house_props/wall_scratch_4.tscn" id="198_10vkk"]
 [ext_resource type="PackedScene" uid="uid://bjqlobxolvp3i" path="res://house_props/rat.tscn" id="199_rat"]
+[ext_resource type="PackedScene" path="res://house_props/shoe_dresser.tscn" id="200_shoedresser"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lower_floor"]
 albedo_color = Color(0.44, 0.43, 0.39, 1)
@@ -595,16 +596,29 @@ size = Vector3(0.22, 4, 2.6544921)
 [sub_resource type="BoxShape3D" id="BoxShape3D_k0tqj"]
 size = Vector3(0.22, 4, 2.6)
 
-[sub_resource type="BoxMesh" id="BoxMesh_vghqc"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pwfo0"]
+render_priority = 0
+shader = ExtResource("3_msxou")
+shader_parameter/upper_white = Color(0.96, 0.955, 0.94, 1)
+shader_parameter/lower_pastel_blue = Color(0.89, 0.885, 0.86, 1)
+shader_parameter/lower_stripe_blue = Color(0.8, 0.795, 0.77, 1)
+shader_parameter/border_blue = Color(0.85, 0.84, 0.81, 1)
+shader_parameter/stripe_width = 0.32
+shader_parameter/border_width = 0.075
+shader_parameter/ground_band_top = 1.38
+shader_parameter/upper_floor_start = 4.1
+shader_parameter/upper_band_top = 5.48
+
+[sub_resource type="BoxMesh" id="BoxMesh_4s1ae"]
 material = SubResource("StandardMaterial3D_fshbq")
-size = Vector3(0.22, 4, 16.017725)
+size = Vector3(0.22, 4, 16.03895)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lxsc4"]
 size = Vector3(0.22, 4, 16.003834)
 
-[sub_resource type="BoxMesh" id="BoxMesh_2hixs"]
+[sub_resource type="BoxMesh" id="BoxMesh_bl01h"]
 material = SubResource("StandardMaterial3D_l4kqb")
-size = Vector3(0.27, 0.24, 15.89873)
+size = Vector3(0.27, 0.24, 6.098291)
 
 [sub_resource type="BoxMesh" id="BoxMesh_ghr3d"]
 material = SubResource("StandardMaterial3D_fshbq")
@@ -615,7 +629,7 @@ size = Vector3(0.22, 4, 10.03584)
 
 [sub_resource type="BoxMesh" id="BoxMesh_jx5v6"]
 material = SubResource("StandardMaterial3D_l4kqb")
-size = Vector3(0.27, 0.24, 11.0560055)
+size = Vector3(0.27, 0.24, 7.200366)
 
 [sub_resource type="BoxMesh" id="BoxMesh_yb3dn"]
 material = SubResource("StandardMaterial3D_fshbq")
@@ -2208,26 +2222,26 @@ shape = SubResource("BoxShape3D_k0tqj")
 [node name="ReceptionAndHall" type="Node3D" parent="GroundFloor" unique_id=1848866392]
 
 [node name="Wall" type="StaticBody3D" parent="GroundFloor/ReceptionAndHall" unique_id=354115124]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, -5.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.3814941, -4, 2, -8.952262)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/Wall" unique_id=743181492]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.848072)
-material_override = SubResource("ShaderMaterial_10vkk")
-mesh = SubResource("BoxMesh_vghqc")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.7582054)
+material_override = SubResource("ShaderMaterial_pwfo0")
+mesh = SubResource("BoxMesh_4s1ae")
 
 [node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/Wall" unique_id=443037853]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.801917)
 shape = SubResource("BoxShape3D_lxsc4")
 
 [node name="WallBaseboard" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall" unique_id=2070001555]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.12, -3.0506349)
-mesh = SubResource("BoxMesh_2hixs")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.12, -7.950855)
+mesh = SubResource("BoxMesh_bl01h")
 
 [node name="KitchenDoorLintel" type="StaticBody3D" parent="GroundFloor/ReceptionAndHall" unique_id=748419496]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 3.35, 0.5)
 
 [node name="Wall_02" type="StaticBody3D" parent="GroundFloor/ReceptionAndHall" unique_id=1184387175]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, 6.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.6410776, -4.0008163, 2, 5.853433)
 
 [node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/Wall_02" unique_id=791275986]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5964041, 0, -7.259998)
@@ -2238,8 +2252,8 @@ mesh = SubResource("BoxMesh_ghr3d")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5940626, 0, -7.2695313)
 shape = SubResource("BoxShape3D_3in4u")
 
-[node name="WallBaseboard_02" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall" unique_id=738180351]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3853588, 0.12, -0.38977027)
+[node name="WallBaseboard_02" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/Wall_02" unique_id=738180351]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.5598736, 1.6154575, -1.88, -6.7314506)
 mesh = SubResource("BoxMesh_jx5v6")
 
 [node name="Wall_03" type="StaticBody3D" parent="GroundFloor/ReceptionAndHall" unique_id=2110471473]
@@ -2315,6 +2329,37 @@ shape = SubResource("BoxShape3D_jd1il")
 [node name="WallBaseboard_05" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall" unique_id=1782298696]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.55, 0.12, -6)
 mesh = SubResource("BoxMesh_riql6")
+
+[node name="Wall_07" type="StaticBody3D" parent="GroundFloor/ReceptionAndHall" unique_id=1586438579]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.645436, 2, -4.602459)
+
+[node name="Wall_08" type="StaticBody3D" parent="GroundFloor/ReceptionAndHall" unique_id=44389009]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.3392725, 2, -4.9313054)
+
+[node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/Wall_08" unique_id=1687845527]
+material_override = SubResource("ShaderMaterial_10vkk")
+mesh = SubResource("BoxMesh_a8hfu")
+
+[node name="WallBaseboard_08" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/Wall_08" unique_id=914802606]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.88, 0)
+mesh = SubResource("BoxMesh_riql6")
+
+[node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/Wall_08" unique_id=891087203]
+shape = SubResource("BoxShape3D_jd1il")
+
+[node name="Wall_09" type="StaticBody3D" parent="GroundFloor/ReceptionAndHall" unique_id=477531987]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.745153, 2, -1.9152955)
+
+[node name="Mesh" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/Wall_09" unique_id=904305312]
+material_override = SubResource("ShaderMaterial_10vkk")
+mesh = SubResource("BoxMesh_a8hfu")
+
+[node name="WallBaseboard_08" type="MeshInstance3D" parent="GroundFloor/ReceptionAndHall/Wall_09" unique_id=1053400077]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.88, 0)
+mesh = SubResource("BoxMesh_riql6")
+
+[node name="Collision" type="CollisionShape3D" parent="GroundFloor/ReceptionAndHall/Wall_09" unique_id=2068543757]
+shape = SubResource("BoxShape3D_jd1il")
 
 [node name="BasementDoorLintel" type="StaticBody3D" parent="GroundFloor/ReceptionAndHall" unique_id=1263026293]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.35, -6)
@@ -4112,7 +4157,7 @@ omni_range = 7.5
 omni_attenuation = 1.5
 
 [node name="KitchenChairB5" parent="." unique_id=908118020 instance=ExtResource("92_asrs0")]
-transform = Transform3D(-0.8044934, 0, -0.59396374, 0, 1, 0, 0.59396374, 0, -0.8044934, -1.8044882, 0.03857541, -1.3909955)
+transform = Transform3D(-0.8044934, 0, -0.59396374, 0, 1, 0, 0.59396374, 0, -0.8044934, -1.8115213, 0.03857541, 0.6978714)
 
 [node name="KitchenChairB4" parent="." unique_id=1785788595 instance=ExtResource("92_asrs0")]
 transform = Transform3D(-0.9948549, 0, -0.10131632, 0, 1, 0, 0.10131632, 0, -0.9948549, 6.760541, 0.019287705, 4.123463)
@@ -4219,7 +4264,7 @@ transform = Transform3D(0.59493345, 0.3736545, 0.3600995, -0.4110673, -0.0240845
 transform = Transform3D(0.23491402, 5.576948e-10, -0.005525645, 3.9685294e-10, 0.744256, -1.3579485e-10, 0.003959544, 1.3682876e-12, 0.2926507, 2.6653025, 4.207293, 1.4532266)
 
 [node name="LivingTable2" parent="FurnitureAndPickups" unique_id=629912538 instance=ExtResource("94_53hur")]
-transform = Transform3D(0.30837768, 4.4019544e-10, -0.0024514054, 1.4360524e-10, 0.81086266, -3.2049488e-11, 0.0027460228, 0, 0.2752921, -1.9779139, 0.0025379797, -2.5506287)
+transform = Transform3D(0.30837768, 4.4019544e-10, -0.0024514054, 1.4360524e-10, 0.81086266, -3.2049488e-11, 0.0027460228, 0, 0.2752921, -1.984947, 0.0025379797, -0.4617617)
 
 [node name="LivingSofa" parent="FurnitureAndPickups" unique_id=1787486096 instance=ExtResource("95_eu3s6")]
 transform = Transform3D(1.0764239, -0.0066927313, 0.03288044, 0.0075727394, 0.9586526, -0.0011500317, -0.0385053, 0.0014391819, 0.91895294, 7.767352, 0.054793656, 6.4169335)
@@ -4299,6 +4344,9 @@ transform = Transform3D(0.5352265, -0.19772658, -0.19233796, -0.019367632, 0.424
 
 [node name="LivingRoomCoatRack" parent="FurnitureAndPickups" unique_id=639026781 instance=ExtResource("106_8yt6u")]
 transform = Transform3D(0.92279273, 0, 0.38529682, 0, 1, 0, -0.38529682, 0, 0.92279273, 2.3360531, 0.1, 10.185567)
+
+[node name="EntranceShoeDresser" parent="FurnitureAndPickups" unique_id=3021177744 instance=ExtResource("200_shoedresser")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -2.3, 0, 10.7)
 
 [node name="LivingRoomCurtains2" parent="FurnitureAndPickups" unique_id=1730220151 instance=ExtResource("107_oba2h")]
 transform = Transform3D(1.2584181, 0, -0.009306834, 0, 1.2191873, 0, 0.008708884, 0, 1.2584107, 8.033902, 0.09645736, 10.73185)
@@ -4545,7 +4593,7 @@ minigame_enabled = false
 transform = Transform3D(0.50725913, -0.028294954, 0.33631742, 0.044227913, 0.50966114, -0.0028992745, -0.35633048, 0.022979777, 0.47840932, 12.25444, 5.35489, -1.427591)
 
 [node name="EntranceSingleBook3" parent="FurnitureAndPickups" unique_id=609089329 instance=ExtResource("118_geaya")]
-transform = Transform3D(0.41005185, -0.002741533, -0.24307078, 0.002790182, 0.3809426, 0.0014758883, 0.2658427, -0.0013970258, 0.3892425, -1.8756027, 0.74025965, -2.667365)
+transform = Transform3D(0.41005185, -0.002741533, -0.24307078, 0.002790182, 0.3809426, 0.0014758883, 0.2658427, -0.0013970258, 0.3892425, -1.8826358, 0.74025965, -0.5784981)
 
 [node name="EntranceSingleBook2" parent="FurnitureAndPickups" unique_id=1495245909 instance=ExtResource("118_geaya")]
 transform = Transform3D(-0.6685846, 0.009133524, 0.18385664, 0.005081343, 0.61701614, -0.015166812, -0.20124327, -0.012349468, -0.652729, 9.925777, 2.741933, 2.3658237)
@@ -4566,7 +4614,7 @@ transform = Transform3D(-0.006346573, 0, -0.99992853, 0, 0.5442163, 0, 0.5294441
 transform = Transform3D(-0.52916974, 0, 0.034345534, 0, 0.5442163, 0, -0.01818534, 0, -0.9994104, 8.385375, 6.8111296, 3.1396139)
 
 [node name="EntranceRotaryPhone" parent="FurnitureAndPickups" unique_id=907170493 instance=ExtResource("120_vfwwx")]
-transform = Transform3D(0.004179549, 0.99996066, 0.00782417, -0.999895, 0.0040703453, 0.013921404, 0.013889004, -0.007881529, 0.9998727, -2.4273646, 1.9197513, -2.1854358)
+transform = Transform3D(0.004179549, 0.99996066, 0.00782417, -0.999895, 0.0040703453, 0.013921404, 0.013889004, -0.007881529, 0.9998727, -2.4343977, 1.9197513, -0.09656888)
 
 [node name="EntranceBrassCandlestick" parent="FurnitureAndPickups" unique_id=1138908710 instance=ExtResource("121_idxua")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.254127, 2.6514354, 2.3266773)
@@ -4590,7 +4638,7 @@ transform = Transform3D(-0.9849717, 0, 0.0822885, 0, 0.9470402, 0, -0.09138546, 
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 10.5217285, 2.687422, 2.3342886)
 
 [node name="EntranceAntiqueMirror" parent="FurnitureAndPickups" unique_id=89307771 instance=ExtResource("127_252sh")]
-transform = Transform3D(-0.0043384135, 0, 0.99999094, 0, 1, 0, -0.99999094, 0, -0.0043384135, -2.249627, 0.6488867, -3.610682)
+transform = Transform3D(-0.0043384135, 0, 0.99999094, 0, 1, 0, -0.99999094, 0, -0.0043384135, -2.2566602, 0.6488867, -1.5218151)
 
 [node name="EntranceBoardGameStack" parent="FurnitureAndPickups" unique_id=418199854 instance=ExtResource("128_g0jag")]
 transform = Transform3D(1.0699449, 0, -0.032926917, 0, 0.7763108, 0, 0.03524908, 0, 0.99945813, 7.926881, 0.22334832, 10.394448)
