@@ -63,6 +63,7 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var held_bottle: Node3D = $Head/Camera3D/RightHandRig/HeldBottle
 @onready var held_plunger: Node3D = $Head/Camera3D/RightHandRig/HeldPlunger
 @onready var held_crowbar: Node3D = $Head/Camera3D/RightHandRig/HeldCrowbar
+@onready var held_screwdriver: Node3D = $Head/Camera3D/RightHandRig/HeldScrewdriver
 @onready var held_note: Node3D = $Head/Camera3D/RightHandRig/HeldNote
 @onready var held_recipe_book: Node3D = $Head/Camera3D/RightHandRig/HeldRecipeBook
 @onready var held_recipe_book_closed: Node3D = $Head/Camera3D/RightHandRig/HeldRecipeBookClosed
@@ -149,6 +150,7 @@ var _monster_hit_cooldown := 0.0
 var _monster_restart_pending := false
 var _skill_check_active := false
 var _active_valve: Node3D
+var _active_screw_panel: Node3D
 var _candle_placement_mode := false
 var _candle_placement_valid := false
 var _candle_placement_point := Vector3.ZERO
@@ -179,12 +181,14 @@ func notify_light_switched_on(source: Node3D) -> void:
 	light_switched_on.emit(source)
 const PlungerPickupScene := preload("res://house_props/toilet_plunger.tscn")
 const CrowbarPickupScene := preload("res://house_props/crowbar_pickup.tscn")
+const ScrewdriverPickupScene := preload("res://house_props/flathead_screwdriver.tscn")
 const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
 const INVENTORY_ITEM_NAMES := {
 	&"can": "LATA",
 	&"bottle": "BOTELLA",
 	&"plunger": "DESATASCADOR",
 	&"crowbar": "PALANCA",
+	&"flathead_screwdriver": "DESTORNILLADOR",
 	&"note": "NOTA",
 	&"recipe_book": "RECETARIO",
 	&"matchbox": "CERILLAS",
@@ -223,6 +227,10 @@ func _ready() -> void:
 	hand_rig.visible = false
 	_right_hand_rest_transform = right_hand.transform
 	_held_note_rest_transform = held_note.transform
+	held_screwdriver.collision_layer = 0
+	for screwdriver_child in held_screwdriver.get_children():
+		if screwdriver_child is CollisionShape3D:
+			screwdriver_child.disabled = true
 	if held_matchbox.has_signal(&"state_changed"):
 		held_matchbox.connect(&"state_changed", Callable(self, &"_on_matchbox_state_changed"))
 	if held_candle.has_signal(&"state_changed"):
@@ -266,6 +274,11 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		var key_event := event as InputEventKey
 		var pressed_key := key_event.physical_keycode if key_event.physical_keycode != 0 else key_event.keycode
+		if is_instance_valid(_active_screw_panel):
+			if pressed_key == KEY_F:
+				_active_screw_panel.call(&"end_screw_manipulation")
+				get_viewport().set_input_as_handled()
+			return
 		if is_instance_valid(_active_valve):
 			if pressed_key in [KEY_F, KEY_ESCAPE]:
 				end_valve_manipulation()
@@ -341,6 +354,10 @@ func _input(event: InputEvent) -> void:
 
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		var mouse_motion := event as InputEventMouseMotion
+		if is_instance_valid(_active_screw_panel):
+			_active_screw_panel.call(&"handle_screwdriver_mouse", mouse_motion.screen_relative)
+			get_viewport().set_input_as_handled()
+			return
 		if is_instance_valid(_active_valve):
 			get_viewport().set_input_as_handled()
 			return
@@ -456,6 +473,12 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector3.ZERO
 		_update_camera_motion(delta, Vector2.ZERO, false)
 		_update_valve_prompt()
+		return
+	if is_instance_valid(_active_screw_panel):
+		velocity = Vector3.ZERO
+		_update_camera_motion(delta, Vector2.ZERO, false)
+		interaction_prompt.text = "HAZ CIRCULOS CON EL RATON  |  F  SOLTAR"
+		interaction_prompt.visible = true
 		return
 	if is_instance_valid(_ladder_controller):
 		var ladder_input := Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
@@ -723,6 +746,7 @@ func _hide_all_held_visuals() -> void:
 	held_bottle.visible = false
 	held_plunger.visible = false
 	held_crowbar.visible = false
+	held_screwdriver.visible = false
 	held_note.visible = false
 	held_recipe_book.visible = false
 	held_recipe_book_closed.visible = false
@@ -828,6 +852,7 @@ func _equip_inventory_slot(slot_index: int) -> bool:
 			&"bottle": held_bottle.visible = true
 			&"plunger": held_plunger.visible = true
 			&"crowbar": held_crowbar.visible = true
+			&"flathead_screwdriver": held_screwdriver.visible = true
 			&"note":
 				held_note.visible = true
 				_configure_held_note(_inventory_item_data[slot_index])
@@ -949,6 +974,20 @@ func end_valve_manipulation() -> void:
 	_skill_check_active = false
 
 
+func begin_screw_manipulation(panel: Node3D) -> void:
+	if not is_instance_valid(panel):
+		return
+	_active_screw_panel = panel
+	_skill_check_active = true
+
+
+func end_screw_manipulation(panel: Node3D) -> void:
+	if panel != _active_screw_panel:
+		return
+	_active_screw_panel = null
+	_skill_check_active = false
+
+
 func _update_valve_prompt() -> void:
 	var percentage := roundi(float(_active_valve.call(&"get_openness")) * 100.0)
 	interaction_prompt.text = "RUEDA RATON  REGULAR  |  F  SOLTAR  [%d%%]" % percentage
@@ -966,6 +1005,13 @@ func set_crowbar_minigame_pose(active: bool) -> void:
 	if _held_item != &"crowbar":
 		return
 	held_crowbar.visible = not active
+	right_hand.visible = not active
+
+
+func set_screwdriver_minigame_pose(active: bool) -> void:
+	if _held_item != &"flathead_screwdriver":
+		return
+	held_screwdriver.visible = not active
 	right_hand.visible = not active
 
 
@@ -1096,7 +1142,13 @@ func _update_interaction_prompt() -> void:
 		interaction_prompt.text = "F  SOLTAR ANDADOR"
 		return
 	if _held_item == &"note":
-		interaction_prompt.visible = false
+		var note_target := _get_interactable()
+		if note_target != null:
+			var note_target_text := str(note_target.get_interaction_text(self))
+			interaction_prompt.text = note_target_text
+			interaction_prompt.visible = not note_target_text.is_empty()
+		else:
+			interaction_prompt.visible = false
 		note_controls_prompt.visible = true
 		note_controls_prompt.text = "G  SOLTAR NOTA    RMB  %s" % ("CERRAR" if _note_reading else "AMPLIAR")
 		return
@@ -1166,6 +1218,16 @@ func pick_up_note(title: String, text: String, paper_color: Color, ink_color: Co
 	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(held_note, "scale", Vector3.ONE, 0.22)
 	return true
+
+
+func take_held_note_for_wall() -> Dictionary:
+	if _held_item != &"note" or _selected_inventory_slot < 0 or _selected_inventory_slot >= _inventory_slots.size():
+		return {}
+	var note_data := _inventory_item_data[_selected_inventory_slot].duplicate(true)
+	_set_note_reading(false, true)
+	_clear_inventory_item(&"note")
+	_return_to_flashlight_slot()
+	return note_data
 
 
 func _configure_held_note(data: Dictionary) -> void:
@@ -1544,6 +1606,16 @@ func pick_up_crowbar() -> bool:
 	return true
 
 
+func pick_up_screwdriver() -> bool:
+	if not _store_inventory_item(&"flathead_screwdriver"):
+		return false
+	add_tool(&"flathead_screwdriver")
+	held_screwdriver.scale = Vector3.ONE * 0.03
+	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(held_screwdriver, "scale", Vector3.ONE * 0.82, 0.24)
+	return true
+
+
 func consume_held_item(item_type: StringName) -> bool:
 	if _held_item != item_type:
 		return false
@@ -1554,6 +1626,8 @@ func consume_held_item(item_type: StringName) -> bool:
 		held_plunger.visible = false
 	elif item_type == &"crowbar":
 		held_crowbar.visible = false
+	elif item_type == &"flathead_screwdriver":
+		held_screwdriver.visible = false
 	right_hand.visible = false
 	_return_to_flashlight_slot()
 	return true
@@ -1649,7 +1723,13 @@ func _drop_selected_inventory_item() -> void:
 		dropped_fuse.global_rotation = Vector3(0.15, rotation.y, 0.35)
 		dropped_fuse.call(&"set_dropped", velocity * 0.15 + forward * 0.35)
 	else:
-		var pickup_scene: PackedScene = PlungerPickupScene if item_type == &"plunger" else CrowbarPickupScene
+		var pickup_scene: PackedScene
+		if item_type == &"plunger":
+			pickup_scene = PlungerPickupScene
+		elif item_type == &"flathead_screwdriver":
+			pickup_scene = ScrewdriverPickupScene
+		else:
+			pickup_scene = CrowbarPickupScene
 		var dropped_pickup := pickup_scene.instantiate() as Node3D
 		scene_root.add_child(dropped_pickup)
 		dropped_pickup.global_position = drop_position

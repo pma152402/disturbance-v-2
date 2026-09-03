@@ -8,6 +8,9 @@ const EXPLICIT_INDOOR_VOLUMES: Array[AABB] = [
 	# iniciar la transicion tras bajar los primeros peldaños, sin alcanzar al
 	# jugador que camina por el cesped situado encima.
 	AABB(Vector3(-9.45, -19.5, 0.15), Vector3(6.4, 20.15, 6.85)),
+	# Sotano completo y sus nuevas galerias. Termina por debajo del terreno para
+	# no clasificar como interior el exterior que queda encima de estas salas.
+	AABB(Vector3(-12.5, -20.0, -1.0), Vector3(13.5, 19.2, 17.0)),
 	# Sala inferior de la iglesia, cuyo acceso abierto deja escapar el rayo vertical.
 	AABB(Vector3(-12.4, -4.5, -42.6), Vector3(8.8, 5.2, 4.8)),
 	# Descenso localizado. No se extiende hasta el exterior situado sobre el sotano.
@@ -41,6 +44,7 @@ var _acoustic_blend := 0.0
 func _ready() -> void:
 	_player = get_node_or_null(player_path) as Node3D
 	_setup_weather_bus()
+	_route_weather_players()
 	if _player != null:
 		_acoustic_blend = _get_acoustic_level(_player.global_position)
 	_apply_acoustics(_acoustic_blend)
@@ -96,11 +100,15 @@ func _is_inside_explicit_volume(position: Vector3) -> bool:
 
 
 func _get_acoustic_level(position: Vector3) -> float:
+	# Cualquier espacio situado bajo el terreno usa acústica cerrada. Esto cubre
+	# también galerías nuevas aunque queden fuera de los volúmenes dibujados.
+	if position.y < -0.75:
+		return 2.0
 	if not _is_inside_house(position):
 		return 0.0
 	# Bajo la cota del terreno hay una segunda capa de amortiguacion. De este
 	# modo el sotano y las catacumbas no suenan como una habitacion con ventanas.
-	return 2.0 if position.y < -0.75 else 1.0
+	return 1.0
 
 
 func _setup_weather_bus() -> void:
@@ -120,6 +128,19 @@ func _setup_weather_bus() -> void:
 	if _low_pass == null:
 		_low_pass = AudioEffectLowPassFilter.new()
 		AudioServer.add_bus_effect(_weather_bus_index, _low_pass)
+
+
+func _route_weather_players() -> void:
+	# Fuerza las dos fuentes de tormenta por el mismo bus incluso si una escena
+	# heredada conserva una sobrescritura antigua a Master. Asi lluvia y rayos
+	# respetan siempre la acustica del sotano y de cualquier tunel subterraneo.
+	var scene_root := get_tree().current_scene
+	if scene_root == null:
+		return
+	for player_name: StringName in [&"RainAmbience", &"ThunderFragmentPlayer"]:
+		var weather_player := scene_root.find_child(String(player_name), true, false) as AudioStreamPlayer
+		if weather_player != null:
+			weather_player.bus = bus_name
 
 
 func _apply_acoustics(blend: float) -> void:

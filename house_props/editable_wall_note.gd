@@ -55,6 +55,8 @@ func is_note_interactable() -> bool:
 
 func get_interaction_text(player: Node = null) -> String:
 	if _paper_taken:
+		if player != null and player.has_method(&"is_holding_item_type") and bool(player.call(&"is_holding_item_type", &"note")):
+			return "F  COLGAR NOTA"
 		return ""
 	if player != null and player.has_method(&"can_store_inventory_item") and not player.can_store_inventory_item():
 		return "INVENTARIO LLENO"
@@ -62,7 +64,23 @@ func get_interaction_text(player: Node = null) -> String:
 
 
 func interact(player: Node = null) -> bool:
-	if _paper_taken or player == null or not player.has_method(&"pick_up_note"):
+	if player == null:
+		return false
+	if _paper_taken:
+		if not player.has_method(&"take_held_note_for_wall"):
+			return false
+		var note_data: Dictionary = player.call(&"take_held_note_for_wall")
+		if note_data.is_empty():
+			return false
+		note_title = str(note_data.get("title", "AVISO"))
+		note_text = str(note_data.get("text", ""))
+		paper_color = note_data.get("paper_color", paper_color) as Color
+		ink_color = note_data.get("ink_color", ink_color) as Color
+		_paper_taken = false
+		_refresh_note()
+		_set_paper_visible(true)
+		return true
+	if not player.has_method(&"pick_up_note"):
 		return false
 	if not player.pick_up_note(note_title, note_text, paper_color, ink_color):
 		return true
@@ -76,9 +94,8 @@ func _set_paper_visible(visible_state: bool) -> void:
 		var visual := get_node_or_null(path) as Node3D
 		if visual != null:
 			visual.visible = visible_state
-	var collision := get_node_or_null("CollisionShape3D") as CollisionShape3D
-	if collision != null:
-		collision.set_deferred("disabled", not visible_state)
+	# El collider representa también el clavo/hueco vacío. Se mantiene activo
+	# para que otra nota pueda volver a colgarse aquí con F.
 
 
 func _refresh_note() -> void:

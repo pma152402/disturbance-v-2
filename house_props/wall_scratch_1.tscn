@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Material" path="res://house_props/wall_scratch_material.tres" id="1_mat"]
+
+[sub_resource type="BoxMesh" id="scratch_mesh"]
+size = Vector3(0.018, 0.64, 0.006)
+
+[node name="WallScratch1" type="Node3D"]
+editor_description = "Componente de un arañazo para colocar ligeramente por delante de una pared."
+
+[node name="Scratch1" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0.004)
+rotation = Vector3(0, 0, -0.105)
+mesh = SubResource("scratch_mesh")
+material_override = ExtResource("1_mat")
+

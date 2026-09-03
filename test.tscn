@@ -240,7 +240,7 @@ script = ExtResource("10_indoor_weather")
 
 [node name="Player" parent="." unique_id=546288329 instance=ExtResource("1_player")]
 editor_description = "Spawn de prueba en el pasillo, fuera del sótano y mirando hacia su puerta, con todas las llaves."
-transform = Transform3D(-0.03726088, 0, -0.99930555, 0, 1, 0, 0.99930555, 0, -0.03726088, -7.7847047, 1, 2.681445)
+transform = Transform3D(-0.9986371, 0, 0.052190974, 0, 1, 0, -0.052190974, 0, -0.9986371, -8.153754, -5.6243415, 2.6676843)
 starts_with_lit_candle = true
 debug_all_keys = true
 

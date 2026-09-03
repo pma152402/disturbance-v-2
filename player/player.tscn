@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3]
+[gd_scene load_steps=28 format=3]
 
 [ext_resource type="Script" path="res://player/player.gd" id="1_player"]
 [ext_resource type="ArrayMesh" path="res://ps2_objects/Flashlight/Flashlight.obj" id="2_flashlight_mesh"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" path="res://player/held_items/matchbox_held_visual.tscn" id="14_matchbox"]
 [ext_resource type="PackedScene" path="res://player/held_items/candle_held_visual.tscn" id="15_candle"]
 [ext_resource type="Script" path="res://player/stance_indicator.gd" id="16_stance_indicator"]
+[ext_resource type="PackedScene" path="res://house_props/flathead_screwdriver.tscn" id="17_screwdriver"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.34
@@ -227,6 +228,13 @@ visible = false
 position = Vector3(0.43, -0.62, -0.5)
 rotation = Vector3(-0.5, -0.08, 0.4)
 scale = Vector3(0.58, 0.58, 0.58)
+
+[node name="HeldScrewdriver" parent="Head/Camera3D/RightHandRig" instance=ExtResource("17_screwdriver")]
+visible = false
+position = Vector3(0.4, -0.43, -0.52)
+rotation = Vector3(-0.28, -0.42, 1.12)
+scale = Vector3(0.82, 0.82, 0.82)
+collision_layer = 0
 
 [node name="HeldNote" parent="Head/Camera3D/RightHandRig" instance=ExtResource("11_note")]
 visible = false
