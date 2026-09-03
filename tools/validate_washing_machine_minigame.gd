@@ -1,6 +1,6 @@
 extends SceneTree
 
-const REQUIRED_SEQUENCE := [2, 7, 6, 9, 4, 1, 5, 3]
+const REQUIRED_SEQUENCE := [2, 7, 6, 9, 4, 1]
 
 
 func _initialize() -> void:
@@ -64,6 +64,7 @@ func _run_validation() -> void:
 	var house := packed_house.instantiate()
 	var lower_washer := house.get_node_or_null("FurnitureAndPickups/EntranceWashingMachine")
 	var upper_washer := house.get_node_or_null("FurnitureAndPickups/EntranceWashingMachine2")
+	var wall_hole := house.get_node_or_null("WallHole") as Node3D
 	if lower_washer == null or upper_washer == null:
 		_fail("No se encontraron las dos instancias de lavadora")
 		return
@@ -73,7 +74,20 @@ func _run_validation() -> void:
 	if bool(upper_washer.get("minigame_enabled")) or int(upper_washer.get("collision_layer")) & 2 != 0:
 		_fail("La lavadora superior todavia puede ser detectada como interactuable")
 		return
+	if wall_hole == null or wall_hole.get_node_or_null("PassageArrivalPoint") == null:
+		_fail("El agujero no tiene un punto de llegada vinculado a su posición actual")
+		return
 	house.free()
+
+	var packed_player := load("res://player/player.tscn") as PackedScene
+	var player := packed_player.instantiate()
+	root.add_child(player)
+	await process_frame
+	var interaction_ray := player.get_node("Head/Camera3D/InteractionRay") as RayCast3D
+	if interaction_ray.collision_mask & 1 == 0 or interaction_ray.collision_mask & 2 == 0:
+		_fail("El rayo de interacción no comprueba paredes y objetos a la vez")
+		return
+	player.queue_free()
 
 	print("WASHING_MACHINE_MINIGAME_VALIDATION_OK")
 	quit(0)

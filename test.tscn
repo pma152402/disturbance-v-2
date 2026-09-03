@@ -133,7 +133,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.2, 0)
 
 [node name="ThunderFragmentPlayer" parent="Weather" index="8"]
-bus = &"Weather"
+bus = &"Master"
 
 [node name="GroundWest" parent="Weather/CellarGroundCutout" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.6, -0.1, 0)
@@ -227,7 +227,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.728386, -0.1, 0.8835218)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74, -0.1, 4.94)
 
 [node name="RainAmbience" parent="." unique_id=81507758 instance=ExtResource("9_rain_ambience")]
-bus = &"Weather"
+bus = &"Master"
 
 [node name="IndoorWeatherAudio" type="Node" parent="." unique_id=450258088]
 script = ExtResource("10_indoor_weather")
@@ -240,7 +240,7 @@ script = ExtResource("10_indoor_weather")
 
 [node name="Player" parent="." unique_id=546288329 instance=ExtResource("1_player")]
 editor_description = "Spawn de prueba en el pasillo, fuera del sótano y mirando hacia su puerta, con todas las llaves."
-transform = Transform3D(-0.9986371, 0, 0.052190974, 0, 1, 0, -0.052190974, 0, -0.9986371, -8.153754, -5.6243415, 2.6676843)
+transform = Transform3D(0.3340665, 0, 0.94254947, 0, 1, 0, -0.94254947, 0, 0.3340665, 1.2770935, 0.8476248, -0.035825014)
 starts_with_lit_candle = true
 debug_all_keys = true
 
@@ -382,7 +382,7 @@ theme_override_font_sizes/font_size = 34
 text = "BAT [|||]"
 horizontal_alignment = 2
 
-[node name="FPS" type="Label" parent="PS2PostProcess/CameraHUD"]
+[node name="FPS" type="Label" parent="PS2PostProcess/CameraHUD" unique_id=1521398124]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0

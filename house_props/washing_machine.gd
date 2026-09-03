@@ -155,7 +155,12 @@ func _teleport_through_passage(player: Node) -> void:
 	var exit := get_node_or_null(passage_exit_path) as Node3D
 	if exit == null:
 		return
-	var target := exit.global_position + exit.global_transform.basis.z.normalized() * 1.05
+	var arrival_point := exit.get_node_or_null("PassageArrivalPoint") as Node3D
+	var target := (
+		arrival_point.global_position
+		if arrival_point != null
+		else exit.global_position + exit.global_transform.basis.z.normalized() * 1.35
+	)
 	_move_player_to(player, target)
 
 

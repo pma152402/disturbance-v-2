@@ -5,7 +5,7 @@ signal cancelled
 signal selection_changed(program: int)
 signal program_submitted(program: int, correct: bool)
 
-const REQUIRED_SEQUENCE := [2, 7, 6, 9, 4, 1, 5, 3]
+const REQUIRED_SEQUENCE := [2, 7, 6, 9, 4, 1]
 const PROGRAM_NAMES := [
 	"CORTO",
 	"ALGODÓN",
