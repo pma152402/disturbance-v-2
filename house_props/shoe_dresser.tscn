@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera4.jpg" id="1_wood"]
+[ext_resource type="PackedScene" path="res://bottle_visual.tscn" id="2_bottle"]
 
 [sub_resource type="StandardMaterial3D" id="Material_wood"]
 albedo_color = Color(0.31, 0.17, 0.08, 1)
@@ -22,6 +23,16 @@ texture_filter = 0
 albedo_color = Color(0.09, 0.08, 0.07, 1)
 metallic = 0.6
 roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Material_glass"]
+albedo_color = Color(0.65, 0.78, 0.75, 0.32)
+metallic = 0.1
+roughness = 0.05
+transparency = 1
+
+[sub_resource type="StandardMaterial3D" id="Material_plate"]
+albedo_color = Color(0.82, 0.79, 0.71, 1)
+roughness = 0.45
 
 [sub_resource type="BoxMesh" id="Mesh_horizontal"]
 material = SubResource("Material_wood")
@@ -47,8 +58,42 @@ height = 0.04
 [sub_resource type="BoxShape3D" id="Shape_dresser"]
 size = Vector3(0.9, 0.85, 0.36)
 
+[sub_resource type="BoxMesh" id="Mesh_cabinet_side"]
+material = SubResource("Material_wood")
+size = Vector3(0.05, 0.68, 0.34)
+
+[sub_resource type="BoxMesh" id="Mesh_cabinet_back"]
+material = SubResource("Material_wood")
+size = Vector3(0.9, 0.68, 0.03)
+
+[sub_resource type="BoxMesh" id="Mesh_cabinet_shelf"]
+material = SubResource("Material_wood")
+size = Vector3(0.82, 0.03, 0.32)
+
+[sub_resource type="BoxMesh" id="Mesh_glass_pane"]
+material = SubResource("Material_glass")
+size = Vector3(0.8, 0.58, 0.015)
+
+[sub_resource type="BoxMesh" id="Mesh_frame_vertical"]
+material = SubResource("Material_wood")
+size = Vector3(0.04, 0.66, 0.03)
+
+[sub_resource type="BoxMesh" id="Mesh_frame_horizontal"]
+material = SubResource("Material_wood")
+size = Vector3(0.9, 0.04, 0.03)
+
+[sub_resource type="CylinderMesh" id="Mesh_plate"]
+material = SubResource("Material_plate")
+top_radius = 0.12
+bottom_radius = 0.12
+height = 0.02
+radial_segments = 16
+
+[sub_resource type="BoxShape3D" id="Shape_cabinet"]
+size = Vector3(0.9, 0.68, 0.34)
+
 [node name="ShoeDresser" type="Node3D"]
-editor_description = "Comoda baja de madera con tres cajones, pensada como zapatero junto a una puerta. Mismo material y tecnica de bloques que TVCabinet."
+editor_description = "Comoda baja de madera con tres cajones (base zapatero) y, encima, una vitrina de madera con puerta de cristal, dos baldas, botellas y platos expuestos. Mismo material y tecnica de bloques que TVCabinet."
 
 [node name="Shell" type="StaticBody3D" parent="."]
 
@@ -101,3 +146,92 @@ mesh = SubResource("Mesh_drawer_front")
 [node name="DrawerBottomKnob" type="MeshInstance3D" parent="Drawers"]
 position = Vector3(0, 0.18, 0.19)
 mesh = SubResource("Mesh_knob")
+
+[node name="DisplayCabinet" type="StaticBody3D" parent="."]
+editor_description = "Vitrina superior: cuerpo de madera, balda intermedia, puerta de cristal enmarcada y vajilla expuesta."
+
+[node name="CabinetBottom" type="MeshInstance3D" parent="DisplayCabinet"]
+position = Vector3(0, 0.875, 0)
+mesh = SubResource("Mesh_horizontal")
+
+[node name="CabinetTop" type="MeshInstance3D" parent="DisplayCabinet"]
+position = Vector3(0, 1.575, 0)
+mesh = SubResource("Mesh_horizontal")
+
+[node name="CabinetLeftSide" type="MeshInstance3D" parent="DisplayCabinet"]
+position = Vector3(-0.425, 1.225, 0)
+mesh = SubResource("Mesh_cabinet_side")
+
+[node name="CabinetRightSide" type="MeshInstance3D" parent="DisplayCabinet"]
+position = Vector3(0.425, 1.225, 0)
+mesh = SubResource("Mesh_cabinet_side")
+
+[node name="CabinetBack" type="MeshInstance3D" parent="DisplayCabinet"]
+position = Vector3(0, 1.225, -0.165)
+mesh = SubResource("Mesh_cabinet_back")
+
+[node name="MiddleShelf" type="MeshInstance3D" parent="DisplayCabinet"]
+position = Vector3(0, 1.21, -0.02)
+mesh = SubResource("Mesh_cabinet_shelf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DisplayCabinet"]
+position = Vector3(0, 1.225, 0)
+shape = SubResource("Shape_cabinet")
+
+[node name="CabinetDoor" type="Node3D" parent="."]
+
+[node name="GlassPane" type="MeshInstance3D" parent="CabinetDoor"]
+position = Vector3(0, 1.225, 0.165)
+mesh = SubResource("Mesh_glass_pane")
+
+[node name="FrameLeft" type="MeshInstance3D" parent="CabinetDoor"]
+position = Vector3(-0.41, 1.225, 0.165)
+mesh = SubResource("Mesh_frame_vertical")
+
+[node name="FrameRight" type="MeshInstance3D" parent="CabinetDoor"]
+position = Vector3(0.41, 1.225, 0.165)
+mesh = SubResource("Mesh_frame_vertical")
+
+[node name="FrameTop" type="MeshInstance3D" parent="CabinetDoor"]
+position = Vector3(0, 1.55, 0.165)
+mesh = SubResource("Mesh_frame_horizontal")
+
+[node name="FrameBottom" type="MeshInstance3D" parent="CabinetDoor"]
+position = Vector3(0, 0.9, 0.165)
+mesh = SubResource("Mesh_frame_horizontal")
+
+[node name="FrameMiddle" type="MeshInstance3D" parent="CabinetDoor"]
+position = Vector3(0, 1.21, 0.165)
+mesh = SubResource("Mesh_frame_horizontal")
+
+[node name="Crockery" type="Node3D" parent="."]
+editor_description = "Botellas en la balda baja de la vitrina y platos apilados en la balda alta, vistos a traves del cristal."
+
+[node name="Bottle1" parent="Crockery" instance=ExtResource("2_bottle")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.22, 0.9, -0.05)
+
+[node name="Bottle2" parent="Crockery" instance=ExtResource("2_bottle")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.02, 0.9, -0.08)
+
+[node name="Bottle3" parent="Crockery" instance=ExtResource("2_bottle")]
+transform = Transform3D(0.52, 0, 0, 0, 0.52, 0, 0, 0, 0.52, 0.2, 0.9, -0.06)
+
+[node name="PlateStackLow1" type="MeshInstance3D" parent="Crockery"]
+position = Vector3(-0.18, 1.235, -0.08)
+mesh = SubResource("Mesh_plate")
+
+[node name="PlateStackLow2" type="MeshInstance3D" parent="Crockery"]
+position = Vector3(-0.18, 1.257, -0.08)
+mesh = SubResource("Mesh_plate")
+
+[node name="PlateStackLow3" type="MeshInstance3D" parent="Crockery"]
+position = Vector3(-0.18, 1.279, -0.08)
+mesh = SubResource("Mesh_plate")
+
+[node name="PlateUpright1" type="MeshInstance3D" parent="Crockery"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.15, 1.35, -0.1)
+mesh = SubResource("Mesh_plate")
+
+[node name="PlateUpright2" type="MeshInstance3D" parent="Crockery"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.24, 1.35, -0.1)
+mesh = SubResource("Mesh_plate")
