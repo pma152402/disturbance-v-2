@@ -3,7 +3,7 @@ extends AnimatableBody3D
 const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
 
 @export_range(70.0, 110.0, 1.0) var open_angle_degrees := 90.0
-@export_range(0.05, 1.0, 0.01) var transition_time := 0.18
+@export_range(0.05, 1.5, 0.01) var transition_time := 0.58
 @export var panel_half_width := 0.98
 @export_range(-1.0, 1.0, 1.0) var panel_direction := 1.0
 @export_range(-1.0, 1.0, 1.0) var forced_open_sign := 0.0
@@ -93,8 +93,8 @@ func _animate_to(target_angle: float) -> void:
 	if is_instance_valid(_active_tween):
 		_active_tween.kill()
 	_active_tween = create_tween()
-	_active_tween.set_trans(Tween.TRANS_CUBIC)
-	_active_tween.set_ease(Tween.EASE_OUT)
+	_active_tween.set_trans(Tween.TRANS_SINE)
+	_active_tween.set_ease(Tween.EASE_IN_OUT)
 	_active_tween.tween_property(self, "rotation:y", target_angle, transition_time)
 	_active_tween.finished.connect(func() -> void:
 		rotation.y = target_angle

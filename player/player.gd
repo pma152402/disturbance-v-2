@@ -1256,7 +1256,8 @@ func _update_candle_forward_light() -> void:
 
 
 func _set_candle_hand_pose() -> void:
-	right_hand.position = Vector3(0.37, -0.37, -0.14)
+	# Adelanta el conjunto y acerca la vela al centro de la pantalla.
+	right_hand.position = Vector3(0.15, -0.37, -0.3)
 	right_hand.rotation = Vector3(-1.48, -0.08, -0.08)
 	right_hand.scale = Vector3.ONE * 0.4
 

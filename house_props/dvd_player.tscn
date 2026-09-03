@@ -1,0 +1,93 @@
+[gd_scene load_steps=11 format=3]
+
+[sub_resource type="StandardMaterial3D" id="body_mat"]
+albedo_color = Color(0.035, 0.038, 0.04, 1)
+metallic = 0.28
+roughness = 0.54
+
+[sub_resource type="StandardMaterial3D" id="trim_mat"]
+albedo_color = Color(0.11, 0.12, 0.125, 1)
+metallic = 0.55
+roughness = 0.34
+
+[sub_resource type="StandardMaterial3D" id="display_mat"]
+albedo_color = Color(0.015, 0.025, 0.02, 1)
+emission_enabled = true
+emission = Color(0.06, 0.65, 0.28, 1)
+emission_energy_multiplier = 0.7
+
+[sub_resource type="StandardMaterial3D" id="button_mat"]
+albedo_color = Color(0.22, 0.23, 0.23, 1)
+metallic = 0.42
+roughness = 0.4
+
+[sub_resource type="BoxMesh" id="body_mesh"]
+size = Vector3(0.68, 0.12, 0.43)
+
+[sub_resource type="BoxMesh" id="tray_mesh"]
+size = Vector3(0.42, 0.025, 0.025)
+
+[sub_resource type="BoxMesh" id="display_mesh"]
+size = Vector3(0.115, 0.035, 0.012)
+
+[sub_resource type="CylinderMesh" id="button_mesh"]
+top_radius = 0.018
+bottom_radius = 0.018
+height = 0.014
+radial_segments = 10
+
+[sub_resource type="BoxShape3D" id="body_shape"]
+size = Vector3(0.66, 0.115, 0.41)
+
+[sub_resource type="BoxMesh" id="foot_mesh"]
+size = Vector3(0.08, 0.025, 0.07)
+
+[node name="DVDPlayer" type="StaticBody3D"]
+editor_description = "Reproductor de DVD reutilizable, con bandeja, pantalla, controles y colision propia."
+
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.085, 0)
+mesh = SubResource("body_mesh")
+material_override = SubResource("body_mat")
+
+[node name="FrontTrim" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.085, -0.219)
+scale = Vector3(0.98, 0.82, 0.03)
+mesh = SubResource("body_mesh")
+material_override = SubResource("trim_mat")
+
+[node name="DiscTray" type="MeshInstance3D" parent="."]
+position = Vector3(-0.075, 0.095, -0.241)
+mesh = SubResource("tray_mesh")
+material_override = SubResource("body_mat")
+
+[node name="Display" type="MeshInstance3D" parent="."]
+position = Vector3(0.235, 0.097, -0.243)
+mesh = SubResource("display_mesh")
+material_override = SubResource("display_mat")
+
+[node name="PowerButton" type="MeshInstance3D" parent="."]
+position = Vector3(-0.3, 0.092, -0.245)
+rotation = Vector3(1.5707963, 0, 0)
+mesh = SubResource("button_mesh")
+material_override = SubResource("button_mat")
+
+[node name="EjectButton" type="MeshInstance3D" parent="."]
+position = Vector3(0.145, 0.092, -0.245)
+rotation = Vector3(1.5707963, 0, 0)
+mesh = SubResource("button_mesh")
+material_override = SubResource("button_mat")
+
+[node name="FootLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.255, 0.0125, -0.12)
+mesh = SubResource("foot_mesh")
+material_override = SubResource("body_mat")
+
+[node name="FootRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.255, 0.0125, -0.12)
+mesh = SubResource("foot_mesh")
+material_override = SubResource("body_mat")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.085, 0)
+shape = SubResource("body_shape")

@@ -143,8 +143,10 @@ func get_passage_return_position() -> Vector3:
 func _open_passage_door() -> void:
 	if is_instance_valid(_door_tween):
 		_door_tween.kill()
-	_door_tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	_door_tween.tween_property(door_pivot, "rotation:y", deg_to_rad(-108.0), 0.62)
+	_door_tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# La bisagra queda a la izquierda: el giro positivo aparta la puerta de la
+	# boca de la lavadora y deja libre la salida del pasadizo.
+	_door_tween.tween_property(door_pivot, "rotation:y", deg_to_rad(108.0), 0.85)
 
 
 func _teleport_through_passage(player: Node) -> void:
