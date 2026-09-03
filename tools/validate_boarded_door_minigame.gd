@@ -1,7 +1,7 @@
 extends SceneTree
 
 const NAIL_COUNT := 8
-const HALF_STROKES_PER_NAIL := 6
+const HALF_STROKES_PER_NAIL := 12
 
 
 func _initialize() -> void:
@@ -31,15 +31,22 @@ func _run_validation() -> void:
 	for nail_index in NAIL_COUNT:
 		minigame.call(&"_select_nail", nail_index)
 		minigame.call(&"_finish_insertion")
-		var track := minigame.get("_handle_track") as Rect2
-		var radius := float(minigame.get("_handle_radius"))
-		var top_y := track.position.y + radius
-		var bottom_y := track.end.y - radius
 		for half_stroke in HALF_STROKES_PER_NAIL:
-			minigame.call(&"_update_handle_from_mouse", top_y if half_stroke % 2 == 0 else bottom_y)
+			var press := InputEventKey.new()
+			press.physical_keycode = KEY_SPACE
+			press.pressed = true
+			minigame.call(&"_input", press)
+			press.echo = true
+			minigame.call(&"_input", press)
+			if int(minigame.get("_half_strokes")) != half_stroke + 1:
+				_fail("Las repeticiones automaticas no deben contar")
+				return
+			press.echo = false
+			press.pressed = false
+			minigame.call(&"_input", press)
 		var removed_flags: Array = minigame.get("_removed_nails") as Array
 		if not bool(removed_flags[nail_index]):
-			_fail("El recorrido arriba-abajo no extrajo el clavo %d" % (nail_index + 1))
+			_fail("Las pulsaciones de Espacio no extrajo el clavo %d" % (nail_index + 1))
 			return
 		minigame.call(&"_advance_after_release")
 	if int(minigame.call(&"_count_removed_nails")) != NAIL_COUNT or not bool(minigame.get("_completion_emitted")):

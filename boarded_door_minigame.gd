@@ -9,7 +9,7 @@ signal nail_removed(nail_index: int)
 enum Phase { SELECT_NAIL, INSERTING_CROWBAR, PRYING, NAIL_RELEASED, FINISHED }
 
 const NAIL_COUNT := 8
-const REQUIRED_HALF_STROKES := 6
+const REQUIRED_HALF_STROKES := 12
 const PIXEL_FONT := preload("res://assets/fonts/PressStart2P-Regular.ttf")
 
 var _phase := Phase.SELECT_NAIL
@@ -31,6 +31,14 @@ var _handle_track := Rect2()
 var _handle_center := Vector2.ZERO
 var _handle_radius := 30.0
 var _nail_centers: Array[Vector2] = []
+var _world_camera: Camera3D
+var _world_nails: Array = []
+
+
+func bind_world(camera: Camera3D, nails: Array) -> void:
+	_world_camera = camera
+	_world_nails = nails
+	queue_redraw()
 
 
 func setup(removed_flags: Array) -> void:
@@ -72,32 +80,24 @@ func _notification(what: int) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo:
+	if event is InputEventKey:
 		var key_event := event as InputEventKey
 		var pressed_key := key_event.physical_keycode if key_event.physical_keycode != 0 else key_event.keycode
-		if pressed_key == KEY_ESCAPE:
+		if pressed_key == KEY_SPACE:
+			if key_event.pressed and not key_event.echo and _phase == Phase.PRYING:
+				_complete_half_stroke()
+			get_viewport().set_input_as_handled()
+			return
+		if pressed_key == KEY_ESCAPE and key_event.pressed and not key_event.echo:
 			cancelled.emit()
 			get_viewport().set_input_as_handled()
 			return
-
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		var mouse_button := event as InputEventMouseButton
 		_update_layout()
-		if mouse_button.pressed:
-			if _phase == Phase.SELECT_NAIL:
-				var clicked_nail := _find_nail_at(mouse_button.position)
-				if clicked_nail >= 0:
-					_select_nail(clicked_nail)
-			elif _phase == Phase.PRYING and mouse_button.position.distance_to(_handle_center) <= _handle_radius * 1.45:
-				_dragging_handle = true
-				_update_handle_from_mouse(mouse_button.position.y)
-		else:
-			_dragging_handle = false
-		get_viewport().set_input_as_handled()
-		return
-
-	if event is InputEventMouseMotion and _dragging_handle and _phase == Phase.PRYING:
-		_update_handle_from_mouse((event as InputEventMouseMotion).position.y)
+		if event.pressed and _phase == Phase.SELECT_NAIL:
+			var clicked_nail := _find_nail_at(event.position)
+			if clicked_nail >= 0:
+				_select_nail(clicked_nail)
 		get_viewport().set_input_as_handled()
 
 
@@ -111,7 +111,6 @@ func _select_nail(nail_index: int) -> void:
 	_handle_value = 1.0
 	_handle_target = -1.0
 	_half_strokes = 0
-	_dragging_handle = false
 	nail_selected.emit(_selected_nail)
 	queue_redraw()
 
@@ -122,16 +121,6 @@ func _finish_insertion() -> void:
 	_insertion_amount = 1.0
 	_phase = Phase.PRYING
 	pry_motion.emit(_selected_nail, _nail_progress, _handle_value)
-
-
-func _update_handle_from_mouse(mouse_y: float) -> void:
-	var travel_half := _handle_track.size.y * 0.5 - _handle_radius
-	_handle_value = clampf((mouse_y - _handle_track.get_center().y) / travel_half, -1.0, 1.0)
-	pry_motion.emit(_selected_nail, _nail_progress, _handle_value)
-	var reached_target := (_handle_target < 0.0 and _handle_value <= -0.88) or (_handle_target > 0.0 and _handle_value >= 0.88)
-	if reached_target:
-		_complete_half_stroke()
-	queue_redraw()
 
 
 func _complete_half_stroke() -> void:
@@ -146,7 +135,6 @@ func _complete_half_stroke() -> void:
 		_removed_nails[_selected_nail] = true
 		_phase = Phase.NAIL_RELEASED
 		_release_timer = 0.52
-		_dragging_handle = false
 		nail_removed.emit(_selected_nail)
 
 
@@ -179,6 +167,14 @@ func _find_nail_at(mouse_position: Vector2) -> int:
 
 
 func _update_layout() -> void:
+	if is_instance_valid(_world_camera):
+		_nail_centers.clear()
+		for nail in _world_nails:
+			if is_instance_valid(nail) and not _world_camera.is_position_behind(nail.global_position):
+				_nail_centers.append(_world_camera.unproject_position(nail.global_position))
+			else:
+				_nail_centers.append(Vector2(-10000, -10000))
+		return
 	var panel_size := Vector2(clampf(size.x * 0.78, 820.0, 1180.0), clampf(size.y * 0.78, 560.0, 790.0))
 	_panel_rect = Rect2((size - panel_size) * 0.5, panel_size)
 	_work_rect = Rect2(
@@ -212,6 +208,16 @@ func _board_nail_position(board_index: int, side: int) -> Vector2:
 
 func _draw() -> void:
 	_update_layout()
+	if is_instance_valid(_world_camera):
+		for index in _nail_centers.size():
+			if not _removed_nails[index] and (_phase == Phase.SELECT_NAIL or index == _selected_nail):
+				draw_arc(_nail_centers[index], 17.0, 0, TAU, 32, Color(0.85, 0.85, 0.75, 0.7), 2.0, true)
+		var hint := _instruction_text()
+		if _phase == Phase.PRYING:
+			hint += "  %d / %d" % [_half_strokes, REQUIRED_HALF_STROKES]
+		draw_string(PIXEL_FONT, Vector2(0, size.y - 72), hint, HORIZONTAL_ALIGNMENT_CENTER, size.x, 10, Color(0.9, 0.9, 0.82))
+		draw_string(PIXEL_FONT, Vector2(0, size.y - 44), "ESC  SALIR", HORIZONTAL_ALIGNMENT_CENTER, size.x, 9, Color(0.7, 0.7, 0.65))
+		return
 	draw_rect(_panel_rect.grow(16.0), Color(0.0, 0.0, 0.0, 0.26))
 	draw_rect(_panel_rect, Color(0.045, 0.052, 0.049, 0.64))
 	draw_rect(Rect2(_panel_rect.position + Vector2(14, 14), Vector2(_panel_rect.size.x - 28, 78)), Color(0.02, 0.026, 0.024, 0.76))
@@ -232,7 +238,7 @@ func _instruction_text() -> String:
 	match _phase:
 		Phase.SELECT_NAIL: return "HAZ CLIC EN UN CLAVO"
 		Phase.INSERTING_CROWBAR: return "METIENDO LA PALANCA BAJO EL CLAVO..."
-		Phase.PRYING: return "AGARRA EL POMO Y MUÉVELO ARRIBA Y ABAJO"
+		Phase.PRYING: return "PULSA ESPACIO REPETIDAMENTE PARA HACER PALANCA"
 		Phase.NAIL_RELEASED: return "CLAVO EXTRAÍDO"
 		Phase.FINISHED: return "PUERTA DESPEJADA"
 	return ""
@@ -293,13 +299,9 @@ func _draw_crowbar_animation() -> void:
 
 func _draw_handle_control() -> void:
 	var enabled := _phase == Phase.PRYING
-	var track_color := Color(0.3, 0.32, 0.3, 0.9 if enabled else 0.35)
-	draw_rect(_handle_track.grow(16), Color(0.015, 0.02, 0.018, 0.62))
-	draw_line(Vector2(_handle_track.get_center().x, _handle_track.position.y), Vector2(_handle_track.get_center().x, _handle_track.end.y), track_color, 12.0, true)
-	draw_circle(_handle_center + Vector2(5, 7), _handle_radius + 3.0, Color(0, 0, 0, 0.62))
-	draw_circle(_handle_center, _handle_radius, Color(0.52, 0.055, 0.035, 1.0 if enabled else 0.42))
-	draw_circle(_handle_center - Vector2(0, 7), _handle_radius * 0.63, Color(0.76, 0.1, 0.06, 1.0 if enabled else 0.36))
-	draw_string(PIXEL_FONT, Vector2(_handle_track.position.x - 34, _handle_track.end.y + 42), "POMO", HORIZONTAL_ALIGNMENT_CENTER, _handle_track.size.x + 68, 10, Color(0.62, 0.65, 0.61))
+	var button := Rect2(_handle_track.position + Vector2(-20, 70), Vector2(_handle_track.size.x + 40, 70))
+	draw_rect(button, Color(0.12, 0.14, 0.13, 0.9 if enabled else 0.4))
+	draw_rect(button, Color(0.62, 0.65, 0.61), false, 3.0)
+	draw_string(PIXEL_FONT, button.position + Vector2(0, 40), "ESPACIO", HORIZONTAL_ALIGNMENT_CENTER, button.size.x, 10, Color(0.82, 0.84, 0.78))
 	if enabled:
-		var arrow_y := _handle_track.position.y - 24.0 if _handle_target < 0.0 else _handle_track.end.y + 25.0
-		draw_string(PIXEL_FONT, Vector2(_handle_track.position.x - 34, arrow_y), "▲" if _handle_target < 0.0 else "▼", HORIZONTAL_ALIGNMENT_CENTER, _handle_track.size.x + 68, 18, Color(0.82, 0.84, 0.78))
+		draw_string(PIXEL_FONT, button.position + Vector2(0, 105), "%d / %d" % [_half_strokes, REQUIRED_HALF_STROKES], HORIZONTAL_ALIGNMENT_CENTER, button.size.x, 10, Color(0.72, 0.75, 0.7))

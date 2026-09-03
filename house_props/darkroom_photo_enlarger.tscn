@@ -1,0 +1,83 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t2gjq"]
+albedo_color = Color(0.09019608, 0.09803922, 0.101960786, 1)
+metallic = 0.35
+roughness = 0.52
+
+[sub_resource type="BoxMesh" id="BoxMesh_e2pf2"]
+size = Vector3(0.92, 0.09, 0.72)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dnwve"]
+albedo_color = Color(0.39607844, 0.4117647, 0.41568628, 1)
+metallic = 0.72
+roughness = 0.4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3g1o7"]
+top_radius = 0.035
+bottom_radius = 0.035
+height = 1.45
+radial_segments = 14
+
+[sub_resource type="BoxMesh" id="BoxMesh_rn7lf"]
+size = Vector3(0.5, 0.42, 0.42)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wq84d"]
+albedo_color = Color(0.16078432, 0.13725491, 0.14117648, 1)
+roughness = 0.8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wf6dg"]
+top_radius = 0.13
+bottom_radius = 0.13
+height = 0.27
+radial_segments = 14
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0vgl0"]
+albedo_color = Color(0.09019608, 0.13725491, 0.16862746, 1)
+metallic = 0.1
+roughness = 0.12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_king8"]
+top_radius = 0.085
+bottom_radius = 0.085
+height = 0.07
+radial_segments = 14
+
+[sub_resource type="BoxMesh" id="BoxMesh_q15jd"]
+size = Vector3(0.43, 0.035, 0.36)
+
+[node name="DarkroomPhotoEnlarger" type="Node3D" unique_id=1195817272]
+editor_description = "Ampliadora fotografica independiente."
+metadata/_edit_group_ = true
+
+[node name="GeneratedDetail" type="Node3D" parent="." unique_id=214808920]
+
+[node name="HeavyBase" type="MeshInstance3D" parent="GeneratedDetail" unique_id=692046567]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, 0)
+material_override = SubResource("StandardMaterial3D_t2gjq")
+mesh = SubResource("BoxMesh_e2pf2")
+
+[node name="Column" type="MeshInstance3D" parent="GeneratedDetail" unique_id=1567146251]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28, 0.77, 0.18)
+material_override = SubResource("StandardMaterial3D_dnwve")
+mesh = SubResource("CylinderMesh_3g1o7")
+
+[node name="LampHousing" type="MeshInstance3D" parent="GeneratedDetail" unique_id=695648041]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.28, 0.02)
+material_override = SubResource("StandardMaterial3D_t2gjq")
+mesh = SubResource("BoxMesh_rn7lf")
+
+[node name="LensBellows" type="MeshInstance3D" parent="GeneratedDetail" unique_id=147564386]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.02)
+material_override = SubResource("StandardMaterial3D_wq84d")
+mesh = SubResource("CylinderMesh_wf6dg")
+
+[node name="Lens" type="MeshInstance3D" parent="GeneratedDetail" unique_id=387276920]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84, 0.02)
+material_override = SubResource("StandardMaterial3D_0vgl0")
+mesh = SubResource("CylinderMesh_king8")
+
+[node name="NegativeCarrier" type="MeshInstance3D" parent="GeneratedDetail" unique_id=658718893]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.91, 0.02)
+material_override = SubResource("StandardMaterial3D_dnwve")
+mesh = SubResource("BoxMesh_q15jd")

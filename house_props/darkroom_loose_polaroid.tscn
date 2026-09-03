@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i2e4d"]
+albedo_color = Color(0.88235295, 0.84705883, 0.7411765, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="BoxMesh_dgyis"]
+size = Vector3(0.42, 0.54, 0.018)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qins6"]
+albedo_color = Color(0.2524466, 0.22461215, 0.20870677, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_qc8r2"]
+size = Vector3(0.34, 0.32, 0.012)
+
+[node name="DarkroomLoosePolaroid" type="Node3D" unique_id=731615545]
+editor_description = "Polaroid suelta independiente para colocar manualmente."
+metadata/_edit_group_ = true
+
+[node name="GeneratedDetail" type="Node3D" parent="." unique_id=2082856047]
+
+[node name="LoosePolaroid" type="MeshInstance3D" parent="GeneratedDetail" unique_id=1517338993]
+transform = Transform3D(0.99280864, -0.119712204, 0, -5.2327866e-09, -4.3397044e-08, 1, -0.119712204, -0.99280864, -4.371139e-08, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_i2e4d")
+mesh = SubResource("BoxMesh_dgyis")
+
+[node name="PhotoImage" type="MeshInstance3D" parent="GeneratedDetail" unique_id=1182413242]
+transform = Transform3D(0.99280864, -0.119712204, 0, -5.2327866e-09, -4.3397044e-08, 1, -0.119712204, -0.99280864, -4.371139e-08, 0, 0.055, 0.012)
+material_override = SubResource("StandardMaterial3D_qins6")
+mesh = SubResource("BoxMesh_qc8r2")

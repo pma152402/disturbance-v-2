@@ -1,0 +1,251 @@
+[gd_scene load_steps=15 format=3]
+
+[sub_resource type="StandardMaterial3D" id="paint"]
+albedo_color = Color(0.71, 0.69, 0.61, 1)
+metallic = 0.34
+roughness = 0.68
+
+[sub_resource type="StandardMaterial3D" id="edge_paint"]
+albedo_color = Color(0.48, 0.47, 0.42, 1)
+metallic = 0.52
+roughness = 0.62
+
+[sub_resource type="StandardMaterial3D" id="rust"]
+albedo_color = Color(0.28, 0.12, 0.065, 1)
+metallic = 0.22
+roughness = 0.94
+
+[sub_resource type="StandardMaterial3D" id="pipe"]
+albedo_color = Color(0.29, 0.3, 0.28, 1)
+metallic = 0.76
+roughness = 0.46
+
+[sub_resource type="CapsuleMesh" id="fin"]
+material = SubResource("paint")
+radius = 0.18
+height = 1.42
+radial_segments = 12
+rings = 4
+
+[sub_resource type="CapsuleMesh" id="fin_inner"]
+material = SubResource("edge_paint")
+radius = 0.105
+height = 0.94
+radial_segments = 10
+rings = 3
+
+[sub_resource type="CylinderMesh" id="header"]
+material = SubResource("paint")
+top_radius = 0.115
+bottom_radius = 0.115
+height = 1.86
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="pipe_mesh"]
+material = SubResource("pipe")
+top_radius = 0.045
+bottom_radius = 0.045
+height = 0.58
+radial_segments = 9
+
+[sub_resource type="CylinderMesh" id="valve_body"]
+material = SubResource("edge_paint")
+top_radius = 0.09
+bottom_radius = 0.075
+height = 0.18
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="valve_knob"]
+material = SubResource("rust")
+top_radius = 0.105
+bottom_radius = 0.105
+height = 0.065
+radial_segments = 8
+
+[sub_resource type="BoxMesh" id="bracket"]
+material = SubResource("pipe")
+size = Vector3(0.26, 0.12, 0.32)
+
+[sub_resource type="BoxMesh" id="wall_plate"]
+material = SubResource("edge_paint")
+size = Vector3(0.42, 0.34, 0.055)
+
+[sub_resource type="CylinderMesh" id="bolt"]
+material = SubResource("rust")
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.035
+radial_segments = 8
+
+[sub_resource type="BoxShape3D" id="collision"]
+size = Vector3(2.16, 1.58, 0.46)
+
+[node name="AntiqueWallOilRadiator" type="StaticBody3D"]
+editor_description = "Radiador mural antiguo de aceite con nueve elementos. Sin ruedas, cable, botones ni controles. El eje -Z queda contra la pared."
+
+[node name="WallMounts" type="Node3D" parent="."]
+
+[node name="LeftPlate" type="MeshInstance3D" parent="WallMounts"]
+position = Vector3(-0.68, 0.88, -0.24)
+mesh = SubResource("wall_plate")
+
+[node name="RightPlate" type="MeshInstance3D" parent="WallMounts"]
+position = Vector3(0.68, 0.88, -0.24)
+mesh = SubResource("wall_plate")
+
+[node name="LeftBracket" type="MeshInstance3D" parent="WallMounts"]
+position = Vector3(-0.68, 0.88, -0.08)
+mesh = SubResource("bracket")
+
+[node name="RightBracket" type="MeshInstance3D" parent="WallMounts"]
+position = Vector3(0.68, 0.88, -0.08)
+mesh = SubResource("bracket")
+
+[node name="Bolt1" type="MeshInstance3D" parent="WallMounts"]
+position = Vector3(-0.82, 0.98, -0.208)
+rotation = Vector3(1.5707963, 0, 0)
+mesh = SubResource("bolt")
+
+[node name="Bolt2" type="MeshInstance3D" parent="WallMounts"]
+position = Vector3(-0.54, 0.78, -0.208)
+rotation = Vector3(1.5707963, 0, 0)
+mesh = SubResource("bolt")
+
+[node name="Bolt3" type="MeshInstance3D" parent="WallMounts"]
+position = Vector3(0.54, 0.98, -0.208)
+rotation = Vector3(1.5707963, 0, 0)
+mesh = SubResource("bolt")
+
+[node name="Bolt4" type="MeshInstance3D" parent="WallMounts"]
+position = Vector3(0.82, 0.78, -0.208)
+rotation = Vector3(1.5707963, 0, 0)
+mesh = SubResource("bolt")
+
+[node name="RadiatorBody" type="Node3D" parent="."]
+
+[node name="TopHeader" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(0, 1.55, 0)
+rotation = Vector3(0, 0, 1.5707963)
+mesh = SubResource("header")
+
+[node name="BottomHeader" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(0, 0.25, 0)
+rotation = Vector3(0, 0, 1.5707963)
+mesh = SubResource("header")
+
+[node name="Fin1" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(-0.88, 0.9, 0)
+scale = Vector3(0.42, 1, 1.1)
+mesh = SubResource("fin")
+[node name="Fin2" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(-0.66, 0.9, 0)
+scale = Vector3(0.42, 1, 1.1)
+mesh = SubResource("fin")
+[node name="Fin3" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(-0.44, 0.9, 0)
+scale = Vector3(0.42, 1, 1.1)
+mesh = SubResource("fin")
+[node name="Fin4" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(-0.22, 0.9, 0)
+scale = Vector3(0.42, 1, 1.1)
+mesh = SubResource("fin")
+[node name="Fin5" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(0, 0.9, 0)
+scale = Vector3(0.42, 1, 1.1)
+mesh = SubResource("fin")
+[node name="Fin6" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(0.22, 0.9, 0)
+scale = Vector3(0.42, 1, 1.1)
+mesh = SubResource("fin")
+[node name="Fin7" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(0.44, 0.9, 0)
+scale = Vector3(0.42, 1, 1.1)
+mesh = SubResource("fin")
+[node name="Fin8" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(0.66, 0.9, 0)
+scale = Vector3(0.42, 1, 1.1)
+mesh = SubResource("fin")
+[node name="Fin9" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(0.88, 0.9, 0)
+scale = Vector3(0.42, 1, 1.1)
+mesh = SubResource("fin")
+
+[node name="InnerRelief1" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(-0.88, 0.9, 0.19)
+scale = Vector3(0.28, 1, 0.42)
+mesh = SubResource("fin_inner")
+[node name="InnerRelief2" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(-0.66, 0.9, 0.19)
+scale = Vector3(0.28, 1, 0.42)
+mesh = SubResource("fin_inner")
+[node name="InnerRelief3" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(-0.44, 0.9, 0.19)
+scale = Vector3(0.28, 1, 0.42)
+mesh = SubResource("fin_inner")
+[node name="InnerRelief4" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(-0.22, 0.9, 0.19)
+scale = Vector3(0.28, 1, 0.42)
+mesh = SubResource("fin_inner")
+[node name="InnerRelief5" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(0, 0.9, 0.19)
+scale = Vector3(0.28, 1, 0.42)
+mesh = SubResource("fin_inner")
+[node name="InnerRelief6" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(0.22, 0.9, 0.19)
+scale = Vector3(0.28, 1, 0.42)
+mesh = SubResource("fin_inner")
+[node name="InnerRelief7" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(0.44, 0.9, 0.19)
+scale = Vector3(0.28, 1, 0.42)
+mesh = SubResource("fin_inner")
+[node name="InnerRelief8" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(0.66, 0.9, 0.19)
+scale = Vector3(0.28, 1, 0.42)
+mesh = SubResource("fin_inner")
+[node name="InnerRelief9" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(0.88, 0.9, 0.19)
+scale = Vector3(0.28, 1, 0.42)
+mesh = SubResource("fin_inner")
+
+[node name="Pipework" type="Node3D" parent="."]
+
+[node name="InletPipe" type="MeshInstance3D" parent="Pipework"]
+position = Vector3(-1.15, 0.24, 0)
+rotation = Vector3(0, 0, 1.5707963)
+mesh = SubResource("pipe_mesh")
+
+[node name="OutletPipe" type="MeshInstance3D" parent="Pipework"]
+position = Vector3(1.15, 0.24, 0)
+rotation = Vector3(0, 0, 1.5707963)
+mesh = SubResource("pipe_mesh")
+
+[node name="LeftValve" type="MeshInstance3D" parent="Pipework"]
+position = Vector3(-1.02, 0.24, 0)
+rotation = Vector3(0, 0, 1.5707963)
+mesh = SubResource("valve_body")
+
+[node name="LeftValveKnob" type="MeshInstance3D" parent="Pipework"]
+position = Vector3(-1.02, 0.39, 0)
+mesh = SubResource("valve_knob")
+
+[node name="BleedValve" type="MeshInstance3D" parent="Pipework"]
+position = Vector3(1.01, 1.56, 0)
+rotation = Vector3(0, 0, 1.5707963)
+scale = Vector3(0.55, 0.55, 0.55)
+mesh = SubResource("valve_body")
+
+[node name="RustStainLeft" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(-0.91, 0.28, 0.205)
+scale = Vector3(0.4, 0.08, 0.5)
+mesh = SubResource("fin_inner")
+material_override = SubResource("rust")
+
+[node name="RustStainRight" type="MeshInstance3D" parent="RadiatorBody"]
+position = Vector3(0.89, 1.5, 0.205)
+scale = Vector3(0.32, 0.06, 0.42)
+mesh = SubResource("fin_inner")
+material_override = SubResource("rust")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("collision")

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://house_props/detailed_potted_plant.gd" id="1"]
+
+[node name="DetailedPottedPlant" type="Node3D"]
+editor_description = "Planta detallada reutilizable. Variant selecciona entre ocho especies y macetas diferentes."
+script = ExtResource("1")
+metadata/_edit_group_ = true

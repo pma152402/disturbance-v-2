@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://house_props/detailed_rooftop_prop.gd" id="1"]
+
+[node name="DetailedRooftopProp" type="Node3D"]
+editor_description = "Elemento detallado reutilizable para tejados. Elige la variante desde Prop Type."
+script = ExtResource("1")
+metadata/_edit_group_ = true

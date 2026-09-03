@@ -1,0 +1,473 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yktwr"]
+albedo_color = Color(0.24705882, 0.27058825, 0.27058825, 1)
+metallic = 0.55
+roughness = 0.62
+
+[sub_resource type="BoxMesh" id="BoxMesh_7kdek"]
+size = Vector3(1.65, 0.68, 0.72)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g30pd"]
+albedo_color = Color(0.40784314, 0.4392157, 0.44313726, 1)
+metallic = 0.82
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_xgb88"]
+size = Vector3(0.75, 0.08, 0.84)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i4kqc"]
+albedo_color = Color(0.14509805, 0.1764706, 0.18039216, 1)
+metallic = 0.7
+roughness = 0.25
+
+[sub_resource type="BoxMesh" id="BoxMesh_j0l1u"]
+size = Vector3(0.88, 0.035, 0.67)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_oq38h"]
+top_radius = 0.035
+bottom_radius = 0.035
+height = 0.42999995
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lip6w"]
+top_radius = 0.035
+bottom_radius = 0.035
+height = 0.31
+radial_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wyvr6"]
+albedo_color = Color(0.26666668, 0.28627452, 0.2901961, 1)
+metallic = 0.8
+roughness = 0.3
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_2m34k"]
+top_radius = 0.07
+bottom_radius = 0.07
+height = 0.08
+radial_segments = 14
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gj06j"]
+albedo_color = Color(0.26666668, 0.28627452, 0.2901961, 1)
+metallic = 0.8
+roughness = 0.3
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_xjf77"]
+top_radius = 0.07
+bottom_radius = 0.07
+height = 0.08
+radial_segments = 14
+
+[sub_resource type="StandardMaterial3D" id="DetailSteel"]
+albedo_color = Color(0.38, 0.42, 0.43, 1)
+metallic = 0.8
+roughness = 0.65
+
+[sub_resource type="StandardMaterial3D" id="DetailDark"]
+albedo_color = Color(0.07, 0.08, 0.08, 1)
+metallic = 0
+roughness = 0.65
+
+[sub_resource type="StandardMaterial3D" id="DetailPaper"]
+albedo_color = Color(0.76, 0.72, 0.60, 1)
+metallic = 0
+roughness = 0.65
+
+[sub_resource type="StandardMaterial3D" id="DetailPhoto"]
+albedo_color = Color(0.16, 0.19, 0.17, 1)
+metallic = 0
+roughness = 0.65
+
+[sub_resource type="StandardMaterial3D" id="DetailAmber"]
+albedo_color = Color(0.25, 0.12, 0.05, 1)
+metallic = 0
+roughness = 0.65
+
+[sub_resource type="StandardMaterial3D" id="DetailRed"]
+albedo_color = Color(0.4, 0.09, 0.06, 1)
+metallic = 0
+roughness = 0.65
+
+[sub_resource type="StandardMaterial3D" id="DetailBlue"]
+albedo_color = Color(0.08, 0.17, 0.24, 1)
+metallic = 0
+roughness = 0.65
+
+[sub_resource type="BoxMesh" id="AddedMesh1"]
+size = Vector3(0.91, 0.24, 0.045)
+
+[sub_resource type="BoxMesh" id="AddedMesh2"]
+size = Vector3(0.91, 0.24, 0.045)
+
+[sub_resource type="BoxMesh" id="AddedMesh3"]
+size = Vector3(0.045, 0.24, 0.72)
+
+[sub_resource type="BoxMesh" id="AddedMesh4"]
+size = Vector3(0.045, 0.24, 0.72)
+
+[sub_resource type="BoxMesh" id="AddedMesh5"]
+size = Vector3(0.014, 0.013, 0.61)
+
+[sub_resource type="BoxMesh" id="AddedMesh6"]
+size = Vector3(0.014, 0.013, 0.61)
+
+[sub_resource type="BoxMesh" id="AddedMesh7"]
+size = Vector3(0.014, 0.013, 0.61)
+
+[sub_resource type="BoxMesh" id="AddedMesh8"]
+size = Vector3(0.014, 0.013, 0.61)
+
+[sub_resource type="BoxMesh" id="AddedMesh9"]
+size = Vector3(0.014, 0.013, 0.61)
+
+[sub_resource type="BoxMesh" id="AddedMesh10"]
+size = Vector3(0.014, 0.013, 0.61)
+
+[sub_resource type="BoxMesh" id="AddedMesh11"]
+size = Vector3(0.014, 0.013, 0.61)
+
+[sub_resource type="BoxMesh" id="AddedMesh12"]
+size = Vector3(0.014, 0.013, 0.61)
+
+[sub_resource type="BoxMesh" id="AddedMesh13"]
+size = Vector3(0.014, 0.013, 0.61)
+
+[sub_resource type="BoxMesh" id="AddedMesh14"]
+size = Vector3(1.77, 0.22, 0.04)
+
+[sub_resource type="CylinderMesh" id="AddedMesh15"]
+top_radius = 0.065
+bottom_radius = 0.065
+height = 0.013
+radial_segments = 20
+
+[sub_resource type="BoxMesh" id="AddedMesh16"]
+size = Vector3(0.007, 0.004, 0.066)
+
+[sub_resource type="BoxMesh" id="AddedMesh17"]
+size = Vector3(0.007, 0.004, 0.066)
+
+[sub_resource type="BoxMesh" id="AddedMesh18"]
+size = Vector3(0.007, 0.004, 0.066)
+
+[sub_resource type="BoxMesh" id="AddedMesh19"]
+size = Vector3(0.007, 0.004, 0.066)
+
+[sub_resource type="BoxMesh" id="AddedMesh20"]
+size = Vector3(0.007, 0.004, 0.066)
+
+[sub_resource type="CylinderMesh" id="AddedMesh21"]
+top_radius = 0.036
+bottom_radius = 0.036
+height = 0.09
+radial_segments = 20
+
+[sub_resource type="CylinderMesh" id="AddedMesh22"]
+top_radius = 0.041
+bottom_radius = 0.041
+height = 0.018
+radial_segments = 20
+
+[sub_resource type="BoxMesh" id="AddedMesh23"]
+size = Vector3(0.16, 0.023, 0.025)
+
+[sub_resource type="BoxMesh" id="AddedMesh24"]
+size = Vector3(0.025, 0.023, 0.16)
+
+[sub_resource type="CylinderMesh" id="AddedMesh25"]
+top_radius = 0.023
+bottom_radius = 0.023
+height = 0.012
+radial_segments = 20
+
+[sub_resource type="BoxMesh" id="AddedMesh26"]
+size = Vector3(0.16, 0.023, 0.025)
+
+[sub_resource type="BoxMesh" id="AddedMesh27"]
+size = Vector3(0.025, 0.023, 0.16)
+
+[sub_resource type="CylinderMesh" id="AddedMesh28"]
+top_radius = 0.023
+bottom_radius = 0.023
+height = 0.012
+radial_segments = 20
+
+[sub_resource type="BoxMesh" id="AddedMesh29"]
+size = Vector3(0.79, 0.59, 0.022)
+
+[sub_resource type="BoxMesh" id="AddedMesh30"]
+size = Vector3(0.21, 0.025, 0.04)
+
+[sub_resource type="BoxMesh" id="AddedMesh31"]
+size = Vector3(0.025, 0.07, 0.016)
+
+[sub_resource type="BoxMesh" id="AddedMesh32"]
+size = Vector3(0.025, 0.07, 0.016)
+
+[sub_resource type="BoxMesh" id="AddedMesh33"]
+size = Vector3(0.79, 0.59, 0.022)
+
+[sub_resource type="BoxMesh" id="AddedMesh34"]
+size = Vector3(0.21, 0.025, 0.04)
+
+[sub_resource type="BoxMesh" id="AddedMesh35"]
+size = Vector3(0.025, 0.07, 0.016)
+
+[sub_resource type="BoxMesh" id="AddedMesh36"]
+size = Vector3(0.025, 0.07, 0.016)
+
+[sub_resource type="BoxMesh" id="AddedMesh37"]
+size = Vector3(1.51, 0.1, 0.61)
+
+[sub_resource type="CylinderMesh" id="AddedMesh38"]
+top_radius = 0.066
+bottom_radius = 0.066
+height = 0.24
+radial_segments = 20
+
+[sub_resource type="BoxMesh" id="AddedMesh39"]
+size = Vector3(0.13, 0.023, 0.026)
+
+[sub_resource type="BoxMesh" id="AddedMesh40"]
+size = Vector3(0.19, 0.045, 0.11)
+
+[node name="DarkroomWashingSink" type="Node3D" unique_id=1135071806]
+editor_description = "Fregadero metalico de laboratorio fotografico independiente."
+metadata/_edit_group_ = true
+
+[node name="GeneratedDetail" type="Node3D" parent="." unique_id=328597212]
+
+[node name="SinkCabinet" type="MeshInstance3D" parent="GeneratedDetail" unique_id=236151969]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, 0)
+material_override = SubResource("StandardMaterial3D_yktwr")
+mesh = SubResource("BoxMesh_7kdek")
+
+[node name="SinkRim" type="MeshInstance3D" parent="GeneratedDetail" unique_id=109001205]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.515, 0.96, 0)
+material_override = SubResource("StandardMaterial3D_g30pd")
+mesh = SubResource("BoxMesh_xgb88")
+
+[node name="Basin" type="MeshInstance3D" parent="GeneratedDetail" unique_id=650782147]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36, 0.732, 0)
+material_override = SubResource("StandardMaterial3D_i4kqc")
+mesh = SubResource("BoxMesh_j0l1u")
+
+[node name="FaucetStem" type="MeshInstance3D" parent="GeneratedDetail" unique_id=76854016]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2149999, -0.28)
+material_override = SubResource("StandardMaterial3D_g30pd")
+mesh = SubResource("CylinderMesh_oq38h")
+
+[node name="FaucetSpout" type="MeshInstance3D" parent="GeneratedDetail" unique_id=927813573]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 1.43, -0.125)
+material_override = SubResource("StandardMaterial3D_g30pd")
+mesh = SubResource("CylinderMesh_lip6w")
+
+[node name="Tap" type="MeshInstance3D" parent="GeneratedDetail" unique_id=197442732]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28, 1.08, -0.3)
+material_override = SubResource("StandardMaterial3D_wyvr6")
+mesh = SubResource("CylinderMesh_2m34k")
+
+[node name="@MeshInstance3D@58" type="MeshInstance3D" parent="GeneratedDetail" unique_id=1812475066]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28, 1.08, -0.3)
+material_override = SubResource("StandardMaterial3D_gj06j")
+mesh = SubResource("CylinderMesh_xjf77")
+
+[node name="BasinWall1" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.36, 0.87, -0.34)
+mesh = SubResource("AddedMesh1")
+material_override = SubResource("DetailSteel")
+
+[node name="BasinWall2" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.36, 0.87, 0.34)
+mesh = SubResource("AddedMesh2")
+material_override = SubResource("DetailSteel")
+
+[node name="BasinSide3" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.095, 0.87, 0)
+mesh = SubResource("AddedMesh3")
+material_override = SubResource("DetailSteel")
+
+[node name="BasinSide4" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.815, 0.87, 0)
+mesh = SubResource("AddedMesh4")
+material_override = SubResource("DetailSteel")
+
+[node name="DrainboardRib5" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.75, 1.011, 0)
+mesh = SubResource("AddedMesh5")
+material_override = SubResource("DetailSteel")
+
+[node name="DrainboardRib6" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.683, 1.011, 0)
+mesh = SubResource("AddedMesh6")
+material_override = SubResource("DetailSteel")
+
+[node name="DrainboardRib7" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.616, 1.011, 0)
+mesh = SubResource("AddedMesh7")
+material_override = SubResource("DetailSteel")
+
+[node name="DrainboardRib8" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.5489999999999999, 1.011, 0)
+mesh = SubResource("AddedMesh8")
+material_override = SubResource("DetailSteel")
+
+[node name="DrainboardRib9" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.482, 1.011, 0)
+mesh = SubResource("AddedMesh9")
+material_override = SubResource("DetailSteel")
+
+[node name="DrainboardRib10" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.415, 1.011, 0)
+mesh = SubResource("AddedMesh10")
+material_override = SubResource("DetailSteel")
+
+[node name="DrainboardRib11" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.348, 1.011, 0)
+mesh = SubResource("AddedMesh11")
+material_override = SubResource("DetailSteel")
+
+[node name="DrainboardRib12" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.28099999999999997, 1.011, 0)
+mesh = SubResource("AddedMesh12")
+material_override = SubResource("DetailSteel")
+
+[node name="DrainboardRib13" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.21399999999999997, 1.011, 0)
+mesh = SubResource("AddedMesh13")
+material_override = SubResource("DetailSteel")
+
+[node name="BackSplash14" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0, 1.095, -0.397)
+mesh = SubResource("AddedMesh14")
+material_override = SubResource("DetailSteel")
+
+[node name="Drain15" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.36, 0.759, 0)
+mesh = SubResource("AddedMesh15")
+material_override = SubResource("DetailSteel")
+
+[node name="DrainSlot16" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.32, 0.768, 0)
+mesh = SubResource("AddedMesh16")
+material_override = SubResource("DetailDark")
+
+[node name="DrainSlot17" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.339, 0.768, 0)
+mesh = SubResource("AddedMesh17")
+material_override = SubResource("DetailDark")
+
+[node name="DrainSlot18" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.358, 0.768, 0)
+mesh = SubResource("AddedMesh18")
+material_override = SubResource("DetailDark")
+
+[node name="DrainSlot19" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.377, 0.768, 0)
+mesh = SubResource("AddedMesh19")
+material_override = SubResource("DetailDark")
+
+[node name="DrainSlot20" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.396, 0.768, 0)
+mesh = SubResource("AddedMesh20")
+material_override = SubResource("DetailDark")
+
+[node name="DownturnedSpout21" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0, 1.389, 0.03)
+mesh = SubResource("AddedMesh21")
+material_override = SubResource("DetailSteel")
+
+[node name="Aerator22" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0, 1.339, 0.03)
+mesh = SubResource("AddedMesh22")
+material_override = SubResource("DetailDark")
+
+[node name="TapCross23" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.28, 1.131, -0.3)
+mesh = SubResource("AddedMesh23")
+material_override = SubResource("DetailSteel")
+
+[node name="TapCross24" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.28, 1.131, -0.3)
+mesh = SubResource("AddedMesh24")
+material_override = SubResource("DetailSteel")
+
+[node name="TemperatureCap25" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.28, 1.15, -0.3)
+mesh = SubResource("AddedMesh25")
+material_override = SubResource("DetailRed")
+
+[node name="TapCross26" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.28, 1.131, -0.3)
+mesh = SubResource("AddedMesh26")
+material_override = SubResource("DetailSteel")
+
+[node name="TapCross27" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.28, 1.131, -0.3)
+mesh = SubResource("AddedMesh27")
+material_override = SubResource("DetailSteel")
+
+[node name="TemperatureCap28" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.28, 1.15, -0.3)
+mesh = SubResource("AddedMesh28")
+material_override = SubResource("DetailBlue")
+
+[node name="CabinetDoor29" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.41, 0.36, 0.369)
+mesh = SubResource("AddedMesh29")
+material_override = SubResource("DetailSteel")
+
+[node name="DoorHandle30" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.41, 0.56, 0.405)
+mesh = SubResource("AddedMesh30")
+material_override = SubResource("DetailDark")
+
+[node name="Hinge31" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.76, 0.16, 0.39)
+mesh = SubResource("AddedMesh31")
+material_override = SubResource("DetailDark")
+
+[node name="Hinge32" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.76, 0.55, 0.39)
+mesh = SubResource("AddedMesh32")
+material_override = SubResource("DetailDark")
+
+[node name="CabinetDoor33" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.41, 0.36, 0.369)
+mesh = SubResource("AddedMesh33")
+material_override = SubResource("DetailSteel")
+
+[node name="DoorHandle34" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.41, 0.56, 0.405)
+mesh = SubResource("AddedMesh34")
+material_override = SubResource("DetailDark")
+
+[node name="Hinge35" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.76, 0.16, 0.39)
+mesh = SubResource("AddedMesh35")
+material_override = SubResource("DetailDark")
+
+[node name="Hinge36" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0.76, 0.55, 0.39)
+mesh = SubResource("AddedMesh36")
+material_override = SubResource("DetailDark")
+
+[node name="Plinth37" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(0, 0.055, 0)
+mesh = SubResource("AddedMesh37")
+material_override = SubResource("DetailDark")
+
+[node name="SoapBottle38" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.7, 1.13, -0.24)
+mesh = SubResource("AddedMesh38")
+material_override = SubResource("DetailAmber")
+
+[node name="SoapPump39" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.7, 1.277, -0.24)
+mesh = SubResource("AddedMesh39")
+material_override = SubResource("DetailDark")
+
+[node name="Sponge40" type="MeshInstance3D" parent="GeneratedDetail"]
+position = Vector3(-0.48, 1.035, 0.22)
+mesh = SubResource("AddedMesh40")
+material_override = SubResource("DetailPaper")

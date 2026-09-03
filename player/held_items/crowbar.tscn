@@ -1,4 +1,6 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://house_props/crowbar_curved_hook.obj" id="2_curved_hook"]
 
 [sub_resource type="StandardMaterial3D" id="Material_red"]
 albedo_color = Color(0.31, 0.035, 0.025, 1)
@@ -39,20 +41,9 @@ size = Vector3(0.24, 0.035, 0.095)
 position = Vector3(0, 0.78, 0)
 mesh = SubResource("Mesh_shaft")
 
-[node name="UpperCurveA" type="MeshInstance3D" parent="."]
-position = Vector3(0.103, 1.484, 0)
-rotation = Vector3(0, 0, 0.885)
-mesh = SubResource("Mesh_hook")
-
-[node name="UpperCurveB" type="MeshInstance3D" parent="."]
-position = Vector3(0.253, 1.604, 0)
-rotation = Vector3(0, 0, 1.021)
-mesh = SubResource("Mesh_hook")
-
-[node name="UpperFlatTip" type="MeshInstance3D" parent="."]
-position = Vector3(0.458, 1.664, 0)
-rotation = Vector3(0, 0, 0.462)
-mesh = SubResource("Mesh_tip")
+[node name="ForgedCurvedHook" type="MeshInstance3D" parent="."]
+mesh = ExtResource("2_curved_hook")
+material_override = SubResource("Material_edge")
 
 [node name="LowerPryTip" type="MeshInstance3D" parent="."]
 position = Vector3(-0.123, 0.116, 0)

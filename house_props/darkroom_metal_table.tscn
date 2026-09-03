@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://bt230yrc2t2w3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_60kkr"]
+albedo_color = Color(0.33333334, 0.35686275, 0.3647059, 1)
+metallic = 0.75
+roughness = 0.42
+
+[sub_resource type="BoxMesh" id="BoxMesh_i2jke"]
+size = Vector3(2.25, 0.09, 1.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hlmjd"]
+size = Vector3(0.08, 1.02, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_e412d"]
+size = Vector3(0.08, 1.02, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_plhfg"]
+size = Vector3(0.08, 1.02, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ae25y"]
+size = Vector3(0.08, 1.02, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1u4y7"]
+albedo_color = Color(0.23529412, 0.25490198, 0.25882354, 1)
+metallic = 0.65
+roughness = 0.55
+
+[sub_resource type="BoxMesh" id="BoxMesh_wnmi7"]
+size = Vector3(2.05, 0.055, 0.88)
+
+[node name="DarkroomMetalTable" type="Node3D" unique_id=705999142]
+editor_description = "Mesa metalica independiente para cuarto de fotografia."
+metadata/_edit_group_ = true
+
+[node name="GeneratedDetail" type="Node3D" parent="." unique_id=935048296]
+
+[node name="WorkTop" type="MeshInstance3D" parent="GeneratedDetail" unique_id=778616234]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02, 0)
+material_override = SubResource("StandardMaterial3D_60kkr")
+mesh = SubResource("BoxMesh_i2jke")
+
+[node name="SquareLeg" type="MeshInstance3D" parent="GeneratedDetail" unique_id=1608607108]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.98, 0.51, -0.42)
+material_override = SubResource("StandardMaterial3D_60kkr")
+mesh = SubResource("BoxMesh_hlmjd")
+
+[node name="@MeshInstance3D@2" type="MeshInstance3D" parent="GeneratedDetail" unique_id=284171372]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.98, 0.51, 0.42)
+material_override = SubResource("StandardMaterial3D_60kkr")
+mesh = SubResource("BoxMesh_e412d")
+
+[node name="@MeshInstance3D@3" type="MeshInstance3D" parent="GeneratedDetail" unique_id=1392006029]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.98, 0.51, -0.42)
+material_override = SubResource("StandardMaterial3D_60kkr")
+mesh = SubResource("BoxMesh_plhfg")
+
+[node name="@MeshInstance3D@4" type="MeshInstance3D" parent="GeneratedDetail" unique_id=1390101648]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.98, 0.51, 0.42)
+material_override = SubResource("StandardMaterial3D_60kkr")
+mesh = SubResource("BoxMesh_ae25y")
+
+[node name="LowerShelf" type="MeshInstance3D" parent="GeneratedDetail" unique_id=1024102062]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28, 0)
+material_override = SubResource("StandardMaterial3D_1u4y7")
+mesh = SubResource("BoxMesh_wnmi7")

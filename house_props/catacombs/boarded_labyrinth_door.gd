@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 const MinigameScene := preload("res://boarded_door_minigame.tscn")
+const CrowbarVisual := preload("res://player/held_items/crowbar.tscn")
 
 @export var required_tool_id: StringName = &"crowbar"
 @export var required_tool_name := "PALANCA"
@@ -20,6 +21,8 @@ var _nail_rest_rotations: Array[Vector3] = []
 var _nail_removed_flags: Array[bool] = []
 var _boards: Array[Node3D] = []
 var _board_removed_flags: Array[bool] = []
+var _pry_pivot: Node3D
+var _pry_tween: Tween
 
 
 func _ready() -> void:
@@ -73,6 +76,7 @@ func _start_minigame(player: Node) -> void:
 	get_tree().current_scene.add_child(_active_layer)
 	var minigame := _active_layer.get_node("BoardedDoorMinigame")
 	minigame.call(&"setup", _nail_removed_flags)
+	minigame.call(&"bind_world", get_viewport().get_camera_3d(), _nails)
 	minigame.completed.connect(_on_minigame_completed)
 	minigame.cancelled.connect(_on_minigame_cancelled)
 	minigame.nail_selected.connect(_on_nail_selected)
@@ -113,6 +117,18 @@ func _on_nail_selected(nail_index: int) -> void:
 	if nail_index < 0 or nail_index >= _nails.size() or not is_instance_valid(_nails[nail_index]):
 		return
 	var nail := _nails[nail_index]
+	if is_instance_valid(_pry_pivot):
+		_pry_pivot.free()
+	_pry_pivot = Node3D.new()
+	add_child(_pry_pivot)
+	_pry_pivot.global_transform = (nail.get_parent() as Node3D).global_transform
+	_pry_pivot.global_position = nail.global_position - _pry_pivot.global_basis.z.normalized() * 0.07
+	var visual := CrowbarVisual.instantiate() as Node3D
+	_pry_pivot.add_child(visual)
+	visual.scale = Vector3.ONE * 0.42
+	var inserted := -Vector3(0.41, 1.45, 0) * 0.42
+	visual.position = inserted + Vector3(0, -0.2, -0.3)
+	visual.create_tween().tween_property(visual, "position", inserted, 0.3)
 	var tween := nail.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	tween.tween_property(nail, "scale", Vector3.ONE * 1.24, 0.12)
 	tween.tween_property(nail, "scale", Vector3.ONE, 0.16)
@@ -124,6 +140,11 @@ func _on_pry_motion(nail_index: int, progress: float, handle_value: float) -> vo
 	var nail := _nails[nail_index]
 	nail.position = _nail_rest_positions[nail_index] + Vector3(0.0, 0.0, -progress * 0.17)
 	nail.rotation = _nail_rest_rotations[nail_index] + Vector3(handle_value * 0.035, progress * 0.12, handle_value * 0.025)
+	if is_instance_valid(_pry_pivot):
+		if _pry_tween != null and _pry_tween.is_valid():
+			_pry_tween.kill()
+		_pry_tween = _pry_pivot.create_tween()
+		_pry_tween.tween_property(_pry_pivot, "rotation:x", handle_value * 0.22, 0.1)
 
 
 func _on_nail_removed(nail_index: int) -> void:
@@ -181,6 +202,9 @@ func _on_minigame_cancelled() -> void:
 
 
 func _close_minigame_layer() -> void:
+	if is_instance_valid(_pry_pivot):
+		_pry_pivot.queue_free()
+	_pry_pivot = null
 	if is_instance_valid(_active_layer):
 		_active_layer.queue_free()
 	_active_layer = null

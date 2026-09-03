@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://bw7x63114y08g"]
 
+[ext_resource type="ArrayMesh" path="res://house_props/crowbar_curved_hook.obj" id="2_curved_hook"]
+
 [ext_resource type="Script" uid="uid://o6mefudt8cpt" path="res://house_props/crowbar_pickup.gd" id="1_script"]
 
 [sub_resource type="StandardMaterial3D" id="Material_red"]
@@ -57,17 +59,9 @@ script = ExtResource("1_script")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
 mesh = SubResource("Mesh_shaft")
 
-[node name="UpperCurveA" type="MeshInstance3D" parent="Visual" unique_id=1144950564]
-transform = Transform3D(0.63337976, 0.7738411, 0, -0.7738411, 0.63337976, 0, 0, 0, 1, 0.10318513, 1.4838685, 0)
-mesh = SubResource("Mesh_hook")
-
-[node name="UpperCurveB" type="MeshInstance3D" parent="Visual" unique_id=467201010]
-transform = Transform3D(0.523366, 0.852108, 0, -0.852108, 0.523366, 0, 0, 0, 1, 0.25318512, 1.6038685, 0)
-mesh = SubResource("Mesh_hook")
-
-[node name="UpperFlatTip" type="MeshInstance3D" parent="Visual" unique_id=1682551028]
-transform = Transform3D(0.8951681, 0.44572872, 0, -0.44572872, 0.8951681, 0, 0, 0, 1, 0.45839566, 1.6641146, 0)
-mesh = SubResource("Mesh_tip")
+[node name="ForgedCurvedHook" type="MeshInstance3D" parent="Visual"]
+mesh = ExtResource("2_curved_hook")
+material_override = SubResource("Material_edge")
 
 [node name="LowerPryTip" type="MeshInstance3D" parent="Visual" unique_id=352946484]
 transform = Transform3D(0.93853325, -0.34518877, 0, 0.34518877, 0.93853325, 0, 0, 0, 1, -0.12320009, 0.115999825, 0)
