@@ -1,0 +1,8 @@
+[gd_scene format=3]
+[ext_resource type="PackedScene" path="res://house_props/asylum_woven_gate.tscn" id="gate"]
+[ext_resource type="PackedScene" path="res://house_props/asylum_gate_surround_3m.tscn" id="surround"]
+[node name="AsylumGateComplete3m" type="Node3D"]
+[node name="Surround" parent="." instance=ExtResource("surround")]
+[node name="Door" parent="." instance=ExtResource("gate")]
+[editable path="Surround"]
+[editable path="Door"]

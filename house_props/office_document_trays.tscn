@@ -1,0 +1,200 @@
+[gd_scene format=3]
+[sub_resource type="StandardMaterial3D" id="m1"]
+albedo_color = Color(0.22,0.25,0.23,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b1"]
+size = Vector3(0.42,0.025,0.32)
+material = SubResource("m1")
+
+[sub_resource type="StandardMaterial3D" id="m2"]
+albedo_color = Color(0.76,0.73,0.62,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b2"]
+size = Vector3(0.34,0.006,0.26)
+material = SubResource("m2")
+
+[sub_resource type="StandardMaterial3D" id="m3"]
+albedo_color = Color(0.76,0.73,0.62,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b3"]
+size = Vector3(0.34,0.006,0.26)
+material = SubResource("m3")
+
+[sub_resource type="StandardMaterial3D" id="m4"]
+albedo_color = Color(0.76,0.73,0.62,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b4"]
+size = Vector3(0.34,0.006,0.26)
+material = SubResource("m4")
+
+[sub_resource type="StandardMaterial3D" id="m5"]
+albedo_color = Color(0.76,0.73,0.62,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b5"]
+size = Vector3(0.34,0.006,0.26)
+material = SubResource("m5")
+
+[sub_resource type="StandardMaterial3D" id="m6"]
+albedo_color = Color(0.76,0.73,0.62,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b6"]
+size = Vector3(0.34,0.006,0.26)
+material = SubResource("m6")
+
+[sub_resource type="StandardMaterial3D" id="m7"]
+albedo_color = Color(0.22,0.25,0.23,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b7"]
+size = Vector3(0.42,0.025,0.32)
+material = SubResource("m7")
+
+[sub_resource type="StandardMaterial3D" id="m8"]
+albedo_color = Color(0.76,0.73,0.62,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b8"]
+size = Vector3(0.34,0.006,0.26)
+material = SubResource("m8")
+
+[sub_resource type="StandardMaterial3D" id="m9"]
+albedo_color = Color(0.76,0.73,0.62,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b9"]
+size = Vector3(0.34,0.006,0.26)
+material = SubResource("m9")
+
+[sub_resource type="StandardMaterial3D" id="m10"]
+albedo_color = Color(0.76,0.73,0.62,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b10"]
+size = Vector3(0.34,0.006,0.26)
+material = SubResource("m10")
+
+[sub_resource type="StandardMaterial3D" id="m11"]
+albedo_color = Color(0.76,0.73,0.62,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b11"]
+size = Vector3(0.34,0.006,0.26)
+material = SubResource("m11")
+
+[sub_resource type="StandardMaterial3D" id="m12"]
+albedo_color = Color(0.76,0.73,0.62,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b12"]
+size = Vector3(0.34,0.006,0.26)
+material = SubResource("m12")
+
+[sub_resource type="StandardMaterial3D" id="m13"]
+albedo_color = Color(0.22,0.25,0.23,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b13"]
+size = Vector3(0.42,0.025,0.32)
+material = SubResource("m13")
+
+[sub_resource type="StandardMaterial3D" id="m14"]
+albedo_color = Color(0.76,0.73,0.62,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b14"]
+size = Vector3(0.34,0.006,0.26)
+material = SubResource("m14")
+
+[sub_resource type="StandardMaterial3D" id="m15"]
+albedo_color = Color(0.76,0.73,0.62,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b15"]
+size = Vector3(0.34,0.006,0.26)
+material = SubResource("m15")
+
+[sub_resource type="StandardMaterial3D" id="m16"]
+albedo_color = Color(0.76,0.73,0.62,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b16"]
+size = Vector3(0.34,0.006,0.26)
+material = SubResource("m16")
+
+[sub_resource type="StandardMaterial3D" id="m17"]
+albedo_color = Color(0.76,0.73,0.62,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b17"]
+size = Vector3(0.34,0.006,0.26)
+material = SubResource("m17")
+
+[sub_resource type="StandardMaterial3D" id="m18"]
+albedo_color = Color(0.76,0.73,0.62,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b18"]
+size = Vector3(0.34,0.006,0.26)
+material = SubResource("m18")
+[node name="OfficeDocumentTrays" type="Node3D"]
+metadata/_edit_group_ = true
+[node name="Tray0" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.035,0)
+mesh = SubResource("b1")
+
+[node name="Document0_0" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.055,0)
+mesh = SubResource("b2")
+
+[node name="Document0_1" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.064,0)
+mesh = SubResource("b3")
+
+[node name="Document0_2" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.073,0)
+mesh = SubResource("b4")
+
+[node name="Document0_3" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.08199999999999999,0)
+mesh = SubResource("b5")
+
+[node name="Document0_4" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.091,0)
+mesh = SubResource("b6")
+
+[node name="Tray1" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.165,0)
+mesh = SubResource("b7")
+
+[node name="Document1_0" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.185,0)
+mesh = SubResource("b8")
+
+[node name="Document1_1" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.194,0)
+mesh = SubResource("b9")
+
+[node name="Document1_2" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.20299999999999999,0)
+mesh = SubResource("b10")
+
+[node name="Document1_3" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.212,0)
+mesh = SubResource("b11")
+
+[node name="Document1_4" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.221,0)
+mesh = SubResource("b12")
+
+[node name="Tray2" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.29500000000000004,0)
+mesh = SubResource("b13")
+
+[node name="Document2_0" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.315,0)
+mesh = SubResource("b14")
+
+[node name="Document2_1" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.324,0)
+mesh = SubResource("b15")
+
+[node name="Document2_2" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.333,0)
+mesh = SubResource("b16")
+
+[node name="Document2_3" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.34199999999999997,0)
+mesh = SubResource("b17")
+
+[node name="Document2_4" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.351,0)
+mesh = SubResource("b18")
+

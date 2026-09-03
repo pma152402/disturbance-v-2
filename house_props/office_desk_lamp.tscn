@@ -1,0 +1,42 @@
+[gd_scene format=3]
+[sub_resource type="StandardMaterial3D" id="m1"]
+albedo_color = Color(0.16,0.2,0.17,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b1"]
+size = Vector3(0.28,0.05,0.22)
+material = SubResource("m1")
+
+[sub_resource type="StandardMaterial3D" id="m2"]
+albedo_color = Color(0.4,0.32,0.16,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b2"]
+size = Vector3(0.028,0.4,0.028)
+material = SubResource("m2")
+
+[sub_resource type="StandardMaterial3D" id="m3"]
+albedo_color = Color(0.1,0.25,0.17,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b3"]
+size = Vector3(0.4,0.13,0.22)
+material = SubResource("m3")
+[node name="OfficeDeskLamp" type="Node3D"]
+metadata/_edit_group_ = true
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.025,0)
+mesh = SubResource("b1")
+
+[node name="Stem" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.22,0.07)
+mesh = SubResource("b2")
+
+[node name="Shade" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.44,0)
+mesh = SubResource("b3")
+
+[node name="WarmLight" type="OmniLight3D" parent="."]
+position = Vector3(0,0.36,-0.08)
+light_color = Color(1,0.76,0.46,1)
+light_energy = 0.5
+omni_range = 2.0
+shadow_enabled = true
+

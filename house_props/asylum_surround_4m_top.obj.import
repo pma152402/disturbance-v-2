@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://671by3vsmi5k"
+path="res://.godot/imported/asylum_surround_4m_top.obj-e8563d1bbed062de12655ef6cae9d48d.mesh"
+
+[deps]
+
+files=["res://.godot/imported/asylum_surround_4m_top.obj-e8563d1bbed062de12655ef6cae9d48d.mesh"]
+
+source_file="res://house_props/asylum_surround_4m_top.obj"
+dest_files=["res://.godot/imported/asylum_surround_4m_top.obj-e8563d1bbed062de12655ef6cae9d48d.mesh", "res://.godot/imported/asylum_surround_4m_top.obj-e8563d1bbed062de12655ef6cae9d48d.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

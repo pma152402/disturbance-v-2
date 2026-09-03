@@ -1,0 +1,376 @@
+[gd_scene format=3]
+[sub_resource type="StandardMaterial3D" id="m1"]
+albedo_color = Color(0.12,0.12,0.11,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b1"]
+size = Vector3(0.38,0.11,0.3)
+material = SubResource("m1")
+
+[sub_resource type="StandardMaterial3D" id="m2"]
+albedo_color = Color(0.07,0.07,0.06,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b2"]
+size = Vector3(0.43,0.055,0.065)
+material = SubResource("m2")
+
+[sub_resource type="StandardMaterial3D" id="m3"]
+albedo_color = Color(0.08,0.08,0.07,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b3"]
+size = Vector3(0.1,0.1,0.12)
+material = SubResource("m3")
+
+[sub_resource type="StandardMaterial3D" id="m4"]
+albedo_color = Color(0.08,0.08,0.07,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b4"]
+size = Vector3(0.1,0.1,0.12)
+material = SubResource("m4")
+
+[sub_resource type="StandardMaterial3D" id="m5"]
+albedo_color = Color(0.62,0.58,0.44,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b5"]
+size = Vector3(0.023,0.013,0.024)
+material = SubResource("m5")
+
+[sub_resource type="StandardMaterial3D" id="m6"]
+albedo_color = Color(0.62,0.58,0.44,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b6"]
+size = Vector3(0.023,0.013,0.024)
+material = SubResource("m6")
+
+[sub_resource type="StandardMaterial3D" id="m7"]
+albedo_color = Color(0.62,0.58,0.44,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b7"]
+size = Vector3(0.023,0.013,0.024)
+material = SubResource("m7")
+
+[sub_resource type="StandardMaterial3D" id="m8"]
+albedo_color = Color(0.62,0.58,0.44,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b8"]
+size = Vector3(0.023,0.013,0.024)
+material = SubResource("m8")
+
+[sub_resource type="StandardMaterial3D" id="m9"]
+albedo_color = Color(0.62,0.58,0.44,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b9"]
+size = Vector3(0.023,0.013,0.024)
+material = SubResource("m9")
+
+[sub_resource type="StandardMaterial3D" id="m10"]
+albedo_color = Color(0.62,0.58,0.44,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b10"]
+size = Vector3(0.023,0.013,0.024)
+material = SubResource("m10")
+
+[sub_resource type="StandardMaterial3D" id="m11"]
+albedo_color = Color(0.62,0.58,0.44,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b11"]
+size = Vector3(0.023,0.013,0.024)
+material = SubResource("m11")
+
+[sub_resource type="StandardMaterial3D" id="m12"]
+albedo_color = Color(0.62,0.58,0.44,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b12"]
+size = Vector3(0.023,0.013,0.024)
+material = SubResource("m12")
+
+[sub_resource type="StandardMaterial3D" id="m13"]
+albedo_color = Color(0.62,0.58,0.44,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b13"]
+size = Vector3(0.023,0.013,0.024)
+material = SubResource("m13")
+
+[sub_resource type="StandardMaterial3D" id="m14"]
+albedo_color = Color(0.62,0.58,0.44,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b14"]
+size = Vector3(0.023,0.013,0.024)
+material = SubResource("m14")
+
+[sub_resource type="StandardMaterial3D" id="m15"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b15"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m15")
+
+[sub_resource type="StandardMaterial3D" id="m16"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b16"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m16")
+
+[sub_resource type="StandardMaterial3D" id="m17"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b17"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m17")
+
+[sub_resource type="StandardMaterial3D" id="m18"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b18"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m18")
+
+[sub_resource type="StandardMaterial3D" id="m19"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b19"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m19")
+
+[sub_resource type="StandardMaterial3D" id="m20"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b20"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m20")
+
+[sub_resource type="StandardMaterial3D" id="m21"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b21"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m21")
+
+[sub_resource type="StandardMaterial3D" id="m22"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b22"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m22")
+
+[sub_resource type="StandardMaterial3D" id="m23"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b23"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m23")
+
+[sub_resource type="StandardMaterial3D" id="m24"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b24"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m24")
+
+[sub_resource type="StandardMaterial3D" id="m25"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b25"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m25")
+
+[sub_resource type="StandardMaterial3D" id="m26"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b26"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m26")
+
+[sub_resource type="StandardMaterial3D" id="m27"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b27"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m27")
+
+[sub_resource type="StandardMaterial3D" id="m28"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b28"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m28")
+
+[sub_resource type="StandardMaterial3D" id="m29"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b29"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m29")
+
+[sub_resource type="StandardMaterial3D" id="m30"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b30"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m30")
+
+[sub_resource type="StandardMaterial3D" id="m31"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b31"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m31")
+
+[sub_resource type="StandardMaterial3D" id="m32"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b32"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m32")
+
+[sub_resource type="StandardMaterial3D" id="m33"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b33"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m33")
+
+[sub_resource type="StandardMaterial3D" id="m34"]
+albedo_color = Color(0.06,0.06,0.05,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b34"]
+size = Vector3(0.026,0.026,0.009)
+material = SubResource("m34")
+[node name="OfficeTelephone" type="Node3D"]
+metadata/_edit_group_ = true
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.055,0)
+mesh = SubResource("b1")
+
+[node name="Receiver" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.2,0.045)
+mesh = SubResource("b2")
+
+[node name="Earpiece0" type="MeshInstance3D" parent="."]
+position = Vector3(-0.17,0.16,0.045)
+mesh = SubResource("b3")
+
+[node name="Earpiece2" type="MeshInstance3D" parent="."]
+position = Vector3(0.17,0.16,0.045)
+mesh = SubResource("b4")
+
+[node name="Dial0" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.119,0.04000000000000001)
+mesh = SubResource("b5")
+
+[node name="Dial1" type="MeshInstance3D" parent="."]
+position = Vector3(0.048197161363116296,0.119,0.026631952042314194)
+mesh = SubResource("b6")
+
+[node name="Dial2" type="MeshInstance3D" parent="."]
+position = Vector3(0.07798569516833373,0.119,-0.008366343082200745)
+mesh = SubResource("b7")
+
+[node name="Dial3" type="MeshInstance3D" parent="."]
+position = Vector3(0.07798804288715824,0.119,-0.05162748858320886)
+mesh = SubResource("b8")
+
+[node name="Dial4" type="MeshInstance3D" parent="."]
+position = Vector3(0.04820330782193733,0.119,-0.08662813966751305)
+mesh = SubResource("b9")
+
+[node name="Dial5" type="MeshInstance3D" parent="."]
+position = Vector3(0.000007597594352160202,0.119,-0.09999999969953594)
+mesh = SubResource("b10")
+
+[node name="Dial6" type="MeshInstance3D" parent="."]
+position = Vector3(-0.04819101449053766,0.119,-0.08663576393094773)
+mesh = SubResource("b11")
+
+[node name="Dial7" type="MeshInstance3D" parent="."]
+position = Vector3(-0.07798334678002637,0.119,-0.051639825066671446)
+mesh = SubResource("b12")
+
+[node name="Dial8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.07799038993647975,0.119,-0.008378679937046728)
+mesh = SubResource("b13")
+
+[node name="Dial9" type="MeshInstance3D" parent="."]
+position = Vector3(-0.04820945386694806,0.119,0.02662432680657699)
+mesh = SubResource("b14")
+
+[node name="CoiledCord0" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,-0.18)
+mesh = SubResource("b15")
+
+[node name="CoiledCord1" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,-0.16)
+mesh = SubResource("b16")
+
+[node name="CoiledCord2" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,-0.13999999999999999)
+mesh = SubResource("b17")
+
+[node name="CoiledCord3" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,-0.12)
+mesh = SubResource("b18")
+
+[node name="CoiledCord4" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,-0.09999999999999999)
+mesh = SubResource("b19")
+
+[node name="CoiledCord5" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,-0.07999999999999999)
+mesh = SubResource("b20")
+
+[node name="CoiledCord6" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,-0.06)
+mesh = SubResource("b21")
+
+[node name="CoiledCord7" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,-0.03999999999999998)
+mesh = SubResource("b22")
+
+[node name="CoiledCord8" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,-0.01999999999999999)
+mesh = SubResource("b23")
+
+[node name="CoiledCord9" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,0)
+mesh = SubResource("b24")
+
+[node name="CoiledCord10" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,0.020000000000000018)
+mesh = SubResource("b25")
+
+[node name="CoiledCord11" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,0.04000000000000001)
+mesh = SubResource("b26")
+
+[node name="CoiledCord12" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,0.06)
+mesh = SubResource("b27")
+
+[node name="CoiledCord13" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,0.08000000000000002)
+mesh = SubResource("b28")
+
+[node name="CoiledCord14" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,0.10000000000000003)
+mesh = SubResource("b29")
+
+[node name="CoiledCord15" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,0.12)
+mesh = SubResource("b30")
+
+[node name="CoiledCord16" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,0.14)
+mesh = SubResource("b31")
+
+[node name="CoiledCord17" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,0.16000000000000003)
+mesh = SubResource("b32")
+
+[node name="CoiledCord18" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,0.18)
+mesh = SubResource("b33")
+
+[node name="CoiledCord19" type="MeshInstance3D" parent="."]
+position = Vector3(0.225,0.05,0.2)
+mesh = SubResource("b34")
+

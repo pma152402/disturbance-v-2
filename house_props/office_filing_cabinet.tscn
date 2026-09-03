@@ -1,0 +1,151 @@
+[gd_scene format=3]
+[sub_resource type="StandardMaterial3D" id="m1"]
+albedo_color = Color(0.24,0.28,0.26,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b1"]
+size = Vector3(0.85,1.8,0.62)
+material = SubResource("m1")
+
+[sub_resource type="BoxShape3D" id="c1"]
+size = Vector3(0.85,1.8,0.62)
+
+[sub_resource type="StandardMaterial3D" id="m2"]
+albedo_color = Color(0.35,0.34,0.29,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b2"]
+size = Vector3(0.76,0.36,0.035)
+material = SubResource("m2")
+
+[sub_resource type="StandardMaterial3D" id="m3"]
+albedo_color = Color(0.1,0.1,0.09,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b3"]
+size = Vector3(0.24,0.026,0.045)
+material = SubResource("m3")
+
+[sub_resource type="StandardMaterial3D" id="m4"]
+albedo_color = Color(0.72,0.69,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b4"]
+size = Vector3(0.19,0.065,0.012)
+material = SubResource("m4")
+
+[sub_resource type="StandardMaterial3D" id="m5"]
+albedo_color = Color(0.35,0.34,0.29,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b5"]
+size = Vector3(0.76,0.36,0.035)
+material = SubResource("m5")
+
+[sub_resource type="StandardMaterial3D" id="m6"]
+albedo_color = Color(0.1,0.1,0.09,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b6"]
+size = Vector3(0.24,0.026,0.045)
+material = SubResource("m6")
+
+[sub_resource type="StandardMaterial3D" id="m7"]
+albedo_color = Color(0.72,0.69,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b7"]
+size = Vector3(0.19,0.065,0.012)
+material = SubResource("m7")
+
+[sub_resource type="StandardMaterial3D" id="m8"]
+albedo_color = Color(0.35,0.34,0.29,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b8"]
+size = Vector3(0.76,0.36,0.035)
+material = SubResource("m8")
+
+[sub_resource type="StandardMaterial3D" id="m9"]
+albedo_color = Color(0.1,0.1,0.09,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b9"]
+size = Vector3(0.24,0.026,0.045)
+material = SubResource("m9")
+
+[sub_resource type="StandardMaterial3D" id="m10"]
+albedo_color = Color(0.72,0.69,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b10"]
+size = Vector3(0.19,0.065,0.012)
+material = SubResource("m10")
+
+[sub_resource type="StandardMaterial3D" id="m11"]
+albedo_color = Color(0.35,0.34,0.29,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b11"]
+size = Vector3(0.76,0.36,0.035)
+material = SubResource("m11")
+
+[sub_resource type="StandardMaterial3D" id="m12"]
+albedo_color = Color(0.1,0.1,0.09,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b12"]
+size = Vector3(0.24,0.026,0.045)
+material = SubResource("m12")
+
+[sub_resource type="StandardMaterial3D" id="m13"]
+albedo_color = Color(0.72,0.69,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b13"]
+size = Vector3(0.19,0.065,0.012)
+material = SubResource("m13")
+[node name="OfficeFilingCabinet" type="Node3D"]
+metadata/_edit_group_ = true
+[node name="Cabinet" type="StaticBody3D" parent="."]
+position = Vector3(0,0.9,0)
+[node name="Mesh" type="MeshInstance3D" parent="Cabinet"]
+mesh = SubResource("b1")
+[node name="Collision" type="CollisionShape3D" parent="Cabinet"]
+shape = SubResource("c1")
+
+[node name="Drawer0" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.27,0.326)
+mesh = SubResource("b2")
+
+[node name="Handle0" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.29,0.37)
+mesh = SubResource("b3")
+
+[node name="Label0" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.38,0.35)
+mesh = SubResource("b4")
+
+[node name="Drawer1" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.67,0.326)
+mesh = SubResource("b5")
+
+[node name="Handle1" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.69,0.37)
+mesh = SubResource("b6")
+
+[node name="Label1" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.78,0.35)
+mesh = SubResource("b7")
+
+[node name="Drawer2" type="MeshInstance3D" parent="."]
+position = Vector3(0,1.07,0.326)
+mesh = SubResource("b8")
+
+[node name="Handle2" type="MeshInstance3D" parent="."]
+position = Vector3(0,1.09,0.37)
+mesh = SubResource("b9")
+
+[node name="Label2" type="MeshInstance3D" parent="."]
+position = Vector3(0,1.1800000000000002,0.35)
+mesh = SubResource("b10")
+
+[node name="Drawer3" type="MeshInstance3D" parent="."]
+position = Vector3(0,1.4700000000000002,0.326)
+mesh = SubResource("b11")
+
+[node name="Handle3" type="MeshInstance3D" parent="."]
+position = Vector3(0,1.4900000000000002,0.37)
+mesh = SubResource("b12")
+
+[node name="Label3" type="MeshInstance3D" parent="."]
+position = Vector3(0,1.58,0.35)
+mesh = SubResource("b13")
+

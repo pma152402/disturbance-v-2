@@ -1,0 +1,395 @@
+[gd_scene format=3]
+[sub_resource type="StandardMaterial3D" id="m1"]
+albedo_color = Color(0.3,0.28,0.23,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b1"]
+size = Vector3(10,0.2,8)
+material = SubResource("m1")
+
+[sub_resource type="BoxShape3D" id="c1"]
+size = Vector3(10,0.2,8)
+
+[sub_resource type="StandardMaterial3D" id="m2"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b2"]
+size = Vector3(10,0.2,8)
+material = SubResource("m2")
+
+[sub_resource type="BoxShape3D" id="c2"]
+size = Vector3(10,0.2,8)
+
+[sub_resource type="StandardMaterial3D" id="m3"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b3"]
+size = Vector3(10.2,4,0.22)
+material = SubResource("m3")
+
+[sub_resource type="BoxShape3D" id="c3"]
+size = Vector3(10.2,4,0.22)
+
+[sub_resource type="StandardMaterial3D" id="m4"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b4"]
+size = Vector3(0.22,4,8)
+material = SubResource("m4")
+
+[sub_resource type="BoxShape3D" id="c4"]
+size = Vector3(0.22,4,8)
+
+[sub_resource type="StandardMaterial3D" id="m5"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b5"]
+size = Vector3(0.22,4,8)
+material = SubResource("m5")
+
+[sub_resource type="BoxShape3D" id="c5"]
+size = Vector3(0.22,4,8)
+
+[sub_resource type="StandardMaterial3D" id="m6"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b6"]
+size = Vector3(6.4,4,0.22)
+material = SubResource("m6")
+
+[sub_resource type="BoxShape3D" id="c6"]
+size = Vector3(6.4,4,0.22)
+
+[sub_resource type="StandardMaterial3D" id="m7"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b7"]
+size = Vector3(1.8,4,0.22)
+material = SubResource("m7")
+
+[sub_resource type="BoxShape3D" id="c7"]
+size = Vector3(1.8,4,0.22)
+
+[sub_resource type="StandardMaterial3D" id="m8"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b8"]
+size = Vector3(1.8,1,0.22)
+material = SubResource("m8")
+
+[sub_resource type="BoxShape3D" id="c8"]
+size = Vector3(1.8,1,0.22)
+
+[sub_resource type="StandardMaterial3D" id="m9"]
+albedo_color = Color(0.3,0.28,0.23,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b9"]
+size = Vector3(3.6,0.2,4.1)
+material = SubResource("m9")
+
+[sub_resource type="BoxShape3D" id="c9"]
+size = Vector3(3.6,0.2,4.1)
+
+[sub_resource type="StandardMaterial3D" id="m10"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b10"]
+size = Vector3(3.6,0.2,4.1)
+material = SubResource("m10")
+
+[sub_resource type="BoxShape3D" id="c10"]
+size = Vector3(3.6,0.2,4.1)
+
+[sub_resource type="StandardMaterial3D" id="m11"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b11"]
+size = Vector3(2.56,4,0.22)
+material = SubResource("m11")
+
+[sub_resource type="BoxShape3D" id="c11"]
+size = Vector3(2.56,4,0.22)
+
+[sub_resource type="StandardMaterial3D" id="m12"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b12"]
+size = Vector3(3.86,4,0.22)
+material = SubResource("m12")
+
+[sub_resource type="BoxShape3D" id="c12"]
+size = Vector3(3.86,4,0.22)
+
+[sub_resource type="StandardMaterial3D" id="m13"]
+albedo_color = Color(0.3,0.28,0.23,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b13"]
+size = Vector3(3,0.2,18)
+material = SubResource("m13")
+
+[sub_resource type="BoxShape3D" id="c13"]
+size = Vector3(3,0.2,18)
+
+[sub_resource type="StandardMaterial3D" id="m14"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b14"]
+size = Vector3(3,0.2,18)
+material = SubResource("m14")
+
+[sub_resource type="BoxShape3D" id="c14"]
+size = Vector3(3,0.2,18)
+
+[sub_resource type="StandardMaterial3D" id="m15"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b15"]
+size = Vector3(0.22,4,18)
+material = SubResource("m15")
+
+[sub_resource type="BoxShape3D" id="c15"]
+size = Vector3(0.22,4,18)
+
+[sub_resource type="StandardMaterial3D" id="m16"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b16"]
+size = Vector3(0.22,4,7)
+material = SubResource("m16")
+
+[sub_resource type="BoxShape3D" id="c16"]
+size = Vector3(0.22,4,7)
+
+[sub_resource type="StandardMaterial3D" id="m17"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b17"]
+size = Vector3(0.22,4,6.9)
+material = SubResource("m17")
+
+[sub_resource type="BoxShape3D" id="c17"]
+size = Vector3(0.22,4,6.9)
+
+[sub_resource type="StandardMaterial3D" id="m18"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b18"]
+size = Vector3(3.22,4,0.22)
+material = SubResource("m18")
+
+[sub_resource type="BoxShape3D" id="c18"]
+size = Vector3(3.22,4,0.22)
+
+[sub_resource type="StandardMaterial3D" id="m19"]
+albedo_color = Color(0.66,0.64,0.57,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b19"]
+size = Vector3(3.22,4,0.22)
+material = SubResource("m19")
+
+[sub_resource type="BoxShape3D" id="c19"]
+size = Vector3(3.22,4,0.22)
+
+[sub_resource type="StandardMaterial3D" id="m20"]
+albedo_color = Color(0.4,0.38,0.29,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b20"]
+size = Vector3(0.7,0.12,0.34)
+material = SubResource("m20")
+
+[sub_resource type="StandardMaterial3D" id="m21"]
+albedo_color = Color(0.4,0.38,0.29,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b21"]
+size = Vector3(0.7,0.12,0.34)
+material = SubResource("m21")
+
+[sub_resource type="StandardMaterial3D" id="m22"]
+albedo_color = Color(0.4,0.38,0.29,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b22"]
+size = Vector3(0.7,0.12,0.34)
+material = SubResource("m22")
+
+[sub_resource type="StandardMaterial3D" id="m23"]
+albedo_color = Color(0.4,0.38,0.29,1)
+roughness = 0.85
+[sub_resource type="BoxMesh" id="b23"]
+size = Vector3(0.7,0.12,0.34)
+material = SubResource("m23")
+[node name="WestOfficeAndTJunction" type="Node3D"]
+[node name="OfficeFloor" type="StaticBody3D" parent="."]
+position = Vector3(-19,-0.1,-10)
+[node name="Mesh" type="MeshInstance3D" parent="OfficeFloor"]
+mesh = SubResource("b1")
+[node name="Collision" type="CollisionShape3D" parent="OfficeFloor"]
+shape = SubResource("c1")
+
+[node name="OfficeCeiling" type="StaticBody3D" parent="."]
+position = Vector3(-19,4.03,-10)
+[node name="Mesh" type="MeshInstance3D" parent="OfficeCeiling"]
+mesh = SubResource("b2")
+[node name="Collision" type="CollisionShape3D" parent="OfficeCeiling"]
+shape = SubResource("c2")
+
+[node name="OfficeBackWall" type="StaticBody3D" parent="."]
+position = Vector3(-19,2,-14)
+[node name="Mesh" type="MeshInstance3D" parent="OfficeBackWall"]
+mesh = SubResource("b3")
+[node name="Collision" type="CollisionShape3D" parent="OfficeBackWall"]
+shape = SubResource("c3")
+
+[node name="OfficeWestWall" type="StaticBody3D" parent="."]
+position = Vector3(-24,2,-10)
+[node name="Mesh" type="MeshInstance3D" parent="OfficeWestWall"]
+mesh = SubResource("b4")
+[node name="Collision" type="CollisionShape3D" parent="OfficeWestWall"]
+shape = SubResource("c4")
+
+[node name="OfficeEastWall" type="StaticBody3D" parent="."]
+position = Vector3(-14,2,-10)
+[node name="Mesh" type="MeshInstance3D" parent="OfficeEastWall"]
+mesh = SubResource("b5")
+[node name="Collision" type="CollisionShape3D" parent="OfficeEastWall"]
+shape = SubResource("c5")
+
+[node name="OfficeEntryLeft" type="StaticBody3D" parent="."]
+position = Vector3(-20.8,2,-6)
+[node name="Mesh" type="MeshInstance3D" parent="OfficeEntryLeft"]
+mesh = SubResource("b6")
+[node name="Collision" type="CollisionShape3D" parent="OfficeEntryLeft"]
+shape = SubResource("c6")
+
+[node name="OfficeEntryRight" type="StaticBody3D" parent="."]
+position = Vector3(-14.9,2,-6)
+[node name="Mesh" type="MeshInstance3D" parent="OfficeEntryRight"]
+mesh = SubResource("b7")
+[node name="Collision" type="CollisionShape3D" parent="OfficeEntryRight"]
+shape = SubResource("c7")
+
+[node name="OfficeEntryLintel" type="StaticBody3D" parent="."]
+position = Vector3(-16.7,3.5,-6)
+[node name="Mesh" type="MeshInstance3D" parent="OfficeEntryLintel"]
+mesh = SubResource("b8")
+[node name="Collision" type="CollisionShape3D" parent="OfficeEntryLintel"]
+shape = SubResource("c8")
+
+[node name="ExtensionFloor" type="StaticBody3D" parent="."]
+position = Vector3(-24.8,-0.1,-3.95)
+[node name="Mesh" type="MeshInstance3D" parent="ExtensionFloor"]
+mesh = SubResource("b9")
+[node name="Collision" type="CollisionShape3D" parent="ExtensionFloor"]
+shape = SubResource("c9")
+
+[node name="ExtensionCeiling" type="StaticBody3D" parent="."]
+position = Vector3(-24.8,4.03,-3.95)
+[node name="Mesh" type="MeshInstance3D" parent="ExtensionCeiling"]
+mesh = SubResource("b10")
+[node name="Collision" type="CollisionShape3D" parent="ExtensionCeiling"]
+shape = SubResource("c10")
+
+[node name="ExtensionNorthWall" type="StaticBody3D" parent="."]
+position = Vector3(-25.28,2,-6)
+[node name="Mesh" type="MeshInstance3D" parent="ExtensionNorthWall"]
+mesh = SubResource("b11")
+[node name="Collision" type="CollisionShape3D" parent="ExtensionNorthWall"]
+shape = SubResource("c11")
+
+[node name="ExtensionSouthWall" type="StaticBody3D" parent="."]
+position = Vector3(-24.63,2,-1.91)
+[node name="Mesh" type="MeshInstance3D" parent="ExtensionSouthWall"]
+mesh = SubResource("b12")
+[node name="Collision" type="CollisionShape3D" parent="ExtensionSouthWall"]
+shape = SubResource("c12")
+
+[node name="BranchFloor" type="StaticBody3D" parent="."]
+position = Vector3(-28.05,-0.1,-4)
+[node name="Mesh" type="MeshInstance3D" parent="BranchFloor"]
+mesh = SubResource("b13")
+[node name="Collision" type="CollisionShape3D" parent="BranchFloor"]
+shape = SubResource("c13")
+
+[node name="BranchCeiling" type="StaticBody3D" parent="."]
+position = Vector3(-28.05,4.03,-4)
+[node name="Mesh" type="MeshInstance3D" parent="BranchCeiling"]
+mesh = SubResource("b14")
+[node name="Collision" type="CollisionShape3D" parent="BranchCeiling"]
+shape = SubResource("c14")
+
+[node name="BranchWestWall" type="StaticBody3D" parent="."]
+position = Vector3(-29.55,2,-4)
+[node name="Mesh" type="MeshInstance3D" parent="BranchWestWall"]
+mesh = SubResource("b15")
+[node name="Collision" type="CollisionShape3D" parent="BranchWestWall"]
+shape = SubResource("c15")
+
+[node name="BranchEastNorthWall" type="StaticBody3D" parent="."]
+position = Vector3(-26.55,2,-9.5)
+[node name="Mesh" type="MeshInstance3D" parent="BranchEastNorthWall"]
+mesh = SubResource("b16")
+[node name="Collision" type="CollisionShape3D" parent="BranchEastNorthWall"]
+shape = SubResource("c16")
+
+[node name="BranchEastSouthWall" type="StaticBody3D" parent="."]
+position = Vector3(-26.55,2,1.55)
+[node name="Mesh" type="MeshInstance3D" parent="BranchEastSouthWall"]
+mesh = SubResource("b17")
+[node name="Collision" type="CollisionShape3D" parent="BranchEastSouthWall"]
+shape = SubResource("c17")
+
+[node name="BranchNorthEnd" type="StaticBody3D" parent="."]
+position = Vector3(-28.05,2,-13)
+[node name="Mesh" type="MeshInstance3D" parent="BranchNorthEnd"]
+mesh = SubResource("b18")
+[node name="Collision" type="CollisionShape3D" parent="BranchNorthEnd"]
+shape = SubResource("c18")
+
+[node name="BranchSouthEnd" type="StaticBody3D" parent="."]
+position = Vector3(-28.05,2,5)
+[node name="Mesh" type="MeshInstance3D" parent="BranchSouthEnd"]
+mesh = SubResource("b19")
+[node name="Collision" type="CollisionShape3D" parent="BranchSouthEnd"]
+shape = SubResource("c19")
+
+[node name="OfficeCeilingFixture" type="MeshInstance3D" parent="."]
+position = Vector3(-19,3.88,-10)
+mesh = SubResource("b20")
+
+[node name="OfficeLight" type="OmniLight3D" parent="."]
+position = Vector3(-19,3.6,-10)
+light_color = Color(1,0.82,0.59,1)
+light_energy = 1.1
+omni_range = 7.0
+shadow_enabled = true
+
+[node name="HallCeilingFixture" type="MeshInstance3D" parent="."]
+position = Vector3(-24.5,3.88,-4)
+mesh = SubResource("b21")
+
+[node name="HallLight" type="OmniLight3D" parent="."]
+position = Vector3(-24.5,3.6,-4)
+light_color = Color(1,0.82,0.59,1)
+light_energy = 1.1
+omni_range = 7.0
+shadow_enabled = true
+
+[node name="NorthCeilingFixture" type="MeshInstance3D" parent="."]
+position = Vector3(-28,3.88,-10)
+mesh = SubResource("b22")
+
+[node name="NorthLight" type="OmniLight3D" parent="."]
+position = Vector3(-28,3.6,-10)
+light_color = Color(1,0.82,0.59,1)
+light_energy = 1.1
+omni_range = 7.0
+shadow_enabled = true
+
+[node name="SouthCeilingFixture" type="MeshInstance3D" parent="."]
+position = Vector3(-28,3.88,2)
+mesh = SubResource("b23")
+
+[node name="SouthLight" type="OmniLight3D" parent="."]
+position = Vector3(-28,3.6,2)
+light_color = Color(1,0.82,0.59,1)
+light_energy = 1.1
+omni_range = 7.0
+shadow_enabled = true
