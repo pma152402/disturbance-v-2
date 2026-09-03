@@ -45,6 +45,7 @@ signal footstep_heard(world_position: Vector3, hearing_radius: float)
 @export var falling_gravity_multiplier := 1.15
 @export var can_throw_force := 8.5
 @export var can_throw_upward_force := 1.25
+@export_range(0.3, 2.35, 0.05) var interaction_focus_distance := 2.35
 @export_category("Equipo inicial")
 @export var starts_with_flashlight := false
 @export var starts_with_matchbox := false
@@ -71,6 +72,7 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var held_candle: Node3D = $Head/Camera3D/RightHandRig/HeldCandle
 @onready var flashlight: SpotLight3D = $Head/Camera3D/HandRig/Flashlight
 @onready var interaction_ray: RayCast3D = $Head/Camera3D/InteractionRay
+@onready var interaction_focus_cast: ShapeCast3D = $Head/Camera3D/InteractionFocusCast
 @onready var candle_placement_ray: RayCast3D = $Head/Camera3D/CandlePlacementRay
 @onready var candle_placement_preview: MeshInstance3D = $CandlePlacementPreview
 @onready var candle_forward_light: SpotLight3D = $Head/Camera3D/RightHandRig/HeldCandle/WickRoot/Flame/ForwardLight
@@ -78,6 +80,7 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var stamina_bar: ProgressBar = $StaminaUI/StaminaBar
 @onready var stance_indicator: Control = $StanceUI/StanceIndicator
 @onready var interaction_prompt: Label = $InteractionUI/InteractionPrompt
+@onready var interaction_focus_dot: Control = $InteractionUI/CenterDot
 @onready var note_controls_prompt: Label = $InteractionUI/NoteControlsPrompt
 @onready var inventory_slots_ui: HBoxContainer = $InventoryUI/InventorySlots
 @onready var inventory_panels: Array[PanelContainer] = [
@@ -91,6 +94,7 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 	$InventoryUI/InventorySlots/Slot3/Label,
 ]
 @onready var inventory_flashlight_icon: TextureRect = $InventoryUI/InventorySlots/Slot1/Content/FlashlightIcon
+@onready var inventory_stored_message: Label = $InventoryStoredMessageUI/Message
 @onready var holster_sound: AudioStreamPlayer = $HolsterSound
 @onready var switch_sound: AudioStreamPlayer = $SwitchSound
 @onready var flashlight_click_sound: AudioStreamPlayer = $FlashlightClickSound
@@ -134,6 +138,7 @@ var _held_recipe_book_rest_transform := Transform3D.IDENTITY
 var _recipe_book_read_tween: Tween
 var _queued_recipe_page_direction := 0
 var _inventory_ui_tween: Tween
+var _inventory_message_tween: Tween
 var _key_inventory: Dictionary = {}
 var _tool_inventory: Dictionary = {}
 @export_category("Debug")
@@ -200,6 +205,8 @@ const INVENTORY_ITEM_NAMES := {
 
 func _ready() -> void:
 	add_to_group(&"player")
+	interaction_focus_dot.modulate.a = 0.0
+	interaction_focus_dot.visible = true
 	if starts_with_basement_key:
 		add_key(&"basement_key")
 	_flashlight_available = starts_with_flashlight
@@ -451,6 +458,7 @@ func _input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_update_interaction_focus_dot(delta)
 	_monster_hit_cooldown = maxf(0.0, _monster_hit_cooldown - delta)
 	_update_stance_transition(delta)
 	head.rotation.x = _look_pitch
@@ -886,7 +894,7 @@ func can_store_inventory_item() -> bool:
 
 func pick_up_panel_fuse(condition: int) -> bool:
 	var item_type: StringName = &"panel_fuse_good" if condition == 0 else &"panel_fuse_broken"
-	return _store_inventory_item(item_type, {"condition": condition})
+	return _store_inventory_item(item_type, {"condition": condition}, true)
 
 
 func has_selected_panel_fuse() -> bool:
@@ -905,13 +913,43 @@ func take_selected_panel_fuse() -> int:
 	return condition
 
 
-func _store_inventory_item(item_type: StringName, item_data: Dictionary = {}) -> bool:
+func _store_inventory_item(item_type: StringName, item_data: Dictionary = {}, stow_if_holding := false) -> bool:
 	var slot_index := _find_empty_inventory_slot()
 	if slot_index < 0:
 		return false
+	var keep_current_equipped := stow_if_holding and _has_equipped_inventory_item()
 	_inventory_slots[slot_index] = item_type
 	_inventory_item_data[slot_index] = item_data.duplicate(true)
+	if keep_current_equipped:
+		_update_inventory_ui()
+		_show_inventory_temporarily()
+		_show_inventory_stored_message(item_type)
+		return true
 	return _equip_inventory_slot(slot_index)
+
+
+func _has_equipped_inventory_item() -> bool:
+	if not _held_item.is_empty():
+		return true
+	if _selected_inventory_slot < 0 or _selected_inventory_slot >= _inventory_slots.size():
+		return false
+	return _inventory_slots[_selected_inventory_slot] == &"flashlight" and not _flashlight_holstered
+
+
+func _show_inventory_stored_message(item_type: StringName) -> void:
+	if is_instance_valid(_inventory_message_tween):
+		_inventory_message_tween.kill()
+	var item_name := str(INVENTORY_ITEM_NAMES.get(item_type, String(item_type).to_upper()))
+	inventory_stored_message.text = "HAS GUARDADO %s EN TU INVENTARIO" % item_name
+	inventory_stored_message.visible = true
+	inventory_stored_message.modulate.a = 0.0
+	_inventory_message_tween = create_tween()
+	_inventory_message_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_inventory_message_tween.tween_property(inventory_stored_message, "modulate:a", 1.0, 0.16)
+	_inventory_message_tween.tween_interval(2.0)
+	_inventory_message_tween.set_ease(Tween.EASE_IN)
+	_inventory_message_tween.tween_property(inventory_stored_message, "modulate:a", 0.0, 0.42)
+	_inventory_message_tween.tween_callback(func() -> void: inventory_stored_message.visible = false)
 
 
 func _clear_inventory_item(item_type: StringName) -> bool:
@@ -1097,13 +1135,48 @@ func _get_footstep_stream(surface: StringName) -> AudioStreamWAV:
 
 
 func _get_interactable() -> Node:
+	var collider := _get_interactable_in_sight()
+	if collider != null and _is_interactable_in_range(collider):
+		return collider
+	return null
+
+
+func _get_interactable_in_sight() -> Node:
 	interaction_ray.force_raycast_update()
 	if not interaction_ray.is_colliding():
 		return null
 	var collider := interaction_ray.get_collider() as Node
-	if collider != null and collider.has_method(&"interact") and _is_interactable_in_range(collider):
+	if collider != null and collider.has_method(&"interact"):
 		return collider
 	return null
+
+
+func _update_interaction_focus_dot(delta: float) -> void:
+	var should_show := false
+	var interaction_mode_active := (
+		is_instance_valid(_freezer_controller)
+		or is_instance_valid(_ladder_controller)
+		or is_instance_valid(_walker_controller)
+		or is_instance_valid(_active_valve)
+		or is_instance_valid(_active_screw_panel)
+	)
+	if not interaction_mode_active:
+		interaction_focus_cast.target_position = Vector3(0.0, 0.0, -interaction_focus_distance)
+		interaction_focus_cast.force_shapecast_update()
+		for collision_index in interaction_focus_cast.get_collision_count():
+			var collider := interaction_focus_cast.get_collider(collision_index) as Node
+			if collider != null and collider.has_method(&"interact"):
+				should_show = true
+				break
+	var target_alpha := 1.0 if should_show else 0.0
+	interaction_focus_dot.modulate.a = move_toward(
+		interaction_focus_dot.modulate.a,
+		target_alpha,
+		delta * 5.0
+	)
+	interaction_focus_dot.visible = should_show or interaction_focus_dot.modulate.a > 0.01
+
+
 
 
 func _is_interactable_in_range(target: Node) -> bool:
@@ -1212,7 +1285,7 @@ func pick_up_note(title: String, text: String, paper_color: Color, ink_color: Co
 		"paper_color": paper_color,
 		"ink_color": ink_color,
 	}
-	if not _store_inventory_item(&"note", note_data):
+	if not _store_inventory_item(&"note", note_data, true):
 		return false
 	held_note.scale = Vector3.ZERO
 	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -1246,7 +1319,7 @@ func pick_up_recipe_book(data: Dictionary) -> bool:
 
 func pick_up_matchbox(matches_remaining := 20) -> bool:
 	var data := {"matches_remaining": clampi(matches_remaining, 0, 20)}
-	if not _store_inventory_item(&"matchbox", data):
+	if not _store_inventory_item(&"matchbox", data, true):
 		return false
 	held_matchbox.scale = Vector3.ZERO
 	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -1268,7 +1341,7 @@ func pick_up_candle(data: Dictionary = {}, ignite_on_pickup := false) -> bool:
 		"burn_remaining": clampf(float(data.get("burn_remaining", 840.0)), 0.0, 840.0),
 		"lit": (bool(data.get("lit", false)) or ignite_on_pickup) and float(data.get("burn_remaining", 840.0)) > 0.0,
 	}
-	if not _store_inventory_item(&"candle", candle_data):
+	if not _store_inventory_item(&"candle", candle_data, true):
 		return false
 	held_candle.scale = Vector3.ZERO
 	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -1588,7 +1661,7 @@ func _set_stance_immediate(target_stance: Stance) -> void:
 
 
 func pick_up_plunger() -> bool:
-	if not _store_inventory_item(&"plunger"):
+	if not _store_inventory_item(&"plunger", {}, true):
 		return false
 	held_plunger.scale = Vector3.ZERO
 	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -1597,7 +1670,7 @@ func pick_up_plunger() -> bool:
 
 
 func pick_up_crowbar() -> bool:
-	if not _store_inventory_item(&"crowbar"):
+	if not _store_inventory_item(&"crowbar", {}, true):
 		return false
 	add_tool(&"crowbar")
 	held_crowbar.scale = Vector3.ONE * 0.03
@@ -1607,7 +1680,7 @@ func pick_up_crowbar() -> bool:
 
 
 func pick_up_screwdriver() -> bool:
-	if not _store_inventory_item(&"flathead_screwdriver"):
+	if not _store_inventory_item(&"flathead_screwdriver", {}, true):
 		return false
 	add_tool(&"flathead_screwdriver")
 	held_screwdriver.scale = Vector3.ONE * 0.03

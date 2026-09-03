@@ -382,6 +382,27 @@ theme_override_font_sizes/font_size = 34
 text = "BAT [|||]"
 horizontal_alignment = 2
 
+[node name="FPS" type="Label" parent="PS2PostProcess/CameraHUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -610.0
+offset_top = 30.0
+offset_right = -410.0
+offset_bottom = 88.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.86)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.02, 0.96)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("8_pixel_font")
+theme_override_font_sizes/font_size = 34
+text = "60 FPS"
+horizontal_alignment = 2
+
 [node name="Timestamp" type="Label" parent="PS2PostProcess/CameraHUD" unique_id=893506849]
 layout_mode = 1
 anchors_preset = 3

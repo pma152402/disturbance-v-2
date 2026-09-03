@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://bjqlobxolvp3i"]
+
+[ext_resource type="Script" uid="uid://bms3bruat8114" path="res://house_props/rat.gd" id="1_script"]
+
+[sub_resource type="CapsuleShape3D" id="rat_shape"]
+radius = 0.09726074
+height = 0.19452149
+
+[sub_resource type="StandardMaterial3D" id="fur_mat"]
+albedo_color = Color(0.105, 0.09, 0.075, 1)
+roughness = 0.98
+
+[sub_resource type="CapsuleMesh" id="body_mesh"]
+radius = 0.13
+height = 0.42
+radial_segments = 10
+rings = 5
+
+[sub_resource type="SphereMesh" id="head_mesh"]
+radius = 0.105
+height = 0.18
+radial_segments = 10
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="skin_mat"]
+albedo_color = Color(0.25, 0.13, 0.12, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="snout_mesh"]
+top_radius = 0.018
+bottom_radius = 0.065
+height = 0.13
+radial_segments = 8
+
+[sub_resource type="SphereMesh" id="ear_mesh"]
+radius = 0.045
+height = 0.025
+radial_segments = 8
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="eye_mat"]
+albedo_color = Color(0.012, 0.009, 0.007, 1)
+roughness = 0.22
+
+[sub_resource type="SphereMesh" id="eye_mesh"]
+radius = 0.014
+height = 0.028
+radial_segments = 8
+rings = 4
+
+[sub_resource type="CylinderMesh" id="tail_mesh"]
+top_radius = 0.012
+bottom_radius = 0.025
+height = 0.4072461
+radial_segments = 7
+
+[node name="Rat" type="CharacterBody3D" unique_id=157437083]
+editor_description = "Rata rápida. Por defecto huye del jugador en líneas rectas y prefiere zonas con menos luz. Behavior permite desactivar la huida o detenerla."
+collision_layer = 4
+floor_max_angle = 0.872665
+floor_snap_length = 0.22
+script = ExtResource("1_script")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=3483093]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 2.921878, 0, 0.12381348, -0.074600205)
+shape = SubResource("rat_shape")
+
+[node name="Visual" type="Node3D" parent="." unique_id=1433539484]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.13, 0)
+
+[node name="Body" type="MeshInstance3D" parent="Visual" unique_id=688229602]
+transform = Transform3D(0.796669, 0, 0, 0, 7.54979e-08, -0.7155446, 0, 1, 5.4022113e-08, 0, 0, 0)
+material_override = SubResource("fur_mat")
+mesh = SubResource("body_mesh")
+
+[node name="Head" type="MeshInstance3D" parent="Visual" unique_id=1781192302]
+transform = Transform3D(0.7185664, 0, 0, 0, 0.68100613, 0, 0, 0, 1.08, 0, 0.015000001, -0.225)
+material_override = SubResource("fur_mat")
+mesh = SubResource("head_mesh")
+
+[node name="Snout" type="MeshInstance3D" parent="Visual" unique_id=1676212680]
+transform = Transform3D(-0.76237184, 0.014393021, -0.04427623, 0.0313341, -0.33238065, -0.8472396, -0.023423078, -0.9131036, 0.3077075, 0, -0.0063241124, -0.30766138)
+material_override = SubResource("skin_mat")
+mesh = SubResource("snout_mesh")
+
+[node name="EarLeft" type="MeshInstance3D" parent="Visual" unique_id=1886951731]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, -0.071, 0.085, -0.205)
+material_override = SubResource("skin_mat")
+mesh = SubResource("ear_mesh")
+
+[node name="EarRight" type="MeshInstance3D" parent="Visual" unique_id=1813233516]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0.071, 0.085, -0.205)
+material_override = SubResource("skin_mat")
+mesh = SubResource("ear_mesh")
+
+[node name="EyeLeft" type="MeshInstance3D" parent="Visual" unique_id=756207859]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.059386544, 0.03999999, -0.26797265)
+material_override = SubResource("eye_mat")
+mesh = SubResource("eye_mesh")
+
+[node name="EyeLeft2" type="MeshInstance3D" parent="Visual" unique_id=100025104]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.051019542, 0.03999999, -0.26797265)
+material_override = SubResource("eye_mat")
+mesh = SubResource("eye_mesh")
+
+[node name="Tail" type="Node3D" parent="Visual" unique_id=1197746029]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, 0.23)
+
+[node name="Segment" type="MeshInstance3D" parent="Visual/Tail" unique_id=530329273]
+transform = Transform3D(0.94923544, 0.31456655, 0, -0.09459188, 0.2854403, -0.95371705, -0.3000075, 0.90530205, 0.30070546, 0.0782973, 0.08928018, 0.06977655)
+material_override = SubResource("skin_mat")
+mesh = SubResource("tail_mesh")

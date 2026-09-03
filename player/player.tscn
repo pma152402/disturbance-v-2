@@ -98,6 +98,12 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focus_dot"]
+bg_color = Color(0.86, 0.9, 0.83, 0.38)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_interaction_focus"]
+radius = 0.26
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_flashlight_icon"]
 atlas = ExtResource("3_flashlight_texture")
 region = Rect2(78, 0, 82, 256)
@@ -149,6 +155,14 @@ target_position = Vector3(0, 0, -2.35)
 collision_mask = 2
 collide_with_areas = true
 collide_with_bodies = true
+
+[node name="InteractionFocusCast" type="ShapeCast3D" parent="Head/Camera3D"]
+shape = SubResource("SphereShape3D_interaction_focus")
+target_position = Vector3(0, 0, -2.35)
+collision_mask = 2
+collide_with_areas = true
+collide_with_bodies = true
+max_results = 16
 
 [node name="CandlePlacementRay" type="RayCast3D" parent="Head/Camera3D"]
 target_position = Vector3(0, 0, -3)
@@ -309,6 +323,27 @@ script = ExtResource("16_stance_indicator")
 
 [node name="InventoryUI" type="CanvasLayer" parent="."]
 layer = 102
+
+[node name="InventoryStoredMessageUI" type="CanvasLayer" parent="."]
+layer = 104
+
+[node name="Message" type="Label" parent="InventoryStoredMessageUI"]
+visible = false
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 154.0
+offset_bottom = 194.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.9, 0.93, 0.86, 0.96)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("6_pixel_font")
+theme_override_font_sizes/font_size = 14
+text = "HAS GUARDADO EL OBJETO EN TU INVENTARIO"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="InventorySlots" type="HBoxContainer" parent="InventoryUI"]
 anchors_preset = 7
@@ -558,6 +593,22 @@ horizontal_alignment = 1
 
 [node name="InteractionUI" type="CanvasLayer" parent="."]
 layer = 102
+
+[node name="CenterDot" type="Panel" parent="InteractionUI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_focus_dot")
 
 [node name="InteractionPrompt" type="Label" parent="InteractionUI"]
 visible = false
