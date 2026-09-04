@@ -55,9 +55,9 @@ func run() -> void:
 	var lamp: Node3D = load("res://house_props/courtyard_streetlamp.tscn").instantiate()
 	root.add_child(lamp)
 	check(lamp.get_node("WarmLight").visible, "Streetlamp starts on")
-	lamp.set_lamp_enabled(false)
+	lamp.get_node("WarmLight").visible = false
 	check(not lamp.get_node("WarmLight").visible, "Streetlamp switches off")
-	lamp.set_lamp_enabled(true)
+	lamp.get_node("WarmLight").visible = true
 	check(lamp.find_children("*","CollisionShape3D",true,false).size() == 3,"Streetlamp base/post/lantern collisions")
 	camera.position = Vector3(5,3.4,6)
 	camera.look_at(Vector3(0,2.2,0))

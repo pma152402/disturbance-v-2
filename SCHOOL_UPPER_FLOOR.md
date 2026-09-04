@@ -1,6 +1,6 @@
 # Segunda planta de la escuela
 
-Escena integrada: `school_upper_floor.tscn`, instanciada en `house_baked.tscn`.
+La planta está desplegada como nodos locales en `house_baked.tscn`, bajo `SchoolUpperFloor`. `school_upper_floor.tscn` conserva una copia reutilizable independiente.
 Pavimento a Y=4.16, sobre las losas existentes; techo a Y=8.16.
 
 - Norte oeste: dormitorio con seis literas dobles, doce plazas, escalerillas, barandillas, ropa de cama y cajones.
@@ -21,11 +21,11 @@ La única modificación de una colisión anterior es el hueco del acceso superio
 
 ## Edición y comprobación
 
-La escena tiene grupos para estructura, techo, cada estancia y puente. `SchoolUpperFloor` tiene los hijos editables habilitados en `house_baked.tscn`. Sus instancias interiores están desplegadas en nodos locales: cada pieza nueva tiene su propia malla, transformación y material. Los cambios en una silla o una litera dentro de la planta no afectan a las demás.
+La escena tiene grupos para estructura, techo, cada estancia y puente. `SchoolUpperFloor` y todas sus piezas son nodos locales, sin instancias anidadas. Se conservaron las cuatro farolas colocadas y los ajustes de la escena principal. Las balaustradas están convertidas en piezas individuales, sin el script que reconstruía su geometría.
 
 En el árbol puedes mover `Chair`, `Desk`, `Notebook`, `Table`, `BenchLeft`, `BenchRight`, `Fridge`, `Oven`, `Sink`, `PreparationCounter` o `ExtractorHood` por separado. Cada grupo conserva sus colisiones; mueve o escala el grupo para que la colisión acompañe al objeto. Las literas también separan ropa de cama, escalera y cajón. Expande cualquier grupo para editar sus piezas. Las luminarias incluyen su luz y carcasa juntas. Los assets reutilizados mantienen sus mallas originales.
 
-`school_upper_runtime.gd` une las piezas estáticas por habitación y material únicamente al jugar, respetando las posiciones editadas. En el editor permanecen separadas. `house_props/school_furniture_navigation.gd` crea los recortes de navegación al ejecutar: no hay obstáculos de navegación serializados ni sus recuadros amarillos permanentes en el editor.
+Se ha retirado el agrupador `school_upper_runtime.gd`: las mallas permanecen separadas también al jugar. `WeatherSystems` conserva únicamente la protección contra la lluvia; las puertas y los recortes de navegación mantienen su lógica funcional sin reconstruir decoración. Las farolas no tienen script: edita directamente `WarmLight` y sus mallas desde el árbol. Al quitar la agrupación puede aumentar el coste de renderizado; no se ha medido una cifra de FPS.
 
 `tools/build_school_upper_floor.gd` regenera las tres escenas nuevas de mobiliario y la segunda planta. No debe ejecutarse después de editar manualmente esas escenas sin conservar antes esos cambios.
 

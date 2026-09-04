@@ -4,22 +4,33 @@ func _init() -> void:
 	var house: Node3D = load("res://house_baked.tscn").instantiate()
 	var school: Node3D = house.get_node("SchoolUpperFloor")
 	var before := signature(house)
+	# A non-instancing duplicate clears Godot's hidden instance SceneState too.
+	var native := school.duplicate(7) as Node3D
+	var slot := school.get_index()
+	house.remove_child(school)
+	school.free()
+	school = native
+	house.add_child(school)
+	house.move_child(school,slot)
 	school.set_script(null)
 	freeze(school)
-	var systems := Node3D.new()
-	systems.name = "WeatherSystems"
-	systems.set_script(load("res://school_environment.gd"))
-	school.add_child(systems)
-	localize(school, house)
+	if not school.has_node("WeatherSystems"):
+		var systems := Node3D.new()
+		systems.name = "WeatherSystems"
+		systems.set_script(load("res://school_environment.gd"))
+		school.add_child(systems)
 	# Save the effective instance, including the user's overrides, as the reusable scene.
-	var copy := school.duplicate() as Node3D
-	localize(copy, copy)
+	house.remove_child(school)
+	localize(school, school)
 	var packed := PackedScene.new()
-	assert(packed.pack(copy) == OK)
+	assert(packed.pack(school) == OK)
 	assert(ResourceSaver.save(packed,"res://school_upper_floor.tscn") == OK)
-	copy.free()
+	house.add_child(school)
+	house.move_child(school,slot)
+	localize(school,house)
 	assert(signature(house) == before, "Conversion changed existing geometry or collisions")
 	# Only the school branch becomes local; other scene instances keep their links.
+	packed = PackedScene.new()
 	assert(packed.pack(house) == OK)
 	assert(ResourceSaver.save(packed,"res://house_baked.tscn") == OK)
 	house.free()
@@ -37,6 +48,9 @@ func _init() -> void:
 	quit()
 
 func freeze(node: Node) -> void:
+	if node.get_script() != null and node.get_script().resource_path == "res://house_props/courtyard_streetlamp.gd":
+		node.call("_update_light")
+		node.set_script(null)
 	if node.get_script() != null and node.get_script().resource_path == "res://house_props/modular_balcony_balustrade.gd":
 		node.set_script(null)
 		node.editor_description = "Piezas independientes. Edita mallas y colisión directamente."
