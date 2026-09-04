@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_tvvjj"]
+data = PackedVector3Array(-26.675196, 0.0024849996, -0.39803252, -28.421007, 0.0024849996, -0.39141467, -26.667858, 2.0290961, 2.3517056, -28.421007, 0.0024849996, -0.39141467, -28.406073, 2.0290961, 2.3582947, -26.667858, 2.0290961, 2.3517056, -26.667858, 2.0290961, 2.3517056, -28.406073, 2.0290961, 2.3582947, -26.667252, 2.0290961, 2.5017042, -28.406073, 2.0290961, 2.3582947, -28.405466, 2.0290961, 2.5082934, -26.667252, 2.0290961, 2.5017042)
+backface_collision = true
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_iwvmn"]
+data = PackedVector3Array(-30.044893, 2.0290961, 2.971165, -28.458454, 2.0290961, 2.9381592, -30.041773, 4.1321383, 0.18650278, -28.458454, 2.0290961, 2.9381592, -28.455334, 4.1321383, 0.15349713, -30.041773, 4.1321383, 0.18650278, -30.041773, 4.1321383, 0.18650278, -28.455334, 4.1321383, 0.15349713, -30.041605, 4.1321383, 0.036502883, -28.455334, 4.1321383, 0.15349713, -28.455166, 4.1321383, 0.003497228, -30.041605, 4.1321383, 0.036502883)
+backface_collision = true
+
+[node name="CorridorStairRamps" type="StaticBody3D" unique_id=1489091501]
+
+[node name="Flight1_ContinuousRamp" type="CollisionShape3D" parent="." unique_id=641740759]
+shape = SubResource("ConcavePolygonShape3D_tvvjj")
+
+[node name="Flight2_ContinuousRamp" type="CollisionShape3D" parent="." unique_id=366928603]
+shape = SubResource("ConcavePolygonShape3D_iwvmn")
