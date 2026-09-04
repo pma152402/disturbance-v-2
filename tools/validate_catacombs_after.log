@@ -1,0 +1,13 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Exterior forest ready: 220 trees, AABB [P: (0.0, 0.0, 0.0), S: (0.0, 0.0, 0.0)]
+Exterior vegetation ready: 4600 varied clumps
+Runtime house navigation ready
+Runtime catacomb navigation ready
+Navigation house: 751 vertices, [P: (-14.75, 0.25, -41.75), S: (29.5, 9.5, 56.5)]
+Navigation catacomb: 1486 vertices, [P: (-59.0, -3.95, -182.5), S: (104.75, 3.5, 144.0)]
+Closest catacomb start: (-8.0, -3.95, -49.0)
+Closest final crypt: (-8.15, -3.95, -181.45)
+Catacomb validation passed: 683 static pieces, 13 descent points, 88 labyrinth points

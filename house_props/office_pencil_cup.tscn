@@ -1,0 +1,221 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.23,0.12,0.06, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="dark"]
+albedo_color = Color(0.055,0.06,0.055, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="steel"]
+albedo_color = Color(0.38,0.4,0.38, 1)
+roughness = 0.75
+metallic = 0.65
+
+[sub_resource type="StandardMaterial3D" id="gold"]
+albedo_color = Color(0.5,0.36,0.14, 1)
+roughness = 0.75
+metallic = 0.65
+
+[sub_resource type="StandardMaterial3D" id="paper"]
+albedo_color = Color(0.83,0.79,0.65, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="green"]
+albedo_color = Color(0.18,0.25,0.2, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.37,0.1,0.08, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="blue"]
+albedo_color = Color(0.17,0.23,0.27, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="cream"]
+albedo_color = Color(0.67,0.61,0.46, 1)
+roughness = 0.75
+
+
+[sub_resource type="CylinderMesh" id="m1"]
+top_radius = 0.065
+bottom_radius = 0.065
+height = 0.024
+radial_segments = 20
+rings = 1
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m2"]
+size = Vector3(0.022,0.11,0.02)
+material = SubResource("wood")
+
+[sub_resource type="TorusMesh" id="m3"]
+inner_radius = 0.058
+outer_radius = 0.07
+rings = 24
+ring_segments = 6
+material = SubResource("gold")
+
+[sub_resource type="BoxMesh" id="m4"]
+size = Vector3(0.007,0.2,0.007)
+material = SubResource("green")
+
+[sub_resource type="CylinderMesh" id="m5"]
+top_radius = 0.003
+bottom_radius = 0.003
+height = 0.013
+radial_segments = 20
+rings = 1
+material = SubResource("dark")
+
+[sub_resource type="BoxMesh" id="m6"]
+size = Vector3(0.007,0.2,0.007)
+material = SubResource("red")
+
+[sub_resource type="BoxShape3D" id="c7"]
+size = Vector3(0.15,0.24,0.15)
+
+[node name="OfficePencilCup" type="StaticBody3D"]
+
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.012,0)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m1")
+
+[node name="Slat0" type="MeshInstance3D" parent="."]
+position = Vector3(0.057,0.068,0)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m2")
+
+[node name="Slat1" type="MeshInstance3D" parent="."]
+position = Vector3(0.049363,0.068,0.0285)
+rotation = Vector3(0,-0.523599,0)
+mesh = SubResource("m2")
+
+[node name="Slat2" type="MeshInstance3D" parent="."]
+position = Vector3(0.0285,0.068,0.049363)
+rotation = Vector3(0,-1.047198,0)
+mesh = SubResource("m2")
+
+[node name="Slat3" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.068,0.057)
+rotation = Vector3(0,-1.570796,0)
+mesh = SubResource("m2")
+
+[node name="Slat4" type="MeshInstance3D" parent="."]
+position = Vector3(-0.0285,0.068,0.049363)
+rotation = Vector3(0,-2.094395,0)
+mesh = SubResource("m2")
+
+[node name="Slat5" type="MeshInstance3D" parent="."]
+position = Vector3(-0.049363,0.068,0.0285)
+rotation = Vector3(0,-2.617994,0)
+mesh = SubResource("m2")
+
+[node name="Slat6" type="MeshInstance3D" parent="."]
+position = Vector3(-0.057,0.068,0)
+rotation = Vector3(0,-3.141593,0)
+mesh = SubResource("m2")
+
+[node name="Slat7" type="MeshInstance3D" parent="."]
+position = Vector3(-0.049363,0.068,-0.0285)
+rotation = Vector3(0,-3.665191,0)
+mesh = SubResource("m2")
+
+[node name="Slat8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.0285,0.068,-0.049363)
+rotation = Vector3(0,-4.18879,0)
+mesh = SubResource("m2")
+
+[node name="Slat9" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.068,-0.057)
+rotation = Vector3(0,-4.712389,0)
+mesh = SubResource("m2")
+
+[node name="Slat10" type="MeshInstance3D" parent="."]
+position = Vector3(0.0285,0.068,-0.049363)
+rotation = Vector3(0,-5.235988,0)
+mesh = SubResource("m2")
+
+[node name="Slat11" type="MeshInstance3D" parent="."]
+position = Vector3(0.049363,0.068,-0.0285)
+rotation = Vector3(0,-5.759587,0)
+mesh = SubResource("m2")
+
+[node name="Rim" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.13,0)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m3")
+
+[node name="Pencil0" type="MeshInstance3D" parent="."]
+position = Vector3(-0.027,0.13,-0.017)
+rotation = Vector3(0,0,-0.11)
+mesh = SubResource("m4")
+
+[node name="Tip0" type="MeshInstance3D" parent="."]
+position = Vector3(-0.027,0.235,-0.017)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m5")
+
+[node name="Pencil1" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.13,0.017)
+rotation = Vector3(0,0,-0.055)
+mesh = SubResource("m6")
+
+[node name="Tip1" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.235,0.017)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m5")
+
+[node name="Pencil2" type="MeshInstance3D" parent="."]
+position = Vector3(0.027,0.13,-0.017)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m4")
+
+[node name="Tip2" type="MeshInstance3D" parent="."]
+position = Vector3(0.027,0.235,-0.017)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m5")
+
+[node name="Pencil3" type="MeshInstance3D" parent="."]
+position = Vector3(-0.027,0.13,0.017)
+rotation = Vector3(0,0,0.055)
+mesh = SubResource("m6")
+
+[node name="Tip3" type="MeshInstance3D" parent="."]
+position = Vector3(-0.027,0.235,0.017)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m5")
+
+[node name="Pencil4" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.13,-0.017)
+rotation = Vector3(0,0,0.11)
+mesh = SubResource("m4")
+
+[node name="Tip4" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.235,-0.017)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m5")
+
+[node name="Pencil5" type="MeshInstance3D" parent="."]
+position = Vector3(0.027,0.13,0.017)
+rotation = Vector3(0,0,0.165)
+mesh = SubResource("m6")
+
+[node name="Tip5" type="MeshInstance3D" parent="."]
+position = Vector3(0.027,0.235,0.017)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m5")
+
+[node name="Collision7" type="CollisionShape3D" parent="."]
+position = Vector3(0,0.12,0)
+shape = SubResource("c7")
+

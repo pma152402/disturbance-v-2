@@ -1,0 +1,1104 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.22,0.12,0.07, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="edge"]
+albedo_color = Color(0.11,0.065,0.04, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.22,0.26,0.25, 1)
+roughness = 0.8
+metallic = 0.65
+
+
+[sub_resource type="StandardMaterial3D" id="brass"]
+albedo_color = Color(0.48,0.35,0.13, 1)
+roughness = 0.8
+metallic = 0.65
+
+
+[sub_resource type="StandardMaterial3D" id="paper"]
+albedo_color = Color(0.79,0.75,0.61, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.31,0.1,0.09, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="green"]
+albedo_color = Color(0.15,0.23,0.18, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="blue"]
+albedo_color = Color(0.13,0.19,0.25, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="cloth"]
+albedo_color = Color(0.29,0.25,0.18, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="black"]
+albedo_color = Color(0.06,0.065,0.06, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="cork"]
+albedo_color = Color(0.39,0.26,0.13, 1)
+roughness = 0.8
+
+
+[sub_resource type="BoxMesh" id="m1"]
+size = Vector3(1.6, 2.35, 0.045)
+material = SubResource("edge")
+
+[sub_resource type="BoxMesh" id="m2"]
+size = Vector3(0.08, 2.35, 0.48)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m3"]
+size = Vector3(1.6, 0.06, 0.49)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m4"]
+size = Vector3(0.06, 0.332, 0.2)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m5"]
+size = Vector3(0.012, 0.35, 0.23)
+material = SubResource("red")
+
+[sub_resource type="BoxMesh" id="m6"]
+size = Vector3(0.075, 0.35, 0.015)
+material = SubResource("red")
+
+[sub_resource type="BoxMesh" id="m7"]
+size = Vector3(0.0615, 0.008, 0.005)
+material = SubResource("brass")
+
+[sub_resource type="BoxMesh" id="m8"]
+size = Vector3(0.0712, 0.357, 0.2)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m9"]
+size = Vector3(0.012, 0.375, 0.23)
+material = SubResource("blue")
+
+[sub_resource type="BoxMesh" id="m10"]
+size = Vector3(0.089, 0.375, 0.015)
+material = SubResource("blue")
+
+[sub_resource type="BoxMesh" id="m11"]
+size = Vector3(0.07298, 0.008, 0.005)
+material = SubResource("brass")
+
+[sub_resource type="BoxMesh" id="m12"]
+size = Vector3(0.0824, 0.382, 0.2)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m13"]
+size = Vector3(0.012, 0.4, 0.23)
+material = SubResource("green")
+
+[sub_resource type="BoxMesh" id="m14"]
+size = Vector3(0.103, 0.4, 0.015)
+material = SubResource("green")
+
+[sub_resource type="BoxMesh" id="m15"]
+size = Vector3(0.08446, 0.008, 0.005)
+material = SubResource("brass")
+
+[sub_resource type="BoxMesh" id="m16"]
+size = Vector3(0.06, 0.407, 0.2)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m17"]
+size = Vector3(0.012, 0.425, 0.23)
+material = SubResource("cloth")
+
+[sub_resource type="BoxMesh" id="m18"]
+size = Vector3(0.075, 0.425, 0.015)
+material = SubResource("cloth")
+
+[sub_resource type="BoxMesh" id="m19"]
+size = Vector3(0.0712, 0.332, 0.2)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m20"]
+size = Vector3(0.089, 0.35, 0.015)
+material = SubResource("red")
+
+[sub_resource type="BoxMesh" id="m21"]
+size = Vector3(0.0824, 0.357, 0.2)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m22"]
+size = Vector3(0.103, 0.375, 0.015)
+material = SubResource("blue")
+
+[sub_resource type="BoxMesh" id="m23"]
+size = Vector3(0.06, 0.382, 0.2)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m24"]
+size = Vector3(0.075, 0.4, 0.015)
+material = SubResource("green")
+
+[sub_resource type="BoxMesh" id="m25"]
+size = Vector3(0.06, 0.357, 0.2)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m26"]
+size = Vector3(0.075, 0.375, 0.015)
+material = SubResource("blue")
+
+[sub_resource type="BoxMesh" id="m27"]
+size = Vector3(0.0712, 0.382, 0.2)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m28"]
+size = Vector3(0.089, 0.4, 0.015)
+material = SubResource("green")
+
+[sub_resource type="BoxMesh" id="m29"]
+size = Vector3(0.0824, 0.407, 0.2)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m30"]
+size = Vector3(0.103, 0.425, 0.015)
+material = SubResource("cloth")
+
+[sub_resource type="BoxMesh" id="m31"]
+size = Vector3(0.0712, 0.407, 0.2)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m32"]
+size = Vector3(0.089, 0.425, 0.015)
+material = SubResource("cloth")
+
+[sub_resource type="BoxMesh" id="m33"]
+size = Vector3(0.0824, 0.332, 0.2)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m34"]
+size = Vector3(0.103, 0.35, 0.015)
+material = SubResource("red")
+
+[sub_resource type="BoxMesh" id="m35"]
+size = Vector3(1.72, 0.1, 0.55)
+material = SubResource("edge")
+
+[sub_resource type="BoxMesh" id="m36"]
+size = Vector3(1.66, 0.11, 0.54)
+material = SubResource("edge")
+
+[sub_resource type="BoxShape3D" id="c37"]
+size = Vector3(1.6, 2.35, 0.48)
+
+[node name="OfficeBookcaseOak" type="StaticBody3D"]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Back" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.175, -0.22)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m1")
+
+[node name="Side-1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.76, 1.175, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m2")
+
+[node name="Side1" type="MeshInstance3D" parent="."]
+position = Vector3(0.76, 1.175, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m2")
+
+[node name="Shelf0" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.1, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m3")
+
+[node name="Shelf1" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.6475, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m3")
+
+[node name="Shelf2" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.195, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m3")
+
+[node name="Shelf3" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.7425, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m3")
+
+[node name="Shelf4" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.29, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m3")
+
+[node name="Book0_0Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 0.31, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="Book0_0CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.6745, 0.31, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Book0_0CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.6055, 0.31, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Book0_0Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 0.31, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m6")
+
+[node name="Book0_0Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 0.198, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book0_0Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 0.415, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book0_1Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 0.3225, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m8")
+
+[node name="Book0_1CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.495226, 0.3225, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="Book0_1CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.413346, 0.3225, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="Book0_1Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 0.3225, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m10")
+
+[node name="Book0_1Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 0.2025, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book0_1Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 0.435, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book0_2Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 0.335, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m12")
+
+[node name="Book0_2CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.315951, 0.335, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="Book0_2CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.221191, 0.335, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="Book0_2Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 0.335, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m14")
+
+[node name="Book0_2Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 0.207, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book0_2Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 0.455, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book0_3Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 0.3475, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m16")
+
+[node name="Book0_3CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.117357, 0.3475, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m17")
+
+[node name="Book0_3CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.048357, 0.3475, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m17")
+
+[node name="Book0_3Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 0.3475, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m18")
+
+[node name="Book0_3Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 0.2115, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book0_3Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 0.475, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book0_4Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 0.31, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m19")
+
+[node name="Book0_4CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(0.061917, 0.31, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Book0_4CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(0.143797, 0.31, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Book0_4Spine" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 0.31, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m20")
+
+[node name="Book0_4Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 0.198, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book0_4Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 0.415, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book0_5Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 0.3225, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m21")
+
+[node name="Book0_5CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(0.241191, 0.3225, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="Book0_5CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(0.335951, 0.3225, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="Book0_5Spine" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 0.3225, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m22")
+
+[node name="Book0_5Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 0.2025, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book0_5Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 0.435, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book0_6Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 0.335, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m23")
+
+[node name="Book0_6CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(0.439786, 0.335, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="Book0_6CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(0.508786, 0.335, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="Book0_6Spine" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 0.335, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m24")
+
+[node name="Book0_6Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 0.207, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book0_6Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 0.455, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book1_0Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 0.87, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m25")
+
+[node name="Book1_0CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.6745, 0.87, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="Book1_0CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.6055, 0.87, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="Book1_0Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 0.87, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m26")
+
+[node name="Book1_0Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 0.75, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book1_0Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 0.9825, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book1_1Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 0.8825, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m27")
+
+[node name="Book1_1CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.495226, 0.8825, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="Book1_1CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.413346, 0.8825, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="Book1_1Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 0.8825, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m28")
+
+[node name="Book1_1Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 0.7545, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book1_1Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 1.0025, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book1_2Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 0.895, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m29")
+
+[node name="Book1_2CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.315951, 0.895, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m17")
+
+[node name="Book1_2CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.221191, 0.895, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m17")
+
+[node name="Book1_2Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 0.895, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m30")
+
+[node name="Book1_2Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 0.759, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book1_2Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 1.0225, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book1_3Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 0.8575, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="Book1_3CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.117357, 0.8575, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Book1_3CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.048357, 0.8575, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Book1_3Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 0.8575, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m6")
+
+[node name="Book1_3Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 0.7455, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book1_3Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 0.9625, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book1_4Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 0.87, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m8")
+
+[node name="Book1_4CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(0.061917, 0.87, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="Book1_4CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(0.143797, 0.87, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="Book1_4Spine" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 0.87, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m10")
+
+[node name="Book1_4Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 0.75, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book1_4Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 0.9825, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book1_5Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 0.8825, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m12")
+
+[node name="Book1_5CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(0.241191, 0.8825, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="Book1_5CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(0.335951, 0.8825, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="Book1_5Spine" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 0.8825, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m14")
+
+[node name="Book1_5Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 0.7545, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book1_5Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 1.0025, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book1_6Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 0.895, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m16")
+
+[node name="Book1_6CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(0.439786, 0.895, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m17")
+
+[node name="Book1_6CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(0.508786, 0.895, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m17")
+
+[node name="Book1_6Spine" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 0.895, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m18")
+
+[node name="Book1_6Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 0.759, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book1_6Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 1.0225, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book2_0Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 1.43, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m23")
+
+[node name="Book2_0CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.6745, 1.43, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="Book2_0CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.6055, 1.43, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="Book2_0Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 1.43, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m24")
+
+[node name="Book2_0Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 1.302, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book2_0Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 1.55, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book2_1Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 1.4425, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m31")
+
+[node name="Book2_1CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.495226, 1.4425, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m17")
+
+[node name="Book2_1CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.413346, 1.4425, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m17")
+
+[node name="Book2_1Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 1.4425, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m32")
+
+[node name="Book2_1Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 1.3065, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book2_1Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 1.57, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book2_2Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 1.405, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m33")
+
+[node name="Book2_2CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.315951, 1.405, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Book2_2CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.221191, 1.405, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Book2_2Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 1.405, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m34")
+
+[node name="Book2_2Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 1.293, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book2_2Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 1.51, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book2_3Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 1.4175, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m25")
+
+[node name="Book2_3CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.117357, 1.4175, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="Book2_3CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.048357, 1.4175, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="Book2_3Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 1.4175, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m26")
+
+[node name="Book2_3Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 1.2975, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book2_3Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 1.53, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book2_4Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 1.43, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m27")
+
+[node name="Book2_4CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(0.061917, 1.43, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="Book2_4CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(0.143797, 1.43, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="Book2_4Spine" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 1.43, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m28")
+
+[node name="Book2_4Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 1.302, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book2_4Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 1.55, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book2_5Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 1.4425, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m29")
+
+[node name="Book2_5CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(0.241191, 1.4425, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m17")
+
+[node name="Book2_5CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(0.335951, 1.4425, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m17")
+
+[node name="Book2_5Spine" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 1.4425, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m30")
+
+[node name="Book2_5Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 1.3065, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book2_5Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 1.57, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book2_6Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 1.405, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="Book2_6CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(0.439786, 1.405, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Book2_6CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(0.508786, 1.405, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Book2_6Spine" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 1.405, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m6")
+
+[node name="Book2_6Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 1.293, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book2_6Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 1.51, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book3_0Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 1.99, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m16")
+
+[node name="Book3_0CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.6745, 1.99, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m17")
+
+[node name="Book3_0CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.6055, 1.99, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m17")
+
+[node name="Book3_0Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 1.99, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m18")
+
+[node name="Book3_0Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 1.854, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book3_0Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.64, 2.1175, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book3_1Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 1.9525, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m19")
+
+[node name="Book3_1CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.495226, 1.9525, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Book3_1CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.413346, 1.9525, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Book3_1Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 1.9525, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m20")
+
+[node name="Book3_1Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 1.8405, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book3_1Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.454286, 2.0575, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book3_2Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 1.965, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m21")
+
+[node name="Book3_2CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.315951, 1.965, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="Book3_2CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.221191, 1.965, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="Book3_2Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 1.965, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m22")
+
+[node name="Book3_2Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 1.845, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book3_2Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.268571, 2.0775, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book3_3Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 1.9775, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m23")
+
+[node name="Book3_3CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.117357, 1.9775, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="Book3_3CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.048357, 1.9775, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="Book3_3Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 1.9775, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m24")
+
+[node name="Book3_3Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 1.8495, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book3_3Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.082857, 2.0975, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book3_4Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 1.99, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m31")
+
+[node name="Book3_4CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(0.061917, 1.99, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m17")
+
+[node name="Book3_4CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(0.143797, 1.99, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m17")
+
+[node name="Book3_4Spine" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 1.99, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m32")
+
+[node name="Book3_4Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 1.854, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book3_4Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(0.102857, 2.1175, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="Book3_5Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 1.9525, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m33")
+
+[node name="Book3_5CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(0.241191, 1.9525, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Book3_5CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(0.335951, 1.9525, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Book3_5Spine" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 1.9525, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m34")
+
+[node name="Book3_5Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 1.8405, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book3_5Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(0.288571, 2.0575, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m15")
+
+[node name="Book3_6Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 1.965, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m25")
+
+[node name="Book3_6CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(0.439786, 1.965, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="Book3_6CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(0.508786, 1.965, 0.015)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="Book3_6Spine" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 1.965, 0.127)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m26")
+
+[node name="Book3_6Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 1.845, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Book3_6Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(0.474286, 2.0775, 0.137)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Cornice" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.385, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m35")
+
+[node name="Plinth" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.055, 0.025)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m36")
+
+[node name="Collision37" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.175, 0)
+shape = SubResource("c37")
+

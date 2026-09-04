@@ -16,6 +16,19 @@ material = SubResource("m2")
 [sub_resource type="StandardMaterial3D" id="m3"]
 albedo_color = Color(0.1,0.25,0.17,1)
 roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="bulb_material"]
+albedo_color = Color(1, 0.64, 0.24, 1)
+emission_enabled = true
+emission = Color(1, 0.36, 0.06, 1)
+emission_energy_multiplier = 2.2
+
+[sub_resource type="SphereMesh" id="bulb_mesh"]
+material = SubResource("bulb_material")
+radius = 0.045
+height = 0.09
+radial_segments = 16
+rings = 8
 [sub_resource type="BoxMesh" id="b3"]
 size = Vector3(0.4,0.13,0.22)
 material = SubResource("m3")
@@ -36,7 +49,10 @@ mesh = SubResource("b3")
 [node name="WarmLight" type="OmniLight3D" parent="."]
 position = Vector3(0,0.36,-0.08)
 light_color = Color(1,0.76,0.46,1)
-light_energy = 0.5
+light_energy = 1.15
 omni_range = 2.0
 shadow_enabled = true
 
+[node name="LitBulb" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.365, -0.08)
+mesh = SubResource("bulb_mesh")

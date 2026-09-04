@@ -1,0 +1,182 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.22,0.12,0.07, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="edge"]
+albedo_color = Color(0.11,0.065,0.04, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.22,0.26,0.25, 1)
+roughness = 0.8
+metallic = 0.65
+
+
+[sub_resource type="StandardMaterial3D" id="brass"]
+albedo_color = Color(0.48,0.35,0.13, 1)
+roughness = 0.8
+metallic = 0.65
+
+
+[sub_resource type="StandardMaterial3D" id="paper"]
+albedo_color = Color(0.79,0.75,0.61, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.31,0.1,0.09, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="green"]
+albedo_color = Color(0.15,0.23,0.18, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="blue"]
+albedo_color = Color(0.13,0.19,0.25, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="cloth"]
+albedo_color = Color(0.29,0.25,0.18, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="black"]
+albedo_color = Color(0.06,0.065,0.06, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="cork"]
+albedo_color = Color(0.39,0.26,0.13, 1)
+roughness = 0.8
+
+
+[sub_resource type="BoxMesh" id="m1"]
+size = Vector3(0.72, 0.9, 0.045)
+material = SubResource("edge")
+
+[sub_resource type="BoxMesh" id="m2"]
+size = Vector3(0.64, 0.82, 0.014)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m3"]
+size = Vector3(0.04, 0.9, 0.05)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m4"]
+size = Vector3(0.72, 0.04, 0.05)
+material = SubResource("wood")
+
+[sub_resource type="CylinderMesh" id="m5"]
+top_radius = 0.055
+bottom_radius = 0.055
+height = 0.01
+radial_segments = 12
+rings = 1
+material = SubResource("brass")
+
+[sub_resource type="BoxMesh" id="m6"]
+size = Vector3(0.17, 0.004, 0.003)
+material = SubResource("blue")
+
+[sub_resource type="BoxShape3D" id="c7"]
+size = Vector3(0.72, 0.9, 0.09)
+
+[node name="OfficeDiplomaService" type="StaticBody3D"]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Backing" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m1")
+
+[node name="Paper" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0.03)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m2")
+
+[node name="FrameSide-1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.34, 0, 0.055)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m3")
+
+[node name="FrameSide1" type="MeshInstance3D" parent="."]
+position = Vector3(0.34, 0, 0.055)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m3")
+
+[node name="FrameEdge-1" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.43, 0.055)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="FrameEdge1" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.43, 0.055)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="Institution" type="Label3D" parent="."]
+position = Vector3(0, 0.3, 0.045)
+text = "INSTITUTO SAN GABRIEL"
+font_size = 24
+pixel_size = 0.00135
+modulate = Color(0.18,0.13,0.08,1)
+outline_size = 0
+no_depth_test = false
+double_sided = false
+
+[node name="Heading" type="Label3D" parent="."]
+position = Vector3(0, 0.16, 0.045)
+text = "RECONOCIMIENTO"
+font_size = 34
+pixel_size = 0.0016
+modulate = Color(0.18,0.13,0.08,1)
+outline_size = 0
+no_depth_test = false
+double_sided = false
+
+[node name="Body" type="Label3D" parent="."]
+position = Vector3(0, 0.015, 0.045)
+text = "Por veinticinco años\nde servicio y dedicación"
+font_size = 24
+pixel_size = 0.0016
+modulate = Color(0.18,0.13,0.08,1)
+outline_size = 0
+no_depth_test = false
+double_sided = false
+
+[node name="Date" type="Label3D" parent="."]
+position = Vector3(0, -0.15, 0.045)
+text = "Dirección del centro · 1978"
+font_size = 20
+pixel_size = 0.0014
+modulate = Color(0.18,0.13,0.08,1)
+outline_size = 0
+no_depth_test = false
+double_sided = false
+
+[node name="Seal" type="MeshInstance3D" parent="."]
+position = Vector3(0.19, -0.27, 0.048)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Signature0" type="MeshInstance3D" parent="."]
+position = Vector3(-0.12, -0.25, 0.044)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m6")
+
+[node name="Signature1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.104, -0.241, 0.044)
+rotation = Vector3(0, 0, 0.06)
+mesh = SubResource("m6")
+
+[node name="Collision7" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0, 0.02)
+shape = SubResource("c7")

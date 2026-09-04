@@ -14,7 +14,6 @@
 [ext_resource type="Script" uid="uid://4dg6d2nyvkm" path="res://sounds/ambient/indoor_weather_audio.gd" id="10_indoor_weather"]
 [ext_resource type="PackedScene" path="res://runtime_house_navigation.tscn" id="11_runtime_navigation"]
 [ext_resource type="PackedScene" uid="uid://d2nkf5x4tmuwa" path="res://monster_grandmother.tscn" id="12_monster_grandmother"]
-[ext_resource type="PackedScene" path="res://runtime_catacomb_navigation.tscn" id="13_catacomb_navigation"]
 [ext_resource type="PackedScene" uid="uid://btj1tf3hf2k6t" path="res://monster_grandmother_imported.tscn" id="15_imported_grandmother"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_storm"]
@@ -235,8 +234,6 @@ script = ExtResource("10_indoor_weather")
 [node name="ExteriorEnvironment" parent="." unique_id=1088491580 instance=ExtResource("6_exterior")]
 
 [node name="RuntimeHouseNavigation" parent="." unique_id=187039915 instance=ExtResource("11_runtime_navigation")]
-
-[node name="RuntimeCatacombNavigation" parent="." unique_id=194099012 instance=ExtResource("13_catacomb_navigation")]
 
 [node name="Player" parent="." unique_id=546288329 instance=ExtResource("1_player")]
 editor_description = "Spawn de prueba en el pasillo, fuera del sótano y mirando hacia su puerta, con todas las llaves."

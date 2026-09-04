@@ -1,5 +1,7 @@
 extends Node
 
+const WestExtension = preload("res://west_extension_bounds.gd")
+
 ## Amortigua la tormenta cuando el jugador esta dentro de la casa.
 ## El cambio es progresivo para que atravesar una puerta no produzca un corte.
 
@@ -93,6 +95,8 @@ func _is_inside_house(position: Vector3) -> bool:
 
 
 func _is_inside_explicit_volume(position: Vector3) -> bool:
+	if WestExtension.contains_interior(position):
+		return true
 	for volume: AABB in EXPLICIT_INDOOR_VOLUMES:
 		if volume.has_point(position):
 			return true

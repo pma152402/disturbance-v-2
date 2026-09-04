@@ -8,7 +8,7 @@ enum Behavior {
 
 @export_category("Comportamiento")
 @export var behavior: Behavior = Behavior.FLEE_PLAYER
-@export_range(1.0, 12.0, 0.1) var run_speed := 5.4
+@export_range(1.0, 12.0, 0.1) var run_speed := 4.3
 @export_range(0.5, 20.0, 0.5) var player_detection_distance := 9.0
 @export_range(0.2, 4.0, 0.1) var direction_min_time := 0.32
 @export_range(0.2, 5.0, 0.1) var direction_max_time := 0.95

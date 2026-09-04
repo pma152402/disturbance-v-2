@@ -1,0 +1,135 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.22,0.12,0.07, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="edge"]
+albedo_color = Color(0.11,0.065,0.04, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.22,0.26,0.25, 1)
+roughness = 0.8
+metallic = 0.65
+
+
+[sub_resource type="StandardMaterial3D" id="brass"]
+albedo_color = Color(0.48,0.35,0.13, 1)
+roughness = 0.8
+metallic = 0.65
+
+
+[sub_resource type="StandardMaterial3D" id="paper"]
+albedo_color = Color(0.79,0.75,0.61, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.31,0.1,0.09, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="green"]
+albedo_color = Color(0.15,0.23,0.18, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="blue"]
+albedo_color = Color(0.13,0.19,0.25, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="cloth"]
+albedo_color = Color(0.29,0.25,0.18, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="black"]
+albedo_color = Color(0.06,0.065,0.06, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="cork"]
+albedo_color = Color(0.39,0.26,0.13, 1)
+roughness = 0.8
+
+
+[sub_resource type="BoxMesh" id="m1"]
+size = Vector3(0.045, 0.5, 0.045)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m2"]
+size = Vector3(0.59, 0.08, 0.59)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m3"]
+size = Vector3(0.53, 0.08, 0.53)
+material = SubResource("green")
+
+[sub_resource type="BoxMesh" id="m4"]
+size = Vector3(0.055, 0.65, 0.055)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m5"]
+size = Vector3(0.47, 0.35, 0.07)
+material = SubResource("green")
+
+[sub_resource type="BoxShape3D" id="c6"]
+size = Vector3(0.6, 1.1, 0.6)
+
+[node name="OfficeVisitorChair" type="StaticBody3D"]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Leg-0.25-0.24" type="MeshInstance3D" parent="."]
+position = Vector3(-0.25, 0.25, -0.24)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m1")
+
+[node name="Leg-0.250.24" type="MeshInstance3D" parent="."]
+position = Vector3(-0.25, 0.25, 0.24)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m1")
+
+[node name="Leg0.25-0.24" type="MeshInstance3D" parent="."]
+position = Vector3(0.25, 0.25, -0.24)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m1")
+
+[node name="Leg0.250.24" type="MeshInstance3D" parent="."]
+position = Vector3(0.25, 0.25, 0.24)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m1")
+
+[node name="SeatFrame" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.48, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m2")
+
+[node name="SeatCushion" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.545, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m3")
+
+[node name="BackPost-0.25" type="MeshInstance3D" parent="."]
+position = Vector3(-0.25, 0.77, -0.25)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="BackPost0.25" type="MeshInstance3D" parent="."]
+position = Vector3(0.25, 0.77, -0.25)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="BackCushion" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.88, -0.25)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Collision6" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.55, 0)
+shape = SubResource("c6")
+

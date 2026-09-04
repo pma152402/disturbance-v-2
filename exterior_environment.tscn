@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="ArrayMesh" path="res://exterior_tree_mesh.tres" id="2_tree_mesh"]
 [ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera4.jpg" id="3_wood"]
@@ -17,7 +17,7 @@ uv1_world_triplanar = true
 texture_filter = 0
 
 [sub_resource type="BoxShape3D" id="Shape_north"]
-size = Vector3(48, 1.5, 0.26)
+size = Vector3(58, 1.5, 0.26)
 
 [sub_resource type="BoxShape3D" id="Shape_side"]
 size = Vector3(0.26, 1.5, 72)
@@ -26,6 +26,9 @@ size = Vector3(0.26, 1.5, 72)
 
 [sub_resource type="BoxShape3D" id="Shape_south"]
 size = Vector3(21.3, 1.5, 0.26)
+
+[sub_resource type="BoxShape3D" id="Shape_south_west"]
+size = Vector3(31.3, 1.5, 0.26)
 
 [sub_resource type="StandardMaterial3D" id="Material_tall_grass"]
 cull_mode = 2
@@ -57,11 +60,11 @@ collision_mask = 1
 material_override = SubResource("Material_fence")
 
 [node name="NorthCollision" type="CollisionShape3D" parent="Fence"]
-position = Vector3(0, 0.75, -48)
+position = Vector3(-5, 0.75, -48)
 shape = SubResource("Shape_north")
 
 [node name="WestCollision" type="CollisionShape3D" parent="Fence"]
-position = Vector3(-24, 0.75, -12)
+position = Vector3(-34, 0.75, -12)
 shape = SubResource("Shape_side")
 
 [node name="EastCollision" type="CollisionShape3D" parent="Fence"]
@@ -69,8 +72,8 @@ position = Vector3(24, 0.75, -12)
 shape = SubResource("Shape_side")
 
 [node name="SouthLeftCollision" type="CollisionShape3D" parent="Fence"]
-position = Vector3(-13.35, 0.75, 24)
-shape = SubResource("Shape_south")
+position = Vector3(-18.35, 0.75, 24)
+shape = SubResource("Shape_south_west")
 
 [node name="SouthRightCollision" type="CollisionShape3D" parent="Fence"]
 position = Vector3(13.35, 0.75, 24)

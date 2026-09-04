@@ -1,7 +1,12 @@
 # Herramientas del proyecto
 
 - `generate_catacombs.py`: regenera `church_catacombs.tscn`. La casa lo carga
-  solamente al ejecutar el juego, por lo que no aparece al editar `house_baked`.
+  al iniciar el minijuego de BoardedLabyrinthAccess (entrada de la iglesia),
+  junto con su navegacion. No se instancia al arrancar ni en el editor.
+- `validate_deferred_content_and_batching.gd`: valida carga diferida, cancelacion,
+  reintento y navegacion, y compara geometria, materiales, transformaciones y
+  colisiones antes/despues de agrupar decoracion. Ejecutar sin `--headless`:
+  el renderizador dummy no conserva las matrices de MultiMesh.
 - `split_graffiti_sheets.py`: recorta las hojas maestras en texturas individuales.
 - `validate_catacombs.gd`: comprueba geometria y navegacion hasta la cripta.
 - `validate_labyrinth_barricade.gd`: comprueba palanca, tablones e inventario.

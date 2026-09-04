@@ -2,20 +2,34 @@
 extends Node3D
 
 const BAND_SHADER := preload("res://pastel_wall_band.gdshader")
-const CATACOMBS_SCENE := preload("res://church_catacombs.tscn")
+const STATIC_DECOR_BATCHER := preload("res://static_decor_batcher.gd")
 const SKIP_WALL_BAND_GROUP := &"skip_wall_band"
 
 
 func _ready() -> void:
-	# Mantener el laberinto fuera de house_baked en el editor. Durante el juego
-	# se instancia como hijo de la casa, conservando las mismas coordenadas.
-	if not Engine.is_editor_hint() and get_node_or_null("ChurchCatacombs") == null:
-		var catacombs := CATACOMBS_SCENE.instantiate()
-		catacombs.name = &"ChurchCatacombs"
-		add_child(catacombs)
 	var overlay := ShaderMaterial.new()
 	overlay.shader = BAND_SHADER
 	_apply_to_wall_meshes(self, overlay)
+	if not Engine.is_editor_hint():
+		STATIC_DECOR_BATCHER.optimize(self)
+
+
+func ensure_church_catacombs() -> bool:
+	if get_node_or_null("ChurchCatacombs") != null:
+		return true
+	# Sin preload: ni la geometria ni sus recursos se cargan al arrancar.
+	var packed := load("res://church_catacombs.tscn") as PackedScene
+	var navigation := load("res://runtime_catacomb_navigation.tscn") as PackedScene
+	if packed == null or navigation == null:
+		push_error("No se pudo cargar el laberinto de la iglesia")
+		return false
+	var catacombs := packed.instantiate()
+	catacombs.name = &"ChurchCatacombs"
+	add_child(catacombs)
+	# La region conserva su ruta ../House/ChurchCatacombs y su transformacion.
+	if get_parent().get_node_or_null("RuntimeCatacombNavigation") == null:
+		get_parent().add_child(navigation.instantiate())
+	return true
 
 
 func _apply_to_wall_meshes(branch: Node, overlay: ShaderMaterial) -> int:

@@ -1,0 +1,216 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.22,0.12,0.07, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="edge"]
+albedo_color = Color(0.11,0.065,0.04, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.22,0.26,0.25, 1)
+roughness = 0.8
+metallic = 0.65
+
+
+[sub_resource type="StandardMaterial3D" id="brass"]
+albedo_color = Color(0.48,0.35,0.13, 1)
+roughness = 0.8
+metallic = 0.65
+
+
+[sub_resource type="StandardMaterial3D" id="paper"]
+albedo_color = Color(0.79,0.75,0.61, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.31,0.1,0.09, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="green"]
+albedo_color = Color(0.15,0.23,0.18, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="blue"]
+albedo_color = Color(0.13,0.19,0.25, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="cloth"]
+albedo_color = Color(0.29,0.25,0.18, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="black"]
+albedo_color = Color(0.06,0.065,0.06, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="cork"]
+albedo_color = Color(0.39,0.26,0.13, 1)
+roughness = 0.8
+
+
+[sub_resource type="BoxMesh" id="m1"]
+size = Vector3(1.25, 0.85, 0.045)
+material = SubResource("edge")
+
+[sub_resource type="BoxMesh" id="m2"]
+size = Vector3(1.17, 0.77, 0.014)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m3"]
+size = Vector3(0.04, 0.85, 0.05)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m4"]
+size = Vector3(1.25, 0.04, 0.05)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m5"]
+size = Vector3(1.16, 0.76, 0.015)
+material = SubResource("cork")
+
+[sub_resource type="BoxMesh" id="m6"]
+size = Vector3(0.42, 0.28, 0.007)
+material = SubResource("paper")
+
+[sub_resource type="CylinderMesh" id="m7"]
+top_radius = 0.012
+bottom_radius = 0.012
+height = 0.016
+radial_segments = 12
+rings = 1
+material = SubResource("red")
+
+[sub_resource type="BoxShape3D" id="c8"]
+size = Vector3(1.25, 0.85, 0.08)
+
+[node name="OfficeNoticeBoard" type="StaticBody3D"]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Backing" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m1")
+
+[node name="Paper" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0.03)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m2")
+
+[node name="FrameSide-1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.605, 0, 0.055)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m3")
+
+[node name="FrameSide1" type="MeshInstance3D" parent="."]
+position = Vector3(0.605, 0, 0.055)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m3")
+
+[node name="FrameEdge-1" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.405, 0.055)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="FrameEdge1" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.405, 0.055)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="Cork" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0.045)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="Note0" type="MeshInstance3D" parent="."]
+position = Vector3(-0.275, 0.18, 0.058)
+rotation = Vector3(0, 0, -0.05)
+mesh = SubResource("m6")
+
+[node name="Pin0" type="MeshInstance3D" parent="."]
+position = Vector3(-0.275, 0.28, 0.074)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("m7")
+
+[node name="NoteText0" type="Label3D" parent="."]
+position = Vector3(-0.275, 0.18, 0.065)
+text = "TURNOS\nLUN · MAR · MIÉ"
+font_size = 20
+pixel_size = 0.00115
+modulate = Color(0.18,0.13,0.08,1)
+outline_size = 0
+no_depth_test = false
+double_sided = false
+
+[node name="Note1" type="MeshInstance3D" parent="."]
+position = Vector3(0.275, 0.18, 0.058)
+rotation = Vector3(0, 0, -0.025)
+mesh = SubResource("m6")
+
+[node name="Pin1" type="MeshInstance3D" parent="."]
+position = Vector3(0.275, 0.28, 0.074)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("m7")
+
+[node name="NoteText1" type="Label3D" parent="."]
+position = Vector3(0.275, 0.18, 0.065)
+text = "REUNIÓN\nDIRECCIÓN · 18:00"
+font_size = 20
+pixel_size = 0.00115
+modulate = Color(0.18,0.13,0.08,1)
+outline_size = 0
+no_depth_test = false
+double_sided = false
+
+[node name="Note2" type="MeshInstance3D" parent="."]
+position = Vector3(-0.275, -0.19, 0.058)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m6")
+
+[node name="Pin2" type="MeshInstance3D" parent="."]
+position = Vector3(-0.275, -0.09, 0.074)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("m7")
+
+[node name="NoteText2" type="Label3D" parent="."]
+position = Vector3(-0.275, -0.19, 0.065)
+text = "ARCHIVO\nDEVOLVER FICHAS"
+font_size = 20
+pixel_size = 0.00115
+modulate = Color(0.18,0.13,0.08,1)
+outline_size = 0
+no_depth_test = false
+double_sided = false
+
+[node name="Note3" type="MeshInstance3D" parent="."]
+position = Vector3(0.275, -0.19, 0.058)
+rotation = Vector3(0, 0, 0.025)
+mesh = SubResource("m6")
+
+[node name="Pin3" type="MeshInstance3D" parent="."]
+position = Vector3(0.275, -0.09, 0.074)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("m7")
+
+[node name="NoteText3" type="Label3D" parent="."]
+position = Vector3(0.275, -0.19, 0.065)
+text = "AVISO\nCERRAR AL SALIR"
+font_size = 20
+pixel_size = 0.00115
+modulate = Color(0.18,0.13,0.08,1)
+outline_size = 0
+no_depth_test = false
+double_sided = false
+
+[node name="Collision8" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0, 0.02)
+shape = SubResource("c8")

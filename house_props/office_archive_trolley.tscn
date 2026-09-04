@@ -1,0 +1,395 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.22,0.12,0.07, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="edge"]
+albedo_color = Color(0.11,0.065,0.04, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.22,0.26,0.25, 1)
+roughness = 0.8
+metallic = 0.65
+
+
+[sub_resource type="StandardMaterial3D" id="brass"]
+albedo_color = Color(0.48,0.35,0.13, 1)
+roughness = 0.8
+metallic = 0.65
+
+
+[sub_resource type="StandardMaterial3D" id="paper"]
+albedo_color = Color(0.79,0.75,0.61, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.31,0.1,0.09, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="green"]
+albedo_color = Color(0.15,0.23,0.18, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="blue"]
+albedo_color = Color(0.13,0.19,0.25, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="cloth"]
+albedo_color = Color(0.29,0.25,0.18, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="black"]
+albedo_color = Color(0.06,0.065,0.06, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="cork"]
+albedo_color = Color(0.39,0.26,0.13, 1)
+roughness = 0.8
+
+
+[sub_resource type="CylinderMesh" id="m1"]
+top_radius = 0.065
+bottom_radius = 0.065
+height = 0.035
+radial_segments = 12
+rings = 1
+material = SubResource("black")
+
+[sub_resource type="BoxMesh" id="m2"]
+size = Vector3(0.035, 0.86, 0.035)
+material = SubResource("metal")
+
+[sub_resource type="BoxMesh" id="m3"]
+size = Vector3(0.8, 0.035, 0.52)
+material = SubResource("metal")
+
+[sub_resource type="BoxMesh" id="m4"]
+size = Vector3(0.8, 0.14, 0.025)
+material = SubResource("metal")
+
+[sub_resource type="BoxMesh" id="m5"]
+size = Vector3(0.068, 0.262, 0.2)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m6"]
+size = Vector3(0.012, 0.28, 0.23)
+material = SubResource("cloth")
+
+[sub_resource type="BoxMesh" id="m7"]
+size = Vector3(0.085, 0.28, 0.015)
+material = SubResource("cloth")
+
+[sub_resource type="BoxMesh" id="m8"]
+size = Vector3(0.0697, 0.008, 0.005)
+material = SubResource("brass")
+
+[sub_resource type="BoxMesh" id="m9"]
+size = Vector3(0.012, 0.28, 0.23)
+material = SubResource("green")
+
+[sub_resource type="BoxMesh" id="m10"]
+size = Vector3(0.085, 0.28, 0.015)
+material = SubResource("green")
+
+[sub_resource type="BoxMesh" id="m11"]
+size = Vector3(0.012, 0.28, 0.23)
+material = SubResource("red")
+
+[sub_resource type="BoxMesh" id="m12"]
+size = Vector3(0.085, 0.28, 0.015)
+material = SubResource("red")
+
+[sub_resource type="BoxMesh" id="m13"]
+size = Vector3(0.5, 0.028, 0.36)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m14"]
+size = Vector3(0.8, 0.035, 0.035)
+material = SubResource("metal")
+
+[sub_resource type="BoxShape3D" id="c15"]
+size = Vector3(0.82, 1.06, 0.55)
+
+[node name="OfficeArchiveTrolley" type="StaticBody3D"]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Wheel-0.36-0.22" type="MeshInstance3D" parent="."]
+position = Vector3(-0.36, 0.08, -0.22)
+rotation = Vector3(0, 0, 1.570796)
+mesh = SubResource("m1")
+
+[node name="Post-0.36-0.22" type="MeshInstance3D" parent="."]
+position = Vector3(-0.36, 0.53, -0.22)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m2")
+
+[node name="Wheel-0.360.22" type="MeshInstance3D" parent="."]
+position = Vector3(-0.36, 0.08, 0.22)
+rotation = Vector3(0, 0, 1.570796)
+mesh = SubResource("m1")
+
+[node name="Post-0.360.22" type="MeshInstance3D" parent="."]
+position = Vector3(-0.36, 0.53, 0.22)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m2")
+
+[node name="Wheel0.36-0.22" type="MeshInstance3D" parent="."]
+position = Vector3(0.36, 0.08, -0.22)
+rotation = Vector3(0, 0, 1.570796)
+mesh = SubResource("m1")
+
+[node name="Post0.36-0.22" type="MeshInstance3D" parent="."]
+position = Vector3(0.36, 0.53, -0.22)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m2")
+
+[node name="Wheel0.360.22" type="MeshInstance3D" parent="."]
+position = Vector3(0.36, 0.08, 0.22)
+rotation = Vector3(0, 0, 1.570796)
+mesh = SubResource("m1")
+
+[node name="Post0.360.22" type="MeshInstance3D" parent="."]
+position = Vector3(0.36, 0.53, 0.22)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m2")
+
+[node name="Tray0.21" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.21, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m3")
+
+[node name="BackLip0.21" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.28, -0.25)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="Tray0.68" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.68, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m3")
+
+[node name="BackLip0.68" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.75, -0.25)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="File0Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.28, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="File0CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.3191, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m6")
+
+[node name="File0CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.2409, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m6")
+
+[node name="File0Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.28, 0.845, 0.112)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="File0Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.28, 0.7554, 0.122)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m8")
+
+[node name="File0Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.28, 0.929, 0.122)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m8")
+
+[node name="File1Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.17, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="File1CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.2091, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="File1CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.1309, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="File1Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.17, 0.845, 0.112)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m10")
+
+[node name="File1Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.17, 0.7554, 0.122)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m8")
+
+[node name="File1Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.17, 0.929, 0.122)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m8")
+
+[node name="File2Pages" type="MeshInstance3D" parent="."]
+position = Vector3(-0.06, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="File2CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.0991, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="File2CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(-0.0209, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="File2Spine" type="MeshInstance3D" parent="."]
+position = Vector3(-0.06, 0.845, 0.112)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m12")
+
+[node name="File2Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(-0.06, 0.7554, 0.122)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m8")
+
+[node name="File2Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(-0.06, 0.929, 0.122)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m8")
+
+[node name="File3Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0.05, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="File3CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(0.0109, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m6")
+
+[node name="File3CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(0.0891, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m6")
+
+[node name="File3Spine" type="MeshInstance3D" parent="."]
+position = Vector3(0.05, 0.845, 0.112)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="File3Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(0.05, 0.7554, 0.122)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m8")
+
+[node name="File3Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(0.05, 0.929, 0.122)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m8")
+
+[node name="File4Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0.16, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="File4CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(0.1209, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="File4CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(0.1991, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m9")
+
+[node name="File4Spine" type="MeshInstance3D" parent="."]
+position = Vector3(0.16, 0.845, 0.112)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m10")
+
+[node name="File4Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(0.16, 0.7554, 0.122)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m8")
+
+[node name="File4Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(0.16, 0.929, 0.122)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m8")
+
+[node name="File5Pages" type="MeshInstance3D" parent="."]
+position = Vector3(0.27, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m5")
+
+[node name="File5CoverL" type="MeshInstance3D" parent="."]
+position = Vector3(0.2309, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="File5CoverR" type="MeshInstance3D" parent="."]
+position = Vector3(0.3091, 0.845, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m11")
+
+[node name="File5Spine" type="MeshInstance3D" parent="."]
+position = Vector3(0.27, 0.845, 0.112)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m12")
+
+[node name="File5Band0.18" type="MeshInstance3D" parent="."]
+position = Vector3(0.27, 0.7554, 0.122)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m8")
+
+[node name="File5Band0.8" type="MeshInstance3D" parent="."]
+position = Vector3(0.27, 0.929, 0.122)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m8")
+
+[node name="PaperStack0" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.25, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="PaperStack1" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.285, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="PaperStack2" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.32, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="PaperStack3" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.355, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m13")
+
+[node name="Handle" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1, -0.22)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m14")
+
+[node name="Collision15" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.53, 0)
+shape = SubResource("c15")
+

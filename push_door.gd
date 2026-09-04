@@ -48,7 +48,6 @@ func interact(player: Node) -> bool:
 	_animate_to(_open_sign * deg_to_rad(_get_open_angle()) if _is_open else 0.0)
 	return true
 
-
 func ensure_open_for_npc(actor: Node) -> bool:
 	# NPCs only request an open passage. Reusing interact() while closed keeps
 	# locked-door checks in derived scripts, but never toggles an open door shut.

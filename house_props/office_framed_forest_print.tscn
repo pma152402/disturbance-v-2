@@ -1,0 +1,299 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.23,0.12,0.06, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="dark"]
+albedo_color = Color(0.055,0.06,0.055, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="steel"]
+albedo_color = Color(0.38,0.4,0.38, 1)
+roughness = 0.75
+metallic = 0.65
+
+[sub_resource type="StandardMaterial3D" id="gold"]
+albedo_color = Color(0.5,0.36,0.14, 1)
+roughness = 0.75
+metallic = 0.65
+
+[sub_resource type="StandardMaterial3D" id="paper"]
+albedo_color = Color(0.83,0.79,0.65, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="green"]
+albedo_color = Color(0.18,0.25,0.2, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.37,0.1,0.08, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="blue"]
+albedo_color = Color(0.17,0.23,0.27, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="cream"]
+albedo_color = Color(0.67,0.61,0.46, 1)
+roughness = 0.75
+
+
+[sub_resource type="BoxMesh" id="m1"]
+size = Vector3(0.94,0.66,0.035)
+material = SubResource("dark")
+
+[sub_resource type="BoxMesh" id="m2"]
+size = Vector3(0.88,0.6,0.012)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m3"]
+size = Vector3(0.76,0.43,0.008)
+material = SubResource("cream")
+
+[sub_resource type="BoxMesh" id="m4"]
+size = Vector3(0.03,0.66,0.055)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m5"]
+size = Vector3(0.94,0.03,0.055)
+material = SubResource("wood")
+
+[sub_resource type="CylinderMesh" id="m6"]
+top_radius = 0.054
+bottom_radius = 0.054
+height = 0.006
+radial_segments = 20
+rings = 1
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m7"]
+size = Vector3(0.76,0.065,0.007)
+material = SubResource("green")
+
+[sub_resource type="BoxMesh" id="m8"]
+size = Vector3(0.014,0.2,0.008)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m9"]
+size = Vector3(0.11,0.045,0.007)
+material = SubResource("green")
+
+[sub_resource type="BoxMesh" id="m10"]
+size = Vector3(0.085,0.045,0.007)
+material = SubResource("green")
+
+[sub_resource type="BoxMesh" id="m11"]
+size = Vector3(0.06,0.045,0.007)
+material = SubResource("green")
+
+[sub_resource type="BoxShape3D" id="c12"]
+size = Vector3(0.94,0.66,0.07)
+
+[node name="OfficeFramedForestPrint" type="StaticBody3D"]
+
+[node name="Backing" type="MeshInstance3D" parent="."]
+position = Vector3(0,0,0)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m1")
+
+[node name="Mount" type="MeshInstance3D" parent="."]
+position = Vector3(0,0,0.025)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m2")
+
+[node name="Image" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.025,0.036)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m3")
+
+[node name="FrameSide-1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.455,0,0.035)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m4")
+
+[node name="FrameSide1" type="MeshInstance3D" parent="."]
+position = Vector3(0.455,0,0.035)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m4")
+
+[node name="FrameEdge-1" type="MeshInstance3D" parent="."]
+position = Vector3(0,-0.315,0.035)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m5")
+
+[node name="FrameEdge1" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.315,0.035)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m5")
+
+[node name="Sun" type="MeshInstance3D" parent="."]
+position = Vector3(0.22,0.12,0.044)
+rotation = Vector3(1.570796,0,0)
+mesh = SubResource("m6")
+
+[node name="Horizon" type="MeshInstance3D" parent="."]
+position = Vector3(0,-0.15,0.045)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m7")
+
+[node name="Trunk0" type="MeshInstance3D" parent="."]
+position = Vector3(-0.3,-0.045,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m8")
+
+[node name="Branches00" type="MeshInstance3D" parent="."]
+position = Vector3(-0.3,-0.04,0.055)
+rotation = Vector3(0,0,-0.075)
+mesh = SubResource("m9")
+
+[node name="Branches01" type="MeshInstance3D" parent="."]
+position = Vector3(-0.3,0.025,0.055)
+rotation = Vector3(0,0,-0.075)
+mesh = SubResource("m10")
+
+[node name="Branches02" type="MeshInstance3D" parent="."]
+position = Vector3(-0.3,0.09,0.055)
+rotation = Vector3(0,0,-0.075)
+mesh = SubResource("m11")
+
+[node name="Trunk1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.2,-0.045,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m8")
+
+[node name="Branches10" type="MeshInstance3D" parent="."]
+position = Vector3(-0.2,-0.04,0.055)
+rotation = Vector3(0,0,0.075)
+mesh = SubResource("m9")
+
+[node name="Branches11" type="MeshInstance3D" parent="."]
+position = Vector3(-0.2,0.025,0.055)
+rotation = Vector3(0,0,0.075)
+mesh = SubResource("m10")
+
+[node name="Branches12" type="MeshInstance3D" parent="."]
+position = Vector3(-0.2,0.09,0.055)
+rotation = Vector3(0,0,0.075)
+mesh = SubResource("m11")
+
+[node name="Trunk2" type="MeshInstance3D" parent="."]
+position = Vector3(-0.1,-0.045,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m8")
+
+[node name="Branches20" type="MeshInstance3D" parent="."]
+position = Vector3(-0.1,-0.04,0.055)
+rotation = Vector3(0,0,-0.075)
+mesh = SubResource("m9")
+
+[node name="Branches21" type="MeshInstance3D" parent="."]
+position = Vector3(-0.1,0.025,0.055)
+rotation = Vector3(0,0,-0.075)
+mesh = SubResource("m10")
+
+[node name="Branches22" type="MeshInstance3D" parent="."]
+position = Vector3(-0.1,0.09,0.055)
+rotation = Vector3(0,0,-0.075)
+mesh = SubResource("m11")
+
+[node name="Trunk3" type="MeshInstance3D" parent="."]
+position = Vector3(0,-0.045,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m8")
+
+[node name="Branches30" type="MeshInstance3D" parent="."]
+position = Vector3(0,-0.04,0.055)
+rotation = Vector3(0,0,0.075)
+mesh = SubResource("m9")
+
+[node name="Branches31" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.025,0.055)
+rotation = Vector3(0,0,0.075)
+mesh = SubResource("m10")
+
+[node name="Branches32" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.09,0.055)
+rotation = Vector3(0,0,0.075)
+mesh = SubResource("m11")
+
+[node name="Trunk4" type="MeshInstance3D" parent="."]
+position = Vector3(0.1,-0.045,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m8")
+
+[node name="Branches40" type="MeshInstance3D" parent="."]
+position = Vector3(0.1,-0.04,0.055)
+rotation = Vector3(0,0,-0.075)
+mesh = SubResource("m9")
+
+[node name="Branches41" type="MeshInstance3D" parent="."]
+position = Vector3(0.1,0.025,0.055)
+rotation = Vector3(0,0,-0.075)
+mesh = SubResource("m10")
+
+[node name="Branches42" type="MeshInstance3D" parent="."]
+position = Vector3(0.1,0.09,0.055)
+rotation = Vector3(0,0,-0.075)
+mesh = SubResource("m11")
+
+[node name="Trunk5" type="MeshInstance3D" parent="."]
+position = Vector3(0.2,-0.045,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m8")
+
+[node name="Branches50" type="MeshInstance3D" parent="."]
+position = Vector3(0.2,-0.04,0.055)
+rotation = Vector3(0,0,0.075)
+mesh = SubResource("m9")
+
+[node name="Branches51" type="MeshInstance3D" parent="."]
+position = Vector3(0.2,0.025,0.055)
+rotation = Vector3(0,0,0.075)
+mesh = SubResource("m10")
+
+[node name="Branches52" type="MeshInstance3D" parent="."]
+position = Vector3(0.2,0.09,0.055)
+rotation = Vector3(0,0,0.075)
+mesh = SubResource("m11")
+
+[node name="Trunk6" type="MeshInstance3D" parent="."]
+position = Vector3(0.3,-0.045,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m8")
+
+[node name="Branches60" type="MeshInstance3D" parent="."]
+position = Vector3(0.3,-0.04,0.055)
+rotation = Vector3(0,0,-0.075)
+mesh = SubResource("m9")
+
+[node name="Branches61" type="MeshInstance3D" parent="."]
+position = Vector3(0.3,0.025,0.055)
+rotation = Vector3(0,0,-0.075)
+mesh = SubResource("m10")
+
+[node name="Branches62" type="MeshInstance3D" parent="."]
+position = Vector3(0.3,0.09,0.055)
+rotation = Vector3(0,0,-0.075)
+mesh = SubResource("m11")
+
+[node name="Caption" type="Label3D" parent="."]
+position = Vector3(0,-0.255,0.043)
+rotation = Vector3(0,0,0)
+text = "EL BOSQUE EN INVIERNO"
+font_size = 22
+pixel_size = 0.001
+outline_size = 0
+modulate = Color(0.16,0.12,0.09,1)
+double_sided = false
+
+[node name="Collision12" type="CollisionShape3D" parent="."]
+position = Vector3(0,0,0.02)
+shape = SubResource("c12")
+

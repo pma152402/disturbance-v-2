@@ -1,0 +1,130 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.23,0.12,0.06, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="dark"]
+albedo_color = Color(0.055,0.06,0.055, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="steel"]
+albedo_color = Color(0.38,0.4,0.38, 1)
+roughness = 0.75
+metallic = 0.65
+
+[sub_resource type="StandardMaterial3D" id="gold"]
+albedo_color = Color(0.5,0.36,0.14, 1)
+roughness = 0.75
+metallic = 0.65
+
+[sub_resource type="StandardMaterial3D" id="paper"]
+albedo_color = Color(0.83,0.79,0.65, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="green"]
+albedo_color = Color(0.18,0.25,0.2, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.37,0.1,0.08, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="blue"]
+albedo_color = Color(0.17,0.23,0.27, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="cream"]
+albedo_color = Color(0.67,0.61,0.46, 1)
+roughness = 0.75
+
+
+[sub_resource type="BoxMesh" id="m1"]
+size = Vector3(0.26,0.018,0.15)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m2"]
+size = Vector3(0.23,0.2,0.018)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m3"]
+size = Vector3(0.21,0.17,0.005)
+material = SubResource("paper")
+
+[sub_resource type="TorusMesh" id="m4"]
+inner_radius = 0.011
+outer_radius = 0.017
+rings = 24
+ring_segments = 6
+material = SubResource("gold")
+
+[sub_resource type="BoxShape3D" id="c5"]
+size = Vector3(0.26,0.22,0.15)
+
+[node name="OfficeDeskCalendar" type="StaticBody3D"]
+
+[node name="Foot" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.009,0)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m1")
+
+[node name="Stand" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.105,-0.025)
+rotation = Vector3(-0.16,0,0)
+mesh = SubResource("m2")
+
+[node name="Page" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.11,-0.007)
+rotation = Vector3(-0.16,0,0)
+mesh = SubResource("m3")
+
+[node name="Month" type="Label3D" parent="."]
+position = Vector3(0,0.158,0.012)
+rotation = Vector3(0,0,0)
+text = "SEPTIEMBRE"
+font_size = 20
+pixel_size = 0.0007
+outline_size = 0
+modulate = Color(0.16,0.12,0.09,1)
+double_sided = false
+
+[node name="Day" type="Label3D" parent="."]
+position = Vector3(0,0.107,0.02)
+rotation = Vector3(0,0,0)
+text = "17"
+font_size = 42
+pixel_size = 0.001
+outline_size = 0
+modulate = Color(0.16,0.12,0.09,1)
+double_sided = false
+
+[node name="Year" type="Label3D" parent="."]
+position = Vector3(0,0.051,0.028)
+rotation = Vector3(0,0,0)
+text = "1978"
+font_size = 18
+pixel_size = 0.0007
+outline_size = 0
+modulate = Color(0.16,0.12,0.09,1)
+double_sided = false
+
+[node name="Binding-0.065" type="MeshInstance3D" parent="."]
+position = Vector3(-0.065,0.198,-0.01)
+rotation = Vector3(0,0,1.570796)
+mesh = SubResource("m4")
+
+[node name="Binding0.065" type="MeshInstance3D" parent="."]
+position = Vector3(0.065,0.198,-0.01)
+rotation = Vector3(0,0,1.570796)
+mesh = SubResource("m4")
+
+[node name="Collision5" type="CollisionShape3D" parent="."]
+position = Vector3(0,0.11,0)
+shape = SubResource("c5")
+

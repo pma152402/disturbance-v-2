@@ -1,0 +1,109 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.23,0.12,0.06, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="dark"]
+albedo_color = Color(0.055,0.06,0.055, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="steel"]
+albedo_color = Color(0.38,0.4,0.38, 1)
+roughness = 0.75
+metallic = 0.65
+
+[sub_resource type="StandardMaterial3D" id="gold"]
+albedo_color = Color(0.5,0.36,0.14, 1)
+roughness = 0.75
+metallic = 0.65
+
+[sub_resource type="StandardMaterial3D" id="paper"]
+albedo_color = Color(0.83,0.79,0.65, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="green"]
+albedo_color = Color(0.18,0.25,0.2, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.37,0.1,0.08, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="blue"]
+albedo_color = Color(0.17,0.23,0.27, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="cream"]
+albedo_color = Color(0.67,0.61,0.46, 1)
+roughness = 0.75
+
+
+[sub_resource type="BoxMesh" id="m1"]
+size = Vector3(0.16,0.036,0.1)
+material = SubResource("dark")
+
+[sub_resource type="BoxMesh" id="m2"]
+size = Vector3(0.135,0.005,0.075)
+material = SubResource("red")
+
+[sub_resource type="BoxMesh" id="m3"]
+size = Vector3(0.075,0.035,0.06)
+material = SubResource("gold")
+
+[sub_resource type="CylinderMesh" id="m4"]
+top_radius = 0.018
+bottom_radius = 0.018
+height = 0.08
+radial_segments = 20
+rings = 1
+material = SubResource("wood")
+
+[sub_resource type="CylinderMesh" id="m5"]
+top_radius = 0.032
+bottom_radius = 0.032
+height = 0.025
+radial_segments = 20
+rings = 1
+material = SubResource("wood")
+
+[sub_resource type="BoxShape3D" id="c6"]
+size = Vector3(0.25,0.134,0.11)
+
+[node name="OfficeStampAndPad" type="StaticBody3D"]
+
+[node name="InkPadCase" type="MeshInstance3D" parent="."]
+position = Vector3(-0.045,0.018,0)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m1")
+
+[node name="InkPad" type="MeshInstance3D" parent="."]
+position = Vector3(-0.045,0.038,0)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m2")
+
+[node name="StampBase" type="MeshInstance3D" parent="."]
+position = Vector3(0.09,0.02,0)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m3")
+
+[node name="Handle" type="MeshInstance3D" parent="."]
+position = Vector3(0.09,0.07,0)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m4")
+
+[node name="HandleTop" type="MeshInstance3D" parent="."]
+position = Vector3(0.09,0.112,0)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m5")
+
+[node name="Collision6" type="CollisionShape3D" parent="."]
+position = Vector3(0.015,0.067,0)
+shape = SubResource("c6")
+

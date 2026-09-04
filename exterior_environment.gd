@@ -1,6 +1,8 @@
 @tool
 extends Node3D
 
+const WestExtension = preload("res://west_extension_bounds.gd")
+
 @export var tree_mesh: ArrayMesh
 @export var grass_mesh: ArrayMesh
 @export var fence_piece_mesh: BoxMesh
@@ -24,11 +26,11 @@ func _build_fence_instances() -> void:
 	var pieces: Array[Transform3D] = []
 	# La sala inferior tras la iglesia llega hasta Z=-42.6. Dejamos un patio
 	# exterior util antes del nuevo limite norte.
-	_add_horizontal_fence(pieces, -24.0, 24.0, -48.0)
-	_add_vertical_fence(pieces, -24.0, -48.0, 24.0)
+	_add_horizontal_fence(pieces, -34.0, 24.0, -48.0)
+	_add_vertical_fence(pieces, -34.0, -48.0, 24.0)
 	_add_vertical_fence(pieces, 24.0, -48.0, 24.0)
 	# Entrada principal abierta entre X=-2.7 y X=2.7.
-	_add_horizontal_fence(pieces, -24.0, -2.7, 24.0)
+	_add_horizontal_fence(pieces, -34.0, -2.7, 24.0)
 	_add_horizontal_fence(pieces, 2.7, 24.0, 24.0)
 	var generated := MultiMesh.new()
 	generated.transform_format = MultiMesh.TRANSFORM_3D
@@ -149,7 +151,7 @@ func _add_outer_vegetation(transforms: Array[Transform3D], rng: RandomNumberGene
 		var plant_position := Vector3(rng.randf_range(-52.0, 52.0), 0.02, rng.randf_range(-52.0, 52.0))
 		if _is_inside_house_footprint(plant_position, 0.75):
 			continue
-		if absf(plant_position.x) < 25.5 and plant_position.z > -49.5 and plant_position.z < 25.5:
+		if plant_position.x > -35.5 and plant_position.x < 25.5 and plant_position.z > -49.5 and plant_position.z < 25.5:
 			continue
 		if plant_position.z > 23.5 and absf(plant_position.x) < 7.5:
 			continue
@@ -169,7 +171,7 @@ func _add_forest_outside_fence(transforms: Array[Transform3D], rng: RandomNumber
 		if _is_inside_house_footprint(tree_position, 3.2):
 			continue
 		# El cercado norte queda en Z=-48 para rodear tambien la sala inferior.
-		if absf(tree_position.x) < 27.5 and tree_position.z > -51.5 and tree_position.z < 27.5:
+		if tree_position.x > -37.5 and tree_position.x < 27.5 and tree_position.z > -51.5 and tree_position.z < 27.5:
 			continue
 		# Preserve the route leading through the south gate.
 		if tree_position.z > 23.5 and absf(tree_position.x) < 7.5:
@@ -192,6 +194,8 @@ func _add_forest_outside_fence(transforms: Array[Transform3D], rng: RandomNumber
 
 
 func _is_inside_house_footprint(world_position: Vector3, margin: float) -> bool:
+	if WestExtension.contains_ground_point(world_position, margin + 0.8):
+		return true
 	var inside_original_house := (
 		world_position.x > -13.3 - margin
 		and world_position.x < 13.3 + margin

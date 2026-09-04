@@ -5,6 +5,7 @@ const CrowbarVisual := preload("res://player/held_items/crowbar.tscn")
 
 @export var required_tool_id: StringName = &"crowbar"
 @export var required_tool_name := "PALANCA"
+@export_node_path("Node3D") var deferred_content_path: NodePath
 
 @onready var collision_shape: CollisionShape3D = $Collision
 @onready var boards_root: Node3D = $Boards
@@ -70,6 +71,13 @@ func interact(player: Node = null) -> bool:
 
 
 func _start_minigame(player: Node) -> void:
+	if not deferred_content_path.is_empty():
+		var content := get_node_or_null(deferred_content_path)
+		if content == null or not content.has_method(&"ensure_church_catacombs"):
+			push_error("Falta el controlador del laberinto de la iglesia")
+			return
+		if not bool(content.call(&"ensure_church_catacombs")):
+			return
 	_minigame_active = true
 	_active_player = player
 	_active_layer = MinigameScene.instantiate() as CanvasLayer

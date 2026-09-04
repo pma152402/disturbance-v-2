@@ -15,6 +15,8 @@ func _validate() -> void:
 	var world := MAIN_SCENE.instantiate()
 	root.add_child(world)
 	current_scene = world
+	assert(world.get_node_or_null("House/ChurchCatacombs") == null)
+	assert(world.get_node("House").ensure_church_catacombs())
 
 	var catacombs := world.get_node_or_null("House/ChurchCatacombs")
 	if catacombs == null:

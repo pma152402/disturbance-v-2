@@ -1,0 +1,206 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.23,0.12,0.06, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="dark"]
+albedo_color = Color(0.055,0.06,0.055, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="steel"]
+albedo_color = Color(0.38,0.4,0.38, 1)
+roughness = 0.75
+metallic = 0.65
+
+[sub_resource type="StandardMaterial3D" id="gold"]
+albedo_color = Color(0.5,0.36,0.14, 1)
+roughness = 0.75
+metallic = 0.65
+
+[sub_resource type="StandardMaterial3D" id="paper"]
+albedo_color = Color(0.83,0.79,0.65, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="green"]
+albedo_color = Color(0.18,0.25,0.2, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.37,0.1,0.08, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="blue"]
+albedo_color = Color(0.17,0.23,0.27, 1)
+roughness = 0.75
+
+
+[sub_resource type="StandardMaterial3D" id="cream"]
+albedo_color = Color(0.67,0.61,0.46, 1)
+roughness = 0.75
+
+
+[sub_resource type="BoxMesh" id="m1"]
+size = Vector3(0.94,0.66,0.035)
+material = SubResource("dark")
+
+[sub_resource type="BoxMesh" id="m2"]
+size = Vector3(0.88,0.6,0.012)
+material = SubResource("paper")
+
+[sub_resource type="BoxMesh" id="m3"]
+size = Vector3(0.76,0.43,0.008)
+material = SubResource("blue")
+
+[sub_resource type="BoxMesh" id="m4"]
+size = Vector3(0.03,0.66,0.055)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m5"]
+size = Vector3(0.94,0.03,0.055)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m6"]
+size = Vector3(0.55,0.24,0.008)
+material = SubResource("cream")
+
+[sub_resource type="BoxMesh" id="m7"]
+size = Vector3(0.59,0.035,0.008)
+material = SubResource("dark")
+
+[sub_resource type="BoxMesh" id="m8"]
+size = Vector3(0.06,0.11,0.008)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m9"]
+size = Vector3(0.045,0.065,0.007)
+material = SubResource("dark")
+
+[sub_resource type="BoxMesh" id="m10"]
+size = Vector3(0.025,0.24,0.008)
+material = SubResource("paper")
+
+[sub_resource type="BoxShape3D" id="c11"]
+size = Vector3(0.94,0.66,0.07)
+
+[node name="OfficeFramedAsylumDrawing" type="StaticBody3D"]
+
+[node name="Backing" type="MeshInstance3D" parent="."]
+position = Vector3(0,0,0)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m1")
+
+[node name="Mount" type="MeshInstance3D" parent="."]
+position = Vector3(0,0,0.025)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m2")
+
+[node name="Image" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.025,0.036)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m3")
+
+[node name="FrameSide-1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.455,0,0.035)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m4")
+
+[node name="FrameSide1" type="MeshInstance3D" parent="."]
+position = Vector3(0.455,0,0.035)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m4")
+
+[node name="FrameEdge-1" type="MeshInstance3D" parent="."]
+position = Vector3(0,-0.315,0.035)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m5")
+
+[node name="FrameEdge1" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.315,0.035)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m5")
+
+[node name="Building" type="MeshInstance3D" parent="."]
+position = Vector3(0,-0.005,0.043)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m6")
+
+[node name="Roof" type="MeshInstance3D" parent="."]
+position = Vector3(0,0.13,0.046)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m7")
+
+[node name="Door" type="MeshInstance3D" parent="."]
+position = Vector3(0,-0.07,0.051)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m8")
+
+[node name="Window-0.21-0.055" type="MeshInstance3D" parent="."]
+position = Vector3(-0.21,-0.055,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m9")
+
+[node name="Window-0.210.055" type="MeshInstance3D" parent="."]
+position = Vector3(-0.21,0.055,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m9")
+
+[node name="Window-0.12-0.055" type="MeshInstance3D" parent="."]
+position = Vector3(-0.12,-0.055,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m9")
+
+[node name="Window-0.120.055" type="MeshInstance3D" parent="."]
+position = Vector3(-0.12,0.055,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m9")
+
+[node name="Window0.12-0.055" type="MeshInstance3D" parent="."]
+position = Vector3(0.12,-0.055,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m9")
+
+[node name="Window0.120.055" type="MeshInstance3D" parent="."]
+position = Vector3(0.12,0.055,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m9")
+
+[node name="Window0.21-0.055" type="MeshInstance3D" parent="."]
+position = Vector3(0.21,-0.055,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m9")
+
+[node name="Window0.210.055" type="MeshInstance3D" parent="."]
+position = Vector3(0.21,0.055,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m9")
+
+[node name="Pillar-0.28" type="MeshInstance3D" parent="."]
+position = Vector3(-0.28,-0.005,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m10")
+
+[node name="Pillar0.28" type="MeshInstance3D" parent="."]
+position = Vector3(0.28,-0.005,0.05)
+rotation = Vector3(0,0,0)
+mesh = SubResource("m10")
+
+[node name="Caption" type="Label3D" parent="."]
+position = Vector3(0,-0.255,0.043)
+rotation = Vector3(0,0,0)
+text = "SAN GABRIEL · 1928"
+font_size = 22
+pixel_size = 0.001
+outline_size = 0
+modulate = Color(0.16,0.12,0.09,1)
+double_sided = false
+
+[node name="Collision11" type="CollisionShape3D" parent="."]
+position = Vector3(0,0,0.02)
+shape = SubResource("c11")
+

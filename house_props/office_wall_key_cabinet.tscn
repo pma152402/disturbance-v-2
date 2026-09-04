@@ -1,0 +1,306 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.22,0.12,0.07, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="edge"]
+albedo_color = Color(0.11,0.065,0.04, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="metal"]
+albedo_color = Color(0.22,0.26,0.25, 1)
+roughness = 0.8
+metallic = 0.65
+
+
+[sub_resource type="StandardMaterial3D" id="brass"]
+albedo_color = Color(0.48,0.35,0.13, 1)
+roughness = 0.8
+metallic = 0.65
+
+
+[sub_resource type="StandardMaterial3D" id="paper"]
+albedo_color = Color(0.79,0.75,0.61, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="red"]
+albedo_color = Color(0.31,0.1,0.09, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="green"]
+albedo_color = Color(0.15,0.23,0.18, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="blue"]
+albedo_color = Color(0.13,0.19,0.25, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="cloth"]
+albedo_color = Color(0.29,0.25,0.18, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="black"]
+albedo_color = Color(0.06,0.065,0.06, 1)
+roughness = 0.8
+
+
+[sub_resource type="StandardMaterial3D" id="cork"]
+albedo_color = Color(0.39,0.26,0.13, 1)
+roughness = 0.8
+
+
+[sub_resource type="BoxMesh" id="m1"]
+size = Vector3(0.58, 0.7, 0.06)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m2"]
+size = Vector3(0.035, 0.7, 0.16)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m3"]
+size = Vector3(0.58, 0.04, 0.16)
+material = SubResource("wood")
+
+[sub_resource type="BoxMesh" id="m4"]
+size = Vector3(0.1, 0.055, 0.01)
+material = SubResource("paper")
+
+[sub_resource type="TorusMesh" id="m5"]
+inner_radius = 0.019000000000000003
+outer_radius = 0.031
+rings = 24
+ring_segments = 6
+material = SubResource("brass")
+
+[sub_resource type="BoxMesh" id="m6"]
+size = Vector3(0.014, 0.08, 0.014)
+material = SubResource("brass")
+
+[sub_resource type="BoxMesh" id="m7"]
+size = Vector3(0.035, 0.012, 0.018)
+material = SubResource("brass")
+
+[sub_resource type="BoxShape3D" id="c8"]
+size = Vector3(0.6, 0.72, 0.18)
+
+[node name="OfficeWallKeyCabinet" type="StaticBody3D"]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Back" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m1")
+
+[node name="Side-0.28" type="MeshInstance3D" parent="."]
+position = Vector3(-0.28, 0, 0.065)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m2")
+
+[node name="Side0.28" type="MeshInstance3D" parent="."]
+position = Vector3(0.28, 0, 0.065)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m2")
+
+[node name="Edge-0.33" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.33, 0.065)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m3")
+
+[node name="Edge0.33" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.33, 0.065)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m3")
+
+[node name="Tag0" type="MeshInstance3D" parent="."]
+position = Vector3(-0.17, 0.19, 0.04)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="Number0" type="Label3D" parent="."]
+position = Vector3(-0.17, 0.19, 0.048)
+text = "01"
+font_size = 18
+pixel_size = 0.001
+modulate = Color(0.18,0.13,0.08,1)
+outline_size = 0
+no_depth_test = false
+double_sided = false
+
+[node name="KeyRing0" type="MeshInstance3D" parent="."]
+position = Vector3(-0.17, 0.12, 0.08)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("m5")
+
+[node name="KeyStem0" type="MeshInstance3D" parent="."]
+position = Vector3(-0.17, 0.065, 0.08)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m6")
+
+[node name="KeyTooth0" type="MeshInstance3D" parent="."]
+position = Vector3(-0.157, 0.035, 0.08)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Tag1" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.19, 0.04)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="Number1" type="Label3D" parent="."]
+position = Vector3(0, 0.19, 0.048)
+text = "02"
+font_size = 18
+pixel_size = 0.001
+modulate = Color(0.18,0.13,0.08,1)
+outline_size = 0
+no_depth_test = false
+double_sided = false
+
+[node name="KeyRing1" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.12, 0.08)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("m5")
+
+[node name="KeyStem1" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.065, 0.08)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m6")
+
+[node name="KeyTooth1" type="MeshInstance3D" parent="."]
+position = Vector3(0.013, 0.035, 0.08)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Tag2" type="MeshInstance3D" parent="."]
+position = Vector3(0.17, 0.19, 0.04)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="Number2" type="Label3D" parent="."]
+position = Vector3(0.17, 0.19, 0.048)
+text = "03"
+font_size = 18
+pixel_size = 0.001
+modulate = Color(0.18,0.13,0.08,1)
+outline_size = 0
+no_depth_test = false
+double_sided = false
+
+[node name="KeyRing2" type="MeshInstance3D" parent="."]
+position = Vector3(0.17, 0.12, 0.08)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("m5")
+
+[node name="KeyStem2" type="MeshInstance3D" parent="."]
+position = Vector3(0.17, 0.065, 0.08)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m6")
+
+[node name="KeyTooth2" type="MeshInstance3D" parent="."]
+position = Vector3(0.183, 0.035, 0.08)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Tag3" type="MeshInstance3D" parent="."]
+position = Vector3(-0.17, -0.09, 0.04)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="Number3" type="Label3D" parent="."]
+position = Vector3(-0.17, -0.09, 0.048)
+text = "04"
+font_size = 18
+pixel_size = 0.001
+modulate = Color(0.18,0.13,0.08,1)
+outline_size = 0
+no_depth_test = false
+double_sided = false
+
+[node name="KeyRing3" type="MeshInstance3D" parent="."]
+position = Vector3(-0.17, -0.16, 0.08)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("m5")
+
+[node name="KeyStem3" type="MeshInstance3D" parent="."]
+position = Vector3(-0.17, -0.215, 0.08)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m6")
+
+[node name="KeyTooth3" type="MeshInstance3D" parent="."]
+position = Vector3(-0.157, -0.245, 0.08)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Tag4" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.09, 0.04)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="Number4" type="Label3D" parent="."]
+position = Vector3(0, -0.09, 0.048)
+text = "05"
+font_size = 18
+pixel_size = 0.001
+modulate = Color(0.18,0.13,0.08,1)
+outline_size = 0
+no_depth_test = false
+double_sided = false
+
+[node name="KeyRing4" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.16, 0.08)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("m5")
+
+[node name="KeyStem4" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.215, 0.08)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m6")
+
+[node name="KeyTooth4" type="MeshInstance3D" parent="."]
+position = Vector3(0.013, -0.245, 0.08)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Tag5" type="MeshInstance3D" parent="."]
+position = Vector3(0.17, -0.09, 0.04)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m4")
+
+[node name="Number5" type="Label3D" parent="."]
+position = Vector3(0.17, -0.09, 0.048)
+text = "06"
+font_size = 18
+pixel_size = 0.001
+modulate = Color(0.18,0.13,0.08,1)
+outline_size = 0
+no_depth_test = false
+double_sided = false
+
+[node name="KeyRing5" type="MeshInstance3D" parent="."]
+position = Vector3(0.17, -0.16, 0.08)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("m5")
+
+[node name="KeyStem5" type="MeshInstance3D" parent="."]
+position = Vector3(0.17, -0.215, 0.08)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m6")
+
+[node name="KeyTooth5" type="MeshInstance3D" parent="."]
+position = Vector3(0.183, -0.245, 0.08)
+rotation = Vector3(0, 0, 0)
+mesh = SubResource("m7")
+
+[node name="Collision8" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0, 0.05)
+shape = SubResource("c8")
+

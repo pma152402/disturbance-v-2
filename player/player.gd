@@ -167,7 +167,6 @@ var _freezer_controller: Node3D
 var _freezer_previous_stance := Stance.STANDING
 var _freezer_return_transform := Transform3D.IDENTITY
 var _freezer_exit_lock_timer := 0.0
-
 const ZOOM_SEGMENT_ON := Color(0.86, 0.9, 0.83, 0.92)
 const ZOOM_SEGMENT_OFF := Color(0.20, 0.23, 0.20, 0.42)
 
@@ -1139,7 +1138,6 @@ func _get_interactable() -> Node:
 	if collider != null and _is_interactable_in_range(collider):
 		return collider
 	return null
-
 
 func _get_interactable_in_sight() -> Node:
 	interaction_ray.force_raycast_update()
