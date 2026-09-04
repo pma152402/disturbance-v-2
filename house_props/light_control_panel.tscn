@@ -98,7 +98,7 @@ radial_segments = 8
 [node name="LightControlPanel" type="Node3D" unique_id=969548015]
 editor_description = "Panel mural de control de luces. El frente mira hacia +Z. Incluye cuatro interruptores y cuatro fusibles alargados configurables desde el script."
 script = ExtResource("1")
-debug_bypass_panel = false
+debug_bypass_panel = true
 
 [node name="Cabinet" type="MeshInstance3D" parent="." unique_id=319137549]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.07)

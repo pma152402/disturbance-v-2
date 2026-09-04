@@ -1,0 +1,17 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+  "lights": 85,
+  "materials": 1032,
+  "meshes": 8644,
+  "multimeshes": 57,
+  "particle_amount": 4800,
+  "particles": 4,
+  "shadow_lights": 65,
+  "surfaces": 8729,
+  "triangles": 678893,
+  "unfaded_lights": 46
+}
+SCHOOL {"lights":11,"materials":82,"meshes":1617,"shadow_lights":11,"triangles":85866}
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)

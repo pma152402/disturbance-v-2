@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cracjjbl8bj3l"]
 
 [ext_resource type="PackedScene" path="res://player/player.tscn" id="1_player"]
-[ext_resource type="PackedScene" uid="uid://bjgpno8nlgeck" path="res://house_baked.tscn" id="2_house"]
+[ext_resource type="PackedScene" path="res://house_baked.tscn" id="2_house"]
 [ext_resource type="Shader" uid="uid://dtlwspvl68jnn" path="res://ps2_distortion.gdshader" id="3_distortion"]
 [ext_resource type="Shader" uid="uid://dosdd5ab7itct" path="res://ps2_postprocess.gdshader" id="3_shader"]
 [ext_resource type="PackedScene" path="res://rainy_weather.tscn" id="4_weather"]

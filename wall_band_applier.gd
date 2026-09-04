@@ -3,6 +3,7 @@ extends Node3D
 
 const BAND_SHADER := preload("res://pastel_wall_band.gdshader")
 const STATIC_DECOR_BATCHER := preload("res://static_decor_batcher.gd")
+const RENDER_OPTIMIZER := preload("res://runtime_render_optimizer.gd")
 const SKIP_WALL_BAND_GROUP := &"skip_wall_band"
 
 
@@ -12,6 +13,8 @@ func _ready() -> void:
 	_apply_to_wall_meshes(self, overlay)
 	if not Engine.is_editor_hint():
 		STATIC_DECOR_BATCHER.optimize(self)
+		var result := RENDER_OPTIMIZER.install(self)
+		print("Render optimizer: ", result.detail_meshes, " details culled by distance; ", result.managed_lights, " lights managed.")
 
 
 func ensure_church_catacombs() -> bool:
