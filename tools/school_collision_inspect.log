@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+GroundFloor/LowerNorth_ConnectorFloor/Collision | [P: (-1.52951, -0.2, -22.0), S: (3.559021, 0.2, 11.15)]
+GroundFloor/LowerNorth_ConnectorFloor2/Collision | [P: (-27.52033, -0.199999, -5.982323), S: (21.07054, 0.199998, 4.157789)]
+GroundFloor/LowerNorth_ConnectorFloor6/Collision | [P: (-26.6079, 3.932139, -5.982323), S: (21.07054, 0.199999, 4.157789)]
+GroundFloor/LowerNorth_ConnectorFloor8/Collision | [P: (-30.272, 3.932138, -17.41107), S: (3.797375, 0.2, 17.53532)]
+GroundFloor/LowerNorth_ConnectorFloor9/Collision | [P: (-30.272, -0.197515, -13.12821), S: (3.797375, 0.2, 16.97123)]
+GroundFloor/LowerNorth_ConnectorFloor4/Collision | [P: (-23.70121, -0.2, -1.833081), S: (8.575565, 0.2, 7.018674)]
+GroundFloor/LowerNorth_ConnectorFloor10/Collision | [P: (-26.68324, -0.2, -14.04682), S: (10.85431, 0.2, 8.046625)]
+GroundFloor/LowerNorth_ConnectorFloor5/Collision | [P: (-22.61753, 3.932569, -2.001008), S: (7.574646, 0.199999, 7.186602)]
+GroundFloor/LowerNorth_ConnectorFloor7/Collision | [P: (-26.55591, 3.932569, -13.94551), S: (12.32126, 0.199997, 7.8823)]
+UpperFloor/ExteriorWalls/WindowLowerWall_06/Collision | [P: (-5.389433, 4.2, -6.9), S: (0.22, 1.05, 2.8)]
+UpperFloor/ExteriorWalls/WindowUpperWall_06/Collision | [P: (-5.379275, 6.95, -6.9), S: (0.22, 1.25, 2.8)]
+UpperFloor/ExteriorWalls/Wall_09/Collision | [P: (-5.39185, 4.2, -7.073243), S: (0.22, 4.0, 9.662512)]

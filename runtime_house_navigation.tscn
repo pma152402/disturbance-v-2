@@ -5,6 +5,7 @@
 [node name="RuntimeHouseNavigation" type="NavigationRegion3D"]
 editor_description = "Navegacion generada desde los colliders de la casa al iniciar; limitada a las dos plantas."
 script = ExtResource("1_script")
+baking_aabb = AABB(-30.8, -1, -42, 45.8, 11, 57)
 
 [node name="StairTransitionLink" type="NavigationLink3D" parent="."]
 editor_description = "Conexion bidireccional estable entre los extremos reales de la rampa de la escalera."

@@ -1,0 +1,385 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://house_props/school_furniture_navigation.gd" id="1_wcj5v"]
+[ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera4.jpg" id="2_n8aqn"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kvtb3"]
+resource_name = "Wear"
+albedo_color = Color(0.25, 0.18, 0.1, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="BoxMesh_qu8gy"]
+size = Vector3(0.007, 0.007, 0.17)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qj5gd"]
+resource_name = "Wood"
+albedo_color = Color(0.49, 0.36, 0.21, 1)
+albedo_texture = ExtResource("2_n8aqn")
+roughness = 0.7
+uv1_scale = Vector3(0.9, 0.9, 0.9)
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_hj73q"]
+size = Vector3(0.44, 0.035, 0.42)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hpod6"]
+size = Vector3(0.44, 0.22, 0.035)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yd1g2"]
+resource_name = "Paint"
+albedo_color = Color(0.2, 0.29, 0.27, 1)
+metallic = 0.25
+roughness = 0.7
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_0ql20"]
+top_radius = 0.019
+bottom_radius = 0.019
+height = 0.48
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_amwvu"]
+top_radius = 0.019
+bottom_radius = 0.019
+height = 0.48
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_o7xpb"]
+top_radius = 0.017
+bottom_radius = 0.017
+height = 0.46
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_n3f63"]
+top_radius = 0.019
+bottom_radius = 0.019
+height = 0.48
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bqgt1"]
+top_radius = 0.019
+bottom_radius = 0.019
+height = 0.48
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_8udc2"]
+top_radius = 0.017
+bottom_radius = 0.017
+height = 0.46
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_aqtar"]
+size = Vector3(0.46, 0.88, 0.46)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tc5ls"]
+size = Vector3(0.94, 0.055, 0.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ewwil"]
+size = Vector3(0.79, 0.028, 0.43)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1cktp"]
+top_radius = 0.024
+bottom_radius = 0.024
+height = 0.76
+radial_segments = 10
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tqtkc"]
+resource_name = "Rubber"
+albedo_color = Color(0.04, 0.045, 0.039, 1)
+roughness = 0.7
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_uxk42"]
+top_radius = 0.028
+bottom_radius = 0.028
+height = 0.05
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_8r5u1"]
+top_radius = 0.024
+bottom_radius = 0.024
+height = 0.76
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_cwivn"]
+top_radius = 0.028
+bottom_radius = 0.028
+height = 0.05
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_n4520"]
+size = Vector3(0.035, 0.03, 0.43)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_uu5fx"]
+top_radius = 0.024
+bottom_radius = 0.024
+height = 0.76
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_cari2"]
+top_radius = 0.028
+bottom_radius = 0.028
+height = 0.05
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_jlg4y"]
+top_radius = 0.024
+bottom_radius = 0.024
+height = 0.76
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_myaem"]
+top_radius = 0.028
+bottom_radius = 0.028
+height = 0.05
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_4mdck"]
+size = Vector3(0.035, 0.03, 0.43)
+
+[sub_resource type="BoxMesh" id="BoxMesh_h3pv2"]
+size = Vector3(0.8, 0.03, 0.03)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nsxo0"]
+size = Vector3(0.96, 0.8, 0.6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wuonm"]
+resource_name = "Paper"
+albedo_color = Color(0.72, 0.69, 0.55, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="BoxMesh_dwd0h"]
+size = Vector3(0.2, 0.009, 0.28)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o5k20"]
+resource_name = "Frame"
+albedo_color = Color(0.2, 0.18, 0.13, 1)
+metallic = 0.15
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="BoxMesh_kv3et"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tukeq"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="BoxMesh_d3vxv"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wxugn"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6vaqg"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="BoxMesh_dqtje"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[node name="SchoolStudentDesk" type="StaticBody3D" unique_id=496085361]
+metadata/skip_wall_band = true
+
+[node name="WearPart28" type="MeshInstance3D" parent="." unique_id=419750984]
+transform = Transform3D(0.9800666, 0, 0.19866933, 0, 1, 0, -0.19866933, 0, 0.9800666, 0.18, 0.804, 0.05)
+material_override = SubResource("StandardMaterial3D_kvtb3")
+mesh = SubResource("BoxMesh_qu8gy")
+metadata/school_static_detail = true
+
+[node name="Chair" type="StaticBody3D" parent="." unique_id=757037915]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.67)
+script = ExtResource("1_wcj5v")
+metadata/school_navigation_rect = Rect2(-0.23, -0.23, 0.46, 0.46)
+
+[node name="WoodPart13" type="MeshInstance3D" parent="Chair" unique_id=1589949948]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46, -0.00999999)
+material_override = SubResource("StandardMaterial3D_qj5gd")
+mesh = SubResource("BoxMesh_hj73q")
+metadata/school_static_detail = true
+
+[node name="WoodPart14" type="MeshInstance3D" parent="Chair" unique_id=1722414352]
+transform = Transform3D(1, 0, 0, 0, 0.99680173, 0.07991469, 0, -0.07991469, 0.99680173, 0, 0.78, 0.19999999)
+material_override = SubResource("StandardMaterial3D_qj5gd")
+mesh = SubResource("BoxMesh_hpod6")
+metadata/school_static_detail = true
+
+[node name="PaintPart15" type="MeshInstance3D" parent="Chair" unique_id=473577401]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 0.24, -0.18)
+material_override = SubResource("StandardMaterial3D_yd1g2")
+mesh = SubResource("CylinderMesh_0ql20")
+metadata/school_static_detail = true
+
+[node name="PaintPart16" type="MeshInstance3D" parent="Chair" unique_id=329683416]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 0.24, 0.15999997)
+material_override = SubResource("StandardMaterial3D_yd1g2")
+mesh = SubResource("CylinderMesh_amwvu")
+metadata/school_static_detail = true
+
+[node name="PaintPart17" type="MeshInstance3D" parent="Chair" unique_id=1499566227]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 0.67, 0.19999999)
+material_override = SubResource("StandardMaterial3D_yd1g2")
+mesh = SubResource("CylinderMesh_o7xpb")
+metadata/school_static_detail = true
+
+[node name="PaintPart18" type="MeshInstance3D" parent="Chair" unique_id=1263809665]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0.24, -0.18)
+material_override = SubResource("StandardMaterial3D_yd1g2")
+mesh = SubResource("CylinderMesh_n3f63")
+metadata/school_static_detail = true
+
+[node name="PaintPart19" type="MeshInstance3D" parent="Chair" unique_id=2116357166]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0.24, 0.15999997)
+material_override = SubResource("StandardMaterial3D_yd1g2")
+mesh = SubResource("CylinderMesh_bqgt1")
+metadata/school_static_detail = true
+
+[node name="PaintPart20" type="MeshInstance3D" parent="Chair" unique_id=1324060420]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0.67, 0.19999999)
+material_override = SubResource("StandardMaterial3D_yd1g2")
+mesh = SubResource("CylinderMesh_8udc2")
+metadata/school_static_detail = true
+
+[node name="ChairCollider" type="CollisionShape3D" parent="Chair" unique_id=1198459998]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44, 0)
+shape = SubResource("BoxShape3D_aqtar")
+
+[node name="Desk" type="StaticBody3D" parent="." unique_id=609177846]
+script = ExtResource("1_wcj5v")
+metadata/school_navigation_rect = Rect2(-0.48, -0.3, 0.96, 0.6)
+
+[node name="WoodPart0" type="MeshInstance3D" parent="Desk" unique_id=636881550]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.77, 0)
+material_override = SubResource("StandardMaterial3D_qj5gd")
+mesh = SubResource("BoxMesh_tc5ls")
+metadata/school_static_detail = true
+
+[node name="PaintPart1" type="MeshInstance3D" parent="Desk" unique_id=619892576]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62, 0)
+material_override = SubResource("StandardMaterial3D_yd1g2")
+mesh = SubResource("BoxMesh_ewwil")
+metadata/school_static_detail = true
+
+[node name="PaintPart2" type="MeshInstance3D" parent="Desk" unique_id=807597493]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.39, 0.38, -0.21)
+material_override = SubResource("StandardMaterial3D_yd1g2")
+mesh = SubResource("CylinderMesh_1cktp")
+metadata/school_static_detail = true
+
+[node name="RubberPart3" type="MeshInstance3D" parent="Desk" unique_id=1415471390]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.39, 0.025, -0.21)
+material_override = SubResource("StandardMaterial3D_tqtkc")
+mesh = SubResource("CylinderMesh_uxk42")
+metadata/school_static_detail = true
+
+[node name="PaintPart4" type="MeshInstance3D" parent="Desk" unique_id=1356529108]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.39, 0.38, 0.21)
+material_override = SubResource("StandardMaterial3D_yd1g2")
+mesh = SubResource("CylinderMesh_8r5u1")
+metadata/school_static_detail = true
+
+[node name="RubberPart5" type="MeshInstance3D" parent="Desk" unique_id=25547601]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.39, 0.025, 0.21)
+material_override = SubResource("StandardMaterial3D_tqtkc")
+mesh = SubResource("CylinderMesh_cwivn")
+metadata/school_static_detail = true
+
+[node name="PaintPart6" type="MeshInstance3D" parent="Desk" unique_id=1100737079]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.39, 0.31, 0)
+material_override = SubResource("StandardMaterial3D_yd1g2")
+mesh = SubResource("BoxMesh_n4520")
+metadata/school_static_detail = true
+
+[node name="PaintPart7" type="MeshInstance3D" parent="Desk" unique_id=1880933169]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.39, 0.38, -0.21)
+material_override = SubResource("StandardMaterial3D_yd1g2")
+mesh = SubResource("CylinderMesh_uu5fx")
+metadata/school_static_detail = true
+
+[node name="RubberPart8" type="MeshInstance3D" parent="Desk" unique_id=469903209]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.39, 0.025, -0.21)
+material_override = SubResource("StandardMaterial3D_tqtkc")
+mesh = SubResource("CylinderMesh_cari2")
+metadata/school_static_detail = true
+
+[node name="PaintPart9" type="MeshInstance3D" parent="Desk" unique_id=957246356]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.39, 0.38, 0.21)
+material_override = SubResource("StandardMaterial3D_yd1g2")
+mesh = SubResource("CylinderMesh_jlg4y")
+metadata/school_static_detail = true
+
+[node name="RubberPart10" type="MeshInstance3D" parent="Desk" unique_id=110234841]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.39, 0.025, 0.21)
+material_override = SubResource("StandardMaterial3D_tqtkc")
+mesh = SubResource("CylinderMesh_myaem")
+metadata/school_static_detail = true
+
+[node name="PaintPart11" type="MeshInstance3D" parent="Desk" unique_id=1210945948]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.39, 0.31, 0)
+material_override = SubResource("StandardMaterial3D_yd1g2")
+mesh = SubResource("BoxMesh_4mdck")
+metadata/school_static_detail = true
+
+[node name="PaintPart12" type="MeshInstance3D" parent="Desk" unique_id=288388271]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -0.2)
+material_override = SubResource("StandardMaterial3D_yd1g2")
+mesh = SubResource("BoxMesh_h3pv2")
+metadata/school_static_detail = true
+
+[node name="DeskCollider" type="CollisionShape3D" parent="Desk" unique_id=1261523618]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("BoxShape3D_nsxo0")
+
+[node name="Notebook" type="StaticBody3D" parent="." unique_id=1886542304]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0.805, -0.02)
+
+[node name="PaperPart21" type="MeshInstance3D" parent="Notebook" unique_id=958790669]
+transform = Transform3D(0.99680173, 0, 0.07991469, 0, 1, 0, -0.07991469, 0, 0.99680173, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_wuonm")
+mesh = SubResource("BoxMesh_dwd0h")
+metadata/school_static_detail = true
+
+[node name="FramePart22" type="MeshInstance3D" parent="Notebook" unique_id=1981638711]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.09)
+material_override = SubResource("StandardMaterial3D_o5k20")
+mesh = SubResource("BoxMesh_kv3et")
+metadata/school_static_detail = true
+
+[node name="FramePart23" type="MeshInstance3D" parent="Notebook" unique_id=218865565]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.055000003)
+material_override = SubResource("StandardMaterial3D_o5k20")
+mesh = SubResource("BoxMesh_tukeq")
+metadata/school_static_detail = true
+
+[node name="FramePart24" type="MeshInstance3D" parent="Notebook" unique_id=88963780]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.02)
+material_override = SubResource("StandardMaterial3D_o5k20")
+mesh = SubResource("BoxMesh_d3vxv")
+metadata/school_static_detail = true
+
+[node name="FramePart25" type="MeshInstance3D" parent="Notebook" unique_id=781877469]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.015)
+material_override = SubResource("StandardMaterial3D_o5k20")
+mesh = SubResource("BoxMesh_wxugn")
+metadata/school_static_detail = true
+
+[node name="FramePart26" type="MeshInstance3D" parent="Notebook" unique_id=306737184]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.049999997)
+material_override = SubResource("StandardMaterial3D_o5k20")
+mesh = SubResource("BoxMesh_6vaqg")
+metadata/school_static_detail = true
+
+[node name="FramePart27" type="MeshInstance3D" parent="Notebook" unique_id=1752093573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.08499999)
+material_override = SubResource("StandardMaterial3D_o5k20")
+mesh = SubResource("BoxMesh_dqtje")
+metadata/school_static_detail = true

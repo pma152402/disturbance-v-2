@@ -111,7 +111,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.5, 15, 27.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.5, 15, 27.5)
 
 [node name="HouseRoofRainOccluder" parent="Weather/Rain" index="4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.11, 4, 0)
 
 [node name="ConnectorRoofRainOccluder" parent="Weather/Rain" index="5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 4, -16.4)

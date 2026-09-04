@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+Wall_08/Mesh transform=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (7.720567, 0.0, 0.0)] size=(0.22, 4.0, 4.1)
+Wall_08/Collision transform=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (7.718151, 0.0, 0.0)] size=(0.22, 4.0, 4.1)
+WallBaseboard_08 transform=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-5.286222, 4.32, -8.95)] size=(0.278745, 0.24, 4.1)
+WindowGlass_06/Mesh transform=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (7.720567, 0.0, 0.0)] size=(0.035, 1.7, 2.68)
+WindowLowerWall_06/Mesh transform=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (7.718151, 0.0, 0.0)] size=(0.22, 1.042566, 2.8)
+WindowUpperWall_06/Mesh transform=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (7.720567, 0.04364, 0.0)] size=(0.22, 1.160767, 2.8)
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)

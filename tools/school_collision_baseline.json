@@ -1,0 +1,3727 @@
+{
+	"AsylumGateSurround4m/LeftSurround/Collision": {
+		"disabled": false,
+		"shape": "4173663250",
+		"transform": "[X: (-0.004118, 0.0, 0.963236), Y: (0.0, 1.0, 0.0), Z: (-1.000146, 0.0, -0.004275), O: (-6.892247, 1.969278, -5.395916)]"
+	},
+	"AsylumGateSurround4m/RightSurround/Collision": {
+		"disabled": false,
+		"shape": "4173663250",
+		"transform": "[X: (-0.004118, 0.0, 0.963236), Y: (0.0, 1.0, 0.0), Z: (-1.000146, 0.0, -0.004275), O: (-6.904559, 1.969278, -2.515841)]"
+	},
+	"AsylumGateSurround4m/TopSurround/Collision": {
+		"disabled": false,
+		"shape": "1848111567",
+		"transform": "[X: (-0.004118, 0.0, 0.963236), Y: (0.0, 1.0, 0.0), Z: (-1.000146, 0.0, -0.004275), O: (-6.898403, 3.329278, -3.955878)]"
+	},
+	"AsylumWovenGate/Frame/LeftJambCollision": {
+		"disabled": false,
+		"shape": "4270748722",
+		"transform": "[X: (0.011312, 0.0, -0.999936), Y: (0.0, 1.0, 0.0), Z: (0.999936, 0.0, 0.011312), O: (-6.893059, 1.35, -3.089798)]"
+	},
+	"AsylumWovenGate/Frame/LintelCollision": {
+		"disabled": false,
+		"shape": "214969547",
+		"transform": "[X: (0.011312, 0.0, -0.999936), Y: (0.0, 1.0, 0.0), Z: (0.999936, 0.0, 0.011312), O: (-6.883218, 2.66, -3.959743)]"
+	},
+	"AsylumWovenGate/Frame/RightJambCollision": {
+		"disabled": false,
+		"shape": "4270748722",
+		"transform": "[X: (0.011312, 0.0, -0.999936), Y: (0.0, 1.0, 0.0), Z: (0.999936, 0.0, 0.011312), O: (-6.873376, 1.35, -4.829687)]"
+	},
+	"AsylumWovenGate/Gate/PanelCollision": {
+		"disabled": false,
+		"shape": "2719466046",
+		"transform": "[X: (0.011312, 0.0, -0.999936), Y: (0.0, 1.0, 0.0), Z: (0.999936, 0.0, 0.011312), O: (-6.883218, 1.3, -3.959743)]"
+	},
+	"BasementAccessAndInitialRoom/BasementStairContinuousCollider/RampSurface01": {
+		"disabled": false,
+		"shape": "3635070751",
+		"transform": "[X: (14.39258, -8.520976, -0.0), Y: (-0.005557, -0.009386, 3.288124), Z: (-0.081177, -0.137114, -0.000529), O: (-5.42595, -6.787355, 5.949815)]"
+	},
+	"BasementAccessAndInitialRoom/BasementStairContinuousCollider/RampSurface02": {
+		"disabled": false,
+		"shape": "3635070751",
+		"transform": "[X: (-0.915589, -10.34085, 17.50045), Y: (-3.256843, 0.102877, -0.109603), Z: (-0.001397, -0.119561, -0.070721), O: (-7.762594, -4.874512, 3.985811)]"
+	},
+	"BasementAccessAndInitialRoom/BasementStairContinuousCollider/RampSurface03": {
+		"disabled": false,
+		"shape": "3635070751",
+		"transform": "[X: (7.749789, -0.653191, -0.0), Y: (-0.000916, -0.010871, 3.288456), Z: (-0.01379, -0.163615, -0.000545), O: (-7.576479, -5.879913, 5.949815)]"
+	},
+	"BasementAccessAndInitialRoom/BasementStairContinuousCollider/RampSurface04": {
+		"disabled": false,
+		"shape": "1786117182",
+		"transform": "[X: (17.06824, 13.95311, -0.0), Y: (0.008793, -0.010756, 4.187749), Z: (0.093361, -0.114204, -0.000489), O: (-7.085534, -3.641812, 1.411164)]"
+	},
+	"BasementAccessAndInitialRoom/BasementStairContinuousCollider/RampSurface05": {
+		"disabled": false,
+		"shape": "3635070751",
+		"transform": "[X: (9.163285, -0.335506, 0.000331), Y: (-0.008919, -0.239465, 4.186125), Z: (-0.005503, -0.150312, -0.00861), O: (-8.297116, -3.772461, 1.489101)]"
+	},
+	"BasementAccessAndInitialRoom/BasementStairContinuousCollider/RampSurface06": {
+		"disabled": false,
+		"shape": "1870371480",
+		"transform": "[X: (9.169393, -0.014849, 0.019036), Y: (-0.008715, -0.00601, 4.192964), Z: (-0.000244, -0.150658, -0.000216), O: (-4.393568, -2.254413, 2.602019)]"
+	},
+	"BasementAccessAndInitialRoom/BasementStairContinuousCollider/RampSurface07": {
+		"disabled": false,
+		"shape": "4159953322",
+		"transform": "[X: (13.4187, -9.98459, -0.0), Y: (-0.006512, -0.008751, 3.288125), Z: (-0.09512, -0.127836, -0.000529), O: (-5.758522, -1.3816, 3.447339)]"
+	},
+	"BasementAccessAndInitialRoom/CeilingEast/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (4.439123, 0.0, 0.0), Y: (0.0, 0.22, 0.0), Z: (0.0, 0.0, 8.0), O: (-1.097078, -3.145582, 3.777816)]"
+	},
+	"BasementAccessAndInitialRoom/CeilingNorth/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (3.2, 0.0, 0.0), Y: (0.0, 0.22, 0.0), Z: (0.0, 0.0, 1.591682), O: (-5.741586, -3.145582, -0.143546)]"
+	},
+	"BasementAccessAndInitialRoom/CeilingSouth/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (7.038325, 0.0, 0.0), Y: (0.0, 0.22, 0.0), Z: (0.0, 0.0, 2.4), O: (-6.196798, -2.655877, 6.092579)]"
+	},
+	"BasementAccessAndInitialRoom/CeilingWest/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (4.4, 0.0, 0.0), Y: (0.0, 0.22, 0.0), Z: (0.0, 0.0, 7.999998), O: (-11.71873, -3.145582, 2.991352)]"
+	},
+	"BasementAccessAndInitialRoom/EastWall/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (0.28, 0.0, 0.0), Y: (0.0, 4.249999, 0.0), Z: (0.0, 0.0, 8.0), O: (0.258414, -5.275582, 2.991352)]"
+	},
+	"BasementAccessAndInitialRoom/Floor/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (12.0, 0.0, 0.0), Y: (0.0, 0.22, 0.0), Z: (0.0, 0.0, 8.0), O: (-5.741586, -7.405582, 2.991352)]"
+	},
+	"BasementAccessAndInitialRoom/Floor2/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (12.0, 0.0, 0.0), Y: (0.0, 0.22, 0.0), Z: (0.0, 0.0, 8.0), O: (-5.741586, -7.405582, 10.69417)]"
+	},
+	"BasementAccessAndInitialRoom/Floor3/Collision": {
+		"disabled": false,
+		"shape": "376756157",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-6.594258, -6.414295, 10.64697)]"
+	},
+	"BasementAccessAndInitialRoom/Floor3/TunnelCeilingBranch1Collision": {
+		"disabled": false,
+		"shape": "401476047",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-5.225369, -6.414295, 8.616266)]"
+	},
+	"BasementAccessAndInitialRoom/Floor3/TunnelCeilingBranch2Collision": {
+		"disabled": false,
+		"shape": "203632282",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.298246, -6.414295, 9.262108)]"
+	},
+	"BasementAccessAndInitialRoom/NorthWall/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (12.0, 0.0, 0.0), Y: (0.0, 4.25, 0.0), Z: (0.0, 0.0, 0.28), O: (-5.741586, -5.275582, -1.008648)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftEast/Collision": {
+		"disabled": false,
+		"shape": "261858145",
+		"transform": "[X: (0.207516, 0.073056, 0.0), Y: (-0.680746, 1.933671, 0.0), Z: (0.0, 0.0, 3.55), O: (-3.329158, -2.085514, 2.675007)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (4.251616, 0.0, 0.0), Y: (0.0, 2.05, 0.0), Z: (0.0, 0.0, 0.22), O: (-5.936015, -2.125582, 0.472964)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth10/Collision": {
+		"disabled": false,
+		"shape": "1340546041",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-6.528159, -6.909938, 10.22999)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth11/Collision": {
+		"disabled": false,
+		"shape": "2936619538",
+		"transform": "[X: (1.0, 0.0, -0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-5.715034, -6.909939, 12.56128)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth12/Collision": {
+		"disabled": false,
+		"shape": "3440829207",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-6.594258, -6.909939, 14.59142)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth13/Collision": {
+		"disabled": false,
+		"shape": "2058584286",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.790919, -6.909939, 9.863354)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth14/Collision": {
+		"disabled": false,
+		"shape": "2225557284",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.409202, -6.909939, 10.53001)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth15/Collision": {
+		"disabled": false,
+		"shape": "2225557284",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.409202, -6.909939, 7.994205)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth16/Collision": {
+		"disabled": false,
+		"shape": "2507970406",
+		"transform": "[X: (1.0, 0.0, -0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-5.711591, -6.909939, 8.279573)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth17/Collision": {
+		"disabled": false,
+		"shape": "2507970406",
+		"transform": "[X: (1.0, 0.0, -0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-4.967061, -6.909939, 8.598925)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth18/Collision": {
+		"disabled": false,
+		"shape": "2507970406",
+		"transform": "[X: (1.0, 0.0, -0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-4.967061, -6.909939, 7.631578)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth2/Collision": {
+		"disabled": false,
+		"shape": "3601449415",
+		"transform": "[X: (5.854684, 0.0, 0.0), Y: (0.0, 2.05, 0.0), Z: (0.0, 0.0, 0.220001), O: (-6.051624, -1.833743, 4.75405)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth3/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (11.85496, 0.0, 0.0), Y: (0.0, 3.291153, 0.0), Z: (0.0, 0.0, 0.22), O: (-5.741586, -5.895309, -0.471039)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth4/Collision": {
+		"disabled": false,
+		"shape": "2324631598",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-3.195133, -5.157492, 6.702523)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth5/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (-0.130487, 0.0, 8.554011), Y: (0.0, 3.291153, 0.0), Z: (-0.220908, 0.0, -0.00337), O: (-11.50804, -5.895309, 2.916432)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth6/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (-0.130487, 0.0, 8.554011), Y: (0.0, 3.291153, 0.0), Z: (-0.220908, 0.0, -0.00337), O: (-0.372029, -5.895309, 2.916432)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth7/Collision": {
+		"disabled": false,
+		"shape": "1930629520",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-9.557465, -5.157492, 6.702523)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth8/Collision": {
+		"disabled": false,
+		"shape": "521241219",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-6.224294, -6.414295, 6.702523)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftNorth9/Collision": {
+		"disabled": false,
+		"shape": "1048969149",
+		"transform": "[X: (1.0, 0.0, -0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-7.472401, -6.909939, 10.669)]"
+	},
+	"BasementAccessAndInitialRoom/ShaftWest/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (0.198894, -0.094028, 0.0), Y: (0.876168, 1.85333, 0.0), Z: (0.0, 0.0, 4.855489), O: (-9.041715, -2.125582, 2.991353)]"
+	},
+	"BasementAccessAndInitialRoom/SouthWall/Collision": {
+		"disabled": true,
+		"shape": "4269271018",
+		"transform": "[X: (12.0, 0.0, 0.0), Y: (0.0, 4.25, 0.0), Z: (0.0, 0.0, 0.28), O: (-5.741586, -5.275582, 6.991351)]"
+	},
+	"BasementAccessAndInitialRoom/WestWall/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (0.28, 0.0, 0.0), Y: (0.0, 4.249999, 0.0), Z: (0.0, 0.0, 8.0), O: (-11.74159, -5.275582, 2.991352)]"
+	},
+	"BasementDVDPlayer/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2057664233",
+		"transform": "[X: (-0.929725, 0.0, 0.368253), Y: (0.0, 1.0, 0.0), Z: (-0.368253, 0.0, -0.929725), O: (-8.999244, -5.523784, 0.271094)]"
+	},
+	"BasementStairGuardrails/Rail02/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (-0.024098, 0.0, -0.81126), Y: (-0.019644, 0.999805, 0.000584), Z: (0.993772, 0.019764, -0.029519), O: (-6.136835, -0.620934, 2.695131)]"
+	},
+	"BasementStairGuardrails/Rail03/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (-0.024098, 0.0, -0.81126), Y: (-0.019644, 0.999805, 0.000584), Z: (0.993772, 0.019764, -0.029519), O: (-5.519997, -1.137672, 2.695131)]"
+	},
+	"BasementStairGuardrails/Rail05/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.012598, 0.0, 0.993192), Y: (0.019709, 0.999805, -0.00025), Z: (-0.997062, 0.019764, 0.012647), O: (-5.593665, -2.128588, 2.39041)]"
+	},
+	"BasementStairGuardrails/Rail06/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.012598, 0.0, 0.993192), Y: (0.019709, 0.999805, -0.00025), Z: (-0.997062, 0.019764, 0.012647), O: (-6.262513, -2.616419, 2.39041)]"
+	},
+	"BasementStairGuardrails/Rail07/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.012598, 0.0, 0.993192), Y: (0.019709, 0.999805, -0.00025), Z: (-0.997062, 0.019764, 0.012647), O: (-6.903482, -3.094564, 2.39041)]"
+	},
+	"BasementStairGuardrails/Rail08/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.744199, 0.0, 0.002989), Y: (0.00008, 0.999805, -0.019897), Z: (-0.004043, 0.019764, 1.006561), O: (-7.083206, -3.772344, 2.613908)]"
+	},
+	"BasementStairGuardrails/Rail09/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.744199, 0.0, 0.002989), Y: (0.00008, 0.999805, -0.019897), Z: (-0.004043, 0.019764, 1.006561), O: (-7.083206, -4.256807, 3.346416)]"
+	},
+	"BasementStairGuardrails/Rail10/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.744199, 0.0, 0.002989), Y: (0.00008, 0.999805, -0.019897), Z: (-0.004043, 0.019764, 1.006561), O: (-7.083206, -4.758292, 3.964016)]"
+	},
+	"BasementStairGuardrails/Rail11/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.744199, 0.0, 0.002989), Y: (0.00008, 0.999805, -0.019897), Z: (-0.004043, 0.019764, 1.006561), O: (-7.083206, -5.242755, 4.696525)]"
+	},
+	"BasementStairGuardrails/Rail12/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.001572, 0.0, -0.744203), Y: (-0.019897, 0.999805, -0.000042), Z: (1.006567, 0.019764, 0.002126), O: (-6.416444, -5.895508, 5.242124)]"
+	},
+	"BasementStairGuardrails/Rail13/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.001572, 0.0, -0.744203), Y: (-0.019897, 0.999805, -0.000042), Z: (1.006567, 0.019764, 0.002126), O: (-5.683937, -6.379971, 5.24073)]"
+	},
+	"BasementStairGuardrails/Rail15/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (-0.026922, 0.0, -0.906334), Y: (-0.019713, 0.999805, 0.000586), Z: (0.997231, 0.019764, -0.029622), O: (-6.406198, -14.60968, 2.640291)]"
+	},
+	"BasementStairGuardrails/Rail16/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (-0.026922, 0.0, -0.906334), Y: (-0.019713, 0.999805, 0.000586), Z: (0.997231, 0.019764, -0.029622), O: (-5.754673, -15.10608, 2.640291)]"
+	},
+	"BasementStairGuardrails/Rail17/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (-0.026922, 0.0, -0.906334), Y: (-0.019713, 0.999805, 0.000586), Z: (0.997231, 0.019764, -0.029622), O: (-5.087563, -15.45349, 2.640291)]"
+	},
+	"BasementStairGuardrails/Rail18/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.012598, 0.0, 0.740928), Y: (0.019709, 0.999805, -0.000249), Z: (-0.997062, 0.019764, 0.012604), O: (-5.304715, -15.94546, 2.458733)]"
+	},
+	"BasementStairGuardrails/Rail19/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.009398, 0.0, 0.740928), Y: (0.019643, 0.999805, -0.000249), Z: (-0.993688, 0.019764, 0.012604), O: (-5.979041, -16.43329, 2.247884)]"
+	},
+	"BasementStairGuardrails/Rail20/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.009398, 0.0, 0.740928), Y: (0.019643, 0.999805, -0.000249), Z: (-0.993688, 0.019764, 0.012604), O: (-6.601754, -16.91979, 2.247884)]"
+	},
+	"BasementStairGuardrails/Rail21/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.744199, 0.0, 0.002989), Y: (0.00008, 0.999805, -0.019897), Z: (-0.004043, 0.019764, 1.006561), O: (-6.562027, -17.57937, 2.49468)]"
+	},
+	"BasementStairGuardrails/Rail22/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.744199, 0.0, 0.002989), Y: (0.00008, 0.999805, -0.019897), Z: (-0.004043, 0.019764, 1.006561), O: (-6.562027, -18.06384, 3.227189)]"
+	},
+	"BasementStairGuardrails/Rail23/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.744199, 0.0, 0.002989), Y: (0.00008, 0.999805, -0.019897), Z: (-0.004043, 0.019764, 1.006561), O: (-8.440029, -3.772344, 2.613908)]"
+	},
+	"BasementStairGuardrails/Rail24/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.744199, 0.0, 0.002989), Y: (0.00008, 0.999805, -0.019897), Z: (-0.004043, 0.019764, 1.006561), O: (-8.440029, -4.256807, 3.346416)]"
+	},
+	"BasementStairGuardrails/Rail25/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.744199, 0.0, 0.002989), Y: (0.00008, 0.999805, -0.019897), Z: (-0.004043, 0.019764, 1.006561), O: (-8.440029, -4.758292, 3.964016)]"
+	},
+	"BasementStairGuardrails/Rail26/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.744199, 0.0, 0.002989), Y: (0.00008, 0.999805, -0.019897), Z: (-0.004043, 0.019764, 1.006561), O: (-8.440029, -5.242755, 4.696525)]"
+	},
+	"BasementStairGuardrails/Rail27/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.025523, 0.0, 0.906374), Y: (0.019714, 0.999805, -0.000555), Z: (-0.997276, 0.019764, 0.028083), O: (-29.21299, 4.145292, 12.4698)]"
+	},
+	"BasementStairGuardrails/Rail28/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.025523, 0.0, 0.906374), Y: (0.019714, 0.999805, -0.000555), Z: (-0.997276, 0.019764, 0.028083), O: (-29.86452, 3.648891, 12.46879)]"
+	},
+	"BasementStairGuardrails/Rail29/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.025523, 0.0, 0.906374), Y: (0.019714, 0.999805, -0.000555), Z: (-0.997276, 0.019764, 0.028083), O: (-30.53162, 3.301479, 12.46776)]"
+	},
+	"BasementStairGuardrails/Rail30/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (-0.011455, 0.0, -0.740946), Y: (-0.01971, 0.999805, 0.000219), Z: (0.99708, 0.019764, -0.011066), O: (-30.31475, 2.809503, 12.64966)]"
+	},
+	"BasementStairGuardrails/Rail31/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (-0.008255, 0.0, -0.740941), Y: (-0.019643, 0.999805, 0.000219), Z: (0.993706, 0.019764, -0.011071), O: (-29.64075, 2.321672, 12.86155)]"
+	},
+	"BasementStairGuardrails/Rail32/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (-0.008255, 0.0, -0.740941), Y: (-0.019643, 0.999805, 0.000219), Z: (0.993706, 0.019764, -0.011071), O: (-29.01804, 1.83518, 12.86251)]"
+	},
+	"BasementStairGuardrails/Rail33/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.906537, 0.0, -0.01886), Y: (-0.00041, 0.999805, -0.019717), Z: (0.020752, 0.019764, 0.997455), O: (-28.5175, 3.596924, 1.08918)]"
+	},
+	"BasementStairGuardrails/Rail34/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.906537, 0.0, -0.01886), Y: (-0.00041, 0.999805, -0.019717), Z: (0.020752, 0.019764, 0.997455), O: (-28.52329, 3.100523, 1.74068)]"
+	},
+	"BasementStairGuardrails/Rail35/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (0.906537, 0.0, -0.01886), Y: (-0.00041, 0.999805, -0.019717), Z: (0.020752, 0.019764, 0.997455), O: (-28.52923, 2.657653, 2.407763)]"
+	},
+	"BasementStairGuardrails/Rail36/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (-0.741011, 0.0, 0.006009), Y: (0.000074, 0.999805, 0.019711), Z: (-0.003737, 0.019764, -0.997134), O: (-28.38484, 2.122061, 2.26252)]"
+	},
+	"BasementStairGuardrails/Rail37/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (-0.740982, 0.0, 0.002809), Y: (0.000074, 0.999805, 0.019644), Z: (-0.003767, 0.019764, -0.993761), O: (-28.37688, 1.63423, 1.590093)]"
+	},
+	"BasementStairGuardrails/Rail38/Rail/CollisionBarrier/Shape": {
+		"disabled": false,
+		"shape": "985437728",
+		"transform": "[X: (-0.740982, 0.0, 0.002809), Y: (0.000074, 0.999805, 0.019644), Z: (-0.003767, 0.019764, -0.993761), O: (-28.37135, 1.147738, 0.967407)]"
+	},
+	"Bed/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2329265016",
+		"transform": "[X: (0.386752, 0.850503, -0.350112), Y: (-0.636327, 0.51826, 0.556054), Z: (0.534831, 0.006318, 0.606151), O: (3.948776, 6.295174, 1.822929)]"
+	},
+	"BoardedLabyrinthAccess/Collision": {
+		"disabled": false,
+		"shape": "3578692345",
+		"transform": "[X: (1.06442, 0.0, 0.0), Y: (0.0, 1.090998, 0.0), Z: (0.0, 0.0, 1.0), O: (-9.57984, 1.216292, -37.70941)]"
+	},
+	"BoardedLabyrinthAccess2/Collision": {
+		"disabled": false,
+		"shape": "3578692345",
+		"transform": "[X: (1.202691, 0.0, 0.0), Y: (0.0, 1.090998, 0.0), Z: (0.0, 0.0, 1.0), O: (-16.71972, 1.290298, -2.092981)]"
+	},
+	"BookOpeningWallCabinet/InteractionShape": {
+		"disabled": false,
+		"shape": "2948115623",
+		"transform": "[X: (-0.999976, 0.0, -0.00695), Y: (0.0, 0.890695, 0.0), Z: (0.00695, 0.0, -0.999976), O: (6.092866, 2.350035, -5.457)]"
+	},
+	"BookOpeningWallCabinet/StaticBody3D/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2735029204",
+		"transform": "[X: (-0.999976, 0.0, -0.00695), Y: (0.0, 0.890695, 0.0), Z: (0.00695, 0.0, -0.999976), O: (6.094395, 2.350035, -5.676994)]"
+	},
+	"BranchEastNorthWall/Collision": {
+		"disabled": false,
+		"shape": "2349991443",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.316582), O: (-26.543, 2.0, -7.028763)]"
+	},
+	"BranchEastNorthWall2/Collision": {
+		"disabled": false,
+		"shape": "2349991443",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.125923), O: (-24.06835, 2.0, -10.00002)]"
+	},
+	"BranchEastNorthWall2/Collision2": {
+		"disabled": false,
+		"shape": "2349991443",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.125923), O: (-14.11308, 2.0, -10.00002)]"
+	},
+	"BranchEastNorthWall3/Collision": {
+		"disabled": false,
+		"shape": "2349991443",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-26.543, 2.0, -13.92813)]"
+	},
+	"BranchEastNorthWall4/Collision": {
+		"disabled": false,
+		"shape": "2349991443",
+		"transform": "[X: (0.010728, 0.0, -1.000587), Y: (0.0, 1.0, 0.0), Z: (0.335594, 0.0, 0.003598), O: (-25.28809, 2.0, -12.72039)]"
+	},
+	"BranchEastSouthWall/Collision": {
+		"disabled": false,
+		"shape": "89063658",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-26.55, 2.171045, 1.433526)]"
+	},
+	"BranchWestWall/Collision": {
+		"disabled": false,
+		"shape": "15951337",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.916657), O: (-30.15071, 2.0, -6.742317)]"
+	},
+	"BrokenEntranceDecor/BrokenWallSwitch/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1466489026",
+		"transform": "[X: (-0.001004, -0.17475, 0.897262), Y: (1.001623, -0.018298, -0.002443), Z: (0.016539, 0.882426, 0.171879), O: (3.159962, 5.509134, -0.055778)]"
+	},
+	"CellarBulkheadEntranceStaging/InteractionShape": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (-0.024933, 0.0, 3.23093), Y: (0.0, 0.453987, 0.0), Z: (-3.119684, 0.0, -0.024075), O: (-5.741586, 0.187938, 2.69975)]"
+	},
+	"CellarBulkheadEntranceStaging/LeftHinge/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (-0.012021, 0.0, 1.55777), Y: (-0.3238, 0.034674, -0.002499), Z: (-2.883853, -0.277061, -0.022255), O: (-5.735308, 0.240452, 1.886248)]"
+	},
+	"CellarBulkheadEntranceStaging/RightHinge/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (-0.012021, 0.0, 1.55777), Y: (-0.337912, 0.036185, -0.002608), Z: (-2.884222, -0.277097, -0.022258), O: (-5.747864, 0.240452, 3.513252)]"
+	},
+	"CellarBulkheadEntranceStaging/StoneCurb/LeftCurbCollision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (-0.001959, 0.0, 0.253859), Y: (0.0, 0.38, 0.0), Z: (-3.201781, 0.0, -0.024708), O: (-5.728229, 0.000452, 0.968895)]"
+	},
+	"CellarBulkheadEntranceStaging/StoneCurb/RightCurbCollision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (-0.001959, 0.0, 0.253859), Y: (0.0, 0.38, 0.0), Z: (-3.201781, 0.0, -0.024708), O: (-5.754943, 0.000452, 4.430606)]"
+	},
+	"ChurchAltar/Collision": {
+		"disabled": false,
+		"shape": "107116638",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.675181), O: (0.25, 1.24, -35.55194)]"
+	},
+	"ChurchBalconyColumnLeft/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.039798, 0.0), Z: (0.0, 0.0, 1.0), O: (-4.299432, 2.001611, -24.64662)]"
+	},
+	"ChurchBalconyColumnLeft2/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.039798, 0.0), Z: (0.0, 0.0, 1.0), O: (4.812273, 2.001611, -24.64662)]"
+	},
+	"ChurchGiantCrucifix/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3491453584",
+		"transform": "[X: (-3.0, 0.0, 0.0), Y: (0.0, 3.0, 0.0), Z: (0.0, 0.0, -3.0), O: (0.25, 3.655, -37.46605)]"
+	},
+	"ChurchPewLeftRow1/Collision": {
+		"disabled": false,
+		"shape": "640394776",
+		"transform": "[X: (1.5, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-3.8, 0.575, -26.33711)]"
+	},
+	"ChurchPewLeftRow2/Collision": {
+		"disabled": false,
+		"shape": "640394776",
+		"transform": "[X: (1.5, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-3.8, 0.575, -27.98711)]"
+	},
+	"ChurchPewLeftRow3/Collision": {
+		"disabled": false,
+		"shape": "640394776",
+		"transform": "[X: (1.5, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-3.8, 0.575, -29.63711)]"
+	},
+	"ChurchPewLeftRow4/Collision": {
+		"disabled": false,
+		"shape": "640394776",
+		"transform": "[X: (1.5, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-3.8, 0.575, -31.28711)]"
+	},
+	"ChurchPewLeftRow5/Collision": {
+		"disabled": false,
+		"shape": "640394776",
+		"transform": "[X: (1.5, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-3.8, 0.575, -32.93711)]"
+	},
+	"ChurchPewRightRow1/Collision": {
+		"disabled": false,
+		"shape": "640394776",
+		"transform": "[X: (1.5, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (4.3, 0.575, -26.33711)]"
+	},
+	"ChurchPewRightRow2/Collision": {
+		"disabled": false,
+		"shape": "640394776",
+		"transform": "[X: (1.5, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (4.3, 0.575, -27.98711)]"
+	},
+	"ChurchPewRightRow3/Collision": {
+		"disabled": false,
+		"shape": "640394776",
+		"transform": "[X: (1.5, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (4.3, 0.575, -29.63711)]"
+	},
+	"ChurchPewRightRow4/Collision": {
+		"disabled": false,
+		"shape": "640394776",
+		"transform": "[X: (1.5, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (4.3, 0.575, -31.28711)]"
+	},
+	"ChurchPewRightRow5/Collision": {
+		"disabled": false,
+		"shape": "640394776",
+		"transform": "[X: (1.5, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (4.3, 0.575, -32.93711)]"
+	},
+	"ChurchSanctuaryPlatform/Collision": {
+		"disabled": false,
+		"shape": "1211329054",
+		"transform": "[X: (10.65, 0.0, 0.0), Y: (0.0, 0.62, 0.0), Z: (0.0, 0.0, 2.75), O: (0.25, 0.31, -36.30964)]"
+	},
+	"ChurchSanctuaryStepLower/Collision": {
+		"disabled": false,
+		"shape": "3035844373",
+		"transform": "[X: (11.9, 0.0, 0.0), Y: (0.0, 0.18, 0.0), Z: (0.0, 0.0, 0.72), O: (0.25, 0.09, -35.7839)]"
+	},
+	"ChurchSanctuaryStepMiddle/Collision": {
+		"disabled": false,
+		"shape": "20064912",
+		"transform": "[X: (11.25, 0.0, 0.0), Y: (0.0, 0.38, 0.0), Z: (0.0, 0.0, 0.72), O: (0.25, 0.19, -36.05538)]"
+	},
+	"ChurchTripleWallSconceStaging/Collision": {
+		"disabled": false,
+		"shape": "2012955049",
+		"transform": "[X: (-0.002488, 0.0, 0.999997), Y: (0.0, 1.0, 0.0), Z: (-0.999997, 0.0, -0.002488), O: (7.86249, 3.678368, -30.13175)]"
+	},
+	"ChurchTripleWallSconceStaging2/Collision": {
+		"disabled": false,
+		"shape": "2012955049",
+		"transform": "[X: (-0.002488, 0.0, 0.999997), Y: (0.0, 1.0, 0.0), Z: (-0.999997, 0.0, -0.002488), O: (7.86249, 3.678368, -35.72575)]"
+	},
+	"ChurchTripleWallSconceStaging3/Collision": {
+		"disabled": false,
+		"shape": "2012955049",
+		"transform": "[X: (-0.007009, 0.0, -0.999976), Y: (0.0, 1.0, 0.0), Z: (0.999976, 0.0, -0.007009), O: (-7.316779, 3.678368, -35.88449)]"
+	},
+	"ChurchTripleWallSconceStaging4/Collision": {
+		"disabled": false,
+		"shape": "2012955049",
+		"transform": "[X: (-0.007009, 0.0, -0.999976), Y: (0.0, 1.0, 0.0), Z: (0.999976, 0.0, -0.007009), O: (-7.316779, 3.678368, -30.29606)]"
+	},
+	"Clothesline_large_blanket/@StaticBody3D@28/@CollisionShape3D@29": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (5.546197, 9.510802, -6.355356)]"
+	},
+	"Clothesline_large_blanket/PostCollision/@CollisionShape3D@25": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (1.546197, 9.510802, -6.355356)]"
+	},
+	"Clothesline_large_blanket2/@StaticBody3D@28/@CollisionShape3D@29": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (1.156711, 9.510802, -6.355356)]"
+	},
+	"Clothesline_large_blanket2/PostCollision/@CollisionShape3D@25": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.843289, 9.510802, -6.355356)]"
+	},
+	"Clothesline_mixed_family/@StaticBody3D@95/@CollisionShape3D@96": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-4.842163, 1.31615, -12.37377)]"
+	},
+	"Clothesline_mixed_family/PostCollision/@CollisionShape3D@92": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-8.842163, 1.31615, -12.37377)]"
+	},
+	"Clothesline_mixed_family2/@StaticBody3D@95/@CollisionShape3D@96": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (5.547346, 9.535388, -2.799012)]"
+	},
+	"Clothesline_mixed_family2/PostCollision/@CollisionShape3D@92": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (1.547346, 9.535388, -2.799012)]"
+	},
+	"Clothesline_mixed_family3/@StaticBody3D@95/@CollisionShape3D@96": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-9.311118, 1.31615, -12.37377)]"
+	},
+	"Clothesline_mixed_family3/PostCollision/@CollisionShape3D@92": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-13.31112, 1.31615, -12.37377)]"
+	},
+	"Clothesline_mixed_family4/@StaticBody3D@95/@CollisionShape3D@96": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (1.15786, 9.535388, -2.799012)]"
+	},
+	"Clothesline_mixed_family4/PostCollision/@CollisionShape3D@92": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.84214, 9.535388, -2.799012)]"
+	},
+	"Clothesline_sheets_and_towels/@StaticBody3D@49/@CollisionShape3D@50": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-4.873803, 1.15, -9.694614)]"
+	},
+	"Clothesline_sheets_and_towels/PostCollision/@CollisionShape3D@46": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-8.873803, 1.15, -9.694614)]"
+	},
+	"Clothesline_shirts_and_trousers/@StaticBody3D@5/@CollisionShape3D@6": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-9.304416, 1.15, -9.69571)]"
+	},
+	"Clothesline_shirts_and_trousers/PostCollision/@CollisionShape3D@2": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-13.30442, 1.15, -9.69571)]"
+	},
+	"Clothesline_shirts_and_trousers2/@StaticBody3D@5/@CollisionShape3D@6": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (5.52598, 9.545018, -9.557354)]"
+	},
+	"Clothesline_shirts_and_trousers2/PostCollision/@CollisionShape3D@2": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (1.52598, 9.545018, -9.557354)]"
+	},
+	"Clothesline_shirts_and_trousers3/@StaticBody3D@5/@CollisionShape3D@6": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (1.136494, 9.545018, -9.557354)]"
+	},
+	"Clothesline_shirts_and_trousers3/PostCollision/@CollisionShape3D@2": {
+		"disabled": false,
+		"shape": "2582347690",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.863506, 9.545018, -9.557354)]"
+	},
+	"CompactStaircase/WalkableRamp/Collision": {
+		"disabled": false,
+		"shape": "2930998498",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 0.793778, 0.608207), Z: (0.0, -0.608207, 0.793778), O: (-1.328256, 2.02368, 0.406123)]"
+	},
+	"CorridorStairRamps/Flight1_ContinuousRamp": {
+		"disabled": false,
+		"shape": "636636139",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+	},
+	"CorridorStairRamps/Flight2_ContinuousRamp": {
+		"disabled": false,
+		"shape": "3125822839",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+	},
+	"CrowbarForLabyrinth/Collision": {
+		"disabled": false,
+		"shape": "254253092",
+		"transform": "[X: (-0.275614, -0.015386, -0.369366), Y: (0.542248, -0.005742, -0.404376), Z: (0.008136, -0.618462, 0.019692), O: (-1.615878, 8.448544, 2.207612)]"
+	},
+	"DetailedBasementBoiler/FootLeftCollision": {
+		"disabled": false,
+		"shape": "42667774",
+		"transform": "[X: (-0.0, 0.0, -1.363147), Y: (0.0, 1.238534, 0.0), Z: (1.206328, 0.0, -0.0), O: (-10.51328, -7.117177, 3.551478)]"
+	},
+	"DetailedBasementBoiler/FootRightCollision": {
+		"disabled": false,
+		"shape": "42667774",
+		"transform": "[X: (-0.0, 0.0, -1.363147), Y: (0.0, 1.238534, 0.0), Z: (1.206328, 0.0, -0.0), O: (-10.51328, -7.117177, 2.379172)]"
+	},
+	"DetailedBasementBoiler/TankCollision": {
+		"disabled": false,
+		"shape": "2598971225",
+		"transform": "[X: (-0.0, 0.0, -1.363147), Y: (0.0, 1.238534, 0.0), Z: (1.206328, 0.0, -0.0), O: (-10.51328, -5.829102, 2.965325)]"
+	},
+	"DetailedBathtubShower/CollisionShape3D": {
+		"disabled": false,
+		"shape": "653379498",
+		"transform": "[X: (1.228922, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.498068), O: (-4.734052, 0.390037, 10.22161)]"
+	},
+	"DetailedConfessionalStaging/BackCollision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (0.000257, 0.005907, -2.779042), Y: (0.070856, 2.457804, 0.00523), Z: (0.097325, -0.002806, 0.000003), O: (12.2892, 1.293779, -26.70959)]"
+	},
+	"DetailedConfessionalStaging/BaseCollision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (0.000268, 0.006163, -2.89987), Y: (0.004653, 0.161408, 0.000343), Z: (0.946211, -0.027278, 0.00003), O: (11.83214, 0.080704, -26.71221)]"
+	},
+	"DetailedConfessionalStaging/LeftCollision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (0.00001, 0.000231, -0.108745), Y: (0.070856, 2.457804, 0.00523), Z: (0.838072, -0.024161, 0.000026), O: (11.86733, 1.302971, -25.31404)]"
+	},
+	"DetailedConfessionalStaging/RightCollision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (0.00001, 0.000231, -0.108745), Y: (0.070856, 2.457804, 0.00523), Z: (0.838072, -0.024161, 0.000026), O: (11.86759, 1.308904, -28.10516)]"
+	},
+	"DetailedPedestalSink/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1583236456",
+		"transform": "[X: (-1.218848, 0.0, 0.011009), Y: (0.0, 1.211643, 0.0), Z: (-0.009649, 0.0, -1.068262), O: (-3.492395, 0.625021, 5.408679)]"
+	},
+	"DetailedPedestalSink2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1583236456",
+		"transform": "[X: (1.21881, 0.0, -0.014594), Y: (0.0, 1.211643, 0.0), Z: (0.012791, 0.0, 1.068229), O: (-25.30346, 0.625021, -6.331597)]"
+	},
+	"DetailedToilet/InteractionCollision": {
+		"disabled": false,
+		"shape": "45508345",
+		"transform": "[X: (-1.126133, 0.0, -0.017678), Y: (0.0, 1.0, 0.0), Z: (0.01931, 0.0, -1.230121), O: (-5.873026, 0.62, 5.627331)]"
+	},
+	"DetailedToilet2/InteractionCollision": {
+		"disabled": false,
+		"shape": "45508345",
+		"transform": "[X: (-1.126133, 0.0, -0.017678), Y: (0.0, 1.0, 0.0), Z: (0.01931, 0.0, -1.230121), O: (-25.19206, 0.62, -11.97275)]"
+	},
+	"Doors/BasementDoor2/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (-0.005858, 0.0, 0.999983), Y: (0.0, 1.0, 0.0), Z: (-0.999983, 0.0, -0.005858), O: (2.911661, 1.35, -2.785472)]"
+	},
+	"Doors/BedroomDoor/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (-0.0, 0.0, -1.0), Y: (0.0, 1.0, 0.0), Z: (1.0, 0.0, -0.0), O: (3.0, 5.55, -2.0)]"
+	},
+	"Doors/BedroomSleepingAreaDoor/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (0.866025, 0.0, 0.5), Y: (0.0, 1.0, 0.0), Z: (-0.5, 0.0, 0.866025), O: (5.718705, 5.55, -4.11)]"
+	},
+	"Doors/ChurchDoor/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.23792), O: (0.203294, 1.35, -21.98582)]"
+	},
+	"Doors/EntryLeftRoomDoor/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (0.0, 0.0, -1.0), Y: (0.0, 1.0, 0.0), Z: (1.0, 0.0, 0.0), O: (-2.4, 1.35, 7.32)]"
+	},
+	"Doors/MasterBedroomDoor/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (-0.0, 0.0, -1.0), Y: (0.0, 1.0, 0.0), Z: (1.0, 0.0, -0.0), O: (3.0, 5.55, 7.0)]"
+	},
+	"Doors/PuertaPrincipal/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 1.35, 10.99906)]"
+	},
+	"Doors/RooftopStairDoor/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.23792), O: (-5.244185, 5.562273, -22.03329)]"
+	},
+	"Doors/StorageDoorNorth/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.058872), O: (0.203294, 1.35, -10.86214)]"
+	},
+	"Doors/StorageDoorNorth4/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.058872), O: (-16.75197, 1.35, -1.928651)]"
+	},
+	"Doors/StorageDoorSouth/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 1.35, -6.0)]"
+	},
+	"Doors/StorageDoorSouth2/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-22.55474, 1.35, -6.0)]"
+	},
+	"Doors/StorageDoorSouth3/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (-0.00241, 0.00044, 0.999997), Y: (0.000004, 1.0, -0.00044), Z: (-0.999997, 0.000003, -0.00241), O: (-26.54214, 1.35, -9.329392)]"
+	},
+	"Doors/UpperNorthWingDoorMain/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.23792), O: (0.203294, 5.562273, -21.98582)]"
+	},
+	"DroppedFlashlight/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3015498964",
+		"transform": "[X: (0.687983, 0.0, -0.725726), Y: (0.725726, -0.000004, 0.687983), Z: (-0.000003, -1.0, -0.000002), O: (-3.581843, 1.248413, -9.520494)]"
+	},
+	"FlatheadScrewdriver/HandleCollision": {
+		"disabled": false,
+		"shape": "3442398580",
+		"transform": "[X: (0.0, 0.831936, 0.0), Y: (-0.897694, 0.0, 0.0), Z: (0.0, 0.0, 0.735673), O: (-7.133508, -7.230186, 3.753478)]"
+	},
+	"FlatheadScrewdriver/ShaftCollision": {
+		"disabled": false,
+		"shape": "2218715290",
+		"transform": "[X: (0.897694, 0.0, 0.0), Y: (0.0, 0.831936, 0.0), Z: (0.0, 0.0, 0.735673), O: (-7.474632, -7.230186, 3.753478)]"
+	},
+	"FlatheadScrewdriver2/HandleCollision": {
+		"disabled": false,
+		"shape": "3442398580",
+		"transform": "[X: (-0.484327, 0.083792, 0.008323), Y: (0.001691, -0.042657, 0.527839), Z: (0.057902, 0.332034, 0.026647), O: (-3.557647, 1.743202, -8.969553)]"
+	},
+	"FlatheadScrewdriver2/ShaftCollision": {
+		"disabled": false,
+		"shape": "2218715290",
+		"transform": "[X: (-0.001691, 0.042657, -0.527839), Y: (-0.484327, 0.083792, 0.008323), Z: (0.057902, 0.332034, 0.026647), O: (-3.557004, 1.726993, -8.768973)]"
+	},
+	"FurnitureAndPickups/BedroomChair/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1535781403",
+		"transform": "[X: (0.714753, -0.0, -0.699377), Y: (0.699304, -0.014477, 0.714678), Z: (-0.010125, -0.999895, -0.010348), O: (4.794265, 4.465596, 4.37983)]"
+	},
+	"FurnitureAndPickups/CandlePickup/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3043391491",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-6.142126, -7.144608, 6.380893)]"
+	},
+	"FurnitureAndPickups/CandlePickup2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3043391491",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-1.665321, -7.144608, 0.342278)]"
+	},
+	"FurnitureAndPickups/CandlePickup3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3043391491",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-1.767969, -7.144608, 0.706281)]"
+	},
+	"FurnitureAndPickups/DirtyLaundryBasket/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2981147576",
+		"transform": "[X: (1.206919, 0.0, 0.0), Y: (0.0, 1.566389, 0.0), Z: (0.0, 0.0, 1.107699), O: (-1.835388, 0.587376, -6.514258)]"
+	},
+	"FurnitureAndPickups/EntranceAccoladePhotoFrame/Frame/StaticBody3D/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2691632788",
+		"transform": "[X: (-0.002172, 0.0, 0.880853), Y: (0.0, 0.769876, 0.0), Z: (-0.999997, 0.0, -0.002466), O: (11.0134, 2.30123, 3.431617)]"
+	},
+	"FurnitureAndPickups/EntranceAntiqueMirror/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1262227905",
+		"transform": "[X: (0.999907, 0.0, -0.013661), Y: (0.0, 1.0, 0.0), Z: (0.013661, 0.0, 0.999907), O: (-2.061441, 1.558887, -5.866365)]"
+	},
+	"FurnitureAndPickups/EntranceBoardGameStack/CollisionShape3D": {
+		"disabled": false,
+		"shape": "345082582",
+		"transform": "[X: (1.069945, 0.0, 0.035249), Y: (0.0, 0.776311, 0.0), Z: (-0.032927, 0.0, 0.999458), O: (7.926881, 0.370847, 10.39445)]"
+	},
+	"FurnitureAndPickups/EntranceBrassCandlestick/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3103783754",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (8.254127, 3.041435, 2.326677)]"
+	},
+	"FurnitureAndPickups/EntranceCardboardBoxes/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3184917961",
+		"transform": "[X: (-0.039876, 0.0, 0.69358), Y: (0.0, 0.514327, 0.0), Z: (-0.567414, 0.0, -0.032623), O: (-3.762069, 2.476844, -9.353512)]"
+	},
+	"FurnitureAndPickups/EntranceCardboardBoxes2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3184917961",
+		"transform": "[X: (-0.576688, 0.0, 0.469956), Y: (0.0, 1.049931, 0.0), Z: (-0.801309, 0.0, -0.983296), O: (6.87229, 4.731066, 2.037328)]"
+	},
+	"FurnitureAndPickups/EntranceCardboardBoxes3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3184917961",
+		"transform": "[X: (-0.27678, -0.282263, 0.630197), Y: (0.345319, 0.839459, 0.527654), Z: (-1.101001, 0.590584, -0.219035), O: (3.597597, 6.286438, 2.111071)]"
+	},
+	"FurnitureAndPickups/EntranceCautivoPhotoFrame/CalendarCollision/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2738767426",
+		"transform": "[X: (0.021489, 0.0, -0.783006), Y: (0.0, 0.629939, 0.0), Z: (0.307536, 0.0, 0.00844), O: (3.060883, 2.212948, 3.337378)]"
+	},
+	"FurnitureAndPickups/EntranceCautivoPhotoFrame/Frame/StaticBody3D/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2691632788",
+		"transform": "[X: (0.029568, 0.0, -1.077374), Y: (0.0, 0.957508, 0.0), Z: (0.307536, 0.0, 0.00844), O: (3.060883, 2.433427, 3.337378)]"
+	},
+	"FurnitureAndPickups/EntranceChestFreezer/CollisionShape3D": {
+		"disabled": false,
+		"shape": "19284008",
+		"transform": "[X: (0.003475, 0.0, -1.735288), Y: (0.0, 1.302602, 0.0), Z: (0.922624, 0.0, 0.001848), O: (2.410992, 0.588325, -8.174757)]"
+	},
+	"FurnitureAndPickups/EntranceChestFreezer2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "19284008",
+		"transform": "[X: (-1.735264, 0.0, 0.009794), Y: (0.0, 1.302602, 0.0), Z: (-0.005207, 0.0, -0.922611), O: (-6.081206, -6.848022, 0.090013)]"
+	},
+	"FurnitureAndPickups/EntranceEditableWallNote/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1201261418",
+		"transform": "[X: (-0.998081, -0.061921, 0.0), Y: (-0.061921, 0.998081, 0.0), Z: (0.0, 0.0, -1.0), O: (1.991936, 1.717688, 10.837)]"
+	},
+	"FurnitureAndPickups/EntranceEditableWallNote10/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1201261418",
+		"transform": "[X: (-0.998081, -0.061921, 0.0), Y: (-0.061921, 0.998081, 0.0), Z: (0.0, 0.0, -1.0), O: (-2.210104, -5.760756, 5.502559)]"
+	},
+	"FurnitureAndPickups/EntranceEditableWallNote11/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1201261418",
+		"transform": "[X: (0.003315, -0.061921, 0.998075), Y: (0.000206, 0.998081, 0.061921), Z: (-0.999994, 0.0, 0.003321), O: (-2.130148, -5.760756, 0.326438)]"
+	},
+	"FurnitureAndPickups/EntranceEditableWallNote12/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1201261418",
+		"transform": "[X: (0.01616, -0.061921, -0.99795), Y: (0.001003, 0.998081, -0.061913), Z: (0.999869, 0.0, 0.016191), O: (-6.059678, -0.396166, 2.485469)]"
+	},
+	"FurnitureAndPickups/EntranceEditableWallNote13/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1201261418",
+		"transform": "[X: (0.997737, -0.061921, 0.026208), Y: (0.0619, 0.998081, 0.001626), Z: (-0.026258, -0.0, 0.999655), O: (-9.72739, -5.760756, 0.475156)]"
+	},
+	"FurnitureAndPickups/EntranceEditableWallNote2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1201261418",
+		"transform": "[X: (0.014448, 0.083663, -0.996389), Y: (0.0, 0.996493, 0.083671), Z: (0.999896, -0.001209, 0.014398), O: (3.105342, 6.262437, 3.519646)]"
+	},
+	"FurnitureAndPickups/EntranceEditableWallNote3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1201261418",
+		"transform": "[X: (-0.0323, 0.083663, 0.995971), Y: (0.001499, 0.996493, -0.083658), Z: (-0.999477, -0.001209, -0.032312), O: (10.96774, 2.005377, 1.118872)]"
+	},
+	"FurnitureAndPickups/EntranceEditableWallNote4/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1201261418",
+		"transform": "[X: (0.01609, -0.061921, -0.997951), Y: (0.000998, 0.998081, -0.061913), Z: (0.99987, 0.0, 0.016121), O: (3.030476, 1.981529, 3.963634)]"
+	},
+	"FurnitureAndPickups/EntranceEditableWallNote5/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1201261418",
+		"transform": "[X: (0.996096, 0.083663, 0.028178), Y: (-0.083664, 0.996493, -0.001153), Z: (-0.028176, -0.001209, 0.999602), O: (-2.05159, 2.005377, -10.73942)]"
+	},
+	"FurnitureAndPickups/EntranceEditableWallNote6/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1201261418",
+		"transform": "[X: (0.999548, -0.010503, 0.028178), Y: (0.010539, 0.999944, -0.001153), Z: (-0.028165, 0.00145, 0.999602), O: (-1.734045, 2.196081, -10.73942)]"
+	},
+	"FurnitureAndPickups/EntranceEditableWallNote7/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1201261418",
+		"transform": "[X: (0.999649, -0.018487, 0.019011), Y: (0.018509, 0.999828, -0.001011), Z: (-0.018989, 0.001363, 0.999819), O: (-1.58019, 1.847643, -10.73943)]"
+	},
+	"FurnitureAndPickups/EntranceEditableWallNote8/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1201261418",
+		"transform": "[X: (-0.995791, 0.083663, -0.037437), Y: (0.083649, 0.996493, 0.001931), Z: (0.037467, -0.001209, -0.999297), O: (6.340946, 1.324612, -6.109043)]"
+	},
+	"FurnitureAndPickups/EntranceEditableWallNote9/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1201261418",
+		"transform": "[X: (0.999955, 0.003167, -0.008995), Y: (-0.003149, 0.999993, 0.001968), Z: (0.009001, -0.00194, 0.999958), O: (9.154933, 1.585169, -5.89169)]"
+	},
+	"FurnitureAndPickups/EntranceGrandmotherPhotoFrame2/Frame/StaticBody3D/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2691632788",
+		"transform": "[X: (-0.005472, 0.0, 0.240468), Y: (0.0, 0.281336, 0.0), Z: (-0.036772, 0.0, -0.001859), O: (10.98047, 2.529509, 4.13811)]"
+	},
+	"FurnitureAndPickups/EntranceIroningBoard/CollisionShape3D": {
+		"disabled": false,
+		"shape": "617625723",
+		"transform": "[X: (-0.250873, -0.965259, -0.073073), Y: (-0.967575, 0.252331, -0.011309), Z: (0.029355, 0.067866, -0.997263), O: (2.591666, 1.168882, -9.760519)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3972042328",
+		"transform": "[X: (0.006945, -0.00002, -1.237847), Y: (-0.002918, -0.999996, 0.0), Z: (-0.99998, 0.002918, -0.005611), O: (-3.687407, 2.183814, -8.999452)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves/LeftRailCollision": {
+		"disabled": false,
+		"shape": "1676910541",
+		"transform": "[X: (0.006945, -0.00002, -1.237847), Y: (-0.001984, -0.679665, 0.0), Z: (-0.99998, 0.002918, -0.005611), O: (-3.873171, 1.683391, -8.232996)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves/LowerLeftBraceCollision": {
+		"disabled": false,
+		"shape": "3012654875",
+		"transform": "[X: (0.006945, -0.00002, -1.237847), Y: (-0.70534, -0.708858, -0.003946), Z: (-0.708847, 0.705351, -0.003989), O: (-3.782115, 2.004089, -8.254101)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves/LowerRightBraceCollision": {
+		"disabled": false,
+		"shape": "3012654875",
+		"transform": "[X: (0.006945, -0.00002, -1.237847), Y: (-0.70534, -0.708858, -0.003946), Z: (-0.708847, 0.705351, -0.003989), O: (-3.773599, 2.004064, -9.772033)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves/MiddleLeftBraceCollision": {
+		"disabled": false,
+		"shape": "3012654875",
+		"transform": "[X: (0.006945, -0.00002, -1.237847), Y: (-0.70534, -0.708858, -0.003946), Z: (-0.708847, 0.705351, -0.003989), O: (-3.783574, 1.504091, -8.254101)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves/MiddleRightBraceCollision": {
+		"disabled": false,
+		"shape": "3012654875",
+		"transform": "[X: (0.006945, -0.00002, -1.237847), Y: (-0.70534, -0.708858, -0.003946), Z: (-0.708847, 0.705351, -0.003989), O: (-3.775058, 1.504066, -9.772033)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves/MiddleShelfCollision": {
+		"disabled": false,
+		"shape": "3972042328",
+		"transform": "[X: (0.006945, -0.00002, -1.237847), Y: (-0.002918, -0.999996, 0.0), Z: (-0.99998, 0.002918, -0.005611), O: (-3.688866, 1.683816, -8.999452)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves/RightRailCollision": {
+		"disabled": false,
+		"shape": "1676910541",
+		"transform": "[X: (0.006945, -0.00002, -1.237847), Y: (-0.001989, -0.681428, 0.0), Z: (-0.99998, 0.002918, -0.005611), O: (-3.864557, 1.684328, -9.767926)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves/UpperShelfCollision": {
+		"disabled": false,
+		"shape": "3972042328",
+		"transform": "[X: (0.006945, -0.00002, -1.237847), Y: (-0.002918, -0.999996, 0.0), Z: (-0.99998, 0.002918, -0.005611), O: (-3.690325, 1.183818, -8.999452)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3972042328",
+		"transform": "[X: (-1.238264, 0.003614, 0.001641), Y: (-0.002918, -0.999996, 0.0), Z: (0.001652, -0.000005, 1.246422), O: (9.609382, 2.210356, 1.653812)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves3/LeftRailCollision": {
+		"disabled": false,
+		"shape": "1676910541",
+		"transform": "[X: (-1.238264, 0.003614, 0.001641), Y: (-0.001984, -0.679665, 0.0), Z: (0.001652, -0.000005, 1.246422), O: (10.37594, 1.707154, 1.87715)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves3/LowerLeftBraceCollision": {
+		"disabled": false,
+		"shape": "3012654875",
+		"transform": "[X: (-1.238264, 0.003614, 0.001641), Y: (-0.000913, -0.710914, 0.876583), Z: (0.003227, 0.703273, 0.886098), O: (10.35511, 2.028179, 1.765001)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves3/LowerRightBraceCollision": {
+		"disabled": false,
+		"shape": "3012654875",
+		"transform": "[X: (-1.238264, 0.003614, 0.001641), Y: (-0.000913, -0.710914, 0.876583), Z: (0.003227, 0.703273, 0.886098), O: (8.836668, 2.03261, 1.767013)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves3/MiddleLeftBraceCollision": {
+		"disabled": false,
+		"shape": "3012654875",
+		"transform": "[X: (-1.238264, 0.003614, 0.001641), Y: (-0.000913, -0.710914, 0.876583), Z: (0.003227, 0.703273, 0.886098), O: (10.35365, 1.528181, 1.765001)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves3/MiddleRightBraceCollision": {
+		"disabled": false,
+		"shape": "3012654875",
+		"transform": "[X: (-1.238264, 0.003614, 0.001641), Y: (-0.000913, -0.710914, 0.876583), Z: (0.003227, 0.703273, 0.886098), O: (8.835209, 1.532612, 1.767013)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves3/MiddleShelfCollision": {
+		"disabled": false,
+		"shape": "3972042328",
+		"transform": "[X: (-1.238264, 0.003614, 0.001641), Y: (-0.002918, -0.999996, 0.0), Z: (0.001652, -0.000005, 1.246422), O: (9.607923, 1.710358, 1.653812)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves3/RightRailCollision": {
+		"disabled": false,
+		"shape": "1676910541",
+		"transform": "[X: (-1.238264, 0.003614, 0.001641), Y: (-0.001989, -0.681428, 0.0), Z: (0.001652, -0.000005, 1.246422), O: (8.840496, 1.712597, 1.879185)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves3/UpperShelfCollision": {
+		"disabled": false,
+		"shape": "3972042328",
+		"transform": "[X: (-1.238264, 0.003614, 0.001641), Y: (-0.002918, -0.999996, 0.0), Z: (0.001652, -0.000005, 1.246422), O: (9.606463, 1.21036, 1.653812)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves4/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3972042328",
+		"transform": "[X: (-0.041427, 0.004745, 1.625249), Y: (-0.000078, -1.000909, 0.00292), Z: (1.255958, -0.000005, 0.032014), O: (-0.666239, -4.949972, 1.76734)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves4/LeftRailCollision": {
+		"disabled": false,
+		"shape": "1676910541",
+		"transform": "[X: (-0.041427, 0.004745, 1.625249), Y: (-0.000053, -0.680286, 0.001985), Z: (1.255958, -0.000005, 0.032014), O: (-0.414521, -5.454332, 0.766911)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves4/LowerLeftBraceCollision": {
+		"disabled": false,
+		"shape": "3012654875",
+		"transform": "[X: (-0.041427, 0.004745, 1.625249), Y: (0.883233, -0.711563, 0.024591), Z: (0.892932, 0.703915, 0.020706), O: (-0.528255, -5.132995, 0.791464)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves4/LowerRightBraceCollision": {
+		"disabled": false,
+		"shape": "3012654875",
+		"transform": "[X: (-0.041427, 0.004745, 1.625249), Y: (0.883233, -0.711563, 0.024591), Z: (0.892932, 0.703915, 0.020706), O: (-0.579057, -5.127177, 2.784456)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves4/MiddleLeftBraceCollision": {
+		"disabled": false,
+		"shape": "3012654875",
+		"transform": "[X: (-0.041427, 0.004745, 1.625249), Y: (0.883233, -0.711563, 0.024591), Z: (0.892932, 0.703915, 0.020706), O: (-0.528295, -5.63345, 0.792924)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves4/MiddleRightBraceCollision": {
+		"disabled": false,
+		"shape": "3012654875",
+		"transform": "[X: (-0.041427, 0.004745, 1.625249), Y: (0.883233, -0.711563, 0.024591), Z: (0.892932, 0.703915, 0.020706), O: (-0.579096, -5.627631, 2.785916)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves4/MiddleShelfCollision": {
+		"disabled": false,
+		"shape": "3972042328",
+		"transform": "[X: (-0.041427, 0.004745, 1.625249), Y: (-0.000078, -1.000909, 0.00292), Z: (1.255958, -0.000005, 0.032014), O: (-0.666279, -5.450427, 1.7688)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves4/RightRailCollision": {
+		"disabled": false,
+		"shape": "1676910541",
+		"transform": "[X: (-0.041427, 0.004745, 1.625249), Y: (-0.000053, -0.682051, 0.00199), Z: (1.255958, -0.000005, 0.032014), O: (-0.465891, -5.447486, 2.782218)]"
+	},
+	"FurnitureAndPickups/EntranceMetalWallShelves4/UpperShelfCollision": {
+		"disabled": false,
+		"shape": "3972042328",
+		"transform": "[X: (-0.041427, 0.004745, 1.625249), Y: (-0.000078, -1.000909, 0.00292), Z: (1.255958, -0.000005, 0.032014), O: (-0.666318, -5.950881, 1.77026)]"
+	},
+	"FurnitureAndPickups/EntranceMusicJewelryBox/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1985775429",
+		"transform": "[X: (-0.465492, 0.0, -0.194546), Y: (0.0, 0.643557, 0.0), Z: (0.302498, 0.0, -0.723789), O: (4.040584, 2.833693, 2.379491)]"
+	},
+	"FurnitureAndPickups/EntranceOldRadio/CollisionShape3D": {
+		"disabled": false,
+		"shape": "4056207865",
+		"transform": "[X: (-0.984972, 0.0, -0.091385), Y: (0.0, 0.94704, 0.0), Z: (0.082289, 0.0, -0.886922), O: (5.254949, 2.94438, 2.349705)]"
+	},
+	"FurnitureAndPickups/EntranceOldRadio2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "4056207865",
+		"transform": "[X: (-0.984972, 0.0, -0.091385), Y: (0.0, 0.94704, 0.0), Z: (0.082289, 0.0, -0.886922), O: (4.549785, 5.848217, -2.873174)]"
+	},
+	"FurnitureAndPickups/EntranceOldWomanPhotoFrame/Frame/StaticBody3D/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2691632788",
+		"transform": "[X: (0.696964, 0.0, 0.0), Y: (0.0, 0.675739, 0.0), Z: (0.0, 0.0, 1.0), O: (-5.195565, 2.245849, 5.156449)]"
+	},
+	"FurnitureAndPickups/EntranceRetroCamera/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2864537396",
+		"transform": "[X: (-0.410042, 0.0, 0.30301), Y: (0.0, 0.412968, 0.0), Z: (-0.228389, 0.0, -0.309063), O: (6.277533, 2.810181, 2.349782)]"
+	},
+	"FurnitureAndPickups/EntranceRetroKitchenCounter2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3847024735",
+		"transform": "[X: (-1.848126, 0.0, -0.030057), Y: (0.0, 1.0, 0.0), Z: (0.016261, 0.0, -0.999868), O: (6.083268, 0.51, -5.549771)]"
+	},
+	"FurnitureAndPickups/EntranceRetroKitchenCounter3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3847024735",
+		"transform": "[X: (-0.999868, 0.0, -0.016261), Y: (0.0, 1.0, 0.0), Z: (0.016261, 0.0, -0.999868), O: (9.593336, 0.51, -5.487715)]"
+	},
+	"FurnitureAndPickups/EntranceRetroKitchenCounter5/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3847024735",
+		"transform": "[X: (0.001241, 0.0, -0.999999), Y: (0.0, 1.0, 0.0), Z: (0.999999, 0.0, 0.001241), O: (10.67177, 0.51, -4.349693)]"
+	},
+	"FurnitureAndPickups/EntranceRetroMicrowave/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1577392596",
+		"transform": "[X: (-0.97144, 0.0, 0.237286), Y: (0.0, 1.0, 0.0), Z: (-0.237286, 0.0, -0.97144), O: (5.231922, 1.302262, -5.578784)]"
+	},
+	"FurnitureAndPickups/EntranceRetroMicrowave2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1577392596",
+		"transform": "[X: (0.00101, -0.999978, -0.006539), Y: (0.628637, -0.004451, 0.777686), Z: (-0.777699, -0.004896, 0.628619), O: (10.48703, 0.4676, -5.215239)]"
+	},
+	"FurnitureAndPickups/EntranceRetroMicrowave3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1577392596",
+		"transform": "[X: (-0.00021, 0.99999, 0.004533), Y: (0.046311, 0.004538, -0.998917), Z: (-0.998927, 0.0, -0.046311), O: (10.6197, 0.462365, -3.621)]"
+	},
+	"FurnitureAndPickups/EntranceRetroRefrigerator/CollisionShape3D": {
+		"disabled": false,
+		"shape": "328825464",
+		"transform": "[X: (1.472276, 0.0, 0.023213), Y: (0.0, 1.240791, 0.0), Z: (0.016271, 0.0, -1.031972), O: (3.852234, 1.302831, -5.505216)]"
+	},
+	"FurnitureAndPickups/EntranceRetroSinkCounter/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1307018464",
+		"transform": "[X: (-0.001047, 0.0, -1.0), Y: (0.0, 1.026159, 0.0), Z: (1.0, 0.0, -0.001047), O: (10.63412, 0.50751, -2.772792)]"
+	},
+	"FurnitureAndPickups/EntranceRotaryPhone/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3810848523",
+		"transform": "[X: (-0.013849, -0.999895, 0.004309), Y: (0.017204, 0.00407, 0.999844), Z: (-0.999756, 0.013921, 0.017145), O: (-3.484669, 1.920606, -5.82084)]"
+	},
+	"FurnitureAndPickups/EntranceSingleBook/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1787239868",
+		"transform": "[X: (0.017989, -0.028818, -0.668459), Y: (-0.484278, 0.226045, -0.022777), Z: (0.277969, 0.593694, -0.018115), O: (8.560369, 2.913152, 2.252483)]"
+	},
+	"FurnitureAndPickups/EntranceSingleBook2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1787239868",
+		"transform": "[X: (-0.668585, 0.005081, -0.201243), Y: (0.009134, 0.617016, -0.012349), Z: (0.183857, -0.015167, -0.652729), O: (9.926508, 2.791294, 2.364836)]"
+	},
+	"FurnitureAndPickups/EntranceSingleBook3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1787239868",
+		"transform": "[X: (-0.262008, 0.00279, 0.412512), Y: (0.001371, 0.380943, -0.002754), Z: (-0.391492, 0.001476, -0.239431), O: (-3.00112, 0.770735, -5.483783)]"
+	},
+	"FurnitureAndPickups/EntranceSmallWhiteBathroomShelf/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1008840562",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-6.122796, 1.156094, 10.77222)]"
+	},
+	"FurnitureAndPickups/EntranceThreeBooks/BlueBook/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1787239868",
+		"transform": "[X: (0.019766, -0.047077, -0.6321), Y: (-0.663509, -0.003511, -0.020486), Z: (-0.002467, 0.721841, -0.043793), O: (8.838307, 2.94813, 2.277082)]"
+	},
+	"FurnitureAndPickups/EntranceThreeBooks/EntranceThreeBooks/BlueBook/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1787239868",
+		"transform": "[X: (0.213552, 0.004927, 0.52491), Y: (0.01203, -0.616325, 0.002278), Z: (0.551611, 0.012244, -0.203847), O: (9.525248, 2.883368, 2.353614)]"
+	},
+	"FurnitureAndPickups/EntranceThreeBooks/EntranceThreeBooks/GreenBook/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1787239868",
+		"transform": "[X: (0.260815, 0.005976, 0.505147), Y: (0.01203, -0.616325, 0.002278), Z: (0.530899, 0.011768, -0.24882), O: (9.519691, 2.981897, 2.345547)]"
+	},
+	"FurnitureAndPickups/EntranceThreeBooks/EntranceThreeBooks/OchreBook/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1787239868",
+		"transform": "[X: (0.25151, 0.00577, 0.509412), Y: (0.01203, -0.616325, 0.002278), Z: (0.53537, 0.011871, -0.239966), O: (9.526516, 2.784737, 2.33883)]"
+	},
+	"FurnitureAndPickups/EntranceThreeBooks/GreenBook/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1787239868",
+		"transform": "[X: (0.019475, 0.016014, -0.633512), Y: (-0.663509, -0.003511, -0.020486), Z: (-0.00418, 0.723197, 0.011464), O: (8.944175, 2.94883, 2.289863)]"
+	},
+	"FurnitureAndPickups/EntranceThreeBooks/OchreBook/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1787239868",
+		"transform": "[X: (0.019545, 0.00339, -0.633615), Y: (-0.663509, -0.003511, -0.020486), Z: (-0.00384, 0.723367, 0.000406), O: (8.731621, 2.955032, 2.289536)]"
+	},
+	"FurnitureAndPickups/EntranceThreeBurnerKitchenCounter/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3394852054",
+		"transform": "[X: (-0.999787, 0.0, -0.020616), Y: (0.0, 1.0, 0.0), Z: (0.020616, 0.0, -0.999787), O: (8.149186, 0.487224, -5.513732)]"
+	},
+	"FurnitureAndPickups/EntranceWashingMachine/CollisionShape3D": {
+		"disabled": false,
+		"shape": "141455421",
+		"transform": "[X: (1.182391, 0.0, 0.0), Y: (0.0, 1.056542, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.917238, 0.79721, -6.652112)]"
+	},
+	"FurnitureAndPickups/EntranceWashingMachine2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "141455421",
+		"transform": "[X: (0.004804, 1.182382, 0.0), Y: (-1.056534, 0.004293, 0.0), Z: (0.0, 0.0, 1.0), O: (10.81354, 4.900637, 2.321811)]"
+	},
+	"FurnitureAndPickups/EntranceWhiteAntiqueMirror/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1262227905",
+		"transform": "[X: (1.407329, 0.0, 0.0), Y: (0.0, 0.821435, 0.0), Z: (0.0, 0.0, 1.0), O: (-3.505575, 2.099494, 5.233781)]"
+	},
+	"FurnitureAndPickups/EntranceWhiteAntiqueMirror2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1262227905",
+		"transform": "[X: (-1.407323, 0.0, 0.004139), Y: (0.0, 0.821435, 0.0), Z: (-0.002941, 0.0, -0.999996), O: (-25.28976, 2.099494, -6.156737)]"
+	},
+	"FurnitureAndPickups/EntranceWoodenCrucifix/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3491453584",
+		"transform": "[X: (-0.006347, 0.0, 0.529444), Y: (0.0, 0.544216, 0.0), Z: (-0.999929, 0.0, -0.011986), O: (-2.275274, 3.042174, 3.905111)]"
+	},
+	"FurnitureAndPickups/EntranceWoodenCrucifix2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3491453584",
+		"transform": "[X: (-0.52917, 0.0, -0.018185), Y: (0.0, 0.544216, 0.0), Z: (0.034346, 0.0, -0.99941), O: (8.385375, 7.205687, 3.139614)]"
+	},
+	"FurnitureAndPickups/KitchenBottle/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.0, -0.411371), Y: (0.0, 0.626849, 0.0), Z: (0.426381, 0.0, 0.780485), O: (10.29775, 1.365358, 1.610029)]"
+	},
+	"FurnitureAndPickups/KitchenBottle10/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.0, -0.411371), Y: (0.0, 0.626849, 0.0), Z: (0.426381, 0.0, 0.780485), O: (9.777742, 1.365358, 1.80166)]"
+	},
+	"FurnitureAndPickups/KitchenBottle11/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.0, -0.411371), Y: (0.0, 0.626849, 0.0), Z: (0.426381, 0.0, 0.780485), O: (9.626058, 1.863112, 1.527045)]"
+	},
+	"FurnitureAndPickups/KitchenBottle12/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.0, -0.411371), Y: (0.0, 0.626849, 0.0), Z: (0.426381, 0.0, 0.780485), O: (9.837174, 1.864212, 1.50496)]"
+	},
+	"FurnitureAndPickups/KitchenBottle13/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.0, -0.411371), Y: (0.0, 0.626849, 0.0), Z: (0.426381, 0.0, 0.780485), O: (6.892003, 0.921354, 0.180741)]"
+	},
+	"FurnitureAndPickups/KitchenBottle14/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.594933, -0.411067, 0.461874), Y: (0.373655, -0.024085, -0.502735), Z: (0.360099, 0.779909, 0.230279), O: (7.037662, 0.861841, 0.493304)]"
+	},
+	"FurnitureAndPickups/KitchenBottle15/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (-0.315685, 0.0, -0.797868), Y: (0.0, 0.626849, 0.0), Z: (0.82698, 0.0, -0.327204), O: (-0.5774, -5.788985, 1.800383)]"
+	},
+	"FurnitureAndPickups/KitchenBottle16/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.41128, -0.008677), Y: (0.0, 0.013222, 0.62671), Z: (0.426381, -0.780311, 0.016463), O: (3.254462, 2.781846, 2.383709)]"
+	},
+	"FurnitureAndPickups/KitchenBottle17/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.41128, -0.008677), Y: (0.0, 0.013222, 0.62671), Z: (0.426381, -0.780311, 0.016463), O: (3.406196, 2.781846, 2.383709)]"
+	},
+	"FurnitureAndPickups/KitchenBottle18/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.41128, -0.008677), Y: (0.0, 0.013222, 0.62671), Z: (0.426381, -0.780311, 0.016463), O: (3.560631, 2.781846, 2.383709)]"
+	},
+	"FurnitureAndPickups/KitchenBottle19/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.41128, -0.008677), Y: (0.0, 0.013222, 0.62671), Z: (0.426381, -0.780311, 0.016463), O: (3.719101, 2.781846, 2.383709)]"
+	},
+	"FurnitureAndPickups/KitchenBottle2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.0, -0.411371), Y: (0.0, 0.626849, 0.0), Z: (0.426381, 0.0, 0.780485), O: (6.686095, 0.921354, 0.343815)]"
+	},
+	"FurnitureAndPickups/KitchenBottle20/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.41128, -0.008677), Y: (0.0, 0.013222, 0.62671), Z: (0.426381, -0.780311, 0.016463), O: (3.324074, 2.920219, 2.383709)]"
+	},
+	"FurnitureAndPickups/KitchenBottle21/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.41128, -0.008677), Y: (0.0, 0.013222, 0.62671), Z: (0.426381, -0.780311, 0.016463), O: (3.481051, 2.920219, 2.383709)]"
+	},
+	"FurnitureAndPickups/KitchenBottle22/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.41128, -0.008677), Y: (0.0, 0.013222, 0.62671), Z: (0.426381, -0.780311, 0.016463), O: (3.639819, 2.920219, 2.383709)]"
+	},
+	"FurnitureAndPickups/KitchenBottle23/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.41128, -0.008677), Y: (0.0, 0.013222, 0.62671), Z: (0.426381, -0.780311, 0.016463), O: (3.557447, 3.056803, 2.383709)]"
+	},
+	"FurnitureAndPickups/KitchenBottle24/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.41128, -0.008677), Y: (0.0, 0.013222, 0.62671), Z: (0.426381, -0.780311, 0.016463), O: (3.390043, 3.060501, 2.383709)]"
+	},
+	"FurnitureAndPickups/KitchenBottle3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.0, -0.411371), Y: (0.0, 0.626849, 0.0), Z: (0.426381, 0.0, 0.780485), O: (4.614497, 5.734222, -2.239925)]"
+	},
+	"FurnitureAndPickups/KitchenBottle4/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.0, -0.411371), Y: (0.0, 0.626849, 0.0), Z: (0.426381, 0.0, 0.780485), O: (4.919683, 5.734222, -2.239925)]"
+	},
+	"FurnitureAndPickups/KitchenBottle5/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.0, -0.411371), Y: (0.0, 0.626849, 0.0), Z: (0.426381, 0.0, 0.780485), O: (4.788139, 5.734222, -2.094624)]"
+	},
+	"FurnitureAndPickups/KitchenBottle6/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.0, -0.411371), Y: (0.0, 0.626849, 0.0), Z: (0.426381, 0.0, 0.780485), O: (4.788139, 5.734222, -2.553666)]"
+	},
+	"FurnitureAndPickups/KitchenBottle7/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.0, -0.411371), Y: (0.0, 0.626849, 0.0), Z: (0.426381, 0.0, 0.780485), O: (5.099649, 5.734222, -1.96224)]"
+	},
+	"FurnitureAndPickups/KitchenBottle8/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.0, -0.411371), Y: (0.0, 0.626849, 0.0), Z: (0.426381, 0.0, 0.780485), O: (4.788139, 5.734222, -1.850186)]"
+	},
+	"FurnitureAndPickups/KitchenBottle9/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651106686",
+		"transform": "[X: (0.75301, 0.0, -0.411371), Y: (0.0, 0.626849, 0.0), Z: (0.426381, 0.0, 0.780485), O: (10.11252, 1.365358, 1.707422)]"
+	},
+	"FurnitureAndPickups/KitchenChairB/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1535781403",
+		"transform": "[X: (-0.966544, 0.0, -0.2565), Y: (0.0, 1.0, 0.0), Z: (0.2565, 0.0, -0.966544), O: (6.185462, 0.641836, 2.731372)]"
+	},
+	"FurnitureAndPickups/KitchenChairB2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1535781403",
+		"transform": "[X: (0.976828, 0.0, -0.214027), Y: (0.0, 1.0, 0.0), Z: (0.214027, 0.0, 0.976828), O: (8.639018, 0.644247, 3.037105)]"
+	},
+	"FurnitureAndPickups/KitchenChairB3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1535781403",
+		"transform": "[X: (0.988222, 0.0, 0.153029), Y: (0.0, 1.0, 0.0), Z: (-0.153029, 0.0, 0.988222), O: (8.700692, 0.649069, 4.187283)]"
+	},
+	"FurnitureAndPickups/KitchenRecipeBook/CollisionShape3D": {
+		"disabled": false,
+		"shape": "218120064",
+		"transform": "[X: (0.507259, 0.044228, -0.35633), Y: (-0.028295, 0.509661, 0.02298), Z: (0.336317, -0.002899, 0.478409), O: (12.25232, 5.393115, -1.425867)]"
+	},
+	"FurnitureAndPickups/LivingCan/CollisionShape3D": {
+		"disabled": false,
+		"shape": "377086365",
+		"transform": "[X: (0.696707, 0.0, 0.717356), Y: (0.0, 1.0, 0.0), Z: (-0.717356, 0.0, 0.696707), O: (7.072752, 0.915378, 3.865081)]"
+	},
+	"FurnitureAndPickups/LivingCan2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "377086365",
+		"transform": "[X: (-0.0292, 0.0, 0.999574), Y: (0.0, 1.0, 0.0), Z: (-0.999574, 0.0, -0.0292), O: (7.986596, 0.917353, 4.500103)]"
+	},
+	"FurnitureAndPickups/LivingCan3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "377086365",
+		"transform": "[X: (-0.0292, 0.0, 0.999574), Y: (0.0, 1.0, 0.0), Z: (-0.999574, 0.0, -0.0292), O: (8.809992, 1.360063, 1.752201)]"
+	},
+	"FurnitureAndPickups/LivingCan4/CollisionShape3D": {
+		"disabled": false,
+		"shape": "377086365",
+		"transform": "[X: (-0.0292, 0.0, 0.999574), Y: (0.0, 1.0, 0.0), Z: (-0.999574, 0.0, -0.0292), O: (9.047897, 1.360063, 1.786793)]"
+	},
+	"FurnitureAndPickups/LivingCan5/CollisionShape3D": {
+		"disabled": false,
+		"shape": "377086365",
+		"transform": "[X: (-0.0292, 0.0, 0.999574), Y: (0.0, 1.0, 0.0), Z: (-0.999574, 0.0, -0.0292), O: (8.941381, 1.360063, 1.592129)]"
+	},
+	"FurnitureAndPickups/LivingCan6/CollisionShape3D": {
+		"disabled": false,
+		"shape": "377086365",
+		"transform": "[X: (-0.0292, 0.0, 0.999574), Y: (0.0, 1.0, 0.0), Z: (-0.999574, 0.0, -0.0292), O: (9.285776, 1.360063, 1.718598)]"
+	},
+	"FurnitureAndPickups/LivingCan7/CollisionShape3D": {
+		"disabled": false,
+		"shape": "377086365",
+		"transform": "[X: (0.988403, 0.0, 0.151854), Y: (0.0, 1.0, 0.0), Z: (-0.151854, 0.0, 0.988403), O: (-0.720308, -5.79428, 2.278407)]"
+	},
+	"FurnitureAndPickups/LivingRoomCoatRack/CollisionShape3D": {
+		"disabled": false,
+		"shape": "323827525",
+		"transform": "[X: (0.922793, 0.0, -0.385297), Y: (0.0, 1.0, 0.0), Z: (0.385297, 0.0, 0.922793), O: (2.336053, 1.175, 10.18557)]"
+	},
+	"FurnitureAndPickups/LivingRoomFloorCushion/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1403191124",
+		"transform": "[X: (0.630271, 0.152563, 0.287225), Y: (-0.501507, 0.867367, 0.639765), Z: (-0.115972, -0.418862, 0.476965), O: (8.599345, 0.62551, 6.454865)]"
+	},
+	"FurnitureAndPickups/LivingRoomFloorCushion2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1403191124",
+		"transform": "[X: (-0.326537, -0.326945, -0.250445), Y: (-1.028991, 1.34619, 0.632861), Z: (0.2135, 0.195562, -0.826628), O: (9.002716, 0.643283, 6.505917)]"
+	},
+	"FurnitureAndPickups/LivingRoomHangingShelf/LeftSupportCollision": {
+		"disabled": false,
+		"shape": "1635275275",
+		"transform": "[X: (-0.014661, 0.0, -0.999893), Y: (0.0, 1.0, 0.0), Z: (0.999893, 0.0, -0.014661), O: (3.399377, 2.460847, 2.358055)]"
+	},
+	"FurnitureAndPickups/LivingRoomHangingShelf/RightSupportCollision": {
+		"disabled": false,
+		"shape": "1635275275",
+		"transform": "[X: (-0.014661, 0.0, -0.999893), Y: (0.0, 1.0, 0.0), Z: (0.999893, 0.0, -0.014661), O: (4.499259, 2.460847, 2.341933)]"
+	},
+	"FurnitureAndPickups/LivingRoomHangingShelf/TopBoardCollision": {
+		"disabled": false,
+		"shape": "2451617798",
+		"transform": "[X: (0.999893, 0.0, -0.014657), Y: (0.0, 1.0, 0.0), Z: (0.014657, 0.0, 0.999893), O: (3.949611, 2.660847, 2.369992)]"
+	},
+	"FurnitureAndPickups/LivingRoomHangingShelf2/LeftSupportCollision": {
+		"disabled": false,
+		"shape": "1635275275",
+		"transform": "[X: (-0.011799, 0.0, -0.999931), Y: (0.0, 1.0, 0.0), Z: (0.999931, 0.0, -0.011799), O: (5.099507, 2.462791, 2.379788)]"
+	},
+	"FurnitureAndPickups/LivingRoomHangingShelf2/RightSupportCollision": {
+		"disabled": false,
+		"shape": "1635275275",
+		"transform": "[X: (-0.011799, 0.0, -0.999931), Y: (0.0, 1.0, 0.0), Z: (0.999931, 0.0, -0.011799), O: (6.199431, 2.462791, 2.366813)]"
+	},
+	"FurnitureAndPickups/LivingRoomHangingShelf2/TopBoardCollision": {
+		"disabled": false,
+		"shape": "2451617798",
+		"transform": "[X: (0.999931, 0.0, -0.011795), Y: (0.0, 1.0, 0.0), Z: (0.011795, 0.0, 0.999931), O: (5.649705, 2.662791, 2.3933)]"
+	},
+	"FurnitureAndPickups/LivingRoomHangingShelf3/LeftSupportCollision": {
+		"disabled": false,
+		"shape": "1635275275",
+		"transform": "[X: (0.006803, 0.0, -0.999977), Y: (0.0, 1.0, 0.0), Z: (0.999977, 0.0, 0.006803), O: (7.752019, 2.469582, 2.313409)]"
+	},
+	"FurnitureAndPickups/LivingRoomHangingShelf3/RightSupportCollision": {
+		"disabled": false,
+		"shape": "1635275275",
+		"transform": "[X: (0.006803, 0.0, -0.999977), Y: (0.0, 1.0, 0.0), Z: (0.999977, 0.0, 0.006803), O: (8.851994, 2.469582, 2.320897)]"
+	},
+	"FurnitureAndPickups/LivingRoomHangingShelf3/TopBoardCollision": {
+		"disabled": false,
+		"shape": "2451617798",
+		"transform": "[X: (0.999977, 0.0, 0.006807), Y: (0.0, 1.0, 0.0), Z: (-0.006807, 0.0, 0.999977), O: (8.30187, 2.669582, 2.337152)]"
+	},
+	"FurnitureAndPickups/LivingRoomHangingShelf4/LeftSupportCollision": {
+		"disabled": false,
+		"shape": "1635275275",
+		"transform": "[X: (0.01361, 0.0, -0.999908), Y: (0.0, 1.0, 0.0), Z: (0.999908, 0.0, 0.01361), O: (9.518218, 2.482772, 2.326407)]"
+	},
+	"FurnitureAndPickups/LivingRoomHangingShelf4/RightSupportCollision": {
+		"disabled": false,
+		"shape": "1635275275",
+		"transform": "[X: (0.01361, 0.0, -0.999908), Y: (0.0, 1.0, 0.0), Z: (0.999908, 0.0, 0.01361), O: (10.61812, 2.482772, 2.341382)]"
+	},
+	"FurnitureAndPickups/LivingRoomHangingShelf4/TopBoardCollision": {
+		"disabled": false,
+		"shape": "2451617798",
+		"transform": "[X: (0.999908, 0.0, 0.013614), Y: (0.0, 1.0, 0.0), Z: (-0.013614, 0.0, 0.999908), O: (10.06789, 2.682772, 2.353892)]"
+	},
+	"FurnitureAndPickups/LivingRoomLampSwitch/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3867524268",
+		"transform": "[X: (0.0239, 0.0, 0.999714), Y: (0.0, 1.0, 0.0), Z: (-0.999714, 0.0, 0.0239), O: (3.087142, 1.514459, 4.067731)]"
+	},
+	"FurnitureAndPickups/LivingRoomLampSwitch10/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3867524268",
+		"transform": "[X: (0.999925, 0.0, 0.012298), Y: (0.0, 1.0, 0.0), Z: (-0.012298, 0.0, 0.999925), O: (-20.57487, 1.477225, -6.165342)]"
+	},
+	"FurnitureAndPickups/LivingRoomLampSwitch2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3867524268",
+		"transform": "[X: (-0.051685, 0.0, 0.998664), Y: (0.0, 1.0, 0.0), Z: (-0.998664, 0.0, -0.051685), O: (3.073708, 1.516349, -0.795497)]"
+	},
+	"FurnitureAndPickups/LivingRoomLampSwitch3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3867524268",
+		"transform": "[X: (0.999868, 0.0, -0.016322), Y: (0.0, 1.0, 0.0), Z: (0.016322, 0.0, 0.999868), O: (1.660091, 1.477225, -6.212099)]"
+	},
+	"FurnitureAndPickups/LivingRoomLampSwitch4/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3867524268",
+		"transform": "[X: (-0.029935, 0.0, 0.999552), Y: (0.0, 1.0, 0.0), Z: (-0.999552, 0.0, -0.029935), O: (-2.23158, 1.515212, 9.557737)]"
+	},
+	"FurnitureAndPickups/LivingRoomLampSwitch5/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3867524268",
+		"transform": "[X: (0.009106, 0.0, -0.999959), Y: (0.0, 1.0, 0.0), Z: (0.999959, 0.0, 0.009106), O: (-2.540079, 1.515212, 5.657886)]"
+	},
+	"FurnitureAndPickups/LivingRoomLampSwitch6/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3867524268",
+		"transform": "[X: (-0.01301, 0.0, -0.999916), Y: (0.0, 1.0, 0.0), Z: (0.999916, 0.0, -0.01301), O: (2.765006, 1.477225, -4.751362)]"
+	},
+	"FurnitureAndPickups/LivingRoomLampSwitch7/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3867524268",
+		"transform": "[X: (0.999958, 0.0, 0.009159), Y: (0.0, 1.0, 0.0), Z: (-0.009159, 0.0, 0.999958), O: (-4.285556, -6.097048, 6.5328)]"
+	},
+	"FurnitureAndPickups/LivingRoomLampSwitch8/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3867524268",
+		"transform": "[X: (-0.999951, 0.0, 0.009938), Y: (0.0, 1.0, 0.0), Z: (-0.009938, 0.0, -0.999951), O: (-6.261198, 1.477225, -5.849442)]"
+	},
+	"FurnitureAndPickups/LivingRoomLampSwitch9/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3867524268",
+		"transform": "[X: (-0.999951, 0.0, 0.009938), Y: (0.0, 1.0, 0.0), Z: (-0.009938, 0.0, -0.999951), O: (-20.57495, 1.477225, -5.849442)]"
+	},
+	"FurnitureAndPickups/LivingRoomLargeTV/CollisionShape3D": {
+		"disabled": false,
+		"shape": "201392208",
+		"transform": "[X: (0.625779, 0.0, 0.0), Y: (0.0, 0.586419, 0.0), Z: (0.0, 0.0, 0.488887), O: (7.5, 1.484641, 10.35121)]"
+	},
+	"FurnitureAndPickups/LivingRoomLargeTV2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "201392208",
+		"transform": "[X: (0.535227, -0.019368, 0.323661), Y: (-0.197727, 0.424974, 0.352403), Z: (-0.192338, -0.336538, 0.297924), O: (8.688104, 5.034975, 1.70559)]"
+	},
+	"FurnitureAndPickups/LivingRoomLargeTV3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "201392208",
+		"transform": "[X: (-0.561664, -0.00339, 0.275899), Y: (0.00617, 0.586053, 0.019762), Z: (-0.2155, 0.017055, -0.438496), O: (-8.946351, -5.95416, 0.279752)]"
+	},
+	"FurnitureAndPickups/LivingRoomTVCabinet/Shell/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2816480928",
+		"transform": "[X: (0.691569, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (7.5, 0.6, 10.311)]"
+	},
+	"FurnitureAndPickups/LivingSofa/CollisionShape3D": {
+		"disabled": false,
+		"shape": "391873612",
+		"transform": "[X: (1.076424, 0.007573, -0.038505), Y: (-0.006693, 0.958653, 0.001439), Z: (0.03288, -0.00115, 0.918953), O: (7.767415, 0.62052, 6.52862)]"
+	},
+	"FurnitureAndPickups/LivingSofa2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "391873612",
+		"transform": "[X: (-1.07698, 0.007573, -0.016936), Y: (0.006758, 0.958652, -0.001093), Z: (0.014451, -0.00115, -0.919428), O: (-6.786462, -6.718195, 4.589443)]"
+	},
+	"FurnitureAndPickups/LivingTable/BackLeftLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (-0.99999, 0.0, -0.004452), Y: (0.0, 0.900479, 0.0), Z: (0.004452, 0.0, -0.99999), O: (8.355783, 0.339015, 2.379429)]"
+	},
+	"FurnitureAndPickups/LivingTable/BackRightLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (-0.99999, 0.0, -0.004452), Y: (0.0, 0.900479, 0.0), Z: (0.004452, 0.0, -0.99999), O: (6.975796, 0.339015, 2.373285)]"
+	},
+	"FurnitureAndPickups/LivingTable/FrontLeftLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (-0.99999, 0.0, -0.004452), Y: (0.0, 0.900479, 0.0), Z: (0.004452, 0.0, -0.99999), O: (8.34572, 0.339015, 4.639406)]"
+	},
+	"FurnitureAndPickups/LivingTable/FrontRightLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (-0.99999, 0.0, -0.004452), Y: (0.0, 0.900479, 0.0), Z: (0.004452, 0.0, -0.99999), O: (6.965734, 0.339015, 4.633262)]"
+	},
+	"FurnitureAndPickups/LivingTable/TabletopCollision": {
+		"disabled": false,
+		"shape": "3301737364",
+		"transform": "[X: (-0.99999, 0.0, -0.004452), Y: (0.0, 0.900479, 0.0), Z: (0.004452, 0.0, -0.99999), O: (7.660758, 0.739728, 3.506346)]"
+	},
+	"FurnitureAndPickups/LivingTable2/BackLeftLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (0.000129, 0.0, 0.30839), Y: (0.0, 0.810863, 0.0), Z: (-0.275303, -0.0, 0.000115), O: (-3.430096, 0.306611, -5.797439)]"
+	},
+	"FurnitureAndPickups/LivingTable2/BackRightLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (0.000129, 0.0, 0.30839), Y: (0.0, 0.810863, 0.0), Z: (-0.275303, -0.0, 0.000115), O: (-3.429918, 0.306611, -5.371861)]"
+	},
+	"FurnitureAndPickups/LivingTable2/FrontLeftLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (0.000129, 0.0, 0.30839), Y: (0.0, 0.810863, 0.0), Z: (-0.275303, -0.0, 0.000115), O: (-2.807911, 0.306611, -5.797699)]"
+	},
+	"FurnitureAndPickups/LivingTable2/FrontRightLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (0.000129, 0.0, 0.30839), Y: (0.0, 0.810863, 0.0), Z: (-0.275303, -0.0, 0.000115), O: (-2.807733, 0.306611, -5.372121)]"
+	},
+	"FurnitureAndPickups/LivingTable2/TabletopCollision": {
+		"disabled": false,
+		"shape": "3301737364",
+		"transform": "[X: (0.000129, 0.0, 0.30839), Y: (0.0, 0.810863, 0.0), Z: (-0.275303, -0.0, 0.000115), O: (-3.118915, 0.667445, -5.58478)]"
+	},
+	"FurnitureAndPickups/LivingTable3/BackLeftLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (0.234914, 0.0, 0.00396), Y: (0.0, 0.744256, 0.0), Z: (-0.005526, -0.0, 0.292651), O: (2.496968, 4.486389, 1.78119)]"
+	},
+	"FurnitureAndPickups/LivingTable3/BackRightLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (0.234914, 0.0, 0.00396), Y: (0.0, 0.744256, 0.0), Z: (-0.005526, -0.0, 0.292651), O: (2.821149, 4.486389, 1.786654)]"
+	},
+	"FurnitureAndPickups/LivingTable3/FrontLeftLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (0.234914, 0.0, 0.00396), Y: (0.0, 0.744256, 0.0), Z: (-0.005526, -0.0, 0.292651), O: (2.509456, 4.486389, 1.119799)]"
+	},
+	"FurnitureAndPickups/LivingTable3/FrontRightLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (0.234914, 0.0, 0.00396), Y: (0.0, 0.744256, 0.0), Z: (-0.005526, -0.0, 0.292651), O: (2.833637, 4.486389, 1.125263)]"
+	},
+	"FurnitureAndPickups/LivingTable3/TabletopCollision": {
+		"disabled": false,
+		"shape": "3301737364",
+		"transform": "[X: (0.234914, 0.0, 0.00396), Y: (0.0, 0.744256, 0.0), Z: (-0.005526, -0.0, 0.292651), O: (2.665303, 4.817583, 1.453227)]"
+	},
+	"FurnitureAndPickups/LivingTable4/BackLeftLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (-0.005423, 0.0, 0.999985), Y: (0.0, 0.900479, 0.0), Z: (-0.999985, 0.0, -0.005423), O: (6.049306, 0.339015, -0.696652)]"
+	},
+	"FurnitureAndPickups/LivingTable4/BackRightLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (-0.005423, 0.0, 0.999985), Y: (0.0, 0.900479, 0.0), Z: (-0.999985, 0.0, -0.005423), O: (6.041822, 0.339015, 0.683328)]"
+	},
+	"FurnitureAndPickups/LivingTable4/FrontLeftLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (-0.005423, 0.0, 0.999985), Y: (0.0, 0.900479, 0.0), Z: (-0.999985, 0.0, -0.005423), O: (8.309273, 0.339015, -0.684395)]"
+	},
+	"FurnitureAndPickups/LivingTable4/FrontRightLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (-0.005423, 0.0, 0.999985), Y: (0.0, 0.900479, 0.0), Z: (-0.999985, 0.0, -0.005423), O: (8.301788, 0.339015, 0.695585)]"
+	},
+	"FurnitureAndPickups/LivingTable4/TabletopCollision": {
+		"disabled": false,
+		"shape": "3301737364",
+		"transform": "[X: (-0.005423, 0.0, 0.999985), Y: (0.0, 0.900479, 0.0), Z: (-0.999985, 0.0, -0.005423), O: (7.175548, 0.739728, -0.000533)]"
+	},
+	"FurnitureAndPickups/LivingTable5/BackLeftLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (-0.002305, 0.0, 0.424962), Y: (0.0, 1.115267, 0.0), Z: (-0.236135, 0.0, -0.001281), O: (10.37469, 0.473651, -5.772002)]"
+	},
+	"FurnitureAndPickups/LivingTable5/BackRightLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (-0.002305, 0.0, 0.424962), Y: (0.0, 1.115267, 0.0), Z: (-0.236135, 0.0, -0.001281), O: (10.37151, 0.473651, -5.185555)]"
+	},
+	"FurnitureAndPickups/LivingTable5/FrontLeftLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (-0.002305, 0.0, 0.424962), Y: (0.0, 1.115267, 0.0), Z: (-0.236135, 0.0, -0.001281), O: (10.90836, 0.473651, -5.769108)]"
+	},
+	"FurnitureAndPickups/LivingTable5/FrontRightLegCollision": {
+		"disabled": false,
+		"shape": "3796280354",
+		"transform": "[X: (-0.002305, 0.0, 0.424962), Y: (0.0, 1.115267, 0.0), Z: (-0.236135, 0.0, -0.001281), O: (10.90518, 0.473651, -5.18266)]"
+	},
+	"FurnitureAndPickups/LivingTable5/TabletopCollision": {
+		"disabled": false,
+		"shape": "3301737364",
+		"transform": "[X: (-0.002305, 0.0, 0.424962), Y: (0.0, 1.115267, 0.0), Z: (-0.236135, 0.0, -0.001281), O: (10.63994, 0.969945, -5.477331)]"
+	},
+	"FurnitureAndPickups/MainEntranceCandle/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3043391491",
+		"transform": "[X: (0.62448, -0.00629, -0.075363), Y: (0.00889, 0.799067, 0.006977), Z: (0.075424, -0.006301, 0.625512), O: (7.69666, 0.914804, 4.311306)]"
+	},
+	"FurnitureAndPickups/MainEntranceCandle2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3043391491",
+		"transform": "[X: (0.62448, -0.00629, -0.075363), Y: (0.00889, 0.799067, 0.006977), Z: (0.075424, -0.006301, 0.625512), O: (1.237324, 2.09152, -35.58511)]"
+	},
+	"FurnitureAndPickups/MainEntranceCandle3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3043391491",
+		"transform": "[X: (0.62448, -0.00629, -0.075363), Y: (0.00889, 0.799067, 0.006977), Z: (0.075424, -0.006301, 0.625512), O: (9.597606, 5.200233, -6.965317)]"
+	},
+	"FurnitureAndPickups/MainEntranceMatchbox2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1297212866",
+		"transform": "[X: (0.98354, 0.01999, 0.179584), Y: (-0.025045, 0.99935, 0.025925), Z: (-0.178949, -0.029995, 0.983401), O: (10.1466, 1.773853, 1.558949)]"
+	},
+	"FurnitureAndPickups/MainEntranceMatchbox3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1297212866",
+		"transform": "[X: (0.299127, 0.01999, -0.954004), Y: (0.022649, 0.99935, 0.028041), Z: (0.953945, -0.029995, 0.298479), O: (-0.772927, -5.374886, 1.40449)]"
+	},
+	"FurnitureAndPickups/ManadaPhotoFrame2/StaticBody3D/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2691632788",
+		"transform": "[X: (-0.003092, 0.0, 0.269982), Y: (0.0, 0.27, 0.0), Z: (-0.269982, 0.0, -0.003092), O: (10.98218, 2.094277, 4.15353)]"
+	},
+	"FurnitureAndPickups/ReceptionTrash/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3818187924",
+		"transform": "[X: (1.458427, -0.271922, -0.454421), Y: (0.198995, 1.169364, -0.061079), Z: (0.297353, -0.000732, 0.954767), O: (2.461668, 0.396452, -10.37841)]"
+	},
+	"FurnitureAndPickups/ReceptionTrash2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3818187924",
+		"transform": "[X: (-1.525622, -0.271922, -0.077371), Y: (-0.207844, 1.169364, -0.011424), Z: (0.050779, -0.000732, -0.998709), O: (10.60724, 0.396452, -1.683273)]"
+	},
+	"FurnitureAndPickups/ReceptionTrash3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3818187924",
+		"transform": "[X: (-1.525622, -0.271922, -0.077371), Y: (-0.207844, 1.169364, -0.011424), Z: (0.050779, -0.000732, -0.998709), O: (-0.889335, -6.922628, 3.33789)]"
+	},
+	"FurnitureAndPickups/ReceptionTrash4/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3818187924",
+		"transform": "[X: (1.458427, -0.271922, -0.454421), Y: (0.198995, 1.169364, -0.061079), Z: (0.297353, -0.000732, 0.954767), O: (-26.0922, 0.396452, -10.87853)]"
+	},
+	"FurnitureAndPickups/StraightThreeStepSection/Step03/Collision": {
+		"disabled": false,
+		"shape": "1167758474",
+		"transform": "[X: (-0.022983, 0.0, -2.230916), Y: (0.0, 1.0, 0.0), Z: (1.840397, 0.0, -0.01896), O: (-7.390464, -0.308722, 3.280595)]"
+	},
+	"FurnitureAndPickups/StraightThreeStepSection10/Step03/Collision": {
+		"disabled": false,
+		"shape": "1167758474",
+		"transform": "[X: (0.016858, 0.0, 1.924587), Y: (0.0, 1.0, 0.0), Z: (-1.678818, 0.0, 0.014705), O: (-31.2646, 2.465493, 12.53552)]"
+	},
+	"FurnitureAndPickups/StraightThreeStepSection11/Step03/Collision": {
+		"disabled": false,
+		"shape": "1167758474",
+		"transform": "[X: (0.006531, 0.0, 0.745638), Y: (0.0, 1.06536, 0.0), Z: (-1.670659, 0.0, 0.014634), O: (-28.21731, 1.005114, 13.55163)]"
+	},
+	"FurnitureAndPickups/StraightThreeStepSection12/Step03/Collision": {
+		"disabled": false,
+		"shape": "1167758474",
+		"transform": "[X: (2.013756, 0.0, -0.002837), Y: (0.0, 1.0, 0.0), Z: (0.004717, 0.0, 3.348737), O: (-28.30675, 3.907172, -0.716989)]"
+	},
+	"FurnitureAndPickups/StraightThreeStepSection13/Step03/Collision": {
+		"disabled": false,
+		"shape": "1167758474",
+		"transform": "[X: (1.923434, 0.0, -0.002709), Y: (0.0, 1.0, 0.0), Z: (0.003433, 0.0, 2.437), O: (-28.35189, 1.949096, 3.134521)]"
+	},
+	"FurnitureAndPickups/StraightThreeStepSection2/Step03/Collision": {
+		"disabled": false,
+		"shape": "1167758474",
+		"transform": "[X: (-0.024813, 0.0, -2.408555), Y: (0.0, 1.0, 0.0), Z: (3.595557, 0.0, -0.037042), O: (-4.319734, -2.312901, 2.399509)]"
+	},
+	"FurnitureAndPickups/StraightThreeStepSection3/Step03/Collision": {
+		"disabled": false,
+		"shape": "1167758474",
+		"transform": "[X: (-0.022342, 0.0, -2.168635), Y: (0.0, 1.0, 0.0), Z: (3.348901, 0.0, -0.034501), O: (-7.566668, -14.78524, 2.404471)]"
+	},
+	"FurnitureAndPickups/StraightThreeStepSection4/Step03/Collision": {
+		"disabled": false,
+		"shape": "1167758474",
+		"transform": "[X: (-0.019827, 0.0, -1.924558), Y: (0.0, 1.0, 0.0), Z: (1.678793, 0.0, -0.017295), O: (-4.354687, -16.28947, 2.571407)]"
+	},
+	"FurnitureAndPickups/StraightThreeStepSection5/Step03/Collision": {
+		"disabled": false,
+		"shape": "1167758474",
+		"transform": "[X: (-0.007682, 0.0, -0.745627), Y: (0.0, 1.06536, 0.0), Z: (1.670634, 0.0, -0.017211), O: (-7.403545, -17.74985, 1.56)]"
+	},
+	"FurnitureAndPickups/StraightThreeStepSection6/Step03/Collision": {
+		"disabled": false,
+		"shape": "1167758474",
+		"transform": "[X: (-0.010111, 0.0, -0.981453), Y: (0.0, 1.06536, 0.0), Z: (3.740389, 0.0, -0.038534), O: (-8.197571, -3.942824, 1.47102)]"
+	},
+	"FurnitureAndPickups/StraightThreeStepSection7/Step03/Collision": {
+		"disabled": false,
+		"shape": "1167758474",
+		"transform": "[X: (-0.010111, 0.0, -0.981453), Y: (0.0, 1.06536, 0.0), Z: (3.740389, 0.0, -0.038534), O: (-8.197571, -3.942824, 1.47102)]"
+	},
+	"FurnitureAndPickups/StraightThreeStepSection8/Step03/Collision": {
+		"disabled": false,
+		"shape": "1167758474",
+		"transform": "[X: (-0.010156, 0.0, -0.985847), Y: (0.0, 1.105657, 0.0), Z: (2.615885, 0.0, -0.026949), O: (-7.612462, -6.075035, 5.982936)]"
+	},
+	"FurnitureAndPickups/StraightThreeStepSection9/Step03/Collision": {
+		"disabled": false,
+		"shape": "1167758474",
+		"transform": "[X: (0.018996, 0.0, 2.168666), Y: (0.0, 1.0, 0.0), Z: (-3.348949, 0.0, 0.029334), O: (-28.05289, 3.969731, 12.70741)]"
+	},
+	"FurnitureAndPickups/UnderStairsPebbleJar/CollisionShape3D": {
+		"disabled": false,
+		"shape": "4275628109",
+		"transform": "[X: (-0.630139, 0.0, 0.255368), Y: (0.0, 0.603838, 0.0), Z: (-0.259489, 0.0, -0.640309), O: (7.734883, 2.859844, 2.418403)]"
+	},
+	"FurnitureAndPickups/UnderStairsVase/CollisionShape3D": {
+		"disabled": false,
+		"shape": "676190621",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (7.966389, 2.910551, 2.239156)]"
+	},
+	"FurnitureAndPickups/UpperBedroomRockingChair/CollisionShape3D": {
+		"disabled": false,
+		"shape": "359498233",
+		"transform": "[X: (-0.851809, 0.0, 0.523853), Y: (0.0, 1.0, 0.0), Z: (-0.523853, 0.0, -0.851809), O: (10.66695, 5.022386, 8.751049)]"
+	},
+	"FuseBulb/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2117448128",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 0.0, 1.0), Z: (0.0, -1.0, 0.0), O: (-2.438062, -7.252233, 1.176428)]"
+	},
+	"FuseBulb10/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2117448128",
+		"transform": "[X: (0.828631, 0.0, 0.559795), Y: (-0.559795, 0.0, 0.828631), Z: (-0.0, -1.0, 0.0), O: (-5.291878, 5.410173, -25.21421)]"
+	},
+	"FuseBulb11/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2117448128",
+		"transform": "[X: (0.801579, 0.0, -0.597889), Y: (0.597889, 0.0, 0.801579), Z: (0.0, -1.0, 0.0), O: (4.021036, 8.442252, -10.53294)]"
+	},
+	"FuseBulb12/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2117448128",
+		"transform": "[X: (0.82157, 0.0, 0.570108), Y: (-0.570108, 0.0, 0.82157), Z: (-0.0, -1.0, 0.0), O: (-3.469052, 0.062424, 3.742992)]"
+	},
+	"FuseBulb2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1143745417",
+		"transform": "[X: (0.938532, 0.0, 0.345192), Y: (0.344784, 0.048633, -0.937422), Z: (-0.016788, 0.998817, 0.045644), O: (-3.347563, -7.229398, 0.099562)]"
+	},
+	"FuseBulb3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1143745417",
+		"transform": "[X: (0.856799, -0.0, -0.515651), Y: (-0.515041, 0.048633, -0.855785), Z: (0.025078, 0.998817, 0.041669), O: (-3.081552, -7.229398, 0.24767)]"
+	},
+	"FuseBulb4/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1143745417",
+		"transform": "[X: (-0.485662, -0.0, -0.874146), Y: (-0.873112, 0.048633, 0.485088), Z: (0.042513, 0.998817, -0.023619), O: (-2.686217, -7.229398, 0.13345)]"
+	},
+	"FuseBulb5/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1143745417",
+		"transform": "[X: (0.408245, -0.910914, 0.059755), Y: (0.521267, 0.178878, -0.834436), Z: (0.749411, 0.371803, 0.547856), O: (-2.721076, -7.214614, 0.247308)]"
+	},
+	"FuseBulb6/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2117448128",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 0.0, 1.0), Z: (0.0, -1.0, 0.0), O: (-2.690218, -7.252233, 1.176428)]"
+	},
+	"FuseBulb7/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2117448128",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 0.0, 1.0), Z: (0.0, -1.0, 0.0), O: (-2.129333, -7.252233, 1.176428)]"
+	},
+	"FuseBulb8/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2117448128",
+		"transform": "[X: (0.567161, 0.0, 0.823607), Y: (-0.823607, 0.0, 0.567161), Z: (-0.0, -1.0, 0.0), O: (-3.566093, -5.894478, 4.100481)]"
+	},
+	"FuseBulb9/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1143745417",
+		"transform": "[X: (0.856799, -0.0, -0.515651), Y: (-0.515041, 0.048633, -0.855785), Z: (0.025078, 0.998817, 0.041669), O: (-3.458938, -6.485657, 5.71445)]"
+	},
+	"GroundFloor/ChurchBackWall/Collision": {
+		"disabled": false,
+		"shape": "2559478352",
+		"transform": "[X: (24.76, 0.0, 0.0), Y: (0.0, 8.399997, 0.0), Z: (0.0, 0.0, 0.26), O: (2.075566, 4.1, -38.0)]"
+	},
+	"GroundFloor/ChurchBackWall/Collision2": {
+		"disabled": false,
+		"shape": "1110842994",
+		"transform": "[X: (24.76, 0.0, 0.0), Y: (0.0, 8.399997, 0.0), Z: (0.0, 0.0, 0.26), O: (-9.604731, 5.549902, -38.0)]"
+	},
+	"GroundFloor/ChurchBackWall/Collision3": {
+		"disabled": false,
+		"shape": "1066344461",
+		"transform": "[X: (24.76, 0.0, 0.0), Y: (0.0, 8.399997, 0.0), Z: (0.0, 0.0, 0.26), O: (-11.29458, 4.148193, -38.0)]"
+	},
+	"GroundFloor/ChurchFrontWallRight/Collision": {
+		"disabled": false,
+		"shape": "2559478352",
+		"transform": "[X: (9.5, 0.0, 0.0), Y: (0.0, 8.4, 0.0), Z: (0.0, 0.0, 0.3), O: (7.75, 4.1, -22.0)]"
+	},
+	"GroundFloor/ChurchLeftWallLower/Collision": {
+		"disabled": false,
+		"shape": "2559478352",
+		"transform": "[X: (0.26, 0.0, 0.0), Y: (0.0, 3.1, 0.0), Z: (0.0, 0.0, 16.25), O: (-12.0, 1.55, -29.875)]"
+	},
+	"GroundFloor/ChurchLeftWallUpper/Collision": {
+		"disabled": false,
+		"shape": "2559478352",
+		"transform": "[X: (0.26, 0.0, 0.0), Y: (0.0, 1.65, 0.0), Z: (0.0, 0.0, 16.25), O: (-12.0, 7.475, -29.875)]"
+	},
+	"GroundFloor/ChurchLeftWindowPier1/Collision": {
+		"disabled": false,
+		"shape": "2559478352",
+		"transform": "[X: (0.26, 0.0, 0.0), Y: (0.0, 3.55, 0.0), Z: (0.0, 0.0, 2.6), O: (-12.0, 4.875, -27.5)]"
+	},
+	"GroundFloor/ChurchLeftWindowPier2/Collision": {
+		"disabled": false,
+		"shape": "2559478352",
+		"transform": "[X: (0.26, 0.0, 0.0), Y: (0.0, 3.55, 0.0), Z: (0.0, 0.0, 2.6), O: (-12.0, 4.875, -32.5)]"
+	},
+	"GroundFloor/ChurchLeftWindowPierBack/Collision": {
+		"disabled": false,
+		"shape": "2559478352",
+		"transform": "[X: (0.26, 0.0, 0.0), Y: (0.0, 3.55, 0.0), Z: (0.0, 0.0, 1.8), O: (-12.0, 4.875, -37.1)]"
+	},
+	"GroundFloor/ChurchLeftWindowPierFront/Collision": {
+		"disabled": false,
+		"shape": "2559478352",
+		"transform": "[X: (0.26, 0.0, 0.0), Y: (0.0, 3.55, 0.0), Z: (0.0, 0.0, 2.05), O: (-12.0, 4.875, -22.775)]"
+	},
+	"GroundFloor/ChurchNaveFloor/Collision": {
+		"disabled": false,
+		"shape": "215394076",
+		"transform": "[X: (24.5, 0.0, 0.0), Y: (0.0, 0.2, 0.0), Z: (0.0, 0.0, 16.25), O: (0.25, -0.1, -29.875)]"
+	},
+	"GroundFloor/ChurchRightWallLower/Collision": {
+		"disabled": false,
+		"shape": "2559478352",
+		"transform": "[X: (0.26, 0.0, 0.0), Y: (0.0, 3.1, 0.0), Z: (0.0, 0.0, 16.25), O: (12.5, 1.55, -29.875)]"
+	},
+	"GroundFloor/ChurchRightWallUpper/Collision": {
+		"disabled": false,
+		"shape": "2559478352",
+		"transform": "[X: (0.26, 0.0, 0.0), Y: (0.0, 1.65, 0.0), Z: (0.0, 0.0, 16.25), O: (12.5, 7.475, -29.875)]"
+	},
+	"GroundFloor/ChurchRightWindowPier1/Collision": {
+		"disabled": false,
+		"shape": "2559478352",
+		"transform": "[X: (0.26, 0.0, 0.0), Y: (0.0, 3.55, 0.0), Z: (0.0, 0.0, 2.6), O: (12.5, 4.875, -27.5)]"
+	},
+	"GroundFloor/ChurchRightWindowPier2/Collision": {
+		"disabled": false,
+		"shape": "2559478352",
+		"transform": "[X: (0.26, 0.0, 0.0), Y: (0.0, 3.55, 0.0), Z: (0.0, 0.0, 2.6), O: (12.5, 4.875, -32.5)]"
+	},
+	"GroundFloor/ChurchRightWindowPierBack/Collision": {
+		"disabled": false,
+		"shape": "2559478352",
+		"transform": "[X: (0.26, 0.0, 0.0), Y: (0.0, 3.55, 0.0), Z: (0.0, 0.0, 1.8), O: (12.5, 4.875, -37.1)]"
+	},
+	"GroundFloor/ChurchRightWindowPierFront/Collision": {
+		"disabled": false,
+		"shape": "2559478352",
+		"transform": "[X: (0.26, 0.0, 0.0), Y: (0.0, 3.55, 0.0), Z: (0.0, 0.0, 2.05), O: (12.5, 4.875, -22.775)]"
+	},
+	"GroundFloor/ChurchWindowLeftBack/GlassCollision/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2055227469",
+		"transform": "[X: (-0.0, 0.0, -1.0), Y: (0.0, 1.0, 0.0), Z: (1.0, 0.0, -0.0), O: (-11.84, 4.86, -35.0)]"
+	},
+	"GroundFloor/ChurchWindowLeftFront/GlassCollision/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2055227469",
+		"transform": "[X: (-0.0, 0.0, -1.0), Y: (0.0, 1.0, 0.0), Z: (1.0, 0.0, -0.0), O: (-11.84, 4.86, -25.0)]"
+	},
+	"GroundFloor/ChurchWindowLeftMiddle/GlassCollision/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2055227469",
+		"transform": "[X: (-0.0, 0.0, -1.0), Y: (0.0, 1.0, 0.0), Z: (1.0, 0.0, -0.0), O: (-11.84, 4.86, -30.0)]"
+	},
+	"GroundFloor/ChurchWindowRightBack/GlassCollision/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2055227469",
+		"transform": "[X: (-0.0, 0.0, 1.0), Y: (0.0, 1.0, 0.0), Z: (-1.0, 0.0, -0.0), O: (12.34, 4.86, -35.0)]"
+	},
+	"GroundFloor/ChurchWindowRightFront/GlassCollision/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2055227469",
+		"transform": "[X: (-0.0, 0.0, 1.0), Y: (0.0, 1.0, 0.0), Z: (-1.0, 0.0, -0.0), O: (12.34, 4.86, -25.0)]"
+	},
+	"GroundFloor/ChurchWindowRightMiddle/GlassCollision/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2055227469",
+		"transform": "[X: (-0.0, 0.0, 1.0), Y: (0.0, 1.0, 0.0), Z: (-1.0, 0.0, -0.0), O: (12.34, 4.86, -30.0)]"
+	},
+	"GroundFloor/ExteriorWalls/DetachedWall13Extension/Collision": {
+		"disabled": false,
+		"shape": "2258288542",
+		"transform": "[X: (0.005984, 0.0, 0.999982), Y: (0.0, 1.0, 0.0), Z: (-0.999982, 0.0, 0.005984), O: (6.994165, 2.0, 2.024619)]"
+	},
+	"GroundFloor/ExteriorWalls/FrontDoorLintel/Collision": {
+		"disabled": false,
+		"shape": "1508765498",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 3.35, 11.0)]"
+	},
+	"GroundFloor/ExteriorWalls/Wall_02/Collision": {
+		"disabled": false,
+		"shape": "2186595814",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-3.85, 2.0, 11.0)]"
+	},
+	"GroundFloor/ExteriorWalls/Wall_03/Collision": {
+		"disabled": false,
+		"shape": "2186595814",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (3.85, 2.0, 11.0)]"
+	},
+	"GroundFloor/ExteriorWalls/Wall_04/Collision": {
+		"disabled": false,
+		"shape": "2784408554",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (10.30166, 2.0, 11.0)]"
+	},
+	"GroundFloor/ExteriorWalls/Wall_13/Collision": {
+		"disabled": false,
+		"shape": "433728122",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (11.09293, 2.0, -0.252734)]"
+	},
+	"GroundFloor/ExteriorWalls/Wall_14/Collision": {
+		"disabled": false,
+		"shape": "1433694178",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (11.10579, 2.0, 9.7)]"
+	},
+	"GroundFloor/ExteriorWalls/Wall_15/Collision": {
+		"disabled": false,
+		"shape": "4194022906",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.444084), O: (11.09293, 2.0, -4.130766)]"
+	},
+	"GroundFloor/ExteriorWalls/WindowGlass_02/Collision": {
+		"disabled": false,
+		"shape": "1107222248",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (8.0, 1.9, 11.0)]"
+	},
+	"GroundFloor/ExteriorWalls/WindowGlass_09/Collision": {
+		"disabled": false,
+		"shape": "622409910",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (11.09322, 1.902302, 7.000421)]"
+	},
+	"GroundFloor/ExteriorWalls/WindowLowerWall_02/Collision": {
+		"disabled": false,
+		"shape": "2210734183",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (8.0, 0.525, 11.0)]"
+	},
+	"GroundFloor/ExteriorWalls/WindowLowerWall_09/Collision": {
+		"disabled": false,
+		"shape": "1497132020",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (11.09878, 0.525, 7.0)]"
+	},
+	"GroundFloor/ExteriorWalls/WindowUpperWall_02/Collision": {
+		"disabled": false,
+		"shape": "1930050681",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (8.0, 3.375, 11.0)]"
+	},
+	"GroundFloor/ExteriorWalls/WindowUpperWall_08/Collision": {
+		"disabled": false,
+		"shape": "1930050681",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-12.53819, 3.375, -1.929352)]"
+	},
+	"GroundFloor/ExteriorWalls/WindowUpperWall_09/Collision": {
+		"disabled": false,
+		"shape": "3283836158",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (11.0953, 3.375, 7.0)]"
+	},
+	"GroundFloor/ExteriorWalls/WindowUpperWall_10/Collision": {
+		"disabled": false,
+		"shape": "3283836158",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (11.0953, 3.375, -1.900507)]"
+	},
+	"GroundFloor/GroundFloorSlab/Collision": {
+		"disabled": false,
+		"shape": "2429244213",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (3.523193, -0.1, 0.0)]"
+	},
+	"GroundFloor/GroundFloorSlab/Collision2": {
+		"disabled": false,
+		"shape": "2429244213",
+		"transform": "[X: (0.226152, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.162853), O: (8.456464, -0.1, -16.68227)]"
+	},
+	"GroundFloor/GroundFloorSlab2/Collision": {
+		"disabled": false,
+		"shape": "2429244213",
+		"transform": "[X: (0.267509, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.275593), O: (-5.090104, -0.1, 8.043256)]"
+	},
+	"GroundFloor/LowerNorth_ConnectorCeiling/Collision": {
+		"disabled": false,
+		"shape": "1656015296",
+		"transform": "[X: (5.5, 0.0, 0.0), Y: (0.0, 0.2, 0.0), Z: (0.0, 0.0, 11.15), O: (0.25, 4.1, -16.425)]"
+	},
+	"GroundFloor/LowerNorth_ConnectorFloor/Collision": {
+		"disabled": false,
+		"shape": "1656015296",
+		"transform": "[X: (5.5, 0.0, 0.0), Y: (0.0, 0.2, 0.0), Z: (0.0, 0.0, 11.15), O: (0.25, -0.1, -16.425)]"
+	},
+	"GroundFloor/LowerNorth_ConnectorFloor10/Collision": {
+		"disabled": false,
+		"shape": "826311356",
+		"transform": "[X: (9.843059, 0.0, 0.0), Y: (0.0, 0.2, 0.0), Z: (0.0, 0.0, 8.046626), O: (-21.25609, -0.1, -10.02351)]"
+	},
+	"GroundFloor/LowerNorth_ConnectorFloor2/Collision": {
+		"disabled": false,
+		"shape": "826311356",
+		"transform": "[X: (19.10749, 0.0, 0.0), Y: (0.0, 0.199998, 0.0), Z: (0.0, 0.0, 4.157789), O: (-16.98506, -0.1, -3.903428)]"
+	},
+	"GroundFloor/LowerNorth_ConnectorFloor4/Collision": {
+		"disabled": false,
+		"shape": "826311356",
+		"transform": "[X: (7.776615, 0.0, 0.0), Y: (0.0, 0.2, 0.0), Z: (0.0, 0.0, 7.018674), O: (-19.41343, -0.1, 1.676257)]"
+	},
+	"GroundFloor/LowerNorth_ConnectorFloor5/Collision": {
+		"disabled": false,
+		"shape": "2194965701",
+		"transform": "[X: (7.776608, 0.0, 0.0), Y: (0.0, 0.199999, 0.0), Z: (0.0, 0.0, 7.018674), O: (-18.8302, 4.032568, 1.592293)]"
+	},
+	"GroundFloor/LowerNorth_ConnectorFloor6/Collision": {
+		"disabled": false,
+		"shape": "826311356",
+		"transform": "[X: (19.10749, 0.0, 0.0), Y: (0.0, 0.199999, 0.0), Z: (0.0, 0.0, 4.157789), O: (-16.07263, 4.032138, -3.903428)]"
+	},
+	"GroundFloor/LowerNorth_ConnectorFloor7/Collision": {
+		"disabled": false,
+		"shape": "3290539478",
+		"transform": "[X: (7.776608, 0.0, 0.0), Y: (0.0, 0.199997, 0.0), Z: (0.0, 0.0, 7.018674), O: (-20.39528, 4.032568, -10.00436)]"
+	},
+	"GroundFloor/LowerNorth_ConnectorFloor8/Collision": {
+		"disabled": false,
+		"shape": "2304353204",
+		"transform": "[X: (2.96833, 0.0, 0.0), Y: (0.0, 0.200001, 0.0), Z: (0.0, 0.0, 17.53532), O: (-28.23852, 4.032138, -8.643411)]"
+	},
+	"GroundFloor/LowerNorth_ConnectorFloor9/Collision": {
+		"disabled": false,
+		"shape": "2304353204",
+		"transform": "[X: (2.96833, 0.0, 0.0), Y: (0.0, 0.200001, 0.0), Z: (0.0, 0.0, 16.97123), O: (-28.23852, -0.097515, -4.642594)]"
+	},
+	"GroundFloor/LowerNorth_EntranceLintel/Collision": {
+		"disabled": false,
+		"shape": "1915816576",
+		"transform": "[X: (1.999982, 0.0, 0.0), Y: (0.0, 1.1, 0.0), Z: (0.0, 0.0, 0.22), O: (0.211944, 3.45, -10.85)]"
+	},
+	"GroundFloor/LowerNorth_EntranceLintel3/Collision2": {
+		"disabled": false,
+		"shape": "1560815842",
+		"transform": "[X: (1.999988, 0.0, 0.0), Y: (0.0, 1.1, 0.0), Z: (0.0, 0.0, 0.22), O: (-16.78348, 3.45, -1.916509)]"
+	},
+	"GroundFloor/LowerNorth_EntranceWallLeft/Collision": {
+		"disabled": false,
+		"shape": "3950451869",
+		"transform": "[X: (3.25, 0.0, 0.0), Y: (0.0, 4.0, 0.0), Z: (0.0, 0.0, 0.22), O: (-2.506962, 2.0, -10.85)]"
+	},
+	"GroundFloor/LowerNorth_EntranceWallRight/Collision": {
+		"disabled": false,
+		"shape": "1656015296",
+		"transform": "[X: (2.75, 0.0, 0.0), Y: (0.0, 4.0, 0.0), Z: (0.0, 0.0, 0.22), O: (2.136231, 2.0, -10.85)]"
+	},
+	"GroundFloor/LowerNorth_EntranceWallRight3/Collision2": {
+		"disabled": false,
+		"shape": "1656015296",
+		"transform": "[X: (2.75, 0.0, 0.0), Y: (0.0, 4.0, 0.0), Z: (0.0, 0.0, 0.22), O: (-14.81905, 2.0, -1.916509)]"
+	},
+	"GroundFloor/LowerNorth_PortalLeft/Collision": {
+		"disabled": false,
+		"shape": "146364452",
+		"transform": "[X: (1.749999, 0.0, 0.0), Y: (0.0, 4.0, 0.0), Z: (0.0, 0.0, 0.3), O: (-6.409699, 2.0, -22.0)]"
+	},
+	"GroundFloor/LowerNorth_PortalLintel/Collision": {
+		"disabled": false,
+		"shape": "1656015296",
+		"transform": "[X: (2.0, 0.0, 0.0), Y: (0.0, 1.1, 0.0), Z: (0.0, 0.0, 0.3), O: (0.25, 3.45, -22.0)]"
+	},
+	"GroundFloor/LowerNorth_PortalRight/Collision": {
+		"disabled": false,
+		"shape": "627616838",
+		"transform": "[X: (1.749999, 0.0, 0.0), Y: (0.0, 4.0, 0.0), Z: (0.0, 0.0, 0.3), O: (2.348557, 2.0, -22.0)]"
+	},
+	"GroundFloor/ReceptionAndHall/BasementDoorLintel/Collision": {
+		"disabled": false,
+		"shape": "1508765498",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 3.35, -6.0)]"
+	},
+	"GroundFloor/ReceptionAndHall/BasementDoorLintel2/Collision": {
+		"disabled": false,
+		"shape": "1508765498",
+		"transform": "[X: (-0.004259, 0.0, 0.999991), Y: (0.0, 1.0, 0.0), Z: (-0.999991, 0.0, -0.004259), O: (2.90543, 3.35, -2.780193)]"
+	},
+	"GroundFloor/ReceptionAndHall/BasementDoorLintel3/Collision": {
+		"disabled": false,
+		"shape": "1508765498",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-22.55474, 3.35, -6.0)]"
+	},
+	"GroundFloor/ReceptionAndHall/BasementDoorLintel4/Collision": {
+		"disabled": false,
+		"shape": "1508765498",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-22.55474, 3.35, -6.0)]"
+	},
+	"GroundFloor/ReceptionAndHall/BasementDoorLintel5/Collision": {
+		"disabled": false,
+		"shape": "1508765498",
+		"transform": "[X: (-0.00241, 0.00044, 0.999997), Y: (0.000004, 1.0, -0.00044), Z: (-0.999997, 0.000003, -0.00241), O: (-26.53559, 3.35, -9.330274)]"
+	},
+	"GroundFloor/ReceptionAndHall/BasementDoorLintel6/Collision": {
+		"disabled": false,
+		"shape": "1508765498",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-28.41702, 3.386301, -17.38464)]"
+	},
+	"GroundFloor/ReceptionAndHall/Collision": {
+		"disabled": false,
+		"shape": "3532914859",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.312371), O: (-4.0, 2.0, -8.443468)]"
+	},
+	"GroundFloor/ReceptionAndHall/EntryLeftRoom/BackWall/Collision": {
+		"disabled": false,
+		"shape": "615430337",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-4.7, 2.0, 5.0)]"
+	},
+	"GroundFloor/ReceptionAndHall/EntryLeftRoom/DoorLintel/Collision": {
+		"disabled": false,
+		"shape": "1688560769",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.4, 3.45, 7.32)]"
+	},
+	"GroundFloor/ReceptionAndHall/EntryLeftRoom/DoorWallFront/Collision": {
+		"disabled": false,
+		"shape": "1965234052",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.4, 2.0, 9.77)]"
+	},
+	"GroundFloor/ReceptionAndHall/EntryLeftRoom/DoorWallRear/Collision": {
+		"disabled": false,
+		"shape": "196446430",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.4, 2.0, 5.075)]"
+	},
+	"GroundFloor/ReceptionAndHall/EntryLeftRoom/WestWall/Collision": {
+		"disabled": false,
+		"shape": "4096588703",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-7.0, 2.0, 8.0)]"
+	},
+	"GroundFloor/ReceptionAndHall/LivingRoomDoorLintel/Collision": {
+		"disabled": false,
+		"shape": "1590753221",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (2.921972, 3.445936, 7.765298)]"
+	},
+	"GroundFloor/ReceptionAndHall/ReceptionFrontWallPiece/Collision": {
+		"disabled": false,
+		"shape": "262860525",
+		"transform": "[X: (1.147275, 0.0, 0.0), Y: (0.0, 0.010829, -1.010368), Z: (0.0, 1.065386, 0.011418), O: (2.919335, 1.505299, 10.37119)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_02/Collision": {
+		"disabled": false,
+		"shape": "2454322011",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.641078), O: (-2.406754, 2.0, 1.193099)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_03/Collision": {
+		"disabled": false,
+		"shape": "3612377391",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.40675), O: (2.927663, 2.074707, 1.49862)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_04/Collision": {
+		"disabled": false,
+		"shape": "3612377391",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.296108), O: (2.927663, 2.074707, -8.446385)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_05/Collision": {
+		"disabled": false,
+		"shape": "208894778",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.55, 2.0, -6.0)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_06/Collision": {
+		"disabled": false,
+		"shape": "1017564286",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (6.050647, 2.0, -6.0)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_08/Collision": {
+		"disabled": false,
+		"shape": "1607142858",
+		"transform": "[X: (1.560097, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-8.730927, 2.0, -5.999979)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_09/Collision": {
+		"disabled": false,
+		"shape": "651850094",
+		"transform": "[X: (3.054394, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-8.437221, 2.0, -1.915295)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_10/Collision": {
+		"disabled": false,
+		"shape": "889600837",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.641078), O: (-3.971395, 2.0, 1.40444)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_13/Collision": {
+		"disabled": false,
+		"shape": "3612377391",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.205189), O: (-3.987595, 2.074707, -9.240075)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_14/Collision": {
+		"disabled": false,
+		"shape": "3612377391",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.205189), O: (-3.987595, 2.074707, -9.240075)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_15/Collision": {
+		"disabled": false,
+		"shape": "3545066687",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.28965), O: (-14.90966, 2.074707, 1.705096)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_15/Collision2": {
+		"disabled": false,
+		"shape": "3545066687",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.28965), O: (-22.53246, 2.074707, 1.705096)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_16/Collision": {
+		"disabled": false,
+		"shape": "1785167755",
+		"transform": "[X: (1.664934, 0.0, 0.0), Y: (0.0, 0.999992, 0.0), Z: (0.0, 0.0, 0.999992), O: (-22.25812, 2.0, -1.915295)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_17/Collision": {
+		"disabled": false,
+		"shape": "208894778",
+		"transform": "[X: (2.714005, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-18.7374, 2.0, 5.149837)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_18/Collision": {
+		"disabled": false,
+		"shape": "208894778",
+		"transform": "[X: (3.712743, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-15.99243, 2.0, -5.999979)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_19/Collision": {
+		"disabled": false,
+		"shape": "208894778",
+		"transform": "[X: (1.029735, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-25.16033, 2.0, -6.000792)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_20/Collision": {
+		"disabled": false,
+		"shape": "208894778",
+		"transform": "[X: (1.19717, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-28.17422, 2.0, 3.785792)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_21/Collision": {
+		"disabled": false,
+		"shape": "208894778",
+		"transform": "[X: (0.246592, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-29.90595, 2.0, -17.38418)]"
+	},
+	"GroundFloor/ReceptionAndHall/Wall_22/Collision": {
+		"disabled": false,
+		"shape": "208894778",
+		"transform": "[X: (0.246592, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-26.79044, 2.0, -17.38418)]"
+	},
+	"InteractivePipeValve/InteractionCollision": {
+		"disabled": false,
+		"shape": "3749487558",
+		"transform": "[X: (-0.010118, 0.0, -0.558484), Y: (0.990709, -0.000002, -0.017948), Z: (-0.000004, -0.531606, 0.0), O: (-10.33408, -6.235081, 1.474689)]"
+	},
+	"InteractivePipeValve2/InteractionCollision": {
+		"disabled": false,
+		"shape": "3749487558",
+		"transform": "[X: (-0.010118, 0.0, -0.558484), Y: (0.990709, -0.000002, -0.017948), Z: (-0.000004, -0.531606, 0.0), O: (-10.33408, -5.978464, 0.915972)]"
+	},
+	"InteractivePipeValve3/InteractionCollision": {
+		"disabled": false,
+		"shape": "3749487558",
+		"transform": "[X: (-0.010118, 0.0, -0.558484), Y: (0.990709, -0.000002, -0.017948), Z: (-0.000004, -0.531606, 0.0), O: (-10.33408, -6.000015, 0.280648)]"
+	},
+	"KitchenChairB10/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1535781403",
+		"transform": "[X: (0.875197, -0.000505, -0.483768), Y: (0.008368, -0.999834, 0.016183), Z: (-0.483696, -0.018211, -0.875047), O: (5.099797, 6.134171, -2.163487)]"
+	},
+	"KitchenChairB11/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1535781403",
+		"transform": "[X: (-0.778344, 0.0, -0.627839), Y: (0.0, 1.0, 0.0), Z: (0.627839, 0.0, -0.778344), O: (3.580399, 4.81848, -3.629127)]"
+	},
+	"KitchenChairB4/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1535781403",
+		"transform": "[X: (-0.994855, 0.0, 0.101316), Y: (0.0, 1.0, 0.0), Z: (-0.101316, 0.0, -0.994855), O: (6.719452, 0.658712, 4.127647)]"
+	},
+	"KitchenChairB5/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1535781403",
+		"transform": "[X: (-0.601438, 0.0, -0.798921), Y: (0.0, 1.0, 0.0), Z: (0.798921, 0.0, -0.601438), O: (-4.301721, 0.678, -5.433547)]"
+	},
+	"KitchenChairB6/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1535781403",
+		"transform": "[X: (-0.355171, 0.0, 0.934802), Y: (0.0, 1.0, 0.0), Z: (-0.934802, 0.0, -0.355171), O: (6.665164, 0.658712, 0.81023)]"
+	},
+	"KitchenChairB7/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1535781403",
+		"transform": "[X: (0.13231, 0.0, 0.991209), Y: (0.0, 1.0, 0.0), Z: (-0.991209, 0.0, 0.13231), O: (7.76578, 0.658712, 1.05895)]"
+	},
+	"KitchenChairB8/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1535781403",
+		"transform": "[X: (0.416872, 0.0, -0.908966), Y: (0.0, 1.0, 0.0), Z: (0.908966, 0.0, 0.416872), O: (7.642726, 0.658712, -0.850122)]"
+	},
+	"KitchenChairB9/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1535781403",
+		"transform": "[X: (0.08713, 0.0, -0.996198), Y: (0.0, 1.0, 0.0), Z: (0.996198, 0.0, 0.08713), O: (6.73909, 0.658712, -1.188623)]"
+	},
+	"KitchenFoodStaging/BreadBasket/Collision": {
+		"disabled": false,
+		"shape": "1157231203",
+		"transform": "[X: (0.983844, 0.0, -0.17903), Y: (0.0, 1.0, 0.0), Z: (0.17903, 0.0, 0.983844), O: (3.593154, 2.849924, -5.551952)]"
+	},
+	"KitchenFoodStaging/CannedGoods/Collision": {
+		"disabled": false,
+		"shape": "1576949013",
+		"transform": "[X: (0.676353, 0.0, 0.001469), Y: (0.0, 0.597561, 0.0), Z: (-0.001417, 0.0, 0.652255), O: (9.996056, 1.933688, 1.709376)]"
+	},
+	"KitchenFoodStaging/CookingEssentials/Collision": {
+		"disabled": false,
+		"shape": "747812126",
+		"transform": "[X: (0.686281, 0.0, 0.103721), Y: (0.0, 0.529362, 0.0), Z: (-0.114242, 0.0, 0.755895), O: (6.974864, 1.258113, -5.687393)]"
+	},
+	"KitchenFoodStaging/EggCarton/Collision": {
+		"disabled": false,
+		"shape": "4282310457",
+		"transform": "[X: (0.593926, 0.0, 0.117542), Y: (0.0, 0.607229, 0.0), Z: (-0.125532, 0.0, 0.634301), O: (9.257785, 1.841939, 1.624133)]"
+	},
+	"KitchenFoodStaging/FruitBowl/Collision": {
+		"disabled": false,
+		"shape": "2849065557",
+		"transform": "[X: (0.537736, 0.0, -0.249419), Y: (0.0, 0.603916, 0.0), Z: (0.328145, 0.0, 0.707466), O: (9.786695, 1.124748, -5.580715)]"
+	},
+	"KitchenFoodStaging/PantryPackages/Collision": {
+		"disabled": false,
+		"shape": "2928226530",
+		"transform": "[X: (0.755265, 0.0, -0.055573), Y: (0.0, 0.770897, 0.0), Z: (0.062805, 0.0, 0.853554), O: (9.976627, 2.504141, 1.784545)]"
+	},
+	"KitchenFoodStaging/SpiceJarSet/Collision": {
+		"disabled": false,
+		"shape": "2023945171",
+		"transform": "[X: (0.573763, 0.0, -0.357076), Y: (0.0, 0.681665, 0.0), Z: (0.350572, 0.0, 0.563311), O: (9.527421, 2.391067, 1.723973)]"
+	},
+	"LargeDecorationStaging/DetailedShoppingCart/Collision": {
+		"disabled": false,
+		"shape": "3201668250",
+		"transform": "[X: (0.753419, 0.0, 0.09206), Y: (0.0, 0.731672, 0.0), Z: (-0.176689, 0.0, 1.446022), O: (9.752469, 4.766714, -3.370005)]"
+	},
+	"LargeDecorationStaging/DetailedWoodenBarrel/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2780808593",
+		"transform": "[X: (0.983844, 0.0, -0.17903), Y: (0.0, 1.0, 0.0), Z: (0.17903, 0.0, 0.983844), O: (12.34867, 4.712274, -1.606721)]"
+	},
+	"LargeDecorationStaging/DetailedWoodenBarrel2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2780808593",
+		"transform": "[X: (0.983844, 0.0, -0.17903), Y: (0.0, 1.0, 0.0), Z: (0.17903, 0.0, 0.983844), O: (-8.977728, -6.976382, 0.187895)]"
+	},
+	"LargeDecorationStaging/DetailedWoodenBarrel3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2780808593",
+		"transform": "[X: (-0.025924, -0.791341, 0.610825), Y: (0.999653, -0.017638, 0.019576), Z: (-0.004717, 0.61112, 0.791524), O: (-10.57226, -6.780297, 5.906065)]"
+	},
+	"LargeDecorationStaging/DetailedWoodenBarrel4/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2780808593",
+		"transform": "[X: (-0.025924, -0.983502, -0.17903), Y: (0.999653, -0.026349, -0.0), Z: (-0.004717, -0.178967, 0.983844), O: (-10.54434, -6.785785, 4.798897)]"
+	},
+	"LargeDecorationStaging/DetailedWoodenBarrel5/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2780808593",
+		"transform": "[X: (-0.025924, 0.628147, 0.777663), Y: (0.999653, 0.01996, 0.017201), Z: (-0.004717, 0.777839, -0.628446), O: (-10.54434, -5.893365, 5.377786)]"
+	},
+	"LargeDecorationStaging/DetailedWoodenBarrel6/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2780808593",
+		"transform": "[X: (0.983844, 0.0, -0.17903), Y: (0.0, 1.0, 0.0), Z: (0.17903, 0.0, 0.983844), O: (-9.063067, -6.976382, 6.001494)]"
+	},
+	"LargeDecorationStaging/DetailedWoodenBarrel7/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2780808593",
+		"transform": "[X: (0.983844, 0.0, -0.17903), Y: (0.0, 1.0, 0.0), Z: (0.17903, 0.0, 0.983844), O: (-9.131106, -5.734621, 5.82115)]"
+	},
+	"LaundryFlashlightBattery/CollisionShape3D": {
+		"disabled": false,
+		"shape": "770505536",
+		"transform": "[X: (0.596766, 0.0, 0.211647), Y: (-0.200034, 0.0, 0.564021), Z: (0.0, -0.564904, 0.0), O: (-9.121003, 4.242939, -24.37806)]"
+	},
+	"LightControlPanel/Face/FuseBank/Fuse1/FuseBulb/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2117448128",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 0.0, 1.0), Z: (0.0, -1.0, 0.0), O: (-3.622446, -6.319793, 0.009017)]"
+	},
+	"LightControlPanel/Face/FuseBank/Fuse1/SocketInteract/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2868766314",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 0.0, 1.0), Z: (0.0, -1.0, 0.0), O: (-3.622446, -6.319793, -0.066039)]"
+	},
+	"LightControlPanel/Face/FuseBank/Fuse2/FuseBulb/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1143745417",
+		"transform": "[X: (0.23284, -0.972515, 0.0), Y: (0.00745, 0.001784, 0.999971), Z: (-0.972487, -0.232833, 0.007661), O: (-3.380407, -6.318972, -0.011052)]"
+	},
+	"LightControlPanel/Face/FuseBank/Fuse2/SocketInteract/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2868766314",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 0.0, 1.0), Z: (0.0, -1.0, 0.0), O: (-3.382446, -6.319793, -0.066039)]"
+	},
+	"LightControlPanel/Face/FuseBank/Fuse3/FuseBulb/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1143745417",
+		"transform": "[X: (0.23284, -0.972515, 0.0), Y: (0.00745, 0.001784, 0.999971), Z: (-0.972487, -0.232833, 0.007661), O: (-3.140407, -6.318972, -0.011052)]"
+	},
+	"LightControlPanel/Face/FuseBank/Fuse3/SocketInteract/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2868766314",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 0.0, 1.0), Z: (0.0, -1.0, 0.0), O: (-3.142446, -6.319793, -0.066039)]"
+	},
+	"LightControlPanel/Face/FuseBank/Fuse4/SocketInteract/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2868766314",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 0.0, 1.0), Z: (0.0, -1.0, 0.0), O: (-2.902446, -6.319793, -0.066039)]"
+	},
+	"LightControlPanel/Face/Switches/Switch1/InteractBody/CollisionShape3D": {
+		"disabled": false,
+		"shape": "208965604",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-3.512446, -5.579793, -0.024039)]"
+	},
+	"LightControlPanel/Face/Switches/Switch2/InteractBody/CollisionShape3D": {
+		"disabled": false,
+		"shape": "208965604",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-3.012446, -5.579793, -0.024039)]"
+	},
+	"LightControlPanel/Face/Switches/Switch3/InteractBody/CollisionShape3D": {
+		"disabled": false,
+		"shape": "208965604",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-3.512446, -5.869793, -0.024039)]"
+	},
+	"LightControlPanel/Face/Switches/Switch4/InteractBody/CollisionShape3D": {
+		"disabled": false,
+		"shape": "208965604",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-3.012446, -5.869793, -0.024039)]"
+	},
+	"LivingRoomLampSwitch/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3867524268",
+		"transform": "[X: (0.0057, 0.0, -0.999984), Y: (0.0, 1.0, 0.0), Z: (0.999984, 0.0, 0.0057), O: (2.84029, 5.578705, -4.665759)]"
+	},
+	"LivingRoomLampSwitch2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3867524268",
+		"transform": "[X: (-0.019319, 0.0, -0.999813), Y: (0.0, 1.0, 0.0), Z: (0.999813, 0.0, -0.019319), O: (2.833923, 5.578705, 8.782545)]"
+	},
+	"LivingRoomLampSwitch3/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3867524268",
+		"transform": "[X: (0.007156, 0.0, 0.999974), Y: (0.0, 1.0, 0.0), Z: (-0.999974, 0.0, 0.007156), O: (-2.337644, 5.578705, -20.50123)]"
+	},
+	"LivingRoomLampSwitch4/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3867524268",
+		"transform": "[X: (0.999989, 0.0, -0.004573), Y: (0.0, 1.0, 0.0), Z: (0.004573, 0.0, 0.999989), O: (7.548885, 5.578705, -4.752416)]"
+	},
+	"LivingRoomLampSwitch5/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3867524268",
+		"transform": "[X: (-0.045389, 0.0, 0.998969), Y: (0.0, 1.0, 0.0), Z: (-0.998969, 0.0, -0.045389), O: (3.174788, 5.578705, 5.351305)]"
+	},
+	"LockedDoorKeys/BasementKey/Collision": {
+		"disabled": false,
+		"shape": "635706663",
+		"transform": "[X: (0.464325, 0.0, 0.143828), Y: (0.0, 0.702483, 0.0), Z: (-0.17449, 0.0, 0.56331), O: (1.755397, 1.979453, -35.72491)]"
+	},
+	"LockedDoorKeys/BasementKey2/Collision": {
+		"disabled": false,
+		"shape": "635706663",
+		"transform": "[X: (0.464325, 0.0, 0.143828), Y: (0.0, 0.702483, 0.0), Z: (-0.17449, 0.0, 0.56331), O: (1.452804, 0.10205, 10.01574)]"
+	},
+	"LockedDoorKeys/ChurchKey/Collision": {
+		"disabled": false,
+		"shape": "635706663",
+		"transform": "[X: (0.464325, 0.0, 0.143828), Y: (0.0, 0.702483, 0.0), Z: (-0.17449, 0.0, 0.56331), O: (6.376501, 5.135263, 3.545737)]"
+	},
+	"LockedDoorKeys/LowerNorthWingKey/Collision": {
+		"disabled": false,
+		"shape": "635706663",
+		"transform": "[X: (0.464325, 0.0, 0.143828), Y: (0.0, 0.702483, 0.0), Z: (-0.17449, 0.0, 0.56331), O: (7.816191, 0.555685, 0.888802)]"
+	},
+	"LockedDoorKeys/MainDoorKey/Collision": {
+		"disabled": false,
+		"shape": "635706663",
+		"transform": "[X: (-0.496911, 0.0, 0.160499), Y: (0.0, 0.604271, 0.0), Z: (-0.194497, 0.0, -0.602169), O: (4.63661, 0.061816, 12.57634)]"
+	},
+	"LockedDoorKeys/MainDoorKey2/Collision": {
+		"disabled": false,
+		"shape": "635706663",
+		"transform": "[X: (0.022027, -0.015729, 0.521486), Y: (-0.60086, -0.059633, 0.023581), Z: (0.06162, -0.629424, -0.021588), O: (0.706078, 1.06425, 10.87847)]"
+	},
+	"LockedDoorKeys/MasterBedroomKey/Collision": {
+		"disabled": false,
+		"shape": "635706663",
+		"transform": "[X: (-0.529647, 0.0, 0.2867), Y: (0.0, 0.72785, 0.0), Z: (-0.367729, 0.0, -0.679339), O: (-4.766225, 0.125019, 8.008154)]"
+	},
+	"LockedDoorKeys/RooftopKey/Collision": {
+		"disabled": false,
+		"shape": "635706663",
+		"transform": "[X: (0.464325, 0.0, 0.143828), Y: (0.0, 0.702483, 0.0), Z: (-0.17449, 0.0, 0.56331), O: (-1.174807, -6.516093, 6.303336)]"
+	},
+	"LockedDoorKeys/StorageKey/Collision": {
+		"disabled": false,
+		"shape": "635706663",
+		"transform": "[X: (0.393691, 0.0, -0.18352), Y: (0.0, 0.548038, 0.0), Z: (0.183588, 0.0, 0.393838), O: (3.666647, 4.710419, -3.527191)]"
+	},
+	"LockedDoorKeys/UpperRoomKey/Collision": {
+		"disabled": false,
+		"shape": "635706663",
+		"transform": "[X: (-0.496911, 0.0, 0.160499), Y: (0.0, 0.604271, 0.0), Z: (-0.194497, 0.0, -0.602169), O: (6.80692, 0.808179, 10.37338)]"
+	},
+	"NewFrontHouseDecor/AntiqueGeometricRug/CollisionShape3D": {
+		"disabled": false,
+		"shape": "738152399",
+		"transform": "[X: (1.854463, 0.0, 0.55376), Y: (0.0, 1.0, 0.0), Z: (-0.502809, 0.0, 1.683833), O: (8.812685, 4.207194, 1.531777)]"
+	},
+	"NewFrontHouseDecor/AntiqueMedallionRug/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1422803761",
+		"transform": "[X: (1.592974, 0.0, 1.215833), Y: (0.0, 1.0, 0.0), Z: (-1.289498, 0.0, 1.689487), O: (7.527084, 4.211469, -2.389807)]"
+	},
+	"NewFrontHouseDecor/BalconyBalustradeSample/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (0.001747, 0.0, -2.27665), Y: (0.0, 1.0, 0.0), Z: (0.998327, 0.0, 0.000766), O: (-6.942734, 4.549446, 8.867937)]"
+	},
+	"NewFrontHouseDecor/BalconyBalustradeSample2/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (0.489474, 0.0, -0.004714), Y: (0.0, 1.0, 0.0), Z: (0.008874, 0.0, 0.921371), O: (-6.212161, 4.549446, 5.021984)]"
+	},
+	"NewFrontHouseDecor/BalconyBalustradeSample3/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (-0.000627, 0.0, -0.393401), Y: (0.0, 1.0, 0.0), Z: (0.921285, 0.0, -0.001468), O: (3.590944, 4.549446, 11.78169)]"
+	},
+	"NewFrontHouseDecor/BalconyBalustradeSample4/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (0.001115, 0.0, -1.452791), Y: (0.0, 1.0, 0.0), Z: (0.998676, 0.0, 0.000767), O: (11.01835, 0.435462, -8.500256)]"
+	},
+	"NewFrontHouseDecor/BalconyBalustradeSample5/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (-1.125783, 0.0, -0.009312), Y: (0.0, 1.0, 0.0), Z: (0.008279, 0.0, -1.00087), O: (4.841915, 0.435462, -10.74183)]"
+	},
+	"NewFrontHouseDecor/BalconyBalustradeSample6/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (-0.592451, 0.0, -0.004901), Y: (0.0, 1.0, 0.0), Z: (0.008311, 0.0, -1.004792), O: (9.924362, 0.435462, -10.74183)]"
+	},
+	"NewFrontHouseDecor/BalconyBalustradeSample7/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (-1.352855, 0.0, -0.014272), Y: (0.0, 1.0, 0.0), Z: (0.010552, 0.0, -1.000256), O: (-4.7123, 4.549446, -20.3349)]"
+	},
+	"NewFrontHouseDecor/BalconyBalustradeSample8/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (0.000074, 0.0, -0.489532), Y: (0.0, 1.0, 0.0), Z: (1.027624, 0.0, 0.000155), O: (-6.773016, 4.549446, -21.08464)]"
+	},
+	"NewFrontHouseDecor/BalconyBalustradeSample9/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (-0.869132, 0.0, -0.009169), Y: (0.0, 1.0, 0.0), Z: (0.010589, 0.0, -1.003787), O: (-3.976864, 8.941729, -10.98628)]"
+	},
+	"NewFrontHouseDecor/BeachChairRight/Collision": {
+		"disabled": false,
+		"shape": "1360218211",
+		"transform": "[X: (-0.89544, 0.0, 0.445182), Y: (0.0, 1.0, 0.0), Z: (-0.445182, 0.0, -0.89544), O: (10.05473, 0.65, -13.96746)]"
+	},
+	"NewFrontHouseDecor/BeachChairRight2/Collision": {
+		"disabled": false,
+		"shape": "1360218211",
+		"transform": "[X: (0.441197, 0.0, -0.89741), Y: (0.0, 1.0, 0.0), Z: (0.89741, 0.0, 0.441197), O: (11.39446, 0.65, -12.05117)]"
+	},
+	"NewFrontHouseDecor/BeachChairRight3/Collision": {
+		"disabled": false,
+		"shape": "1360218211",
+		"transform": "[X: (0.846575, 0.0, -0.532269), Y: (0.0, 1.0, 0.0), Z: (0.532269, 0.0, 0.846575), O: (9.934429, 0.65, -9.464349)]"
+	},
+	"NewFrontHouseDecor/ChildTricycle/Collision": {
+		"disabled": false,
+		"shape": "920039977",
+		"transform": "[X: (0.966122, -0.214025, -0.144225), Y: (0.155538, 0.928791, -0.336387), Z: (0.20595, 0.302558, 0.930615), O: (12.31604, 7.072287, -3.468066)]"
+	},
+	"NewFrontHouseDecor/DetailedPicnicTable/Collision": {
+		"disabled": false,
+		"shape": "2253172376",
+		"transform": "[X: (0.995004, 0.0, 0.099833), Y: (0.0, 1.0, 0.0), Z: (-0.099833, 0.0, 0.995004), O: (8.076019, 0.52, -17.0316)]"
+	},
+	"NewFrontHouseDecor/DetailedWoodFiredOven/Collision": {
+		"disabled": false,
+		"shape": "737337012",
+		"transform": "[X: (0.999978, 0.0, 0.006619), Y: (0.0, 1.0, 0.0), Z: (-0.006619, 0.0, 0.999978), O: (4.955864, 1.55, -7.126661)]"
+	},
+	"NewFrontHouseDecor/ElderlyWalker/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2960460449",
+		"transform": "[X: (0.906308, 0.0, 0.422618), Y: (0.0, 1.0, 0.0), Z: (-0.422618, 0.0, 0.906308), O: (-1.002083, 0.56, 3.648726)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample10/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.03825, 0.0), Z: (0.0, 0.0, 1.0), O: (2.534288, 1.980055, -14.75935)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample11/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.03825, 0.0), Z: (0.0, 0.0, 1.0), O: (2.534288, 1.980055, -18.11329)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample12/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.03825, 0.0), Z: (0.0, 0.0, 1.0), O: (2.534288, 1.980055, -21.34112)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample13/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.03825, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.030224, 1.980055, -11.4736)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample14/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.03825, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.057359, 1.980055, -14.75935)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample15/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.03825, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.041561, 1.980055, -18.11329)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample16/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.03825, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.02795, 1.980055, -21.34112)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample17/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.019178, 0.0), Z: (0.0, 0.0, 1.0), O: (-4.89149, 1.961917, -8.38433)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample2/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.019178, 0.0), Z: (0.0, 0.0, 1.0), O: (12.57987, 1.961917, -10.61768)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample3/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.019178, 0.0), Z: (0.0, 0.0, 1.0), O: (12.57987, 1.961917, 10.58313)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample4/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.019178, 0.0), Z: (0.0, 0.0, 1.0), O: (12.57987, 1.961917, 3.342263)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample5/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.019178, 0.0), Z: (0.0, 0.0, 1.0), O: (12.57987, 1.961917, -3.621326)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample6/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.019178, 0.0), Z: (0.0, 0.0, 1.0), O: (-6.578674, 1.961917, 12.19598)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample7/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.019178, 0.0), Z: (0.0, 0.0, 1.0), O: (3.19637, 1.961917, 12.19598)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample8/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.019178, 0.0), Z: (0.0, 0.0, 1.0), O: (-4.89149, 1.961917, 0.21527)]"
+	},
+	"NewFrontHouseDecor/FlutedTuscanColumnSample9/Collision": {
+		"disabled": false,
+		"shape": "1031772759",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.03825, 0.0), Z: (0.0, 0.0, 1.0), O: (2.534288, 1.980055, -11.4736)]"
+	},
+	"NewFrontHouseDecor/PullDownAtticEntry/HatchCollision": {
+		"disabled": false,
+		"shape": "2955543952",
+		"transform": "[X: (0.992809, 0.0, -0.119712), Y: (0.0, 1.0, 0.0), Z: (0.119712, 0.0, 0.992809), O: (10.82609, 8.180902, -7.70811)]"
+	},
+	"NewFrontHouseDecor/PullDownAtticEntry/LadderCollision": {
+		"disabled": false,
+		"shape": "2465190182",
+		"transform": "[X: (0.992809, 0.0, -0.119712), Y: (-0.045513, 0.924909, -0.377454), Z: (0.110723, 0.380188, 0.918258), O: (10.75512, 6.680903, -8.296705)]"
+	},
+	"NewFrontHouseDecor/RetroTVRemote2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3953266969",
+		"transform": "[X: (-0.4015, 0.0, 0.481213), Y: (0.0, 0.838326, 0.0), Z: (-0.454467, 0.0, -0.379184), O: (8.319459, 0.544022, 6.720411)]"
+	},
+	"NewFrontHouseDecor/RitualTable/Collision": {
+		"disabled": false,
+		"shape": "1350065386",
+		"transform": "[X: (0.00828, 0.0, -0.999966), Y: (0.0, 1.0, 0.0), Z: (0.999966, 0.0, 0.00828), O: (9.401718, 4.646556, -7.723845)]"
+	},
+	"NewFrontHouseDecor/SquareMasonryColumnSample/Collision": {
+		"disabled": false,
+		"shape": "3933736916",
+		"transform": "[X: (1.540559, 0.0, 0.0), Y: (0.0, 2.209196, 0.0), Z: (0.0, 0.0, 1.408839), O: (8.506005, 3.981176, -35.79009)]"
+	},
+	"NewFrontHouseDecor/SquareMasonryColumnSample10/Collision": {
+		"disabled": false,
+		"shape": "3933736916",
+		"transform": "[X: (1.540559, 0.0, 0.0), Y: (0.0, 2.209196, 0.0), Z: (0.0, 0.0, 1.408839), O: (12.66411, 3.981176, -21.85474)]"
+	},
+	"NewFrontHouseDecor/SquareMasonryColumnSample2/Collision": {
+		"disabled": false,
+		"shape": "3933736916",
+		"transform": "[X: (1.540559, 0.0, 0.0), Y: (0.0, 2.209196, 0.0), Z: (0.0, 0.0, 1.408839), O: (8.506005, 3.981176, -30.21099)]"
+	},
+	"NewFrontHouseDecor/SquareMasonryColumnSample3/Collision": {
+		"disabled": false,
+		"shape": "3933736916",
+		"transform": "[X: (1.540559, 0.0, 0.0), Y: (0.0, 2.209196, 0.0), Z: (0.0, 0.0, 1.408839), O: (8.506005, 3.981176, -24.19854)]"
+	},
+	"NewFrontHouseDecor/SquareMasonryColumnSample4/Collision": {
+		"disabled": false,
+		"shape": "3933736916",
+		"transform": "[X: (1.540559, 0.0, 0.0), Y: (0.0, 2.209196, 0.0), Z: (0.0, 0.0, 1.408839), O: (-7.967304, 3.981176, -24.19854)]"
+	},
+	"NewFrontHouseDecor/SquareMasonryColumnSample5/Collision": {
+		"disabled": false,
+		"shape": "3933736916",
+		"transform": "[X: (1.540559, 0.0, 0.0), Y: (0.0, 2.209196, 0.0), Z: (0.0, 0.0, 1.408839), O: (-7.971756, 3.981176, -30.21099)]"
+	},
+	"NewFrontHouseDecor/SquareMasonryColumnSample6/Collision": {
+		"disabled": false,
+		"shape": "3933736916",
+		"transform": "[X: (1.540559, 0.0, 0.0), Y: (0.0, 2.209196, 0.0), Z: (0.0, 0.0, 1.408839), O: (-7.967393, 3.981176, -35.79009)]"
+	},
+	"NewFrontHouseDecor/SquareMasonryColumnSample7/Collision": {
+		"disabled": false,
+		"shape": "3933736916",
+		"transform": "[X: (1.540559, 0.0, 0.0), Y: (0.0, 2.209196, 0.0), Z: (0.0, 0.0, 1.408839), O: (-12.13388, 3.981176, -21.85516)]"
+	},
+	"NewFrontHouseDecor/SquareMasonryColumnSample8/Collision": {
+		"disabled": false,
+		"shape": "3933736916",
+		"transform": "[X: (1.540559, 0.0, 0.0), Y: (0.0, 2.209196, 0.0), Z: (0.0, 0.0, 1.408839), O: (-12.13388, 3.981176, -38.06202)]"
+	},
+	"NewFrontHouseDecor/SquareMasonryColumnSample9/Collision": {
+		"disabled": false,
+		"shape": "3933736916",
+		"transform": "[X: (1.540559, 0.0, 0.0), Y: (0.0, 2.209196, 0.0), Z: (0.0, 0.0, 1.408839), O: (12.66411, 3.981176, -38.06202)]"
+	},
+	"NewFrontHouseDecor/ToiletPlunger/Collision": {
+		"disabled": false,
+		"shape": "3270826523",
+		"transform": "[X: (0.960467, 0.034993, 0.276186), Y: (-0.03363, 0.999388, -0.00967), Z: (-0.276356, 0.0, 0.961055), O: (-3.703774, 0.479706, -9.905684)]"
+	},
+	"OfficeArchiveTrolley/Collision15": {
+		"disabled": false,
+		"shape": "1167000095",
+		"transform": "[X: (-0.607341, 0.0, -0.794441), Y: (0.0, 1.0, 0.0), Z: (0.794441, 0.0, -0.607341), O: (-16.50675, 0.55, -7.446808)]"
+	},
+	"OfficeArmchair/Collision": {
+		"disabled": false,
+		"shape": "3716925049",
+		"transform": "[X: (0.037506, 0.0, -0.999296), Y: (0.0, 1.0, 0.0), Z: (0.999296, 0.0, 0.037506), O: (-16.00167, 0.903076, -10.06438)]"
+	},
+	"OfficeBackWall/Collision": {
+		"disabled": false,
+		"shape": "204012134",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-20.17656, 2.0, -14.0)]"
+	},
+	"OfficeBookcaseLow2/Collision31": {
+		"disabled": false,
+		"shape": "2254342076",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-16.15278, 0.57, -13.60926)]"
+	},
+	"OfficeBookcaseLow3/Collision31": {
+		"disabled": false,
+		"shape": "2254342076",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-18.42907, 0.57, -13.60926)]"
+	},
+	"OfficeBookcaseOak/Collision37": {
+		"disabled": false,
+		"shape": "2302333467",
+		"transform": "[X: (1.195091, 0.0, 0.0), Y: (0.0, 1.341821, 0.0), Z: (0.0, 0.0, 1.160021), O: (-20.67108, 1.59664, -13.49361)]"
+	},
+	"OfficeBookcaseSteel/Collision36": {
+		"disabled": false,
+		"shape": "617267903",
+		"transform": "[X: (-0.019052, 0.0, 1.394703), Y: (0.0, 1.557023, 0.0), Z: (-0.999907, 0.0, -0.013659), O: (-14.6259, 1.654874, -7.042994)]"
+	},
+	"OfficeBooks/BlueBook/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1787239868",
+		"transform": "[X: (-0.288219, 0.0, -0.529872), Y: (0.0, 0.403931, 0.0), Z: (0.639286, 0.0, -0.332331), O: (-17.21105, 1.117565, -8.856106)]"
+	},
+	"OfficeBooks/GreenBook/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1787239868",
+		"transform": "[X: (-0.231405, 0.0, -0.55682), Y: (0.0, 0.403931, 0.0), Z: (0.661973, 0.0, -0.284886), O: (-17.20724, 1.052936, -8.847908)]"
+	},
+	"OfficeBooks/OchreBook/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1787239868",
+		"transform": "[X: (-0.242923, 0.0, -0.551764), Y: (0.0, 0.403931, 0.0), Z: (0.657833, 0.0, -0.29456), O: (-17.19816, 1.182194, -8.845484)]"
+	},
+	"OfficeDesk/CabinetCollision": {
+		"disabled": false,
+		"shape": "1148235718",
+		"transform": "[X: (0.000038, 0.0, 1.6), Y: (0.0, 1.138451, 0.0), Z: (-1.6, 0.0, 0.000038), O: (-17.35897, 0.47538, -8.94456)]"
+	},
+	"OfficeDesk/LeftLegCollision": {
+		"disabled": false,
+		"shape": "1993640132",
+		"transform": "[X: (0.000038, 0.0, 1.6), Y: (0.0, 1.138451, 0.0), Z: (-1.6, 0.0, 0.000038), O: (-17.35902, 0.47538, -10.99256)]"
+	},
+	"OfficeDesk/TopCollision": {
+		"disabled": false,
+		"shape": "757982891",
+		"transform": "[X: (0.000038, 0.0, 1.6), Y: (0.0, 1.138451, 0.0), Z: (-1.6, 0.0, 0.000038), O: (-17.35899, 0.95353, -9.87256)]"
+	},
+	"OfficeDeskCalendar/Collision5": {
+		"disabled": false,
+		"shape": "958186005",
+		"transform": "[X: (0.959047, 0.0, 0.283247), Y: (0.0, 1.0, 0.0), Z: (-0.283247, 0.0, 0.959047), O: (-16.70923, 1.2, -13.57)]"
+	},
+	"OfficeDiplomaMedicine/Collision7": {
+		"disabled": false,
+		"shape": "1355958661",
+		"transform": "[X: (-0.0, 0.0, -1.0), Y: (0.0, 1.0, 0.0), Z: (1.0, 0.0, -0.0), O: (-23.83, 2.32, -7.83175)]"
+	},
+	"OfficeDiplomaMedicine2/Collision7": {
+		"disabled": false,
+		"shape": "1355958661",
+		"transform": "[X: (-0.999978, 0.0, 0.006554), Y: (0.0, 1.0, 0.0), Z: (-0.006554, 0.0, -0.999978), O: (-19.26394, 2.32, -6.116047)]"
+	},
+	"OfficeDiplomaService/Collision7": {
+		"disabled": false,
+		"shape": "1355958661",
+		"transform": "[X: (-0.0, 0.0, -1.0), Y: (0.0, 1.0, 0.0), Z: (1.0, 0.0, -0.0), O: (-23.83, 2.32, -9.039796)]"
+	},
+	"OfficeFilingCabinet/Cabinet/Collision": {
+		"disabled": false,
+		"shape": "3237881193",
+		"transform": "[X: (1.100446, 0.0, 0.0), Y: (0.0, 1.20316, 0.0), Z: (0.0, 0.0, 1.0), O: (-23.3592, 1.102844, -13.53052)]"
+	},
+	"OfficeFilingCabinet2/Cabinet/Collision": {
+		"disabled": false,
+		"shape": "3237881193",
+		"transform": "[X: (1.100446, 0.0, 0.0), Y: (0.0, 1.20316, 0.0), Z: (0.0, 0.0, 1.0), O: (-22.30038, 1.102844, -13.53052)]"
+	},
+	"OfficeFramedAsylumDrawing/Collision11": {
+		"disabled": false,
+		"shape": "1812508798",
+		"transform": "[X: (-0.999823, 0.0, -0.018832), Y: (0.0, 1.0, 0.0), Z: (0.018832, 0.0, -0.999823), O: (-17.29209, 2.325299, -6.115414)]"
+	},
+	"OfficeFramedForestPrint/Collision12": {
+		"disabled": false,
+		"shape": "1812508798",
+		"transform": "[X: (-0.0, 0.0, -1.0), Y: (0.0, 1.0, 0.0), Z: (1.0, 0.0, -0.0), O: (-23.83, 2.329075, -11.19983)]"
+	},
+	"OfficeNoticeBoard/Collision8": {
+		"disabled": false,
+		"shape": "645185701",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-17.07489, 2.22, -13.81)]"
+	},
+	"OfficePencilCup/Collision7": {
+		"disabled": false,
+		"shape": "435608123",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-17.57585, 1.138291, -8.709184)]"
+	},
+	"OfficeStampAndPad/Collision6": {
+		"disabled": false,
+		"shape": "3788544654",
+		"transform": "[X: (-0.053649, 0.0, -0.99856), Y: (0.0, 1.0, 0.0), Z: (0.99856, 0.0, -0.053649), O: (-17.34909, 1.094475, -9.364833)]"
+	},
+	"OfficeTeaCup/Collision6": {
+		"disabled": false,
+		"shape": "1667305958",
+		"transform": "[X: (0.811416, 0.0, -0.584469), Y: (0.0, 1.0, 0.0), Z: (0.584469, 0.0, 0.811416), O: (-17.08297, 1.075046, -10.75702)]"
+	},
+	"OfficeVintageStapler/Collision6": {
+		"disabled": false,
+		"shape": "779747072",
+		"transform": "[X: (-0.808941, 0.0, -0.58789), Y: (0.0, 1.0, 0.0), Z: (0.58789, 0.0, -0.808941), O: (-17.64518, 1.073889, -9.038315)]"
+	},
+	"OfficeVisitorChair/Collision6": {
+		"disabled": false,
+		"shape": "1970467706",
+		"transform": "[X: (0.175653, 0.0, -0.984452), Y: (0.0, 1.0, 0.0), Z: (0.984452, 0.0, 0.175653), O: (-18.41929, 0.57, -10.4923)]"
+	},
+	"OfficeVisitorChair2/Collision6": {
+		"disabled": false,
+		"shape": "1970467706",
+		"transform": "[X: (-0.075585, 0.0, -0.997139), Y: (0.0, 1.0, 0.0), Z: (0.997139, 0.0, -0.075585), O: (-18.47151, 0.57, -9.348631)]"
+	},
+	"OfficeWallKeyCabinet/Collision8": {
+		"disabled": false,
+		"shape": "204964434",
+		"transform": "[X: (-0.0, 0.0, 1.0), Y: (0.0, 1.0, 0.0), Z: (-1.0, 0.0, -0.0), O: (-14.21, 2.02, -8.6)]"
+	},
+	"OfficeWireWastebasket/Collision5": {
+		"disabled": false,
+		"shape": "1462207687",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-17.16769, 0.24, -8.293307)]"
+	},
+	"OldVerticalIronLadderStaging/Rung07Collision": {
+		"disabled": false,
+		"shape": "1905418833",
+		"transform": "[X: (1.0, 0.0, -0.00083), Y: (0.0, 1.0, 0.0), Z: (0.00083, 0.0, 1.0), O: (-2.813953, 7.987062, -21.65138)]"
+	},
+	"OldVerticalIronLadderStaging/Rung07Collision11": {
+		"disabled": false,
+		"shape": "1905418833",
+		"transform": "[X: (1.0, -0.000087, -0.000826), Y: (0.000016, 0.996282, -0.086149), Z: (0.000831, 0.086149, 0.996282), O: (-2.813952, 6.699619, -21.65697)]"
+	},
+	"OldVerticalIronLadderStaging/Rung07Collision12": {
+		"disabled": false,
+		"shape": "1905418833",
+		"transform": "[X: (1.0, -0.000087, -0.000826), Y: (0.000016, 0.996282, -0.086149), Z: (0.000831, 0.086149, 0.996282), O: (-2.814127, 6.783323, -20.68896)]"
+	},
+	"OldVerticalIronLadderStaging/Rung07Collision2": {
+		"disabled": false,
+		"shape": "1905418833",
+		"transform": "[X: (1.0, 0.0, -0.00083), Y: (0.0, 1.0, 0.0), Z: (0.00083, 0.0, 1.0), O: (-2.814129, 7.987062, -20.67976)]"
+	},
+	"OldVerticalIronLadderStaging/Rung07Collision3": {
+		"disabled": false,
+		"shape": "1905418833",
+		"transform": "[X: (1.0, 0.000085, -0.000826), Y: (-0.000015, 0.996465, 0.084007), Z: (0.00083, -0.084007, 0.996465), O: (-2.813953, 7.426336, -21.64938)]"
+	},
+	"OldVerticalIronLadderStaging/Rung07Collision4": {
+		"disabled": false,
+		"shape": "1905418833",
+		"transform": "[X: (1.0, 0.000085, -0.000826), Y: (-0.000015, 0.996465, 0.084007), Z: (0.00083, -0.084007, 0.996465), O: (-2.814128, 7.344713, -20.68119)]"
+	},
+	"OldVerticalIronLadderStaging/Rung07Collision5": {
+		"disabled": false,
+		"shape": "1905418833",
+		"transform": "[X: (1.0, 0.0, -0.00083), Y: (0.0, 1.0, 0.0), Z: (0.00083, 0.0, 1.0), O: (-2.813953, 6.102682, -21.65138)]"
+	},
+	"OldVerticalIronLadderStaging/Rung07Collision6": {
+		"disabled": false,
+		"shape": "1905418833",
+		"transform": "[X: (1.0, 0.0, -0.00083), Y: (0.0, 1.0, 0.0), Z: (0.00083, 0.0, 1.0), O: (-2.814129, 6.102682, -20.67976)]"
+	},
+	"OldVerticalIronLadderStaging/Rung07Collision8": {
+		"disabled": false,
+		"shape": "1905418833",
+		"transform": "[X: (1.0, 0.0, -0.00083), Y: (0.0, 1.0, 0.0), Z: (0.00083, 0.0, 1.0), O: (-2.813953, 5.284122, -21.65138)]"
+	},
+	"OldVerticalIronLadderStaging/Rung07Collision9": {
+		"disabled": false,
+		"shape": "1905418833",
+		"transform": "[X: (1.0, 0.0, -0.00083), Y: (0.0, 1.0, 0.0), Z: (0.00083, 0.0, 1.0), O: (-2.814129, 5.284122, -20.67976)]"
+	},
+	"OldVerticalIronLadderStaging/Rung11Collision": {
+		"disabled": false,
+		"shape": "2306743130",
+		"transform": "[X: (-0.000181, 0.0, 1.0), Y: (0.0, 1.0, 0.0), Z: (-1.0, 0.0, -0.000181), O: (-3.054668, 7.982135, -21.16204)]"
+	},
+	"OldVerticalIronLadderStaging/Rung11Collision2": {
+		"disabled": false,
+		"shape": "2306743130",
+		"transform": "[X: (-0.00018, -0.084007, 0.996465), Y: (-0.000015, 0.996465, 0.084007), Z: (-1.0, 0.0, -0.000181), O: (-3.054668, 7.380315, -21.16218)]"
+	},
+	"OldVerticalIronLadderStaging/Rung11Collision3": {
+		"disabled": false,
+		"shape": "2306743130",
+		"transform": "[X: (-0.000181, 0.0, 1.0), Y: (0.0, 1.0, 0.0), Z: (-1.0, 0.0, -0.000181), O: (-3.054668, 6.097755, -21.16204)]"
+	},
+	"OldVerticalIronLadderStaging/Rung11Collision4": {
+		"disabled": false,
+		"shape": "2306743130",
+		"transform": "[X: (-0.000181, 0.0, 1.0), Y: (0.0, 1.0, 0.0), Z: (-1.0, 0.0, -0.000181), O: (-3.054668, 5.279196, -21.16204)]"
+	},
+	"OldVerticalIronLadderStaging/Rung11Collision5": {
+		"disabled": false,
+		"shape": "2306743130",
+		"transform": "[X: (-0.00018, 0.086149, 0.996282), Y: (0.000016, 0.996282, -0.086149), Z: (-1.0, 0.0, -0.000181), O: (-3.054667, 6.736871, -21.16902)]"
+	},
+	"SchoolDoubleDoor/Frame/Jamb0": {
+		"disabled": false,
+		"shape": "3813854853",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-29.61712, 1.42, -17.55801)]"
+	},
+	"SchoolDoubleDoor/Frame/Jamb1": {
+		"disabled": false,
+		"shape": "3813854853",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-27.07712, 1.42, -17.55801)]"
+	},
+	"SchoolDoubleDoor/Frame/Lintel": {
+		"disabled": false,
+		"shape": "80096522",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-28.34712, 2.85, -17.55801)]"
+	},
+	"SchoolDoubleDoor/LeftLeaf/PanelCollision": {
+		"disabled": false,
+		"shape": "1960434566",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-28.95212, 1.39, -17.55801)]"
+	},
+	"SchoolDoubleDoor/RightLeaf/PanelCollision": {
+		"disabled": false,
+		"shape": "1960434566",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-27.74212, 1.39, -17.55801)]"
+	},
+	"SchoolLockers/Collision": {
+		"disabled": false,
+		"shape": "2181547380",
+		"transform": "[X: (0.0082, 0.0, 0.999966), Y: (0.0, 1.0, 0.0), Z: (-0.999966, 0.0, 0.0082), O: (-26.90747, 1.152485, -13.33469)]"
+	},
+	"SchoolLockers2/Collision": {
+		"disabled": false,
+		"shape": "2181547380",
+		"transform": "[X: (-0.999894, 0.0, -0.014585), Y: (0.0, 1.0, 0.0), Z: (0.014585, 0.0, -0.999894), O: (-24.24661, 1.152485, -2.258978)]"
+	},
+	"ShoeDresser/DisplayCabinet/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2030142604",
+		"transform": "[X: (0.012224, 0.0, -1.699688), Y: (0.0, 1.686641, 0.0), Z: (1.549116, 0.0, 0.011141), O: (-1.971457, 2.066135, -1.16694)]"
+	},
+	"ShoeDresser/Shell/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1283124467",
+		"transform": "[X: (0.012224, 0.0, -1.699688), Y: (0.0, 1.686641, 0.0), Z: (1.549116, 0.0, 0.011141), O: (-3.281464, 0.758988, -1.176361)]"
+	},
+	"StairwellGuardrailParts/LongSide/Collision": {
+		"disabled": false,
+		"shape": "1415159668",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.054221, 4.2, 1.161796)]"
+	},
+	"StairwellGuardrailParts/LongSide/LongSide/Collision": {
+		"disabled": false,
+		"shape": "1415159668",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.374632, 4.191309, 1.10749)]"
+	},
+	"StairwellGuardrailParts/ShortSide/Collision": {
+		"disabled": false,
+		"shape": "477996559",
+		"transform": "[X: (0.563013, 0.0, 0.008697), Y: (0.0, 1.0, 0.0), Z: (-0.015446, 0.0, 0.999881), O: (-1.144648, 4.2, 4.789307)]"
+	},
+	"TunnelRat/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1947406387",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 2.921878), O: (-7.004479, -7.171186, 10.21414)]"
+	},
+	"UpperFloor/ChurchBalconyFrontRail/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (1.511466, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-2.335427, 4.74, -25.2)]"
+	},
+	"UpperFloor/ChurchBalconyFrontRail2/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (0.004774, 0.0, -2.182175), Y: (0.0, 1.0, 0.0), Z: (0.999093, 0.0, 0.002186), O: (-5.31202, 8.938856, -0.003295)]"
+	},
+	"UpperFloor/ChurchBalconyFrontRail3/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (0.004774, 0.0, -2.182175), Y: (0.0, 1.0, 0.0), Z: (0.999093, 0.0, 0.002186), O: (12.99098, 8.938856, -0.003295)]"
+	},
+	"UpperFloor/ChurchBalconyFrontRail4/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (-1.804894, 0.0, -0.005471), Y: (0.0, 1.0, 0.0), Z: (0.00303, 0.0, -0.99959), O: (3.824847, 8.938856, 11.04006)]"
+	},
+	"UpperFloor/ChurchBalconyFrontRail5/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (-1.010567, 0.0, -0.003063), Y: (0.0, 1.0, 0.0), Z: (0.003035, 0.0, -1.001111), O: (7.951288, 8.938856, -10.97958)]"
+	},
+	"UpperFloor/ChurchBalconyFrontRail6/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (-0.006283, 0.0, 1.0473), Y: (0.0, 1.0, 0.0), Z: (-1.000879, 0.0, -0.006004), O: (2.879126, 8.938856, -16.30619)]"
+	},
+	"UpperFloor/ChurchBalconyFrontRail7/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (-0.0053, 0.0, 0.883477), Y: (0.0, 1.0, 0.0), Z: (-1.001794, 0.0, -0.00601), O: (-2.686212, 8.938856, -15.45316)]"
+	},
+	"UpperFloor/ChurchBalconyFrontRail8/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (-1.040481, 0.0, 0.014405), Y: (0.0, 1.0, 0.0), Z: (-0.013879, 0.0, -1.00245), O: (-1.749318, 4.551845, 12.51243)]"
+	},
+	"UpperFloor/ChurchBalconyLeftRail/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (-0.0, 0.0, 1.0), Y: (0.0, 1.0, 0.0), Z: (-1.0, 0.0, -0.0), O: (-10.02085, 4.74, -23.59205)]"
+	},
+	"UpperFloor/ChurchBalconyRightRail/Collision": {
+		"disabled": false,
+		"shape": "2072461191",
+		"transform": "[X: (-0.0, 0.0, 1.0), Y: (0.0, 1.0, 0.0), Z: (-1.0, 0.0, -0.0), O: (5.35, 4.74, -23.6)]"
+	},
+	"UpperFloor/ChurchChoirBalcony/Collision": {
+		"disabled": false,
+		"shape": "3071121457",
+		"transform": "[X: (10.2, 0.0, 0.0), Y: (0.0, 0.199994, 0.0), Z: (0.0, 0.0, 3.199903), O: (-2.443811, 4.1, -23.6)]"
+	},
+	"UpperFloor/ChurchChoirBalcony/Collision2": {
+		"disabled": false,
+		"shape": "2463556579",
+		"transform": "[X: (10.2, 0.0, 0.0), Y: (0.0, 0.199987, 0.0), Z: (0.0, 0.0, 3.199796), O: (-4.714827, 4.1, -21.15694)]"
+	},
+	"UpperFloor/ChurchRoofLeftSlope/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (12.246, -0.0443, 0.0), Y: (2.3, 0.2359, 0.0), Z: (0.0, 0.0, 16.8), O: (-5.875, 9.35, -29.875)]"
+	},
+	"UpperFloor/ChurchRoofRightSlope/Collision": {
+		"disabled": false,
+		"shape": "4269271018",
+		"transform": "[X: (12.246, 0.0443, 0.0), Y: (-2.3, 0.2359, 0.0), Z: (0.0, 0.0, 16.8), O: (6.375, 9.35, -29.875)]"
+	},
+	"UpperFloor/ExteriorWalls/Wall_02/Collision": {
+		"disabled": false,
+		"shape": "1011461502",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-3.398242, 6.2, 11.0)]"
+	},
+	"UpperFloor/ExteriorWalls/Wall_03/Collision": {
+		"disabled": false,
+		"shape": "3476367813",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (4.0, 6.2, 11.0)]"
+	},
+	"UpperFloor/ExteriorWalls/Wall_04/Collision": {
+		"disabled": false,
+		"shape": "656002885",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (11.2, 6.2, 11.0)]"
+	},
+	"UpperFloor/ExteriorWalls/Wall_06/Collision": {
+		"disabled": false,
+		"shape": "2551257869",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-3.878136, 6.2, -11.0)]"
+	},
+	"UpperFloor/ExteriorWalls/Wall_07/Collision": {
+		"disabled": false,
+		"shape": "4169433778",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (7.950902, 6.2, -11.0)]"
+	},
+	"UpperFloor/ExteriorWalls/Wall_08/Collision": {
+		"disabled": false,
+		"shape": "3174004438",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-5.281849, 6.2, -8.95)]"
+	},
+	"UpperFloor/ExteriorWalls/Wall_09/Collision": {
+		"disabled": false,
+		"shape": "1838221813",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-5.281849, 6.2, -2.241987)]"
+	},
+	"UpperFloor/ExteriorWalls/Wall_10/Collision": {
+		"disabled": false,
+		"shape": "771610337",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-5.275731, 6.2, 10.1141)]"
+	},
+	"UpperFloor/ExteriorWalls/Wall_12/Collision": {
+		"disabled": false,
+		"shape": "1499779824",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (13.0, 6.2, 0.75)]"
+	},
+	"UpperFloor/ExteriorWalls/Wall_13/Collision": {
+		"disabled": false,
+		"shape": "1433694178",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (13.0, 6.2, 9.7)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowGlass_02/Collision": {
+		"disabled": false,
+		"shape": "1107222248",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 6.1, 11.0)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowGlass_03/Collision": {
+		"disabled": false,
+		"shape": "1107222248",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (8.0, 6.1, 11.0)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowGlass_05/Collision": {
+		"disabled": false,
+		"shape": "1107222248",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (8.0, 6.1, -11.0)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowGlass_06/Collision": {
+		"disabled": false,
+		"shape": "622409910",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-5.281849, 6.1, -5.5)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowGlass_07/Collision": {
+		"disabled": false,
+		"shape": "622409910",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-5.289434, 6.1, 3.96648)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowGlass_09/Collision": {
+		"disabled": false,
+		"shape": "622409910",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (13.0, 6.1, 7.0)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowLowerWall_02/Collision": {
+		"disabled": false,
+		"shape": "2210734183",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 4.725, 11.0)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowLowerWall_03/Collision": {
+		"disabled": false,
+		"shape": "2210734183",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (8.0, 4.725, 11.0)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowLowerWall_05/Collision": {
+		"disabled": false,
+		"shape": "2210734183",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (8.0, 4.725, -11.0)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowLowerWall_06/Collision": {
+		"disabled": false,
+		"shape": "1497132020",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-5.279433, 4.725, -5.5)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowLowerWall_07/Collision": {
+		"disabled": false,
+		"shape": "1497132020",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-5.281849, 4.725, 1.192813)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowLowerWall_09/Collision": {
+		"disabled": false,
+		"shape": "1497132020",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (13.0, 4.725, 7.0)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowUpperWall_02/Collision": {
+		"disabled": false,
+		"shape": "1930050681",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 7.575, 11.0)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowUpperWall_03/Collision": {
+		"disabled": false,
+		"shape": "1930050681",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (8.0, 7.575, 11.0)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowUpperWall_05/Collision": {
+		"disabled": false,
+		"shape": "1930050681",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (8.0, 7.575, -11.0)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowUpperWall_06/Collision": {
+		"disabled": false,
+		"shape": "3283836158",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-5.269275, 7.575, -5.5)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowUpperWall_07/Collision": {
+		"disabled": false,
+		"shape": "3283836158",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-5.281849, 7.575, 1.21546)]"
+	},
+	"UpperFloor/ExteriorWalls/WindowUpperWall_09/Collision": {
+		"disabled": false,
+		"shape": "3283836158",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (13.0, 7.575, 7.0)]"
+	},
+	"UpperFloor/Landing/BathroomDoorLintel/Collision": {
+		"disabled": false,
+		"shape": "2724720010",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (3.0, 7.55, 7.0)]"
+	},
+	"UpperFloor/Landing/BedroomDoorLintel/Collision": {
+		"disabled": false,
+		"shape": "2724720010",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (3.0, 7.55, -2.0)]"
+	},
+	"UpperFloor/Landing/UpperHallPaintings/GoyaSaturnPainting/StaticBody3D/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2691632788",
+		"transform": "[X: (0.006555, 0.0, 1.891883), Y: (0.0, 1.515698, 0.0), Z: (-1.199993, 0.0, 0.004158), O: (2.883595, 6.75473, -7.515984)]"
+	},
+	"UpperFloor/Landing/UpperHallPaintings/GoyaSaturnPainting2/StaticBody3D/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2691632788",
+		"transform": "[X: (-1.887075, 0.036634, 0.129884), Y: (0.0, 1.458783, -0.411451), Z: (-0.085598, -0.324922, -1.151998), O: (8.685524, 4.982465, -4.202118)]"
+	},
+	"UpperFloor/Landing/UpperHallPaintings/GoyaSaturnPainting3/StaticBody3D/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2691632788",
+		"transform": "[X: (-1.89189, 0.003857, -0.001222), Y: (-0.002748, -1.467693, -0.378425), Z: (-0.001362, -0.299602, 1.161997), O: (5.868295, 4.982212, 2.64839)]"
+	},
+	"UpperFloor/Landing/UpperHallPaintings/KlimtPainting/StaticBody3D/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2691632788",
+		"transform": "[X: (-0.0, 1.735956, 0.013654), Y: (0.000008, 0.017686, -2.248529), Z: (-1.2, 0.0, -0.000004), O: (2.768322, 2.212317, 0.99391)]"
+	},
+	"UpperFloor/Landing/UpperHallPaintings/RubensSaturnPainting/StaticBody3D/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2691632788",
+		"transform": "[X: (-0.000005, 0.0, 1.325005), Y: (0.0, 1.417362, 0.0), Z: (-1.2, 0.0, -0.000004), O: (2.761528, 2.202014, 2.832882)]"
+	},
+	"UpperFloor/Landing/Wall_03/Collision": {
+		"disabled": false,
+		"shape": "1132979441",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (3.0, 6.2, -12.4011)]"
+	},
+	"UpperFloor/Landing/Wall_03/Collision2": {
+		"disabled": false,
+		"shape": "1132979441",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.591085), O: (-2.48759, 6.2, -16.40014)]"
+	},
+	"UpperFloor/Landing/Wall_04/Collision": {
+		"disabled": false,
+		"shape": "442223957",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (3.0, 6.2, 2.5)]"
+	},
+	"UpperFloor/Landing/Wall_05/Collision": {
+		"disabled": false,
+		"shape": "3951042330",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (3.0, 6.2, 9.55)]"
+	},
+	"UpperFloor/RoofCeiling/Collision": {
+		"disabled": false,
+		"shape": "786128506",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (3.848735, 8.3, -0.004876)]"
+	},
+	"UpperFloor/RoofCeiling/Collision2": {
+		"disabled": false,
+		"shape": "786128506",
+		"transform": "[X: (0.311676, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.49984), O: (0.25889, 8.3, -16.44762)]"
+	},
+	"UpperFloor/RoomDivisions/BedroomBathroomDivider/Collision": {
+		"disabled": false,
+		"shape": "391656195",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (8.0, 6.2, 3.0)]"
+	},
+	"UpperFloor/RoomDivisions/BedroomSleepingAreaDoorLintel/Collision": {
+		"disabled": false,
+		"shape": "3210716541",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (5.85, 7.675, -4.6)]"
+	},
+	"UpperFloor/RoomDivisions/BedroomSleepingAreaPartitionLeft/Collision": {
+		"disabled": false,
+		"shape": "75436217",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (3.865, 6.2, -4.6)]"
+	},
+	"UpperFloor/RoomDivisions/BedroomSleepingAreaPartitionRight/Collision": {
+		"disabled": false,
+		"shape": "3207575452",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (9.985, 6.2, -4.6)]"
+	},
+	"UpperFloor/UpperFloorSlabEast/Collision": {
+		"disabled": false,
+		"shape": "2221480002",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (7.65, 4.1, 0.0)]"
+	},
+	"UpperFloor/UpperFloorSlabNorth/Collision": {
+		"disabled": false,
+		"shape": "4236609472",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.43), O: (0.423407, 4.1, -12.11922)]"
+	},
+	"UpperFloor/UpperFloorSlabSouth/Collision": {
+		"disabled": false,
+		"shape": "2933351208",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.495264, 4.042711, 7.842407)]"
+	},
+	"UpperFloor/UpperFloorSlabWest/Collision": {
+		"disabled": false,
+		"shape": "3736140269",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-3.678058, 4.1, 0.0)]"
+	},
+	"UpperFloor/UpperFloorSlabWest2/Collision": {
+		"disabled": false,
+		"shape": "3736140269",
+		"transform": "[X: (0.796081, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.279943), O: (-5.979047, 4.1, 7.970777)]"
+	},
+	"UpperFloor/UpperFloorSlabWest2/Collision2": {
+		"disabled": false,
+		"shape": "2807006609",
+		"transform": "[X: (0.796081, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 0.279943), O: (-1.686778, 4.1, 11.89054)]"
+	},
+	"UpperFloor/UpperHallFloorCollisionPatch/Collision": {
+		"disabled": false,
+		"shape": "256532647",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (1.899278, 4.06829, -2.577133)]"
+	},
+	"UpperFloor/UpperHoarderStudy/NewDiogenesClutter/DamagedPorcelainDoll/CollisionShape3D": {
+		"disabled": false,
+		"shape": "1324417053",
+		"transform": "[X: (-0.490487, 0.0, 0.194487), Y: (0.0, 0.585279, 0.0), Z: (-0.268075, 0.0, -0.676073), O: (5.82395, 3.02472, 2.435472)]"
+	},
+	"UpperFloor/UpperHoarderStudy/NewDiogenesClutter/InvestigationPhotoWall/CollisionShape3D": {
+		"disabled": false,
+		"shape": "491377911",
+		"transform": "[X: (-0.999966, 0.0, 0.0082), Y: (0.0, 1.0, 0.0), Z: (-0.0082, 0.0, -0.999966), O: (-19.17493, 1.850933, 5.065985)]"
+	},
+	"UpperFloor/UpperHoarderStudy/OldDressMannequin/Collision": {
+		"disabled": false,
+		"shape": "3153294427",
+		"transform": "[X: (-0.688886, 0.0, -0.724869), Y: (0.0, 1.0, 0.0), Z: (0.724869, 0.0, -0.688886), O: (12.34148, 5.25, -4.015297)]"
+	},
+	"UpperFloor/UpperHoarderStudy/OldDressMannequin2/Collision": {
+		"disabled": false,
+		"shape": "3153294427",
+		"transform": "[X: (-0.983728, 0.0, -0.179663), Y: (0.0, 1.0, 0.0), Z: (0.179663, 0.0, -0.983728), O: (-3.175398, 0.962056, 4.31274)]"
+	},
+	"UpperFloor/UpperHoarderStudy/OldWoodenCrib/Collision": {
+		"disabled": false,
+		"shape": "2425745592",
+		"transform": "[X: (0.972883, 0.0, -0.231298), Y: (0.0, 1.0, 0.0), Z: (0.231298, 0.0, 0.972883), O: (6.358129, 4.641749, -2.823331)]"
+	},
+	"UpperFloor/UpperHoarderStudy/StandingMetalShelving/Collision": {
+		"disabled": false,
+		"shape": "2471602561",
+		"transform": "[X: (0.457294, 0.0, 1.196753), Y: (0.0, 1.060424, 0.0), Z: (-1.25447, 0.0, 0.479348), O: (4.782626, 5.366466, -2.46952)]"
+	},
+	"UpperFloor/UpperHoarderStudy/StandingMetalShelving2/Collision": {
+		"disabled": false,
+		"shape": "2471602561",
+		"transform": "[X: (-1.124326, -0.009192, -0.614119), Y: (-0.508327, -0.000257, 0.930646), Z: (-0.008612, 1.342899, -0.004333), O: (8.918843, 4.543364, 1.119413)]"
+	},
+	"UpperFloor/UpperHoarderStudy/StandingMetalShelving4/Collision": {
+		"disabled": false,
+		"shape": "2471602561",
+		"transform": "[X: (0.042295, 0.0, -1.855487), Y: (0.0, 1.0, 0.0), Z: (1.494936, 0.0, 0.034076), O: (-3.495851, -6.195582, 5.092568)]"
+	},
+	"UpperFloor/UpperHoarderStudy/StandingMetalShelving5/Collision": {
+		"disabled": false,
+		"shape": "2471602561",
+		"transform": "[X: (0.042295, 0.0, -1.855487), Y: (0.0, 1.0, 0.0), Z: (1.494936, 0.0, 0.034076), O: (-0.949652, -6.195582, 5.092568)]"
+	},
+	"UpperFloor/UpperHoarderStudy/StudyArmchair/Collision": {
+		"disabled": false,
+		"shape": "3716925049",
+		"transform": "[X: (-0.970061, -0.025984, 0.241466), Y: (-0.183559, 0.729465, -0.658929), Z: (-0.159019, -0.683525, -0.712396), O: (6.577255, 5.056024, -1.852677)]"
+	},
+	"UpperFloor/UpperHoarderStudy/WritingDesk/CabinetCollision": {
+		"disabled": false,
+		"shape": "1148235718",
+		"transform": "[X: (0.894795, 0.0, -0.446478), Y: (0.0, 1.0, 0.0), Z: (0.446478, 0.0, 0.894795), O: (6.319139, 4.6, 1.408955)]"
+	},
+	"UpperFloor/UpperHoarderStudy/WritingDesk/LeftLegCollision": {
+		"disabled": false,
+		"shape": "1993640132",
+		"transform": "[X: (0.894795, 0.0, -0.446478), Y: (0.0, 1.0, 0.0), Z: (0.446478, 0.0, 0.894795), O: (5.173802, 4.6, 1.980446)]"
+	},
+	"UpperFloor/UpperHoarderStudy/WritingDesk/TopCollision": {
+		"disabled": false,
+		"shape": "757982891",
+		"transform": "[X: (0.894795, 0.0, -0.446478), Y: (0.0, 1.0, 0.0), Z: (0.446478, 0.0, 0.894795), O: (5.800159, 5.02, 1.667912)]"
+	},
+	"UpperFloor/UpperMasterBedroom/AntiqueBedroomChest/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2229279908",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (6.924375, 4.551525, 10.28661)]"
+	},
+	"UpperFloor/UpperMasterBedroom/AntiqueBedroomWardrobe/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3313263970",
+		"transform": "[X: (1.285455, 0.0, 0.02068), Y: (0.0, 1.233527, 0.0), Z: (-0.024253, 0.0, 1.507504), O: (4.642053, 5.725299, 10.1237)]"
+	},
+	"UpperFloor/UpperMasterBedroom/AntiqueBedroomWardrobe2/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3313263970",
+		"transform": "[X: (1.285454, -0.017769, 0.01058), Y: (0.0, 0.631079, 1.059872), Z: (-0.024253, -1.295278, 0.771247), O: (11.46868, 5.564892, 0.611605)]"
+	},
+	"UpperFloor/UpperMasterBedroom/AntiqueBedsideTable/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2664637465",
+		"transform": "[X: (-1.410138, 0.0, -0.022693), Y: (0.0, 1.142655, 0.0), Z: (0.01609, 0.0, -0.99987), O: (6.458884, 4.602895, 3.431638)]"
+	},
+	"UpperFloor/UpperMasterBedroom/AntiqueVanityTable/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2651158996",
+		"transform": "[X: (0.003175, 0.0, -0.999995), Y: (0.0, 1.0, 0.0), Z: (0.999995, 0.0, 0.003175), O: (3.330209, 4.615112, 4.401652)]"
+	},
+	"UpperFloor/UpperMasterBedroom/FloorLampCableSwitch/InteractionCollision": {
+		"disabled": false,
+		"shape": "3665554618",
+		"transform": "[X: (0.925904, 0.0, -0.37776), Y: (0.0, 1.0, 0.0), Z: (0.37776, 0.0, 0.925904), O: (10.5108, 4.29, 4.41265)]"
+	},
+	"UpperFloor/UpperMasterBedroom/FloorLampCableSwitch2/InteractionCollision": {
+		"disabled": false,
+		"shape": "3665554618",
+		"transform": "[X: (-0.580657, 0.0, 0.814148), Y: (0.0, 1.0, 0.0), Z: (-0.814148, 0.0, -0.580657), O: (12.04763, 4.29, -2.839487)]"
+	},
+	"UpperFloor/UpperMasterBedroom/FloorLampCableSwitch3/InteractionCollision": {
+		"disabled": false,
+		"shape": "3665554618",
+		"transform": "[X: (0.627199, 0.0, -0.962874), Y: (0.0, 1.0, 0.0), Z: (-0.665527, 0.0, -0.433512), O: (11.43856, 4.29, 2.366765)]"
+	},
+	"UpperFloor/UpperMasterBedroom/LargeDoubleBed/CollisionShape3D": {
+		"disabled": false,
+		"shape": "2297794474",
+		"transform": "[X: (-0.999991, 0.0, 0.004352), Y: (0.0, 1.0, 0.0), Z: (-0.004352, 0.0, -0.999991), O: (8.478461, 4.387327, 5.04972)]"
+	},
+	"UpperFloor/UpperNorth_PortalLintel/Collision": {
+		"disabled": false,
+		"shape": "3018818316",
+		"transform": "[X: (2.0, 0.0, 0.0), Y: (0.0, 1.1, 0.0), Z: (0.0, 0.0, 0.3), O: (0.25708, 7.65, -22.0)]"
+	},
+	"UpperFloor/UpperNorth_PortalLintel/Collision2": {
+		"disabled": false,
+		"shape": "3018818316",
+		"transform": "[X: (2.0, 0.0, 0.0), Y: (0.0, 1.1, 0.0), Z: (0.0, 0.0, 0.3), O: (-5.352158, 7.65, -22.0)]"
+	},
+	"UpperFloor/UpperNorth_PortalRight/Collision": {
+		"disabled": false,
+		"shape": "3195613188",
+		"transform": "[X: (1.749999, 0.0, 0.0), Y: (0.0, 4.0, 0.0), Z: (0.0, 0.0, 0.3), O: (2.176857, 6.2, -22.0)]"
+	},
+	"UpperFloor/UpperNorth_PortalRight/Collision2": {
+		"disabled": false,
+		"shape": "289376899",
+		"transform": "[X: (1.749999, 0.0, 0.0), Y: (0.0, 4.0, 0.0), Z: (0.0, 0.0, 0.3), O: (-2.51487, 6.2, -22.0)]"
+	},
+	"UpperFloor/UpperNorth_PortalRight/Collision3": {
+		"disabled": false,
+		"shape": "116145011",
+		"transform": "[X: (1.749999, 0.0, 0.0), Y: (0.0, 4.107866, 0.0), Z: (0.0, 0.0, 0.3), O: (-9.198565, 6.348616, -22.0)]"
+	},
+	"UpperNorth_NorthWingEntranceDoor2/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (0.0059, 0.0, 0.999983), Y: (0.0, 1.0, 0.0), Z: (-0.999983, 0.0, 0.0059), O: (-5.260509, 5.549999, 8.026448)]"
+	},
+	"UpperNorth_NorthWingEntranceDoor4/Hinge/PanelCollision": {
+		"disabled": false,
+		"shape": "3046999960",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-9.57984, 1.352359, -37.87276)]"
+	},
+	"VentilationPanel/CollisionShape3D": {
+		"disabled": false,
+		"shape": "3331926968",
+		"transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-7.004479, -6.915582, 6.61653)]"
+	},
+	"WallHole/InteractionCollision": {
+		"disabled": false,
+		"shape": "1844051902",
+		"transform": "[X: (0.999998, 0.0, 0.001741), Y: (0.0, 1.0, 0.0), Z: (-0.001741, 0.0, 0.999998), O: (-3.201138, 0.967309, -1.77617)]"
+	}
+}

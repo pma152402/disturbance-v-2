@@ -256,8 +256,8 @@ process_material = SubResource("Particles_east_west")
 draw_pass_1 = SubResource("Mesh_raindrop")
 
 [node name="HouseRoofRainOccluder" type="GPUParticlesCollisionBox3D" parent="Rain"]
-position = Vector3(0, 4, 0)
-size = Vector3(27, 12, 23)
+position = Vector3(4.11, 4, 0)
+size = Vector3(18.78, 12, 23)
 
 [node name="ConnectorRoofRainOccluder" type="GPUParticlesCollisionBox3D" parent="Rain"]
 position = Vector3(0.25, 4, -16.4)
