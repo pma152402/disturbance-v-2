@@ -19,6 +19,11 @@ const SCREW_PATHS: Array[NodePath] = [
 const REQUIRED_ROTATION := TAU * 8.75
 const SCREW_EXTRACTION_DISTANCE := 0.48
 
+@export_category("Audio")
+@export_range(-40.0, 6.0, 0.5) var volumen_destornillador_db := -7.5
+
+@onready var screwdriver_sound: AudioStreamPlayer3D = $ScrewdriverSound
+
 var _removed: Array[bool] = [false, false, false, false]
 var _active_screw := -1
 var _active_player: Node
@@ -28,6 +33,25 @@ var _virtual_mouse := Vector2(42.0, 0.0)
 var _last_mouse_angle := 0.0
 var _rotation_progress := 0.0
 var _active_screw_start_position := Vector3.ZERO
+var _screw_sound_hold := 0.0
+
+
+func _ready() -> void:
+	if screwdriver_sound.stream != null:
+		screwdriver_sound.stream.set("loop", true)
+	set_process(false)
+
+
+func _process(delta: float) -> void:
+	_screw_sound_hold = maxf(0.0, _screw_sound_hold - delta)
+	var target_volume := volumen_destornillador_db if _screw_sound_hold > 0.0 else -40.0
+	screwdriver_sound.volume_db = move_toward(screwdriver_sound.volume_db, target_volume, delta * (75.0 if _screw_sound_hold > 0.0 else 48.0))
+	if _screw_sound_hold > 0.0 and not screwdriver_sound.playing:
+		screwdriver_sound.play()
+	if _screw_sound_hold <= 0.0 and screwdriver_sound.volume_db <= -39.5:
+		screwdriver_sound.stop()
+		if _active_screw < 0:
+			set_process(false)
 
 
 func get_interaction_key() -> Key:
@@ -72,6 +96,8 @@ func _start_screw_manipulation(player: Node, screw_index: int) -> void:
 	_virtual_mouse = Vector2(42.0, 0.0)
 	_last_mouse_angle = 0.0
 	_rotation_progress = 0.0
+	_screw_sound_hold = 0.0
+	set_process(true)
 	_active_screw_start_position = (get_node(SCREW_PATHS[screw_index]) as Node3D).position
 	_tool_pivot = Node3D.new()
 	_tool_pivot.name = "ActiveScrewdriverPivot"
@@ -116,6 +142,8 @@ func handle_screwdriver_mouse(relative_motion: Vector2) -> void:
 	if absf(angle_delta) > 0.65:
 		return
 	_rotation_progress += absf(angle_delta)
+	if absf(angle_delta) > 0.002:
+		_screw_sound_hold = 0.14
 	var ratio := clampf(_rotation_progress / REQUIRED_ROTATION, 0.0, 1.0)
 	var screw := get_node(SCREW_PATHS[_active_screw]) as Node3D
 	# Parte siempre de su posicion real, sin el salto inicial que provocaba
@@ -152,6 +180,8 @@ func end_screw_manipulation() -> void:
 	_tool_visual = null
 	_active_screw = -1
 	_rotation_progress = 0.0
+	_screw_sound_hold = 0.0
+	set_process(true)
 	if is_instance_valid(_active_player) and _active_player.has_method(&"end_screw_manipulation"):
 		_active_player.call(&"end_screw_manipulation", self)
 	if is_instance_valid(_active_player) and _active_player.has_method(&"set_screwdriver_minigame_pose"):

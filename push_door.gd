@@ -1,6 +1,8 @@
 extends AnimatableBody3D
 
-const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
+const DoorSoundStream := preload("res://sounds/interactions/door_open_close_sound.mp3")
+const DOOR_CLOSE_START := 3.72
+const DOOR_OPEN_END := 3.66
 
 @export_range(70.0, 110.0, 1.0) var open_angle_degrees := 90.0
 @export_range(0.05, 1.5, 0.01) var transition_time := 0.58
@@ -9,6 +11,9 @@ const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
 @export_range(-1.0, 1.0, 1.0) var forced_open_sign := 0.0
 @export_range(0.0, 110.0, 1.0) var positive_open_angle_degrees := 0.0
 @export_range(0.0, 110.0, 1.0) var negative_open_angle_degrees := 0.0
+@export_category("Audio")
+@export_range(-40.0, 6.0, 0.5) var volumen_apertura_db := -15.5
+@export_range(-40.0, 6.0, 0.5) var volumen_cierre_db := -37.0
 
 @onready var panel_collision: CollisionShape3D = $PanelCollision
 @onready var door_sound: AudioStreamPlayer3D = $DoorSound
@@ -19,13 +24,11 @@ var _open_sign := 1.0
 var _active_tween: Tween
 var _last_interactor: Node3D
 var _collision_restore_token := 0
-var _open_sound: AudioStreamWAV
-var _close_sound: AudioStreamWAV
+var _sound_play_token := 0
 
 
 func _ready() -> void:
-	_open_sound = GameplaySounds.make_door_open()
-	_close_sound = GameplaySounds.make_door_close()
+	door_sound.stream = DoorSoundStream
 
 
 func get_interaction_key() -> Key:
@@ -34,6 +37,10 @@ func get_interaction_key() -> Key:
 
 func get_interaction_text(_player: Node) -> String:
 	return "F  CERRAR PUERTA" if _is_open else "F  ABRIR PUERTA"
+
+
+func is_open() -> bool:
+	return _is_open
 
 
 func interact(player: Node) -> bool:
@@ -68,10 +75,19 @@ func get_npc_traversal_portal() -> Dictionary:
 
 
 func _play_door_sound(opening: bool) -> void:
-	door_sound.stream = _open_sound if opening else _close_sound
-	door_sound.volume_db = -7.0 if opening else -5.5
+	_sound_play_token += 1
+	var token := _sound_play_token
+	door_sound.volume_db = volumen_apertura_db if opening else volumen_cierre_db
 	door_sound.pitch_scale = randf_range(0.95, 1.05)
-	door_sound.play()
+	door_sound.play(0.0 if opening else DOOR_CLOSE_START)
+	if opening:
+		_stop_opening_sound_at_split(token)
+
+
+func _stop_opening_sound_at_split(token: int) -> void:
+	await get_tree().create_timer(DOOR_OPEN_END / maxf(door_sound.pitch_scale, 0.01)).timeout
+	if token == _sound_play_token and _is_open and is_instance_valid(door_sound):
+		door_sound.stop()
 
 
 func _get_open_sign(player: Node) -> float:

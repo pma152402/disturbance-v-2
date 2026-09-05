@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bjqlobxolvp3i"]
 
 [ext_resource type="Script" uid="uid://bms3bruat8114" path="res://house_props/rat.gd" id="1_script"]
+[ext_resource type="AudioStream" path="res://sounds/npcs/npc_rat_sound.mp3" id="2_rat_sound"]
 
 [sub_resource type="CapsuleShape3D" id="rat_shape"]
 radius = 0.09726074
@@ -60,6 +61,13 @@ collision_layer = 4
 floor_max_angle = 0.872665
 floor_snap_length = 0.22
 script = ExtResource("1_script")
+
+[node name="RatSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_rat_sound")
+volume_db = -10.5
+unit_size = 1.3
+max_distance = 16.0
+attenuation_model = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=3483093]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 2.921878, 0, 0.12381348, -0.074600205)

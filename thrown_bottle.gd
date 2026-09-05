@@ -5,6 +5,9 @@ const ARMING_TIME := 0.08
 const SHARD_COUNT := 7
 const SHARD_LIFETIME := 3.5
 
+@export_category("Audio")
+@export_range(-40.0, 6.0, 0.5) var volumen_rotura_db := -5.5
+
 var _age := 0.0
 var _broken := false
 var _break_on_impact := true
@@ -62,7 +65,7 @@ func _play_break_sound() -> void:
 	var break_sound := AudioStreamPlayer3D.new()
 	break_sound.name = "BottleBreakSound"
 	break_sound.stream = GameplaySounds.make_glass_break()
-	break_sound.volume_db = -5.5
+	break_sound.volume_db = volumen_rotura_db
 	break_sound.pitch_scale = randf_range(0.94, 1.06)
 	break_sound.unit_size = 3.0
 	break_sound.max_distance = 15.0

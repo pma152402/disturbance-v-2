@@ -1,5 +1,9 @@
 [gd_scene format=3 uid="uid://vpa6dekoymt1"]
 
+[ext_resource type="Script" path="res://sounds/seamless_spatial_loop.gd" id="1_loop"]
+[ext_resource type="AudioStream" path="res://sounds/ambient/darkroom_sound.mp3" id="2_darkroom_sound"]
+[ext_resource type="Script" path="res://house_props/darkroom_red_ceiling_light.gd" id="3_controller"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1spix"]
 albedo_color = Color(0.39215687, 0.078431375, 0.0627451, 1)
 metallic = 0.4
@@ -26,9 +30,21 @@ radial_segments = 14
 rings = 7
 
 [node name="DarkroomRedCeilingLight" type="Node3D" unique_id=2029901082]
-editor_description = "Luz roja de techo funcional e independiente."
+editor_description = "Luz roja del cuarto oscuro. Con la puerta cerrada se activa al acercarse a 4 m de la puerta; con la puerta abierta ignora el límite."
 transform = Transform3D(2.623524, 0, 0, 0, 1, 0, 0, 0, 2.7372692, 0, 0, 0)
 metadata/_edit_group_ = true
+script = ExtResource("3_controller")
+
+[node name="ElectricalHum" type="Node3D" parent="."]
+position = Vector3(0, -0.55, 0)
+script = ExtResource("1_loop")
+stream = ExtResource("2_darkroom_sound")
+volume_db = -24.0
+crossfade_seconds = 1.0
+activation_fade_seconds = 0.7
+random_start = true
+unit_size = 1.5
+max_distance = 10.0
 
 [node name="GeneratedDetail" type="Node3D" parent="." unique_id=471329609]
 

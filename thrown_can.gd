@@ -2,6 +2,10 @@ extends RigidBody3D
 
 const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
 
+@export_category("Audio")
+@export_range(-40.0, 6.0, 0.5) var volumen_impacto_suave_db := -14.0
+@export_range(-40.0, 6.0, 0.5) var volumen_impacto_fuerte_db := -5.0
+
 @onready var impact_sound: AudioStreamPlayer3D = $ImpactSound
 
 var _being_picked_up := false
@@ -23,7 +27,11 @@ func _on_body_entered(_body: Node) -> void:
 	if _being_picked_up or _impact_cooldown > 0.0 or _tracked_speed < 0.7:
 		return
 	_impact_cooldown = 0.14
-	impact_sound.volume_db = lerpf(-14.0, -5.0, clampf(_tracked_speed / 8.0, 0.0, 1.0))
+	impact_sound.volume_db = lerpf(
+		volumen_impacto_suave_db,
+		volumen_impacto_fuerte_db,
+		clampf(_tracked_speed / 8.0, 0.0, 1.0)
+	)
 	impact_sound.pitch_scale = randf_range(0.88, 1.13)
 	impact_sound.play()
 

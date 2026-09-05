@@ -1,8 +1,6 @@
 [gd_scene format=3]
 [ext_resource type="Material" path="res://house_props/catacombs/materials/aged_iron.tres" id="iron"]
-[ext_resource type="ArrayMesh" path="res://house_props/asylum_surround_3m_left.obj" id="LeftLattice"]
-[ext_resource type="ArrayMesh" path="res://house_props/asylum_surround_3m_right.obj" id="RightLattice"]
-[ext_resource type="ArrayMesh" path="res://house_props/asylum_surround_3m_top.obj" id="TopLattice"]
+[ext_resource type="ArrayMesh" path="res://house_props/asylum_surround_3m_woven_unified.obj" id="UnifiedLattice"]
 [sub_resource type="BoxShape3D" id="LeftCollision"]
 size = Vector3(0.56,3.93,0.12)
 
@@ -60,13 +58,13 @@ material = ExtResource("iron")
 size = Vector3(1.88,0.06,0.1)
 material = ExtResource("iron")
 [node name="AsylumGateSurround3m" type="Node3D"]
-editor_description = "Encuadre completamente de rejas: laterales y montante superior trenzados. 3 x 3.93 m. Sin paredes opacas."
+editor_description = "Encuadre completamente de rejas: laterales y montante superior trenzados. Alambre estatico unificado en una sola malla; marcos y colisiones permanecen editables. 3 x 3.93 m."
+[node name="UnifiedWovenLattice" type="MeshInstance3D" parent="."]
+mesh = ExtResource("UnifiedLattice")
+material_override = ExtResource("iron")
 [node name="LeftSurround" type="StaticBody3D" parent="."]
 position = Vector3(-1.22,1.965,0)
 metadata/_edit_group_ = true
-[node name="Lattice" type="MeshInstance3D" parent="LeftSurround"]
-mesh = ExtResource("LeftLattice")
-material_override = ExtResource("iron")
 [node name="Collision" type="CollisionShape3D" parent="LeftSurround"]
 shape = SubResource("LeftCollision")
 
@@ -89,9 +87,6 @@ mesh = SubResource("rail4")
 [node name="RightSurround" type="StaticBody3D" parent="."]
 position = Vector3(1.22,1.965,0)
 metadata/_edit_group_ = true
-[node name="Lattice" type="MeshInstance3D" parent="RightSurround"]
-mesh = ExtResource("RightLattice")
-material_override = ExtResource("iron")
 [node name="Collision" type="CollisionShape3D" parent="RightSurround"]
 shape = SubResource("RightCollision")
 
@@ -114,9 +109,6 @@ mesh = SubResource("rail8")
 [node name="TopSurround" type="StaticBody3D" parent="."]
 position = Vector3(0,3.325,0)
 metadata/_edit_group_ = true
-[node name="Lattice" type="MeshInstance3D" parent="TopSurround"]
-mesh = ExtResource("TopLattice")
-material_override = ExtResource("iron")
 [node name="Collision" type="CollisionShape3D" parent="TopSurround"]
 shape = SubResource("TopCollision")
 
@@ -135,4 +127,3 @@ mesh = SubResource("rail11")
 [node name="BottomRail" type="MeshInstance3D" parent="TopSurround"]
 position = Vector3(0,-0.575,0)
 mesh = SubResource("rail12")
-

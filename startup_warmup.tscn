@@ -1,0 +1,45 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://startup_warmup.gd" id="1_warmup"]
+
+[node name="StartupWarmup" type="CanvasLayer"]
+script = ExtResource("1_warmup")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.008, 0.01, 0.013, 1)
+
+[node name="ProgressBar" type="ProgressBar" parent="Backdrop"]
+custom_minimum_size = Vector2(380, 8)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -190.0
+offset_top = -4.0
+offset_right = 190.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+value = 92.0
+show_percentage = false
+
+[node name="Status" type="Label" parent="Backdrop"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = 18.0
+offset_right = 240.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "PREPARANDO NAVEGACIÓN..."
+horizontal_alignment = 1

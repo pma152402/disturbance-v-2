@@ -22,9 +22,14 @@ enum Behavior {
 @export_node_path("Node3D") var escape_target_path: NodePath
 @export var escape_waypoint_paths: Array[NodePath] = []
 @export_range(0.0, 3.0, 0.05) var escape_delay := 0.85
+@export_category("Audio")
+@export_range(-40.0, 6.0, 0.5) var volumen_susto_db := -1.5
+@export_range(-40.0, 6.0, 0.5) var volumen_normal_min_db := -12.0
+@export_range(-40.0, 6.0, 0.5) var volumen_normal_max_db := -9.0
 
 @onready var visual: Node3D = $Visual
 @onready var tail: Node3D = $Visual/Tail
+@onready var rat_sound: AudioStreamPlayer3D = $RatSound
 
 var _player: Node3D
 var _travel_direction := Vector3.ZERO
@@ -40,6 +45,9 @@ var _escape_waypoint_index := 0
 var _escape_detour_timer := 0.0
 var _last_motion_position := Vector3.ZERO
 var _stuck_time := 0.0
+var _sound_timer := 0.0
+var _scare_sound_pending := false
+var _waiting_for_scripted_reveal := false
 
 
 func _ready() -> void:
@@ -47,10 +55,13 @@ func _ready() -> void:
 	_find_player()
 	_choose_direction()
 	_last_motion_position = global_position
+	_waiting_for_scripted_reveal = behavior == Behavior.STAY_STILL and not escape_target_path.is_empty()
+	_sound_timer = randf_range(5.0, 14.0)
 
 
 func _physics_process(delta: float) -> void:
 	_find_player()
+	_update_rat_sound(delta)
 	_recent_light_timer = maxf(0.0, _recent_light_timer - delta)
 
 	if _scripted_escape:
@@ -131,6 +142,31 @@ func _on_escape_triggered() -> void:
 		return
 	_escape_waypoint_index = 0
 	_scripted_escape = true
+	_waiting_for_scripted_reveal = false
+	_scare_sound_pending = true
+	_sound_timer = 1.0
+
+
+func _update_rat_sound(delta: float) -> void:
+	if _waiting_for_scripted_reveal or rat_sound.stream == null:
+		return
+	_sound_timer -= delta
+	if _sound_timer > 0.0:
+		return
+	if _scare_sound_pending:
+		_scare_sound_pending = false
+		rat_sound.volume_db = volumen_susto_db
+		rat_sound.pitch_scale = 1.03
+	else:
+		rat_sound.volume_db = randf_range(
+			minf(volumen_normal_min_db, volumen_normal_max_db),
+			maxf(volumen_normal_min_db, volumen_normal_max_db)
+		)
+		rat_sound.pitch_scale = randf_range(0.94, 1.06)
+	rat_sound.play()
+	# El clip ya dura unos 13 s. Dejamos una pausa amplia después para que la
+	# rata siga teniendo presencia sin convertirse en una alarma repetitiva.
+	_sound_timer = rat_sound.stream.get_length() + randf_range(14.0, 28.0)
 
 
 func _update_scripted_escape(delta: float) -> void:

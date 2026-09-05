@@ -42,6 +42,8 @@ var _weather_bus_index := -1
 var _low_pass: AudioEffectLowPassFilter
 var _acoustic_blend := 0.0
 var _update_accumulator := 0.0
+var _last_applied_cutoff := -1.0
+var _last_applied_volume := INF
 const UPDATE_INTERVAL := 0.1
 
 
@@ -171,5 +173,11 @@ func _apply_acoustics(blend: float) -> void:
 		var basement_amount := smoothstep(0.0, 1.0, clampf(blend - 1.0, 0.0, 1.0))
 		cutoff_hz = exp(lerpf(log(indoor_cutoff_hz), log(basement_cutoff_hz), basement_amount))
 		volume_db = lerpf(indoor_volume_db, basement_volume_db, basement_amount)
-	_low_pass.cutoff_hz = cutoff_hz
-	AudioServer.set_bus_volume_db(_weather_bus_index, volume_db)
+	# Evita bloquear el servidor de audio diez veces por segundo cuando el
+	# jugador está quieto y la mezcla ya alcanzó su valor final.
+	if absf(_last_applied_cutoff - cutoff_hz) >= 1.0:
+		_low_pass.cutoff_hz = cutoff_hz
+		_last_applied_cutoff = cutoff_hz
+	if absf(_last_applied_volume - volume_db) >= 0.02:
+		AudioServer.set_bus_volume_db(_weather_bus_index, volume_db)
+		_last_applied_volume = volume_db

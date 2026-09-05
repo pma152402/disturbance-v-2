@@ -15,6 +15,9 @@ var boiler_puzzle_enabled := false
 @export_range(0.1, 10.0, 0.1) var temperature_response_speed := 2.8
 @export_range(1.0, 60.0, 1.0) var needle_spring_strength := 30.0
 @export_range(1.0, 20.0, 0.5) var needle_damping := 8.5
+@export_category("Audio")
+@export_range(-40.0, 6.0, 0.5) var volumen_controles_db := -3.0
+@export_category("Estado")
 @export var boiler_state: BoilerState = BoilerState.CLOGGED:
 	get:
 		return _boiler_state
@@ -78,7 +81,7 @@ func _ready() -> void:
 	_target_temperature = temperature_percent
 	_control_audio = AudioStreamPlayer3D.new()
 	_control_audio.max_distance = 12.0
-	_control_audio.volume_db = -3.0
+	_control_audio.volume_db = volumen_controles_db
 	_control_audio.stream = GameplaySounds.make_switch_click()
 	add_child(_control_audio)
 	call_deferred(&"_configure_boiler_puzzle")

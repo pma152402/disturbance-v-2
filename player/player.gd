@@ -3,6 +3,9 @@ extends CharacterBody3D
 signal light_switched_on(source: Node3D)
 signal footstep_heard(world_position: Vector3, hearing_radius: float)
 
+const ZOOM_IN_SOUND_START := 0.0
+const ZOOM_OUT_SOUND_START := 1.55
+
 @export var move_speed := 1.4
 @export var sprint_speed := 3.6
 @export var crouch_speed := 1.0
@@ -51,6 +54,20 @@ signal footstep_heard(world_position: Vector3, hearing_radius: float)
 @export var starts_with_matchbox := false
 @export var starts_with_lit_candle := false
 @export var starts_with_basement_key := false
+@export_category("Audio - Pasos")
+@export_group("Volumen por movimiento")
+@export_range(-40.0, 12.0, 0.5) var volumen_pasos_normal_db := 2.0
+@export_range(-40.0, 12.0, 0.5) var volumen_pasos_corriendo_db := 6.0
+@export_range(-40.0, 6.0, 0.5) var volumen_pasos_agachado_db := -5.0
+@export_range(-40.0, 6.0, 0.5) var volumen_pasos_tumbado_db := -11.0
+@export_group("")
+@export_category("Audio - Zoom")
+@export_range(-40.0, 12.0, 0.5) var volumen_zoom_in_db := -18.0
+@export_range(-40.0, 12.0, 0.5) var volumen_zoom_out_db := -18.0
+@export_range(0.15, 1.5, 0.05) var duracion_sonido_zoom := 0.55
+@export_range(0.02, 0.25, 0.01) var fundido_sonido_zoom := 0.08
+@export_category("Audio - Ruido permanente de cámara")
+@export_range(-60.0, 0.0, 0.5) var volumen_ruido_camara_db := -40.0
 
 enum Stance { STANDING, CROUCHED, PRONE }
 enum JumpPhase { IDLE, WINDUP, RECOVERING }
@@ -99,7 +116,10 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var switch_sound: AudioStreamPlayer = $SwitchSound
 @onready var flashlight_click_sound: AudioStreamPlayer = $FlashlightClickSound
 @onready var footstep_sound: AudioStreamPlayer = $FootstepSound
-@onready var footstep_surface_ray: RayCast3D = $FootstepSurfaceRay
+@onready var footstep_sound_right: AudioStreamPlayer = $FootstepSoundRight
+@onready var zoom_sound: AudioStreamPlayer = $ZoomSound
+# Ruido electrónico propio de la videocámara; no pertenece a la vela.
+@onready var camera_background_noise: Node = $Head/Camera3D/CameraBackgroundNoise
 
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 var _camera_rest_position: Vector3
@@ -107,7 +127,6 @@ var _bob_phase := 0.0
 var _lean_amount := 0.0
 var _stamina := 100.0
 var _is_exhausted := false
-var _sprint_held := false
 var _full_stamina_flash_timer := 0.0
 var _ui_time := 0.0
 var _stamina_fill_style: StyleBoxFlat
@@ -147,8 +166,11 @@ var _flashlight_holstered := true
 var _flashlight_was_on := true
 var _flashlight_available := true
 var _zoom_fov_target := 95.0
+var _zoom_sound_timer := 0.0
+var _zoom_sound_direction := 0
 var _last_footstep_beat := -1
-var _current_footstep_surface: StringName = &"normal"
+var _footstep_voice_index := 0
+var _footstep_variant := 0
 var _zoom_segments: Array[ColorRect] = []
 var _monster_hits := 0
 var _monster_hit_cooldown := 0.0
@@ -167,6 +189,7 @@ var _freezer_controller: Node3D
 var _freezer_previous_stance := Stance.STANDING
 var _freezer_return_transform := Transform3D.IDENTITY
 var _freezer_exit_lock_timer := 0.0
+var _active_companion_menu: Node3D
 const ZOOM_SEGMENT_ON := Color(0.86, 0.9, 0.83, 0.92)
 const ZOOM_SEGMENT_OFF := Color(0.20, 0.23, 0.20, 0.42)
 
@@ -250,6 +273,9 @@ func _ready() -> void:
 	_stamina_fill_style = stamina_bar.get_theme_stylebox("fill").duplicate() as StyleBoxFlat
 	stamina_bar.add_theme_stylebox_override("fill", _stamina_fill_style)
 	camera.make_current()
+	camera_background_noise.set("volume_db", volumen_ruido_camara_db)
+	camera_background_noise.set("volume_ceiling_db", -40.0)
+	camera_background_noise.call(&"set_active", true)
 	camera.fov = zoom_max_fov
 	_zoom_fov_target = zoom_max_fov
 	_update_zoom_meter()
@@ -259,7 +285,9 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	stance_indicator.call(&"set_stance", _stance)
 	holster_sound.stream = GameplaySounds.make_switch_click()
-	footstep_sound.stream = GameplaySounds.make_footstep_normal()
+	GameplaySounds.prewarm_footsteps()
+	footstep_sound.stream = GameplaySounds.make_outdoor_footstep(0)
+	footstep_sound_right.stream = GameplaySounds.make_outdoor_footstep(1)
 	if held_recipe_book.has_signal(&"page_turn_finished"):
 		held_recipe_book.connect(&"page_turn_finished", Callable(self, &"_on_recipe_page_turn_finished"))
 	if initial_slot_to_equip >= 0:
@@ -267,19 +295,21 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey:
-		var sprint_key_event := event as InputEventKey
-		var sprint_key := (
-			sprint_key_event.physical_keycode
-			if sprint_key_event.physical_keycode != 0
-			else sprint_key_event.keycode
-		)
-		if sprint_key == KEY_SHIFT:
-			_sprint_held = sprint_key_event.pressed
-
 	if event is InputEventKey and event.pressed and not event.echo:
 		var key_event := event as InputEventKey
 		var pressed_key := key_event.physical_keycode if key_event.physical_keycode != 0 else key_event.keycode
+		if is_instance_valid(_active_companion_menu):
+			if pressed_key == KEY_ESCAPE:
+				end_companion_command()
+				get_viewport().set_input_as_handled()
+				return
+			if pressed_key >= KEY_1 and pressed_key <= KEY_5:
+				var command_index := pressed_key - KEY_0
+				var command_target := _get_companion_aim_target(_active_companion_menu)
+				if bool(_active_companion_menu.call(&"receive_menu_command", command_index, command_target)):
+					end_companion_command()
+					get_viewport().set_input_as_handled()
+					return
 		if is_instance_valid(_active_screw_panel):
 			if pressed_key == KEY_F:
 				_active_screw_panel.call(&"end_screw_manipulation")
@@ -407,11 +437,17 @@ func _input(event: InputEvent) -> void:
 		if mouse_button.pressed and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			var wheel_amount := maxf(mouse_button.factor, 1.0) * zoom_step
 			if mouse_button.button_index == MOUSE_BUTTON_WHEEL_UP:
+				var previous_zoom_target := _zoom_fov_target
 				_zoom_fov_target = clampf(_zoom_fov_target - wheel_amount, zoom_min_fov, zoom_max_fov)
+				if not is_equal_approx(previous_zoom_target, _zoom_fov_target):
+					_play_zoom_sound(true)
 				get_viewport().set_input_as_handled()
 				return
 			if mouse_button.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				var previous_zoom_target := _zoom_fov_target
 				_zoom_fov_target = clampf(_zoom_fov_target + wheel_amount, zoom_min_fov, zoom_max_fov)
+				if not is_equal_approx(previous_zoom_target, _zoom_fov_target):
+					_play_zoom_sound(false)
 				get_viewport().set_input_as_handled()
 				return
 		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and _held_item == &"note" and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -457,6 +493,7 @@ func _input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_update_zoom_sound(delta)
 	_update_interaction_focus_dot(delta)
 	_monster_hit_cooldown = maxf(0.0, _monster_hit_cooldown - delta)
 	_update_stance_transition(delta)
@@ -533,7 +570,7 @@ func _physics_process(delta: float) -> void:
 		_request_stance(Stance.STANDING)
 	var previous_stamina := _stamina
 	var wants_to_sprint := (
-		_sprint_held
+		Input.is_action_pressed(&"sprint")
 		and input_vector.length_squared() > 0.01
 		and _stance == Stance.STANDING
 		and _stance_transition_timer <= 0.0
@@ -575,6 +612,7 @@ func _physics_process(delta: float) -> void:
 		current_speed = crouch_speed
 	elif _stance == Stance.PRONE:
 		current_speed = prone_speed
+	current_speed *= _get_companion_speed_scale()
 	if _stance_transition_timer > 0.0:
 		current_speed *= 0.4
 	if _jump_phase == JumpPhase.WINDUP:
@@ -606,6 +644,28 @@ func _physics_process(delta: float) -> void:
 	var zoom_weight := 1.0 - exp(-zoom_smoothing * delta)
 	camera.fov = lerpf(camera.fov, desired_fov, zoom_weight)
 	_update_zoom_meter()
+
+
+func _play_zoom_sound(zooming_in: bool) -> void:
+	var direction := -1 if zooming_in else 1
+	var target_volume := volumen_zoom_in_db if zooming_in else volumen_zoom_out_db
+	if _zoom_sound_direction != direction or not zoom_sound.playing:
+		zoom_sound.play(ZOOM_IN_SOUND_START if zooming_in else ZOOM_OUT_SOUND_START)
+	_zoom_sound_direction = direction
+	_zoom_sound_timer = duracion_sonido_zoom
+	zoom_sound.volume_db = target_volume
+
+
+func _update_zoom_sound(delta: float) -> void:
+	if _zoom_sound_timer <= 0.0:
+		return
+	_zoom_sound_timer = maxf(0.0, _zoom_sound_timer - delta)
+	var target_volume := volumen_zoom_in_db if _zoom_sound_direction < 0 else volumen_zoom_out_db
+	if _zoom_sound_timer < fundido_sonido_zoom:
+		zoom_sound.volume_db = lerpf(-40.0, target_volume, _zoom_sound_timer / maxf(fundido_sonido_zoom, 0.001))
+	if _zoom_sound_timer <= 0.0:
+		zoom_sound.stop()
+		_zoom_sound_direction = 0
 
 
 func _try_step_up(horizontal_motion: Vector3) -> bool:
@@ -643,11 +703,6 @@ func _try_step_up(horizontal_motion: Vector3) -> bool:
 	return true
 
 
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
-		_sprint_held = false
-
-
 func _update_zoom_meter() -> void:
 	var zoom_amount := clampf(
 		inverse_lerp(zoom_max_fov, zoom_min_fov, camera.fov) * 100.0,
@@ -669,7 +724,12 @@ func _update_camera_motion(delta: float, _input_vector: Vector2, _is_sprinting: 
 		var sprint_blend := clampf(inverse_lerp(move_speed, sprint_speed, horizontal_speed), 0.0, 1.0)
 		var bob_multiplier := lerpf(1.0, sprint_bob_multiplier, sprint_blend)
 		var hand_bob_multiplier := lerpf(1.0, 1.15, sprint_blend)
-		_bob_phase += delta * bob_frequency * bob_multiplier
+		var cadence_multiplier := lerpf(1.0, 1.55, sprint_blend)
+		if _stance == Stance.CROUCHED:
+			cadence_multiplier = 0.68
+		elif _stance == Stance.PRONE:
+			cadence_multiplier = 0.42
+		_bob_phase += delta * bob_frequency * cadence_multiplier
 		target_position += Vector3(
 			cos(_bob_phase * 0.5) * bob_horizontal_amount * bob_multiplier,
 			(absf(sin(_bob_phase)) - 0.5) * bob_vertical_amount * bob_multiplier,
@@ -1064,23 +1124,29 @@ func _update_footsteps(_delta: float, input_vector: Vector2, is_sprinting: bool)
 		return
 	_last_footstep_beat = current_beat
 
-	var surface := _detect_footstep_surface()
-	if surface != _current_footstep_surface:
-		_current_footstep_surface = surface
-		footstep_sound.stream = _get_footstep_stream(surface)
+	_footstep_variant = (_footstep_variant + randi_range(1, 3)) % 4
+	_footstep_voice_index = 1 - _footstep_voice_index
+	var step_player: AudioStreamPlayer = footstep_sound if _footstep_voice_index == 0 else footstep_sound_right
+	step_player.stream = GameplaySounds.make_outdoor_footstep(_footstep_variant)
 
-	var volume := -7.0
+	var volume := volumen_pasos_normal_db
+	var pitch_min := 0.95
+	var pitch_max := 1.05
 	if is_sprinting:
-		volume = -3.0
+		volume = volumen_pasos_corriendo_db
+		pitch_min = 1.04
+		pitch_max = 1.13
 	elif _stance == Stance.CROUCHED:
-		volume = -12.0
+		volume = volumen_pasos_agachado_db
+		pitch_min = 0.88
+		pitch_max = 0.97
 	elif _stance == Stance.PRONE:
-		volume = -18.0
-	if surface == &"wood":
-		volume += 1.5
-	footstep_sound.volume_db = volume + randf_range(-1.2, 0.8)
-	footstep_sound.pitch_scale = randf_range(0.92, 1.08)
-	footstep_sound.play()
+		volume = volumen_pasos_tumbado_db
+		pitch_min = 0.76
+		pitch_max = 0.86
+	step_player.volume_db = volume + randf_range(-0.9, 0.7)
+	step_player.pitch_scale = randf_range(pitch_min, pitch_max)
+	step_player.play()
 	var hearing_radius := 3.4
 	if is_sprinting:
 		hearing_radius = 5.2
@@ -1089,49 +1155,6 @@ func _update_footsteps(_delta: float, input_vector: Vector2, is_sprinting: bool)
 	elif _stance == Stance.PRONE:
 		hearing_radius = 0.65
 	footstep_heard.emit(global_position, hearing_radius)
-
-
-func _detect_footstep_surface() -> StringName:
-	footstep_surface_ray.force_raycast_update()
-	if not footstep_surface_ray.is_colliding():
-		return &"normal"
-	var surface_node := footstep_surface_ray.get_collider() as Node
-	var levels_checked := 0
-	while surface_node != null and levels_checked < 6:
-		if surface_node.has_meta(&"footstep_surface"):
-			var explicit_surface := StringName(str(surface_node.get_meta(&"footstep_surface")).to_lower())
-			if explicit_surface in [&"normal", &"wood", &"outdoor"]:
-				return explicit_surface
-		if surface_node.is_in_group(&"footstep_wood"):
-			return &"wood"
-		if surface_node.is_in_group(&"footstep_outdoor"):
-			return &"outdoor"
-		var node_name := String(surface_node.name).to_lower()
-		if _contains_surface_keyword(node_name, ["stair", "step", "wood", "madera", "tread", "pelda"]):
-			return &"wood"
-		if _contains_surface_keyword(node_name, ["exterior", "yard", "dirt", "grass", "ground", "garden", "weather", "outside", "path"]):
-			return &"outdoor"
-		surface_node = surface_node.get_parent()
-		levels_checked += 1
-	return &"normal"
-
-
-func _contains_surface_keyword(text: String, keywords: Array[String]) -> bool:
-	for keyword in keywords:
-		if text.contains(keyword):
-			return true
-	return false
-
-
-func _get_footstep_stream(surface: StringName) -> AudioStreamWAV:
-	match surface:
-		&"wood":
-			return GameplaySounds.make_footstep_wood()
-		&"outdoor":
-			return GameplaySounds.make_footstep_outdoor()
-		_:
-			return GameplaySounds.make_footstep_normal()
-
 
 func _get_interactable() -> Node:
 	var collider := _get_interactable_in_sight()
@@ -1200,6 +1223,13 @@ func _try_interact(pressed_key: Key) -> bool:
 
 func _update_interaction_prompt() -> void:
 	note_controls_prompt.visible = false
+	if is_instance_valid(_active_companion_menu):
+		if global_position.distance_to(_active_companion_menu.global_position) > 4.5:
+			end_companion_command()
+		else:
+			interaction_prompt.text = str(_active_companion_menu.call(&"get_command_menu_text"))
+			interaction_prompt.visible = true
+			return
 	if is_instance_valid(_freezer_controller):
 		interaction_prompt.visible = true
 		interaction_prompt.text = "F  SALIR DEL CONGELADOR"
@@ -1264,6 +1294,38 @@ func _update_interaction_prompt() -> void:
 		interaction_prompt.visible = not prompt_text.is_empty()
 	else:
 		interaction_prompt.visible = false
+
+
+func begin_companion_command(companion: Node3D) -> void:
+	_active_companion_menu = companion
+	_update_interaction_prompt()
+
+
+func end_companion_command() -> void:
+	_active_companion_menu = null
+	_update_interaction_prompt()
+
+
+func _get_companion_speed_scale() -> float:
+	var speed_scale := 1.0
+	for companion in get_tree().get_nodes_in_group(&"companion_npc"):
+		if companion != null and companion.has_method(&"get_player_speed_scale"):
+			speed_scale = minf(speed_scale, float(companion.call(&"get_player_speed_scale")))
+	return speed_scale
+
+
+func _get_companion_aim_target(companion: Node3D) -> Vector3:
+	var ray_origin := camera.global_position
+	var ray_end := ray_origin - camera.global_basis.z * float(companion.get("go_there_distance"))
+	var query := PhysicsRayQueryParameters3D.create(ray_origin, ray_end, 1)
+	var excluded_rids: Array[RID] = [get_rid()]
+	if companion is CollisionObject3D:
+		excluded_rids.append((companion as CollisionObject3D).get_rid())
+	query.exclude = excluded_rids
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	if not hit.is_empty():
+		return hit.position
+	return ray_end
 
 
 func pick_up_item(item_type: StringName) -> bool:

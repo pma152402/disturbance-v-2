@@ -1,22 +1,26 @@
-[gd_scene load_steps=28 format=3]
+[gd_scene format=3 uid="uid://c748yu6y7jvnr"]
 
-[ext_resource type="Script" path="res://player/player.gd" id="1_player"]
-[ext_resource type="ArrayMesh" path="res://ps2_objects/Flashlight/Flashlight.obj" id="2_flashlight_mesh"]
-[ext_resource type="Texture2D" path="res://ps2_objects/Flashlight/Flashlight.png" id="3_flashlight_texture"]
+[ext_resource type="Script" uid="uid://cumv50hbyfr5p" path="res://player/player.gd" id="1_player"]
+[ext_resource type="ArrayMesh" uid="uid://bucpyqi5w41xy" path="res://ps2_objects/Flashlight/Flashlight.obj" id="2_flashlight_mesh"]
+[ext_resource type="Texture2D" uid="uid://bkyllg4vvn5vy" path="res://ps2_objects/Flashlight/Flashlight.png" id="3_flashlight_texture"]
 [ext_resource type="PackedScene" path="res://can_visual.tscn" id="4_can_visual"]
 [ext_resource type="PackedScene" path="res://bottle_visual.tscn" id="5_bottle_visual"]
-[ext_resource type="FontFile" path="res://assets/fonts/PressStart2P-Regular.ttf" id="6_pixel_font"]
-[ext_resource type="AudioStream" path="res://sounds/interactions/flashlight_toggle.wav" id="7_flashlight_click"]
-[ext_resource type="AudioStream" path="res://sounds/interactions/light_switch_on.wav" id="8_light_switch"]
+[ext_resource type="FontFile" uid="uid://b60wwt30lnp8h" path="res://assets/fonts/PressStart2P-Regular.ttf" id="6_pixel_font"]
+[ext_resource type="AudioStream" uid="uid://bqo055aijxawp" path="res://sounds/interactions/flashlight_toggle.wav" id="7_flashlight_click"]
+[ext_resource type="AudioStream" uid="uid://xdb2gmxiotkg" path="res://sounds/interactions/light_switch_on.wav" id="8_light_switch"]
 [ext_resource type="PackedScene" path="res://player/held_items/plunger.tscn" id="9_plunger"]
 [ext_resource type="PackedScene" path="res://player/held_items/crowbar.tscn" id="10_crowbar"]
 [ext_resource type="PackedScene" path="res://house_props/note_paper_visual.tscn" id="11_note"]
-[ext_resource type="PackedScene" path="res://house_props/recipe_book_visual.tscn" id="12_recipe_book"]
+[ext_resource type="PackedScene" uid="uid://mqwlcrku7kam" path="res://house_props/recipe_book_visual.tscn" id="12_recipe_book"]
 [ext_resource type="PackedScene" path="res://house_props/recipe_book_closed_visual.tscn" id="13_recipe_book_closed"]
-[ext_resource type="PackedScene" path="res://player/held_items/matchbox_held_visual.tscn" id="14_matchbox"]
-[ext_resource type="PackedScene" path="res://player/held_items/candle_held_visual.tscn" id="15_candle"]
-[ext_resource type="Script" path="res://player/stance_indicator.gd" id="16_stance_indicator"]
+[ext_resource type="PackedScene" uid="uid://smjf2mu6l56j" path="res://player/held_items/matchbox_held_visual.tscn" id="14_matchbox"]
+[ext_resource type="PackedScene" uid="uid://dumjivvri22bh" path="res://player/held_items/candle_held_visual.tscn" id="15_candle"]
+[ext_resource type="Script" uid="uid://bxijgpu2flkxm" path="res://player/stance_indicator.gd" id="16_stance_indicator"]
 [ext_resource type="PackedScene" path="res://house_props/flathead_screwdriver.tscn" id="17_screwdriver"]
+[ext_resource type="Script" path="res://sounds/seamless_global_loop.gd" id="18_camera_loop"]
+[ext_resource type="AudioStream" uid="uid://bgjk0g3r3jie2" path="res://sounds/interactions/camera_zoom.mp3" id="20_zoom_sound"]
+[ext_resource type="AudioStream" path="res://sounds/objects/camera_background_noise.mp3" id="21_camera_noise"]
+[ext_resource type="Script" path="res://sounds/camera_audio_filter.gd" id="22_camera_filter"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.34
@@ -29,6 +33,9 @@ roughness = 0.9
 [sub_resource type="BoxMesh" id="BoxMesh_player"]
 material = SubResource("StandardMaterial3D_player")
 size = Vector3(0.68, 1.55, 0.48)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_interaction_focus"]
+radius = 0.26
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hand"]
 albedo_color = Color(0.12, 0.13, 0.16, 1)
@@ -49,6 +56,12 @@ height = 0.134
 radial_segments = 10
 rings = 6
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_flashlight"]
+albedo_texture = ExtResource("3_flashlight_texture")
+metallic = 0.2
+roughness = 0.62
+texture_filter = 0
+
 [sub_resource type="StandardMaterial3D" id="CandlePlacementMaterial"]
 transparency = 1
 shading_mode = 0
@@ -60,12 +73,6 @@ top_radius = 0.075
 bottom_radius = 0.085
 height = 0.34
 radial_segments = 12
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_flashlight"]
-albedo_texture = ExtResource("3_flashlight_texture")
-texture_filter = 0
-metallic = 0.2
-roughness = 0.62
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stamina_background"]
 bg_color = Color(0.015, 0.018, 0.024, 0.48)
@@ -98,196 +105,175 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focus_dot"]
-bg_color = Color(0.86, 0.9, 0.83, 0.38)
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_interaction_focus"]
-radius = 0.26
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_flashlight_icon"]
 atlas = ExtResource("3_flashlight_texture")
 region = Rect2(78, 0, 82, 256)
 
-[node name="Player" type="CharacterBody3D"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focus_dot"]
+bg_color = Color(0.86, 0.9, 0.83, 0.38)
+
+[node name="Player" type="CharacterBody3D" unique_id=157810499]
 floor_snap_length = 0.48
 script = ExtResource("1_player")
+volumen_pasos_normal_db = 2.0
+volumen_pasos_corriendo_db = 6.0
+volumen_ruido_camara_db = -40.0
 
-[node name="HolsterSound" type="AudioStreamPlayer" parent="."]
+[node name="CameraAudioFilter" type="Node" parent="."]
+script = ExtResource("22_camera_filter")
+
+[node name="HolsterSound" type="AudioStreamPlayer" parent="." unique_id=1942738998]
 volume_db = -8.0
 
-[node name="SwitchSound" type="AudioStreamPlayer" parent="."]
+[node name="SwitchSound" type="AudioStreamPlayer" parent="." unique_id=1475844013]
 stream = ExtResource("8_light_switch")
 volume_db = -9.0
 
-[node name="FlashlightClickSound" type="AudioStreamPlayer" parent="."]
+[node name="FlashlightClickSound" type="AudioStreamPlayer" parent="." unique_id=1363006901]
 stream = ExtResource("7_flashlight_click")
 volume_db = -9.0
 
-[node name="FootstepSound" type="AudioStreamPlayer" parent="."]
-volume_db = -6.0
+[node name="FootstepSound" type="AudioStreamPlayer" parent="." unique_id=908806743]
 
-[node name="FootstepSurfaceRay" type="RayCast3D" parent="."]
-target_position = Vector3(0, -1.45, 0)
-collision_mask = 1
-collide_with_areas = false
-collide_with_bodies = true
+[node name="FootstepSoundRight" type="AudioStreamPlayer" parent="."]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.15, 0)
+[node name="ZoomSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("20_zoom_sound")
+volume_db = -18.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1245257827]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
 shape = SubResource("CapsuleShape3D_player")
 
-[node name="Body" type="MeshInstance3D" parent="."]
+[node name="Body" type="MeshInstance3D" parent="." unique_id=2016906643]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.13, 0)
 visible = false
-position = Vector3(0, -0.13, 0)
 mesh = SubResource("BoxMesh_player")
-cast_shadow = 1
 
-[node name="Head" type="Node3D" parent="."]
-position = Vector3(0, 0.9, 0)
+[node name="Head" type="Node3D" parent="." unique_id=1724098262]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Head"]
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=369524132]
 current = true
 fov = 95.0
-near = 0.05
 
-[node name="InteractionRay" type="RayCast3D" parent="Head/Camera3D"]
+[node name="CameraBackgroundNoise" type="Node" parent="Head/Camera3D"]
+script = ExtResource("18_camera_loop")
+stream = ExtResource("21_camera_noise")
+volume_db = -40.0
+volume_ceiling_db = -40.0
+crossfade_seconds = 1.15
+activation_fade_seconds = 0.35
+
+[node name="InteractionRay" type="RayCast3D" parent="Head/Camera3D" unique_id=1650031078]
 target_position = Vector3(0, 0, -2.35)
 collision_mask = 3
 collide_with_areas = true
-collide_with_bodies = true
 
-[node name="InteractionFocusCast" type="ShapeCast3D" parent="Head/Camera3D"]
+[node name="InteractionFocusCast" type="ShapeCast3D" parent="Head/Camera3D" unique_id=75440849]
 shape = SubResource("SphereShape3D_interaction_focus")
 target_position = Vector3(0, 0, -2.35)
+max_results = 16
 collision_mask = 2
 collide_with_areas = true
-collide_with_bodies = true
-max_results = 16
 
-[node name="CandlePlacementRay" type="RayCast3D" parent="Head/Camera3D"]
+[node name="CandlePlacementRay" type="RayCast3D" parent="Head/Camera3D" unique_id=2095789670]
 target_position = Vector3(0, 0, -3)
-collision_mask = 1
-collide_with_areas = false
-collide_with_bodies = true
 
-[node name="HandRig" type="Node3D" parent="Head/Camera3D"]
+[node name="HandRig" type="Node3D" parent="Head/Camera3D" unique_id=1020972736]
+transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, 0, 0, 0)
 visible = false
-scale = Vector3(0.65, 0.65, 0.65)
 
-[node name="Hand" type="MeshInstance3D" parent="Head/Camera3D/HandRig"]
-position = Vector3(0.22, -0.17, 0.08)
-rotation = Vector3(-1.48, -0.08, -0.08)
+[node name="Hand" type="MeshInstance3D" parent="Head/Camera3D/HandRig" unique_id=263932539]
+transform = Transform3D(0.98725367, 0.15899009, -0.0072459932, -0.0072459932, 0.090381615, 0.99588084, 0.15899009, -0.9831345, 0.090381615, 0.22, -0.17, 0.08)
+cast_shadow = 0
 mesh = SubResource("BoxMesh_hand")
-cast_shadow = 0
 
-[node name="HandBall" type="MeshInstance3D" parent="Head/Camera3D/HandRig"]
-position = Vector3(0.22, -0.145, -0.175)
-scale = Vector3(0.9, 0.82, 1.08)
+[node name="HandBall" type="MeshInstance3D" parent="Head/Camera3D/HandRig" unique_id=1878167653]
+transform = Transform3D(0.9, 0, 0, 0, 0.82, 0, 0, 0, 1.08, 0.22, -0.145, -0.175)
+cast_shadow = 0
 mesh = SubResource("SphereMesh_hand")
-cast_shadow = 0
 
-[node name="FlashlightBody" type="MeshInstance3D" parent="Head/Camera3D/HandRig"]
-position = Vector3(0.22, -0.135, -0.14)
-rotation = Vector3(-1.48, -0.08, -0.08)
-scale = Vector3(0.62, 0.62, 0.62)
-mesh = ExtResource("2_flashlight_mesh")
+[node name="FlashlightBody" type="MeshInstance3D" parent="Head/Camera3D/HandRig" unique_id=1761331193]
+transform = Transform3D(0.61209726, 0.098573856, -0.0044925157, -0.0044925157, 0.056036603, 0.6174461, 0.098573856, -0.6095434, 0.056036603, 0.22, -0.135, -0.14)
 material_override = SubResource("StandardMaterial3D_flashlight")
 cast_shadow = 0
+mesh = ExtResource("2_flashlight_mesh")
 
-[node name="Flashlight" type="SpotLight3D" parent="Head/Camera3D/HandRig"]
-position = Vector3(0.22, -0.135, -0.4)
+[node name="Flashlight" type="SpotLight3D" parent="Head/Camera3D/HandRig" unique_id=928817132]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22, -0.135, -0.4)
 light_color = Color(1, 0.9, 0.72, 1)
 light_energy = 6.5
 shadow_enabled = true
-shadow_bias = 0.03
 shadow_normal_bias = 1.5
 shadow_blur = 2.0
 spot_range = 21.0
 spot_attenuation = 0.28
 spot_angle = 29.0
 
-[node name="RightHandRig" type="Node3D" parent="Head/Camera3D"]
+[node name="RightHandRig" type="Node3D" parent="Head/Camera3D" unique_id=374394639]
 
-[node name="RightHand" type="MeshInstance3D" parent="Head/Camera3D/RightHandRig"]
+[node name="RightHand" type="MeshInstance3D" parent="Head/Camera3D/RightHandRig" unique_id=1610019569]
+transform = Transform3D(0.61325586, 0.08412266, -0.03522371, -0.03522371, 0.4393567, 0.43603322, 0.08412266, -0.429289, 0.4393567, 0.31, -0.46, -0.09)
 visible = false
-position = Vector3(0.31, -0.46, -0.09)
-rotation = Vector3(-0.78, -0.08, -0.08)
-scale = Vector3(0.62, 0.62, 0.62)
+cast_shadow = 0
 mesh = SubResource("BoxMesh_hand")
-cast_shadow = 0
 
-[node name="HandBall" type="MeshInstance3D" parent="Head/Camera3D/RightHandRig/RightHand"]
-position = Vector3(0, 0.34, 0)
+[node name="HandBall" type="MeshInstance3D" parent="Head/Camera3D/RightHandRig/RightHand" unique_id=355173279]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, 0)
+cast_shadow = 0
 mesh = SubResource("SphereMesh_hand")
-cast_shadow = 0
 
-[node name="HeldCan" parent="Head/Camera3D/RightHandRig" instance=ExtResource("4_can_visual")]
+[node name="HeldCan" parent="Head/Camera3D/RightHandRig" unique_id=1446701995 instance=ExtResource("4_can_visual")]
+transform = Transform3D(0.9838437, -0.17902958, 0, 0.17674288, 0.9712773, -0.15931821, 0.028522672, 0.15674421, 0.98722726, 0.35, -0.29, -0.38)
 visible = false
-position = Vector3(0.35, -0.29, -0.38)
-rotation = Vector3(0.16, 0, 0.18)
 
-[node name="HeldBottle" parent="Head/Camera3D/RightHandRig" instance=ExtResource("5_bottle_visual")]
+[node name="HeldBottle" parent="Head/Camera3D/RightHandRig" unique_id=1560656481 instance=ExtResource("5_bottle_visual")]
+transform = Transform3D(0.98722726, -0.15931821, 0, 0.15817249, 0.98012775, -0.119712204, 0.019072333, 0.11818315, 0.99280864, 0.35, -0.37, -0.38)
 visible = false
-position = Vector3(0.35, -0.37, -0.38)
-rotation = Vector3(0.12, 0, 0.16)
 
-[node name="HeldPlunger" parent="Head/Camera3D/RightHandRig" instance=ExtResource("9_plunger")]
+[node name="HeldPlunger" parent="Head/Camera3D/RightHandRig" unique_id=1252743930 instance=ExtResource("9_plunger")]
+transform = Transform3D(0.68443674, -0.2172239, -0.05253784, 0.21924244, 0.6197896, 0.29358754, -0.04334975, -0.29508418, 0.6553214, 0.42, -0.57, -0.48)
 visible = false
-position = Vector3(0.42, -0.57, -0.48)
-rotation = Vector3(-0.42, -0.08, 0.34)
-scale = Vector3(0.72, 0.72, 0.72)
 
-[node name="HeldCrowbar" parent="Head/Camera3D/RightHandRig" instance=ExtResource("10_crowbar")]
+[node name="HeldCrowbar" parent="Head/Camera3D/RightHandRig" unique_id=1164428919 instance=ExtResource("10_crowbar")]
+transform = Transform3D(0.5411603, -0.20467278, -0.040676404, 0.1982131, 0.46881807, 0.2780668, -0.065246336, -0.2733471, 0.50736994, 0.43, -0.62, -0.5)
 visible = false
-position = Vector3(0.43, -0.62, -0.5)
-rotation = Vector3(-0.5, -0.08, 0.4)
-scale = Vector3(0.58, 0.58, 0.58)
 
-[node name="HeldScrewdriver" parent="Head/Camera3D/RightHandRig" instance=ExtResource("17_screwdriver")]
+[node name="HeldScrewdriver" parent="Head/Camera3D/RightHandRig" unique_id=475670536 instance=ExtResource("17_screwdriver")]
+transform = Transform3D(0.40938202, -0.63367635, -0.32134193, 0.70933807, 0.3433463, 0.22661163, -0.040569365, -0.39111072, 0.71957386, 0.4, -0.43, -0.52)
 visible = false
-position = Vector3(0.4, -0.43, -0.52)
-rotation = Vector3(-0.28, -0.42, 1.12)
-scale = Vector3(0.82, 0.82, 0.82)
 collision_layer = 0
 
-[node name="HeldNote" parent="Head/Camera3D/RightHandRig" instance=ExtResource("11_note")]
+[node name="HeldNote" parent="Head/Camera3D/RightHandRig" unique_id=1183787652 instance=ExtResource("11_note")]
+transform = Transform3D(0.9802297, -0.11887504, -0.15817249, 0.13853961, 0.983095, 0.119712204, 0.14126779, -0.13925861, 0.98012775, 0.38, -0.38, -0.48)
 visible = false
-position = Vector3(0.38, -0.38, -0.48)
-rotation = Vector3(-0.12, -0.16, 0.14)
 
-[node name="HeldRecipeBook" parent="Head/Camera3D/RightHandRig" instance=ExtResource("12_recipe_book")]
+[node name="HeldRecipeBook" parent="Head/Camera3D/RightHandRig" unique_id=1780224954 instance=ExtResource("12_recipe_book")]
+transform = Transform3D(-0.6180171, 0.049547154, -2.5546996e-08, 0.023352955, 0.29128894, 0.54681385, 0.043698512, 0.545065, -0.29222357, 0.29, -0.38, -0.56)
 visible = false
-position = Vector3(0.29, -0.38, -0.56)
-rotation = Vector3(-1.08, 3.1415927, 0.08)
-scale = Vector3(0.62, 0.62, 0.62)
 
-[node name="HeldRecipeBookClosed" parent="Head/Camera3D/RightHandRig" instance=ExtResource("13_recipe_book_closed")]
+[node name="HeldRecipeBookClosed" parent="Head/Camera3D/RightHandRig" unique_id=1906060623 instance=ExtResource("13_recipe_book_closed")]
+transform = Transform3D(-0.6180171, 0.049547154, -2.5546996e-08, 0.023352955, 0.29128894, 0.54681385, 0.043698512, 0.545065, -0.29222357, 0.29, -0.38, -0.56)
 visible = false
-position = Vector3(0.29, -0.38, -0.56)
-rotation = Vector3(-1.08, 3.1415927, 0.08)
-scale = Vector3(0.62, 0.62, 0.62)
 
-[node name="HeldMatchbox" parent="Head/Camera3D/RightHandRig" instance=ExtResource("14_matchbox")]
+[node name="HeldMatchbox" parent="Head/Camera3D/RightHandRig" unique_id=941713709 instance=ExtResource("14_matchbox")]
+transform = Transform3D(0.88771427, -0.13021588, -0.070761204, 0.14106978, 0.87414956, 0.16112663, 0.045416255, -0.17001854, 0.88262737, 0.37, -0.39, -0.47)
 visible = false
-position = Vector3(0.37, -0.39, -0.47)
-rotation = Vector3(-0.18, -0.08, 0.16)
-scale = Vector3(0.9, 0.9, 0.9)
 
-[node name="HeldCandle" parent="Head/Camera3D/RightHandRig" instance=ExtResource("15_candle")]
+[node name="HeldCandle" parent="Head/Camera3D/RightHandRig" unique_id=908124201 instance=ExtResource("15_candle")]
+transform = Transform3D(0.85277236, -0.09867575, -0.05140411, 0.10262323, 0.8510847, 0.06872664, 0.04298558, -0.07428306, 0.85570693, 0.2, -0.32, -0.6)
 visible = false
-position = Vector3(0.2, -0.32, -0.6)
-rotation = Vector3(-0.08, -0.06, 0.12)
-scale = Vector3(0.86, 0.86, 0.86)
 
-[node name="CandlePlacementPreview" type="MeshInstance3D" parent="."]
+[node name="CandlePlacementPreview" type="MeshInstance3D" parent="." unique_id=1806168459]
 visible = false
-mesh = SubResource("CandlePlacementMesh")
 cast_shadow = 0
+mesh = SubResource("CandlePlacementMesh")
 
-[node name="StaminaUI" type="CanvasLayer" parent="."]
+[node name="StaminaUI" type="CanvasLayer" parent="." unique_id=1898289555]
 layer = 20
 
-[node name="StaminaBar" type="ProgressBar" parent="StaminaUI"]
+[node name="StaminaBar" type="ProgressBar" parent="StaminaUI" unique_id=1959162770]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(230, 7)
 anchors_preset = 7
@@ -307,45 +293,26 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_stamina_fill")
 value = 100.0
 show_percentage = false
 
-[node name="StanceUI" type="CanvasLayer" parent="."]
+[node name="StanceUI" type="CanvasLayer" parent="." unique_id=1776035118]
 layer = 127
 
-[node name="StanceIndicator" type="Control" parent="StanceUI"]
+[node name="StanceIndicator" type="Control" parent="StanceUI" unique_id=656389425]
 modulate = Color(1, 1, 1, 0.8)
+z_index = 100
 texture_filter = 1
+layout_mode = 3
+anchors_preset = 0
 offset_left = 297.0
 offset_top = 54.0
 offset_right = 371.0
 offset_bottom = 134.0
 mouse_filter = 2
-z_index = 100
 script = ExtResource("16_stance_indicator")
 
-[node name="InventoryUI" type="CanvasLayer" parent="."]
+[node name="InventoryUI" type="CanvasLayer" parent="." unique_id=203855527]
 layer = 102
 
-[node name="InventoryStoredMessageUI" type="CanvasLayer" parent="."]
-layer = 104
-
-[node name="Message" type="Label" parent="InventoryStoredMessageUI"]
-visible = false
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 154.0
-offset_bottom = 194.0
-grow_horizontal = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.9, 0.93, 0.86, 0.96)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_fonts/font = ExtResource("6_pixel_font")
-theme_override_font_sizes/font_size = 14
-text = "HAS GUARDADO EL OBJETO EN TU INVENTARIO"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="InventorySlots" type="HBoxContainer" parent="InventoryUI"]
+[node name="InventorySlots" type="HBoxContainer" parent="InventoryUI" unique_id=1880132432]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -360,18 +327,18 @@ grow_vertical = 0
 mouse_filter = 2
 theme_override_constants/separation = 5
 
-[node name="Slot1" type="PanelContainer" parent="InventoryUI/InventorySlots"]
+[node name="Slot1" type="PanelContainer" parent="InventoryUI/InventorySlots" unique_id=1213245738]
 custom_minimum_size = Vector2(102, 44)
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_inventory_slot")
 
-[node name="Content" type="Control" parent="InventoryUI/InventorySlots/Slot1"]
+[node name="Content" type="Control" parent="InventoryUI/InventorySlots/Slot1" unique_id=610882276]
 custom_minimum_size = Vector2(100, 42)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="InventoryUI/InventorySlots/Slot1/Content"]
+[node name="Label" type="Label" parent="InventoryUI/InventorySlots/Slot1/Content" unique_id=71159625]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 42.0
@@ -381,11 +348,12 @@ theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_fonts/font = ExtResource("6_pixel_font")
 theme_override_font_sizes/font_size = 8
-text = "1\nVACIO"
+text = "1
+VACIO"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="FlashlightIcon" type="TextureRect" parent="InventoryUI/InventorySlots/Slot1/Content"]
+[node name="FlashlightIcon" type="TextureRect" parent="InventoryUI/InventorySlots/Slot1/Content" unique_id=1413633917]
 visible = false
 layout_mode = 0
 offset_left = 29.0
@@ -399,13 +367,13 @@ texture = SubResource("AtlasTexture_flashlight_icon")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Slot2" type="PanelContainer" parent="InventoryUI/InventorySlots"]
+[node name="Slot2" type="PanelContainer" parent="InventoryUI/InventorySlots" unique_id=732002677]
 custom_minimum_size = Vector2(102, 44)
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_inventory_slot")
 
-[node name="Label" type="Label" parent="InventoryUI/InventorySlots/Slot2"]
+[node name="Label" type="Label" parent="InventoryUI/InventorySlots/Slot2" unique_id=40240159]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.94)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
@@ -413,17 +381,18 @@ theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_fonts/font = ExtResource("6_pixel_font")
 theme_override_font_sizes/font_size = 8
-text = "2\nVACIO"
+text = "2
+VACIO"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Slot3" type="PanelContainer" parent="InventoryUI/InventorySlots"]
+[node name="Slot3" type="PanelContainer" parent="InventoryUI/InventorySlots" unique_id=198620998]
 custom_minimum_size = Vector2(102, 44)
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_inventory_slot")
 
-[node name="Label" type="Label" parent="InventoryUI/InventorySlots/Slot3"]
+[node name="Label" type="Label" parent="InventoryUI/InventorySlots/Slot3" unique_id=335850932]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.94)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
@@ -431,14 +400,35 @@ theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_fonts/font = ExtResource("6_pixel_font")
 theme_override_font_sizes/font_size = 8
-text = "3\nVACIO"
+text = "3
+VACIO"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ZoomUI" type="CanvasLayer" parent="."]
+[node name="InventoryStoredMessageUI" type="CanvasLayer" parent="." unique_id=723077058]
+layer = 104
+
+[node name="Message" type="Label" parent="InventoryStoredMessageUI" unique_id=2137248523]
+visible = false
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 154.0
+offset_bottom = 194.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.9, 0.93, 0.86, 0.96)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("6_pixel_font")
+theme_override_font_sizes/font_size = 14
+text = "HAS GUARDADO EL OBJETO EN TU INVENTARIO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ZoomUI" type="CanvasLayer" parent="." unique_id=1509871321]
 layer = 102
 
-[node name="ZoomMeter" type="Control" parent="ZoomUI"]
+[node name="ZoomMeter" type="Control" parent="ZoomUI" unique_id=1541231227]
 layout_mode = 3
 anchors_preset = 3
 anchor_left = 1.0
@@ -453,9 +443,8 @@ grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
 
-[node name="Minus" type="Label" parent="ZoomUI/ZoomMeter"]
+[node name="Minus" type="Label" parent="ZoomUI/ZoomMeter" unique_id=1525160405]
 layout_mode = 0
-offset_left = 0.0
 offset_top = 4.0
 offset_right = 28.0
 offset_bottom = 34.0
@@ -470,15 +459,14 @@ theme_override_font_sizes/font_size = 16
 text = "-"
 horizontal_alignment = 1
 
-[node name="ZoomSegments" type="Control" parent="ZoomUI/ZoomMeter"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
+[node name="ZoomSegments" type="Control" parent="ZoomUI/ZoomMeter" unique_id=1718258007]
+anchors_preset = 0
 offset_right = 332.0
 offset_bottom = 38.0
 mouse_filter = 2
 
-[node name="Segment01" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+[node name="Segment01" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments" unique_id=1262826521]
+layout_mode = 0
 offset_left = 35.0
 offset_top = 14.0
 offset_right = 51.0
@@ -486,7 +474,8 @@ offset_bottom = 23.0
 mouse_filter = 2
 color = Color(0.2, 0.23, 0.2, 0.42)
 
-[node name="Segment02" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+[node name="Segment02" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments" unique_id=152793634]
+layout_mode = 0
 offset_left = 56.0
 offset_top = 14.0
 offset_right = 72.0
@@ -494,7 +483,8 @@ offset_bottom = 23.0
 mouse_filter = 2
 color = Color(0.2, 0.23, 0.2, 0.42)
 
-[node name="Segment03" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+[node name="Segment03" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments" unique_id=93233520]
+layout_mode = 0
 offset_left = 77.0
 offset_top = 14.0
 offset_right = 93.0
@@ -502,7 +492,8 @@ offset_bottom = 23.0
 mouse_filter = 2
 color = Color(0.2, 0.23, 0.2, 0.42)
 
-[node name="Segment04" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+[node name="Segment04" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments" unique_id=107910140]
+layout_mode = 0
 offset_left = 98.0
 offset_top = 14.0
 offset_right = 114.0
@@ -510,7 +501,8 @@ offset_bottom = 23.0
 mouse_filter = 2
 color = Color(0.2, 0.23, 0.2, 0.42)
 
-[node name="Segment05" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+[node name="Segment05" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments" unique_id=1630783896]
+layout_mode = 0
 offset_left = 119.0
 offset_top = 14.0
 offset_right = 135.0
@@ -518,7 +510,8 @@ offset_bottom = 23.0
 mouse_filter = 2
 color = Color(0.2, 0.23, 0.2, 0.42)
 
-[node name="Segment06" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+[node name="Segment06" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments" unique_id=890784710]
+layout_mode = 0
 offset_left = 140.0
 offset_top = 14.0
 offset_right = 156.0
@@ -526,7 +519,8 @@ offset_bottom = 23.0
 mouse_filter = 2
 color = Color(0.2, 0.23, 0.2, 0.42)
 
-[node name="Segment07" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+[node name="Segment07" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments" unique_id=107558026]
+layout_mode = 0
 offset_left = 161.0
 offset_top = 14.0
 offset_right = 177.0
@@ -534,7 +528,8 @@ offset_bottom = 23.0
 mouse_filter = 2
 color = Color(0.2, 0.23, 0.2, 0.42)
 
-[node name="Segment08" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+[node name="Segment08" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments" unique_id=990373246]
+layout_mode = 0
 offset_left = 182.0
 offset_top = 14.0
 offset_right = 198.0
@@ -542,7 +537,8 @@ offset_bottom = 23.0
 mouse_filter = 2
 color = Color(0.2, 0.23, 0.2, 0.42)
 
-[node name="Segment09" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+[node name="Segment09" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments" unique_id=828205862]
+layout_mode = 0
 offset_left = 203.0
 offset_top = 14.0
 offset_right = 219.0
@@ -550,7 +546,8 @@ offset_bottom = 23.0
 mouse_filter = 2
 color = Color(0.2, 0.23, 0.2, 0.42)
 
-[node name="Segment10" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+[node name="Segment10" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments" unique_id=2101848809]
+layout_mode = 0
 offset_left = 224.0
 offset_top = 14.0
 offset_right = 240.0
@@ -558,7 +555,8 @@ offset_bottom = 23.0
 mouse_filter = 2
 color = Color(0.2, 0.23, 0.2, 0.42)
 
-[node name="Segment11" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+[node name="Segment11" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments" unique_id=347782657]
+layout_mode = 0
 offset_left = 245.0
 offset_top = 14.0
 offset_right = 261.0
@@ -566,7 +564,8 @@ offset_bottom = 23.0
 mouse_filter = 2
 color = Color(0.2, 0.23, 0.2, 0.42)
 
-[node name="Segment12" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments"]
+[node name="Segment12" type="ColorRect" parent="ZoomUI/ZoomMeter/ZoomSegments" unique_id=1695111223]
+layout_mode = 0
 offset_left = 266.0
 offset_top = 14.0
 offset_right = 282.0
@@ -574,7 +573,7 @@ offset_bottom = 23.0
 mouse_filter = 2
 color = Color(0.2, 0.23, 0.2, 0.42)
 
-[node name="Plus" type="Label" parent="ZoomUI/ZoomMeter"]
+[node name="Plus" type="Label" parent="ZoomUI/ZoomMeter" unique_id=889322625]
 layout_mode = 0
 offset_left = 302.0
 offset_top = 4.0
@@ -591,10 +590,10 @@ theme_override_font_sizes/font_size = 16
 text = "+"
 horizontal_alignment = 1
 
-[node name="InteractionUI" type="CanvasLayer" parent="."]
+[node name="InteractionUI" type="CanvasLayer" parent="." unique_id=483352692]
 layer = 102
 
-[node name="CenterDot" type="Panel" parent="InteractionUI"]
+[node name="CenterDot" type="Panel" parent="InteractionUI" unique_id=545653779]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
@@ -610,7 +609,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_focus_dot")
 
-[node name="InteractionPrompt" type="Label" parent="InteractionUI"]
+[node name="InteractionPrompt" type="Label" parent="InteractionUI" unique_id=1027912858]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
@@ -623,7 +622,6 @@ offset_right = 310.0
 offset_bottom = 121.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.9)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
 theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.02, 0.96)
@@ -635,7 +633,7 @@ theme_override_font_sizes/font_size = 12
 text = "F  COGER OBJETO"
 horizontal_alignment = 1
 
-[node name="NoteControlsPrompt" type="Label" parent="InteractionUI"]
+[node name="NoteControlsPrompt" type="Label" parent="InteractionUI" unique_id=2050308514]
 visible = false
 anchors_preset = 7
 anchor_left = 0.5
@@ -648,7 +646,6 @@ offset_right = 360.0
 offset_bottom = -14.0
 grow_horizontal = 2
 grow_vertical = 0
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.92, 0.94, 0.88, 0.96)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.96)
 theme_override_colors/font_outline_color = Color(0.015, 0.018, 0.015, 0.98)

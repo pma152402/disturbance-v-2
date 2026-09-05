@@ -2,7 +2,7 @@ extends Node
 ## Runtime-only culling. The editable scene and every asset remain untouched.
 const UPDATE_INTERVAL := 0.18
 const LIGHT_MARGIN := 4.0
-const MAX_SHADOW_LIGHTS := 2
+const MAX_SHADOW_LIGHTS := 3
 var _lights: Array[Light3D] = []
 var _shadow_capable := {}
 
@@ -21,14 +21,19 @@ static func install(branch: Node) -> Dictionary:
 			mesh.visibility_range_end_margin = 5.0
 			mesh.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_SELF
 			detail_meshes += 1
-	for node in branch.find_children("*", "OmniLight3D", true, false):
-		var light := node as OmniLight3D
+	# Presupuesta conjuntamente sombras omni y spot. Antes los focos spot se
+	# sumaban por fuera del límite de sombras dinámicas.
+	for node in branch.find_children("*", "Light3D", true, false):
+		var light := node as Light3D
+		if light is DirectionalLight3D:
+			continue
 		controller._lights.append(light)
 		var has_spot_shadow := false
-		for sibling in light.get_parent().get_children():
-			if sibling is SpotLight3D and sibling.shadow_enabled:
-				has_spot_shadow = true
-				break
+		if light is OmniLight3D:
+			for sibling in light.get_parent().get_children():
+				if sibling is SpotLight3D and sibling.shadow_enabled:
+					has_spot_shadow = true
+					break
 		# A hanging lamp already has a downward spot shadow (one render pass).
 		# Its omni shadow would add six redundant cubemap faces every frame.
 		controller._shadow_capable[light] = light.shadow_enabled and not has_spot_shadow
@@ -56,11 +61,18 @@ func _update_shadow_budget() -> void:
 		if not is_instance_valid(light): continue
 		var distance := camera.global_position.distance_to(light.global_position)
 		light.shadow_enabled = false
-		if light.visible and _shadow_capable.get(light,false) and distance <= minf(11.0,light.omni_range * 1.65):
+		if light.visible and _shadow_capable.get(light,false) and distance <= minf(11.0, _light_range(light) * 1.65):
 			candidates.append(light)
 	candidates.sort_custom(func(a: Light3D,b: Light3D): return camera.global_position.distance_squared_to(a.global_position) < camera.global_position.distance_squared_to(b.global_position))
 	for index in mini(MAX_SHADOW_LIGHTS,candidates.size()):
 		candidates[index].shadow_enabled = true
+
+func _light_range(light: Light3D) -> float:
+	if light is OmniLight3D:
+		return (light as OmniLight3D).omni_range
+	if light is SpotLight3D:
+		return (light as SpotLight3D).spot_range
+	return 8.0
 
 func _has_moving_parent(node: Node) -> bool:
 	var parent := node.get_parent()

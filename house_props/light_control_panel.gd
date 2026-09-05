@@ -10,8 +10,8 @@ signal power_state_changed(powered: bool)
 @export var switch_states: Array[bool] = [false, false, false, false]
 @export_category("Electricidad de la casa")
 @export var debug_bypass_panel := true
-@export var installed_fuses: Array[bool] = [true, true, true, false]
-@export var fuse_conditions: Array[int] = [0, 1, 1, -1]
+@export var installed_fuses: Array[bool] = [false, false, true, false]
+@export var fuse_conditions: Array[int] = [-1, -1, 1, -1]
 
 const GoodFuseScene := preload("res://house_props/light_panel_fuse_good.tscn")
 const BrokenFuseScene := preload("res://house_props/light_panel_fuse_broken.tscn")

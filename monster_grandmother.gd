@@ -130,7 +130,12 @@ func _ready() -> void:
 	breathing_sound.stream = _make_breathing_sound()
 	footstep_sound.stream = _make_footstep_sound()
 	voice_sound.stream = _make_chase_voice()
-	breathing_sound.play()
+	# _ready() también se ejecuta con PROCESS_MODE_DISABLED. No dejar una
+	# respiración permanente activa en enemigos colocados como inactivos.
+	if process_mode != Node.PROCESS_MODE_DISABLED:
+		breathing_sound.play()
+	else:
+		breathing_sound.stop()
 	_waiting_covered_eyes = starts_waiting_covered_eyes
 	if is_instance_valid(mouth):
 		_mouth_rest_scale = mouth.scale

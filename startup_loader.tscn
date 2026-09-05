@@ -1,0 +1,47 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://startup_loader.gd" id="1_loader"]
+
+[node name="StartupLoader" type="Node"]
+script = ExtResource("1_loader")
+
+[node name="LoadingUI" type="CanvasLayer" parent="."]
+layer = 127
+visible = false
+
+[node name="Backdrop" type="ColorRect" parent="LoadingUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.008, 0.01, 0.013, 1)
+
+[node name="Content" type="VBoxContainer" parent="LoadingUI/Backdrop"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -190.0
+offset_top = -45.0
+offset_right = 190.0
+offset_bottom = 45.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="LoadingUI/Backdrop/Content"]
+layout_mode = 2
+text = "DISTURBANCE"
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="LoadingUI/Backdrop/Content"]
+custom_minimum_size = Vector2(380, 8)
+layout_mode = 2
+show_percentage = false
+
+[node name="Status" type="Label" parent="LoadingUI/Backdrop/Content"]
+layout_mode = 2
+text = "CARGANDO RECURSOS..."
+horizontal_alignment = 1

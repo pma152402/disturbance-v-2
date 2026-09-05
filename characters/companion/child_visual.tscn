@@ -1,0 +1,425 @@
+[gd_scene load_steps=37 format=3]
+
+[ext_resource type="Script" path="res://characters/companion/child_visual.gd" id="1_anim"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_skin"]
+albedo_color = Color(0.64, 0.43, 0.31, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="Mat_skin_warm"]
+albedo_color = Color(0.52, 0.28, 0.2, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="Mat_hair"]
+albedo_color = Color(0.055, 0.035, 0.026, 1)
+roughness = 0.96
+
+[sub_resource type="StandardMaterial3D" id="Mat_shirt"]
+albedo_color = Color(0.56, 0.48, 0.29, 1)
+roughness = 0.94
+
+[sub_resource type="StandardMaterial3D" id="Mat_cardigan"]
+albedo_color = Color(0.16, 0.255, 0.245, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Mat_shorts"]
+albedo_color = Color(0.11, 0.13, 0.16, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_sock"]
+albedo_color = Color(0.55, 0.52, 0.42, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Mat_shoe"]
+albedo_color = Color(0.12, 0.065, 0.042, 1)
+roughness = 0.78
+
+[sub_resource type="StandardMaterial3D" id="Mat_sole"]
+albedo_color = Color(0.035, 0.03, 0.027, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="Mat_eye_white"]
+albedo_color = Color(0.78, 0.72, 0.61, 1)
+roughness = 0.86
+
+[sub_resource type="StandardMaterial3D" id="Mat_eye"]
+albedo_color = Color(0.055, 0.035, 0.02, 1)
+roughness = 0.32
+
+[sub_resource type="StandardMaterial3D" id="Mat_mouth"]
+albedo_color = Color(0.22, 0.055, 0.045, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_backpack"]
+albedo_color = Color(0.29, 0.075, 0.055, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_metal"]
+albedo_color = Color(0.48, 0.42, 0.27, 1)
+metallic = 0.35
+roughness = 0.58
+
+[sub_resource type="CapsuleMesh" id="Mesh_torso"]
+material = SubResource("Mat_cardigan")
+radius = 0.205
+height = 0.53
+radial_segments = 10
+rings = 5
+
+[sub_resource type="SphereMesh" id="Mesh_head"]
+material = SubResource("Mat_skin")
+radius = 0.235
+height = 0.47
+radial_segments = 12
+rings = 7
+
+[sub_resource type="SphereMesh" id="Mesh_ear"]
+material = SubResource("Mat_skin_warm")
+radius = 0.052
+height = 0.083
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="Mesh_hair"]
+material = SubResource("Mat_hair")
+radius = 0.245
+height = 0.33
+radial_segments = 10
+rings = 5
+
+[sub_resource type="SphereMesh" id="Mesh_hair_lock"]
+material = SubResource("Mat_hair")
+radius = 0.07
+height = 0.14
+radial_segments = 7
+rings = 4
+
+[sub_resource type="SphereMesh" id="Mesh_eye_white"]
+material = SubResource("Mat_eye_white")
+radius = 0.047
+height = 0.078
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="Mesh_eye"]
+material = SubResource("Mat_eye")
+radius = 0.027
+height = 0.052
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="Mesh_nose"]
+material = SubResource("Mat_skin_warm")
+radius = 0.034
+height = 0.06
+radial_segments = 7
+rings = 4
+
+[sub_resource type="BoxMesh" id="Mesh_mouth"]
+material = SubResource("Mat_mouth")
+size = Vector3(0.075, 0.018, 0.012)
+
+[sub_resource type="SphereMesh" id="Mesh_freckle"]
+material = SubResource("Mat_skin_warm")
+radius = 0.009
+height = 0.012
+radial_segments = 5
+rings = 3
+
+[sub_resource type="BoxMesh" id="Mesh_collar"]
+material = SubResource("Mat_shirt")
+size = Vector3(0.17, 0.08, 0.035)
+
+[sub_resource type="CapsuleMesh" id="Mesh_arm"]
+material = SubResource("Mat_cardigan")
+radius = 0.055
+height = 0.29
+radial_segments = 7
+rings = 3
+
+[sub_resource type="CapsuleMesh" id="Mesh_forearm"]
+material = SubResource("Mat_skin")
+radius = 0.045
+height = 0.25
+radial_segments = 7
+rings = 3
+
+[sub_resource type="SphereMesh" id="Mesh_hand"]
+material = SubResource("Mat_skin")
+radius = 0.055
+height = 0.085
+radial_segments = 7
+rings = 4
+
+[sub_resource type="CapsuleMesh" id="Mesh_leg"]
+material = SubResource("Mat_shorts")
+radius = 0.073
+height = 0.34
+radial_segments = 8
+rings = 3
+
+[sub_resource type="CapsuleMesh" id="Mesh_shin"]
+material = SubResource("Mat_sock")
+radius = 0.058
+height = 0.31
+radial_segments = 8
+rings = 3
+
+[sub_resource type="BoxMesh" id="Mesh_shoe"]
+material = SubResource("Mat_shoe")
+size = Vector3(0.15, 0.105, 0.26)
+
+[sub_resource type="BoxMesh" id="Mesh_sole"]
+material = SubResource("Mat_sole")
+size = Vector3(0.155, 0.025, 0.27)
+
+[sub_resource type="BoxMesh" id="Mesh_backpack"]
+material = SubResource("Mat_backpack")
+size = Vector3(0.33, 0.42, 0.14)
+
+[sub_resource type="TorusMesh" id="Mesh_strap"]
+material = SubResource("Mat_backpack")
+inner_radius = 0.025
+outer_radius = 0.045
+rings = 8
+ring_segments = 6
+
+[sub_resource type="CylinderMesh" id="Mesh_button"]
+material = SubResource("Mat_metal")
+top_radius = 0.018
+bottom_radius = 0.018
+height = 0.012
+radial_segments = 7
+
+[node name="ChildVisual" type="Node3D"]
+editor_description = "Visual low-poly PS2 intercambiable: nino de unos ocho anos, ropa gastada y mochila escolar."
+script = ExtResource("1_anim")
+
+[node name="LeftLeg" type="Node3D" parent="."]
+position = Vector3(-0.105, 0.72, 0)
+
+[node name="Upper" type="MeshInstance3D" parent="LeftLeg"]
+position = Vector3(0, -0.16, 0)
+mesh = SubResource("Mesh_leg")
+
+[node name="Lower" type="MeshInstance3D" parent="LeftLeg"]
+position = Vector3(0, -0.43, 0)
+mesh = SubResource("Mesh_shin")
+
+[node name="Shoe" type="MeshInstance3D" parent="LeftLeg"]
+position = Vector3(0, -0.61, 0.055)
+mesh = SubResource("Mesh_shoe")
+
+[node name="Sole" type="MeshInstance3D" parent="LeftLeg"]
+position = Vector3(0, -0.67, 0.055)
+mesh = SubResource("Mesh_sole")
+
+[node name="RightLeg" type="Node3D" parent="."]
+position = Vector3(0.105, 0.72, 0)
+
+[node name="Upper" type="MeshInstance3D" parent="RightLeg"]
+position = Vector3(0, -0.16, 0)
+mesh = SubResource("Mesh_leg")
+
+[node name="Lower" type="MeshInstance3D" parent="RightLeg"]
+position = Vector3(0, -0.43, 0)
+mesh = SubResource("Mesh_shin")
+
+[node name="Shoe" type="MeshInstance3D" parent="RightLeg"]
+position = Vector3(0, -0.61, 0.055)
+mesh = SubResource("Mesh_shoe")
+
+[node name="Sole" type="MeshInstance3D" parent="RightLeg"]
+position = Vector3(0, -0.67, 0.055)
+mesh = SubResource("Mesh_sole")
+
+[node name="Body" type="Node3D" parent="."]
+position = Vector3(0, 0.87, 0)
+
+[node name="Torso" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.16, 0)
+mesh = SubResource("Mesh_torso")
+
+[node name="ShirtCollarLeft" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.065, 0.395, 0.17)
+rotation = Vector3(0, 0, -0.35)
+mesh = SubResource("Mesh_collar")
+
+[node name="ShirtCollarRight" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.065, 0.395, 0.17)
+rotation = Vector3(0, 0, 0.35)
+mesh = SubResource("Mesh_collar")
+
+[node name="ButtonTop" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.25, 0.205)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_button")
+
+[node name="ButtonBottom" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.11, 0.205)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_button")
+
+[node name="Backpack" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.16, -0.205)
+mesh = SubResource("Mesh_backpack")
+
+[node name="BackpackPocket" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.06, -0.288)
+scale = Vector3(0.67, 0.35, 0.4)
+mesh = SubResource("Mesh_backpack")
+
+[node name="LeftStrap" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.13, 0.2, 0.03)
+rotation = Vector3(1.5708, 0, 0)
+scale = Vector3(1, 1.9, 1)
+mesh = SubResource("Mesh_strap")
+
+[node name="RightStrap" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.13, 0.2, 0.03)
+rotation = Vector3(1.5708, 0, 0)
+scale = Vector3(1, 1.9, 1)
+mesh = SubResource("Mesh_strap")
+
+[node name="LeftArm" type="Node3D" parent="Body"]
+position = Vector3(-0.245, 0.33, 0)
+
+[node name="Upper" type="MeshInstance3D" parent="Body/LeftArm"]
+position = Vector3(0, -0.12, 0)
+mesh = SubResource("Mesh_arm")
+
+[node name="Forearm" type="Node3D" parent="Body/LeftArm"]
+position = Vector3(0, -0.25, 0)
+
+[node name="Lower" type="MeshInstance3D" parent="Body/LeftArm/Forearm"]
+position = Vector3(0, -0.1, 0)
+mesh = SubResource("Mesh_forearm")
+
+[node name="Hand" type="MeshInstance3D" parent="Body/LeftArm/Forearm"]
+position = Vector3(0, -0.235, 0)
+mesh = SubResource("Mesh_hand")
+
+[node name="RightArm" type="Node3D" parent="Body"]
+position = Vector3(0.245, 0.33, 0)
+
+[node name="Upper" type="MeshInstance3D" parent="Body/RightArm"]
+position = Vector3(0, -0.12, 0)
+mesh = SubResource("Mesh_arm")
+
+[node name="Forearm" type="Node3D" parent="Body/RightArm"]
+position = Vector3(0, -0.25, 0)
+
+[node name="Lower" type="MeshInstance3D" parent="Body/RightArm/Forearm"]
+position = Vector3(0, -0.1, 0)
+mesh = SubResource("Mesh_forearm")
+
+[node name="Hand" type="MeshInstance3D" parent="Body/RightArm/Forearm"]
+position = Vector3(0, -0.235, 0)
+mesh = SubResource("Mesh_hand")
+
+[node name="Head" type="Node3D" parent="Body"]
+position = Vector3(0, 0.64, 0.015)
+
+[node name="HeadShape" type="MeshInstance3D" parent="Body/Head"]
+scale = Vector3(0.92, 1.08, 0.9)
+mesh = SubResource("Mesh_head")
+
+[node name="LeftEar" type="MeshInstance3D" parent="Body/Head"]
+position = Vector3(-0.222, -0.005, 0)
+scale = Vector3(0.65, 1, 0.55)
+mesh = SubResource("Mesh_ear")
+
+[node name="RightEar" type="MeshInstance3D" parent="Body/Head"]
+position = Vector3(0.222, -0.005, 0)
+scale = Vector3(0.65, 1, 0.55)
+mesh = SubResource("Mesh_ear")
+
+[node name="HairCap" type="MeshInstance3D" parent="Body/Head"]
+position = Vector3(0, 0.105, -0.012)
+scale = Vector3(0.94, 0.76, 0.92)
+mesh = SubResource("Mesh_hair")
+
+[node name="HairBack" type="MeshInstance3D" parent="Body/Head"]
+position = Vector3(0, 0.015, -0.17)
+scale = Vector3(2.55, 1.65, 0.75)
+mesh = SubResource("Mesh_hair_lock")
+
+[node name="BangLeft" type="MeshInstance3D" parent="Body/Head"]
+position = Vector3(-0.105, 0.13, 0.175)
+rotation = Vector3(0.2, 0, -0.28)
+scale = Vector3(1.15, 1.7, 0.55)
+mesh = SubResource("Mesh_hair_lock")
+
+[node name="BangMiddle" type="MeshInstance3D" parent="Body/Head"]
+position = Vector3(0, 0.165, 0.19)
+rotation = Vector3(0.2, 0, 0.08)
+scale = Vector3(0.9, 1.45, 0.5)
+mesh = SubResource("Mesh_hair_lock")
+
+[node name="BangRight" type="MeshInstance3D" parent="Body/Head"]
+position = Vector3(0.11, 0.125, 0.17)
+rotation = Vector3(0.2, 0, 0.34)
+scale = Vector3(1.1, 1.55, 0.55)
+mesh = SubResource("Mesh_hair_lock")
+
+[node name="Face" type="Node3D" parent="Body/Head"]
+
+[node name="LeftEyeWhite" type="MeshInstance3D" parent="Body/Head/Face"]
+position = Vector3(-0.083, 0.025, 0.202)
+scale = Vector3(1.05, 0.88, 0.55)
+mesh = SubResource("Mesh_eye_white")
+
+[node name="RightEyeWhite" type="MeshInstance3D" parent="Body/Head/Face"]
+position = Vector3(0.083, 0.025, 0.202)
+scale = Vector3(1.05, 0.88, 0.55)
+mesh = SubResource("Mesh_eye_white")
+
+[node name="LeftEye" type="MeshInstance3D" parent="Body/Head/Face"]
+position = Vector3(-0.083, 0.025, 0.23)
+scale = Vector3(0.9, 1, 0.55)
+mesh = SubResource("Mesh_eye")
+
+[node name="RightEye" type="MeshInstance3D" parent="Body/Head/Face"]
+position = Vector3(0.083, 0.025, 0.23)
+scale = Vector3(0.9, 1, 0.55)
+mesh = SubResource("Mesh_eye")
+
+[node name="LeftBrow" type="MeshInstance3D" parent="Body/Head/Face"]
+position = Vector3(-0.085, 0.095, 0.211)
+rotation = Vector3(0, 0, -0.12)
+scale = Vector3(1, 0.34, 0.24)
+mesh = SubResource("Mesh_mouth")
+material_override = SubResource("Mat_hair")
+
+[node name="RightBrow" type="MeshInstance3D" parent="Body/Head/Face"]
+position = Vector3(0.085, 0.095, 0.211)
+rotation = Vector3(0, 0, 0.12)
+scale = Vector3(1, 0.34, 0.24)
+mesh = SubResource("Mesh_mouth")
+material_override = SubResource("Mat_hair")
+
+[node name="Nose" type="MeshInstance3D" parent="Body/Head/Face"]
+position = Vector3(0, -0.025, 0.231)
+scale = Vector3(0.72, 0.9, 0.7)
+mesh = SubResource("Mesh_nose")
+
+[node name="Mouth" type="MeshInstance3D" parent="Body/Head/Face"]
+position = Vector3(0, -0.105, 0.216)
+rotation = Vector3(0, 0, -0.04)
+mesh = SubResource("Mesh_mouth")
+
+[node name="FreckleL1" type="MeshInstance3D" parent="Body/Head/Face"]
+position = Vector3(-0.115, -0.055, 0.219)
+mesh = SubResource("Mesh_freckle")
+
+[node name="FreckleL2" type="MeshInstance3D" parent="Body/Head/Face"]
+position = Vector3(-0.085, -0.068, 0.228)
+mesh = SubResource("Mesh_freckle")
+
+[node name="FreckleR1" type="MeshInstance3D" parent="Body/Head/Face"]
+position = Vector3(0.112, -0.055, 0.219)
+mesh = SubResource("Mesh_freckle")
+
+[node name="FreckleR2" type="MeshInstance3D" parent="Body/Head/Face"]
+position = Vector3(0.078, -0.068, 0.228)
+mesh = SubResource("Mesh_freckle")

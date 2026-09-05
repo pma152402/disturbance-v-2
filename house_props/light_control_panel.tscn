@@ -363,9 +363,6 @@ script = ExtResource("5_socket")
 transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0.045)
 shape = SubResource("socket_collision")
 
-[node name="FuseBulb" parent="Face/FuseBank/Fuse1" unique_id=395097208 instance=ExtResource("2_good")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.12005566)
-
 [node name="Fuse2" type="Node3D" parent="Face/FuseBank" unique_id=348003180]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, -0.43, 0.09)
 
@@ -383,9 +380,6 @@ slot_index = 1
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Face/FuseBank/Fuse2/SocketInteract" unique_id=472672138]
 transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0.045)
 shape = SubResource("socket_collision")
-
-[node name="FuseBulb" parent="Face/FuseBank/Fuse2" unique_id=360089169 instance=ExtResource("3_broken")]
-transform = Transform3D(0.23283982, 0.007449953, -0.9724866, -0.9725151, 0.0017836696, -0.232833, 0, 0.9999707, 0.0076605007, 0.0022248, 0.00086578727, 0.12498674)
 
 [node name="Fuse3" type="Node3D" parent="Face/FuseBank" unique_id=1398280871]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, -0.43, 0.09)

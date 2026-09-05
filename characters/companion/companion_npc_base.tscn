@@ -1,0 +1,53 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://characters/companion/companion_npc_base.gd" id="1_base"]
+
+[sub_resource type="CapsuleShape3D" id="Capsule_child"]
+radius = 0.23
+height = 1.28
+
+[sub_resource type="SphereShape3D" id="Sphere_interaction"]
+radius = 0.36
+
+[sub_resource type="StandardMaterial3D" id="Material_label"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.82, 0.88, 0.76, 1)
+
+[node name="CompanionNPCBase" type="CharacterBody3D"]
+editor_description = "Base reutilizable de acompanante. Sustituye visual_scene para cambiar el personaje sin tocar su comportamiento."
+collision_layer = 2
+collision_mask = 3
+floor_stop_on_slope = false
+floor_constant_speed = true
+floor_snap_length = 0.45
+script = ExtResource("1_base")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.64, 0)
+shape = SubResource("Capsule_child")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.3
+target_desired_distance = 0.55
+path_max_distance = 1.1
+height = 1.25
+radius = 0.24
+
+[node name="DoorRay" type="RayCast3D" parent="."]
+position = Vector3(0, 0.72, 0.08)
+target_position = Vector3(0, 0, 0.82)
+collision_mask = 3
+
+[node name="VisualSocket" type="Node3D" parent="."]
+
+[node name="ResponseLabel" type="Label3D" parent="."]
+position = Vector3(0, 1.67, 0)
+pixel_size = 0.0022
+billboard = 1
+no_depth_test = true
+text = ""
+font_size = 32
+outline_size = 8
+modulate = Color(0.86, 0.9, 0.79, 1)
+

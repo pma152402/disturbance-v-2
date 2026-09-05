@@ -12,9 +12,11 @@ extends Node3D
 @onready var upper_flash: OmniLight3D = $InteriorLightning/UpperFloorFlash
 @onready var basement_flash: OmniLight3D = $InteriorLightning/BasementFlash
 @onready var thunder_player: AudioStreamPlayer = $ThunderFragmentPlayer
+@onready var rain_emitter: GPUParticles3D = $Rain/NorthRain
 
 var _lightning_tween: Tween
 var _interior_lights: Array[OmniLight3D] = []
+var _player: Node3D
 var _flash_strength := 0.0:
 	set(value):
 		_flash_strength = value
@@ -29,7 +31,23 @@ func _ready() -> void:
 	_interior_lights = [ground_flash, upper_flash, basement_flash]
 	_flash_strength = 0.0
 	set_process(false)
+	var rain_follow_timer := Timer.new()
+	rain_follow_timer.name = "RainFollowTimer"
+	rain_follow_timer.wait_time = 0.25
+	rain_follow_timer.timeout.connect(_update_rain_position)
+	add_child(rain_follow_timer)
+	rain_follow_timer.start()
+	call_deferred(&"_update_rain_position")
 	_schedule_lightning()
+
+func _update_rain_position() -> void:
+	if not is_instance_valid(_player):
+		var scene_root := get_tree().current_scene
+		if scene_root != null:
+			_player = scene_root.find_child("Player", true, false) as Node3D
+	if is_instance_valid(_player):
+		var player_position := _player.global_position
+		rain_emitter.global_position = Vector3(player_position.x, player_position.y + 15.0, player_position.z)
 
 func _schedule_lightning() -> void:
 	get_tree().create_timer(randf_range(minimum_lightning_delay, maximum_lightning_delay)).timeout.connect(
