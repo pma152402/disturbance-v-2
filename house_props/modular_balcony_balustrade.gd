@@ -20,6 +20,8 @@ var _last_scale_x := -1.0
 func _ready() -> void:
 	_rebuild_requested = true
 	call_deferred(&"_rebuild")
+	# Runtime geometry is already serialized; polling scale is editor-only.
+	set_process(Engine.is_editor_hint())
 
 
 func _process(_delta: float) -> void:

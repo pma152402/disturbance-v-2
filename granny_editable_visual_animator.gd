@@ -119,6 +119,7 @@ func _physics_process(delta: float) -> void:
 	var waiting_covered_eyes := bool(_body.get("_waiting_covered_eyes"))
 	var duck_amount := clampf(float(_body.get("_duck_amount")), 0.0, 1.0)
 	var attack_timer := maxf(float(_body.get("_attack_timer")), 0.0)
+	var crossing_door := _body.has_method(&"is_crossing_door") and bool(_body.call(&"is_crossing_door"))
 
 	var cadence := lerpf(idle_speed, 6.2, moving)
 	if state == STATE_CHASE:
@@ -131,22 +132,48 @@ func _physics_process(delta: float) -> void:
 	var reaching := (
 		state == STATE_CHASE
 		and is_instance_valid(_player)
-		and player_distance >= 2.35
-		and player_distance <= 7.2
+		and player_distance >= 1.25
+		and player_distance <= 2.65
 		and absf(_player.global_position.y - _body.global_position.y) < 1.7
 	)
 
 	if waiting_covered_eyes:
 		_apply_covered_eyes_pose(delta)
+	elif crossing_door:
+		_apply_door_cross_pose(delta)
 	elif state == STATE_ATTACK:
 		_apply_attack_pose(delta, attack_timer)
 	elif reaching:
 		_apply_reaching_pose(delta)
+	elif state in [STATE_INVESTIGATE, STATE_SEARCH]:
+		_apply_alert_pose(delta, state, moving)
 	else:
 		_apply_locomotion_pose(delta, state, moving)
 
-	_lock_head_to_body()
-	_apply_body_motion(delta, state, moving, duck_amount, waiting_covered_eyes)
+	_lock_head_to_body(state)
+	_apply_body_motion(delta, state, moving, duck_amount, waiting_covered_eyes, crossing_door)
+
+
+func _apply_door_cross_pose(delta: float) -> void:
+	# Al comprometer el cruce recoge hombros y manos. Además de hacerlo legible,
+	# evita que la silueta parezca atravesar los marcos estrechos con los brazos.
+	var forward := _body.global_basis.z.normalized()
+	var right := _body.global_basis.x.normalized()
+	var center := _body.global_position + Vector3.UP * 0.92 + forward * 0.18
+	_pose_arm_ik(
+		_left_shoulder, _left_elbow, _left_wrist,
+		_base_left_shoulder, _base_left_elbow,
+		_left_upper_rest_direction, _left_lower_rest_direction,
+		center + right * 0.18, 1.0, delta, 12.0
+	)
+	_pose_arm_ik(
+		_right_shoulder, _right_elbow, _right_wrist,
+		_base_right_shoulder, _base_right_elbow,
+		_right_upper_rest_direction, _right_lower_rest_direction,
+		center - right * 0.18, -1.0, delta, 12.0
+	)
+	_pose_node(_left_wrist, _offset_pose(_base_left_wrist, -0.12, 0.0, -0.16), delta, 12.0)
+	_pose_node(_right_wrist, _offset_pose(_base_right_wrist, -0.12, 0.0, 0.16), delta, 12.0)
 
 
 func _apply_locomotion_pose(delta: float, state: int, moving: float) -> void:
@@ -156,8 +183,9 @@ func _apply_locomotion_pose(delta: float, state: int, moving: float) -> void:
 	var forward := _body.global_basis.z.normalized()
 	var stride := sin(_phase) * 0.11 * moving
 	var breathing := sin(_phase * 0.72) * 0.015 * (1.0 - moving)
-	var target_center := _body.global_position + Vector3.UP * (resting_hand_height + breathing)
-	target_center += forward * resting_hand_forward
+	var chase_amount := 1.0 if state == STATE_CHASE else 0.0
+	var target_center := _body.global_position + Vector3.UP * (resting_hand_height + breathing + chase_amount * 0.08)
+	target_center += forward * (resting_hand_forward + chase_amount * 0.22)
 	var left_target := target_center + side * resting_hand_width + forward * stride
 	var right_target := target_center - side * resting_hand_width - forward * stride
 	_pose_arm_ik(
@@ -174,6 +202,32 @@ func _apply_locomotion_pose(delta: float, state: int, moving: float) -> void:
 	)
 	_pose_node(_left_wrist, _offset_pose(_base_left_wrist, -0.08, 0.0, -0.12), delta, pose_transition_speed)
 	_pose_node(_right_wrist, _offset_pose(_base_right_wrist, -0.08, 0.0, 0.12), delta, pose_transition_speed)
+
+
+func _apply_alert_pose(delta: float, state: int, moving: float) -> void:
+	# En investigación tantea el espacio con una mano. Durante la búsqueda abre
+	# más ambos brazos y barre la habitación, diferenciándola de la persecución.
+	var forward := _body.global_basis.z.normalized()
+	var right := _body.global_basis.x.normalized()
+	var searching := 1.0 if state == STATE_SEARCH else 0.0
+	var scan := sin(_phase * 0.48)
+	var center := _body.global_position + Vector3.UP * lerpf(1.0, 1.12, searching)
+	var left_target := center + forward * (0.38 + searching * 0.18) + right * (0.34 + scan * 0.08)
+	var right_target := center + forward * (0.08 + searching * 0.3) - right * (0.38 - scan * 0.08)
+	_pose_arm_ik(
+		_left_shoulder, _left_elbow, _left_wrist,
+		_base_left_shoulder, _base_left_elbow,
+		_left_upper_rest_direction, _left_lower_rest_direction,
+		left_target, 1.0, delta, 8.5
+	)
+	_pose_arm_ik(
+		_right_shoulder, _right_elbow, _right_wrist,
+		_base_right_shoulder, _base_right_elbow,
+		_right_upper_rest_direction, _right_lower_rest_direction,
+		right_target, -1.0, delta, 8.5
+	)
+	_pose_node(_left_wrist, _offset_pose(_base_left_wrist, -0.16, 0.0, -0.12), delta, 9.0)
+	_pose_node(_right_wrist, _offset_pose(_base_right_wrist, -0.1, 0.0, 0.12), delta, 9.0)
 
 
 func _apply_covered_eyes_pose(delta: float) -> void:
@@ -227,11 +281,16 @@ func _apply_reaching_pose(delta: float) -> void:
 
 
 func _apply_attack_pose(delta: float, attack_timer: float) -> void:
-	var progress := clampf(attack_timer / 0.72, 0.0, 1.0)
-	var thrust := sin(progress * PI)
+	var windup_time := maxf(float(_body.get("attack_windup_seconds")), 0.05)
+	var hit_time := maxf(float(_body.get("attack_hit_seconds")), windup_time + 0.05)
+	var end_time := maxf(float(_body.get("attack_animation_seconds")), hit_time + 0.1)
+	var windup := clampf(attack_timer / windup_time, 0.0, 1.0)
+	var strike := clampf((attack_timer - windup_time) / (hit_time - windup_time), 0.0, 1.0)
+	var recovery := clampf((attack_timer - hit_time) / (end_time - hit_time), 0.0, 1.0)
+	var thrust := strike * (1.0 - recovery)
 	var forward := _body.global_basis.z.normalized()
 	var right := _body.global_basis.x.normalized()
-	var target_center := _body.global_position + forward * lerpf(0.48, 1.25, thrust) + Vector3.UP * 1.08
+	var target_center := _body.global_position + forward * lerpf(0.28 - windup * 0.14, 1.25, thrust) + Vector3.UP * lerpf(1.18, 1.02, thrust)
 	if is_instance_valid(_player):
 		target_center = target_center.lerp(_player.global_position + Vector3.UP * 1.0, thrust * 0.85)
 	_pose_arm_ik(
@@ -252,14 +311,24 @@ func _apply_attack_pose(delta: float, attack_timer: float) -> void:
 	_pose_node(_right_wrist, _offset_pose(_base_right_wrist, -0.1 * thrust, 0.0, 0.08), delta, 15.0)
 
 
-func _lock_head_to_body() -> void:
-	# Esta cabeza no tiene animacion independiente: conserva siempre el mismo
-	# transform local respecto al torso y acompana al cuerpo como una sola pieza.
+func _lock_head_to_body(state: int) -> void:
+	# Conserva el anclaje del cuello, pero permite pequeños movimientos legibles
+	# de atención. No se anima la posición, sólo una rotación contenida.
 	_head.position = _base_head_position + Vector3(0.0, -head_down_offset, 0.0)
-	_head.quaternion = _base_head_rotation
+	var yaw := 0.0
+	var pitch := 0.0
+	if state == STATE_INVESTIGATE:
+		yaw = sin(_phase * 0.34) * 0.16
+		pitch = -0.06
+	elif state == STATE_SEARCH:
+		yaw = sin(_phase * 0.42) * 0.34
+		pitch = -0.1 + sin(_phase * 0.21) * 0.04
+	elif state == STATE_CHASE:
+		pitch = -0.11
+	_head.quaternion = _base_head_rotation * Quaternion(Vector3.UP, yaw) * Quaternion(Vector3.RIGHT, pitch)
 	_head.scale = _base_head_scale * head_scale_multiplier
 
-func _apply_body_motion(delta: float, state: int, moving: float, duck_amount: float, covered_eyes: bool) -> void:
+func _apply_body_motion(delta: float, state: int, moving: float, duck_amount: float, covered_eyes: bool, crossing_door: bool) -> void:
 	var chase_amount := 1.0 if state == STATE_CHASE else 0.0
 	var attack_amount := 0.0
 	if state == STATE_ATTACK:
@@ -267,6 +336,8 @@ func _apply_body_motion(delta: float, state: int, moving: float, duck_amount: fl
 	var lean_x := -0.045 - chase_amount * 0.16 - duck_amount * 0.2 - attack_amount * 0.2
 	if covered_eyes:
 		lean_x = -0.18
+	elif crossing_door:
+		lean_x = -0.14
 	var sway_z := sin(_phase * 0.5) * lerpf(0.012, 0.035, moving)
 	_pose_node(_rig, _offset_pose(_base_rig_rotation, lean_x, 0.0, sway_z), delta, 7.0)
 

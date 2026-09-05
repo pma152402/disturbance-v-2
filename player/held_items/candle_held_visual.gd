@@ -31,6 +31,7 @@ func _ready() -> void:
 	_flame_material = flame_mesh.get_active_material(0).duplicate() as StandardMaterial3D
 	flame_mesh.material_override = _flame_material
 	_apply_visual_state()
+	set_process(lit or _smoke_timer > 0.0)
 
 
 func _process(delta: float) -> void:
@@ -39,6 +40,7 @@ func _process(delta: float) -> void:
 		return
 	burn_remaining = maxf(0.0, burn_remaining - delta)
 	_apply_visual_state()
+	set_process(lit)
 	if _motion_strength > 0.72:
 		_run_extinguish_exposure += delta * _motion_strength * 2.0
 	else:
@@ -56,6 +58,7 @@ func _process(delta: float) -> void:
 		lit = false
 		_apply_visual_state()
 		_emit_state()
+		set_process(false)
 	elif _state_emit_timer >= 1.0:
 		_state_emit_timer = 0.0
 		_emit_state()
@@ -69,12 +72,14 @@ func configure_candle(data: Dictionary) -> void:
 	_flame_stress = 0.0
 	_extinguish_threshold = randf_range(5.5, 8.5)
 	_apply_visual_state()
+	set_process(lit)
 
 
 func ignite() -> bool:
 	if lit or burn_remaining <= 0.0:
 		return false
 	lit = true
+	set_process(true)
 	_run_extinguish_exposure = 0.0
 	_flame_stress = 0.0
 	_extinguish_threshold = randf_range(5.5, 8.5)
@@ -90,6 +95,8 @@ func extinguish(show_smoke := false) -> bool:
 	_apply_visual_state()
 	if show_smoke:
 		_start_smoke()
+	else:
+		set_process(false)
 	_emit_state()
 	return true
 
@@ -150,6 +157,7 @@ func _start_smoke() -> void:
 	smoke.visible = true
 	smoke.position = _smoke_rest_position
 	smoke.scale = Vector3.ONE * 0.55
+	set_process(true)
 
 
 func _update_smoke(delta: float) -> void:
@@ -161,6 +169,7 @@ func _update_smoke(delta: float) -> void:
 	smoke.scale = Vector3.ONE * lerpf(0.55, 1.45, progress)
 	if _smoke_timer <= 0.0:
 		smoke.visible = false
+		set_process(lit)
 
 
 func _emit_state() -> void:

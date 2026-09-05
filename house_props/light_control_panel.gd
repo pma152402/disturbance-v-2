@@ -35,6 +35,7 @@ func _ready() -> void:
 	if not Engine.is_editor_hint():
 		_configure_fuses()
 		call_deferred(&"_refresh_house_power")
+	set_process(not Engine.is_editor_hint() and not is_house_power_available())
 
 
 func _process(delta: float) -> void:
@@ -220,6 +221,7 @@ func _update_status_lamps() -> void:
 
 func _refresh_house_power() -> void:
 	var powered := is_house_power_available()
+	set_process(not powered)
 	if powered != _last_power_state:
 		_last_power_state = powered
 		power_state_changed.emit(powered)

@@ -21,7 +21,13 @@ func _run() -> void:
 		if plant == null:
 			_fail("Falta la planta independiente %s" % plant_name)
 			return
-		variants[int(plant.get("variant"))] = true
+		if plant_name in ["CeramicSnakePlant", "BlackFicus"]:
+			if plant.get_script() != null:
+				_fail("%s todavía depende de un script generador" % plant_name)
+				return
+			variants[2 if plant_name == "CeramicSnakePlant" else 7] = true
+		else:
+			variants[int(plant.get("variant"))] = true
 		var detail := plant.get_node_or_null("GeneratedDetail")
 		if detail == null or detail.get_child_count() < 12:
 			_fail("Una planta no generó suficiente detalle: %s" % plant.name)

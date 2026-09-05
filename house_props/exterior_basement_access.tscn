@@ -1,0 +1,677 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://house_props/cellar_bulkhead_entrance.tscn" id="1_i3nay"]
+[ext_resource type="Script" path="res://house_props/cellar_bulkhead_entrance.gd" id="2_6aeqh"]
+
+[sub_resource type="StandardMaterial3D" id="floor_mat"]
+albedo_color = Color(0.13, 0.115, 0.095, 1)
+roughness = 0.96
+
+[sub_resource type="BoxMesh" id="floor_box"]
+material = SubResource("floor_mat")
+
+[sub_resource type="BoxShape3D" id="shape"]
+
+[sub_resource type="BoxMesh" id="TunnelCeilingMain_mesh"]
+material = SubResource("floor_mat")
+size = Vector3(1.99685, 0.22, 8.108897)
+
+[sub_resource type="BoxShape3D" id="TunnelCeilingMain_shape"]
+size = Vector3(1.99685, 0.22, 8.108897)
+
+[sub_resource type="BoxMesh" id="TunnelCeilingBranch1_mesh"]
+material = SubResource("floor_mat")
+size = Vector3(0.740928, 0.22, 4.047487)
+
+[sub_resource type="BoxShape3D" id="TunnelCeilingBranch1_shape"]
+size = Vector3(0.740928, 0.22, 4.047487)
+
+[sub_resource type="BoxMesh" id="TunnelCeilingBranch2_mesh"]
+material = SubResource("floor_mat")
+size = Vector3(5.1133184, 0.22, 2.755805)
+
+[sub_resource type="BoxShape3D" id="TunnelCeilingBranch2_shape"]
+size = Vector3(5.1133184, 0.22, 2.755805)
+
+[sub_resource type="StandardMaterial3D" id="stone"]
+albedo_color = Color(0.25, 0.235, 0.205, 1)
+roughness = 0.98
+
+[sub_resource type="BoxMesh" id="stone_box"]
+material = SubResource("stone")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hfjqu"]
+albedo_color = Color(0.25, 0.235, 0.205, 1)
+roughness = 0.98
+
+[sub_resource type="BoxMesh" id="BoxMesh_30qqc"]
+material = SubResource("StandardMaterial3D_hfjqu")
+size = Vector3(0.82421875, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k2h41"]
+albedo_color = Color(0.25, 0.235, 0.205, 1)
+roughness = 0.98
+
+[sub_resource type="BoxMesh" id="BoxMesh_i55e4"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(1, 1.4414063, 1.074707)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ox0cq"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(1, 1.5537415, 1.2209473)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jjyb4"]
+size = Vector3(1, 1.0414429, 1.1782227)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tkxxf"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(1, 1.4483643, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wguai"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(1.1160889, 1.3252563, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ib71f"]
+size = Vector3(1, 0.8989258, 1)
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.16, 0.075, 0.035, 1)
+roughness = 0.92
+
+[sub_resource type="BoxMesh" id="wood_box"]
+material = SubResource("wood")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rqe3r"]
+albedo_color = Color(0.16, 0.075, 0.035, 1)
+roughness = 0.92
+
+[sub_resource type="BoxMesh" id="BoxMesh_j01pm"]
+material = SubResource("StandardMaterial3D_rqe3r")
+
+[sub_resource type="BoxMesh" id="BoxMesh_k2h41"]
+material = SubResource("StandardMaterial3D_rqe3r")
+size = Vector3(1, 0.32622528, 1.0623779)
+
+[sub_resource type="BoxMesh" id="BoxMesh_n6fm1"]
+material = SubResource("StandardMaterial3D_rqe3r")
+size = Vector3(1.4219971, 0.020297527, 0.48410034)
+
+[sub_resource type="BoxMesh" id="BoxMesh_a7o2t"]
+material = SubResource("StandardMaterial3D_rqe3r")
+size = Vector3(1, 0.34197998, 0.9682617)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5ytr3"]
+material = SubResource("StandardMaterial3D_rqe3r")
+size = Vector3(0.61083984, 0.22557068, 1.0025635)
+
+[sub_resource type="BoxMesh" id="BoxMesh_t4t8f"]
+material = SubResource("StandardMaterial3D_rqe3r")
+size = Vector3(0.61083984, 0.43297958, 1.0025635)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yl2gr"]
+size = Vector3(0.19334316, 0.37957764, 0.99072266)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6y63m"]
+size = Vector3(0.19918633, 0.4271698, 0.99072266)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jx5v6"]
+size = Vector3(0.19918633, 0.37252808, 0.99072266)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yb3dn"]
+size = Vector3(0.22164512, 0.910141, 0.99072266)
+
+[sub_resource type="BoxMesh" id="TunnelEntrance4_mesh"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(6.907093, 4.7667885, 0.22000027)
+
+[sub_resource type="BoxShape3D" id="TunnelEntrance4_shape"]
+size = Vector3(6.907093, 4.7667885, 0.22000027)
+
+[sub_resource type="BoxMesh" id="TunnelWall12_mesh"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(1.99685, 1.2112875, 0.21999836)
+
+[sub_resource type="BoxShape3D" id="TunnelWall12_shape"]
+size = Vector3(1.99685, 1.2112875, 0.21999836)
+
+[sub_resource type="BoxMesh" id="TunnelWall13_mesh"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(6.0986648, 1.2112875, 0.21999931)
+
+[sub_resource type="BoxShape3D" id="TunnelWall13_shape"]
+size = Vector3(6.0986648, 1.2112875, 0.21999931)
+
+[sub_resource type="BoxMesh" id="TunnelWall14_mesh"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(5.33523, 1.2112875, 0.21999931)
+
+[sub_resource type="BoxShape3D" id="TunnelWall14_shape"]
+size = Vector3(5.33523, 1.2112875, 0.21999931)
+
+[sub_resource type="BoxMesh" id="TunnelWall15_mesh"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(5.33523, 1.2112875, 0.21999979)
+
+[sub_resource type="BoxShape3D" id="TunnelWall15_shape"]
+size = Vector3(5.33523, 1.2112875, 0.21999979)
+
+[sub_resource type="BoxMesh" id="TunnelLintel_mesh"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(2.736778, 0.22, 0.22)
+
+[sub_resource type="BoxShape3D" id="TunnelLintel_shape"]
+size = Vector3(2.736778, 0.22, 0.22)
+
+[sub_resource type="BoxMesh" id="TunnelEntrance7_mesh"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(4.368243, 4.7667885, 0.22000027)
+
+[sub_resource type="BoxShape3D" id="TunnelEntrance7_shape"]
+size = Vector3(4.368243, 4.7667885, 0.22000027)
+
+[sub_resource type="BoxMesh" id="TunnelWall9_mesh"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(0.2405634, 1.2112875, 7.987438)
+
+[sub_resource type="BoxShape3D" id="TunnelWall9_shape"]
+size = Vector3(0.2405634, 1.2112875, 7.987438)
+
+[sub_resource type="BoxMesh" id="TunnelWall10_mesh"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(0.2376175, 1.2112875, 6.86474)
+
+[sub_resource type="BoxShape3D" id="TunnelWall10_shape"]
+size = Vector3(0.2376175, 1.2112875, 6.86474)
+
+[sub_resource type="BoxMesh" id="TunnelWall11_mesh"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(0.23839855, 1.2112875, 4.280287)
+
+[sub_resource type="BoxShape3D" id="TunnelWall11_shape"]
+size = Vector3(0.23839855, 1.2112875, 4.280287)
+
+[sub_resource type="BoxMesh" id="TunnelWall16_mesh"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(0.22368717, 1.2112875, 1.6728477)
+
+[sub_resource type="BoxShape3D" id="TunnelWall16_shape"]
+size = Vector3(0.22368717, 1.2112875, 1.6728477)
+
+[sub_resource type="BoxMesh" id="TunnelWall17_mesh"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(0.22368717, 1.2112875, 1.6728477)
+
+[sub_resource type="BoxShape3D" id="TunnelWall17_shape"]
+size = Vector3(0.22368717, 1.2112875, 1.6728477)
+
+[sub_resource type="BoxMesh" id="TunnelWall18_mesh"]
+material = SubResource("StandardMaterial3D_k2h41")
+size = Vector3(0.22368717, 1.2112875, 1.6728477)
+
+[sub_resource type="BoxShape3D" id="TunnelWall18_shape"]
+size = Vector3(0.22368717, 1.2112875, 1.6728477)
+
+[node name="ExteriorBasementAccess" type="Node3D" unique_id=1735807492]
+
+[node name="CellarBulkheadEntranceStaging" type="Area3D" parent="." unique_id=1874915032 instance=ExtResource("1_i3nay")]
+transform = Transform3D(-0.008904687, 0, -0.8209694, 0, 1, 0, 1.1539036, 0, -0.0063354303, -5.741586, -0.18954766, 2.6997502)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("2_6aeqh")
+
+[node name="BasementAccessAndInitialRoom" type="Node3D" parent="." unique_id=867008395]
+editor_description = "Hueco real bajo las puertas exteriores y primera sala del sotano. El acceso queda libre para construir la escalera manualmente."
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.741586, -1.2255822, 3.777816)
+
+[node name="Floor" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=1258653049]
+transform = Transform3D(12, 0, 0, 0, 0.22, 0, 0, 0, 8, 0, -6.18, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/Floor" unique_id=891356625]
+transform = Transform3D(1, 0, 0, 0, 1.0000004, 0, 0, 0, 1, 0, 0, -0.09830797)
+mesh = SubResource("floor_box")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/Floor" unique_id=730496827]
+transform = Transform3D(1, 0, 0, 0, 1.0000004, 0, 0, 0, 1, 0, 0, -0.09830797)
+shape = SubResource("shape")
+
+[node name="Floor2" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=614316133]
+transform = Transform3D(12, 0, 0, 0, 0.22, 0, 0, 0, 8, 0, -6.18, 7.702815)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/Floor2" unique_id=2113169844]
+transform = Transform3D(1, 0, 0, 0, 1.0000004, 0, 0, 0, 1, 0, 0, -0.09830797)
+mesh = SubResource("floor_box")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/Floor2" unique_id=608123848]
+transform = Transform3D(1, 0, 0, 0, 1.0000004, 0, 0, 0, 1, 0, 0, -0.09830797)
+shape = SubResource("shape")
+
+[node name="Floor3" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=1381309084]
+transform = Transform3D(12, 0, 0, 0, 0.22, 0, 0, 0, 8, 0, -5.1887126, 7.702815)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/Floor3" unique_id=1350283525]
+transform = Transform3D(0.083333336, 0, 0, 0, 4.545455, 0, 0, 0, 0.125, -0.07105598, 0, -0.1042074)
+mesh = SubResource("TunnelCeilingMain_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/Floor3" unique_id=1420679389]
+transform = Transform3D(0.083333336, 0, 0, 0, 4.545455, 0, 0, 0, 0.125, -0.07105598, 0, -0.1042074)
+shape = SubResource("TunnelCeilingMain_shape")
+
+[node name="TunnelCeilingBranch1" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/Floor3" unique_id=468439748]
+transform = Transform3D(0.083333336, 0, 0, 0, 4.545455, 0, 0, 0, 0.125, 0.043018103, 0, -0.35804558)
+mesh = SubResource("TunnelCeilingBranch1_mesh")
+
+[node name="TunnelCeilingBranch1Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/Floor3" unique_id=1937963390]
+transform = Transform3D(0.083333336, 0, 0, 0, 4.545455, 0, 0, 0, 0.125, 0.043018103, 0, -0.35804558)
+shape = SubResource("TunnelCeilingBranch1_shape")
+
+[node name="TunnelCeilingBranch2" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/Floor3" unique_id=1720962049]
+transform = Transform3D(0.083333336, 0, 0, 0, 4.545455, 0, 0, 0, 0.125, 0.28694504, 0, -0.27731538)
+mesh = SubResource("TunnelCeilingBranch2_mesh")
+
+[node name="TunnelCeilingBranch2Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/Floor3" unique_id=2094816557]
+transform = Transform3D(0.083333336, 0, 0, 0, 4.545455, 0, 0, 0, 0.125, 0.28694504, 0, -0.27731538)
+shape = SubResource("TunnelCeilingBranch2_shape")
+
+[node name="WestWall" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=844975574]
+transform = Transform3D(0.28, 0, 0, 0, 4.25, 0, 0, 0, 8, -6, -4.05, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/WestWall" unique_id=316980351]
+transform = Transform3D(0.9999997, 0, 0, 0, 0.9999997, 0, 0, 0, 1, 0, 0, -0.09830797)
+shape = SubResource("shape")
+
+[node name="EastWall" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=2015505033]
+transform = Transform3D(0.28, 0, 0, 0, 4.25, 0, 0, 0, 8, 6, -4.05, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/EastWall" unique_id=1799529856]
+transform = Transform3D(0.9999997, 0, 0, 0, 0.9999997, 0, 0, 0, 1, 0, 0, -0.09830797)
+shape = SubResource("shape")
+
+[node name="NorthWall" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=1117329654]
+transform = Transform3D(12, 0, 0, 0, 4.25, 0, 0, 0, 0.28, 0, -4.05, -4)
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/NorthWall" unique_id=1183566321]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.9999997, 0, 0, -2.8087983)
+shape = SubResource("shape")
+
+[node name="SouthWall" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=1206985738]
+transform = Transform3D(12, 0, 0, 0, 4.25, 0, 0, 0, 0.28, 0, -4.05, 4)
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/SouthWall" unique_id=801752321]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.9999997, 0, 0, -2.8088036)
+shape = SubResource("shape")
+disabled = true
+
+[node name="CeilingWest" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=842795515]
+transform = Transform3D(4.4, 0, 0, 0, 0.22, 0, 0, 0, 8, -4.5040717, -1.92, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/CeilingWest" unique_id=329310712]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.99998695, -0.32295752, 0, -0.09830797)
+mesh = SubResource("stone_box")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/CeilingWest" unique_id=582509313]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.9999997, -0.33478785, 0, -0.09830797)
+shape = SubResource("shape")
+
+[node name="CeilingEast" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=99089114]
+transform = Transform3D(4.439123, 0, 0, 0, 0.22, 0, 0, 0, 8, 4.6445084, -1.92, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/CeilingEast" unique_id=1940033263]
+transform = Transform3D(1.1511333, 0, 0, 0, 1, 0, 0, 0, 0.99999976, 0, 0, -0.09830797)
+mesh = SubResource("BoxMesh_30qqc")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/CeilingEast" unique_id=1841806392]
+shape = SubResource("shape")
+
+[node name="CeilingNorth" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=1436555421]
+transform = Transform3D(3.2, 0, 0, 0, 0.22, 0, 0, 0, 2.4, 0, -1.92, -3.1348982)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/CeilingNorth" unique_id=1033744194]
+transform = Transform3D(1.9403571, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.50950485)
+mesh = SubResource("stone_box")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/CeilingNorth" unique_id=175396160]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.663201, 0, 0, -0.32769322)
+shape = SubResource("shape")
+
+[node name="CeilingSouth" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=193996345]
+transform = Transform3D(7.0383253, 0, 0, 0, 0.22, 0, 0, 0, 2.4, -0.45521212, -1.776198, 2.9194448)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/CeilingSouth" unique_id=1956041103]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5897264, -0.3572333)
+mesh = SubResource("stone_box")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/CeilingSouth" unique_id=928370375]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5722866, -0.25195074)
+shape = SubResource("shape")
+
+[node name="ShaftWest" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=1546785413]
+transform = Transform3D(0.1988939, 0.8761676, 0, -0.09402774, 1.8533297, 0, 0, 0, 4.8554893, -3.3001285, -0.9, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftWest" unique_id=1633898511]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.1693051, 0, 0.22070313, -0.037353516)
+mesh = SubResource("BoxMesh_i55e4")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftWest" unique_id=2135669249]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 0.9999999, 0, 0, -0.16197407)
+shape = SubResource("shape")
+
+[node name="ShaftEast" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=1164414017]
+transform = Transform3D(0.20751594, -0.6807461, 0, 0.07305568, 1.9336712, 0, 0, 0, 3.55, 2.2063076, -0.9, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftEast" unique_id=690642994]
+transform = Transform3D(1, -7.1525574e-07, 0, 0, 1, 0, 0, 0, 1.3901244, 1.0201187, 0.23832983, -0.11047363)
+mesh = SubResource("BoxMesh_ox0cq")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftEast" unique_id=1874070214]
+transform = Transform3D(1, -7.1525574e-07, 0, 0, 1, 0, 0, 0, 1, 0.9442253, -0.014952183, -0.31065047)
+shape = SubResource("BoxShape3D_jjyb4")
+
+[node name="ShaftNorth" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=883231724]
+transform = Transform3D(4.2516165, 0, 0, 0, 2.05, 0, 0, 0, 0.22, -0.19442844, -0.9, -2.5183887)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth" unique_id=1095174164]
+transform = Transform3D(1.5930436, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22418213, -3.5423934)
+mesh = SubResource("BoxMesh_tkxxf")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth" unique_id=1109227379]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.5748348)
+shape = SubResource("shape")
+
+[node name="ShaftNorth2" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=1620702875]
+transform = Transform3D(5.8546844, 0, 0, 0, 2.05, 0, 0, 0, 0.22, -0.3100381, -0.9, 0.84263015)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth2" unique_id=265221435]
+transform = Transform3D(0.99999964, 0, 0, 0, 1, 0, 0, 0, 1.2662565, -0.030974627, 0.34435892, 0.7809086)
+mesh = SubResource("BoxMesh_wguai")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth2" unique_id=733171672]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.0000027, 0, 0.14236063, 0.6072922)
+shape = SubResource("BoxShape3D_ib71f")
+
+[node name="NorthBeam" type="MeshInstance3D" parent="BasementAccessAndInitialRoom" unique_id=1088197713]
+transform = Transform3D(11.4, 0, 0, 0, 0.28, 0, 0, 0, 0.3, 0, -2.25, -3.4515204)
+mesh = SubResource("wood_box")
+
+[node name="SouthBeam" type="MeshInstance3D" parent="BasementAccessAndInitialRoom" unique_id=210124069]
+transform = Transform3D(11.4, 0, 0, 0, 0.28, 0, 0, 0, 0.3, 0, -2.25, 1.8827131)
+mesh = SubResource("wood_box")
+
+[node name="SouthBeam2" type="MeshInstance3D" parent="BasementAccessAndInitialRoom" unique_id=1242790159]
+transform = Transform3D(-0.27786157, 0, 0, 0, -3.9292336, 0, 0, 0, 0.2894383, -3.9760594, -4.18885, 1.8827131)
+mesh = SubResource("BoxMesh_j01pm")
+
+[node name="SouthBeam6" type="MeshInstance3D" parent="BasementAccessAndInitialRoom" unique_id=361021872]
+transform = Transform3D(-0.34089276, 0, 0, 0, -7.733451, 0, 0, 0, 0.37445864, -0.49026966, -2.833405, -1.2914739)
+mesh = SubResource("BoxMesh_j01pm")
+
+[node name="SouthBeam9" type="MeshInstance3D" parent="BasementAccessAndInitialRoom" unique_id=1359589508]
+transform = Transform3D(-0.19324015, 3.9601233, -0.24164662, -0.22851296, -5.7386613, 0, -0.163242, 3.345363, 0.28605273, -1.2271199, -3.7063189, -1.8750613)
+mesh = SubResource("BoxMesh_k2h41")
+
+[node name="SouthBeam10" type="MeshInstance3D" parent="BasementAccessAndInitialRoom" unique_id=2123760416]
+transform = Transform3D(-0.23310785, -0.31597054, 0.27279675, 0.005069302, -7.7257476, -0.015753336, 0.24868226, -0.13869546, 0.25603318, -0.630393, -4.7014523, -1.3804369)
+visibility_range_end = 32.0
+visibility_range_end_margin = 5.0
+visibility_range_fade_mode = 1
+mesh = SubResource("BoxMesh_n6fm1")
+
+[node name="SouthBeam12" type="MeshInstance3D" parent="BasementAccessAndInitialRoom" unique_id=1226457905]
+transform = Transform3D(-0.23310785, -0.31597054, 0.27279675, 0.005069302, -7.7257476, -0.015753336, 0.24868226, -0.13869546, 0.25603318, -1.9113431, -2.8555841, -2.4861495)
+visibility_range_end = 32.0
+visibility_range_end_margin = 5.0
+visibility_range_fade_mode = 1
+mesh = SubResource("BoxMesh_n6fm1")
+
+[node name="SouthBeam11" type="MeshInstance3D" parent="BasementAccessAndInitialRoom" unique_id=1323984017]
+transform = Transform3D(-0.00587593, 0.32335052, -0.3740754, 0.0050693024, -7.725747, -0.015753336, -0.34080434, -0.12049168, 0.0062152743, 1.1885409, -1.2085351, -1.2860532)
+visibility_range_end = 32.0
+visibility_range_end_margin = 5.0
+visibility_range_fade_mode = 1
+mesh = SubResource("BoxMesh_n6fm1")
+
+[node name="SouthBeam7" type="MeshInstance3D" parent="BasementAccessAndInitialRoom" unique_id=1839753317]
+transform = Transform3D(-0.34089276, 0, 0, 0, -7.733451, 0, 0, 0, 0.37445864, -0.49026966, -2.833405, -1.2914739)
+mesh = SubResource("BoxMesh_j01pm")
+
+[node name="SouthBeam8" type="MeshInstance3D" parent="BasementAccessAndInitialRoom" unique_id=1581510350]
+transform = Transform3D(-0.2709574, -4.69274, 0, 0.20685731, -6.146906, 0, 0, 0, 0.3744586, 0.2938776, -2.175511, -1.2893229)
+mesh = SubResource("BoxMesh_a7o2t")
+
+[node name="SouthBeam13" type="MeshInstance3D" parent="BasementAccessAndInitialRoom" unique_id=507142332]
+transform = Transform3D(0.00062726624, -7.7334366, 0, 0.3408921, 0.014231026, 0, 0, 0, 0.37445855, -1.1911254, 0.94090235, -1.2906768)
+visibility_range_end = 32.0
+visibility_range_end_margin = 5.0
+visibility_range_fade_mode = 1
+mesh = SubResource("BoxMesh_5ytr3")
+
+[node name="SouthBeam14" type="MeshInstance3D" parent="BasementAccessAndInitialRoom" unique_id=585662813]
+transform = Transform3D(5.8838705e-06, -0.07254103, -0.3744421, 0.3408921, 0.014231026, 9.17377e-13, 0.00062723854, -7.733096, 0.0035124877, -1.7608361, 0.9031427, -1.2203927)
+mesh = SubResource("BoxMesh_t4t8f")
+
+[node name="SouthBeam4" type="MeshInstance3D" parent="BasementAccessAndInitialRoom" unique_id=231344356]
+transform = Transform3D(-0.27786157, 0, 0, 0, -3.9292336, 0, 0, 0, 0.2894383, -3.9760594, -4.18885, -3.446085)
+mesh = SubResource("BoxMesh_j01pm")
+
+[node name="SouthBeam5" type="MeshInstance3D" parent="BasementAccessAndInitialRoom" unique_id=418937710]
+transform = Transform3D(-0.27786157, 0, 0, 0, -3.9292336, 0, 0, 0, 0.2894383, 3.752267, -4.18885, -3.446085)
+mesh = SubResource("BoxMesh_j01pm")
+
+[node name="SouthBeam3" type="MeshInstance3D" parent="BasementAccessAndInitialRoom" unique_id=1024265597]
+transform = Transform3D(-0.27786157, 0, 0, 0, -3.9292336, 0, 0, 0, 0.2894383, 3.536606, -4.18885, 1.8827131)
+mesh = SubResource("BoxMesh_j01pm")
+
+[node name="ShaftNorth3" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=334271340]
+transform = Transform3D(11.854956, 0, 0, 0, 3.291153, 0, 0, 0, 0.22, 0, -4.6697273, -3.4623914)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth3" unique_id=758765619]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22185314, -3.574835)
+mesh = SubResource("BoxMesh_tkxxf")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth3" unique_id=1823993149]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.5748353)
+shape = SubResource("shape")
+
+[node name="BasementStairContinuousCollider" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=319338263]
+editor_description = "Único cuerpo físico de la escalera del sótano. Sus superficies forman rampas continuas; los peldaños son solo visuales."
+
+[node name="RampSurface01" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/BasementStairContinuousCollider" unique_id=125320612]
+transform = Transform3D(14.392583, -0.005557173, -0.08117679, -8.520976, -0.009386499, -0.13711385, -3.9608756e-09, 3.288124, -0.00052860944, 0.31563616, -5.5617733, 2.1719992)
+shape = SubResource("BoxShape3D_yl2gr")
+
+[node name="RampSurface07" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/BasementStairContinuousCollider" unique_id=1269527692]
+transform = Transform3D(13.418697, -0.006511708, -0.0951202, -9.98459, -0.008751356, -0.12783593, -7.620338e-09, 3.2881246, -0.0005286095, -0.016935825, -0.1560173, -0.33047724)
+shape = SubResource("BoxShape3D_6y63m")
+
+[node name="RampSurface02" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/BasementStairContinuousCollider" unique_id=1767655250]
+transform = Transform3D(-0.9155894, -3.2568426, -0.0013967037, -10.340846, 0.102876514, -0.119561195, 17.500446, -0.10960304, -0.07072065, -2.0210075, -3.64893, 0.20799518)
+shape = SubResource("BoxShape3D_yl2gr")
+
+[node name="RampSurface03" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/BasementStairContinuousCollider" unique_id=1887984204]
+transform = Transform3D(7.749789, -0.0009162372, -0.0137902675, -0.65319115, -0.010870744, -0.16361494, -3.367619e-09, 3.2884564, -0.0005447092, -1.8348932, -4.6543307, 2.1719992)
+shape = SubResource("BoxShape3D_yl2gr")
+
+[node name="RampSurface04" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/BasementStairContinuousCollider" unique_id=989421269]
+transform = Transform3D(17.068237, 0.008792891, 0.0933606, 13.953107, -0.010755963, -0.11420403, -8.07065e-09, 4.187749, -0.00048935245, -1.3439479, -2.4162297, -2.366652)
+shape = SubResource("BoxShape3D_jx5v6")
+
+[node name="RampSurface05" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/BasementStairContinuousCollider" unique_id=929972331]
+transform = Transform3D(9.163285, -0.008919169, -0.005503226, -0.33550584, -0.23946528, -0.15031157, 0.00033130223, 4.1861253, -0.008610228, -2.55553, -2.5468793, -2.2887154)
+shape = SubResource("BoxShape3D_yl2gr")
+
+[node name="RampSurface06" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/BasementStairContinuousCollider" unique_id=517154397]
+transform = Transform3D(9.169393, -0.008714648, -0.00024352921, -0.01484862, -0.0060102604, -0.15065818, 0.019036354, 4.192964, -0.0002164645, 1.3480186, -1.0288306, -1.1757967)
+shape = SubResource("BoxShape3D_yb3dn")
+
+[node name="ShaftNorth4" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=381395285]
+transform = Transform3D(11.854956, 0, 0, 0, 3.291153, 0, 0, 0, 0.22, 5.0203843, -4.6697273, 3.7111719)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth4" unique_id=624224342]
+transform = Transform3D(0.08435291, 0, 0, 0, 0.3038449, 0, 0, 0, 4.5454545, -0.20868331, 0.22418213, -3.5748405)
+mesh = SubResource("TunnelEntrance4_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth4" unique_id=92128513]
+transform = Transform3D(0.08435291, 0, 0, 0, 0.3038449, 0, 0, 0, 4.5454545, -0.20868331, 0.22418213, -3.5748405)
+shape = SubResource("TunnelEntrance4_shape")
+
+[node name="ShaftNorth12" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=1704503508]
+transform = Transform3D(11.854956, 0, 0, 0, 3.291153, 0, 0, 0, 0.22, 0.005252838, -4.6697273, 11.60007)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth12" unique_id=873846933]
+transform = Transform3D(0.08435291, 0, 0, 0, 0.3038449, 0, 0, 0, 4.5454545, -0.07236844, -0.3082899, -3.5748444)
+mesh = SubResource("TunnelWall12_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth12" unique_id=995831928]
+transform = Transform3D(0.08435291, 0, 0, 0, 0.3038449, 0, 0, 0, 4.5454545, -0.07236844, -0.3082899, -3.5748444)
+shape = SubResource("TunnelWall12_shape")
+
+[node name="ShaftNorth13" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=1083371689]
+transform = Transform3D(6.518556, 0, 0, 0, 3.291153, 0, 0, 0, 0.22, 3.1606128, -4.6697273, 6.8720016)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth13" unique_id=1744671700]
+transform = Transform3D(0.15340821, 0, 0, 0, 0.3038449, 0, 0, 0, 4.545455, -0.0322074, -0.3082899, -3.5748367)
+mesh = SubResource("TunnelWall13_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth13" unique_id=1409281925]
+transform = Transform3D(0.15340821, 0, 0, 0, 0.3038449, 0, 0, 0, 4.545455, -0.0322074, -0.3082899, -3.5748367)
+shape = SubResource("TunnelWall13_shape")
+
+[node name="ShaftNorth14" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=1715507112]
+transform = Transform3D(6.518556, 0, 0, 0, 3.291153, 0, 0, 0, 0.22, 3.924048, -4.6697273, 7.538661)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth14" unique_id=1193721901]
+transform = Transform3D(0.15340821, 0, 0, 0, 0.3038449, 0, 0, 0, 4.545455, -0.09076601, -0.3082899, -3.5748405)
+mesh = SubResource("TunnelWall14_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth14" unique_id=53278973]
+transform = Transform3D(0.15340821, 0, 0, 0, 0.3038449, 0, 0, 0, 4.545455, -0.09076601, -0.3082899, -3.5748405)
+shape = SubResource("TunnelWall14_shape")
+
+[node name="ShaftNorth15" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=476624266]
+transform = Transform3D(6.518556, 0, 0, 0, 3.291153, 0, 0, 0, 0.22, 3.924048, -4.6697273, 5.0028543)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth15" unique_id=1064619075]
+transform = Transform3D(0.15340821, 0, 0, 0, 0.3038449, 0, 0, 0, 4.545455, -0.09076601, -0.3082899, -3.5748405)
+mesh = SubResource("TunnelWall15_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth15" unique_id=1072607669]
+transform = Transform3D(0.15340821, 0, 0, 0, 0.3038449, 0, 0, 0, 4.545455, -0.09076601, -0.3082899, -3.5748405)
+shape = SubResource("TunnelWall15_shape")
+
+[node name="ShaftNorth8" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=561006130]
+transform = Transform3D(11.854956, 0, 0, 0, 3.291153, 0, 0, 0, 0.22, 0.34760714, -3.6547894, 3.7111719)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth8" unique_id=1333653364]
+transform = Transform3D(0.08435291, 0, 0, 0, 0.3038449, 0, 0, 0, 4.5454545, -0.07003945, -0.4660747, -3.5748405)
+mesh = SubResource("TunnelLintel_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth8" unique_id=1356745554]
+transform = Transform3D(0.08435291, 0, 0, 0, 0.3038449, 0, 0, 0, 4.5454545, -0.07003945, -0.4660747, -3.5748405)
+shape = SubResource("TunnelLintel_shape")
+
+[node name="ShaftNorth7" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=1463759082]
+transform = Transform3D(11.854956, 0, 0, 0, 3.291153, 0, 0, 0, 0.22, -7.565024, -4.6697273, 3.7111719)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth7" unique_id=1031914737]
+transform = Transform3D(0.08435291, 0, 0, 0, 0.3038449, 0, 0, 0, 4.5454545, 0.31625134, 0.22418213, -3.5748405)
+mesh = SubResource("TunnelEntrance7_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth7" unique_id=1222761984]
+transform = Transform3D(0.08435291, 0, 0, 0, 0.3038449, 0, 0, 0, 4.5454545, 0.31625134, 0.22418213, -3.5748405)
+shape = SubResource("TunnelEntrance7_shape")
+
+[node name="ShaftNorth9" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=471067952]
+transform = Transform3D(-0.018626668, 0, 0.2197722, 0, 1.32086, 0, -7.1553373, 0, -0.00057210785, -0.008655548, -6.0315905, 6.4733725)
+
+[node name="Mesh2" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth9" unique_id=1350797557]
+transform = Transform3D(-0.00036380783, 0, -0.13975486, 0, 0.7570824, 0, 4.550135, 0, -0.011844844, -0.05776429, 0.26288462, -7.841007)
+mesh = SubResource("TunnelWall9_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth9" unique_id=820418287]
+transform = Transform3D(-0.00036380783, 0, -0.13975486, 0, 0.7570824, 0, 4.550135, 0, -0.011844844, -0.05776429, 0.26288462, -7.841007)
+shape = SubResource("TunnelWall9_shape")
+
+[node name="ShaftNorth10" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=1727220778]
+transform = Transform3D(-0.017868698, 0, 0.21974893, 0, 1.32086, 0, -6.864167, 0, -0.00057204725, 0.93648624, -6.0315905, 6.450033)
+
+[node name="Mesh2" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth10" unique_id=951450758]
+transform = Transform3D(-0.0003792402, 0, -0.14568312, 0, 0.7570826, 0, 4.550617, 0, -0.011846099, 0.00034093857, 0.2628851, -7.841007)
+mesh = SubResource("TunnelWall10_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth10" unique_id=1085267297]
+transform = Transform3D(-0.0003792402, 0, -0.14568312, 0, 0.7570826, 0, 4.550617, 0, -0.011846099, 0.00034093857, 0.2628851, -7.841007)
+shape = SubResource("TunnelWall10_shape")
+
+[node name="ShaftNorth11" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=538046487]
+transform = Transform3D(-0.018626668, 0, 0.2197722, 0, 1.32086, 0, -7.1553373, 0, -0.00057210785, 1.749795, -6.0315905, 10.219225)
+
+[node name="Mesh2" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth11" unique_id=847713235]
+transform = Transform3D(-0.00036380783, 0, -0.13975486, 0, 0.7570824, 0, 4.550135, 0, -0.011844844, 0.2012819, 0.26288462, -7.8239784)
+mesh = SubResource("TunnelWall11_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth11" unique_id=1063633413]
+transform = Transform3D(-0.00036380783, 0, -0.13975486, 0, 0.7570824, 0, 4.550135, 0, -0.011844844, 0.2012819, 0.26288462, -7.8239784)
+shape = SubResource("TunnelWall11_shape")
+
+[node name="ShaftNorth16" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=1200891267]
+transform = Transform3D(-0.004353246, 0, 0.21933381, 0, 1.32086, 0, -1.6722769, 0, -0.00057096663, 1.749795, -6.0315905, 4.4978504)
+
+[node name="Mesh2" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth16" unique_id=1611316392]
+transform = Transform3D(-0.0015566607, 0, -0.59798306, 0, 0.75708246, 0, 4.5592294, 0, -0.011868518, 0.00034093857, 0.26288462, -7.841007)
+visibility_range_end = 32.0
+visibility_range_end_margin = 5.0
+visibility_range_fade_mode = 1
+mesh = SubResource("TunnelWall16_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth16" unique_id=144949922]
+transform = Transform3D(-0.0015566607, 0, -0.59798306, 0, 0.75708246, 0, 4.5592294, 0, -0.011868518, 0.00034093857, 0.26288462, -7.841007)
+shape = SubResource("TunnelWall16_shape")
+
+[node name="ShaftNorth17" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=325182329]
+transform = Transform3D(-0.004353246, 0, 0.21933381, 0, 1.32086, 0, -1.6722769, 0, -0.00057096663, 2.4943247, -6.0315905, 4.8172007)
+
+[node name="Mesh2" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth17" unique_id=1521227033]
+transform = Transform3D(-0.0015566607, 0, -0.59798306, 0, 0.75708246, 0, 4.5592294, 0, -0.011868518, 0.00034046173, 0.26288462, -7.841008)
+visibility_range_end = 32.0
+visibility_range_end_margin = 5.0
+visibility_range_fade_mode = 1
+mesh = SubResource("TunnelWall17_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth17" unique_id=233142212]
+transform = Transform3D(-0.0015566607, 0, -0.59798306, 0, 0.75708246, 0, 4.5592294, 0, -0.011868518, 0.00034046173, 0.26288462, -7.841008)
+shape = SubResource("TunnelWall17_shape")
+
+[node name="ShaftNorth18" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=887918191]
+transform = Transform3D(-0.004353246, 0, 0.21933381, 0, 1.32086, 0, -1.6722769, 0, -0.00057096663, 2.4943247, -6.0315905, 3.8498542)
+
+[node name="Mesh2" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth18" unique_id=1360310573]
+transform = Transform3D(-0.0015566607, 0, -0.59798306, 0, 0.75708246, 0, 4.5592294, 0, -0.011868518, 0.00034046173, 0.26288462, -7.841008)
+visibility_range_end = 32.0
+visibility_range_end_margin = 5.0
+visibility_range_fade_mode = 1
+mesh = SubResource("TunnelWall18_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth18" unique_id=436140600]
+transform = Transform3D(-0.0015566607, 0, -0.59798306, 0, 0.75708246, 0, 4.5592294, 0, -0.011868518, 0.00034046173, 0.26288462, -7.841008)
+shape = SubResource("TunnelWall18_shape")
+
+[node name="ShaftNorth5" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=789699368]
+transform = Transform3D(-0.13048726, 0, -0.22090846, 0, 3.2911534, 0, 8.554014, 0, -0.0033698487, -5.7664533, -4.6697273, -0.074920416)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth5" unique_id=1447703742]
+transform = Transform3D(0.9999997, 0, 8.731149e-11, 0, 1, 0, 0, 0, 1, -0.09191951, 0.22418213, 0.054294586)
+mesh = SubResource("BoxMesh_tkxxf")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth5" unique_id=257648488]
+transform = Transform3D(0.9999997, 0, 8.731149e-11, 0, 1, 0, 0, 0, 1, -0.09191951, 0, 0.054294586)
+shape = SubResource("shape")
+
+[node name="ShaftNorth6" type="StaticBody3D" parent="BasementAccessAndInitialRoom" unique_id=1030888142]
+transform = Transform3D(-0.13048726, 0, -0.22090846, 0, 3.2911534, 0, 8.554014, 0, -0.0033698487, 5.369557, -4.6697273, -0.074920416)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasementAccessAndInitialRoom/ShaftNorth6" unique_id=1172469057]
+transform = Transform3D(0.9999997, 0, 8.731149e-11, 0, 1, 0, 0, 0, 1, -0.09191951, 0.22418213, 0.05429542)
+mesh = SubResource("BoxMesh_tkxxf")
+
+[node name="Collision" type="CollisionShape3D" parent="BasementAccessAndInitialRoom/ShaftNorth6" unique_id=566357666]
+transform = Transform3D(0.9999997, 0, 8.731149e-11, 0, 1, 0, 0, 0, 1, -0.09191951, 0, 0.05429542)
+shape = SubResource("shape")

@@ -5,18 +5,21 @@ extends Node3D
 @onready var minute_hand: Node3D = $Hands/MinuteHand
 @onready var second_hand: Node3D = $Hands/SecondHand
 
-var _refresh_timer := 0.0
-
-
 func _ready() -> void:
 	_update_clock()
+	set_process(Engine.is_editor_hint())
+	if not Engine.is_editor_hint():
+		var refresh_timer := Timer.new()
+		refresh_timer.name = "ClockRefreshTimer"
+		refresh_timer.wait_time = 0.25
+		refresh_timer.timeout.connect(_update_clock)
+		add_child(refresh_timer)
+		refresh_timer.start()
 
 
-func _process(delta: float) -> void:
-	_refresh_timer -= delta
-	if _refresh_timer <= 0.0:
-		_refresh_timer = 0.25
-		_update_clock()
+func _process(_delta: float) -> void:
+	# En el editor no hay un Timer de runtime; mantener la previsualizacion viva.
+	_update_clock()
 
 
 func _update_clock() -> void:

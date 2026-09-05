@@ -56,6 +56,17 @@ func ensure_open_for_npc(actor: Node) -> bool:
 	return interact(actor)
 
 
+func get_npc_traversal_portal() -> Dictionary:
+	var portal_root := get_parent() as Node3D
+	if not is_instance_valid(portal_root):
+		return {"center": global_position, "normal": global_basis.z.normalized(), "open_wait": transition_time * 0.25}
+	return {
+		"center": portal_root.global_position,
+		"normal": portal_root.global_basis.z.normalized(),
+		"open_wait": transition_time * 0.25,
+	}
+
+
 func _play_door_sound(opening: bool) -> void:
 	door_sound.stream = _open_sound if opening else _close_sound
 	door_sound.volume_db = -7.0 if opening else -5.5

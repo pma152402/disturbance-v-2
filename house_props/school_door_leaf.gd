@@ -38,6 +38,17 @@ func ensure_open_for_npc(actor: Node) -> bool:
 	return true if _is_open else interact(actor)
 
 
+func get_npc_traversal_portal() -> Dictionary:
+	var portal_root := get_parent() as Node3D
+	if not is_instance_valid(portal_root):
+		return {"center": global_position, "normal": global_basis.z.normalized(), "open_wait": transition_time * 0.25}
+	return {
+		"center": portal_root.global_position,
+		"normal": portal_root.global_basis.z.normalized(),
+		"open_wait": transition_time * 0.25,
+	}
+
+
 func _set_open(opening: bool, player: Node) -> void:
 	_is_open = opening
 	_is_animating = true

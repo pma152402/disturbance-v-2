@@ -30,6 +30,7 @@ func set_lamp_enabled(enabled: bool) -> void:
 func refresh_house_power() -> void:
 	var enabled := _requested_on and _house_power_available()
 	is_on = enabled
+	set_process(enabled)
 	warm_light.visible = enabled
 	warm_light.set_process(enabled)
 	downward_halo.visible = enabled

@@ -39,6 +39,7 @@ func _ready() -> void:
 	_flame_material.emission_enabled = true
 	flame_mesh.material_override = _flame_material
 	_reset_match_visual()
+	set_process(false)
 
 
 func _process(delta: float) -> void:
@@ -93,6 +94,7 @@ func strike_match() -> bool:
 	_play_strike_animation()
 	if strikes_done >= strikes_required:
 		match_lit = true
+		set_process(true)
 		burn_remaining = burn_duration
 		_run_extinguish_exposure = 0.0
 		_flame_stress = 0.0
@@ -149,6 +151,7 @@ func _finish_match() -> void:
 	match_out = false
 	burn_remaining = 0.0
 	_emit_state()
+	set_process(false)
 
 
 func _discard_current_match(emit_change: bool) -> void:
@@ -159,6 +162,7 @@ func _discard_current_match(emit_change: bool) -> void:
 	_extinguishing = false
 	_smoke_timer = 0.0
 	_reset_match_visual()
+	set_process(false)
 	if emit_change:
 		_emit_state()
 
@@ -210,6 +214,7 @@ func _extinguish_from_wind() -> void:
 	match_light.visible = false
 	forward_light.visible = false
 	_smoke_timer = 1.7
+	set_process(true)
 	smoke.visible = true
 	smoke.position = _smoke_rest_position
 	smoke.scale = Vector3.ONE * 0.5

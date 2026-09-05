@@ -41,6 +41,8 @@ var _player: Node3D
 var _weather_bus_index := -1
 var _low_pass: AudioEffectLowPassFilter
 var _acoustic_blend := 0.0
+var _update_accumulator := 0.0
+const UPDATE_INTERVAL := 0.1
 
 
 func _ready() -> void:
@@ -53,13 +55,18 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	_update_accumulator += delta
+	if _update_accumulator < UPDATE_INTERVAL:
+		return
+	var step := _update_accumulator
+	_update_accumulator = 0.0
 	if _player == null:
 		_player = get_node_or_null(player_path) as Node3D
 		if _player == null:
 			return
 
 	var target := _get_acoustic_level(_player.global_position)
-	_acoustic_blend = move_toward(_acoustic_blend, target, transition_speed * delta)
+	_acoustic_blend = move_toward(_acoustic_blend, target, transition_speed * step)
 	_apply_acoustics(_acoustic_blend)
 
 

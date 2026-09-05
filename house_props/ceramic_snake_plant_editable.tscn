@@ -1,0 +1,235 @@
+[gd_scene format=3 uid="uid://csdlkqaa7frnc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_njgd1"]
+albedo_color = Color(0.8352941, 0.7882353, 0.6627451, 1)
+roughness = 0.88
+
+[sub_resource type="BoxMesh" id="BoxMesh_3mfmv"]
+size = Vector3(0.5, 0.58, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hlfab"]
+albedo_color = Color(0.568, 0.536, 0.4506667, 1)
+roughness = 0.94
+
+[sub_resource type="BoxMesh" id="BoxMesh_0w78v"]
+size = Vector3(0.525, 0.07, 0.525)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w3612"]
+albedo_color = Color(0.12941177, 0.09019608, 0.05882353, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_mxj0t"]
+top_radius = 0.27
+bottom_radius = 0.27
+height = 0.035
+radial_segments = 14
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v845b"]
+albedo_color = Color(0.42745098, 0.35686275, 0.28627452, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_3gox6"]
+radial_segments = 6
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dxkt6"]
+albedo_color = Color(0.43775687, 0.36843923, 0.2991216, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ansmr"]
+radial_segments = 6
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bgmf1"]
+albedo_color = Color(0.44806275, 0.3800157, 0.31196862, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ttfns"]
+radial_segments = 6
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pose8"]
+albedo_color = Color(0.45836863, 0.39159217, 0.3248157, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_s2dwj"]
+radial_segments = 6
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_df8iy"]
+albedo_color = Color(0.4686745, 0.40316862, 0.33766276, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_6wypu"]
+radial_segments = 6
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aoy1f"]
+albedo_color = Color(0.4789804, 0.4147451, 0.35050982, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_16hyu"]
+radial_segments = 6
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kh0ss"]
+albedo_color = Color(0.48928627, 0.42632157, 0.3633569, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_olov1"]
+radial_segments = 6
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vhayx"]
+albedo_color = Color(0.45333335, 0.5498039, 0.35043138, 1)
+roughness = 0.9
+
+[sub_resource type="SphereMesh" id="SphereMesh_6xksl"]
+radial_segments = 8
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_esldb"]
+albedo_color = Color(0.33333334, 0.4509804, 0.20784314, 1)
+roughness = 0.92
+
+[sub_resource type="SphereMesh" id="SphereMesh_wf15w"]
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_rufcw"]
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_w3y0o"]
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_lhojp"]
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_3fduu"]
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_vm22b"]
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_135bt"]
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_uh7yd"]
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_bjv51"]
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_h8rmx"]
+radial_segments = 8
+rings = 4
+
+[node name="CeramicSnakePlant" type="Node3D" unique_id=925946113]
+editor_description = "Planta detallada reutilizable. Variant selecciona entre ocho especies y macetas diferentes."
+
+[node name="GeneratedDetail" type="Node3D" parent="." unique_id=231021017]
+
+[node name="TallCeramicPot" type="MeshInstance3D" parent="GeneratedDetail" unique_id=2011844422]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.29, 0)
+material_override = SubResource("StandardMaterial3D_njgd1")
+mesh = SubResource("BoxMesh_3mfmv")
+
+[node name="PotBand" type="MeshInstance3D" parent="GeneratedDetail" unique_id=867375800]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.57146525, 0)
+material_override = SubResource("StandardMaterial3D_hlfab")
+mesh = SubResource("BoxMesh_0w78v")
+
+[node name="Soil" type="MeshInstance3D" parent="GeneratedDetail" unique_id=960131088]
+transform = Transform3D(0.9863367, 0, 0, 0, 1, 0, 0, 0, 0.95552605, 0, 0.59, 0)
+material_override = SubResource("StandardMaterial3D_w3612")
+mesh = SubResource("CylinderMesh_mxj0t")
+
+[node name="SoilPebble" type="MeshInstance3D" parent="GeneratedDetail" unique_id=658219303]
+transform = Transform3D(0.07, 0, 0, 0, 0.036, 0, 0, 0, 0.06, 0.19, 0.615, 0)
+material_override = SubResource("StandardMaterial3D_v845b")
+mesh = SubResource("SphereMesh_3gox6")
+
+[node name="PlantPart01" type="MeshInstance3D" parent="GeneratedDetail" unique_id=612497975]
+transform = Transform3D(0.07, 0, 0, 0, 0.036, 0, 0, 0, 0.06, 0.11846306, 0.615, 0.14854798)
+material_override = SubResource("StandardMaterial3D_dxkt6")
+mesh = SubResource("SphereMesh_ansmr")
+
+[node name="PlantPart02" type="MeshInstance3D" parent="GeneratedDetail" unique_id=382451505]
+transform = Transform3D(0.07, 0, 0, 0, 0.036, 0, 0, 0, 0.06, -0.04227898, 0.615, 0.1852363)
+material_override = SubResource("StandardMaterial3D_bgmf1")
+mesh = SubResource("SphereMesh_ttfns")
+
+[node name="PlantPart03" type="MeshInstance3D" parent="GeneratedDetail" unique_id=1375790499]
+transform = Transform3D(0.07, 0, 0, 0, 0.036, 0, 0, 0, 0.06, -0.17118408, 0.615, 0.08243791)
+material_override = SubResource("StandardMaterial3D_pose8")
+mesh = SubResource("SphereMesh_s2dwj")
+
+[node name="PlantPart04" type="MeshInstance3D" parent="GeneratedDetail" unique_id=1496037952]
+transform = Transform3D(0.07, 0, 0, 0, 0.036, 0, 0, 0, 0.06, -0.17118408, 0.615, -0.08243791)
+material_override = SubResource("StandardMaterial3D_df8iy")
+mesh = SubResource("SphereMesh_6wypu")
+
+[node name="PlantPart05" type="MeshInstance3D" parent="GeneratedDetail" unique_id=1162694894]
+transform = Transform3D(0.07, 0, 0, 0, 0.036, 0, 0, 0, 0.06, -0.04227898, 0.615, -0.1852363)
+material_override = SubResource("StandardMaterial3D_aoy1f")
+mesh = SubResource("SphereMesh_16hyu")
+
+[node name="PlantPart06" type="MeshInstance3D" parent="GeneratedDetail" unique_id=1589265527]
+transform = Transform3D(0.07, 0, 0, 0, 0.036, 0, 0, 0, 0.06, 0.11846306, 0.615, -0.14854798)
+material_override = SubResource("StandardMaterial3D_kh0ss")
+mesh = SubResource("SphereMesh_olov1")
+
+[node name="Leaf" type="MeshInstance3D" parent="GeneratedDetail" unique_id=58150428]
+transform = Transform3D(0.15548739, 0.562459, -0.0068391724, -0.0900087, 0.99558115, -0.0057753515, 0.011049992, 0.19508357, 0.049192183, 0.16, 0.88, 0)
+material_override = SubResource("StandardMaterial3D_vhayx")
+mesh = SubResource("SphereMesh_6xksl")
+
+[node name="PlantPart07" type="MeshInstance3D" parent="GeneratedDetail" unique_id=783570292]
+transform = Transform3D(0.15273216, 0.6248498, 0.014696622, -0.04826244, 1.1876583, -0.023904985, -0.08211953, 0.46414515, 0.0413831, 0.13460056, 0.945, 0.08650253)
+material_override = SubResource("StandardMaterial3D_esldb")
+mesh = SubResource("SphereMesh_wf15w")
+
+[node name="PlantPart08" type="MeshInstance3D" parent="GeneratedDetail" unique_id=222680871]
+transform = Transform3D(0.080292754, 0.017695298, 0.044746783, 0.060724415, 1.5526491, -0.00895148, -0.1492167, 0.64137936, 0.020435175, 0.0664664, 1.01, 0.14554112)
+material_override = SubResource("StandardMaterial3D_vhayx")
+mesh = SubResource("SphereMesh_rufcw")
+
+[node name="PlantPart09" type="MeshInstance3D" parent="GeneratedDetail" unique_id=1997810463]
+transform = Transform3D(-0.013126083, 0.41761053, 0.048691478, 0.060724415, 1.7929401, -0.00895148, -0.1689386, 0.61201906, -0.007000778, -0.022770375, 1.075, 0.15837143)
+material_override = SubResource("StandardMaterial3D_esldb")
+mesh = SubResource("SphereMesh_w3y0o")
+
+[node name="PlantPart10" type="MeshInstance3D" parent="GeneratedDetail" unique_id=968099304]
+transform = Transform3D(-0.11757125, -0.017163696, 0.037853185, 0.018590335, 1.1469203, 0.005421538, -0.13502371, 0.17285547, -0.03221403, -0.104777716, 0.88, 0.120919935)
+material_override = SubResource("StandardMaterial3D_vhayx")
+mesh = SubResource("SphereMesh_lhojp")
+
+[node name="PlantPart11" type="MeshInstance3D" parent="GeneratedDetail" unique_id=678210143]
+transform = Transform3D(-0.16439754, -0.33991572, 0.016473135, -0.044514947, 1.3756458, 0.00091534876, -0.05823974, -0.09195598, -0.04719956, -0.15351887, 0.945, 0.04507721)
+material_override = SubResource("StandardMaterial3D_esldb")
+mesh = SubResource("SphereMesh_3fduu")
+
+[node name="PlantPart12" type="MeshInstance3D" parent="GeneratedDetail" unique_id=75101391]
+transform = Transform3D(-0.17430669, -0.32392585, -0.007918622, -0.025408555, 1.5904865, -0.014474023, 0.037034947, -0.4333874, -0.04719956, -0.15351887, 1.01, -0.04507721)
+material_override = SubResource("StandardMaterial3D_vhayx")
+mesh = SubResource("SphereMesh_vm22b")
+
+[node name="PlantPart13" type="MeshInstance3D" parent="GeneratedDetail" unique_id=1200080812]
+transform = Transform3D(-0.11907953, 0.18905644, -0.037176974, 0.041662887, 1.881108, -0.003942624, 0.12839109, -0.43507436, -0.03320133, -0.104777716, 1.075, -0.120919935)
+material_override = SubResource("StandardMaterial3D_esldb")
+mesh = SubResource("SphereMesh_135bt")
+
+[node name="PlantPart14" type="MeshInstance3D" parent="GeneratedDetail" unique_id=252653936]
+transform = Transform3D(-0.03500115, -0.13649048, -0.048691478, 0.060724415, 1.0720673, -0.00895148, 0.16579345, -0.4214761, -0.0070007867, -0.022770375, 0.88, -0.15837143)
+material_override = SubResource("StandardMaterial3D_vhayx")
+mesh = SubResource("SphereMesh_uh7yd")
+
+[node name="PlantPart15" type="MeshInstance3D" parent="GeneratedDetail" unique_id=349229233]
+transform = Transform3D(0.0749107, -0.031075597, -0.04545116, 0.041214887, 1.3774248, 0.004073776, 0.15839736, -0.3437084, 0.020435179, 0.0664664, 0.945, -0.14554112)
+material_override = SubResource("StandardMaterial3D_esldb")
+mesh = SubResource("SphereMesh_bjv51")
+
+[node name="PlantPart16" type="MeshInstance3D" parent="GeneratedDetail" unique_id=670795458]
+transform = Transform3D(0.14688177, 0.34290522, -0.02704011, -0.026134135, 1.6429775, 0.0075014536, 0.100711234, -0.07376266, 0.0413831, 0.13460056, 1.01, -0.08650253)
+material_override = SubResource("StandardMaterial3D_vhayx")
+mesh = SubResource("SphereMesh_h8rmx")

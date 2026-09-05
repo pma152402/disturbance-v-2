@@ -61,7 +61,7 @@ func _run() -> void:
 			return
 	print("STAIR_VALIDATION_OK: full standing capsule ascended both flights and landing; maximum slope ", max_slope)
 	for suffix in [9, 10, 11, 12, 13, 14, 15, 16, 17, 18]:
-		var wall := house.get_node("BasementAccessAndInitialRoom/ShaftNorth%d" % suffix)
+		var wall := house.get_node("ExteriorBasementAccess/BasementAccessAndInitialRoom/ShaftNorth%d" % suffix)
 		var mesh := wall.get_node("Mesh2" if wall.has_node("Mesh2") else "Mesh") as MeshInstance3D
 		var collision := wall.get_node("Collision") as CollisionShape3D
 		if not mesh.global_transform.is_equal_approx(collision.global_transform) or not mesh.mesh.size.is_equal_approx(collision.shape.size):

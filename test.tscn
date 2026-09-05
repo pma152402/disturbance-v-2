@@ -245,10 +245,10 @@ debug_all_keys = true
 transform = Transform3D(-0.24663237, 0, -0.9691091, 0, 1, 0, 0.9691091, 0, -0.24663237, 10.15, 4.35, 8.65)
 
 [node name="ImportedGrandmotherGroundFloor" parent="." unique_id=1485663130 instance=ExtResource("15_imported_grandmother")]
-transform = Transform3D(-0.24663237, 0, -0.9691091, 0, 1, 0, 0.9691091, 0, -0.24663237, 8.85, 4.35, 8.65)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -1.8, 0.0, -3.8)
 remain_still = false
 dormant_until_door_opens = true
-activation_door_path = NodePath("House/Doors/MasterBedroomDoor/Hinge")
+dormant_until_door_opens = false
 close_player_distance = 1.2
 close_player_memory_seconds = 0.85
 light_detection_distance = 13.0

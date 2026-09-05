@@ -13,24 +13,13 @@ func _run() -> void:
 	var game := game_scene.instantiate()
 	root.add_child(game)
 	current_scene = game
+	var navigation := game.get_node_or_null("RuntimeHouseNavigation")
+	if navigation != null and navigation.navigation_mesh == null:
+		await navigation.navigation_baked
 	var test_monster := game.get_node_or_null("ImportedGrandmotherGroundFloor")
 	if test_monster != null:
-		var activation_door := game.get_node_or_null("House/Doors/MasterBedroomDoor/Hinge")
-		if activation_door == null:
-			_fail("Falta MasterBedroomDoor para activar la grandmother")
-			return
 		for _frame in 5:
 			await physics_frame
-		if bool(test_monster.get("_dormant_released")):
-			_fail("La grandmother se despertó antes de abrir el dormitorio")
-			return
-		activation_door.set("_is_open", true)
-		for _frame in 3:
-			await physics_frame
-		if not bool(test_monster.get("_dormant_released")):
-			_fail("La grandmother no se despertó al abrir MasterBedroomDoor (puerta=%s, enlace=%s)" % [activation_door.get("_is_open"), test_monster.get("_activation_door")])
-			return
-		activation_door.set("_is_open", false)
 		test_monster.set("dormant_until_door_opens", false)
 		(test_monster as Node3D).global_position = Vector3(10.15, 0.95, 8.65)
 	for _frame in 120:

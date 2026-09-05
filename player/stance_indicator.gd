@@ -28,6 +28,10 @@ var _running_phase := 0.0
 var _raster_texture: ImageTexture
 
 
+func _ready() -> void:
+	set_process(false)
+
+
 func _process(delta: float) -> void:
 	var walking_target := 1.0 if _walking and not _running else 0.0
 	var next_walking_blend := move_toward(_walking_blend, walking_target, delta * 8.0)
@@ -59,21 +63,33 @@ func _process(delta: float) -> void:
 	if _running_blend > 0.001:
 		_running_phase = fmod(_running_phase + delta * 9.0, TAU)
 		queue_redraw()
+	if not _walking and not _crouch_moving and not _prone_moving and not _running \
+	and _walking_blend <= 0.001 and _crouch_blend <= 0.001 \
+	and _prone_blend <= 0.001 and _running_blend <= 0.001:
+		set_process(false)
 
 
 func set_running(running: bool) -> void:
+	if _running != running:
+		set_process(true)
 	_running = running
 
 
 func set_walking(walking: bool) -> void:
+	if _walking != walking:
+		set_process(true)
 	_walking = walking
 
 
 func set_crouch_moving(moving: bool) -> void:
+	if _crouch_moving != moving:
+		set_process(true)
 	_crouch_moving = moving
 
 
 func set_prone_moving(moving: bool) -> void:
+	if _prone_moving != moving:
+		set_process(true)
 	_prone_moving = moving
 
 

@@ -94,7 +94,7 @@ func _build_ramps() -> void:
 	ramps.free()
 
 func _fit_tunnels() -> void:
-	var basement := house.get_node("BasementAccessAndInitialRoom")
+	var basement := house.get_node("ExteriorBasementAccess/BasementAccessAndInitialRoom")
 	var floor_mesh := basement.get_node("Floor2/Mesh") as MeshInstance3D
 	var floor_bounds: AABB = floor_mesh.global_transform * floor_mesh.get_aabb()
 	var ceiling := basement.get_node("Floor3/Mesh") as MeshInstance3D

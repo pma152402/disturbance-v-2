@@ -29,7 +29,7 @@ func _init() -> void:
 	var normal_basement_door := house.get_node_or_null("Doors/BasementDoor2")
 	if normal_basement_door == null or normal_basement_door.get_node_or_null("Hinge") == null:
 		_fail("La puerta interior del sótano debe seguir siendo una puerta normal")
-	var cellar_bulkhead := house.get_node_or_null("CellarBulkheadEntranceStaging")
+	var cellar_bulkhead := house.get_node_or_null("ExteriorBasementAccess/CellarBulkheadEntranceStaging")
 	if (
 		cellar_bulkhead == null
 		or cellar_bulkhead.get("required_key_id") != &"basement_key"

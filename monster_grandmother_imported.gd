@@ -22,6 +22,9 @@ enum PhotoBehavior { PATROL, STATIC_LIGHT, FLASHLIGHT, LIGHT_MEMORY, CLOSE_PLAYE
 @export var dark_player_pursuit_break_distance := 4.8
 @export var dark_player_hidden_memory_seconds := 0.65
 @export var footstep_interest_seconds := 1.6
+@export var lost_player_search_seconds := 4.2
+@export var search_step_seconds := 1.05
+@export var search_sweep_radius := 1.45
 @export_group("Revelado anti-espera")
 @export var reveal_after_seconds := 20.0
 @export var reveal_live_seconds := 1.0
@@ -62,18 +65,61 @@ var _reveal_live_timer := 0.0
 var _reveal_search_timer := 0.0
 var _activation_door: Node
 var _dormant_released := false
+var _dormant_monitor: Timer
+var _lost_search_timer := 0.0
+var _search_step_timer := 0.0
+var _search_anchor := Vector3.ZERO
+var _search_step_index := 0
 
 
 func _ready() -> void:
 	super._ready()
 	_waiting_covered_eyes = false
 	_player_has_moved = true
+	if dormant_until_door_opens:
+		call_deferred(&"_arm_dormant_monitor")
+
+
+func _arm_dormant_monitor() -> void:
+	# Dos pasos permiten que el cuerpo se apoye en el suelo antes de dormirlo.
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	if _dormant_released or not is_inside_tree():
+		return
+	velocity = Vector3.ZERO
+	set_physics_process(false)
+	var editable_visual := get_node_or_null("EditableVisual")
+	if is_instance_valid(editable_visual):
+		editable_visual.set_physics_process(false)
+	breathing_sound.stop()
+	_dormant_monitor = Timer.new()
+	_dormant_monitor.name = "DormantDoorMonitor"
+	_dormant_monitor.process_callback = Timer.TIMER_PROCESS_PHYSICS
+	# Respuesta inferior a dos fotogramas a 60 Hz sin mantener física/IA activa.
+	_dormant_monitor.wait_time = 0.025
+	_dormant_monitor.timeout.connect(_poll_dormant_door)
+	add_child(_dormant_monitor)
+	_dormant_monitor.start()
+	_poll_dormant_door()
+
+
+func _poll_dormant_door() -> void:
+	_update_dormant_activation()
+	if not _dormant_released:
+		return
+	if is_instance_valid(_dormant_monitor):
+		_dormant_monitor.stop()
+	if not breathing_sound.playing:
+		breathing_sound.play()
+	var editable_visual := get_node_or_null("EditableVisual")
+	if is_instance_valid(editable_visual):
+		editable_visual.set_physics_process(true)
+	set_physics_process(true)
 
 
 func _finish_navigation_setup() -> void:
 	await get_tree().physics_frame
 	await get_tree().physics_frame
-	_navigation_available = NavigationServer3D.map_get_iteration_id(get_world_3d().navigation_map) > 0
 	_cache_light_sources(get_tree().current_scene)
 	if is_instance_valid(_player) and _player.has_signal(&"light_switched_on"):
 		var light_signal := Callable(self, &"_on_player_switched_on_light")
@@ -83,14 +129,28 @@ func _finish_navigation_setup() -> void:
 		var footstep_signal := Callable(self, &"_on_player_footstep_heard")
 		if not _player.is_connected(&"footstep_heard", footstep_signal):
 			_player.connect(&"footstep_heard", footstep_signal)
-	_patrol_points = [
-		_snap_to_navigation(_spawn_position + patrol_offset_a),
-		_snap_to_navigation(_spawn_position + patrol_offset_b),
-	]
+	# Durante el horneado usamos puntos relativos transitables como intención,
+	# pero no arrancamos una ruta ciega. Cuando el mapa esté listo se proyectan
+	# de nuevo y se invalida cualquier camino provisional.
+	_patrol_points = [_spawn_position + patrol_offset_a, _spawn_position + patrol_offset_b]
 	_patrol_point_index = 0
 	_patrol_target = _patrol_points[0]
 	_patrol_wait_timer = randf_range(patrol_wait_min, minf(patrol_wait_max, 5.0))
 	_patrol_travel_timer = patrol_travel_timeout
+	var navigation_wait_frames := 0
+	while NavigationServer3D.map_get_iteration_id(get_world_3d().navigation_map) <= 0 and navigation_wait_frames < 600:
+		navigation_wait_frames += 1
+		await get_tree().physics_frame
+	_navigation_available = NavigationServer3D.map_get_iteration_id(get_world_3d().navigation_map) > 0
+	if not _navigation_available:
+		return
+	_patrol_points = [
+		_snap_to_navigation(_spawn_position + patrol_offset_a),
+		_snap_to_navigation(_spawn_position + patrol_offset_b),
+	]
+	_patrol_point_index = _closest_patrol_point_index()
+	_patrol_target = _patrol_points[_patrol_point_index]
+	_target_refresh_timer = 0.0
 
 
 func _physics_process(delta: float) -> void:
@@ -109,6 +169,7 @@ func _physics_process(delta: float) -> void:
 			return
 
 	_door_cooldown = maxf(0.0, _door_cooldown - delta)
+	_attack_cooldown_timer = maxf(0.0, _attack_cooldown_timer - delta)
 	_target_refresh_timer = maxf(0.0, _target_refresh_timer - delta)
 	_apply_gravity(delta)
 	_light_scan_timer = maxf(0.0, _light_scan_timer - delta)
@@ -144,12 +205,15 @@ func _physics_process(delta: float) -> void:
 	else:
 		_update_lost_stimulus(delta)
 
-	if current_state == State.ATTACK:
+	if _door_traversal_active:
+		_update_movement(delta)
+	elif current_state == State.ATTACK:
 		_update_attack(delta)
 	else:
 		_update_photo_movement(delta)
 	_update_frame_duck(delta)
 	move_and_slide()
+	_try_open_door()
 	_update_animation(delta)
 
 
@@ -201,6 +265,7 @@ func _focus_close_player() -> void:
 	_close_player_memory_timer = close_player_memory_seconds
 	_player_hunt_active = true
 	_player_loss_timer = _current_player_memory_seconds()
+	_lost_search_timer = lost_player_search_seconds
 	_last_known_player_position = _player.global_position
 	if current_state != State.ATTACK:
 		_set_state(State.CHASE)
@@ -230,10 +295,7 @@ func _update_lost_stimulus(delta: float) -> void:
 			_photo_behavior = PhotoBehavior.CLOSE_MEMORY
 			_set_state(State.INVESTIGATE)
 		PhotoBehavior.CLOSE_MEMORY:
-			_close_player_memory_timer -= delta
-			if _close_player_memory_timer <= 0.0:
-				_player_hunt_active = false
-				_return_to_patrol()
+			_update_lost_player_search(delta)
 		PhotoBehavior.FOOTSTEP:
 			_footstep_interest_timer = maxf(0.0, _footstep_interest_timer - delta)
 			if _footstep_interest_timer <= 0.0 or global_position.distance_to(_last_known_player_position) < 0.75:
@@ -273,7 +335,7 @@ func _update_photo_movement(delta: float) -> void:
 			_set_state(State.CHASE)
 			_update_movement(delta)
 		PhotoBehavior.LIGHT_MEMORY, PhotoBehavior.CLOSE_MEMORY, PhotoBehavior.FOOTSTEP:
-			_set_state(State.INVESTIGATE)
+			_set_state(State.SEARCH if _photo_behavior == PhotoBehavior.CLOSE_MEMORY else State.INVESTIGATE)
 			_update_movement(delta)
 		PhotoBehavior.REVEALED_PLAYER:
 			_set_state(State.CHASE if _reveal_live_timer > 0.0 else State.INVESTIGATE)
@@ -314,6 +376,8 @@ func _return_to_patrol() -> void:
 	_patrol_wait_timer = randf_range(0.25, 1.0)
 	_patrol_travel_timer = patrol_travel_timeout
 	_target_refresh_timer = 0.0
+	_lost_search_timer = 0.0
+	_search_step_timer = 0.0
 
 
 func _update_player_reveal(delta: float) -> bool:
@@ -350,19 +414,22 @@ func _follow_revealed_player() -> void:
 
 
 func _continue_player_hunt(delta: float) -> void:
-	var player_distance := global_position.distance_to(_player.global_position)
+	var player_distance := _player_planar_distance()
 	var same_floor := absf(_player.global_position.y - global_position.y) <= same_floor_player_tolerance
 	var break_distance := (
 		player_pursuit_break_distance if _is_player_illuminated()
 		else dark_player_pursuit_break_distance
 	)
-	if not same_floor or player_distance > break_distance:
-		_player_hunt_active = false
-		_return_to_patrol()
+	if not same_floor:
+		_begin_lost_player_search()
+		return
+	if player_distance > break_distance:
+		_begin_lost_player_search()
 		return
 
 	if _has_clear_line_to(_player.global_position + Vector3.UP * 1.0, _player):
 		_player_loss_timer = _current_player_memory_seconds()
+		_lost_search_timer = lost_player_search_seconds
 		_last_known_player_position = _player.global_position
 		_photo_behavior = PhotoBehavior.CLOSE_PLAYER
 		_set_state(State.CHASE)
@@ -372,9 +439,40 @@ func _continue_player_hunt(delta: float) -> void:
 	_player_loss_timer = maxf(0.0, _player_loss_timer - delta)
 	_photo_behavior = PhotoBehavior.CLOSE_MEMORY
 	_set_state(State.INVESTIGATE)
-	if _player_loss_timer <= 0.0 or global_position.distance_to(_last_known_player_position) < 0.8:
-		_player_hunt_active = false
+	if _player_loss_timer <= 0.0:
+		_begin_lost_player_search()
+
+
+func _begin_lost_player_search() -> void:
+	_player_hunt_active = false
+	_photo_behavior = PhotoBehavior.CLOSE_MEMORY
+	_search_anchor = _snap_to_navigation(_last_known_player_position)
+	_lost_search_timer = lost_player_search_seconds
+	_search_step_timer = 0.0
+	_search_step_index = 0
+	_last_known_player_position = _search_anchor
+	_set_state(State.SEARCH)
+	_target_refresh_timer = 0.0
+
+
+func _update_lost_player_search(delta: float) -> void:
+	_lost_search_timer = maxf(0.0, _lost_search_timer - delta)
+	_search_step_timer = maxf(0.0, _search_step_timer - delta)
+	if _lost_search_timer <= 0.0:
 		_return_to_patrol()
+		return
+	var arrived := global_position.distance_to(_last_known_player_position) < 0.72
+	if _search_step_timer > 0.0 and not arrived:
+		return
+	var search_angles := [0.0, 2.35, -2.35, 1.15, -1.15, PI]
+	var angle: float = search_angles[_search_step_index % search_angles.size()]
+	var radius := search_sweep_radius * (0.62 + 0.38 * float((_search_step_index % 3) + 1) / 3.0)
+	_last_known_player_position = _snap_to_navigation(
+		_search_anchor + Vector3(cos(angle), 0.0, sin(angle)) * radius
+	)
+	_search_step_index += 1
+	_search_step_timer = search_step_seconds
+	_target_refresh_timer = 0.0
 
 
 func _update_static_light_attention(delta: float) -> void:
@@ -437,7 +535,7 @@ func _update_static_light_wander(delta: float) -> void:
 
 
 func _try_begin_attack() -> void:
-	if global_position.distance_to(_player.global_position) <= attack_distance:
+	if _has_attack_contact(attack_distance + 0.18) and can_begin_attack():
 		_set_state(State.ATTACK)
 
 
@@ -449,7 +547,8 @@ func _set_state(state: State) -> void:
 func _is_player_close_enough() -> bool:
 	return (
 		absf(_player.global_position.y - global_position.y) <= same_floor_player_tolerance
-		and global_position.distance_to(_player.global_position) <= close_player_distance
+		and _player_planar_distance() <= close_player_distance
+		and _has_clear_line_to(_player.global_position + Vector3.UP * 0.85, _player)
 	)
 
 

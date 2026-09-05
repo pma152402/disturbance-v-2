@@ -8,7 +8,7 @@ signal navigation_baked
 	Vector3(30.0, 11.0, 57.0)
 )
 @export_group("Agent")
-@export var agent_radius := 0.25
+@export var agent_radius := 0.5
 @export var agent_height := 1.75
 @export var agent_max_climb := 0.5
 @export var agent_max_slope := 48.0

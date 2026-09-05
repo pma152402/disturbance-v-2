@@ -5,7 +5,6 @@ const LIGHT_MARGIN := 4.0
 const MAX_SHADOW_LIGHTS := 2
 var _lights: Array[Light3D] = []
 var _shadow_capable := {}
-var _elapsed := UPDATE_INTERVAL
 
 static func install(branch: Node) -> Dictionary:
 	var controller := new()
@@ -38,13 +37,17 @@ static func install(branch: Node) -> Dictionary:
 		light.distance_fade_enabled = true
 		light.distance_fade_begin = minf(light.distance_fade_begin if light.distance_fade_begin > 0 else 24.0, 24.0)
 		light.distance_fade_length = maxf(light.distance_fade_length, 6.0)
+	controller.set_process(false)
+	var update_timer := Timer.new()
+	update_timer.name = "ShadowBudgetTimer"
+	update_timer.wait_time = UPDATE_INTERVAL
+	update_timer.timeout.connect(controller._update_shadow_budget)
+	controller.add_child(update_timer)
+	update_timer.start()
+	controller._update_shadow_budget()
 	return {"detail_meshes":detail_meshes,"managed_lights":controller._lights.size()}
 
-func _process(delta: float) -> void:
-	_elapsed += delta
-	if _elapsed < UPDATE_INTERVAL:
-		return
-	_elapsed = 0.0
+func _update_shadow_budget() -> void:
 	var camera := get_viewport().get_camera_3d()
 	if camera == null:
 		return

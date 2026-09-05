@@ -9,7 +9,7 @@ func _run() -> void:
 	root.add_child(house)
 	for node in house.find_children("*", "MeshInstance3D", true, false):
 		var path := str(house.get_path_to(node))
-		if path.begins_with("BasementAccessAndInitialRoom/") or path.begins_with("FurnitureAndPickups/StraightThree"):
+		if path.begins_with("ExteriorBasementAccess/BasementAccessAndInitialRoom/") or path.begins_with("FurnitureAndPickups/StraightThree"):
 			print(path, " | ", node.global_transform * node.get_aabb())
 	house.free()
 	quit()

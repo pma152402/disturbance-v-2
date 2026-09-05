@@ -19,7 +19,26 @@ const STAIR_UPPER_ANCHOR := Vector3(-1.328, 4.18, -2.18)
 @export var search_seconds := 8.0
 @export var attack_distance := 1.05
 @export var attack_cooldown := 1.65
+@export var attack_windup_seconds := 0.24
+@export var attack_hit_seconds := 0.43
+@export var attack_animation_seconds := 0.98
+@export var attack_vertical_tolerance := 1.35
 @export var target_refresh_seconds := 0.16
+@export_group("Navegación y recuperación")
+@export var obstacle_probe_distance := 0.85
+@export var stuck_check_seconds := 0.65
+@export var stuck_minimum_progress := 0.12
+@export var recovery_duration := 0.7
+@export var chase_prediction_seconds := 0.22
+@export var chase_slowdown_distance := 2.1
+@export var chase_stop_distance := 0.68
+@export_group("Cruce de puertas")
+@export var door_approach_distance := 0.38
+@export var door_cross_distance := 1.15
+@export var door_cross_speed := 1.55
+@export var door_open_wait_seconds := 0.12
+@export var door_cross_timeout := 2.8
+@export var door_center_tolerance := 0.20
 
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var door_ray: RayCast3D = $DoorRay
@@ -57,6 +76,7 @@ var _target_refresh_timer := 0.0
 var _door_cooldown := 0.0
 var _attack_timer := 0.0
 var _attack_applied := false
+var _attack_cooldown_timer := 0.0
 var _motion_phase := 0.0
 var _last_step_beat := -1
 var _navigation_available := false
@@ -73,6 +93,23 @@ var _mouth_rest_scale := Vector3.ONE
 var teeth: Array[MeshInstance3D] = []
 var _teeth_rest_positions: Array[Vector3] = []
 var _teeth_rest_scales: Array[Vector3] = []
+var _last_motion_sample_position := Vector3.ZERO
+var _motion_sample_timer := 0.0
+var _was_trying_to_move := false
+var _recovery_timer := 0.0
+var _recovery_direction := Vector3.ZERO
+var _recovery_side := 1.0
+var _door_traversal_active := false
+var _door_traversal_phase := 0
+var _door_traversal_door: Node
+var _door_portal_center := Vector3.ZERO
+var _door_portal_normal := Vector3.ZERO
+var _door_entry_point := Vector3.ZERO
+var _door_exit_point := Vector3.ZERO
+var _door_traversal_timer := 0.0
+var _door_open_wait_timer := 0.0
+var _last_crossed_door_id := 0
+var _door_reentry_timer := 0.0
 
 
 func _ready() -> void:
@@ -82,9 +119,14 @@ func _ready() -> void:
 		_player_start_position = Vector2(_player.global_position.x, _player.global_position.z)
 		_player_start_position_set = true
 	navigation_agent.path_height_offset = 0.0
-	navigation_agent.path_desired_distance = 0.35
-	navigation_agent.target_desired_distance = 0.55
+	navigation_agent.path_desired_distance = 0.42
+	navigation_agent.target_desired_distance = 0.65
+	# El funnel recorta esquinas al máximo y hacía que la cápsula rozase marcos
+	# y muebles. Los centros de portal producen recorridos algo menos cortos,
+	# pero mucho más fiables dentro de habitaciones estrechas.
+	navigation_agent.path_postprocessing = NavigationPathQueryParameters3D.PATH_POSTPROCESSING_EDGECENTERED
 	navigation_agent.avoidance_enabled = false
+	_last_motion_sample_position = global_position
 	breathing_sound.stream = _make_breathing_sound()
 	footstep_sound.stream = _make_footstep_sound()
 	voice_sound.stream = _make_chase_voice()
@@ -118,6 +160,7 @@ func _physics_process(delta: float) -> void:
 		_player_start_position_set = true
 
 	_door_cooldown = maxf(0.0, _door_cooldown - delta)
+	_attack_cooldown_timer = maxf(0.0, _attack_cooldown_timer - delta)
 	_target_refresh_timer = maxf(0.0, _target_refresh_timer - delta)
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
@@ -146,6 +189,8 @@ func _physics_process(delta: float) -> void:
 	if distress_active:
 		velocity.x = move_toward(velocity.x, 0.0, delta * 10.0)
 		velocity.z = move_toward(velocity.z, 0.0, delta * 10.0)
+	elif _door_traversal_active:
+		_update_movement(delta)
 	elif current_state == State.ATTACK:
 		_update_attack(delta)
 	else:
@@ -205,7 +250,7 @@ func _update_awareness(delta: float, sees_player: bool, hears_player: bool) -> v
 				_memory_timer -= delta
 				if _memory_timer <= 0.0:
 					_change_state(State.SEARCH)
-			if global_position.distance_to(_player.global_position) <= attack_distance and sees_player:
+			if _has_attack_contact(attack_distance) and sees_player and can_begin_attack():
 				_change_state(State.ATTACK)
 		State.SEARCH:
 			_state_timer -= delta
@@ -220,6 +265,11 @@ func _update_awareness(delta: float, sees_player: bool, hears_player: bool) -> v
 
 
 func _update_movement(delta: float) -> void:
+	_door_reentry_timer = maxf(0.0, _door_reentry_timer - delta)
+	if _door_traversal_active:
+		_update_door_traversal(delta)
+		return
+	_update_stuck_recovery(delta)
 	var target := _patrol_target
 	var speed := patrol_speed
 	_force_stair_steering = false
@@ -228,7 +278,7 @@ func _update_movement(delta: float) -> void:
 			target = _last_known_player_position
 			speed = investigate_speed
 		State.CHASE:
-			target = _player.global_position
+			target = _predicted_player_position()
 			speed = chase_speed
 			target = _get_floor_transition_target(target)
 		State.SEARCH:
@@ -241,14 +291,50 @@ func _update_movement(delta: float) -> void:
 		if _navigation_available:
 			navigation_agent.target_position = target
 
-	var next_point := target
+	var next_point := global_position
+	var has_navigation_path := false
 	if not _force_stair_steering and _navigation_available and not navigation_agent.is_navigation_finished():
+		has_navigation_path = navigation_agent.get_current_navigation_path().size() >= 2
+	if has_navigation_path:
 		next_point = navigation_agent.get_next_path_position()
 		next_point = _get_next_useful_path_point(next_point)
+	elif _force_stair_steering:
+		next_point = target
+	elif _can_walk_directly_to(target):
+		# Sólo usamos línea recta si no hay geometría entre ambos puntos. Una ruta
+		# vacía ya no convierte una pared en el siguiente waypoint.
+		next_point = target
 	var flat_direction := next_point - global_position
 	flat_direction.y = 0.0
 	if flat_direction.length_squared() > 0.015:
 		flat_direction = flat_direction.normalized()
+		var planar_player_distance := INF
+		var close_visible_player := false
+		if current_state == State.CHASE and is_instance_valid(_player):
+			planar_player_distance = _player_planar_distance()
+			close_visible_player = (
+				absf(_player.global_position.y - global_position.y) <= attack_vertical_tolerance
+				and _has_clear_line_to_player_body()
+			)
+			if close_visible_player and planar_player_distance <= chase_slowdown_distance:
+				var direct_player_direction := _player.global_position - global_position
+				direct_player_direction.y = 0.0
+				if direct_player_direction.length_squared() > 0.01:
+					flat_direction = direct_player_direction.normalized()
+				var approach_scale := clampf(
+					(planar_player_distance - chase_stop_distance) /
+					maxf(chase_slowdown_distance - chase_stop_distance, 0.01),
+					0.0,
+					1.0
+				)
+				speed *= approach_scale
+				if approach_scale <= 0.01:
+					_recovery_timer = 0.0
+					_recovery_direction = Vector3.ZERO
+		if _recovery_timer > 0.0 and _recovery_direction.length_squared() > 0.01:
+			flat_direction = _recovery_direction
+		if not close_visible_player:
+			flat_direction = _steer_around_nearby_obstacle(flat_direction)
 		if _smoothed_move_direction.length_squared() < 0.01:
 			_smoothed_move_direction = flat_direction
 		else:
@@ -264,10 +350,141 @@ func _update_movement(delta: float) -> void:
 			facing_direction.y = 0.0
 		if facing_direction.length_squared() > 0.01:
 			rotation.y = lerp_angle(rotation.y, atan2(facing_direction.x, facing_direction.z), minf(delta * 7.5, 1.0))
+		_was_trying_to_move = speed > 0.05
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, delta * 6.0)
 		velocity.z = move_toward(velocity.z, 0.0, delta * 6.0)
 		_smoothed_move_direction = _smoothed_move_direction.move_toward(Vector3.ZERO, delta * 4.0)
+		_was_trying_to_move = false
+
+
+func _update_stuck_recovery(delta: float) -> void:
+	_recovery_timer = maxf(0.0, _recovery_timer - delta)
+	_motion_sample_timer += delta
+	if _motion_sample_timer < stuck_check_seconds:
+		return
+	var progress := Vector2(
+		global_position.x - _last_motion_sample_position.x,
+		global_position.z - _last_motion_sample_position.z
+	).length()
+	if _was_trying_to_move and progress < stuck_minimum_progress:
+		var basis_direction := _smoothed_move_direction
+		if basis_direction.length_squared() < 0.01:
+			basis_direction = global_basis.z
+		_recovery_side *= -1.0
+		_recovery_direction = Vector3(
+			-basis_direction.z * _recovery_side,
+			0.0,
+			basis_direction.x * _recovery_side
+		).normalized()
+		_recovery_timer = recovery_duration
+		_target_refresh_timer = 0.0
+		navigation_agent.target_position = navigation_agent.target_position
+	elif progress >= stuck_minimum_progress:
+		_recovery_direction = Vector3.ZERO
+	_motion_sample_timer = 0.0
+	_last_motion_sample_position = global_position
+
+
+func _steer_around_nearby_obstacle(direction: Vector3) -> Vector3:
+	var origin := global_position + Vector3.UP * 0.72
+	var query := PhysicsRayQueryParameters3D.create(origin, origin + direction * obstacle_probe_distance, collision_mask)
+	query.exclude = _movement_probe_exclusions()
+	query.collide_with_areas = false
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		return direction
+	var collider := hit.collider as Node
+	if _find_npc_door(collider) != null:
+		return direction
+	# Prueba un pequeño abanico antes de pegarse a la tangente. Esto permite
+	# bordear patas de muebles y esquinas sin oscilar contra el mismo punto.
+	var best_direction := Vector3.ZERO
+	var best_score := -INF
+	for angle_degrees in [32.0, -32.0, 58.0, -58.0, 82.0, -82.0]:
+		var candidate := direction.rotated(Vector3.UP, deg_to_rad(angle_degrees)).normalized()
+		var candidate_query := PhysicsRayQueryParameters3D.create(origin, origin + candidate * obstacle_probe_distance, collision_mask)
+		candidate_query.exclude = _movement_probe_exclusions()
+		candidate_query.collide_with_areas = false
+		if not get_world_3d().direct_space_state.intersect_ray(candidate_query).is_empty():
+			continue
+		var score := candidate.dot(direction)
+		if signf(angle_degrees) == _recovery_side:
+			score += 0.04
+		if score > best_score:
+			best_score = score
+			best_direction = candidate
+	if best_direction.length_squared() > 0.01:
+		return best_direction
+	var normal: Vector3 = hit.normal
+	normal.y = 0.0
+	if normal.length_squared() < 0.01:
+		return direction
+	var tangent := Vector3(-normal.z, 0.0, normal.x).normalized()
+	if (-tangent).dot(direction) > tangent.dot(direction):
+		tangent = -tangent
+	return (direction * 0.28 + tangent * 0.72).normalized()
+
+
+func _can_walk_directly_to(target: Vector3) -> bool:
+	if absf(target.y - global_position.y) > 0.8:
+		return false
+	var origin := global_position + Vector3.UP * 0.72
+	var destination := Vector3(target.x, origin.y, target.z)
+	var query := PhysicsRayQueryParameters3D.create(origin, destination, collision_mask)
+	query.exclude = _movement_probe_exclusions()
+	query.collide_with_areas = false
+	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+
+
+func _movement_probe_exclusions() -> Array[RID]:
+	var exclusions: Array[RID] = [get_rid()]
+	# El objetivo de una persecución no es un obstáculo de navegación. Incluirlo
+	# aquí hacía que el abanico local eligiese izquierda/derecha y orbitase.
+	if is_instance_valid(_player):
+		exclusions.append(_player.get_rid())
+	return exclusions
+
+
+func _player_planar_distance() -> float:
+	if not is_instance_valid(_player):
+		return INF
+	return Vector2(
+		_player.global_position.x - global_position.x,
+		_player.global_position.z - global_position.z
+	).length()
+
+
+func _has_attack_contact(distance: float = attack_distance) -> bool:
+	return (
+		is_instance_valid(_player)
+		and absf(_player.global_position.y - global_position.y) <= attack_vertical_tolerance
+		and _player_planar_distance() <= distance
+	)
+
+
+func can_begin_attack() -> bool:
+	return _attack_cooldown_timer <= 0.0 and current_state != State.ATTACK
+
+
+func _predicted_player_position() -> Vector3:
+	if not is_instance_valid(_player):
+		return global_position
+	var prediction := clampf(_player_planar_distance() / 8.0, 0.0, 1.0) * chase_prediction_seconds
+	var predicted := _player.global_position + Vector3(_player.velocity.x, 0.0, _player.velocity.z) * prediction
+	return predicted
+
+
+func _has_clear_line_to_player_body() -> bool:
+	if not is_instance_valid(_player):
+		return false
+	var origin := global_position + Vector3.UP * 0.85
+	var target := _player.global_position + Vector3.UP * 0.85
+	var query := PhysicsRayQueryParameters3D.create(origin, target, collision_mask)
+	query.exclude = [get_rid()]
+	query.collide_with_areas = false
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	return not hit.is_empty() and hit.collider == _player
 
 
 func _get_floor_transition_target(player_target: Vector3) -> Vector3:
@@ -298,10 +515,18 @@ func _get_next_useful_path_point(first_point: Vector3) -> Vector3:
 	# On a floor change NavigationAgent can return a waypoint almost directly
 	# above/below the body. Horizontal steering would then become zero forever.
 	var first_flat := Vector2(first_point.x - global_position.x, first_point.z - global_position.z)
-	if first_flat.length_squared() > 0.015:
-		return first_point
 	var path := navigation_agent.get_current_navigation_path()
 	var start_index := navigation_agent.get_current_navigation_path_index()
+	# Si el primer punto quedó detrás de una esquina tras deslizar el cuerpo,
+	# avanzamos hasta el waypoint visible más lejano. El agente deja así de
+	# intentar volver indefinidamente a una marca que ya no necesita tocar.
+	var lookahead_end := mini(start_index + 3, path.size() - 1)
+	for path_index in range(lookahead_end, start_index, -1):
+		var visible_candidate := path[path_index]
+		if _can_walk_directly_to(visible_candidate):
+			return visible_candidate
+	if first_flat.length_squared() > 0.015:
+		return first_point
 	for path_index in range(start_index + 1, path.size()):
 		var candidate := path[path_index]
 		var candidate_flat := Vector2(candidate.x - global_position.x, candidate.z - global_position.z)
@@ -327,18 +552,24 @@ func _update_frame_duck(delta: float) -> void:
 
 func _update_attack(delta: float) -> void:
 	_attack_timer += delta
-	velocity.x = move_toward(velocity.x, 0.0, delta * 12.0)
-	velocity.z = move_toward(velocity.z, 0.0, delta * 12.0)
 	var to_player := _player.global_position - global_position
 	to_player.y = 0.0
 	if to_player.length_squared() > 0.01:
 		rotation.y = lerp_angle(rotation.y, atan2(to_player.x, to_player.z), minf(delta * 10.0, 1.0))
-	if _attack_timer >= 0.42 and not _attack_applied:
+	var lunging := _attack_timer >= attack_windup_seconds and _attack_timer <= attack_hit_seconds
+	if lunging and to_player.length_squared() > 0.01 and _player_planar_distance() > 0.48:
+		var lunge_direction := to_player.normalized()
+		velocity.x = move_toward(velocity.x, lunge_direction.x * 1.35, delta * 10.0)
+		velocity.z = move_toward(velocity.z, lunge_direction.z * 1.35, delta * 10.0)
+	else:
+		velocity.x = move_toward(velocity.x, 0.0, delta * 14.0)
+		velocity.z = move_toward(velocity.z, 0.0, delta * 14.0)
+	if _attack_timer >= attack_hit_seconds and not _attack_applied:
 		_attack_applied = true
-		if global_position.distance_to(_player.global_position) < attack_distance + 0.55:
+		if _has_attack_contact(attack_distance + 0.7):
 			if _player.has_method(&"receive_monster_attack"):
 				_player.call(&"receive_monster_attack", self)
-	if _attack_timer >= attack_cooldown:
+	if _attack_timer >= attack_animation_seconds:
 		_change_state(State.CHASE)
 
 
@@ -351,6 +582,7 @@ func _change_state(new_state: State) -> void:
 	if new_state == State.ATTACK:
 		_attack_timer = 0.0
 		_attack_applied = false
+		_attack_cooldown_timer = attack_cooldown
 	elif new_state == State.CHASE and not voice_sound.playing:
 		voice_sound.pitch_scale = randf_range(0.9, 1.06)
 		voice_sound.play()
@@ -390,14 +622,152 @@ func _choose_patrol_target() -> void:
 
 
 func _try_open_door() -> void:
-	if _door_cooldown > 0.0 or velocity.length_squared() < 0.2:
+	if _door_traversal_active or _door_cooldown > 0.0 or velocity.length_squared() < 0.2:
 		return
-	if not door_ray.is_colliding():
-		return
-	var collider := door_ray.get_collider()
-	if collider and collider.has_method(&"ensure_open_for_npc"):
+	var door := _find_door_ahead()
+	if door != null:
+		if _door_reentry_timer > 0.0 and door.get_instance_id() == _last_crossed_door_id:
+			return
 		_door_cooldown = 1.0
-		collider.call_deferred(&"ensure_open_for_npc", self)
+		door.call(&"ensure_open_for_npc", self)
+		# Las puertas con llave pueden consumir la interacción sin abrirse. Sólo
+		# comprometemos el cruce cuando la hoja confirma que el hueco está libre.
+		if door.get("_is_open") == true:
+			_begin_door_traversal(door)
+
+
+func _find_door_ahead() -> Node:
+	if door_ray.is_colliding():
+		var center_door := _find_npc_door(door_ray.get_collider() as Node)
+		if center_door != null:
+			return center_door
+	# Las puertas dobles tienen una junta justo en el centro. Dos rayos laterales
+	# evitan que esa ranura invisible anule la detección de ambas hojas.
+	var ray_origin := door_ray.global_position
+	var ray_end := door_ray.to_global(door_ray.target_position)
+	var side_axis := global_basis.x.normalized()
+	for side_offset: float in [-0.32, 0.32]:
+		var offset: Vector3 = side_axis * side_offset
+		var query := PhysicsRayQueryParameters3D.create(ray_origin + offset, ray_end + offset, door_ray.collision_mask)
+		query.exclude = [get_rid()]
+		var result := get_world_3d().direct_space_state.intersect_ray(query)
+		if result.is_empty():
+			continue
+		var side_door := _find_npc_door(result.collider as Node)
+		if side_door != null:
+			return side_door
+	return null
+
+
+func _begin_door_traversal(door: Node) -> void:
+	if not is_instance_valid(door):
+		return
+	var portal_data: Dictionary = {}
+	if door.has_method(&"get_npc_traversal_portal"):
+		portal_data = door.call(&"get_npc_traversal_portal") as Dictionary
+	var portal_root := door.get_parent() as Node3D
+	if portal_data.has("center"):
+		_door_portal_center = portal_data["center"] as Vector3
+	elif is_instance_valid(portal_root):
+		_door_portal_center = portal_root.global_position
+	elif door is Node3D:
+		_door_portal_center = (door as Node3D).global_position
+	else:
+		return
+	if portal_data.has("normal"):
+		_door_portal_normal = portal_data["normal"] as Vector3
+	elif is_instance_valid(portal_root):
+		_door_portal_normal = portal_root.global_basis.z
+	else:
+		_door_portal_normal = (door as Node3D).global_basis.z
+	_door_portal_normal.y = 0.0
+	if _door_portal_normal.length_squared() < 0.01:
+		return
+	_door_portal_normal = _door_portal_normal.normalized()
+	var side := signf((global_position - _door_portal_center).dot(_door_portal_normal))
+	if is_zero_approx(side):
+		side = -signf(velocity.dot(_door_portal_normal))
+	if is_zero_approx(side):
+		side = 1.0
+	_door_entry_point = _door_portal_center + _door_portal_normal * side * door_approach_distance
+	_door_exit_point = _door_portal_center - _door_portal_normal * side * door_cross_distance
+	_door_traversal_door = door
+	_door_traversal_active = true
+	_door_traversal_phase = 0
+	_door_traversal_timer = door_cross_timeout
+	_door_open_wait_timer = maxf(door_open_wait_seconds, float(portal_data.get("open_wait", 0.0)))
+	_recovery_timer = 0.0
+	_recovery_direction = Vector3.ZERO
+	_smoothed_move_direction = Vector3.ZERO
+
+
+func _update_door_traversal(delta: float) -> void:
+	_door_traversal_timer -= delta
+	if _door_traversal_timer <= 0.0 or not is_instance_valid(_door_traversal_door):
+		_end_door_traversal(false)
+		return
+
+	var target := _door_entry_point if _door_traversal_phase == 0 else _door_exit_point
+	if _door_traversal_phase == 0 and _planar_distance_to(target) <= door_center_tolerance:
+		_door_traversal_phase = 1
+	if _door_traversal_phase == 1:
+		_door_open_wait_timer -= delta
+		velocity.x = move_toward(velocity.x, 0.0, delta * 14.0)
+		velocity.z = move_toward(velocity.z, 0.0, delta * 14.0)
+		_was_trying_to_move = false
+		if _door_open_wait_timer <= 0.0:
+			_door_traversal_phase = 2
+		return
+	if _door_traversal_phase == 2:
+		target = _door_exit_point
+
+	var direction := target - global_position
+	direction.y = 0.0
+	if direction.length_squared() <= door_center_tolerance * door_center_tolerance:
+		if _door_traversal_phase == 0:
+			_door_traversal_phase = 1
+		else:
+			_end_door_traversal(true)
+		return
+	direction = direction.normalized()
+	_smoothed_move_direction = direction
+	velocity.x = move_toward(velocity.x, direction.x * door_cross_speed, delta * 12.0)
+	velocity.z = move_toward(velocity.z, direction.z * door_cross_speed, delta * 12.0)
+	rotation.y = lerp_angle(rotation.y, atan2(direction.x, direction.z), minf(delta * 11.0, 1.0))
+	clearance_sensor.rotation.y = wrapf(atan2(direction.x, direction.z) - rotation.y, -PI, PI)
+	door_ray.rotation.y = clearance_sensor.rotation.y
+	_was_trying_to_move = true
+
+
+func _end_door_traversal(completed: bool) -> void:
+	if completed and is_instance_valid(_door_traversal_door):
+		_last_crossed_door_id = _door_traversal_door.get_instance_id()
+		_door_reentry_timer = 1.15
+	_door_traversal_active = false
+	_door_traversal_phase = 0
+	_door_traversal_door = null
+	_target_refresh_timer = 0.0
+	_motion_sample_timer = 0.0
+	_last_motion_sample_position = global_position
+
+
+func _planar_distance_to(point: Vector3) -> float:
+	return Vector2(global_position.x - point.x, global_position.z - point.z).length()
+
+
+func is_crossing_door() -> bool:
+	return _door_traversal_active
+
+
+func _find_npc_door(node: Node) -> Node:
+	var candidate := node
+	for _level in 4:
+		if candidate == null:
+			return null
+		if candidate.has_method(&"ensure_open_for_npc"):
+			return candidate
+		candidate = candidate.get_parent()
+	return null
 
 
 func _update_animation(delta: float) -> void:

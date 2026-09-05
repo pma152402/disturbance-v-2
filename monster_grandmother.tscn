@@ -166,7 +166,7 @@ path_desired_distance = 0.35
 target_desired_distance = 0.55
 path_max_distance = 1.2
 height = 1.7
-radius = 0.27
+radius = 0.34
 
 [node name="DoorRay" type="RayCast3D" parent="." unique_id=1974026879]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0.12)

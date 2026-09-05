@@ -65,6 +65,7 @@ func _find_primary_smoke_emitter() -> CPUParticles3D:
 
 
 func _ready() -> void:
+	set_process(Engine.is_editor_hint() or boiler_puzzle_enabled)
 	_build_gauge_color_sectors()
 	_create_smoke_ramps()
 	if boiler_puzzle_enabled:
@@ -217,6 +218,8 @@ func _configure_boiler_puzzle() -> void:
 	_apply_temperature_to_gauge(_needle_temperature)
 	_set_runtime_boiler_state(BoilerState.OFF)
 	_puzzle_completed = true
+	# La caldera ya resuelta no cambia: la aguja y el humo pueden dormir.
+	set_process(false)
 
 
 func _discover_physical_valves() -> void:

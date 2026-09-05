@@ -13,7 +13,6 @@ extends Node3D
 @onready var basement_flash: OmniLight3D = $InteriorLightning/BasementFlash
 @onready var thunder_player: AudioStreamPlayer = $ThunderFragmentPlayer
 
-var _lightning_timer := 0.0
 var _lightning_tween: Tween
 var _interior_lights: Array[OmniLight3D] = []
 var _flash_strength := 0.0:
@@ -29,18 +28,19 @@ var _flash_strength := 0.0:
 func _ready() -> void:
 	_interior_lights = [ground_flash, upper_flash, basement_flash]
 	_flash_strength = 0.0
+	set_process(false)
 	_schedule_lightning()
 
-
-func _process(delta: float) -> void:
-	_lightning_timer -= delta
-	if _lightning_timer <= 0.0:
-		_flash_lightning()
-		_schedule_lightning()
-
-
 func _schedule_lightning() -> void:
-	_lightning_timer = randf_range(minimum_lightning_delay, maximum_lightning_delay)
+	get_tree().create_timer(randf_range(minimum_lightning_delay, maximum_lightning_delay)).timeout.connect(
+		_flash_and_reschedule,
+		CONNECT_ONE_SHOT
+	)
+
+
+func _flash_and_reschedule() -> void:
+	_flash_lightning()
+	_schedule_lightning()
 
 
 func _flash_lightning() -> void:
