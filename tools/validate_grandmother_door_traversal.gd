@@ -1,7 +1,7 @@
 extends SceneTree
 
-const GRANDMOTHER := preload("res://monster_grandmother.tscn")
-const HOUSE_DOOR := preload("res://push_door.tscn")
+const GRANDMOTHER := preload("res://enemies/monster_grandmother.tscn")
+const HOUSE_DOOR := preload("res://doors/push_door.tscn")
 const SCHOOL_DOOR := preload("res://house_props/school_double_door.tscn")
 
 

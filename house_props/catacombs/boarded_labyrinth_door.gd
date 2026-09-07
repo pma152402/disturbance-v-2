@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-const MinigameScene := preload("res://boarded_door_minigame.tscn")
+const MinigameScene := preload("res://minigames/boarded_door_minigame.tscn")
 const CrowbarVisual := preload("res://player/held_items/crowbar.tscn")
 
 @export var required_tool_id: StringName = &"crowbar"

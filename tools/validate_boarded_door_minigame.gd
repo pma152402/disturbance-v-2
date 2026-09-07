@@ -9,7 +9,7 @@ func _initialize() -> void:
 
 
 func _run_validation() -> void:
-	var packed_minigame := load("res://boarded_door_minigame.tscn") as PackedScene
+	var packed_minigame := load("res://minigames/boarded_door_minigame.tscn") as PackedScene
 	if packed_minigame == null:
 		_fail("No se pudo cargar boarded_door_minigame.tscn")
 		return

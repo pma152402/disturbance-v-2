@@ -4,7 +4,7 @@ func _initialize() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
-	var state = load("res://house_baked.tscn").get_state()
+	var state = load("res://levels/house_baked.tscn").get_state()
 	var paths: Array[NodePath] = []
 	for i in state.get_node_count():
 		if str(state.get_node_path(i)).ends_with("FurnitureAndPickups/LivingRoomLampSwitch8"):

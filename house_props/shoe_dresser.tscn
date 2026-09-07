@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://d3fj0r3n815p0"]
 
 [ext_resource type="Texture2D" uid="uid://d3ick6b0shuci" path="res://ps2_house/Models/Abandoned_House_Madera4.jpg" id="1_wood"]
-[ext_resource type="PackedScene" path="res://bottle_visual.tscn" id="2_bottle"]
+[ext_resource type="PackedScene" path="res://pickups/bottle_visual.tscn" id="2_bottle"]
 
 [sub_resource type="StandardMaterial3D" id="Material_wood"]
 albedo_color = Color(0.31, 0.17, 0.08, 1)

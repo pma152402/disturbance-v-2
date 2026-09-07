@@ -1,7 +1,7 @@
 extends SceneTree
 
 const CHILD := preload("res://characters/companion/child_companion.tscn")
-const DOORS := [preload("res://push_door.tscn"), preload("res://house_props/school_double_door.tscn")]
+const DOORS := [preload("res://doors/push_door.tscn"), preload("res://house_props/school_double_door.tscn")]
 
 class TestPlayer:
 	extends CharacterBody3D

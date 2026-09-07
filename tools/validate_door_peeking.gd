@@ -7,8 +7,8 @@ func run() -> void:
 	var stage := Node3D.new()
 	root.add_child(stage)
 	var player := load("res://player/player.tscn").instantiate() as CharacterBody3D
-	var normal_root := load("res://push_door.tscn").instantiate() as Node3D
-	var locked_root := load("res://locked_door.tscn").instantiate() as Node3D
+	var normal_root := load("res://doors/push_door.tscn").instantiate() as Node3D
+	var locked_root := load("res://doors/locked_door.tscn").instantiate() as Node3D
 	var normal_door := normal_root.get_node("Hinge") as AnimatableBody3D
 	var locked_door := locked_root.get_node("Hinge") as AnimatableBody3D
 	stage.add_child(player)

@@ -6,7 +6,7 @@ func _init() -> void:
 
 
 func _run() -> void:
-	change_scene_to_file("res://startup_loader.tscn")
+	change_scene_to_file("res://systems/startup_loader.tscn")
 	for _frame in 900:
 		await process_frame
 		if current_scene != null and current_scene.name == &"ThreeStoreyHouse" \

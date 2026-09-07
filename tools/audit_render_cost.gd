@@ -1,7 +1,7 @@
 extends SceneTree
 func _init() -> void:
-	var house: Node3D = load("res://house_baked.tscn").instantiate()
-	var weather: Node3D = load("res://rainy_weather.tscn").instantiate()
+	var house: Node3D = load("res://levels/house_baked.tscn").instantiate()
+	var weather: Node3D = load("res://environment/rainy_weather.tscn").instantiate()
 	var totals := {"meshes":0,"surfaces":0,"triangles":0,"materials":{},"lights":0,"shadow_lights":0,"unfaded_lights":0,"particles":0,"particle_amount":0,"multimeshes":0}
 	scan(house,totals)
 	scan(weather,totals)

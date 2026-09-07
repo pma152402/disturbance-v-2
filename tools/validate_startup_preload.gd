@@ -2,12 +2,12 @@ extends SceneTree
 
 const EXPECTED_PRELOADED := [
 	"res://player/player.tscn",
-	"res://boiler_minigame.tscn",
-	"res://washing_machine_minigame.tscn",
-	"res://boarded_door_minigame.tscn",
-	"res://skill_check_minigame.tscn",
-	"res://thrown_can.tscn",
-	"res://thrown_bottle.tscn",
+	"res://minigames/boiler_minigame.tscn",
+	"res://minigames/washing_machine_minigame.tscn",
+	"res://minigames/boarded_door_minigame.tscn",
+	"res://minigames/skill_check_minigame.tscn",
+	"res://pickups/thrown_can.tscn",
+	"res://pickups/thrown_bottle.tscn",
 ]
 
 
@@ -16,7 +16,7 @@ func _init() -> void:
 
 
 func _run() -> void:
-	change_scene_to_file("res://startup_loader.tscn")
+	change_scene_to_file("res://systems/startup_loader.tscn")
 	for _frame in 900:
 		await process_frame
 		if current_scene != null and current_scene.name == &"ThreeStoreyHouse" \
@@ -44,7 +44,7 @@ func _run() -> void:
 			push_error("Recurso de juego no encontrado: " + path)
 			quit(1)
 			return
-	if ResourceLoader.has_cached("res://church_catacombs.tscn"):
+	if ResourceLoader.has_cached("res://environment/church_catacombs.tscn"):
 		push_error("El laberinto final se cargó antes de su minijuego")
 		quit(1)
 		return

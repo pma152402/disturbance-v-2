@@ -12,7 +12,7 @@ func _init() -> void:
 
 
 func _run() -> void:
-	var monster := (load("res://monster_grandmother_imported.tscn") as PackedScene).instantiate() as CharacterBody3D
+	var monster := (load("res://enemies/monster_grandmother_imported.tscn") as PackedScene).instantiate() as CharacterBody3D
 	root.add_child(monster)
 	monster.set_physics_process(false)
 	await physics_frame

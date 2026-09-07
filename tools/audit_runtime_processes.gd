@@ -1,7 +1,7 @@
 extends SceneTree
 func _init() -> void: call_deferred("run")
 func run() -> void:
-	change_scene_to_file("res://test.tscn")
+	change_scene_to_file("res://levels/test.tscn")
 	for i in 20: await process_frame
 	var stats := {"nodes":0,"process":0,"physics":0,"visible_lights":0,"visible_shadow_lights":0,"playing_audio":0}
 	var scripts := {}

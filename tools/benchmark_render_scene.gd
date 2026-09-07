@@ -3,11 +3,11 @@ func _init() -> void:
 	call_deferred("run")
 func run() -> void:
 	root.size = Vector2i(1280,720)
-	var house: Node3D = load("res://house_baked.tscn").instantiate()
+	var house: Node3D = load("res://levels/house_baked.tscn").instantiate()
 	var optimized := "--optimized" in OS.get_cmdline_user_args()
 	if not optimized: house.set_script(null)
 	root.add_child(house)
-	var weather: Node3D = load("res://rainy_weather.tscn").instantiate()
+	var weather: Node3D = load("res://environment/rainy_weather.tscn").instantiate()
 	weather.set_script(null)
 	root.add_child(weather)
 	var camera := Camera3D.new()

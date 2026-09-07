@@ -4,8 +4,8 @@ func _initialize() -> void:
 	call_deferred("run")
 
 func run() -> void:
-	var bounds = load("res://west_extension_bounds.gd")
-	var exterior = load("res://exterior_environment.tscn").instantiate()
+	var bounds = load("res://environment/west_extension_bounds.gd")
+	var exterior = load("res://environment/exterior_environment.tscn").instantiate()
 	root.add_child(exterior)
 	var audio = load("res://sounds/ambient/indoor_weather_audio.gd").new()
 	var failures: int = 0

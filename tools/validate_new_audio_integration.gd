@@ -1,7 +1,7 @@
 extends SceneTree
 
 const RAT := preload("res://house_props/rat.tscn")
-const DOOR := preload("res://push_door.tscn")
+const DOOR := preload("res://doors/push_door.tscn")
 const CLOCK := preload("res://house_props/wall_clock.tscn")
 const CANDLE := preload("res://player/held_items/candle_held_visual.tscn")
 const DARKROOM_LIGHT := preload("res://house_props/darkroom_red_ceiling_light.tscn")

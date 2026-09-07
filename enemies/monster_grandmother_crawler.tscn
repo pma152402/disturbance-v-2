@@ -1,0 +1,623 @@
+[gd_scene format=3 uid="uid://ddrxrc5vvj2gp"]
+
+[ext_resource type="Script" uid="uid://ds3rxmg2kgar7" path="res://enemies/monster_grandmother_crawler.gd" id="1_script"]
+
+[sub_resource type="CapsuleShape3D" id="body_shape"]
+radius = 0.3
+height = 1.45
+
+[sub_resource type="StandardMaterial3D" id="skin_dark"]
+albedo_color = Color(0.46, 0.475, 0.455, 1)
+roughness = 0.98
+
+[sub_resource type="CapsuleMesh" id="torso"]
+material = SubResource("skin_dark")
+radius = 0.29
+height = 0.78
+radial_segments = 10
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="skin"]
+albedo_color = Color(0.76, 0.775, 0.75, 1)
+roughness = 0.98
+
+[sub_resource type="CylinderMesh" id="abdomen"]
+material = SubResource("skin")
+top_radius = 0.22
+bottom_radius = 0.16
+height = 0.62
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="bone"]
+albedo_color = Color(0.43, 0.405, 0.33, 1)
+roughness = 0.95
+
+[sub_resource type="CylinderMesh" id="spine"]
+material = SubResource("bone")
+top_radius = 0.035
+bottom_radius = 0.045
+height = 0.86
+radial_segments = 7
+
+[sub_resource type="TorusMesh" id="rib"]
+material = SubResource("bone")
+inner_radius = 0.2
+outer_radius = 0.235
+rings = 10
+ring_segments = 5
+
+[sub_resource type="SphereMesh" id="joint"]
+material = SubResource("skin")
+radius = 0.075
+height = 0.15
+radial_segments = 8
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="bruised_skin"]
+albedo_color = Color(0.59, 0.61, 0.585, 1)
+roughness = 0.98
+
+[sub_resource type="CylinderMesh" id="neck"]
+material = SubResource("bruised_skin")
+top_radius = 0.105
+bottom_radius = 0.13
+height = 0.34
+radial_segments = 9
+
+[sub_resource type="StandardMaterial3D" id="cloth"]
+albedo_color = Color(0.22, 0.025, 0.022, 1)
+roughness = 0.96
+
+[sub_resource type="BoxMesh" id="cloth_strip"]
+material = SubResource("cloth")
+
+[sub_resource type="SphereMesh" id="head"]
+material = SubResource("skin")
+radius = 0.31
+height = 0.62
+radial_segments = 16
+rings = 10
+
+[sub_resource type="SphereMesh" id="face_flesh"]
+material = SubResource("bruised_skin")
+radius = 0.105
+height = 0.21
+radial_segments = 10
+rings = 7
+
+[sub_resource type="SphereMesh" id="ear"]
+material = SubResource("bruised_skin")
+radius = 0.07
+height = 0.15
+radial_segments = 8
+rings = 5
+
+[sub_resource type="CylinderMesh" id="brow"]
+material = SubResource("bruised_skin")
+top_radius = 0.022
+bottom_radius = 0.028
+height = 0.19
+radial_segments = 7
+
+[sub_resource type="StandardMaterial3D" id="socket"]
+albedo_color = Color(0.008, 0.003, 0.002, 1)
+roughness = 0.5
+
+[sub_resource type="SphereMesh" id="eye_socket"]
+material = SubResource("socket")
+radius = 0.09
+height = 0.13
+radial_segments = 8
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="eye"]
+albedo_color = Color(0.95, 0.004, 0.002, 1)
+emission_enabled = true
+emission = Color(1, 0.002, 0.001, 1)
+emission_energy_multiplier = 5.0
+
+[sub_resource type="SphereMesh" id="eye_mesh"]
+material = SubResource("eye")
+radius = 0.042
+height = 0.084
+radial_segments = 8
+rings = 5
+
+[sub_resource type="CylinderMesh" id="nose_bridge"]
+material = SubResource("skin")
+top_radius = 0.026
+bottom_radius = 0.045
+height = 0.19
+radial_segments = 8
+
+[sub_resource type="SphereMesh" id="nose_tip"]
+material = SubResource("skin")
+radius = 0.055
+height = 0.09
+radial_segments = 9
+rings = 6
+
+[sub_resource type="SphereMesh" id="nostril"]
+material = SubResource("socket")
+radius = 0.014
+height = 0.02
+radial_segments = 7
+rings = 4
+
+[sub_resource type="BoxMesh" id="mouth"]
+material = SubResource("socket")
+size = Vector3(0.245, 0.105, 0.035)
+
+[sub_resource type="StandardMaterial3D" id="gum"]
+albedo_color = Color(0.27, 0.045, 0.041, 1)
+roughness = 0.92
+
+[sub_resource type="BoxMesh" id="lip"]
+material = SubResource("gum")
+size = Vector3(0.24, 0.025, 0.025)
+
+[sub_resource type="StandardMaterial3D" id="teeth"]
+albedo_color = Color(0.56, 0.49, 0.3, 1)
+roughness = 0.94
+
+[sub_resource type="PrismMesh" id="tooth"]
+material = SubResource("teeth")
+size = Vector3(0.032, 0.072, 0.035)
+
+[sub_resource type="BoxMesh" id="wrinkle"]
+material = SubResource("skin_dark")
+size = Vector3(0.11, 0.009, 0.012)
+
+[sub_resource type="StandardMaterial3D" id="dried_blood"]
+albedo_color = Color(0.16, 0.006, 0.004, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="hair"]
+albedo_color = Color(0.004, 0.003, 0.003, 1)
+
+[sub_resource type="SphereMesh" id="hair_mass"]
+material = SubResource("hair")
+radius = 0.3
+height = 0.62
+radial_segments = 9
+rings = 6
+
+[sub_resource type="CapsuleMesh" id="hair_strand"]
+material = SubResource("hair")
+radius = 0.055
+height = 1.05
+radial_segments = 6
+rings = 3
+
+[sub_resource type="CylinderMesh" id="limb_upper"]
+material = SubResource("skin")
+top_radius = 0.038
+bottom_radius = 0.055
+height = 0.95
+radial_segments = 7
+
+[sub_resource type="CylinderMesh" id="limb_lower"]
+material = SubResource("skin_dark")
+top_radius = 0.025
+bottom_radius = 0.042
+height = 1.02
+radial_segments = 7
+
+[sub_resource type="CylinderMesh" id="finger"]
+material = SubResource("skin_dark")
+top_radius = 0.009
+bottom_radius = 0.015
+height = 0.3
+radial_segments = 5
+
+[node name="GrandmotherCrawlerEvolution" type="CharacterBody3D" unique_id=116608388]
+editor_description = "Evolucion humanoide de la abuela: anatomia humana deformada, extremidades largas, locomocion a cuatro patas, trepa paredes y persigue por el techo."
+collision_mask = 3
+floor_stop_on_slope = false
+floor_snap_length = 0.35
+script = ExtResource("1_script")
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=2000194060]
+transform = Transform3D(1, 0, 0, 0, -3.6199901e-06, -1, 0, 1, -3.6199901e-06, 0, 0.64, 0)
+shape = SubResource("body_shape")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1223569499]
+path_desired_distance = 0.42
+target_desired_distance = 0.78
+path_max_distance = 0.82
+height = 1.15
+radius = 0.3
+
+[node name="WallRay" type="RayCast3D" parent="." unique_id=848167620]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0.28)
+target_position = Vector3(0, 0, 3.2)
+
+[node name="CeilingRay" type="RayCast3D" parent="." unique_id=1875524772]
+target_position = Vector3(0, 4.4, 0)
+
+[node name="SightRay" type="RayCast3D" parent="." unique_id=748360088]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.18, 0.55)
+target_position = Vector3(0, 0, 16)
+
+[node name="DoorRay" type="RayCast3D" parent="." unique_id=435220591]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62, 0.25)
+target_position = Vector3(0, 0, 1.15)
+collision_mask = 3
+
+[node name="Model" type="Node3D" parent="." unique_id=789700350]
+
+[node name="BodyRig" type="Node3D" parent="Model" unique_id=1036701878]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+
+[node name="Torso" type="MeshInstance3D" parent="Model/BodyRig" unique_id=1513154346]
+transform = Transform3D(1.05, 0, 0, 0, 0.7648422, -0.43806803, 0, 0.64421767, 0.5200927, 0, 0.2, 0.18)
+mesh = SubResource("torso")
+
+[node name="Abdomen" type="MeshInstance3D" parent="Model/BodyRig" unique_id=138512489]
+transform = Transform3D(1, 0, 0, 0, 0.6967067, -0.54519063, 0, 0.7173561, 0.5294971, 0, -0.08, -0.17)
+mesh = SubResource("abdomen")
+
+[node name="Sternum" type="MeshInstance3D" parent="Model/BodyRig" unique_id=1007654646]
+transform = Transform3D(0.9, 0, 0, 0, 0.44360846, -0.35431972, 0, 0.37364623, 0.42066324, 0, 0.22, 0.405)
+mesh = SubResource("spine")
+
+[node name="ExposedSpine" type="MeshInstance3D" parent="Model/BodyRig" unique_id=864532447]
+transform = Transform3D(0.8, 0, 0, 0, 0.67315376, -0.54531103, 0, 0.6271077, 0.5853511, 0, 0.14, -0.08)
+mesh = SubResource("spine")
+
+[node name="Rib1" type="MeshInstance3D" parent="Model/BodyRig" unique_id=1887982136]
+transform = Transform3D(1.2, 0, 0, 0, 0.66735846, -0.45628363, 0, 0.5736137, 0.53085333, 0, 0.32, 0.34)
+mesh = SubResource("rib")
+
+[node name="Rib2" type="MeshInstance3D" parent="Model/BodyRig" unique_id=1501052336]
+transform = Transform3D(1.12, 0, 0, 0, 0.62944037, -0.44324696, 0, 0.541022, 0.5156861, 0, 0.19, 0.23)
+mesh = SubResource("rib")
+
+[node name="Rib3" type="MeshInstance3D" parent="Model/BodyRig" unique_id=337879553]
+transform = Transform3D(1.02, 0, 0, 0, 0.5915222, -0.4171736, 0, 0.5084303, 0.4853516, 0, 0.06, 0.11)
+mesh = SubResource("rib")
+
+[node name="Pelvis" type="MeshInstance3D" parent="Model/BodyRig" unique_id=886354143]
+transform = Transform3D(2.2, 0, 0, 0, 1.1609355, -0.2595929, 0, 0.2112549, 1.4265734, 0, -0.27, -0.43)
+mesh = SubResource("joint")
+
+[node name="LeftCollarbone" type="MeshInstance3D" parent="Model/BodyRig" unique_id=2047673764]
+transform = Transform3D(0.26987204, -0.4999238, 0.035499487, 0.17544377, 0.025414662, -0.6974749, 0.6440409, 0.20255952, 0.17512447, -0.16, 0.42, 0.4)
+mesh = SubResource("spine")
+
+[node name="RightCollarbone" type="MeshInstance3D" parent="Model/BodyRig" unique_id=1671788173]
+transform = Transform3D(0.26987204, 0.4999238, -0.035499487, -0.17544377, 0.025414662, -0.6974749, -0.6440409, 0.20255952, 0.17512447, 0.16, 0.42, 0.4)
+mesh = SubResource("spine")
+
+[node name="Neck" type="MeshInstance3D" parent="Model/BodyRig" unique_id=1149394716]
+transform = Transform3D(1, 0, 0, 0, 0.8364627, -0.54802394, 0, 0.54802394, 0.8364627, 0, 0.5, 0.54)
+mesh = SubResource("neck")
+
+[node name="DressBodice" type="MeshInstance3D" parent="Model/BodyRig" unique_id=1560458580]
+transform = Transform3D(0.29, 0, 0, 0, 0.2545112, -0.01591343, 0, 0.21005729, 0.01928115, 0, 0.2, 0.435)
+mesh = SubResource("cloth_strip")
+
+[node name="DressLeftStrap" type="MeshInstance3D" parent="Model/BodyRig" unique_id=1065542113]
+transform = Transform3D(0.054604474, 0.02394244, 0, -0.005358715, 0.16160512, -0.015106914, -0.0038256347, 0.11537135, 0.021160841, -0.205, 0.42, 0.48)
+mesh = SubResource("cloth_strip")
+
+[node name="DressRightStrap" type="MeshInstance3D" parent="Model/BodyRig" unique_id=508057721]
+transform = Transform3D(0.054604474, -0.02394244, 0, 0.005358715, 0.16160512, -0.015106914, 0.0038256347, 0.11537135, 0.021160841, 0.205, 0.42, 0.48)
+mesh = SubResource("cloth_strip")
+
+[node name="HeadRig" type="Node3D" parent="Model/BodyRig" unique_id=1468803959]
+transform = Transform3D(1, 0, 0, 0, 0.97589743, 0.21822962, 0, -0.21822962, 0.97589743, 0, 0.61, 0.75)
+
+[node name="Head" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=246357566]
+transform = Transform3D(0.82, 0, 0, 0, 1.12, 0, 0, 0, 0.74, 0, 0, 0)
+mesh = SubResource("head")
+
+[node name="LeftTemple" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=759926133]
+transform = Transform3D(0.72, 0, 0, 0, 1.25, 0, 0, 0, 0.55, -0.205, 0.055, 0.12)
+mesh = SubResource("face_flesh")
+
+[node name="RightTemple" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=188926139]
+transform = Transform3D(0.72, 0, 0, 0, 1.2, 0, 0, 0, 0.55, 0.205, 0.045, 0.12)
+mesh = SubResource("face_flesh")
+
+[node name="LeftCheek" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1706889527]
+transform = Transform3D(1.08, 0, 0, 0, 0.95, 0, 0, 0, 0.65, -0.14, -0.075, 0.225)
+mesh = SubResource("face_flesh")
+
+[node name="RightCheek" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1243642343]
+transform = Transform3D(1.02, 0, 0, 0, 0.9, 0, 0, 0, 0.64, 0.14, -0.06, 0.22)
+mesh = SubResource("face_flesh")
+
+[node name="Jaw" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1350897821]
+transform = Transform3D(1.65, 0, 0, 0, 0.82, 0, 0, 0, 0.82, 0, -0.205, 0.17)
+mesh = SubResource("face_flesh")
+
+[node name="Chin" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=47128581]
+transform = Transform3D(0.8, 0, 0, 0, 0.58, 0, 0, 0, 0.72, 0.015, -0.285, 0.215)
+mesh = SubResource("face_flesh")
+
+[node name="LeftEar" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1696827726]
+transform = Transform3D(0.6453256, 0.119712204, 0, -0.07781293, 0.99280864, 0, 0, 0, 0.5, -0.267, 0.005, 0.015)
+mesh = SubResource("ear")
+
+[node name="RightEar" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1811090623]
+transform = Transform3D(0.6467527, -0.09983342, 0, 0.06489172, 0.9950042, 0, 0, 0, 0.5, 0.267, -0.005, 0.015)
+mesh = SubResource("ear")
+
+[node name="LeftBrow" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=501161718]
+transform = Transform3D(0.13875589, -0.97898674, 0.14943814, 0.99010456, 0.14033166, 0, -0.020970901, 0.14795938, 0.9887711, -0.115, 0.145, 0.264)
+mesh = SubResource("brow")
+
+[node name="RightBrow" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1602480532]
+transform = Transform3D(-0.13775674, -0.983205, -0.119712204, 0.9903268, -0.13875458, 0, -0.016610617, -0.118554205, 0.99280864, 0.115, 0.13, 0.264)
+mesh = SubResource("brow")
+
+[node name="LeftSocket" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1766035869]
+transform = Transform3D(1.25, 0, 0, 0, 0.84, 0, 0, 0, 0.5, -0.115, 0.06, 0.255)
+mesh = SubResource("eye_socket")
+
+[node name="RightSocket" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=903911609]
+transform = Transform3D(1.18, 0, 0, 0, 0.76, 0, 0, 0, 0.5, 0.115, 0.045, 0.255)
+mesh = SubResource("eye_socket")
+
+[node name="LeftEye" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=209637700]
+transform = Transform3D(1, 0, 0, 0, 0.82, 0, 0, 0, 0.72, -0.115, 0.058, 0.307)
+mesh = SubResource("eye_mesh")
+
+[node name="RightEye" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=7585951]
+transform = Transform3D(0.82, 0, 0, 0, 0.7, 0, 0, 0, 0.68, 0.115, 0.04, 0.308)
+mesh = SubResource("eye_mesh")
+
+[node name="NoseBridge" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1309864114]
+transform = Transform3D(0.9998, -0.019998666, 0, 0.019998666, 0.9998, 0, 0, 0, 1, 0, 0.015, 0.305)
+mesh = SubResource("nose_bridge")
+
+[node name="NoseTip" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=966005208]
+transform = Transform3D(1.12, 0, 0, 0, 0.82, 0, 0, 0, 1, 0.004, -0.075, 0.334)
+mesh = SubResource("nose_tip")
+
+[node name="LeftNostril" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1968230409]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.027, -0.083, 0.377)
+mesh = SubResource("nostril")
+
+[node name="RightNostril" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1855636280]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.032, -0.083, 0.377)
+mesh = SubResource("nostril")
+
+[node name="Mouth" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=558041058]
+transform = Transform3D(1.0789068, 0.056231022, 0, -0.048583604, 1.2487346, 0, 0, 0, 1, 0.012, -0.185, 0.292)
+mesh = SubResource("mouth")
+
+[node name="UpperLip" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=273115546]
+transform = Transform3D(1.0791361, 0.039989334, 0, -0.043188483, 0.9992001, 0, 0, 0, 1, 0.01, -0.133, 0.314)
+mesh = SubResource("lip")
+
+[node name="LowerLip" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1752917130]
+transform = Transform3D(1.019541, 0.034494825, 0, -0.030595409, 1.1494825, 0, 0, 0, 1, 0.012, -0.238, 0.31)
+mesh = SubResource("lip")
+
+[node name="Tooth1" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=373112596]
+transform = Transform3D(-1, -2.5351817e-06, 0, 2.5351817e-06, -1, 0, 0, 0, 1, -0.085, -0.155, 0.325)
+mesh = SubResource("tooth")
+
+[node name="Tooth2" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=807086288]
+transform = Transform3D(-1, -2.915459e-06, 0, 2.5351817e-06, -1.15, 0, 0, 0, 1, -0.03, -0.15, 0.327)
+mesh = SubResource("tooth")
+
+[node name="Tooth3" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1476574538]
+transform = Transform3D(-1, -2.5351817e-06, 0, 2.5351817e-06, -1, 0, 0, 0, 1, 0.028, -0.153, 0.327)
+mesh = SubResource("tooth")
+
+[node name="Tooth4" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1916967313]
+transform = Transform3D(-0.9, -1.9774416e-06, 0, 2.2816635e-06, -0.78, 0, 0, 0, 1, 0.086, -0.158, 0.325)
+mesh = SubResource("tooth")
+
+[node name="LowerTooth1" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1068700680]
+transform = Transform3D(0.7990002, -0.035985004, 0, 0.039983336, 0.71910024, 0, 0, 0, 1, -0.057, -0.216, 0.325)
+mesh = SubResource("tooth")
+
+[node name="LowerTooth2" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=2124121578]
+transform = Transform3D(0.8771855, 0.06792749, 0, -0.07032493, 0.8472815, 0, 0, 0, 1, 0.053, -0.218, 0.325)
+mesh = SubResource("tooth")
+
+[node name="ForeheadWrinkle1" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1331169461]
+transform = Transform3D(1.3413786, 0.079659104, -0.07991469, -0.10788483, 0.99680173, 0, 0.107539795, 0.0063863574, 0.99680173, -0.045, 0.235, 0.238)
+mesh = SubResource("wrinkle")
+
+[node name="ForeheadWrinkle2" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1200019388]
+transform = Transform3D(0.995756, -0.069816984, 0.059964005, 0.06994285, 0.997551, 0, -0.059817154, 0.0041940534, 0.99820054, 0.04, 0.195, 0.265)
+mesh = SubResource("wrinkle")
+
+[node name="LeftEyeWrinkle" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1017613159]
+transform = Transform3D(0.7207916, 0.27635565, 0, -0.20726675, 0.96105546, 0, 0, 0, 1, -0.15, -0.005, 0.303)
+mesh = SubResource("wrinkle")
+
+[node name="RightEyeWrinkle" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=644570214]
+transform = Transform3D(0.6958008, -0.25708055, 0, 0.185098, 0.96638995, 0, 0, 0, 1, 0.15, -0.015, 0.299)
+mesh = SubResource("wrinkle")
+
+[node name="MouthCreaseLeft" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=495191111]
+transform = Transform3D(0.23367909, -0.9390994, 0, 0.6385876, 0.34364572, 0, 0, 0, 1, -0.116, -0.17, 0.306)
+mesh = SubResource("wrinkle")
+
+[node name="MouthCreaseRight" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=258455376]
+transform = Transform3D(-0.21337111, -0.9463001, 0, 0.6245581, -0.32328954, 0, 0, 0, 1, 0.128, -0.178, 0.304)
+mesh = SubResource("wrinkle")
+
+[node name="LeftNasolabialFold" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=2087276028]
+transform = Transform3D(0.24947785, -0.7129659, 0, 0.49016407, 0.36287686, 0, 0, 0, 0.75, -0.068, -0.105, 0.331)
+mesh = SubResource("wrinkle")
+
+[node name="RightNasolabialFold" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=268469905]
+transform = Transform3D(-0.25358996, -0.7098899, 0, 0.4880493, -0.36885813, 0, 0, 0, 0.75, 0.074, -0.11, 0.33)
+mesh = SubResource("wrinkle")
+
+[node name="LeftFaceScar" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1410810380]
+transform = Transform3D(0.5097202, -0.5874952, 0, 0.6423281, 0.4662075, 0, 0, 0, 0.8, -0.185, -0.095, 0.286)
+material_override = SubResource("dried_blood")
+mesh = SubResource("wrinkle")
+
+[node name="RightFaceScar" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=625024560]
+transform = Transform3D(-0.40831286, -0.5446512, 0, 0.50574756, -0.43972155, 0, 0, 0, 0.8, 0.19, 0.015, 0.277)
+material_override = SubResource("dried_blood")
+mesh = SubResource("wrinkle")
+
+[node name="HairMass" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=233996320]
+transform = Transform3D(1.18, 0, 0, 0, 1.12, 0, 0, 0, 0.9, 0, 0.13, -0.09)
+mesh = SubResource("hair_mass")
+
+[node name="HairStrandLeft" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=650859781]
+transform = Transform3D(0.990216, 0.13954312, 0, -0.13728862, 0.9742178, -0.17902958, -0.024982346, 0.17727797, 0.9838437, -0.245, -0.39, -0.08)
+mesh = SubResource("hair_strand")
+
+[node name="HairStrandRight" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1259992281]
+transform = Transform3D(0.9915619, -0.12963414, 0, 0.12797835, 0.9788969, -0.15931821, 0.02065308, 0.15797387, 0.98722726, 0.245, -0.4, -0.07)
+mesh = SubResource("hair_strand")
+
+[node name="HairStrandBack" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=515054494]
+transform = Transform3D(1.1191041, -0.04718741, 0, 0.044465967, 1.170577, 0.13407767, -0.0053616767, -0.1411474, 1.1119456, 0, -0.43, -0.2)
+mesh = SubResource("hair_strand")
+
+[node name="HairStrandFrontLeft" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1647207767]
+transform = Transform3D(0.71769726, 0.07032493, 0, -0.057251126, 0.8728033, -0.071880065, -0.0057442733, 0.08757243, 0.716403, -0.185, -0.3, 0.14)
+mesh = SubResource("hair_strand")
+
+[node name="HairStrandFrontRight" type="MeshInstance3D" parent="Model/BodyRig/HeadRig" unique_id=1865200878]
+transform = Transform3D(0.7768431, -0.08808098, 0, 0.06960112, 0.96901464, -0.09337552, 0.008392456, 0.11684314, 0.7743907, 0.205, -0.34, 0.1)
+mesh = SubResource("hair_strand")
+
+[node name="FrontLeftLimb" type="Node3D" parent="Model/BodyRig" unique_id=1387345097]
+transform = Transform3D(0.6854083, 0.72755665, 0.029612375, -0.72180706, 0.6735074, 0.15931821, 0.09596886, -0.13057244, 0.986783, -0.34, 0.32, 0.39)
+
+[node name="Shoulder" type="MeshInstance3D" parent="Model/BodyRig/FrontLeftLimb" unique_id=1441558669]
+mesh = SubResource("joint")
+
+[node name="Upper" type="MeshInstance3D" parent="Model/BodyRig/FrontLeftLimb" unique_id=1098661675]
+transform = Transform3D(1.0240507, 0, 7.450581e-09, 1.7695129e-08, 0.96727717, 0, 1.4901161e-08, 7.450581e-09, 1.2472985, -1.1920929e-07, -0.47500002, 0)
+mesh = SubResource("limb_upper")
+
+[node name="Joint" type="Node3D" parent="Model/BodyRig/FrontLeftLimb" unique_id=193460806]
+transform = Transform3D(0.9393727, -0.3428978, 0, 0.25779253, 0.7062258, -0.65938467, 0.22610155, 0.61940795, 0.7518057, 0, -0.95, 0)
+
+[node name="Elbow" type="MeshInstance3D" parent="Model/BodyRig/FrontLeftLimb/Joint" unique_id=961778300]
+mesh = SubResource("joint")
+
+[node name="Lower" type="MeshInstance3D" parent="Model/BodyRig/FrontLeftLimb/Joint" unique_id=718803500]
+transform = Transform3D(1.2698087, 0, 0, -1.4901161e-08, 1.095656, -5.9604645e-08, -2.9802322e-08, 2.9802322e-08, 0.85272646, 0, -0.51, 0)
+mesh = SubResource("limb_lower")
+
+[node name="Hand" type="MeshInstance3D" parent="Model/BodyRig/FrontLeftLimb/Joint" unique_id=87673224]
+transform = Transform3D(1.2833308, -1.4901161e-08, 1.1920929e-07, -8.940697e-08, 0.7923104, -5.9604645e-08, 2.9802322e-08, 0, 1.459994, 2.3841858e-07, -1.0200002, 0)
+mesh = SubResource("joint")
+
+[node name="Finger1" type="MeshInstance3D" parent="Model/BodyRig/FrontLeftLimb/Joint" unique_id=1371543787]
+transform = Transform3D(0.98384386, 0.17902966, 5.9604645e-08, -0.1612069, 0.88589966, -0.4349658, -0.07787173, 0.42793834, 0.9004476, -0.082701564, -1.1298233, -0.025996506)
+mesh = SubResource("finger")
+
+[node name="Finger2" type="MeshInstance3D" parent="Model/BodyRig/FrontLeftLimb/Joint" unique_id=827591267]
+transform = Transform3D(0.99920034, -0.039989308, 1.3411045e-07, 0.03470345, 0.86712545, -0.4968805, 0.019869909, 0.49648297, 0.8678196, -0.0027017593, -1.1498234, -0.005996406)
+mesh = SubResource("finger")
+
+[node name="Finger3" type="MeshInstance3D" parent="Model/BodyRig/FrontLeftLimb/Joint" unique_id=1531198880]
+transform = Transform3D(0.9800671, -0.19866943, 5.9604645e-08, 0.18140273, 0.89488846, -0.4077608, 0.08100948, 0.3996325, 0.9130894, 0.06729853, -1.1198235, -0.045996368)
+mesh = SubResource("finger")
+
+[node name="FrontRightLimb" type="Node3D" parent="Model/BodyRig" unique_id=910359795]
+transform = Transform3D(0.6854083, -0.72755665, -0.029612375, 0.72180706, 0.6735074, 0.15931821, -0.09596886, -0.13057244, 0.986783, 0.34, 0.32, 0.39)
+
+[node name="Shoulder" type="MeshInstance3D" parent="Model/BodyRig/FrontRightLimb" unique_id=1256148178]
+mesh = SubResource("joint")
+
+[node name="Upper" type="MeshInstance3D" parent="Model/BodyRig/FrontRightLimb" unique_id=163807575]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.475, 0)
+mesh = SubResource("limb_upper")
+
+[node name="Joint" type="Node3D" parent="Model/BodyRig/FrontRightLimb" unique_id=1375581177]
+transform = Transform3D(0.9393727, 0.3428978, 0, -0.25779253, 0.7062258, -0.65938467, -0.22610155, 0.61940795, 0.7518057, 0, -0.95, 0)
+
+[node name="Elbow" type="MeshInstance3D" parent="Model/BodyRig/FrontRightLimb/Joint" unique_id=85556006]
+mesh = SubResource("joint")
+
+[node name="Lower" type="MeshInstance3D" parent="Model/BodyRig/FrontRightLimb/Joint" unique_id=1335187969]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.51, 0)
+mesh = SubResource("limb_lower")
+
+[node name="Hand" type="MeshInstance3D" parent="Model/BodyRig/FrontRightLimb/Joint" unique_id=1071054106]
+transform = Transform3D(1.35, 0, 0, 0, 0.62, 0, 0, 0, 1.7, 0, -1.02, 0)
+mesh = SubResource("joint")
+
+[node name="Finger1" type="MeshInstance3D" parent="Model/BodyRig/FrontRightLimb/Joint" unique_id=1722487555]
+transform = Transform3D(0.9800675, 0.19866952, -1.937151e-07, -0.18140276, 0.89488894, -0.4077611, -0.08100951, 0.3996327, 0.9130897, -0.0889312, -1.1373261, -0.02419132)
+mesh = SubResource("finger")
+
+[node name="Finger2" type="MeshInstance3D" parent="Model/BodyRig/FrontRightLimb/Joint" unique_id=439168751]
+transform = Transform3D(0.9992006, 0.039989337, -1.6391277e-07, -0.03470339, 0.86712563, -0.49688068, -0.01986985, 0.49648306, 0.8678197, -0.020716906, -1.1665765, 0.015127718)
+mesh = SubResource("finger")
+
+[node name="Finger3" type="MeshInstance3D" parent="Model/BodyRig/FrontRightLimb/Joint" unique_id=739966906]
+transform = Transform3D(0.9838441, -0.17902969, -1.0430813e-07, 0.16120696, 0.8858999, -0.43496597, 0.0778718, 0.42793852, 0.90044785, 0.059283257, -1.1465768, -0.0048723817)
+mesh = SubResource("finger")
+
+[node name="RearLeftLimb" type="Node3D" parent="Model/BodyRig" unique_id=1193740829]
+transform = Transform3D(0.7384685, 0.6742879, 0, -0.66943884, 0.73315793, -0.119712204, -0.08072049, 0.088403694, 0.99280864, -0.25, -0.25, -0.43)
+
+[node name="Hip" type="MeshInstance3D" parent="Model/BodyRig/RearLeftLimb" unique_id=366381864]
+transform = Transform3D(0.9999998, -2.3283064e-09, 0, 2.7939677e-08, 1, 0, 0, 0, 0.9999999, 0.07732093, 0.07060093, 0)
+mesh = SubResource("joint")
+
+[node name="Upper" type="MeshInstance3D" parent="Model/BodyRig/RearLeftLimb" unique_id=2091539800]
+transform = Transform3D(0.9999998, -2.3283064e-09, 0, 2.7939677e-08, 1, 0, 0, 0, 0.9999999, 0.077320874, -0.40439913, 0)
+mesh = SubResource("limb_upper")
+
+[node name="Joint" type="Node3D" parent="Model/BodyRig/RearLeftLimb" unique_id=657740804]
+transform = Transform3D(0.9553365, -0.29552022, 0, 0.24051754, 0.7775278, 0.58103514, -0.17170763, -0.5550841, 0.8138785, 0, -0.95, 0)
+
+[node name="Knee" type="MeshInstance3D" parent="Model/BodyRig/RearLeftLimb/Joint" unique_id=1879690846]
+transform = Transform3D(1, 2.2351742e-08, 0, -5.2154064e-08, 1, 0, -1.4901161e-08, 5.9604645e-08, 1, 0.09084833, 0.032044232, 0.041021645)
+mesh = SubResource("joint")
+
+[node name="Lower" type="MeshInstance3D" parent="Model/BodyRig/RearLeftLimb/Joint" unique_id=1882470951]
+transform = Transform3D(1.360456, -1.4901161e-08, 0, -1.0430813e-07, 1.1271411, 0, -2.9802322e-08, 0, 1.1627603, 0.09084821, -0.47795576, 0.041021585)
+mesh = SubResource("limb_lower")
+
+[node name="Foot" type="MeshInstance3D" parent="Model/BodyRig/RearLeftLimb/Joint" unique_id=23532871]
+transform = Transform3D(1.5000001, -7.450581e-09, -2.9802322e-08, -1.0430813e-07, 0.58, 1.1920929e-07, -2.9802322e-08, 1.4901161e-08, 1.9, 0.09084821, -0.98795575, -0.03897834)
+mesh = SubResource("joint")
+
+[node name="RearRightLimb" type="Node3D" parent="Model/BodyRig" unique_id=1019493161]
+transform = Transform3D(0.7384685, -0.6742879, 0, 0.66943884, 0.73315793, -0.119712204, 0.08072049, 0.088403694, 0.99280864, 0.25, -0.25, -0.43)
+
+[node name="Hip" type="MeshInstance3D" parent="Model/BodyRig/RearRightLimb" unique_id=48137048]
+transform = Transform3D(0.99999994, 2.3283064e-09, 0, 2.3283064e-09, 1, 0, 0, 0, 0.99999994, -0.077777624, 0.07101792, 0)
+mesh = SubResource("joint")
+
+[node name="Upper" type="MeshInstance3D" parent="Model/BodyRig/RearRightLimb" unique_id=428504752]
+transform = Transform3D(0.99999994, 2.3283064e-09, 0, 2.3283064e-09, 1, 0, 0, 0, 0.99999994, -0.077777624, -0.40398204, 0)
+mesh = SubResource("limb_upper")
+
+[node name="Joint" type="Node3D" parent="Model/BodyRig/RearRightLimb" unique_id=314083532]
+transform = Transform3D(0.9553365, 0.29552022, 0, -0.24051754, 0.7775278, 0.58103514, 0.17170763, -0.5550841, 0.8138785, 0, -0.95, 0)
+
+[node name="Knee" type="MeshInstance3D" parent="Model/BodyRig/RearRightLimb/Joint" unique_id=2062036984]
+transform = Transform3D(1, -2.9802322e-08, 0, 2.2351742e-08, 1, 0, 1.4901161e-08, 2.9802322e-08, 1, -0.09138489, 0.032233536, 0.041263938)
+mesh = SubResource("joint")
+
+[node name="Lower" type="MeshInstance3D" parent="Model/BodyRig/RearRightLimb/Joint" unique_id=1275408336]
+transform = Transform3D(1.2290901, 7.450581e-09, -5.9604645e-08, 0, 0.9191946, 8.940697e-08, 0, 5.9604645e-08, 0.89655656, -0.09138489, -0.47776645, 0.041263938)
+mesh = SubResource("limb_lower")
+
+[node name="Foot" type="MeshInstance3D" parent="Model/BodyRig/RearRightLimb/Joint" unique_id=955919771]
+transform = Transform3D(1.5000001, 7.450581e-09, 0, 4.4703484e-08, 0.58, 5.9604645e-08, 0, 1.4901161e-08, 1.9, -0.09138489, -0.98776644, -0.038736105)
+mesh = SubResource("joint")
+
+[node name="SkitterSound" type="AudioStreamPlayer3D" parent="." unique_id=1569338614]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+volume_db = -10.0
+unit_size = 2.5
+max_distance = 16.0
+
+[node name="BreathingSound" type="AudioStreamPlayer3D" parent="." unique_id=848375320]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0.45)
+volume_db = -15.0
+unit_size = 3.0
+max_distance = 18.0

@@ -1,7 +1,7 @@
 extends SceneTree
 var pieces := 0
 func _init() -> void:
-	var house: Node3D = load("res://house_baked.tscn").instantiate()
+	var house: Node3D = load("res://levels/house_baked.tscn").instantiate()
 	var school: Node3D = house.get_node("SchoolUpperFloor")
 	var before := signature(house)
 	# A non-instancing duplicate clears Godot's hidden instance SceneState too.
@@ -17,14 +17,14 @@ func _init() -> void:
 	if not school.has_node("WeatherSystems"):
 		var systems := Node3D.new()
 		systems.name = "WeatherSystems"
-		systems.set_script(load("res://school_environment.gd"))
+		systems.set_script(load("res://environment/school_environment.gd"))
 		school.add_child(systems)
 	# Save the effective instance, including the user's overrides, as the reusable scene.
 	house.remove_child(school)
 	localize(school, school)
 	var packed := PackedScene.new()
 	assert(packed.pack(school) == OK)
-	assert(ResourceSaver.save(packed,"res://school_upper_floor.tscn") == OK)
+	assert(ResourceSaver.save(packed,"res://environment/school_upper_floor.tscn") == OK)
 	house.add_child(school)
 	house.move_child(school,slot)
 	localize(school,house)
@@ -32,9 +32,9 @@ func _init() -> void:
 	# Only the school branch becomes local; other scene instances keep their links.
 	packed = PackedScene.new()
 	assert(packed.pack(house) == OK)
-	assert(ResourceSaver.save(packed,"res://house_baked.tscn") == OK)
+	assert(ResourceSaver.save(packed,"res://levels/house_baked.tscn") == OK)
 	house.free()
-	var verify: Node3D = ResourceLoader.load("res://house_baked.tscn","",ResourceLoader.CACHE_MODE_IGNORE).instantiate()
+	var verify: Node3D = ResourceLoader.load("res://levels/house_baked.tscn","",ResourceLoader.CACHE_MODE_IGNORE).instantiate()
 	assert(signature(verify) == before,"Saved scene changed transforms or resources")
 	check_local(verify.get_node("SchoolUpperFloor"))
 	verify.free()
@@ -91,7 +91,7 @@ func check_local(node: Node) -> void:
 	assert(node.scene_file_path.is_empty())
 	assert(not node is MultiMeshInstance3D)
 	if node.get_script() != null:
-		assert(node.get_script().resource_path not in ["res://school_upper_runtime.gd","res://house_props/modular_balcony_balustrade.gd"])
+		assert(node.get_script().resource_path not in ["res://environment/school_upper_runtime.gd","res://house_props/modular_balcony_balustrade.gd"])
 	for n in node.get_children(): check_local(n)
 
 func signature(node: Node, transform_: Transform3D = Transform3D.IDENTITY, result: Dictionary = {}) -> Dictionary:

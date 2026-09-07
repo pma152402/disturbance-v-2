@@ -9,13 +9,13 @@ func _init() -> void:
 	call_deferred(&"_run")
 
 func _run() -> void:
-	scene_text = FileAccess.get_file_as_string("res://house_baked.tscn")
+	scene_text = FileAccess.get_file_as_string("res://levels/house_baked.tscn")
 	var ramps_only := "--ramps-only" in OS.get_cmdline_user_args()
-	if "corridor_stair_ramps.tscn" in scene_text and not ramps_only:
+	if "geometry/corridor_stair_ramps.tscn" in scene_text and not ramps_only:
 		push_error("La escena ya contiene esta correccion; no volver a generarla")
 		quit(1)
 		return
-	house = (load("res://house_baked.tscn") as PackedScene).instantiate() as Node3D
+	house = (load("res://levels/house_baked.tscn") as PackedScene).instantiate() as Node3D
 	house.set_script(null)
 	root.add_child(house)
 	_build_ramps()
@@ -27,11 +27,11 @@ func _run() -> void:
 	var first_node := scene_text.find("[node ")
 	scene_text = scene_text.insert(first_node, resources + "\n")
 	var first_resource := scene_text.find("[ext_resource ")
-	scene_text = scene_text.insert(first_resource, "[ext_resource type=\"PackedScene\" path=\"res://corridor_stair_ramps.tscn\" id=\"corridor_ramps\"]\n")
+	scene_text = scene_text.insert(first_resource, "[ext_resource type=\"PackedScene\" path=\"res://geometry/corridor_stair_ramps.tscn\" id=\"corridor_ramps\"]\n")
 	added_nodes += "\n[node name=\"CorridorStairRamps\" parent=\".\" instance=ExtResource(\"corridor_ramps\")]\n\n"
 	var connections := scene_text.find("[connection ")
 	scene_text = scene_text.insert(connections if connections >= 0 else scene_text.length(), added_nodes)
-	var output := FileAccess.open("res://house_baked.tscn", FileAccess.WRITE)
+	var output := FileAccess.open("res://levels/house_baked.tscn", FileAccess.WRITE)
 	output.store_string(scene_text)
 	house.free()
 	print("CORRIDOR_STAIRS_AND_TUNNELS_WRITTEN")
@@ -89,7 +89,7 @@ func _build_ramps() -> void:
 		collision.owner = ramps
 	var packed := PackedScene.new()
 	assert(packed.pack(ramps) == OK)
-	assert(ResourceSaver.save(packed, "res://corridor_stair_ramps.tscn") == OK)
+	assert(ResourceSaver.save(packed, "res://geometry/corridor_stair_ramps.tscn") == OK)
 	print("RAMPS: ", ramps.get_child_count(), " continuous surfaces across the two corridor flights")
 	ramps.free()
 

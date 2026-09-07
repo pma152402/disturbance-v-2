@@ -22,7 +22,7 @@ func _run() -> void:
 	lights[0].reparent(hidden_parent)
 	hidden_parent.hide()
 	lights[1].light_energy = 0.0
-	load("res://runtime_render_optimizer.gd").install(level)
+	load("res://systems/runtime_render_optimizer.gd").install(level)
 	var optimizer := level.get_node("RuntimeRenderOptimizer")
 	for iteration in 3:
 		optimizer.call(&"_update_shadow_budget")

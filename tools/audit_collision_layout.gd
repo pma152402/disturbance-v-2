@@ -2,7 +2,7 @@ extends SceneTree
 
 
 func _initialize() -> void:
-	var house := (load("res://house_baked.tscn") as PackedScene).instantiate()
+	var house := (load("res://levels/house_baked.tscn") as PackedScene).instantiate()
 	root.add_child(house)
 	await process_frame
 	var shapes: Array[Dictionary] = []

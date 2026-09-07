@@ -2,7 +2,7 @@ extends SceneTree
 
 
 func _init() -> void:
-	var house_scene := load("res://house_baked.tscn") as PackedScene
+	var house_scene := load("res://levels/house_baked.tscn") as PackedScene
 	var player_scene := load("res://player/player.tscn") as PackedScene
 	if house_scene == null or player_scene == null:
 		_fail("No se pudieron cargar las escenas de prueba")

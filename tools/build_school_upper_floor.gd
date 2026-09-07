@@ -31,7 +31,7 @@ func save_scene(path: String) -> void:
 	unpack_children(asset)
 	if asset.name == "SchoolUpperFloor":
 		var systems := child("WeatherSystems", asset)
-		systems.set_script(load("res://school_environment.gd"))
+		systems.set_script(load("res://environment/school_environment.gd"))
 	var packed := PackedScene.new()
 	assert(packed.pack(asset) == OK)
 	assert(ResourceSaver.save(packed, path) == OK)
@@ -139,7 +139,7 @@ func build() -> void:
 	mats.Floor.uv1_triplanar = true
 	mats.Floor.uv1_scale = Vector3(0.65, 0.65, 0.65)
 	var wall := ShaderMaterial.new()
-	wall.shader = load("res://pastel_wall_band.gdshader")
+	wall.shader = load("res://shaders/pastel_wall_band.gdshader")
 	mats.Wall = wall
 	build_desk()
 	build_bunk()
@@ -369,7 +369,7 @@ func build_upper() -> void:
 	furnish_kitchen()
 	furnish_corridor()
 	build_bridge()
-	save_scene("res://school_upper_floor.tscn")
+	save_scene("res://environment/school_upper_floor.tscn")
 
 func furnish_classroom() -> void:
 	for row in range(4):
@@ -493,7 +493,7 @@ func build_bridge() -> void:
 	collision(portal, "OriginalWallNorthRemainder", Vector3(-5.2818494, 2.04, -4.345), Vector3(0.22, 4.0, 0.81))
 	collision(portal, "PortalLintel", Vector3(-5.2818494, 3.465, -3), Vector3(0.22, 1.15, 1.94))
 	box(portal, "Frame", Vector3(-5.2794333, 0.16, -4.345), Vector3(0.27, 0.24, 0.81))
-	instance_asset("res://push_door.tscn", portal, "HouseBridgeDoor", Vector3(-5.28, 0.04, -3), -PI / 2, Vector3(0.94, 1, 1))
+	instance_asset("res://doors/push_door.tscn", portal, "HouseBridgeDoor", Vector3(-5.28, 0.04, -3), -PI / 2, Vector3(0.94, 1, 1))
 	# A short wedge absorbs the 4 cm difference to the original main-house slab.
 	var ramp := child("ThresholdRamp", portal, "MeshInstance3D") as MeshInstance3D
 	var mesh := ArrayMesh.new()

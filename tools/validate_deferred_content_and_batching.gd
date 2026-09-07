@@ -1,6 +1,6 @@
 extends SceneTree
 
-const Batcher := preload("res://static_decor_batcher.gd")
+const Batcher := preload("res://systems/static_decor_batcher.gd")
 
 class ToolPlayer:
 	extends Node
@@ -54,11 +54,11 @@ func _run() -> void:
 		prop.free()
 	print("BATCH_VALIDATION: ", source_count, " meshes -> ", batch_count, " batches; geometry, materials, world transforms and collisions preserved")
 
-	assert(not ResourceLoader.has_cached("res://church_catacombs.tscn"))
-	var game := (load("res://test.tscn") as PackedScene).instantiate()
+	assert(not ResourceLoader.has_cached("res://environment/church_catacombs.tscn"))
+	var game := (load("res://levels/test.tscn") as PackedScene).instantiate()
 	root.add_child(game)
 	current_scene = game
-	assert(not ResourceLoader.has_cached("res://church_catacombs.tscn"))
+	assert(not ResourceLoader.has_cached("res://environment/church_catacombs.tscn"))
 	assert(game.get_node_or_null("House/ChurchCatacombs") == null)
 	assert(game.get_node_or_null("RuntimeCatacombNavigation") == null)
 	var player := ToolPlayer.new()

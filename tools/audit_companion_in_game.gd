@@ -6,7 +6,7 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	var packed_scene := load("res://test.tscn") as PackedScene
+	var packed_scene := load("res://levels/test.tscn") as PackedScene
 	if packed_scene == null:
 		push_error("No se pudo cargar test.tscn")
 		quit(1)

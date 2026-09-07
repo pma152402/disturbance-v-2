@@ -9,7 +9,7 @@ func _run() -> void:
 	root.size = Vector2i(1280, 720)
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	var started_loading := Time.get_ticks_usec()
-	change_scene_to_file("res://startup_loader.tscn")
+	change_scene_to_file("res://systems/startup_loader.tscn")
 	for _frame in 1200:
 		await process_frame
 		if current_scene != null and current_scene.name == &"ThreeStoreyHouse" \

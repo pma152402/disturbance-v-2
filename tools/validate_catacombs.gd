@@ -1,6 +1,6 @@
 extends SceneTree
 
-const MAIN_SCENE := preload("res://test.tscn")
+const MAIN_SCENE := preload("res://levels/test.tscn")
 const CHURCH_ACCESS_TOP := Vector3(-10.3, 0.75, -41.0)
 const CATACOMB_START := Vector3(-8.0, -4.03, -49.0)
 const FINAL_CRYPT := Vector3(-8.0, -4.03, -181.0)

@@ -4,9 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Proyecto
 
-`DisturbanceV2` — juego de terror en primera persona en Godot **4.7** (GDScript puro, renderer Forward+, estética found footage / PS2). No hay C#, ni `.csproj`, ni dependencias externas. La escena de arranque es `res://test.tscn`.
+`DisturbanceV2` — juego de terror en primera persona en Godot **4.7** (GDScript puro, renderer Forward+, estética found footage / PS2). No hay C#, ni `.csproj`, ni dependencias externas. La escena de arranque es `res://levels/test.tscn`.
 
 Los comentarios de código, la documentación y los mensajes de validación están **en español**. Manténlo así.
+
+El mapa de carpetas, con lo que hace y contiene cada una, esta en `ESTRUCTURA.md`. Las auditorias y notas de diseno viven en `docs/`.
 
 ## Comandos
 
@@ -30,7 +32,7 @@ Algunas validaciones **no** funcionan en `--headless` porque el renderizador dum
 
 ## Verificación: el patrón `tools/`
 
-No hay framework de test. Cada comportamiento se valida con un script `SceneTree` en `tools/` que instancia `test.tscn`, espera a `navigation_baked`, manipula el nodo bajo prueba y hace `quit(0)` con un `print("OK: ...")` o `push_error()` + `quit(1)`. **Cualquier cambio de comportamiento debe llevar su validación**, nueva o reutilizando la existente.
+No hay framework de test. Cada comportamiento se valida con un script `SceneTree` en `tools/` que instancia `levels/test.tscn`, espera a `navigation_baked`, manipula el nodo bajo prueba y hace `quit(0)` con un `print("OK: ...")` o `push_error()` + `quit(1)`. **Cualquier cambio de comportamiento debe llevar su validación**, nueva o reutilizando la existente.
 
 Suite de la abuela (la más relevante al tocar IA):
 
@@ -56,9 +58,9 @@ Los `audit_*.gd` son diagnósticos que imprimen inventarios (rendimiento, colisi
 Tres enemigos comparten una sola máquina de estados. Un cambio en la base afecta a los tres:
 
 ```
-monster_grandmother.gd  (CharacterBody3D, 1343 líneas — máquina de estados, navegación, puertas, ataque, comer)
-├── monster_grandmother_imported.gd   → monster_grandmother_imported.tscn   (variante FOTOSENSIBLE; la usada en test.tscn)
-└── monster_grandmother_crawler.gd    → monster_grandmother_crawler.tscn    (variante reptante)
+enemies/monster_grandmother.gd  (CharacterBody3D, 1495 lineas — máquina de estados, navegación, puertas, ataque, comer)
+├── enemies/monster_grandmother_imported.gd   → enemies/monster_grandmother_imported.tscn   (variante FOTOSENSIBLE; la usada en test.tscn)
+└── enemies/monster_grandmother_crawler.gd    → enemies/monster_grandmother_crawler.tscn    (variante reptante)
 ```
 
 `State { PATROL, INVESTIGATE, CHASE, SEARCH, ATTACK, EAT }` vive en la base. La variante importada **añade una segunda capa de decisión encima**, `PhotoBehavior { PATROL, STATIC_LIGHT, FLASHLIGHT, LIGHT_MEMORY, CLOSE_PLAYER, CLOSE_MEMORY, FOOTSTEP, REVEALED_PLAYER }`: `PhotoBehavior` elige el estímulo (¿linterna? ¿lámpara encendida? ¿pasos?) y luego mapea a un `State` de la base, que es quien mueve el cuerpo. Al depurar, mira siempre **los dos**: `_photo_behavior` explica el porqué, `current_state` explica el cómo.
@@ -71,10 +73,10 @@ La variante importada **sobrescribe `_physics_process` por completo** en vez de 
 
 ### Visual: dos animadores en paralelo
 
-- `monster_grandmother.gd::_update_animation()` anima el modelo procedural `Model` (esferas y cilindros con IK de dos huesos) **y dispara los pasos de audio** desde `_motion_phase`.
-- `granny_editable_visual_animator.gd` anima el rig importado `EditableVisual/CleanModel/EditableGrannyRig`.
+- `enemies/monster_grandmother.gd::_update_animation()` anima el modelo procedural `Model` (esferas y cilindros con IK de dos huesos) **y dispara los pasos de audio** desde `_motion_phase`.
+- `enemies/granny_editable_visual_animator.gd` anima el rig importado `EditableVisual/CleanModel/EditableGrannyRig`.
 
-En `monster_grandmother_imported.tscn` el `Model` procedural está en `visible = false` pero **`_update_animation()` sigue ejecutándose**: es la fuente de los pasos de audio. El animador visual lee `_motion_phase` del cuerpo para que el bob visual y el sonido de paso caigan juntos.
+En `enemies/monster_grandmother_imported.tscn` el `Model` procedural está en `visible = false` pero **`_update_animation()` sigue ejecutándose**: es la fuente de los pasos de audio. El animador visual lee `_motion_phase` del cuerpo para que el bob visual y el sonido de paso caigan juntos.
 
 **El rig importado no tiene piernas** (`granny_editable_rig.glb`: 68 nodos — torso+vestido, cabeza, brazos con dedos, ninguna pierna ni pie). El vestido llega al suelo y oculta la ausencia. Toda la sensación de caminar sale del bob vertical, el balanceo lateral y la inclinación en los giros. No intentes animar piernas que no existen.
 
@@ -82,23 +84,23 @@ Todas las poses del animador son **offsets sobre la transformación guardada en 
 
 ### Navegación
 
-`runtime_house_navigation.gd` (`NavigationRegion3D`) hornea el navmesh **en runtime** desde los colliders estáticos, de forma asíncrona, y emite `navigation_baked`. Nada que navegue puede asumir que la malla existe en el primer frame:
+`systems/runtime_house_navigation.gd` (`NavigationRegion3D`) hornea el navmesh **en runtime** desde los colliders estáticos, de forma asíncrona, y emite `navigation_baked`. Nada que navegue puede asumir que la malla existe en el primer frame:
 
-- `startup_warmup.gd` congela al jugador tras una pantalla de carga hasta que el horneado termina.
+- `systems/startup_warmup.gd` congela al jugador tras una pantalla de carga hasta que el horneado termina.
 - Las validaciones hacen `await navigation.navigation_baked`.
-- `monster_grandmother.gd::_refresh_navigation_state()` revisa `map_get_iteration_id()` cada refresco y llama a `_on_navigation_rebuilt()` cuando cambia, para que las variantes reproyecten sus puntos de patrulla.
+- `enemies/monster_grandmother.gd::_refresh_navigation_state()` revisa `map_get_iteration_id()` cada refresco y llama a `_on_navigation_rebuilt()` cuando cambia, para que las variantes reproyecten sus puntos de patrulla.
 
 Nada garantiza que la presa este sobre el navmesh: el jugador puede subirse a muros y repisas. `_update_unreachable_target()` cubre ese caso comparando el final real de la ruta con el destino pedido, porque un destino en una isla de navegacion desconectada devuelve una ruta degenerada de dos puntos y "he llegado" es indistinguible de "no hay camino" si solo se mira la posicion propia.
 
-Los cambios de planta se resuelven con un `NavigationLink3D` en `runtime_house_navigation.tscn` más los anclajes `STAIR_LOWER_ANCHOR` / `STAIR_UPPER_ANCHOR` **hardcodeados** en `monster_grandmother.gd`. Si mueves la escalera de `house_baked.tscn`, hay que mover ambos.
+Los cambios de planta se resuelven con un `NavigationLink3D` en `systems/runtime_house_navigation.tscn` mas los anclajes `STAIR_LOWER_ANCHOR` / `STAIR_UPPER_ANCHOR` **hardcodeados** en `enemies/monster_grandmother.gd`. Si mueves la escalera de `levels/house_baked.tscn`, hay que mover ambos.
 
-`runtime_catacomb_navigation.tscn` reutiliza el mismo script para las catacumbas, cargadas bajo demanda desde el minijuego de la iglesia.
+`systems/runtime_catacomb_navigation.tscn` reutiliza el mismo script para las catacumbas, cargadas bajo demanda desde el minijuego de la iglesia.
 
 ### Puertas
 
 **Las puertas cerradas no se hornean en el navmesh, asi que cada habitacion es una isla de navegacion separada.** Cualquier logica que exija que una ruta termine en su destino fallara para todo lo que este al otro lado de una puerta; la travesia de puertas es lo que une las islas en tiempo de ejecucion. Ojo tambien al colocar un NPC: un pasillo rodeado de `locked_door.gd` lo deja encerrado sin que nada lo advierta.
 
-Las puertas del grupo `npc_door` exponen `ensure_open_for_npc(npc)`, `get_npc_traversal_portal() -> {center, normal, open_wait}` e `is_npc_passage_ready()`. La abuela **se compromete** al cruce: `_begin_door_traversal()` congela recálculo de ruta, evasión lateral y recuperación de atasco, y avanza en línea recta entrada → salida. `npc_passage_probe.gd` comprueba si el hueco está libre. Las puertas con llave consumen la interacción sin abrirse, por eso solo se inicia el cruce si la hoja confirma `_is_open`.
+Las puertas del grupo `npc_door` exponen `ensure_open_for_npc(npc)`, `get_npc_traversal_portal() -> {center, normal, open_wait}` e `is_npc_passage_ready()`. La abuela **se compromete** al cruce: `_begin_door_traversal()` congela recálculo de ruta, evasión lateral y recuperación de atasco, y avanza en línea recta entrada → salida. `systems/npc_passage_probe.gd` comprueba si el hueco está libre. Las puertas con llave consumen la interacción sin abrirse, por eso solo se inicia el cruce si la hoja confirma `_is_open`.
 
 ### Audio
 
@@ -106,7 +108,7 @@ Respiración, pasos y voz de la abuela se **sintetizan en runtime** (`_make_tona
 
 Los pasos del jugador salen de `sounds/gameplay_sound_factory.gd::make_surface_footstep()`. Un paso son tres capas —golpe del talón, resonancia del material y textura del roce— cuyo reparto define `SURFACE_PROFILES`; ahí se ajusta cómo suena cada material, no en el volumen.
 
-`player.gd::_classify_surface()` decide la superficie leyendo el nombre del collider pisado y dos ancestros contra `SURFACE_KEYWORDS`. **El orden de esa lista importa**: `GroundFloorSlab` es la planta baja (madera) y `GroundCutoutCollision` es el patio (tierra), así que `floor`/`slab` reclaman los suelos interiores antes de que `ground` actúe como último recurso. Para forzar un suelo concreto, añádele el grupo `surface_<tipo>`: gana sobre la heurística.
+`player/player.gd::_classify_surface()` decide la superficie leyendo el nombre del collider pisado y dos ancestros contra `SURFACE_KEYWORDS`. **El orden de esa lista importa**: `GroundFloorSlab` es la planta baja (madera) y `GroundCutoutCollision` es el patio (tierra), así que `floor`/`slab` reclaman los suelos interiores antes de que `ground` actúe como último recurso. Para forzar un suelo concreto, añádele el grupo `surface_<tipo>`: gana sobre la heurística.
 
 La superficie también escala el radio de `footstep_heard`, así que la moqueta esconde de verdad al jugador y la baldosa lo delata.
 

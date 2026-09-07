@@ -10,8 +10,8 @@ import re
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SCENE_PATH = PROJECT_ROOT / "house_baked.tscn"
-CATACOMBS_SCENE_PATH = PROJECT_ROOT / "church_catacombs.tscn"
+SCENE_PATH = PROJECT_ROOT / "levels/house_baked.tscn"
+CATACOMBS_SCENE_PATH = PROJECT_ROOT / "environment/church_catacombs.tscn"
 
 CELL = 2.75
 ORIGIN_X = -8.0

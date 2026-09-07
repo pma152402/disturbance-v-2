@@ -1,6 +1,6 @@
 # Abuela editable
 
-La escena que se usa en el juego es `res://monster_grandmother_imported.tscn`.
+La escena que se usa en el juego es `res://enemies/monster_grandmother_imported.tscn`.
 El GLB original se conserva solo como fuente; su armature Mixamo tiene el bind pose roto y no debe editarse directamente.
 
 En el arbol de la escena, abre:

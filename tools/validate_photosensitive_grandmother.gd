@@ -2,9 +2,9 @@ extends SceneTree
 
 
 func _init() -> void:
-	var monster_scene := load("res://monster_grandmother_imported.tscn") as PackedScene
+	var monster_scene := load("res://enemies/monster_grandmother_imported.tscn") as PackedScene
 	var player_scene := load("res://player/player.tscn") as PackedScene
-	var game_scene := load("res://test.tscn") as PackedScene
+	var game_scene := load("res://levels/test.tscn") as PackedScene
 	if monster_scene == null or player_scene == null or game_scene == null:
 		_fail("No se pudieron cargar las escenas de la IA fotosensible")
 		return

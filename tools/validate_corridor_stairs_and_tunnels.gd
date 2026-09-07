@@ -4,7 +4,7 @@ func _init() -> void:
 	call_deferred(&"_run")
 
 func _run() -> void:
-	var house := (load("res://house_baked.tscn") as PackedScene).instantiate()
+	var house := (load("res://levels/house_baked.tscn") as PackedScene).instantiate()
 	house.set_script(null)
 	root.add_child(house)
 	await physics_frame

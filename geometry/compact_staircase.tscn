@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="ArrayMesh" path="res://geometry/compact_staircase_mesh.tres" id="1_mesh"]
+[ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera4.jpg" id="2_wood"]
+
+[sub_resource type="StandardMaterial3D" id="Material_stair_wood"]
+albedo_color = Color(0.52, 0.35, 0.2, 1)
+albedo_texture = ExtResource("2_wood")
+roughness = 0.88
+cull_mode = 2
+uv1_scale = Vector3(1.4, 1.4, 1.4)
+uv1_triplanar = true
+uv1_world_triplanar = true
+texture_filter = 0
+
+[sub_resource type="BoxShape3D" id="Shape_thin_ramp"]
+size = Vector3(2.22, 0.12, 7.05)
+
+[node name="CompactOpenStaircase" type="Node3D"]
+editor_description = "Escalera consolidada y sin escala fisica deformada. La colision es una rampa fina alineada con los escalones para permitir pasar por debajo."
+
+[node name="Visual" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_mesh")
+material_override = SubResource("Material_stair_wood")
+
+[node name="WalkableRamp" type="StaticBody3D" parent="."]
+position = Vector3(0, 2, 0.918)
+rotation = Vector3(0.6538, 0, 0)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="WalkableRamp"]
+shape = SubResource("Shape_thin_ramp")

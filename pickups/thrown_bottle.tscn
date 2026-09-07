@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://pickups/bottle_visual.tscn" id="1_visual"]
+[ext_resource type="Script" path="res://pickups/thrown_bottle.gd" id="2_script"]
+
+[sub_resource type="CylinderShape3D" id="Shape_bottle_body"]
+radius = 0.092
+height = 0.33
+
+[sub_resource type="CylinderShape3D" id="Shape_bottle_neck"]
+radius = 0.043
+height = 0.13
+
+[sub_resource type="PhysicsMaterial" id="Physics_bottle"]
+friction = 0.52
+bounce = 0.18
+
+[node name="ThrownBottle" type="RigidBody3D"]
+mass = 0.32
+physics_material_override = SubResource("Physics_bottle")
+continuous_cd = 1
+collision_layer = 3
+collision_mask = 1
+contact_monitor = true
+max_contacts_reported = 6
+script = ExtResource("2_script")
+
+[node name="BottleVisual" parent="." instance=ExtResource("1_visual")]
+position = Vector3(0, -0.225, 0)
+
+[node name="BodyCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, -0.06, 0)
+shape = SubResource("Shape_bottle_body")
+
+[node name="NeckCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.155, 0)
+shape = SubResource("Shape_bottle_neck")

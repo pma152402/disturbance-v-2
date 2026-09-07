@@ -1,7 +1,7 @@
 [gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://house_props/grandma_ceiling_lamp.gd" id="1_controller"]
-[ext_resource type="Script" path="res://flickering_light.gd" id="2_flicker"]
+[ext_resource type="Script" path="res://systems/flickering_light.gd" id="2_flicker"]
 [ext_resource type="AudioStream" path="res://sounds/objects/light_flicker.mp3" id="3_flicker_audio"]
 [ext_resource type="Script" path="res://sounds/objects/flicker_sound_player.gd" id="4_flicker_player"]
 

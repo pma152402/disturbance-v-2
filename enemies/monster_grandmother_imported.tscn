@@ -1,0 +1,260 @@
+[gd_scene format=3 uid="uid://btj1tf3hf2k6t"]
+
+[ext_resource type="PackedScene" uid="uid://d2nkf5x4tmuwa" path="res://enemies/monster_grandmother.tscn" id="1_base"]
+[ext_resource type="PackedScene" uid="uid://bxs0yptey3210" path="res://characters/granny_editable/granny_editable_rig.glb" id="2_model"]
+[ext_resource type="Script" uid="uid://bheamlmppqwb5" path="res://enemies/monster_grandmother_imported.gd" id="3_controller"]
+[ext_resource type="Script" uid="uid://cgwfngdqbx0j1" path="res://enemies/granny_editable_visual_animator.gd" id="4_animator"]
+
+[sub_resource type="StandardMaterial3D" id="Material_dress_repair"]
+albedo_color = Color(0.64, 0.63, 0.61, 1)
+roughness = 0.96
+
+[sub_resource type="SphereMesh" id="Mesh_seam_sphere"]
+material = SubResource("Material_dress_repair")
+radius = 1.0
+height = 2.0
+radial_segments = 18
+rings = 10
+
+[sub_resource type="StandardMaterial3D" id="Material_skin_repair"]
+albedo_color = Color(0.18, 0.075, 0.052, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="Mesh_neck_seal"]
+material = SubResource("Material_skin_repair")
+top_radius = 0.26
+bottom_radius = 0.32
+height = 1.05
+radial_segments = 16
+rings = 3
+
+[node name="MonsterGrandmotherImported" unique_id=1603691607 instance=ExtResource("1_base")]
+editor_description = "Abuela basada en el modelo importado, reconstruida como personaje editable. Abre EditableVisual/CleanModel/EditableGrannyRig para ajustar cabeza, hombros, codos, munecas, manos y dedos. La animacion conserva los cambios manuales hechos en esos pivotes."
+script = ExtResource("3_controller")
+remain_still = true
+
+[node name="Model" parent="." index="4" unique_id=1069691465]
+visible = false
+
+[node name="EditableVisual" type="Node3D" parent="." index="8" unique_id=1381199113]
+transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 0.18, 0, 0, 0)
+script = ExtResource("4_animator")
+
+[node name="CleanModel" parent="EditableVisual" index="0" unique_id=217428942 instance=ExtResource("2_model")]
+
+[node name="Body" parent="EditableVisual/CleanModel/EditableGrannyRig" parent_id_path=PackedInt32Array(217428942, 1680471412) index="0" unique_id=1890853707]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.59502476, 0.22899707, -0.12265046, 0.48518443)
+
+[node name="HairCap" parent="EditableVisual/CleanModel/EditableGrannyRig/HeadPivot" parent_id_path=PackedInt32Array(217428942, 397755090) index="0" unique_id=605106546]
+transform = Transform3D(1.03, 0, 0, 0, 0.43, 0, 0, 0, 0.86, 0, 1.5149117, -2.897498)
+visible = false
+
+[node name="Head" parent="EditableVisual/CleanModel/EditableGrannyRig/HeadPivot" parent_id_path=PackedInt32Array(217428942, 397755090) index="1" unique_id=1132677278]
+transform = Transform3D(1.3630588, 0, 0, 0, 1.4323373, 0, 0, 0, 1.0857766, 0, -13.347802, 0.8295794)
+
+[node name="LeftHairTuft" parent="EditableVisual/CleanModel/EditableGrannyRig/HeadPivot" parent_id_path=PackedInt32Array(217428942, 397755090) index="2" unique_id=1870247903]
+transform = Transform3D(0.31, 0, 0, 0, 0.49, 0, 0, 0, 0.42, 0.91, 1.3800001, -4.8673854)
+visible = false
+
+[node name="LowerTeeth" parent="EditableVisual/CleanModel/EditableGrannyRig/HeadPivot" parent_id_path=PackedInt32Array(217428942, 397755090) index="3" unique_id=254782994]
+transform = Transform3D(4.5338016, 0, 0, 0, 1.0938922, 0, 0, 0, 1.2931044, 0.47090527, -9.786561, 0.83247554)
+
+[node name="OriginalEyes" parent="EditableVisual/CleanModel/EditableGrannyRig/HeadPivot" parent_id_path=PackedInt32Array(217428942, 397755090) index="4" unique_id=446328225]
+transform = Transform3D(1.3231525, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.045089, 1.0822587)
+
+[node name="RightHairTuft" parent="EditableVisual/CleanModel/EditableGrannyRig/HeadPivot" parent_id_path=PackedInt32Array(217428942, 397755090) index="5" unique_id=869807531]
+transform = Transform3D(0.31, 0, 0, 0, 0.49, 0, 0, 0, 0.42, -0.91, 1.3800001, -3.6393611)
+visible = false
+
+[node name="UpperTeeth" parent="EditableVisual/CleanModel/EditableGrannyRig/HeadPivot" parent_id_path=PackedInt32Array(217428942, 397755090) index="6" unique_id=1172218008]
+transform = Transform3D(4.5338016, 0, 0, 0, 1.0938922, 0, 0, 0, 1.2931044, 0.47090527, -9.718573, 0.7895728)
+
+[node name="LeftDressSleeve" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot" parent_id_path=PackedInt32Array(217428942, 1564175445) index="0" unique_id=455222894]
+transform = Transform3D(0.4438394, 0.61787444, -0.64902824, 0.24510406, -0.78036255, -0.5752898, -0.8619343, 0.096256696, -0.49779898, -0.9669881, -0.19314575, -1.49918)
+
+[node name="LeftElbowJoint" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot" parent_id_path=PackedInt32Array(217428942, 1612853433) index="0" unique_id=691111664]
+transform = Transform3D(0.96682954, -0.25542256, 0, 0.25542256, 0.96682954, 0, 0, 0, 1, -0.068820715, -0.012818813, -1.5301802)
+visible = false
+
+[node name="LeftForearm" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot" parent_id_path=PackedInt32Array(217428942, 1612853433) index="1" unique_id=551132351]
+transform = Transform3D(0.61899275, 0.40609014, 0.6722641, 0.3418308, -0.90992796, 0.23491083, 0.70710665, 0.084392406, -0.7020529, 0.18684697, -0.4397297, -1.4451802)
+
+[node name="LeftFinger1A" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="0" unique_id=768935889]
+transform = Transform3D(0.8753879, 0.47900137, 0.065223366, 0.4834216, -0.8673835, -0.1181075, -4.721968e-09, 0.13492025, -0.9908564, 0.9509208, -0.078558445, -1.45768)
+
+[node name="LeftFinger1B" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="1" unique_id=339838339]
+transform = Transform3D(0.8753876, 0.4358939, 0.20902856, 0.48342153, -0.7893239, -0.37851232, 1.967452e-09, 0.43239403, -0.9016848, 1.0331025, -0.22737408, -1.4076798)
+
+[node name="LeftFinger1Knuckle" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="2" unique_id=775340886]
+transform = Transform3D(0.96682954, -0.25542256, 0, 0.25542256, 0.96682954, 0, 0, 0, 1, 0.47448444, -0.82432604, -1.4451799)
+visible = false
+
+[node name="LeftFinger1Tip" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="3" unique_id=926360923]
+transform = Transform3D(0.8753877, -0.4834216, 0, 0.4834216, 0.8753877, 0, 0, 0, 1, 1.0709064, -0.2958293, -1.3701801)
+
+[node name="LeftFinger2A" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="4" unique_id=1314675059]
+transform = Transform3D(0.8753878, 0.48036885, 0.054242156, 0.48342153, -0.8698596, -0.09822259, 2.2207736e-09, 0.11220467, -0.9936851, 1.0672045, -0.03593254, -1.45768)
+
+[node name="LeftFinger2B" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="5" unique_id=1610504579]
+transform = Transform3D(0.8753878, 0.4492061, 0.17863451, 0.4834216, -0.8134298, -0.32347432, 1.0572478e-08, 0.36952117, -0.9292223, 1.166307, -0.21538782, -1.4076798)
+
+[node name="LeftFinger2Knuckle" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="6" unique_id=399378015]
+transform = Transform3D(0.96682954, -0.25542256, 0, 0.25542256, 0.96682954, 0, 0, 0, 1, 0.60247946, -0.8296089, -1.4451799)
+visible = false
+
+[node name="LeftFinger2Tip" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="7" unique_id=1329784666]
+transform = Transform3D(0.8753877, -0.4834216, 0, 0.4834216, 0.8753877, 0, 0, 0, 1, 1.2118936, -0.29793596, -1.3701801)
+
+[node name="LeftFinger3A" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="8" unique_id=1882098739]
+transform = Transform3D(0.8753879, 0.48005095, 0.056986384, 0.4834216, -0.8692841, -0.10319191, 1.4192503e-10, 0.11788135, -0.9930275, 1.1780443, 0.031446934, -1.45768)
+
+[node name="LeftFinger3B" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="9" unique_id=1471618832]
+transform = Transform3D(0.8753876, 0.44601426, 0.18646093, 0.48342153, -0.80764997, -0.33764648, 1.529102e-08, 0.38571075, -0.9226197, 1.2723114, -0.13925314, -1.4076798)
+
+[node name="LeftFinger3Knuckle" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="10" unique_id=279660567]
+transform = Transform3D(0.96682954, -0.25542256, 0, 0.25542256, 0.96682954, 0, 0, 0, 1, 0.72502184, -0.7860639, -1.4451799)
+visible = false
+
+[node name="LeftFinger3Tip" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="11" unique_id=1832082164]
+transform = Transform3D(0.8753877, -0.4834216, 0, 0.4834216, 0.8753877, 0, 0, 0, 1, 1.3156748, -0.2177763, -1.3701801)
+
+[node name="LeftFinger4A" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="12" unique_id=120797936]
+transform = Transform3D(0.8753878, 0.47811916, 0.07140364, 0.4834216, -0.86578614, -0.12929887, -2.2207725e-09, 0.14770472, -0.9890316, 1.2747502, 0.10952568, -1.45768)
+
+[node name="LeftFinger4B" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="13" unique_id=523098470]
+transform = Transform3D(0.8753877, 0.42785364, 0.22502826, 0.48342162, -0.7747643, -0.4074849, -3.0021198e-08, 0.4654908, -0.8850528, 1.3496809, -0.026159286, -1.4076798)
+
+[node name="LeftFinger4Knuckle" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="14" unique_id=1731288402]
+transform = Transform3D(0.96682954, -0.25542256, 0, 0.25542256, 0.96682954, 0, 0, 0, 1, 0.83232784, -0.7130337, -1.4451799)
+visible = false
+
+[node name="LeftFinger4Tip" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="15" unique_id=1656497387]
+transform = Transform3D(0.8753877, -0.4834216, 0, 0.4834216, 0.8753877, 0, 0, 0, 1, 1.3841484, -0.08857298, -1.3701801)
+
+[node name="LeftPalm" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="16" unique_id=2029584556]
+transform = Transform3D(0.23197773, -0.18853442, 0, 0.12810671, 0.34140116, 0, 0, 0, 0.16000003, 0.93022275, 0.34616137, -1.5101798)
+
+[node name="LeftThumbA" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="17" unique_id=1712454522]
+transform = Transform3D(0.1834191, -0.38424805, 0.90482646, 0.10129065, -0.90815544, -0.40619475, 0.97780234, 0.16615431, -0.12765226, 0.699944, 0.121891975, -1.4651799)
+
+[node name="LeftThumbB" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="18" unique_id=1118939711]
+transform = Transform3D(0.36473387, -0.22778432, 0.9028199, 0.2014196, -0.92735475, -0.31534684, 0.90906525, 0.29686338, -0.2923575, 0.6441541, -0.046000004, -1.42268)
+
+[node name="LeftThumbTip" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="19" unique_id=174268417]
+transform = Transform3D(0.8753877, -0.4834216, 0, 0.4834216, 0.8753877, 0, 0, 0, 1, 0.62305355, -0.13190556, -1.3951801)
+
+[node name="LeftWristJoint" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot" parent_id_path=PackedInt32Array(217428942, 1338392235) index="20" unique_id=573313624]
+transform = Transform3D(0.96682954, -0.25542256, 0, 0.25542256, 0.96682954, 0, 0, 0, 1, 0.44766307, 0.010100365, -1.5301801)
+visible = false
+
+[node name="LeftShoulderJoint" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot" parent_id_path=PackedInt32Array(217428942, 1564175445) index="2" unique_id=1592787194]
+transform = Transform3D(0.96682954, -0.25542256, 0, 0.25542256, 0.96682954, 0, 0, 0, 1, -0.57860506, -0.16732979, -1.5301802)
+visible = false
+
+[node name="LeftUpperArm" parent="EditableVisual/CleanModel/EditableGrannyRig/LeftShoulderPivot" parent_id_path=PackedInt32Array(217428942, 1564175445) index="3" unique_id=356175669]
+transform = Transform3D(0.44383952, 0.6178745, -0.6490283, 0.24510401, -0.7803626, -0.5752898, -0.86193436, 0.09625679, -0.49779922, -0.52407336, -0.75253725, -1.43018)
+
+[node name="RightDressSleeve" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot" parent_id_path=PackedInt32Array(217428942, 1428035866) index="0" unique_id=954082593]
+transform = Transform3D(0.4368661, -0.6392937, 0.6328127, -0.25732726, -0.76291436, -0.59308034, 0.8619343, 0.0962567, -0.49779898, 1.3322908, -0.19304848, -1.2787747)
+
+[node name="RightElbowJoint" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot" parent_id_path=PackedInt32Array(217428942, 746860234) index="0" unique_id=852611130]
+transform = Transform3D(0.93737423, 0.34832415, 0, -0.34832415, 0.93737423, 0, 0, 0, 1, 0.17413116, -0.053071976, -1.3097746)
+visible = false
+
+[node name="RightForearm" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot" parent_id_path=PackedInt32Array(217428942, 746860234) index="1" unique_id=1498239755]
+transform = Transform3D(0.60926753, -0.43118656, -0.66548574, -0.35887766, -0.898307, 0.25347742, -0.70710665, 0.08439242, -0.7020529, 0.11557245, -0.39729452, -1.2247746)
+
+[node name="RightFinger1A" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="0" unique_id=1696152548]
+transform = Transform3D(0.86163455, -0.50288904, -0.06847604, -0.50752974, -0.8537559, -0.11625195, -6.0971024e-09, 0.13492025, -0.99085665, -1.0163515, 0.17101336, -1.2372746)
+
+[node name="RightFinger1B" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="1" unique_id=1181055405]
+transform = Transform3D(0.86163455, -0.45763183, -0.21945274, -0.5075297, -0.7769227, -0.37256548, -1.41400776e-08, 0.43239397, -0.9016849, -1.1026301, 0.024535656, -1.1872745)
+
+[node name="RightFinger1Knuckle" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="2" unique_id=2128958192]
+transform = Transform3D(0.93737423, 0.34832415, 0, -0.34832415, 0.93737423, 0, 0, 0, 1, -0.9920366, -0.6844771, -1.2247747)
+visible = false
+
+[node name="RightFinger1Tip" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="3" unique_id=1812554331]
+transform = Transform3D(0.86163455, 0.50752974, 0, -0.50752974, 0.86163455, 0, 0, 0, 1, -1.1423199, -0.042844772, -1.1497746)
+
+[node name="RightFinger2A" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="4" unique_id=2108165381]
+transform = Transform3D(0.8616344, -0.5043247, -0.056947198, -0.50752974, -0.8561931, -0.09667936, 1.663962e-09, 0.112204656, -0.99368507, -0.92047906, 0.092606544, -1.2372746)
+
+[node name="RightFinger2B" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="5" unique_id=385944808]
+transform = Transform3D(0.86163425, -0.47160792, -0.18754299, -0.5075297, -0.80065006, -0.31839225, -7.565225e-09, 0.36952117, -0.9292223, -1.0245225, -0.084028244, -1.1872745)
+
+[node name="RightFinger2Knuckle" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="6" unique_id=1242709398]
+transform = Transform3D(0.93737423, 0.34832415, 0, -0.34832415, 0.93737423, 0, 0, 0, 1, -0.8904686, -0.7625444, -1.2247747)
+visible = false
+
+[node name="RightFinger2Tip" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="7" unique_id=2134932792]
+transform = Transform3D(0.86163455, 0.50752974, 0, -0.50752974, 0.86163455, 0, 0, 0, 1, -1.0723832, -0.16528082, -1.1497746)
+
+[node name="RightFinger3A" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="8" unique_id=83624076]
+transform = Transform3D(0.8616346, -0.503991, -0.059828315, -0.50752974, -0.8556268, -0.101570666, -1.10503426e-10, 0.11788139, -0.9930277, -0.8060703, 0.03148365, -1.2372746)
+
+[node name="RightFinger3B" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="9" unique_id=1850521426]
+transform = Transform3D(0.8616344, -0.4682569, -0.19575962, -0.5075296, -0.7949608, -0.33234167, -3.297222e-08, 0.38571084, -0.92262, -0.9050386, -0.13653517, -1.1872745)
+
+[node name="RightFinger3Knuckle" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="10" unique_id=1282499879]
+transform = Transform3D(0.93737423, 0.34832415, 0, -0.34832415, 0.93737423, 0, 0, 0, 1, -0.765223, -0.79756427, -1.2247747)
+visible = false
+
+[node name="RightFinger3Tip" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="11" unique_id=746448586]
+transform = Transform3D(0.86163455, 0.50752974, 0, -0.50752974, 0.86163455, 0, 0, 0, 1, -0.9505646, -0.21382332, -1.1497746)
+
+[node name="RightFinger4A" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="12" unique_id=716584038]
+transform = Transform3D(0.86163425, -0.5019629, -0.074964516, -0.50752974, -0.8521837, -0.12726744, -1.54978e-09, 0.14770472, -0.9890316, -0.68964386, -0.01202631, -1.2372746)
+
+[node name="RightFinger4B" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="13" unique_id=1484587460]
+transform = Transform3D(0.8616344, -0.44919056, -0.23625037, -0.5075297, -0.7625919, -0.40108275, -1.2923445e-09, 0.4654907, -0.8850527, -0.7683108, -0.14557981, -1.1872745)
+
+[node name="RightFinger4Knuckle" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="14" unique_id=680601451]
+transform = Transform3D(0.93737423, 0.34832415, 0, -0.34832415, 0.93737423, 0, 0, 0, 1, -0.63544106, -0.7997041, -1.2247747)
+visible = false
+
+[node name="RightFinger4Tip" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="15" unique_id=1722183181]
+transform = Transform3D(0.86163455, 0.50752974, 0, -0.50752974, 0.86163455, 0, 0, 0, 1, -0.8044977, -0.20701408, -1.1497746)
+
+[node name="RightPalm" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="16" unique_id=2110851034]
+transform = Transform3D(0.22833313, 0.19793658, 0, -0.13449538, 0.33603737, 0, 0, 0, 0.16000001, -0.6612785, 0.4049759, -1.2897747)
+
+[node name="RightThumbA" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="17" unique_id=1000202895]
+transform = Transform3D(0.18053731, 0.35889632, -0.9157508, -0.106341995, -0.91846937, -0.38092673, -0.97780234, 0.16615433, -0.12765229, -0.43731165, 0.17440224, -1.2447746)
+
+[node name="RightThumbB" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="18" unique_id=1371239215]
+transform = Transform3D(0.3590034, 0.2019601, -0.9112236, -0.21146433, -0.93331915, -0.29016957, -0.90906525, 0.2968633, -0.29235747, -0.3862033, 0.0050263405, -1.2022746)
+
+[node name="RightThumbTip" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="19" unique_id=241126597]
+transform = Transform3D(0.86163455, 0.50752974, 0, -0.50752974, 0.86163455, 0, 0, 0, 1, -0.36749387, -0.081430435, -1.1747746)
+
+[node name="RightWristJoint" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot" parent_id_path=PackedInt32Array(217428942, 279795057) index="20" unique_id=150707835]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.56001544, 0.034158707, -1.3469064)
+visible = false
+
+[node name="RightShoulderJoint" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot" parent_id_path=PackedInt32Array(217428942, 1428035866) index="2" unique_id=785053941]
+transform = Transform3D(0.93737423, 0.34832415, 0, -0.34832415, 0.93737423, 0, 0, 0, 1, 0.8634194, -0.29926205, -1.3097746)
+visible = false
+
+[node name="RightUpperArm" parent="EditableVisual/CleanModel/EditableGrannyRig/RightShoulderPivot" parent_id_path=PackedInt32Array(217428942, 1428035866) index="3" unique_id=153066279]
+transform = Transform3D(0.43686625, -0.6392937, 0.6328126, -0.2573274, -0.7629144, -0.5930805, 0.86193436, 0.09625681, -0.4977993, 0.8740213, -0.7399349, -1.2097747)
+
+[node name="SeamRepairs" type="Node3D" parent="EditableVisual" index="1" unique_id=865355349]
+editor_description = "Cierres internos independientes. Tapan cuello, torso superior y sobacos sin alterar los ajustes del rig o de los brazos."
+
+[node name="LeftArmpitSeal" type="MeshInstance3D" parent="EditableVisual/SeamRepairs" index="0" unique_id=2092397617]
+transform = Transform3D(0.48, 0, 0, 0, 0.5, 0, 0, 0, 0.62, 1.08, 8.4, 0)
+visible = false
+mesh = SubResource("Mesh_seam_sphere")
+
+[node name="RightArmpitSeal" type="MeshInstance3D" parent="EditableVisual/SeamRepairs" index="1" unique_id=1459223269]
+transform = Transform3D(0.48, 0, 0, 0, 0.5, 0, 0, 0, 0.62, -1.08, 8.4, 0)
+visible = false
+mesh = SubResource("Mesh_seam_sphere")
+
+[node name="NeckSeal" type="MeshInstance3D" parent="EditableVisual/SeamRepairs" index="2" unique_id=233086506]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.661828, 0)
+visible = false
+mesh = SubResource("Mesh_neck_seal")
+
+[editable path="EditableVisual/CleanModel"]

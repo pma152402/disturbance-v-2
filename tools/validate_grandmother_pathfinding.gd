@@ -4,7 +4,7 @@ func _init() -> void:
 	call_deferred(&"_run")
 
 func _run() -> void:
-	var game := (load("res://test.tscn") as PackedScene).instantiate()
+	var game := (load("res://levels/test.tscn") as PackedScene).instantiate()
 	root.add_child(game)
 	current_scene = game
 	var monster := game.get_node("ImportedGrandmotherGroundFloor") as CharacterBody3D

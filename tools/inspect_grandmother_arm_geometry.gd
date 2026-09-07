@@ -4,7 +4,7 @@ func _initialize() -> void:
 	call_deferred(&"_run")
 
 func _run() -> void:
-	var actor := (load("res://monster_grandmother_imported.tscn") as PackedScene).instantiate()
+	var actor := (load("res://enemies/monster_grandmother_imported.tscn") as PackedScene).instantiate()
 	root.add_child(actor)
 	actor.set_physics_process(false)
 	var visual := actor.get_node("EditableVisual")

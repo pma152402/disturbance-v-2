@@ -18,7 +18,7 @@ func _initialize() -> void:
 		var detail := asset.get_node_or_null("GeneratedDetail")
 		if detail == null or detail.get_child_count() < 5:
 			return _fail("%s no contiene piezas editables" % asset_name)
-	var house := (load("res://house_baked.tscn") as PackedScene).instantiate()
+	var house := (load("res://levels/house_baked.tscn") as PackedScene).instantiate()
 	for node_name in ["BlackFicus", "TurbineRoofVent", "OldHVACUnit", "OldHVACUnit2"]:
 		var node := house.get_node_or_null(node_name)
 		if node == null or node.get_script() != null:

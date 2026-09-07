@@ -13,7 +13,7 @@ func _init() -> void:
 
 func _run() -> void:
 	var started := Time.get_ticks_msec()
-	var scene := load("res://test.tscn") as PackedScene
+	var scene := load("res://levels/test.tscn") as PackedScene
 	var game := scene.instantiate()
 	root.add_child(game)
 	current_scene = game

@@ -6,7 +6,7 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	var packed_scene := load("res://test.tscn") as PackedScene
+	var packed_scene := load("res://levels/test.tscn") as PackedScene
 	var scene: Node = packed_scene.instantiate()
 	root.add_child(scene)
 	current_scene = scene

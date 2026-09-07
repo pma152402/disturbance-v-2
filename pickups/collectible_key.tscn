@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://house_props/old_house_key.tscn" id="1_key"]
+[ext_resource type="Script" path="res://pickups/collectible_key.gd" id="2_script"]
+
+[node name="CollectibleKey" instance=ExtResource("1_key")]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("2_script")
+key_id = &"old_house_key"
+key_name = "LLAVE ANTIGUA"

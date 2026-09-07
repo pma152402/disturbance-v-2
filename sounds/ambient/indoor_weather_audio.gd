@@ -1,6 +1,6 @@
 extends Node
 
-const WestExtension = preload("res://west_extension_bounds.gd")
+const WestExtension = preload("res://environment/west_extension_bounds.gd")
 
 ## Amortigua la tormenta cuando el jugador esta dentro de la casa.
 ## El cambio es progresivo para que atravesar una puerta no produzca un corte.

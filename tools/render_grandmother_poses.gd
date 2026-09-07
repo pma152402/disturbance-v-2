@@ -28,7 +28,7 @@ func _run() -> void:
 	camera.look_at(Vector3(0, 1.1, 0))
 	camera.fov = 40
 	camera.make_current()
-	var actor := (load("res://monster_grandmother_imported.tscn") as PackedScene).instantiate()
+	var actor := (load("res://enemies/monster_grandmother_imported.tscn") as PackedScene).instantiate()
 	viewport.add_child(actor)
 	actor.set_physics_process(false)
 	var visual := actor.get_node("EditableVisual")

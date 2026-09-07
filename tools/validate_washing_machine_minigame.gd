@@ -8,7 +8,7 @@ func _initialize() -> void:
 
 
 func _run_validation() -> void:
-	var packed_minigame := load("res://washing_machine_minigame.tscn") as PackedScene
+	var packed_minigame := load("res://minigames/washing_machine_minigame.tscn") as PackedScene
 	if packed_minigame == null:
 		_fail("No se pudo cargar washing_machine_minigame.tscn")
 		return
@@ -57,7 +57,7 @@ func _run_validation() -> void:
 		_fail("La lavadora inferior no esta en la capa 2 del raycast de interaccion")
 		return
 
-	var packed_house := load("res://house_baked.tscn") as PackedScene
+	var packed_house := load("res://levels/house_baked.tscn") as PackedScene
 	if packed_house == null:
 		_fail("No se pudo cargar house_baked.tscn")
 		return

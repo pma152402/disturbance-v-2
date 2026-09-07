@@ -4,7 +4,7 @@ Organizacion de audio del proyecto:
 
 - `ambient/`: lluvia, tormenta y ambientes continuos o espaciales.
 - `interactions/`: clics ya recortados para acciones inmediatas.
-- `footsteps/`: reservado para posibles muestras futuras. Los pasos del juego se sintetizan por impacto y superficie desde `gameplay_sound_factory.gd`.
+- `footsteps/`: reservado para posibles muestras futuras (solo contiene un `.gitkeep`). Los pasos del juego se sintetizan por material desde `gameplay_sound_factory.gd`.
 - `objects/`: sonidos propios de muebles, luces, maquinas y decoracion.
 
 Los ambientes deben exponerse como escenas reutilizables para poder cambiar su
@@ -14,8 +14,9 @@ archivo o generador sin modificar la escena principal.
 
 - `ambient/darkroom_sound.mp3`: bucle espacial con fundido cruzado en una sola luz del cuarto oscuro; las otras dos no duplican el ambiente.
 - `ambient/wood_cracking_sound.mp3`: banco de crujidos; cada evento escoge y recorta un único crack de 0,34–0,55 s en la planta opuesta al jugador.
-- Pasos procedurales: cuatro variantes del paso exterior se usan en todo el mapa. Dos voces alternas conservan las colas; la cadencia cambia al caminar, correr, agacharse y arrastrarse.
-- Las cuatro variantes se precalientan al cargar al jugador para que el primer paso no produzca un tirón.
+- Pasos procedurales: `make_surface_footstep()` sintetiza cada paso como golpe de talon + resonancia del material + textura de roce, con un perfil por superficie en `SURFACE_PROFILES` (madera, moqueta, baldosa, piedra, metal, tierra, grava) y cuatro variantes cada uno. El suelo pisado lo clasifica `player.gd::_classify_surface()`. Dos voces alternas conservan las colas, con un pie 1,1 dB mas suave que el otro; la cadencia cambia al caminar, correr, agacharse y arrastrarse.
+- Las variantes de todas las superficies se precalientan al cargar al jugador para que el primer paso no produzca un tiron.
+- La superficie escala tambien el radio de `footstep_heard`: la moqueta esconde al jugador de la abuela y la baldosa lo delata.
 - `interactions/camera_zoom.mp3`: primer tramo para zoom in y segundo tramo desde 1,55 s para zoom out; se corta con un fundido al terminar el movimiento del FOV.
 - `interactions/door_open_close_sound.mp3`: apertura desde 0 s hasta 3,66 s y cierre desde 3,72 s.
 - `interactions/screwdriver_sound.mp3`: sólo gana volumen mientras el ratón está haciendo girar realmente un tornillo.

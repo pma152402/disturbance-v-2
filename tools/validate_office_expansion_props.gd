@@ -3,7 +3,7 @@ func _initialize():
 	call_deferred("run")
 func run():
 	var assets = ["office_bookcase_oak.tscn","office_bookcase_low.tscn","office_bookcase_steel.tscn","office_bookcase_stepped.tscn","office_coat_stand.tscn","office_wire_wastebasket.tscn","office_archive_trolley.tscn","office_floor_globe.tscn","office_visitor_chair.tscn","office_diploma_medicine.tscn","office_diploma_service.tscn","office_notice_board.tscn","office_wall_key_cabinet.tscn"]
-	var house = load("res://house_baked.tscn").instantiate()
+	var house = load("res://levels/house_baked.tscn").instantiate()
 	var count := 0
 	for n in house.get_children():
 		if n.scene_file_path.get_file() in assets:

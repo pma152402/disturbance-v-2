@@ -2,7 +2,7 @@ extends SceneTree
 var errors := 0
 func _init() -> void: call_deferred("run")
 func run() -> void:
-	var house: Node3D = load("res://house_baked.tscn").instantiate()
+	var house: Node3D = load("res://levels/house_baked.tscn").instantiate()
 	root.add_child(house)
 	await process_frame
 	await process_frame

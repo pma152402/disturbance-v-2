@@ -2,7 +2,7 @@ extends StaticBody3D
 
 signal puzzle_completed
 
-const MinigameScene := preload("res://washing_machine_minigame.tscn")
+const MinigameScene := preload("res://minigames/washing_machine_minigame.tscn")
 const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
 
 @export var minigame_enabled := true

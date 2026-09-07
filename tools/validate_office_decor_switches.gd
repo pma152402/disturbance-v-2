@@ -2,7 +2,7 @@ extends SceneTree
 func _initialize():
 	call_deferred("run")
 func run():
-	var house = load("res://house_baked.tscn").instantiate()
+	var house = load("res://levels/house_baked.tscn").instantiate()
 	root.add_child(house)
 	await process_frame
 	for panel in get_nodes_in_group("house_power_panel"):

@@ -17,7 +17,7 @@ func _initialize() -> void:
 	call_deferred(&"_run")
 
 func _run() -> void:
-	var level := (load("res://test.tscn") as PackedScene).instantiate()
+	var level := (load("res://levels/test.tscn") as PackedScene).instantiate()
 	root.add_child(level)
 	current_scene = level
 	if level.has_node("ChildCompanion"):

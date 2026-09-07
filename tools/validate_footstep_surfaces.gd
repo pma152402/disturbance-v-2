@@ -32,7 +32,7 @@ func _init() -> void:
 
 
 func _run() -> void:
-	var game := (load("res://test.tscn") as PackedScene).instantiate()
+	var game := (load("res://levels/test.tscn") as PackedScene).instantiate()
 	root.add_child(game)
 	current_scene = game
 	# La planta de la escuela se construye en runtime; hay que dejarla montar.

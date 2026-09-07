@@ -2,7 +2,7 @@ extends SceneTree
 
 
 func _initialize() -> void:
-	var house := (load("res://house_baked.tscn") as PackedScene).instantiate()
+	var house := (load("res://levels/house_baked.tscn") as PackedScene).instantiate()
 	var module := house.get_node_or_null("ExteriorBasementAccess")
 	if module == null:
 		return _fail("Falta ExteriorBasementAccess en la casa")

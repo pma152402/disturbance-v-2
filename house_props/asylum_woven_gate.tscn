@@ -1,5 +1,5 @@
 [gd_scene format=3]
-[ext_resource type="Script" path="res://push_door.gd" id="door"]
+[ext_resource type="Script" path="res://doors/push_door.gd" id="door"]
 [ext_resource type="ArrayMesh" path="res://house_props/asylum_gate_lattice_complete.obj" id="weave"]
 [ext_resource type="Material" path="res://house_props/catacombs/materials/aged_iron.tres" id="iron"]
 [ext_resource type="Material" path="res://house_props/catacombs/materials/rusted_iron.tres" id="rust"]

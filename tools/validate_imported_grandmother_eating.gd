@@ -1,7 +1,7 @@
 extends SceneTree
 
 const ChildScene := preload("res://characters/companion/child_companion.tscn")
-const GrandmotherScene := preload("res://monster_grandmother_imported.tscn")
+const GrandmotherScene := preload("res://enemies/monster_grandmother_imported.tscn")
 
 
 func _initialize() -> void:

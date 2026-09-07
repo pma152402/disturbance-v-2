@@ -39,7 +39,7 @@ func _run() -> void:
 	player.add_to_group(&"player")
 	level.add_child(player)
 	player.position = Vector3(0, 0, 0.9)
-	var grandma := (load("res://monster_grandmother_imported.tscn") as PackedScene).instantiate() as CharacterBody3D
+	var grandma := (load("res://enemies/monster_grandmother_imported.tscn") as PackedScene).instantiate() as CharacterBody3D
 	level.add_child(grandma)
 	grandma.set("remain_still", false)
 	grandma.set_physics_process(false)

@@ -1,6 +1,6 @@
 extends SceneTree
 func _init() -> void:
-	var source := "res://school_upper_floor.tscn"
+	var source := "res://environment/school_upper_floor.tscn"
 	var scene := load(source).instantiate() as Node3D
 	var geometry := {}
 	var collisions := {}

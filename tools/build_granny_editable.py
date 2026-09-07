@@ -5,7 +5,7 @@ from mathutils import Vector
 from pathlib import Path
 
 PROJECT = Path(r"C:\Users\papar\Desktop\disturbance-v-2")
-SOURCE = PROJECT / "granny_2_v1.3_model.glb"
+SOURCE = PROJECT / "enemies/granny_2_v1.3_model.glb"
 OUTPUT_DIR = PROJECT / "characters" / "granny_editable"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 OUTPUT = OUTPUT_DIR / "granny_editable_rig.glb"

@@ -71,7 +71,7 @@ func _run_validation() -> void:
 	await process_frame
 	var dropped_note: RigidBody3D
 	for candidate in test_scene.get_children():
-		if candidate is RigidBody3D and candidate.scene_file_path == "res://dropped_note.tscn":
+		if candidate is RigidBody3D and candidate.scene_file_path == "res://pickups/dropped_note.tscn":
 			dropped_note = candidate as RigidBody3D
 			break
 	if dropped_note == null:
@@ -109,7 +109,7 @@ func _run_validation() -> void:
 		await process_frame
 		dropped_note = null
 		for candidate in test_scene.get_children():
-			if candidate is RigidBody3D and candidate.scene_file_path == "res://dropped_note.tscn":
+			if candidate is RigidBody3D and candidate.scene_file_path == "res://pickups/dropped_note.tscn":
 				dropped_note = candidate as RigidBody3D
 				break
 		if dropped_note == null:
@@ -119,7 +119,7 @@ func _run_validation() -> void:
 		_fail("La nota perdio su contenido tras varias recogidas")
 		return
 
-	var packed_house := load("res://house_baked.tscn") as PackedScene
+	var packed_house := load("res://levels/house_baked.tscn") as PackedScene
 	if packed_house == null:
 		_fail("No se pudo cargar house_baked.tscn")
 		return

@@ -6,7 +6,7 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	var packed := load("res://house_baked.tscn") as PackedScene
+	var packed := load("res://levels/house_baked.tscn") as PackedScene
 	if packed == null:
 		_fail("No se pudo cargar la casa")
 		return

@@ -4,7 +4,7 @@ extends StaticBody3D
 signal boiler_state_changed(previous_state: BoilerState, new_state: BoilerState)
 signal puzzle_completed
 
-const MinigameScene := preload("res://boiler_minigame.tscn")
+const MinigameScene := preload("res://minigames/boiler_minigame.tscn")
 const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
 
 enum BoilerState { OFF, RUNNING, CLOGGED }

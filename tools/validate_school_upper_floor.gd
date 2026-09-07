@@ -14,7 +14,7 @@ func check(ok: bool, message: String) -> void:
 		push_error(message)
 
 func run() -> void:
-	h = load("res://house_baked.tscn").instantiate() as Node3D
+	h = load("res://levels/house_baked.tscn").instantiate() as Node3D
 	h.set_script(null)
 	# Compare serialized rest geometry before scripts can animate old actors/doors.
 	var baseline: Dictionary
@@ -168,7 +168,7 @@ func snap(name_: String) -> void:
 	print("PREVIEW ", name_)
 
 func validate_navigation() -> void:
-	var nav := load("res://runtime_house_navigation.tscn").instantiate() as NavigationRegion3D
+	var nav := load("res://systems/runtime_house_navigation.tscn").instantiate() as NavigationRegion3D
 	nav.parsing_root_path = NodePath("../EditableTwoStoreyHouse")
 	root.add_child(nav)
 	for i in range(1800):

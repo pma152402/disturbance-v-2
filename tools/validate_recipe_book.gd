@@ -190,7 +190,7 @@ func _run_validation() -> void:
 	await process_frame
 	var dropped_book: RigidBody3D
 	for candidate in test_scene.get_children():
-		if candidate is RigidBody3D and candidate.scene_file_path == "res://dropped_recipe_book.tscn":
+		if candidate is RigidBody3D and candidate.scene_file_path == "res://pickups/dropped_recipe_book.tscn":
 			dropped_book = candidate as RigidBody3D
 			break
 	if dropped_book == null or int((dropped_book.get("book_data") as Dictionary).get("page_index", -1)) != 2:
@@ -203,7 +203,7 @@ func _run_validation() -> void:
 	if int(held_book.get("page_index")) != 2:
 		_fail("El libro pierde la pagina al volver a cogerlo")
 		return
-	var house_scene := load("res://house_baked.tscn") as PackedScene
+	var house_scene := load("res://levels/house_baked.tscn") as PackedScene
 	var house := house_scene.instantiate()
 	var kitchen_book := house.get_node_or_null("FurnitureAndPickups/KitchenRecipeBook") as Node3D
 	if kitchen_book == null:

@@ -4,7 +4,7 @@ func _initialize() -> void:
 	call_deferred("run")
 
 func run() -> void:
-	var house: Node3D = load("res://house_baked.tscn").instantiate()
+	var house: Node3D = load("res://levels/house_baked.tscn").instantiate()
 	root.add_child(house)
 	await physics_frame
 	for wall_name in [
