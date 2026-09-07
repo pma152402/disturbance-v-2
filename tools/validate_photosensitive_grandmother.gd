@@ -28,8 +28,8 @@ func _init() -> void:
 	if configured_monster == null or bool(configured_monster.get("remain_still")):
 		_fail("La segunda grandmother debe tener activa la IA fotosensible")
 		return
-	if (configured_monster as Node3D).position.y > 1.5:
-		_fail("La grandmother fotosensible debe estar abajo en el salón")
+	if configured_monster.process_mode == Node.PROCESS_MODE_DISABLED or game.has_node("ChildCompanion"):
+		_fail("La escena debe ejecutar a la abuela y no incluir a Nico")
 		return
 
 	print("OK: configuración de grandmother fotosensible verificada")

@@ -30,6 +30,7 @@ func _ready() -> void:
 			if sibling != self:
 				return
 			break
+	add_to_group(&"npc_door")
 	_door_sound = AudioStreamPlayer3D.new()
 	_door_sound.name = "DoorSound"
 	_door_sound.stream = DoorSoundStream
@@ -113,6 +114,13 @@ func _set_open(opening: bool, player: Node) -> void:
 		_is_animating = false
 		_restore_collision(_restore_token)
 	)
+
+
+func is_npc_passage_ready() -> bool:
+	for leaf in get_parent().get_children():
+		if leaf.get_script() == get_script() and (not leaf._is_open or leaf._is_animating):
+			return false
+	return _is_open
 
 
 func _restore_collision(token: int) -> void:

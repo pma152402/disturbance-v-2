@@ -181,6 +181,8 @@ var _active_screw_panel: Node3D
 var _candle_placement_mode := false
 var _candle_placement_valid := false
 var _candle_placement_point := Vector3.ZERO
+var _candle_placement_table: Node3D
+var _candle_placement_slot := -1
 var _walker_controller: Node3D
 var _walker_flashlight_was_drawn := false
 var _walker_flashlight_slot := -1
@@ -1223,10 +1225,18 @@ func _try_interact(pressed_key: Key) -> bool:
 
 func _update_interaction_prompt() -> void:
 	note_controls_prompt.visible = false
+	interaction_prompt.offset_top = 76.0
+	interaction_prompt.offset_bottom = 121.0
+	interaction_prompt.add_theme_font_size_override(&"font_size", 12)
 	if is_instance_valid(_active_companion_menu):
 		if global_position.distance_to(_active_companion_menu.global_position) > 4.5:
 			end_companion_command()
 		else:
+			# El menu del acompanante necesita mas presencia que un aviso de objeto:
+			# veinte pixeles mas alto y con una tipografia algo mayor.
+			interaction_prompt.offset_top = 56.0
+			interaction_prompt.offset_bottom = 101.0
+			interaction_prompt.add_theme_font_size_override(&"font_size", 14)
 			interaction_prompt.text = str(_active_companion_menu.call(&"get_command_menu_text"))
 			interaction_prompt.visible = true
 			return
@@ -1460,6 +1470,8 @@ func _set_candle_hand_pose() -> void:
 func _set_candle_placement_mode(active: bool) -> void:
 	_candle_placement_mode = active and _held_item == &"candle"
 	_candle_placement_valid = false
+	_candle_placement_table = null
+	_candle_placement_slot = -1
 	candle_placement_preview.visible = false
 	if _candle_placement_mode:
 		_update_candle_placement_preview()
@@ -1477,7 +1489,16 @@ func _update_candle_placement_preview() -> void:
 		return
 	var surface_normal := candle_placement_ray.get_collision_normal().normalized()
 	_candle_placement_point = candle_placement_ray.get_collision_point()
-	_candle_placement_valid = surface_normal.dot(Vector3.UP) >= 0.72
+	_candle_placement_table = _find_candle_placement_table(candle_placement_ray.get_collider() as Node)
+	_candle_placement_slot = -1
+	if _candle_placement_table != null:
+		var slot_info: Dictionary = _candle_placement_table.call(&"get_candle_slot_at", _candle_placement_point)
+		_candle_placement_valid = not slot_info.is_empty()
+		if _candle_placement_valid:
+			_candle_placement_slot = int(slot_info.get("slot", -1))
+			_candle_placement_point = slot_info.get("position", _candle_placement_point)
+	else:
+		_candle_placement_valid = surface_normal.dot(Vector3.UP) >= 0.72
 	candle_placement_preview.visible = true
 	candle_placement_preview.global_position = _candle_placement_point + Vector3.UP * 0.17
 	candle_placement_preview.global_rotation = Vector3(0.0, rotation.y, 0.0)
@@ -1503,10 +1524,21 @@ func _place_held_candle() -> bool:
 	placed_candle.global_position = _candle_placement_point + Vector3.UP * 0.17
 	placed_candle.global_rotation = Vector3(0.0, rotation.y, 0.0)
 	placed_candle.call(&"set_placed")
+	if _candle_placement_table != null and _candle_placement_slot >= 0:
+		_candle_placement_table.call(&"accept_candle", placed_candle, _candle_placement_slot)
 	_set_candle_placement_mode(false)
 	_clear_inventory_item(&"candle")
 	_return_to_flashlight_slot()
 	return true
+
+
+func _find_candle_placement_table(node: Node) -> Node3D:
+	var current := node
+	while current != null:
+		if current.has_method(&"get_candle_slot_at") and current.has_method(&"accept_candle"):
+			return current as Node3D
+		current = current.get_parent()
+	return null
 
 
 func _can_ignite_candle() -> bool:
@@ -1910,6 +1942,16 @@ func has_key(key_id: StringName) -> bool:
 
 func is_crouched() -> bool:
 	return _stance == Stance.CROUCHED and _stance_transition_timer <= 0.0
+
+
+func is_prone() -> bool:
+	return _stance == Stance.PRONE and _stance_transition_timer <= 0.0
+
+
+func get_companion_stance() -> int:
+	# Los acompanantes comienzan su propia transicion a la vez que el jugador,
+	# en vez de esperar a que la animacion de camara haya terminado.
+	return int(_pending_stance if _stance_transition_timer > 0.0 else _stance)
 
 
 func add_tool(tool_id: StringName) -> bool:

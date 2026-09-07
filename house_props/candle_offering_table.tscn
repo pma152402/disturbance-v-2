@@ -1,0 +1,425 @@
+[gd_scene format=3 uid="uid://bsf6603n8vvtj"]
+
+[ext_resource type="Script" uid="uid://b23dpl4xur57a" path="res://house_props/candle_offering_table.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://house_props/candle_pickup.tscn" id="2_candle"]
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.115, 0.047, 0.022, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="top_mesh"]
+material = SubResource("wood")
+size = Vector3(6.8, 0.12, 2.85)
+
+[sub_resource type="BoxShape3D" id="top_shape"]
+size = Vector3(6.8, 0.18, 2.85)
+
+[sub_resource type="StandardMaterial3D" id="edge"]
+albedo_color = Color(0.26, 0.13, 0.045, 1)
+metallic = 0.25
+roughness = 0.58
+
+[sub_resource type="BoxMesh" id="leg_mesh"]
+material = SubResource("edge")
+size = Vector3(0.11, 0.98, 0.11)
+
+[sub_resource type="StandardMaterial3D" id="socket"]
+albedo_color = Color(0.018, 0.012, 0.009, 1)
+metallic = 0.35
+roughness = 0.38
+
+[sub_resource type="CylinderMesh" id="socket_mesh"]
+material = SubResource("socket")
+top_radius = 0.105
+bottom_radius = 0.13
+height = 0.035
+radial_segments = 12
+
+[sub_resource type="TorusMesh" id="socket_ring_mesh"]
+material = SubResource("edge")
+inner_radius = 0.001
+outer_radius = 0.002
+rings = 8
+ring_segments = 12
+
+[sub_resource type="BoxMesh" id="socket_bridge_mesh"]
+material = SubResource("edge")
+size = Vector3(0.001, 0.001, 0.001)
+
+[sub_resource type="StandardMaterial3D" id="ember"]
+albedo_color = Color(0.7, 0.16, 0.025, 1)
+emission_enabled = true
+emission = Color(0.9, 0.1, 0.01, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="SphereMesh" id="glow_mesh"]
+material = SubResource("ember")
+radius = 0.08
+height = 0.16
+
+[node name="CandleOfferingTable" type="StaticBody3D" unique_id=7272673]
+script = ExtResource("1_script")
+metadata/_editor_description_ = "Mesa inclinada de ofrendas. Patrón: 3 filas x 2 columnas; cada hueco tiene dos aros unidos por un puente."
+
+[node name="Top" type="MeshInstance3D" parent="." unique_id=1363576627]
+transform = Transform3D(0.42356175, 0, 0, 0, 0.9816272, 0.19080877, 0, -0.19080877, 0.9816272, 0.7146528, 1.1565871, 0.18822445)
+mesh = SubResource("top_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=7018650]
+transform = Transform3D(0.42356175, 0, 0, 0, 0.9816272, 0.19080877, 0, -0.19080877, 0.9816272, 0.7146528, 1.158055, 0.19577591)
+shape = SubResource("top_shape")
+
+[node name="LegLeftFront" type="MeshInstance3D" parent="." unique_id=284628183]
+transform = Transform3D(1, 0, 0, 0, 1.4717375, 0, 0, 0, 1, 1.9115267, 0.6331651, 1.4646878)
+mesh = SubResource("leg_mesh")
+
+[node name="LegLeftFront2" type="MeshInstance3D" parent="." unique_id=695052421]
+transform = Transform3D(1, 0, 0, 0, 1.4717375, 0, 0, 0, 1, -0.5165332, 0.6331651, 1.4646878)
+mesh = SubResource("leg_mesh")
+
+[node name="LegLeftBack" type="MeshInstance3D" parent="." unique_id=780692303]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.50201344, 0.5, -0.95)
+mesh = SubResource("leg_mesh")
+
+[node name="LegRightBack" type="MeshInstance3D" parent="." unique_id=1887339734]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9407833, 0.5, -0.95)
+mesh = SubResource("leg_mesh")
+
+[node name="Slots" type="Node3D" parent="." unique_id=1679716191]
+transform = Transform3D(1, 0, 0, 0, 0.9816272, 0.19080877, 0, -0.19080877, 0.9816272, 0, 1.24, 0)
+
+[node name="LabelA" type="Label3D" parent="Slots" unique_id=1336579885]
+transform = Transform3D(1, 0, 0, 0, 0.08825269, -0.9960981, 0, 0.9960981, 0.08825269, 1.9053578, 0.02164407, -0.31665313)
+pixel_size = 0.003
+text = "A"
+font_size = 72
+outline_size = 6
+
+[node name="LabelB" type="Label3D" parent="Slots" unique_id=202261436]
+transform = Transform3D(-0.9997186, 0.023655385, -0.0018475368, 1.8626451e-09, 0.077865094, 0.99696386, 0.023727424, 0.9966832, -0.07784313, 1.6692876, -0.0013572127, 0.92537206)
+pixel_size = 0.003
+text = "B"
+font_size = 72
+outline_size = 6
+
+[node name="LabelC" type="Label3D" parent="Slots" unique_id=1007442028]
+transform = Transform3D(-0.9992516, 0, 0.03868252, 0.03857819, 0.07338699, 0.9965572, -0.0028387913, 0.99730355, -0.073332086, -0.43190953, 0.0197007, -0.34224486)
+pixel_size = 0.003
+text = "C"
+font_size = 72
+outline_size = 6
+
+[node name="Slot0" type="Marker3D" parent="Slots" unique_id=152157027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8484361, 0, -0.94336426)
+metadata/slot_index = 0
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/Slot0" unique_id=1146553979]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot1" type="Marker3D" parent="Slots" unique_id=1147129120]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.268436, 0, -0.94336426)
+metadata/slot_index = 1
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/Slot1" unique_id=1754617381]
+mesh = SubResource("socket_mesh")
+
+[node name="InitialCandleA" parent="Slots/Slot1" unique_id=375251446 instance=ExtResource("2_candle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
+initial_burn_remaining = 675.0
+initial_lit = true
+
+[node name="Slot2" type="Marker3D" parent="Slots" unique_id=1116273939]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.688436, 0, -0.94336426)
+metadata/slot_index = 2
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/Slot2" unique_id=246140702]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot3" type="Marker3D" parent="Slots" unique_id=967858156]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8484361, 0, -0.53336424)
+metadata/slot_index = 3
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/Slot3" unique_id=1980623926]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot4" type="Marker3D" parent="Slots" unique_id=490927346]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.268436, 0, -0.53336424)
+metadata/slot_index = 4
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/Slot4" unique_id=300356712]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot5" type="Marker3D" parent="Slots" unique_id=683520223]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.688436, 0, -0.53336424)
+metadata/slot_index = 5
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/Slot5" unique_id=1849248972]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot6" type="Marker3D" parent="Slots" unique_id=522985090]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8484361, 0, -0.123364255)
+metadata/slot_index = 6
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/Slot6" unique_id=2146190289]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot7" type="Marker3D" parent="Slots" unique_id=1820470469]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.268436, 0, -0.123364255)
+metadata/slot_index = 7
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/Slot7" unique_id=1971377358]
+mesh = SubResource("socket_mesh")
+
+[node name="InitialCandleB" parent="Slots/Slot7" unique_id=2057896827 instance=ExtResource("2_candle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
+initial_burn_remaining = 318.0
+
+[node name="Slot8" type="Marker3D" parent="Slots" unique_id=408910992]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.688436, 0, -0.123364255)
+metadata/slot_index = 8
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/Slot8" unique_id=878972113]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot9" type="Marker3D" parent="Slots" unique_id=1308215183]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8484361, 0, 0.28663576)
+metadata/slot_index = 9
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/Slot9" unique_id=1328676124]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot10" type="Marker3D" parent="Slots" unique_id=111605236]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.268436, 0, 0.28663576)
+metadata/slot_index = 10
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/Slot10" unique_id=106545664]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot11" type="Marker3D" parent="Slots" unique_id=654851168]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.688436, 0, 0.28663576)
+metadata/slot_index = 11
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/Slot11" unique_id=1534513146]
+mesh = SubResource("socket_mesh")
+
+[node name="PatternB" type="Node3D" parent="Slots" unique_id=1197797410]
+
+[node name="Slot12" type="Marker3D" parent="Slots/PatternB" unique_id=685596710]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0913682, 0, 0.7203386)
+metadata/slot_index = 12
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternB/Slot12" unique_id=1794386699]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.032108963, 0, 0)
+mesh = SubResource("socket_mesh")
+
+[node name="Slot13" type="Marker3D" parent="Slots/PatternB" unique_id=2103538258]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25074077, 0, 0.7203386)
+metadata/slot_index = 13
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternB/Slot13" unique_id=324547957]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot14" type="Marker3D" parent="Slots/PatternB" unique_id=1017012262]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.56074095, 0, 0.7203386)
+metadata/slot_index = 14
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternB/Slot14" unique_id=226877111]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot15" type="Marker3D" parent="Slots/PatternB" unique_id=1551454660]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.87074083, 0, 0.7203386)
+metadata/slot_index = 15
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternB/Slot15" unique_id=1999886908]
+mesh = SubResource("socket_mesh")
+
+[node name="InitialCandleC" parent="Slots/PatternB/Slot15" unique_id=293347760 instance=ExtResource("2_candle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
+initial_burn_remaining = 506.0
+initial_lit = true
+
+[node name="Slot16" type="Marker3D" parent="Slots/PatternB" unique_id=820300644]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1807408, 0, 0.7203386)
+metadata/slot_index = 16
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternB/Slot16" unique_id=1732703469]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot17" type="Marker3D" parent="Slots/PatternB" unique_id=90363078]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.490966, 0, 0.7203386)
+metadata/slot_index = 17
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternB/Slot17" unique_id=638078814]
+mesh = SubResource("socket_mesh")
+
+[node name="InitialCandleE" parent="Slots/PatternB/Slot17" unique_id=1838897246 instance=ExtResource("2_candle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
+initial_burn_remaining = 764.0
+
+[node name="Slot18" type="Marker3D" parent="Slots/PatternB" unique_id=1470245777]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.059259176, 0, 1.1403385)
+metadata/slot_index = 18
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternB/Slot18" unique_id=1513208517]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot19" type="Marker3D" parent="Slots/PatternB" unique_id=592844497]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25074077, 0, 1.1403385)
+metadata/slot_index = 19
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternB/Slot19" unique_id=495888748]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot20" type="Marker3D" parent="Slots/PatternB" unique_id=1730556382]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.56074095, 0, 1.1403385)
+metadata/slot_index = 20
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternB/Slot20" unique_id=714858500]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot21" type="Marker3D" parent="Slots/PatternB" unique_id=1254238066]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.87074083, 0, 1.1403385)
+metadata/slot_index = 21
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternB/Slot21" unique_id=266103884]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot22" type="Marker3D" parent="Slots/PatternB" unique_id=725275109]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1807408, 0, 1.1403385)
+metadata/slot_index = 22
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternB/Slot22" unique_id=1750382317]
+mesh = SubResource("socket_mesh")
+
+[node name="Slot23" type="Marker3D" parent="Slots/PatternB" unique_id=345314357]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4907409, 0, 1.1403385)
+metadata/slot_index = 23
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternB/Slot23" unique_id=198350134]
+mesh = SubResource("socket_mesh")
+
+[node name="PatternC" type="Node3D" parent="Slots" unique_id=929314398]
+
+[node name="Slot24" type="Marker3D" parent="Slots/PatternC" unique_id=778643101]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1832946, 0, -0.7907101)
+metadata/slot_index = 24
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternC/Slot24" unique_id=552473838]
+mesh = SubResource("socket_mesh")
+
+[node name="RingA" type="MeshInstance3D" parent="Slots/PatternC/Slot24/Socket" unique_id=1457939924]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, -0.052)
+mesh = SubResource("socket_ring_mesh")
+
+[node name="RingB" type="MeshInstance3D" parent="Slots/PatternC/Slot24/Socket" unique_id=812707600]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0.052)
+mesh = SubResource("socket_ring_mesh")
+
+[node name="Bridge" type="MeshInstance3D" parent="Slots/PatternC/Slot24/Socket" unique_id=633314985]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
+mesh = SubResource("socket_bridge_mesh")
+
+[node name="Slot25" type="Marker3D" parent="Slots/PatternC" unique_id=676527653]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37670547, 0, -0.7907101)
+metadata/slot_index = 25
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternC/Slot25" unique_id=389686339]
+mesh = SubResource("socket_mesh")
+
+[node name="RingA" type="MeshInstance3D" parent="Slots/PatternC/Slot25/Socket" unique_id=1365305844]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, -0.052)
+mesh = SubResource("socket_ring_mesh")
+
+[node name="RingB" type="MeshInstance3D" parent="Slots/PatternC/Slot25/Socket" unique_id=174482584]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0.052)
+mesh = SubResource("socket_ring_mesh")
+
+[node name="Bridge" type="MeshInstance3D" parent="Slots/PatternC/Slot25/Socket" unique_id=1866757018]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
+mesh = SubResource("socket_bridge_mesh")
+
+[node name="Slot26" type="Marker3D" parent="Slots/PatternC" unique_id=1418124304]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1832946, 0, -0.3407101)
+metadata/slot_index = 26
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternC/Slot26" unique_id=276783578]
+mesh = SubResource("socket_mesh")
+
+[node name="RingA" type="MeshInstance3D" parent="Slots/PatternC/Slot26/Socket" unique_id=1108169562]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, -0.052)
+mesh = SubResource("socket_ring_mesh")
+
+[node name="RingB" type="MeshInstance3D" parent="Slots/PatternC/Slot26/Socket" unique_id=55765238]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0.052)
+mesh = SubResource("socket_ring_mesh")
+
+[node name="Bridge" type="MeshInstance3D" parent="Slots/PatternC/Slot26/Socket" unique_id=150307043]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
+mesh = SubResource("socket_bridge_mesh")
+
+[node name="Slot27" type="Marker3D" parent="Slots/PatternC" unique_id=2042636244]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37670547, 0, -0.3407101)
+metadata/slot_index = 27
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternC/Slot27" unique_id=1683633388]
+mesh = SubResource("socket_mesh")
+
+[node name="RingA" type="MeshInstance3D" parent="Slots/PatternC/Slot27/Socket" unique_id=53858736]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, -0.052)
+mesh = SubResource("socket_ring_mesh")
+
+[node name="RingB" type="MeshInstance3D" parent="Slots/PatternC/Slot27/Socket" unique_id=1196580009]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0.052)
+mesh = SubResource("socket_ring_mesh")
+
+[node name="Bridge" type="MeshInstance3D" parent="Slots/PatternC/Slot27/Socket" unique_id=1741189011]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
+mesh = SubResource("socket_bridge_mesh")
+
+[node name="Slot28" type="Marker3D" parent="Slots/PatternC" unique_id=832645295]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1832946, 0, 0.109289885)
+metadata/slot_index = 28
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternC/Slot28" unique_id=494263381]
+mesh = SubResource("socket_mesh")
+
+[node name="RingA" type="MeshInstance3D" parent="Slots/PatternC/Slot28/Socket" unique_id=1255482946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, -0.052)
+mesh = SubResource("socket_ring_mesh")
+
+[node name="RingB" type="MeshInstance3D" parent="Slots/PatternC/Slot28/Socket" unique_id=270835400]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0.052)
+mesh = SubResource("socket_ring_mesh")
+
+[node name="Bridge" type="MeshInstance3D" parent="Slots/PatternC/Slot28/Socket" unique_id=1569016858]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
+mesh = SubResource("socket_bridge_mesh")
+
+[node name="InitialCandleD" parent="Slots/PatternC/Slot28" unique_id=109959743 instance=ExtResource("2_candle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
+initial_burn_remaining = 142.0
+
+[node name="Slot29" type="Marker3D" parent="Slots/PatternC" unique_id=1445066226]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37670547, 0, 0.109289885)
+metadata/slot_index = 29
+
+[node name="Socket" type="MeshInstance3D" parent="Slots/PatternC/Slot29" unique_id=782800707]
+mesh = SubResource("socket_mesh")
+
+[node name="RingA" type="MeshInstance3D" parent="Slots/PatternC/Slot29/Socket" unique_id=2110054748]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, -0.052)
+mesh = SubResource("socket_ring_mesh")
+
+[node name="RingB" type="MeshInstance3D" parent="Slots/PatternC/Slot29/Socket" unique_id=539008521]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0.052)
+mesh = SubResource("socket_ring_mesh")
+
+[node name="Bridge" type="MeshInstance3D" parent="Slots/PatternC/Slot29/Socket" unique_id=319067557]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
+mesh = SubResource("socket_bridge_mesh")
+
+[node name="StatusLight" type="OmniLight3D" parent="." unique_id=1997005471]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35925913, 1.32, 1.4803386)
+light_color = Color(0.46, 0.08, 0.04, 1)
+light_energy = 0.38
+omni_range = 2.7

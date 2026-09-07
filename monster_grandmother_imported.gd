@@ -22,10 +22,11 @@ enum PhotoBehavior { PATROL, STATIC_LIGHT, FLASHLIGHT, LIGHT_MEMORY, CLOSE_PLAYE
 @export var dark_player_pursuit_break_distance := 4.8
 @export var dark_player_hidden_memory_seconds := 0.65
 @export var footstep_interest_seconds := 1.6
-@export var lost_player_search_seconds := 4.2
+@export var lost_player_search_seconds := 8.0
 @export var search_step_seconds := 1.05
 @export var search_sweep_radius := 1.45
 @export_group("Revelado anti-espera")
+@export var supernatural_player_reveal := false
 @export var reveal_after_seconds := 20.0
 @export var reveal_live_seconds := 1.0
 @export var reveal_reset_distance := 6.0
@@ -70,6 +71,11 @@ var _lost_search_timer := 0.0
 var _search_step_timer := 0.0
 var _search_anchor := Vector3.ZERO
 var _search_step_index := 0
+var _search_anchor_visited := false
+var _photo_sense_timer := 0.0
+var _sees_personal_light := false
+var _senses_close_player := false
+var _sees_known_player := false
 
 
 func _ready() -> void:
@@ -167,6 +173,37 @@ func _physics_process(delta: float) -> void:
 		if not is_instance_valid(_player):
 			_stop_and_apply_gravity(delta)
 			return
+	_prey_refresh_timer = maxf(0.0, _prey_refresh_timer - delta)
+	_door_scan_timer = maxf(0.0, _door_scan_timer - delta)
+	if _prey_refresh_timer <= 0.0 or not _is_valid_prey(_prey):
+		_refresh_preferred_prey()
+	# La prioridad infantil esta por encima de luces y del jugador. El modelo
+	# importado conserva sus reglas fotosensibles cuando ya no quedan niños.
+	if current_state == State.EAT or (is_instance_valid(_prey) and _prey != _player):
+		_door_cooldown = maxf(0.0, _door_cooldown - delta)
+		_attack_cooldown_timer = maxf(0.0, _attack_cooldown_timer - delta)
+		_target_refresh_timer = maxf(0.0, _target_refresh_timer - delta)
+		_apply_gravity(delta)
+		if current_state == State.EAT:
+			_update_eating(delta)
+		else:
+			if current_state not in [State.CHASE, State.ATTACK]:
+				_change_state(State.CHASE)
+			_update_perception_cache(delta)
+			var sees_child := _cached_sees_prey
+			var hears_child := _cached_hears_prey
+			_update_awareness(delta, sees_child, hears_child)
+			if _door_traversal_active:
+				_update_movement(delta)
+			elif current_state == State.ATTACK:
+				_update_attack(delta)
+			else:
+				_update_movement(delta)
+		_update_frame_duck(delta)
+		move_and_slide()
+		_try_open_door()
+		_update_animation(delta)
+		return
 
 	_door_cooldown = maxf(0.0, _door_cooldown - delta)
 	_attack_cooldown_timer = maxf(0.0, _attack_cooldown_timer - delta)
@@ -178,11 +215,23 @@ func _physics_process(delta: float) -> void:
 		_remove_invalid_light_sources()
 		_refresh_light_activation_states()
 
-	var sees_flashlight := _can_see_flashlight()
-	var player_is_close := _is_player_close_enough()
+	# Terminar el ataque comprometido antes de aceptar una distracción.
+	if current_state == State.ATTACK:
+		_update_attack(delta)
+		move_and_slide()
+		_update_animation(delta)
+		return
+	_photo_sense_timer = maxf(0.0, _photo_sense_timer - delta)
+	if _photo_sense_timer <= 0.0:
+		_photo_sense_timer = perception_interval
+		_sees_personal_light = _can_see_flashlight()
+		_senses_close_player = _is_player_close_enough()
+		_sees_known_player = _player_hunt_active and _can_see_hunted_player()
+	var sees_flashlight := _sees_personal_light
+	var player_is_close := _senses_close_player
 	var position_is_revealed := _update_player_reveal(delta)
 
-	var sees_hunted_player := _player_hunt_active and _can_see_hunted_player()
+	var sees_hunted_player := _player_hunt_active and _sees_known_player
 
 	# El jugador visible siempre manda. Una luz solo distrae cuando ya se ha roto
 	# la vision directa, nunca mientras la abuela lo tiene localizado delante.
@@ -228,6 +277,14 @@ func _update_dormant_activation() -> void:
 		_dormant_released = true
 		_reveal_countdown = reveal_after_seconds
 		_return_to_patrol()
+
+
+func _on_navigation_rebuilt() -> void:
+	_patrol_points = [_snap_to_navigation(_spawn_position + patrol_offset_a), _snap_to_navigation(_spawn_position + patrol_offset_b)]
+	if _photo_behavior == PhotoBehavior.PATROL:
+		_patrol_point_index = _closest_patrol_point_index()
+		_patrol_target = _patrol_points[_patrol_point_index]
+		_patrol_travel_timer = patrol_travel_timeout
 
 
 func _focus_flashlight() -> void:
@@ -299,7 +356,7 @@ func _update_lost_stimulus(delta: float) -> void:
 		PhotoBehavior.FOOTSTEP:
 			_footstep_interest_timer = maxf(0.0, _footstep_interest_timer - delta)
 			if _footstep_interest_timer <= 0.0 or global_position.distance_to(_last_known_player_position) < 0.75:
-				_return_to_patrol()
+				_begin_lost_player_search()
 		PhotoBehavior.REVEALED_PLAYER:
 			_reveal_search_timer = maxf(0.0, _reveal_search_timer - delta)
 			_set_state(State.INVESTIGATE)
@@ -381,6 +438,9 @@ func _return_to_patrol() -> void:
 
 
 func _update_player_reveal(delta: float) -> bool:
+	if not supernatural_player_reveal:
+		_reveal_live_timer = 0.0
+		return false
 	var player_distance := global_position.distance_to(_player.global_position)
 	if player_distance <= reveal_reset_distance:
 		_reveal_countdown = reveal_after_seconds
@@ -427,7 +487,7 @@ func _continue_player_hunt(delta: float) -> void:
 		_begin_lost_player_search()
 		return
 
-	if _has_clear_line_to(_player.global_position + Vector3.UP * 1.0, _player):
+	if _sees_known_player:
 		_player_loss_timer = _current_player_memory_seconds()
 		_lost_search_timer = lost_player_search_seconds
 		_last_known_player_position = _player.global_position
@@ -450,6 +510,8 @@ func _begin_lost_player_search() -> void:
 	_lost_search_timer = lost_player_search_seconds
 	_search_step_timer = 0.0
 	_search_step_index = 0
+	_search_anchor_visited = false
+	_search_step_timer = 3.0
 	_last_known_player_position = _search_anchor
 	_set_state(State.SEARCH)
 	_target_refresh_timer = 0.0
@@ -462,14 +524,26 @@ func _update_lost_player_search(delta: float) -> void:
 		_return_to_patrol()
 		return
 	var arrived := global_position.distance_to(_last_known_player_position) < 0.72
-	if _search_step_timer > 0.0 and not arrived:
+	# Primero llegar al último lugar observado; después detenerse a escuchar.
+	if not _search_anchor_visited:
+		if not arrived and _search_step_timer > 0.0:
+			return
+		_search_anchor_visited = true
+		_search_step_timer = 0.65
+		return
+	if _search_step_timer > 0.0:
 		return
 	var search_angles := [0.0, 2.35, -2.35, 1.15, -1.15, PI]
 	var angle: float = search_angles[_search_step_index % search_angles.size()]
 	var radius := search_sweep_radius * (0.62 + 0.38 * float((_search_step_index % 3) + 1) / 3.0)
-	_last_known_player_position = _snap_to_navigation(
-		_search_anchor + Vector3(cos(angle), 0.0, sin(angle)) * radius
-	)
+	var candidate := _snap_to_navigation(_search_anchor + Vector3(cos(angle), 0.0, sin(angle)) * radius)
+	if _navigation_available:
+		var path := NavigationServer3D.map_get_path(get_world_3d().navigation_map, global_position, candidate, true)
+		if path.is_empty() or path[-1].distance_to(candidate) > 0.75 or absf(candidate.y - _search_anchor.y) > 1.0:
+			_search_step_index += 1
+			_search_step_timer = 0.2
+			return
+	_last_known_player_position = candidate
 	_search_step_index += 1
 	_search_step_timer = search_step_seconds
 	_target_refresh_timer = 0.0
@@ -508,14 +582,21 @@ func _on_player_switched_on_light(source: Node3D) -> void:
 
 
 func _on_player_footstep_heard(step_position: Vector3, hearing_radius: float) -> void:
+	if current_state in [State.ATTACK, State.EAT]:
+		return
 	if _player_hunt_active or _photo_behavior in [PhotoBehavior.STATIC_LIGHT, PhotoBehavior.FLASHLIGHT]:
 		return
 	if absf(step_position.y - global_position.y) > same_floor_player_tolerance:
 		return
-	if global_position.distance_to(step_position) > hearing_radius:
+	var sound_distance := global_position.distance_to(step_position)
+	if sound_distance > hearing_radius:
+		return
+	# Las paredes amortiguan los pasos, pero no convierten la casa en silencio.
+	if sound_distance > hearing_radius * 0.55 and not _has_clear_line_between(global_position + Vector3.UP, step_position + Vector3.UP, _player):
 		return
 	_last_known_player_position = _snap_to_navigation(step_position)
-	_footstep_interest_timer = footstep_interest_seconds
+	_footstep_interest_timer = clampf(sound_distance / maxf(investigate_speed, 0.1) + 0.8, footstep_interest_seconds, 6.0)
+	_target_refresh_timer = 0.0
 	_photo_behavior = PhotoBehavior.FOOTSTEP
 	_set_state(State.INVESTIGATE)
 
@@ -714,6 +795,8 @@ func _has_clear_line_between(from_position: Vector3, target_position: Vector3, t
 
 
 func _cache_light_sources(node: Node) -> void:
+	if not is_instance_valid(node):
+		return
 	if node is Node3D and node.has_method(&"set_lamp_enabled"):
 		_light_sources.append(node as Node3D)
 	for child in node.get_children():

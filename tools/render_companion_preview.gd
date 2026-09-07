@@ -35,12 +35,14 @@ func _render() -> void:
 
 	var camera := Camera3D.new()
 	viewport.add_child(camera)
-	camera.position = Vector3(0.0, 1.0, 3.1)
-	camera.look_at(Vector3(0.0, 0.78, 0.0))
+	camera.position = Vector3(0.65, 1.15, 3.8)
+	camera.look_at(Vector3(0.0, 0.88, 0.0))
 	camera.fov = 34.0
 	camera.make_current()
 
-	for _frame in range(8):
+	for _frame in range(90):
+		visual.call(&"set_motion_context", 0.0, 0.0, camera.position, false)
+		visual.call(&"update_companion_animation", 1.0 / 60.0, 0.0, true)
 		await process_frame
 	var image := viewport.get_texture().get_image()
 	if image == null:
@@ -51,6 +53,17 @@ func _render() -> void:
 	var error := image.save_png(output_path)
 	if error == OK:
 		print("Companion preview saved: %s" % output_path)
+		var motion_sheet := Image.create(640 * 4, 720, false, Image.FORMAT_RGBA8)
+		for sample in 4:
+			for frame in 12:
+				visual.call(&"set_motion_context", 1.15, 0.0, camera.position, false)
+				visual.call(&"update_companion_animation", 1.0 / 60.0, 1.0, false)
+			await process_frame
+			await RenderingServer.frame_post_draw
+			var sample_image := viewport.get_texture().get_image()
+			sample_image.convert(Image.FORMAT_RGBA8)
+			motion_sheet.blit_rect(sample_image, Rect2i(0, 0, 640, 720), Vector2i(sample * 640, 0))
+		motion_sheet.save_png(ProjectSettings.globalize_path("res://tools/companion_motion_preview.png"))
 		quit(0)
 	else:
 		push_error("Could not save companion preview: %s" % error_string(error))

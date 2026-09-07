@@ -59,13 +59,20 @@ func _update_shadow_budget() -> void:
 	var candidates: Array[Light3D] = []
 	for light in _lights:
 		if not is_instance_valid(light): continue
-		var distance := camera.global_position.distance_to(light.global_position)
-		light.shadow_enabled = false
-		if light.visible and _shadow_capable.get(light,false) and distance <= minf(11.0, _light_range(light) * 1.65):
+		var distance_squared := camera.global_position.distance_squared_to(light.global_position)
+		var shadow_range := minf(11.0, _light_range(light) * 1.65)
+		if light.is_visible_in_tree() and light.light_energy > 0.0 and _shadow_capable.get(light,false) and distance_squared <= shadow_range * shadow_range:
 			candidates.append(light)
 	candidates.sort_custom(func(a: Light3D,b: Light3D): return camera.global_position.distance_squared_to(a.global_position) < camera.global_position.distance_squared_to(b.global_position))
+	var selected: Array[Light3D] = []
 	for index in mini(MAX_SHADOW_LIGHTS,candidates.size()):
-		candidates[index].shadow_enabled = true
+		selected.append(candidates[index])
+	for light in _lights:
+		if not is_instance_valid(light):
+			continue
+		var enable_shadow := light in selected
+		if light.shadow_enabled != enable_shadow:
+			light.shadow_enabled = enable_shadow
 
 func _light_range(light: Light3D) -> float:
 	if light is OmniLight3D:

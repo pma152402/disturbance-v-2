@@ -1,8 +1,13 @@
 extends CharacterBody3D
 
-signal state_changed(previous_state: State, new_state: State)
+const PassageProbe := preload("res://npc_passage_probe.gd")
 
-enum State { PATROL, INVESTIGATE, CHASE, SEARCH, ATTACK }
+signal state_changed(previous_state: State, new_state: State)
+signal prey_changed(previous_prey: Node3D, new_prey: Node3D)
+signal child_caught(child: Node3D)
+signal finished_eating_child(child: Node3D)
+
+enum State { PATROL, INVESTIGATE, CHASE, SEARCH, ATTACK, EAT }
 
 const STAIR_LOWER_ANCHOR := Vector3(-1.328, 0.12, 3.0)
 const STAIR_UPPER_ANCHOR := Vector3(-1.328, 4.18, -2.18)
@@ -32,13 +37,24 @@ const STAIR_UPPER_ANCHOR := Vector3(-1.328, 4.18, -2.18)
 @export var chase_prediction_seconds := 0.22
 @export var chase_slowdown_distance := 2.1
 @export var chase_stop_distance := 0.68
+@export_group("Prioridad de presas")
+@export var prioritize_children := true
+@export_range(0.05, 1.0, 0.05) var prey_refresh_seconds := 0.2
+@export_range(1.0, 60.0, 0.5) var child_eating_seconds := 20.0
+@export_range(0.05, 0.5, 0.01) var perception_interval := 0.1
+@export_range(0.45, 1.2, 0.05) var eating_distance := 0.72
+@export_range(0.3, 1.5, 0.05) var eating_approach_speed := 0.8
+@export_range(0.5, 4.0, 0.1) var eating_approach_timeout := 2.0
 @export_group("Cruce de puertas")
 @export var door_approach_distance := 0.38
 @export var door_cross_distance := 1.15
 @export var door_cross_speed := 1.55
 @export var door_open_wait_seconds := 0.12
 @export var door_cross_timeout := 2.8
+@export var door_blocked_timeout := 2.5
 @export var door_center_tolerance := 0.20
+@export_range(0.05, 0.5, 0.01) var door_scan_interval := 0.12
+@export_range(0.05, 0.5, 0.01) var clearance_probe_interval := 0.1
 
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var door_ray: RayCast3D = $DoorRay
@@ -65,7 +81,10 @@ const STAIR_UPPER_ANCHOR := Vector3(-1.328, 4.18, -2.18)
 @onready var voice_sound: AudioStreamPlayer3D = $VoiceSound
 
 var current_state := State.PATROL
+var _door_blocked_timer := 0.0
+var _navigation_revision := -1
 var _player: CharacterBody3D
+var _prey: CharacterBody3D
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 var _spawn_position := Vector3.ZERO
 var _last_known_player_position := Vector3.ZERO
@@ -110,6 +129,20 @@ var _door_traversal_timer := 0.0
 var _door_open_wait_timer := 0.0
 var _last_crossed_door_id := 0
 var _door_reentry_timer := 0.0
+var _prey_refresh_timer := 0.0
+var _perception_timer := 0.0
+var _cached_sees_prey := false
+var _cached_hears_prey := false
+var _door_scan_timer := 0.0
+var _clearance_probe_timer := 0.0
+var _cached_doorway_header_ahead := false
+var _cached_low_ceiling_above := false
+var _eating_target: CharacterBody3D
+var _eating_timer := 0.0
+var _eating_elapsed := 0.0
+var _eating_approach_timer := 0.0
+var _eating_started := false
+var _eating_pose_amount := 0.0
 
 
 func _ready() -> void:
@@ -121,11 +154,15 @@ func _ready() -> void:
 	navigation_agent.path_height_offset = 0.0
 	navigation_agent.path_desired_distance = 0.42
 	navigation_agent.target_desired_distance = 0.65
-	# El funnel recorta esquinas al máximo y hacía que la cápsula rozase marcos
-	# y muebles. Los centros de portal producen recorridos algo menos cortos,
-	# pero mucho más fiables dentro de habitaciones estrechas.
-	navigation_agent.path_postprocessing = NavigationPathQueryParameters3D.PATH_POSTPROCESSING_EDGECENTERED
+	# Mecanismo base del video: objetivo mundial vivo + siguiente punto del
+	# NavigationAgent. CORRIDORFUNNEL evita los bucles que EDGE_CENTERED producia
+	# en pasillos; los portales explicitos se encargan de centrar las puertas.
+	navigation_agent.path_postprocessing = NavigationPathQueryParameters3D.PATH_POSTPROCESSING_CORRIDORFUNNEL
 	navigation_agent.avoidance_enabled = false
+	door_ray.enabled = false
+	head_forward_ray.enabled = false
+	body_forward_ray.enabled = false
+	overhead_ray.enabled = false
 	_last_motion_sample_position = global_position
 	breathing_sound.stream = _make_breathing_sound()
 	footstep_sound.stream = _make_footstep_sound()
@@ -137,6 +174,7 @@ func _ready() -> void:
 	else:
 		breathing_sound.stop()
 	_waiting_covered_eyes = starts_waiting_covered_eyes
+	_refresh_preferred_prey(true)
 	if is_instance_valid(mouth):
 		_mouth_rest_scale = mouth.scale
 	for tooth_number in range(1, 9):
@@ -156,6 +194,57 @@ func _finish_navigation_setup() -> void:
 	_choose_patrol_target()
 
 
+func _refresh_preferred_prey(force := false) -> void:
+	_prey_refresh_timer = prey_refresh_seconds
+	var selected: CharacterBody3D
+	var closest_distance := INF
+	if prioritize_children:
+		for candidate in get_tree().get_nodes_in_group(&"child_target"):
+			var child := candidate as CharacterBody3D
+			if not _is_valid_child_prey(child):
+				continue
+			var distance := global_position.distance_squared_to(child.global_position)
+			if distance < closest_distance:
+				closest_distance = distance
+				selected = child
+	if selected == null and is_instance_valid(_player):
+		selected = _player
+	if not force and selected == _prey:
+		return
+	var previous := _prey
+	_prey = selected
+	# La percepción almacenada pertenece a la presa anterior.
+	_perception_timer = 0.0
+	_cached_sees_prey = false
+	_cached_hears_prey = false
+	_target_refresh_timer = 0.0
+	_smoothed_move_direction = Vector3.ZERO
+	if is_instance_valid(_prey):
+		_last_known_player_position = _prey.global_position
+		if _prey != _player and not _waiting_covered_eyes and current_state != State.EAT:
+			_player_has_moved = true
+			_change_state(State.CHASE)
+		elif current_state == State.ATTACK:
+			_change_state(State.CHASE)
+	prey_changed.emit(previous, _prey)
+
+
+func _is_valid_child_prey(child: CharacterBody3D) -> bool:
+	if not is_instance_valid(child) or not child.is_inside_tree():
+		return false
+	if child.has_method(&"can_be_targeted_by_monster"):
+		return bool(child.call(&"can_be_targeted_by_monster"))
+	return true
+
+
+func _is_valid_prey(candidate: CharacterBody3D) -> bool:
+	if not is_instance_valid(candidate) or not candidate.is_inside_tree():
+		return false
+	if candidate == _player:
+		return true
+	return _is_valid_child_prey(candidate)
+
+
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(_player):
 		_player = get_tree().get_first_node_in_group(&"player") as CharacterBody3D
@@ -163,8 +252,12 @@ func _physics_process(delta: float) -> void:
 			return
 		_player_start_position = Vector2(_player.global_position.x, _player.global_position.z)
 		_player_start_position_set = true
+	_prey_refresh_timer = maxf(0.0, _prey_refresh_timer - delta)
+	if _prey_refresh_timer <= 0.0 or not _is_valid_prey(_prey):
+		_refresh_preferred_prey()
 
 	_door_cooldown = maxf(0.0, _door_cooldown - delta)
+	_door_scan_timer = maxf(0.0, _door_scan_timer - delta)
 	_attack_cooldown_timer = maxf(0.0, _attack_cooldown_timer - delta)
 	_target_refresh_timer = maxf(0.0, _target_refresh_timer - delta)
 	if not is_on_floor():
@@ -175,10 +268,11 @@ func _physics_process(delta: float) -> void:
 	if not _player_has_moved:
 		var player_position_2d := Vector2(_player.global_position.x, _player.global_position.z)
 		var player_speed_2d := Vector2(_player.velocity.x, _player.velocity.z).length()
+		var prey_speed_2d := Vector2(_prey.velocity.x, _prey.velocity.z).length() if is_instance_valid(_prey) else 0.0
 		if not _player_start_position_set:
 			_player_start_position = player_position_2d
 			_player_start_position_set = true
-		_player_has_moved = player_position_2d.distance_to(_player_start_position) > 0.035 or player_speed_2d > 0.12
+		_player_has_moved = player_position_2d.distance_to(_player_start_position) > 0.035 or player_speed_2d > 0.12 or prey_speed_2d > 0.12
 		if not _player_has_moved:
 			velocity.x = move_toward(velocity.x, 0.0, delta * 12.0)
 			velocity.z = move_toward(velocity.z, 0.0, delta * 12.0)
@@ -186,14 +280,20 @@ func _physics_process(delta: float) -> void:
 			_update_animation(delta)
 			return
 
-	var sees_player := _can_see_player()
-	var hears_player := _can_hear_player()
-	_update_awareness(delta, sees_player, hears_player)
+	var sees_prey := false
+	var hears_prey := false
+	if current_state != State.EAT:
+		_update_perception_cache(delta)
+		sees_prey = _cached_sees_prey
+		hears_prey = _cached_hears_prey
+		_update_awareness(delta, sees_prey, hears_prey)
 
 	var distress_active := _update_distress(delta)
 	if distress_active:
 		velocity.x = move_toward(velocity.x, 0.0, delta * 10.0)
 		velocity.z = move_toward(velocity.z, 0.0, delta * 10.0)
+	elif current_state == State.EAT:
+		_update_eating(delta)
 	elif _door_traversal_active:
 		_update_movement(delta)
 	elif current_state == State.ATTACK:
@@ -210,27 +310,33 @@ func _physics_process(delta: float) -> void:
 func _update_distress(delta: float) -> bool:
 	if not _waiting_covered_eyes:
 		return false
-	if global_position.distance_to(_player.global_position) <= wake_distance:
+	var wake_target := _prey if is_instance_valid(_prey) else _player
+	var wake_distance_to_target := global_position.distance_to(wake_target.global_position)
+	if is_instance_valid(_player):
+		wake_distance_to_target = minf(wake_distance_to_target, global_position.distance_to(_player.global_position))
+	if wake_distance_to_target <= wake_distance:
 		_waiting_covered_eyes = false
 		_player_has_moved = true
-		_last_known_player_position = _player.global_position
+		_last_known_player_position = wake_target.global_position
 		_change_state(State.CHASE)
 		return false
-	var to_player := _player.global_position - global_position
-	to_player.y = 0.0
-	if to_player.length_squared() > 0.01:
-		rotation.y = lerp_angle(rotation.y, atan2(to_player.x, to_player.z), minf(delta * 8.0, 1.0))
+	var to_target := wake_target.global_position - global_position
+	to_target.y = 0.0
+	if to_target.length_squared() > 0.01:
+		rotation.y = lerp_angle(rotation.y, atan2(to_target.x, to_target.z), minf(delta * 8.0, 1.0))
 	return true
 
 
-func _update_awareness(delta: float, sees_player: bool, hears_player: bool) -> void:
-	if sees_player:
-		_last_known_player_position = _player.global_position
+func _update_awareness(delta: float, sees_prey: bool, hears_prey: bool) -> void:
+	if not is_instance_valid(_prey):
+		return
+	if sees_prey:
+		_last_known_player_position = _prey.global_position
 		_memory_timer = chase_memory_seconds
 		if current_state != State.CHASE and current_state != State.ATTACK:
 			_change_state(State.CHASE)
-	elif hears_player and current_state in [State.PATROL, State.SEARCH]:
-		_last_known_player_position = _player.global_position
+	elif hears_prey and current_state in [State.PATROL, State.SEARCH]:
+		_last_known_player_position = _prey.global_position
 		_change_state(State.INVESTIGATE)
 
 	match current_state:
@@ -240,29 +346,29 @@ func _update_awareness(delta: float, sees_player: bool, hears_player: bool) -> v
 				if _state_timer <= 0.0:
 					_choose_patrol_target()
 		State.INVESTIGATE:
-			if sees_player:
+			if sees_prey:
 				_change_state(State.CHASE)
 			elif global_position.distance_to(_last_known_player_position) < 0.9:
 				_change_state(State.SEARCH)
 		State.CHASE:
-			var changing_floor := absf(_player.global_position.y - global_position.y) > 1.15
-			if sees_player or changing_floor:
+			var changing_floor := absf(_prey.global_position.y - global_position.y) > 1.15
+			if sees_prey or changing_floor:
 				# Floors and the stair slab temporarily block line of sight. During that
 				# transition she must keep following the live target instead of forgetting it.
-				_last_known_player_position = _player.global_position
+				_last_known_player_position = _prey.global_position
 				_memory_timer = chase_memory_seconds
 			else:
 				_memory_timer -= delta
 				if _memory_timer <= 0.0:
 					_change_state(State.SEARCH)
-			if _has_attack_contact(attack_distance) and sees_player and can_begin_attack():
+			if _has_attack_contact(attack_distance) and sees_prey and can_begin_attack():
 				_change_state(State.ATTACK)
 		State.SEARCH:
 			_state_timer -= delta
-			if sees_player:
+			if sees_prey:
 				_change_state(State.CHASE)
-			elif hears_player:
-				_last_known_player_position = _player.global_position
+			elif hears_prey:
+				_last_known_player_position = _prey.global_position
 				_change_state(State.INVESTIGATE)
 			elif _state_timer <= 0.0:
 				_choose_patrol_target()
@@ -283,7 +389,7 @@ func _update_movement(delta: float) -> void:
 			target = _last_known_player_position
 			speed = investigate_speed
 		State.CHASE:
-			target = _predicted_player_position()
+			target = _predicted_prey_position()
 			speed = chase_speed
 			target = _get_floor_transition_target(target)
 		State.SEARCH:
@@ -292,16 +398,18 @@ func _update_movement(delta: float) -> void:
 
 	if _target_refresh_timer <= 0.0:
 		_target_refresh_timer = target_refresh_seconds
-		_navigation_available = NavigationServer3D.map_get_iteration_id(get_world_3d().navigation_map) > 0
+		_refresh_navigation_state()
 		if _navigation_available:
 			navigation_agent.target_position = target
 
 	var next_point := global_position
 	var has_navigation_path := false
 	if not _force_stair_steering and _navigation_available and not navigation_agent.is_navigation_finished():
+		# El agente calcula/avanza la ruta al solicitar el siguiente punto.
+		# Consultar primero el array deja una ruta recién asignada sin calcular.
+		next_point = navigation_agent.get_next_path_position()
 		has_navigation_path = navigation_agent.get_current_navigation_path().size() >= 2
 	if has_navigation_path:
-		next_point = navigation_agent.get_next_path_position()
 		next_point = _get_next_useful_path_point(next_point)
 	elif _force_stair_steering:
 		next_point = target
@@ -313,21 +421,22 @@ func _update_movement(delta: float) -> void:
 	flat_direction.y = 0.0
 	if flat_direction.length_squared() > 0.015:
 		flat_direction = flat_direction.normalized()
-		var planar_player_distance := INF
-		var close_visible_player := false
-		if current_state == State.CHASE and is_instance_valid(_player):
-			planar_player_distance = _player_planar_distance()
-			close_visible_player = (
-				absf(_player.global_position.y - global_position.y) <= attack_vertical_tolerance
-				and _has_clear_line_to_player_body()
+		var planar_prey_distance := INF
+		var close_visible_prey := false
+		if current_state == State.CHASE and is_instance_valid(_prey):
+			planar_prey_distance = _prey_planar_distance()
+			close_visible_prey = (
+				planar_prey_distance <= chase_slowdown_distance
+				and absf(_prey.global_position.y - global_position.y) <= attack_vertical_tolerance
+				and _has_clear_line_to_prey_body()
 			)
-			if close_visible_player and planar_player_distance <= chase_slowdown_distance:
-				var direct_player_direction := _player.global_position - global_position
-				direct_player_direction.y = 0.0
-				if direct_player_direction.length_squared() > 0.01:
-					flat_direction = direct_player_direction.normalized()
+			if close_visible_prey and planar_prey_distance <= chase_slowdown_distance:
+				var direct_prey_direction := _prey.global_position - global_position
+				direct_prey_direction.y = 0.0
+				if direct_prey_direction.length_squared() > 0.01:
+					flat_direction = direct_prey_direction.normalized()
 				var approach_scale := clampf(
-					(planar_player_distance - chase_stop_distance) /
+					(planar_prey_distance - chase_stop_distance) /
 					maxf(chase_slowdown_distance - chase_stop_distance, 0.01),
 					0.0,
 					1.0
@@ -338,20 +447,22 @@ func _update_movement(delta: float) -> void:
 					_recovery_direction = Vector3.ZERO
 		if _recovery_timer > 0.0 and _recovery_direction.length_squared() > 0.01:
 			flat_direction = _recovery_direction
-		if not close_visible_player:
+		if not close_visible_prey:
 			flat_direction = _steer_around_nearby_obstacle(flat_direction)
 		if _smoothed_move_direction.length_squared() < 0.01:
 			_smoothed_move_direction = flat_direction
 		else:
-			_smoothed_move_direction = _smoothed_move_direction.lerp(flat_direction, minf(delta * 5.0, 1.0)).normalized()
+			var heading := lerp_angle(atan2(_smoothed_move_direction.x, _smoothed_move_direction.z), atan2(flat_direction.x, flat_direction.z), 1.0 - exp(-5.0 * delta))
+			_smoothed_move_direction = Vector3(sin(heading), 0.0, cos(heading))
+		speed *= lerpf(0.35, 1.0, smoothstep(-0.3, 0.8, global_basis.z.dot(flat_direction)))
 		velocity.x = move_toward(velocity.x, _smoothed_move_direction.x * speed, delta * 7.5)
 		velocity.z = move_toward(velocity.z, _smoothed_move_direction.z * speed, delta * 7.5)
 		var movement_yaw := atan2(_smoothed_move_direction.x, _smoothed_move_direction.z)
 		clearance_sensor.rotation.y = wrapf(movement_yaw - rotation.y, -PI, PI)
 		door_ray.rotation.y = clearance_sensor.rotation.y
 		var facing_direction := _smoothed_move_direction
-		if current_state == State.CHASE and is_instance_valid(_player):
-			facing_direction = _player.global_position - global_position
+		if current_state == State.CHASE and is_instance_valid(_prey) and close_visible_prey:
+			facing_direction = _prey.global_position - global_position
 			facing_direction.y = 0.0
 		if facing_direction.length_squared() > 0.01:
 			rotation.y = lerp_angle(rotation.y, atan2(facing_direction.x, facing_direction.z), minf(delta * 7.5, 1.0))
@@ -389,6 +500,24 @@ func _update_stuck_recovery(delta: float) -> void:
 		_recovery_direction = Vector3.ZERO
 	_motion_sample_timer = 0.0
 	_last_motion_sample_position = global_position
+
+
+func _refresh_navigation_state() -> void:
+	var map := get_world_3d().navigation_map
+	var revision := NavigationServer3D.map_get_iteration_id(map)
+	_navigation_available = revision > 0 and NavigationServer3D.map_get_closest_point_owner(map, global_position).is_valid()
+	if not _navigation_available:
+		return
+	if is_on_floor():
+		var surface := NavigationServer3D.map_get_closest_point(map, global_position)
+		navigation_agent.path_height_offset = clampf(surface.y - global_position.y, -1.0, 1.0)
+	if revision != _navigation_revision:
+		_navigation_revision = revision
+		_on_navigation_rebuilt()
+
+
+func _on_navigation_rebuilt() -> void:
+	pass
 
 
 func _steer_around_nearby_obstacle(direction: Vector3) -> Vector3:
@@ -448,9 +577,22 @@ func _movement_probe_exclusions() -> Array[RID]:
 	# aquí hacía que el abanico local eligiese izquierda/derecha y orbitase.
 	if is_instance_valid(_player):
 		exclusions.append(_player.get_rid())
+	if is_instance_valid(_prey) and _prey != _player:
+		exclusions.append(_prey.get_rid())
 	return exclusions
 
 
+func _prey_planar_distance() -> float:
+	if not is_instance_valid(_prey):
+		return INF
+	return Vector2(
+		_prey.global_position.x - global_position.x,
+		_prey.global_position.z - global_position.z
+	).length()
+
+
+# Compatibilidad con las variantes fotosensibles que aun miden reglas
+# especificas del jugador, aunque el objetivo de ataque compartido sea la presa.
 func _player_planar_distance() -> float:
 	if not is_instance_valid(_player):
 		return INF
@@ -462,9 +604,10 @@ func _player_planar_distance() -> float:
 
 func _has_attack_contact(distance: float = attack_distance) -> bool:
 	return (
-		is_instance_valid(_player)
-		and absf(_player.global_position.y - global_position.y) <= attack_vertical_tolerance
-		and _player_planar_distance() <= distance
+		is_instance_valid(_prey)
+		and absf(_prey.global_position.y - global_position.y) <= attack_vertical_tolerance
+		and _prey_planar_distance() <= distance
+		and _has_clear_line_to_prey_body()
 	)
 
 
@@ -472,24 +615,33 @@ func can_begin_attack() -> bool:
 	return _attack_cooldown_timer <= 0.0 and current_state != State.ATTACK
 
 
-func _predicted_player_position() -> Vector3:
-	if not is_instance_valid(_player):
+func _predicted_prey_position() -> Vector3:
+	if not is_instance_valid(_prey):
 		return global_position
-	var prediction := clampf(_player_planar_distance() / 8.0, 0.0, 1.0) * chase_prediction_seconds
-	var predicted := _player.global_position + Vector3(_player.velocity.x, 0.0, _player.velocity.z) * prediction
+	var prediction := clampf(_prey_planar_distance() / 8.0, 0.0, 1.0) * chase_prediction_seconds
+	var predicted := _prey.global_position + Vector3(_prey.velocity.x, 0.0, _prey.velocity.z) * prediction
 	return predicted
 
 
-func _has_clear_line_to_player_body() -> bool:
-	if not is_instance_valid(_player):
+func _has_clear_line_to_prey_body() -> bool:
+	if not is_instance_valid(_prey):
 		return false
 	var origin := global_position + Vector3.UP * 0.85
-	var target := _player.global_position + Vector3.UP * 0.85
+	var target := _get_prey_aim_position()
 	var query := PhysicsRayQueryParameters3D.create(origin, target, collision_mask)
 	query.exclude = [get_rid()]
 	query.collide_with_areas = false
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
-	return not hit.is_empty() and hit.collider == _player
+	return hit.is_empty() or hit.collider == _prey
+
+
+func _get_prey_aim_position() -> Vector3:
+	if not is_instance_valid(_prey):
+		return global_position
+	var collision := _prey.get_node_or_null("Collision") as CollisionShape3D
+	if collision == null:
+		collision = _prey.get_node_or_null("CollisionShape3D") as CollisionShape3D
+	return collision.global_position if collision != null else _prey.global_position + Vector3.UP * 0.65
 
 
 func _get_floor_transition_target(player_target: Vector3) -> Vector3:
@@ -541,12 +693,15 @@ func _get_next_useful_path_point(first_point: Vector3) -> Vector3:
 
 
 func _update_frame_duck(delta: float) -> void:
-	head_forward_ray.force_raycast_update()
-	body_forward_ray.force_raycast_update()
-	overhead_ray.force_raycast_update()
-	var doorway_header_ahead := head_forward_ray.is_colliding() and not body_forward_ray.is_colliding()
-	var low_ceiling_above := overhead_ray.is_colliding()
-	if doorway_header_ahead or low_ceiling_above:
+	_clearance_probe_timer = maxf(0.0, _clearance_probe_timer - delta)
+	if _clearance_probe_timer <= 0.0:
+		_clearance_probe_timer = clearance_probe_interval
+		head_forward_ray.force_raycast_update()
+		body_forward_ray.force_raycast_update()
+		overhead_ray.force_raycast_update()
+		_cached_doorway_header_ahead = head_forward_ray.is_colliding() and not body_forward_ray.is_colliding()
+		_cached_low_ceiling_above = overhead_ray.is_colliding()
+	if _cached_doorway_header_ahead or _cached_low_ceiling_above:
 		_duck_hold_timer = 0.72
 	else:
 		_duck_hold_timer = maxf(0.0, _duck_hold_timer - delta)
@@ -556,14 +711,17 @@ func _update_frame_duck(delta: float) -> void:
 
 
 func _update_attack(delta: float) -> void:
+	if not is_instance_valid(_prey):
+		_change_state(State.CHASE)
+		return
 	_attack_timer += delta
-	var to_player := _player.global_position - global_position
-	to_player.y = 0.0
-	if to_player.length_squared() > 0.01:
-		rotation.y = lerp_angle(rotation.y, atan2(to_player.x, to_player.z), minf(delta * 10.0, 1.0))
+	var to_prey := _prey.global_position - global_position
+	to_prey.y = 0.0
+	if to_prey.length_squared() > 0.01:
+		rotation.y = lerp_angle(rotation.y, atan2(to_prey.x, to_prey.z), minf(delta * 10.0, 1.0))
 	var lunging := _attack_timer >= attack_windup_seconds and _attack_timer <= attack_hit_seconds
-	if lunging and to_player.length_squared() > 0.01 and _player_planar_distance() > 0.48:
-		var lunge_direction := to_player.normalized()
+	if lunging and to_prey.length_squared() > 0.01 and _prey_planar_distance() > 0.48:
+		var lunge_direction := to_prey.normalized()
 		velocity.x = move_toward(velocity.x, lunge_direction.x * 1.35, delta * 10.0)
 		velocity.z = move_toward(velocity.z, lunge_direction.z * 1.35, delta * 10.0)
 	else:
@@ -572,13 +730,70 @@ func _update_attack(delta: float) -> void:
 	if _attack_timer >= attack_hit_seconds and not _attack_applied:
 		_attack_applied = true
 		if _has_attack_contact(attack_distance + 0.7):
-			if _player.has_method(&"receive_monster_attack"):
-				_player.call(&"receive_monster_attack", self)
+			var struck_prey := _prey
+			if struck_prey.has_method(&"receive_monster_attack"):
+				struck_prey.call(&"receive_monster_attack", self)
+			if struck_prey != _player and struck_prey.is_in_group(&"child_target"):
+				_begin_eating_child(struck_prey)
+				return
 	if _attack_timer >= attack_animation_seconds:
 		_change_state(State.CHASE)
 
 
+func _begin_eating_child(child: CharacterBody3D) -> void:
+	if _door_traversal_active:
+		_end_door_traversal(false)
+	_eating_target = child
+	_eating_timer = child_eating_seconds
+	_eating_elapsed = 0.0
+	_eating_approach_timer = eating_approach_timeout
+	_eating_started = false
+	velocity.x = 0.0
+	velocity.z = 0.0
+	_recovery_timer = 0.0
+	_recovery_direction = Vector3.ZERO
+	child_caught.emit(child)
+	_change_state(State.EAT)
+
+
+func _update_eating(delta: float) -> void:
+	_duck_hold_timer = 0.5
+	if is_instance_valid(_eating_target):
+		var to_body := _eating_target.global_position - global_position
+		to_body.y = 0.0
+		if to_body.length_squared() > 0.01:
+			rotation.y = lerp_angle(rotation.y, atan2(to_body.x, to_body.z), minf(delta * 5.5, 1.0))
+		var body_distance := to_body.length()
+		if not _eating_started and body_distance > eating_distance and _eating_approach_timer > 0.0:
+			_eating_approach_timer = maxf(0.0, _eating_approach_timer - delta)
+			var approach_direction := to_body.normalized()
+			velocity.x = move_toward(velocity.x, approach_direction.x * eating_approach_speed, delta * 5.0)
+			velocity.z = move_toward(velocity.z, approach_direction.z * eating_approach_speed, delta * 5.0)
+			return
+	_eating_started = true
+	velocity.x = move_toward(velocity.x, 0.0, delta * 14.0)
+	velocity.z = move_toward(velocity.z, 0.0, delta * 14.0)
+	_eating_elapsed += delta
+	_eating_timer = maxf(0.0, _eating_timer - delta)
+	if _eating_timer > 0.0:
+		return
+	var finished_child := _eating_target
+	_eating_target = null
+	_eating_started = false
+	if is_instance_valid(finished_child):
+		finished_eating_child.emit(finished_child)
+	_refresh_preferred_prey(true)
+	if is_instance_valid(_prey):
+		_last_known_player_position = _prey.global_position
+		_memory_timer = chase_memory_seconds
+		_change_state(State.CHASE)
+	else:
+		_change_state(State.SEARCH)
+
+
 func _change_state(new_state: State) -> void:
+	if new_state in [State.ATTACK, State.EAT] and _door_traversal_active:
+		_end_door_traversal(false)
 	if new_state == current_state:
 		return
 	var previous := current_state
@@ -594,28 +809,42 @@ func _change_state(new_state: State) -> void:
 	emit_signal(&"state_changed", previous, new_state)
 
 
-func _can_see_player() -> bool:
+func _update_perception_cache(delta: float) -> void:
+	_perception_timer = maxf(0.0, _perception_timer - delta)
+	if _perception_timer > 0.0:
+		return
+	_perception_timer = perception_interval
+	_cached_sees_prey = _can_see_prey()
+	_cached_hears_prey = _can_hear_prey()
+
+
+func _can_see_prey() -> bool:
+	if not is_instance_valid(_prey):
+		return false
 	var eye_position := global_position + Vector3.UP * 2.65
-	var target_position := _player.global_position + Vector3.UP * 0.65
+	var target_position := _get_prey_aim_position()
 	var to_target := target_position - eye_position
 	if to_target.length() > vision_distance:
 		return false
 	var forward := global_basis.z.normalized()
 	if rad_to_deg(forward.angle_to(to_target.normalized())) > vision_angle_degrees * 0.5:
 		return false
-	var query := PhysicsRayQueryParameters3D.create(eye_position, target_position, 1)
+	var vision_mask := collision_mask | _prey.collision_layer
+	var query := PhysicsRayQueryParameters3D.create(eye_position, target_position, vision_mask)
 	query.exclude = [get_rid()]
 	query.collide_with_areas = false
 	var result := get_world_3d().direct_space_state.intersect_ray(query)
-	return not result.is_empty() and result.collider == _player
+	return not result.is_empty() and result.collider == _prey
 
 
-func _can_hear_player() -> bool:
-	var player_speed := Vector2(_player.velocity.x, _player.velocity.z).length()
-	if player_speed < 0.35:
+func _can_hear_prey() -> bool:
+	if not is_instance_valid(_prey):
 		return false
-	var effective_distance := hearing_distance * clampf(player_speed / 1.4, 0.65, 1.8)
-	return global_position.distance_to(_player.global_position) <= effective_distance
+	var prey_speed := Vector2(_prey.velocity.x, _prey.velocity.z).length()
+	if prey_speed < 0.35:
+		return false
+	var effective_distance := hearing_distance * clampf(prey_speed / 1.4, 0.65, 1.8)
+	return global_position.distance_to(_prey.global_position) <= effective_distance
 
 
 func _choose_patrol_target() -> void:
@@ -627,9 +856,12 @@ func _choose_patrol_target() -> void:
 
 
 func _try_open_door() -> void:
-	if _door_traversal_active or _door_cooldown > 0.0 or velocity.length_squared() < 0.2:
+	if _door_traversal_active or _door_cooldown > 0.0 or current_state == State.EAT or _door_scan_timer > 0.0:
 		return
-	var door := _find_door_ahead()
+	_door_scan_timer = door_scan_interval
+	var door := _find_nearby_door_portal()
+	if door == null and velocity.length_squared() >= 0.12:
+		door = _find_door_ahead()
 	if door != null:
 		if _door_reentry_timer > 0.0 and door.get_instance_id() == _last_crossed_door_id:
 			return
@@ -641,7 +873,51 @@ func _try_open_door() -> void:
 			_begin_door_traversal(door)
 
 
+func _find_nearby_door_portal() -> Node:
+	var requested_target := _patrol_target
+	if current_state == State.CHASE and is_instance_valid(_prey):
+		requested_target = _prey.global_position
+	elif current_state in [State.INVESTIGATE, State.SEARCH]:
+		requested_target = _last_known_player_position
+	var closest: Node
+	var closest_distance := INF
+	for candidate in get_tree().get_nodes_in_group(&"npc_door"):
+		var door := candidate as Node
+		if not is_instance_valid(door) or not door.has_method(&"get_npc_traversal_portal"):
+			continue
+		if _door_reentry_timer > 0.0 and door.get_instance_id() == _last_crossed_door_id:
+			continue
+		var portal := door.call(&"get_npc_traversal_portal") as Dictionary
+		var center: Vector3 = portal.get("center", (door as Node3D).global_position)
+		var normal: Vector3 = portal.get("normal", (door as Node3D).global_basis.z)
+		normal.y = 0.0
+		if normal.length_squared() < 0.01:
+			continue
+		normal = normal.normalized()
+		var offset := global_position - center
+		if absf(offset.y) > 1.0:
+			continue
+		offset.y = 0.0
+		var distance := offset.length()
+		if distance > 1.65:
+			continue
+		var actor_side := offset.dot(normal)
+		var target_side := (requested_target - center).dot(normal)
+		var lateral_offset := (offset - normal * actor_side).length()
+		if lateral_offset > 1.25 or actor_side * target_side >= -0.04:
+			continue
+		var entry := center + normal * signf(actor_side) * maxf(door_approach_distance, 0.6)
+		entry.y = global_position.y
+		if PassageProbe.is_blocked(self, entry - global_position):
+			continue
+		if distance < closest_distance:
+			closest_distance = distance
+			closest = door
+	return closest
+
+
 func _find_door_ahead() -> Node:
+	door_ray.force_raycast_update()
 	if door_ray.is_colliding():
 		var center_door := _find_npc_door(door_ray.get_collider() as Node)
 		if center_door != null:
@@ -694,12 +970,14 @@ func _begin_door_traversal(door: Node) -> void:
 		side = -signf(velocity.dot(_door_portal_normal))
 	if is_zero_approx(side):
 		side = 1.0
-	_door_entry_point = _door_portal_center + _door_portal_normal * side * door_approach_distance
+	_door_entry_point = _door_portal_center + _door_portal_normal * side * maxf(door_approach_distance, 0.6)
 	_door_exit_point = _door_portal_center - _door_portal_normal * side * door_cross_distance
 	_door_traversal_door = door
 	_door_traversal_active = true
-	_door_traversal_phase = 0
-	_door_traversal_timer = door_cross_timeout
+	var crossing := -_door_portal_normal * side
+	_door_traversal_phase = 1 if (global_position - _door_entry_point).dot(crossing) >= 0.0 else 0
+	_door_traversal_timer = maxf(door_cross_timeout, 4.5)
+	_door_blocked_timer = 0.0
 	_door_open_wait_timer = maxf(door_open_wait_seconds, float(portal_data.get("open_wait", 0.0)))
 	_recovery_timer = 0.0
 	_recovery_direction = Vector3.ZERO
@@ -711,20 +989,30 @@ func _update_door_traversal(delta: float) -> void:
 	if _door_traversal_timer <= 0.0 or not is_instance_valid(_door_traversal_door):
 		_end_door_traversal(false)
 		return
-
+	_door_open_wait_timer = maxf(0.0, _door_open_wait_timer - delta)
+	var ready := _door_open_wait_timer <= 0.0
+	if _door_traversal_door.has_method(&"is_npc_passage_ready"):
+		ready = bool(_door_traversal_door.call(&"is_npc_passage_ready"))
 	var target := _door_entry_point if _door_traversal_phase == 0 else _door_exit_point
 	if _door_traversal_phase == 0 and _planar_distance_to(target) <= door_center_tolerance:
 		_door_traversal_phase = 1
 	if _door_traversal_phase == 1:
-		_door_open_wait_timer -= delta
-		velocity.x = move_toward(velocity.x, 0.0, delta * 14.0)
-		velocity.z = move_toward(velocity.z, 0.0, delta * 14.0)
-		_was_trying_to_move = false
-		if _door_open_wait_timer <= 0.0:
-			_door_traversal_phase = 2
-		return
+		if not ready:
+			_brake_at_door(delta)
+			return
+		_door_traversal_phase = 2
 	if _door_traversal_phase == 2:
 		target = _door_exit_point
+		if not ready:
+			if _door_cooldown <= 0.0:
+				_door_traversal_door.call(&"ensure_open_for_npc", self)
+				_door_cooldown = 0.7
+			_brake_at_door(delta)
+			return
+		var crossing := (_door_exit_point - _door_portal_center).normalized()
+		if (global_position - _door_portal_center).dot(crossing) >= door_cross_distance * 0.8:
+			_end_door_traversal(true)
+			return
 
 	var direction := target - global_position
 	direction.y = 0.0
@@ -735,6 +1023,17 @@ func _update_door_traversal(delta: float) -> void:
 			_end_door_traversal(true)
 		return
 	direction = direction.normalized()
+	if PassageProbe.is_blocked(self, direction * 0.3):
+		_door_blocked_timer += delta
+		_brake_at_door(delta)
+		# Un objetivo al alcance no puede bloquear indefinidamente la puerta.
+		if _has_attack_contact() and can_begin_attack():
+			_end_door_traversal(false)
+			_change_state(State.ATTACK)
+		elif _door_blocked_timer >= door_blocked_timeout:
+			_end_door_traversal(false)
+		return
+	_door_blocked_timer = 0.0
 	_smoothed_move_direction = direction
 	velocity.x = move_toward(velocity.x, direction.x * door_cross_speed, delta * 12.0)
 	velocity.z = move_toward(velocity.z, direction.z * door_cross_speed, delta * 12.0)
@@ -744,10 +1043,16 @@ func _update_door_traversal(delta: float) -> void:
 	_was_trying_to_move = true
 
 
+func _brake_at_door(delta: float) -> void:
+	velocity.x = move_toward(velocity.x, 0.0, delta * 14.0)
+	velocity.z = move_toward(velocity.z, 0.0, delta * 14.0)
+	_was_trying_to_move = false
+
+
 func _end_door_traversal(completed: bool) -> void:
-	if completed and is_instance_valid(_door_traversal_door):
+	if is_instance_valid(_door_traversal_door):
 		_last_crossed_door_id = _door_traversal_door.get_instance_id()
-		_door_reentry_timer = 1.15
+	_door_reentry_timer = 1.15 if completed else 1.5
 	_door_traversal_active = false
 	_door_traversal_phase = 0
 	_door_traversal_door = null
@@ -764,6 +1069,14 @@ func is_crossing_door() -> bool:
 	return _door_traversal_active
 
 
+func get_attention_position() -> Vector3:
+	if _door_traversal_active:
+		return _door_exit_point + Vector3.UP
+	if current_state in [State.CHASE, State.INVESTIGATE, State.SEARCH, State.ATTACK]:
+		return _last_known_player_position + Vector3.UP
+	return _patrol_target + Vector3.UP
+
+
 func _find_npc_door(node: Node) -> Node:
 	var candidate := node
 	for _level in 4:
@@ -776,7 +1089,8 @@ func _find_npc_door(node: Node) -> Node:
 
 
 func _update_animation(delta: float) -> void:
-	var horizontal_speed := Vector2(velocity.x, velocity.z).length()
+	var actual_velocity := get_real_velocity()
+	var horizontal_speed := Vector2(actual_velocity.x, actual_velocity.z).length()
 	var moving_amount := clampf(horizontal_speed / maxf(chase_speed, 0.01), 0.0, 1.0)
 	var cadence := lerpf(2.8, 8.2, moving_amount)
 	_motion_phase += delta * cadence
@@ -784,14 +1098,21 @@ func _update_animation(delta: float) -> void:
 	var arm_swing := sin(_motion_phase) * lerpf(0.08, 0.46, moving_amount)
 	var chase_amount := 1.0 if current_state == State.CHASE else 0.0
 	var distress_active := _waiting_covered_eyes
-	var player_distance := global_position.distance_to(_player.global_position) if is_instance_valid(_player) else INF
+	var prey_distance := global_position.distance_to(_prey.global_position) if is_instance_valid(_prey) else INF
 	var reach_active := (
 		current_state == State.CHASE
-		and player_distance >= 2.35
-		and player_distance <= 7.2
-		and absf(_player.global_position.y - global_position.y) < 1.7
+		and prey_distance >= 2.35
+		and prey_distance <= 7.2
+		and is_instance_valid(_prey)
+		and absf(_prey.global_position.y - global_position.y) < 1.7
 	)
 	_update_mouth_pose(delta, distress_active)
+	var eating_active := current_state == State.EAT and _eating_started
+	_eating_pose_amount = move_toward(
+		_eating_pose_amount,
+		1.0 if eating_active else 0.0,
+		delta * (2.2 if eating_active else 3.4)
+	)
 
 	if distress_active:
 		left_leg.rotation.x = lerpf(left_leg.rotation.x, 0.0, minf(delta * 9.0, 1.0))
@@ -801,6 +1122,27 @@ func _update_animation(delta: float) -> void:
 		_pose_hand_over_eye(left_arm, left_elbow, left_eye, -1.0, delta)
 		_pose_hand_over_eye(right_arm, right_elbow, right_eye, 1.0, delta)
 		torso.rotation.x = lerpf(torso.rotation.x, -0.2, minf(delta * 8.0, 1.0))
+	elif eating_active:
+		var chew_cycle := sin(_motion_phase * 1.65)
+		var eat_pulse := chew_cycle * 0.14 * _eating_pose_amount
+		left_leg.rotation.x = lerpf(left_leg.rotation.x, -0.82, minf(delta * 8.0, 1.0))
+		right_leg.rotation.x = lerpf(right_leg.rotation.x, -0.82, minf(delta * 8.0, 1.0))
+		left_knee.rotation.x = lerpf(left_knee.rotation.x, 1.12, minf(delta * 9.0, 1.0))
+		right_knee.rotation.x = lerpf(right_knee.rotation.x, 1.12, minf(delta * 9.0, 1.0))
+		if is_instance_valid(_eating_target):
+			var body_center := _eating_target.global_position + Vector3.UP * 0.16
+			var side := global_basis.x.normalized()
+			var mouth_target := mouth.global_position + global_basis.z.normalized() * 0.08 if is_instance_valid(mouth) else body_center + Vector3.UP * 0.55
+			var left_transfer := smoothstep(-0.2, 0.85, chew_cycle)
+			var right_transfer := smoothstep(-0.2, 0.85, -chew_cycle)
+			var left_grab := body_center - side * 0.14
+			var right_grab := body_center + side * 0.14
+			_pose_arm_toward_position(left_arm, left_elbow, left_grab.lerp(mouth_target - side * 0.08, left_transfer), -1.0, delta)
+			_pose_arm_toward_position(right_arm, right_elbow, right_grab.lerp(mouth_target + side * 0.08, right_transfer), 1.0, delta)
+		torso.rotation.x = lerpf(torso.rotation.x, -0.66 + absf(eat_pulse) * 0.22, minf(delta * 8.0, 1.0))
+		if is_instance_valid(mouth):
+			var bite := smoothstep(-0.15, 0.7, -chew_cycle)
+			mouth.scale.y = _mouth_rest_scale.y * lerpf(1.18, 0.24, bite)
 	elif current_state == State.ATTACK:
 		var attack_progress := clampf(_attack_timer / 0.72, 0.0, 1.0)
 		var thrust := sin(attack_progress * PI)
@@ -815,17 +1157,17 @@ func _update_animation(delta: float) -> void:
 		left_knee.rotation.x = lerpf(left_knee.rotation.x, maxf(0.0, -leg_swing) * 0.62 + _duck_amount * 0.52, minf(delta * 13.0, 1.0))
 		right_knee.rotation.x = lerpf(right_knee.rotation.x, maxf(0.0, leg_swing) * 0.62 + _duck_amount * 0.52, minf(delta * 13.0, 1.0))
 		if reach_active:
-			var player_right := _player.global_basis.x.normalized()
-			var reach_center := _player.global_position + Vector3.UP * 1.05
-			_pose_arm_toward_position(left_arm, left_elbow, reach_center + player_right * 0.2, -1.0, delta)
-			_pose_arm_toward_position(right_arm, right_elbow, reach_center - player_right * 0.2, 1.0, delta)
+			var prey_right := _prey.global_basis.x.normalized()
+			var reach_center := _prey.global_position + Vector3.UP * (0.72 if _prey.is_in_group(&"child_target") else 1.05)
+			_pose_arm_toward_position(left_arm, left_elbow, reach_center + prey_right * 0.2, -1.0, delta)
+			_pose_arm_toward_position(right_arm, right_elbow, reach_center - prey_right * 0.2, 1.0, delta)
 		else:
 			left_arm.rotation.x = lerpf(left_arm.rotation.x, -arm_swing + chase_amount * 0.35, minf(delta * 10.0, 1.0))
 			right_arm.rotation.x = lerpf(right_arm.rotation.x, arm_swing + chase_amount * 0.35, minf(delta * 10.0, 1.0))
 			left_elbow.rotation.x = lerpf(left_elbow.rotation.x, 0.16 + chase_amount * 0.52, minf(delta * 10.0, 1.0))
 			right_elbow.rotation.x = lerpf(right_elbow.rotation.x, 0.16 + chase_amount * 0.52, minf(delta * 10.0, 1.0))
 		torso.rotation.x = lerpf(torso.rotation.x, -0.07 - chase_amount * (0.26 if reach_active else 0.18) - _duck_amount * 0.16, minf(delta * 8.0, 1.0))
-	if not distress_active and not reach_active:
+	if not distress_active and not reach_active and not eating_active:
 		left_arm.rotation.y = lerp_angle(left_arm.rotation.y, 0.0, minf(delta * 7.0, 1.0))
 		right_arm.rotation.y = lerp_angle(right_arm.rotation.y, 0.0, minf(delta * 7.0, 1.0))
 		left_arm.rotation.z = lerp_angle(left_arm.rotation.z, -0.11, minf(delta * 7.0, 1.0))
@@ -839,8 +1181,9 @@ func _update_animation(delta: float) -> void:
 	torso.rotation.z = lerp_angle(torso.rotation.z, 0.0, minf(delta * 11.0, 1.0))
 
 	var search_scan := sin(_motion_phase * 0.42) * 0.62 if current_state == State.SEARCH else 0.0
-	head_rig.rotation.x = lerp_angle(head_rig.rotation.x, 0.0, minf(delta * 15.0, 1.0))
-	head_rig.rotation.y = lerp_angle(head_rig.rotation.y, search_scan, minf(delta * 4.0, 1.0))
+	var eating_head_pitch := 0.46 + absf(sin(_motion_phase * 1.65)) * 0.12 if eating_active else 0.0
+	head_rig.rotation.x = lerp_angle(head_rig.rotation.x, eating_head_pitch, minf(delta * (7.0 if eating_active else 15.0), 1.0))
+	head_rig.rotation.y = lerp_angle(head_rig.rotation.y, 0.04 * sin(_motion_phase * 0.8) if eating_active else search_scan, minf(delta * 4.0, 1.0))
 	head_rig.rotation.z = lerp_angle(head_rig.rotation.z, sin(_motion_phase * 0.23) * 0.045, minf(delta * 6.0, 1.0))
 	model.position.y = (absf(sin(_motion_phase)) - 0.5) * 0.055 * moving_amount + sin(Time.get_ticks_msec() * 0.0018) * 0.012
 

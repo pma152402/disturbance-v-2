@@ -1,8 +1,19 @@
 extends RigidBody3D
 
+@export var initial_burn_remaining := -1.0
+@export var initial_lit := false
+
 @onready var visual: Node3D = $CandleVisual
 
 var _picked_up := false
+
+
+func _ready() -> void:
+	if initial_burn_remaining >= 0.0:
+		visual.call(&"configure_candle", {
+			"burn_remaining": initial_burn_remaining,
+			"lit": initial_lit,
+		})
 
 
 func get_interaction_key() -> Key:
@@ -29,6 +40,11 @@ func interact(player: Node = null) -> bool:
 		return false
 	if not bool(player.call(&"pick_up_candle", visual.call(&"get_candle_data"), not already_lit)):
 		return false
+	var offering_table := get_parent()
+	while offering_table != null and not offering_table.has_method(&"release_candle"):
+		offering_table = offering_table.get_parent()
+	if offering_table != null:
+		offering_table.call(&"release_candle", self)
 	_picked_up = true
 	collision_layer = 0
 	collision_mask = 0

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://house_props/school_clue_frame.tscn" id="1_base"]
+
+[node name="FramePlaces" instance=ExtResource("1_base")]
+frame_title = "PLANOS DEL RECUENTO"
+frame_text = "A  AULA Y PUPITRES\nB  COMEDOR Y ASIENTOS\nC  DORMITORIO Y CAMAS\nCADA HUECO COPIA UN PUESTO."

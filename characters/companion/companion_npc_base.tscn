@@ -42,12 +42,11 @@ collision_mask = 3
 [node name="VisualSocket" type="Node3D" parent="."]
 
 [node name="ResponseLabel" type="Label3D" parent="."]
-position = Vector3(0, 1.67, 0)
-pixel_size = 0.0022
+position = Vector3(0, 1.76, 0)
+pixel_size = 0.0025
 billboard = 1
 no_depth_test = true
 text = ""
-font_size = 32
-outline_size = 8
+font_size = 38
+outline_size = 9
 modulate = Color(0.86, 0.9, 0.79, 1)
-

@@ -1,0 +1,59 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://house_props/school_clue_frame.gd" id="1_script"]
+[ext_resource type="FontFile" path="res://assets/fonts/PressStart2P-Regular.ttf" id="2_font"]
+
+[sub_resource type="StandardMaterial3D" id="frame_mat"]
+albedo_color = Color(0.16, 0.065, 0.025, 1)
+roughness = 0.76
+
+[sub_resource type="StandardMaterial3D" id="paper_mat"]
+albedo_color = Color(0.73, 0.67, 0.49, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="frame_mesh"]
+size = Vector3(1.9, 1.34, 0.075)
+material = SubResource("frame_mat")
+
+[sub_resource type="BoxMesh" id="paper_mesh"]
+size = Vector3(1.7, 1.13, 0.025)
+material = SubResource("paper_mat")
+
+[sub_resource type="BoxShape3D" id="frame_shape"]
+size = Vector3(1.9, 1.34, 0.09)
+
+[node name="SchoolClueFrame" type="StaticBody3D"]
+collision_layer = 3
+script = ExtResource("1_script")
+
+[node name="Frame" type="MeshInstance3D" parent="."]
+mesh = SubResource("frame_mesh")
+
+[node name="Paper" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0.052)
+mesh = SubResource("paper_mesh")
+
+[node name="Title" type="Label3D" parent="Paper"]
+position = Vector3(0, 0.41, 0.02)
+pixel_size = 0.0017
+text = "REGISTRO DE AUSENCIAS"
+font = ExtResource("2_font")
+font_size = 38
+outline_size = 0
+width = 940.0
+
+[node name="Body" type="Label3D" parent="Paper"]
+position = Vector3(0, -0.1, 0.02)
+pixel_size = 0.0017
+text = "CADA NOCHE, LA CAPILLA
+REPETIA EL ULTIMO RECUENTO.
+UNA LUZ INDICABA A QUIEN
+TODAVIA DEBIAN ENCONTRAR."
+font = ExtResource("2_font")
+font_size = 29
+outline_size = 0
+autowrap_mode = 3
+width = 900.0
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+shape = SubResource("frame_shape")

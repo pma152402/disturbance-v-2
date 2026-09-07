@@ -16,7 +16,6 @@
 [ext_resource type="PackedScene" uid="uid://d2nkf5x4tmuwa" path="res://monster_grandmother.tscn" id="12_monster_grandmother"]
 [ext_resource type="PackedScene" uid="uid://btj1tf3hf2k6t" path="res://monster_grandmother_imported.tscn" id="15_imported_grandmother"]
 [ext_resource type="PackedScene" uid="uid://c0dwhce1bymdn" path="res://sounds/ambient/wood_cracking_ambience.tscn" id="16_wood_cracking"]
-[ext_resource type="PackedScene" path="res://characters/companion/child_companion.tscn" id="17_child_companion"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_storm"]
 panorama = ExtResource("5_storm_panorama")
@@ -232,22 +231,17 @@ script = ExtResource("10_indoor_weather")
 
 [node name="Player" parent="." unique_id=546288329 instance=ExtResource("1_player")]
 editor_description = "Spawn de prueba en el pasillo, fuera del sótano y mirando hacia su puerta, con todas las llaves."
-transform = Transform3D(0.3340665, 0, 0.94254947, 0, 1, 0, -0.94254947, 0, 0.3340665, 1.2770935, 0.8476248, -0.035825014)
+transform = Transform3D(0.9835713, 0, 0.18051943, 0, 1, 0, -0.18051943, 0, 0.9835713, -4.0817857, 5.1559386, -23.689379)
 starts_with_lit_candle = true
-volumen_ruido_camara_db = -40.0
 debug_all_keys = true
-
-[node name="ChildCompanion" parent="." instance=ExtResource("17_child_companion")]
-editor_description = "Nico espera junto al punto de inicio para probar todas las ordenes con F."
-position = Vector3(2.25, 0.85, 0.2)
 
 [node name="MonsterGrandmother" parent="." unique_id=889727421 instance=ExtResource("12_monster_grandmother")]
 process_mode = 4
 transform = Transform3D(-0.24663237, 0, -0.9691091, 0, 1, 0, 0.9691091, 0, -0.24663237, 10.15, 4.35, 8.65)
 
 [node name="ImportedGrandmotherGroundFloor" parent="." unique_id=1485663130 instance=ExtResource("15_imported_grandmother")]
-process_mode = 4
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 10.15, 4.35, 7.15)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -12.154203, 0.18374014, -3.5844693)
+remain_still = false
 dormant_until_door_opens = false
 activation_door_path = NodePath("")
 close_player_distance = 1.2
@@ -265,9 +259,10 @@ player_hidden_memory_seconds = 1.8
 dark_player_pursuit_break_distance = 4.8
 dark_player_hidden_memory_seconds = 0.65
 footstep_interest_seconds = 1.6
-lost_player_search_seconds = 4.2
+lost_player_search_seconds = 8.0
 search_step_seconds = 1.05
 search_sweep_radius = 1.45
+supernatural_player_reveal = false
 reveal_after_seconds = 20.0
 reveal_live_seconds = 1.0
 reveal_reset_distance = 6.0
@@ -278,10 +273,10 @@ patrol_wait_min = 1.4
 patrol_wait_max = 5.0
 patrol_travel_timeout = 10.0
 
-[node name="PS2Distortion" type="CanvasLayer" parent="."]
+[node name="PS2Distortion" type="CanvasLayer" parent="." unique_id=744320580]
 layer = 99
 
-[node name="ScreenDistortion" type="ColorRect" parent="PS2Distortion"]
+[node name="ScreenDistortion" type="ColorRect" parent="PS2Distortion" unique_id=1211261490]
 material = SubResource("Material_ps2_distortion")
 anchors_preset = 15
 anchor_right = 1.0

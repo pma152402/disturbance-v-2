@@ -9,6 +9,7 @@ const STATE_INVESTIGATE := 1
 const STATE_CHASE := 2
 const STATE_SEARCH := 3
 const STATE_ATTACK := 4
+const STATE_EAT := 5
 
 @export var idle_speed := 1.15
 @export var idle_arm_sway := 0.045
@@ -112,7 +113,8 @@ func _physics_process(delta: float) -> void:
 	if not is_instance_valid(_player):
 		_player = get_tree().get_first_node_in_group(&"player") as CharacterBody3D
 
-	var horizontal_speed := Vector2(_body.velocity.x, _body.velocity.z).length()
+	var actual_velocity := _body.get_real_velocity()
+	var horizontal_speed := Vector2(actual_velocity.x, actual_velocity.z).length()
 	var chase_speed := maxf(float(_body.get("chase_speed")), 0.01)
 	var moving := clampf(horizontal_speed / chase_speed, 0.0, 1.0)
 	var state := int(_body.get("current_state"))
@@ -141,6 +143,8 @@ func _physics_process(delta: float) -> void:
 		_apply_covered_eyes_pose(delta)
 	elif crossing_door:
 		_apply_door_cross_pose(delta)
+	elif state == STATE_EAT:
+		_apply_eating_pose(delta)
 	elif state == STATE_ATTACK:
 		_apply_attack_pose(delta, attack_timer)
 	elif reaching:
@@ -150,7 +154,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		_apply_locomotion_pose(delta, state, moving)
 
-	_lock_head_to_body(state)
+	_lock_head_to_body(state, delta)
 	_apply_body_motion(delta, state, moving, duck_amount, waiting_covered_eyes, crossing_door)
 
 
@@ -311,7 +315,41 @@ func _apply_attack_pose(delta: float, attack_timer: float) -> void:
 	_pose_node(_right_wrist, _offset_pose(_base_right_wrist, -0.1 * thrust, 0.0, 0.08), delta, 15.0)
 
 
-func _lock_head_to_body(state: int) -> void:
+func _apply_eating_pose(delta: float) -> void:
+	# El rig importado necesita su propia pose porque sustituye visualmente al
+	# modelo procedural del controlador base. Las manos se alternan entre el
+	# cuerpo y la boca para que no parezca un simple bucle de brazos simétrico.
+	var target := _body.get("_eating_target") as Node3D
+	var forward := _body.global_basis.z.normalized()
+	var right := _body.global_basis.x.normalized()
+	var body_center := _body.global_position + forward * 0.55 + Vector3.UP * 0.18
+	if is_instance_valid(target):
+		body_center = target.global_position + Vector3.UP * 0.16
+	var mouth_center := _head.global_position + forward * 0.12 + Vector3.DOWN * 0.08
+	var cycle := fposmod(float(_body.get("_eating_elapsed")) * 1.35, 1.0)
+	var left_transfer := smoothstep(0.08, 0.43, cycle) * (1.0 - smoothstep(0.48, 0.86, cycle))
+	var shifted_cycle := fposmod(cycle + 0.5, 1.0)
+	var right_transfer := smoothstep(0.08, 0.43, shifted_cycle) * (1.0 - smoothstep(0.48, 0.86, shifted_cycle))
+	var left_target := (body_center + right * 0.19).lerp(mouth_center + right * 0.1, left_transfer)
+	var right_target := (body_center - right * 0.19).lerp(mouth_center - right * 0.1, right_transfer)
+	_pose_arm_ik(
+		_left_shoulder, _left_elbow, _left_wrist,
+		_base_left_shoulder, _base_left_elbow,
+		_left_upper_rest_direction, _left_lower_rest_direction,
+		left_target, 1.0, delta, 10.5
+	)
+	_pose_arm_ik(
+		_right_shoulder, _right_elbow, _right_wrist,
+		_base_right_shoulder, _base_right_elbow,
+		_right_upper_rest_direction, _right_lower_rest_direction,
+		right_target, -1.0, delta, 10.5
+	)
+	var bite := maxf(left_transfer, right_transfer)
+	_pose_node(_left_wrist, _offset_pose(_base_left_wrist, -0.2 * bite, 0.0, -0.18), delta, 11.0)
+	_pose_node(_right_wrist, _offset_pose(_base_right_wrist, -0.2 * bite, 0.0, 0.18), delta, 11.0)
+
+
+func _lock_head_to_body(state: int, delta: float) -> void:
 	# Conserva el anclaje del cuello, pero permite pequeños movimientos legibles
 	# de atención. No se anima la posición, sólo una rotación contenida.
 	_head.position = _base_head_position + Vector3(0.0, -head_down_offset, 0.0)
@@ -325,7 +363,16 @@ func _lock_head_to_body(state: int) -> void:
 		pitch = -0.1 + sin(_phase * 0.21) * 0.04
 	elif state == STATE_CHASE:
 		pitch = -0.11
-	_head.quaternion = _base_head_rotation * Quaternion(Vector3.UP, yaw) * Quaternion(Vector3.RIGHT, pitch)
+	elif state == STATE_EAT:
+		yaw = sin(_phase * 0.28) * 0.045
+		pitch = 0.48 + absf(sin(float(_body.get("_eating_elapsed")) * 8.5)) * 0.12
+	if state != STATE_EAT and _body.has_method(&"get_attention_position"):
+		var target: Vector3 = _body.call(&"get_attention_position")
+		var local_direction := _body.global_basis.inverse() * (target - _body.global_position)
+		if Vector2(local_direction.x, local_direction.z).length_squared() > 0.04:
+			yaw += clampf(atan2(local_direction.x, local_direction.z), -0.42, 0.42)
+	var target_rotation := _base_head_rotation * Quaternion(Vector3.UP, yaw) * Quaternion(Vector3.RIGHT, pitch)
+	_head.quaternion = _head.quaternion.slerp(target_rotation, 1.0 - exp(-6.0 * delta))
 	_head.scale = _base_head_scale * head_scale_multiplier
 
 func _apply_body_motion(delta: float, state: int, moving: float, duck_amount: float, covered_eyes: bool, crossing_door: bool) -> void:
@@ -333,18 +380,20 @@ func _apply_body_motion(delta: float, state: int, moving: float, duck_amount: fl
 	var attack_amount := 0.0
 	if state == STATE_ATTACK:
 		attack_amount = sin(clampf(float(_body.get("_attack_timer")) / 0.72, 0.0, 1.0) * PI)
-	var lean_x := -0.045 - chase_amount * 0.16 - duck_amount * 0.2 - attack_amount * 0.2
+	var eating_amount := 1.0 if state == STATE_EAT else 0.0
+	var chew_lean := absf(sin(float(_body.get("_eating_elapsed")) * 8.5)) * 0.07 * eating_amount
+	var lean_x := -0.045 - chase_amount * 0.16 - duck_amount * 0.2 - attack_amount * 0.2 + eating_amount * (0.82 + chew_lean)
 	if covered_eyes:
 		lean_x = -0.18
 	elif crossing_door:
 		lean_x = -0.14
-	var sway_z := sin(_phase * 0.5) * lerpf(0.012, 0.035, moving)
+	var sway_z := sin(_phase * 0.5) * lerpf(0.012, 0.035, moving) + sin(_phase * 0.7) * 0.025 * eating_amount
 	_pose_node(_rig, _offset_pose(_base_rig_rotation, lean_x, 0.0, sway_z), delta, 7.0)
 
 	var bob := (absf(sin(_phase)) - 0.5) * walk_bob_height * moving
 	var breathing := sin(Time.get_ticks_msec() * 0.0018) * 0.008
 	position = position.lerp(
-		_base_position + Vector3(0.0, bob + breathing - duck_amount * 0.38, 0.0),
+		_base_position + Vector3(0.0, bob + breathing - duck_amount * 0.38 - eating_amount * 0.54, eating_amount * 0.08),
 		minf(delta * 8.0, 1.0)
 	)
 

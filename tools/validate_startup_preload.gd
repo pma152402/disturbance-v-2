@@ -1,7 +1,5 @@
 extends SceneTree
 
-const StartupLoader := preload("res://startup_loader.gd")
-
 const EXPECTED_PRELOADED := [
 	"res://player/player.tscn",
 	"res://boiler_minigame.tscn",
@@ -38,17 +36,17 @@ func _run() -> void:
 		push_error("Se entregó el control antes de terminar la navegación")
 		quit(1)
 		return
-	var cached_paths: Array[String] = []
-	for resource in StartupLoader.preloaded_resources:
-		cached_paths.append(resource.resource_path)
 	for path in EXPECTED_PRELOADED:
-		if path not in cached_paths:
-			push_error("Recurso de juego no precargado: " + path)
+		# El cargador ya no precarga recursos: abre test.tscn directamente para
+		# no mantener duplicados en memoria. Validamos que sus dependencias sigan
+		# disponibles sin asumir una API retirada de startup_loader.gd.
+		if not ResourceLoader.exists(path):
+			push_error("Recurso de juego no encontrado: " + path)
 			quit(1)
 			return
 	if ResourceLoader.has_cached("res://church_catacombs.tscn"):
 		push_error("El laberinto final se cargó antes de su minijuego")
 		quit(1)
 		return
-	print("STARTUP OK: escena, puzles, objetos, navegación, render y audio listos antes de jugar; laberinto diferido")
+	print("STARTUP OK: escena y dependencias disponibles; laberinto diferido")
 	quit(0)

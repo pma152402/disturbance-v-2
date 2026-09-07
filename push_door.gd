@@ -28,6 +28,7 @@ var _sound_play_token := 0
 
 
 func _ready() -> void:
+	add_to_group(&"npc_door")
 	door_sound.stream = DoorSoundStream
 
 
@@ -72,6 +73,10 @@ func get_npc_traversal_portal() -> Dictionary:
 		"normal": portal_root.global_basis.z.normalized(),
 		"open_wait": transition_time * 0.25,
 	}
+
+
+func is_npc_passage_ready() -> bool:
+	return _is_open and not _is_animating
 
 
 func _play_door_sound(opening: bool) -> void:

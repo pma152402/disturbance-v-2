@@ -8,4 +8,4 @@ editor_description = "Nico, acompanante infantil. Hereda toda su logica de Compa
 display_name = "Nico"
 visual_scene = ExtResource("2_visual")
 initial_command = 0
-
+actor_scale = 0.88
