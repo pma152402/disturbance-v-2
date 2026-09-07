@@ -8,14 +8,28 @@ signal navigation_baked
 	Vector3(30.0, 11.0, 57.0)
 )
 @export_group("Agent")
-@export var agent_radius := 0.5
-@export var agent_height := 1.75
+# El horneado redondea radio, altura y escalón hacia arriba a múltiplos enteros
+# de celda. Estos valores son múltiplos exactos de cell_size/cell_height (0,15 y
+# 0,1): con 0,5 sobre celdas de 0,15 el radio real pasaba a 0,6 m y comía la
+# anchura útil de los huecos de puerta sin que nada lo dijera.
+@export var agent_radius := 0.45
+@export var agent_height := 1.8
 @export var agent_max_climb := 0.5
 @export var agent_max_slope := 48.0
 @export_group("Rasterization")
-@export var cell_size := 0.25
-@export var cell_height := 0.25
+# 0,25 m de celda dejaba el borde navegable a hasta media celda de su sitio: los
+# huecos de puerta perdían anchura útil y los pasillos salían con dientes de
+# sierra que el agente convertía en zigzag. 0,15 m rasteriza los marcos con
+# fidelidad suficiente sin disparar el horneado.
+@export var cell_size := 0.15
+# La altura de celda gobierna la precisión vertical. A 0,25 m un peldaño de
+# escalera podía caer entre dos niveles y romper la continuidad de la rampa.
+@export var cell_height := 0.1
 @export var region_min_size := 1.0
+@export_group("Detalle de superficie")
+@export var edge_max_error := 1.1
+@export var detail_sample_distance := 4.0
+@export var detail_sample_max_error := 0.6
 @export_group("Diagnostics")
 @export var navigation_label := "house"
 @export_range(1, 8, 1) var bake_delay_frames := 1
@@ -44,6 +58,9 @@ func _begin_bake() -> void:
 	_navigation_mesh.cell_size = cell_size
 	_navigation_mesh.cell_height = cell_height
 	_navigation_mesh.region_min_size = region_min_size
+	_navigation_mesh.edge_max_error = edge_max_error
+	_navigation_mesh.detail_sample_distance = detail_sample_distance
+	_navigation_mesh.detail_sample_max_error = detail_sample_max_error
 	_navigation_mesh.filter_baking_aabb = baking_aabb
 	_navigation_mesh.geometry_parsed_geometry_type = NavigationMesh.PARSED_GEOMETRY_STATIC_COLLIDERS
 	var parsing_root: Node = null

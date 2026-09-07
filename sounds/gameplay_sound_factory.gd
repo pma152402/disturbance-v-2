@@ -8,14 +8,126 @@ static var _can_impact_cache: AudioStreamWAV
 static var _glass_break_cache: AudioStreamWAV
 static var _door_open_cache: AudioStreamWAV
 static var _door_close_cache: AudioStreamWAV
-static var _outdoor_footstep_cache: Dictionary = {}
+static var _surface_footstep_cache: Dictionary = {}
+
+const FOOTSTEP_VARIANTS := 4
+
+# Perfil físico de cada superficie. Un paso son tres capas: el golpe sordo del
+# talón (thump), la resonancia del material (ring) y la textura del contacto
+# (noise). Lo que distingue una tarima de una baldosa no es el volumen, es el
+# reparto entre esas tres y la velocidad a la que se apagan.
+#
+#   thump_hz/decay/gain : cuerpo grave del pisotón
+#   ring_hz/decay/gain  : resonancia tonal (hueca en madera, aguda en cerámica)
+#   noise_lp            : 0..1, cuanto mayor más brillante es el ruido de roce
+#   noise_decay/gain    : cola de textura (grava, tierra, moqueta)
+#   toe_gain            : segundo apoyo, la punta del pie tras el talón
+#   duration            : el ruido corto es lo que hace que una baldosa suene dura
+#   gain_db             : compensación de sonoridad; la moqueta apaga de verdad
+const SURFACE_PROFILES := {
+	&"wood": {
+		"thump_hz": 96.0, "thump_decay": 26.0, "thump_gain": 0.62,
+		"ring_hz": 316.0, "ring_decay": 30.0, "ring_gain": 0.30,
+		"noise_lp": 0.16, "noise_decay": 46.0, "noise_gain": 0.20,
+		"toe_gain": 0.26, "duration": 0.20, "gain_db": 0.0,
+	},
+	&"carpet": {
+		"thump_hz": 74.0, "thump_decay": 34.0, "thump_gain": 0.44,
+		"ring_hz": 0.0, "ring_decay": 1.0, "ring_gain": 0.0,
+		"noise_lp": 0.030, "noise_decay": 26.0, "noise_gain": 0.26,
+		"toe_gain": 0.10, "duration": 0.20, "gain_db": -7.5,
+	},
+	&"tile": {
+		"thump_hz": 132.0, "thump_decay": 44.0, "thump_gain": 0.40,
+		"ring_hz": 1980.0, "ring_decay": 62.0, "ring_gain": 0.30,
+		"noise_lp": 0.62, "noise_decay": 96.0, "noise_gain": 0.26,
+		"toe_gain": 0.34, "duration": 0.13, "gain_db": +1.0,
+	},
+	&"stone": {
+		"thump_hz": 108.0, "thump_decay": 34.0, "thump_gain": 0.52,
+		"ring_hz": 640.0, "ring_decay": 58.0, "ring_gain": 0.14,
+		"noise_lp": 0.40, "noise_decay": 58.0, "noise_gain": 0.34,
+		"toe_gain": 0.30, "duration": 0.17, "gain_db": +0.5,
+	},
+	&"metal": {
+		"thump_hz": 120.0, "thump_decay": 30.0, "thump_gain": 0.34,
+		"ring_hz": 1420.0, "ring_decay": 11.0, "ring_gain": 0.42,
+		"noise_lp": 0.55, "noise_decay": 72.0, "noise_gain": 0.16,
+		"toe_gain": 0.24, "duration": 0.30, "gain_db": +0.5,
+	},
+	&"dirt": {
+		"thump_hz": 82.0, "thump_decay": 28.0, "thump_gain": 0.44,
+		"ring_hz": 0.0, "ring_decay": 1.0, "ring_gain": 0.0,
+		"noise_lp": 0.11, "noise_decay": 20.0, "noise_gain": 0.60,
+		"toe_gain": 0.30, "duration": 0.26, "gain_db": -1.0,
+	},
+	&"gravel": {
+		"thump_hz": 78.0, "thump_decay": 24.0, "thump_gain": 0.40,
+		"ring_hz": 0.0, "ring_decay": 1.0, "ring_gain": 0.0,
+		"noise_lp": 0.30, "noise_decay": 15.0, "noise_gain": 0.74,
+		"toe_gain": 0.36, "duration": 0.30, "gain_db": 0.0,
+	},
+}
 
 
 static func prewarm_footsteps() -> void:
 	# Se hace una sola vez al cargar al jugador. Así el primer paso sobre un
 	# material nuevo no tiene que sintetizar audio durante un fotograma de juego.
-	for variant in 4:
-		make_outdoor_footstep(variant)
+	for surface in SURFACE_PROFILES:
+		for variant in FOOTSTEP_VARIANTS:
+			make_surface_footstep(surface, variant)
+
+
+static func footstep_gain_db(surface: StringName) -> float:
+	var profile: Dictionary = SURFACE_PROFILES.get(surface, SURFACE_PROFILES[&"wood"])
+	return float(profile["gain_db"])
+
+
+static func make_surface_footstep(surface: StringName, variant: int = 0) -> AudioStreamWAV:
+	var profile: Dictionary = SURFACE_PROFILES.get(surface, SURFACE_PROFILES[&"wood"])
+	var key := "%s:%d" % [surface, posmod(variant, FOOTSTEP_VARIANTS)]
+	if _surface_footstep_cache.has(key):
+		return _surface_footstep_cache[key] as AudioStreamWAV
+
+	var duration := float(profile["duration"])
+	var sample_count := int(MIX_RATE * duration)
+	var samples := PackedFloat32Array()
+	samples.resize(sample_count)
+	var rng := RandomNumberGenerator.new()
+	# Semilla fija por superficie y variante: el mismo paso suena igual entre
+	# partidas, pero cuatro variantes evitan el bucle metronómico.
+	rng.seed = hash(key)
+	var tuning := rng.randf_range(0.93, 1.07)
+	var toe_delay := rng.randf_range(0.030, 0.050)
+	var noise_lp := float(profile["noise_lp"])
+	var ring_hz := float(profile["ring_hz"])
+	var texture := 0.0
+	for index in sample_count:
+		var time := float(index) / MIX_RATE
+		texture = lerpf(texture, rng.randf_range(-1.0, 1.0), noise_lp)
+		# El talón baja de tono al hundirse: es lo que da la sensación de peso.
+		var thump_hz := float(profile["thump_hz"]) * tuning - time * 58.0
+		var thump := sin(TAU * maxf(thump_hz, 12.0) * time) * exp(-time * float(profile["thump_decay"]))
+		var ring := 0.0
+		if ring_hz > 0.0:
+			ring = sin(TAU * ring_hz * tuning * time) * exp(-time * float(profile["ring_decay"]))
+		var noise := texture * exp(-time * float(profile["noise_decay"]))
+		# Segundo apoyo: la punta del pie cae unos milisegundos después.
+		var toe_time := maxf(time - toe_delay, 0.0)
+		var toe := 0.0
+		if toe_time > 0.0:
+			toe = texture * exp(-toe_time * float(profile["noise_decay"]) * 1.35)
+		var sample := (
+			thump * float(profile["thump_gain"])
+			+ ring * float(profile["ring_gain"])
+			+ noise * float(profile["noise_gain"])
+			+ toe * float(profile["toe_gain"])
+		)
+		# Ataque de 1,5 ms: sin él el primer sample es un chasquido digital.
+		samples[index] = clampf(sample * minf(time / 0.0015, 1.0) * 0.9, -1.0, 1.0)
+	var stream := _stream_from_samples(samples)
+	_surface_footstep_cache[key] = stream
+	return stream
 
 
 static func make_switch_click() -> AudioStreamWAV:
@@ -42,37 +154,12 @@ static func make_switch_click() -> AudioStreamWAV:
 
 
 static func make_footstep() -> AudioStreamWAV:
-	return make_outdoor_footstep(0)
+	return make_surface_footstep(&"wood", 0)
 
 
+# El "paso exterior" es ahora el perfil de tierra mojada del patio.
 static func make_outdoor_footstep(variant: int = 0) -> AudioStreamWAV:
-	var safe_variant := posmod(variant, 4)
-	if _outdoor_footstep_cache.has(safe_variant):
-		return _outdoor_footstep_cache[safe_variant] as AudioStreamWAV
-	var duration := 0.25
-	var sample_count := int(MIX_RATE * duration)
-	var samples := PackedFloat32Array()
-	samples.resize(sample_count)
-	var rng := RandomNumberGenerator.new()
-	rng.seed = 115079 + safe_variant * 7919
-	var tuning := rng.randf_range(0.92, 1.08)
-	var toe_delay := rng.randf_range(0.035, 0.052)
-	var coarse_noise := 0.0
-	var soft_noise := 0.0
-	for index in sample_count:
-		var time := float(index) / MIX_RATE
-		coarse_noise = lerpf(coarse_noise, rng.randf_range(-1.0, 1.0), 0.10)
-		soft_noise = lerpf(soft_noise, rng.randf_range(-1.0, 1.0), 0.035)
-		var toe_time := maxf(time - toe_delay, 0.0)
-		var toe_gate := 0.0 if toe_time <= 0.0 else 1.0
-		var thump := sin(TAU * (74.0 * tuning - time * 65.0) * time) * exp(-time * 24.0)
-		var crunch := (coarse_noise * 0.72 + soft_noise * 0.28) * exp(-time * 14.0)
-		var second_crunch := coarse_noise * exp(-toe_time * 21.0) * toe_gate
-		var sample := thump * 0.48 + crunch * 0.65 + second_crunch * 0.22
-		samples[index] = clampf(sample * 0.88, -1.0, 1.0)
-	var stream := _stream_from_samples(samples)
-	_outdoor_footstep_cache[safe_variant] = stream
-	return stream
+	return make_surface_footstep(&"dirt", variant)
 
 
 static func make_can_impact() -> AudioStreamWAV:

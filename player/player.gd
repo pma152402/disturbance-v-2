@@ -56,10 +56,14 @@ const ZOOM_OUT_SOUND_START := 1.55
 @export var starts_with_basement_key := false
 @export_category("Audio - Pasos")
 @export_group("Volumen por movimiento")
-@export_range(-40.0, 12.0, 0.5) var volumen_pasos_normal_db := 2.0
-@export_range(-40.0, 12.0, 0.5) var volumen_pasos_corriendo_db := 6.0
-@export_range(-40.0, 6.0, 0.5) var volumen_pasos_agachado_db := -5.0
-@export_range(-40.0, 6.0, 0.5) var volumen_pasos_tumbado_db := -11.0
+# Unos pasos propios no se oyen por encima de la escena: en primera persona
+# llegan por conduccion, no desde el suelo. Estaban en +2/+6 dB, por encima de
+# la lluvia y el ambiente; ahora quedan por debajo y el perfil de superficie
+# los mueve unos decibelios arriba o abajo.
+@export_range(-40.0, 12.0, 0.5) var volumen_pasos_normal_db := -10.0
+@export_range(-40.0, 12.0, 0.5) var volumen_pasos_corriendo_db := -5.0
+@export_range(-40.0, 6.0, 0.5) var volumen_pasos_agachado_db := -17.0
+@export_range(-40.0, 6.0, 0.5) var volumen_pasos_tumbado_db := -23.0
 @export_group("")
 @export_category("Audio - Zoom")
 @export_range(-40.0, 12.0, 0.5) var volumen_zoom_in_db := -18.0
@@ -1114,6 +1118,66 @@ func set_screwdriver_minigame_pose(active: bool) -> void:
 	right_hand.visible = not active
 
 
+# Clasificación de suelo por palabra clave, en orden de más específico a más
+# general. El orden importa: "GroundFloorSlab" es la planta baja de la casa y
+# debe salir madera, mientras que "GroundCutoutCollision" es el patio y debe
+# salir tierra; por eso "ground" a secas queda de último recurso, después de que
+# "floor"/"slab" hayan reclamado los suelos interiores.
+const SURFACE_KEYWORDS: Array = [
+	[&"carpet", ["rug", "carpet", "alfombra", "moqueta", "doily"]],
+	[&"metal", ["metal", "steel", "grate", "rejilla", "chapa", "boiler", "pipe"]],
+	[&"tile", ["ceramic", "tile", "baldosa", "azulejo", "bathroom", "porcelain"]],
+	# Nada de "cellar" aquí: en esta casa solo nombra la trampilla exterior y su
+	# recorte de terreno, que son patio. El sótano real usa "basement".
+	[&"stone", ["stone", "piedra", "church", "nave", "crypt", "catacomb", "concrete",
+		"hormigon", "basement", "sotano", "brick", "ladrillo", "marble"]],
+	[&"gravel", ["gravel", "grava", "rubble", "escombro", "pebble"]],
+	[&"dirt", ["dirt", "mud", "grass", "pasto", "tierra", "yard", "soil", "garden"]],
+	[&"wood", ["wood", "madera", "plank", "parquet", "tarima", "floor", "slab",
+		"stair", "ramp", "escalera", "suelo", "deck"]],
+	[&"dirt", ["ground", "terrain", "landscape"]],
+]
+
+
+func _classify_surface(collider: Node) -> StringName:
+	# Un grupo `surface_<tipo>` en el nodo o en cualquier ancestro manda sobre la
+	# heurística: es la vía para corregir a mano un suelo concreto sin tocar esto.
+	var node := collider
+	for _level in 4:
+		if node == null:
+			break
+		for profile in GameplaySounds.SURFACE_PROFILES:
+			if node.is_in_group(StringName("surface_%s" % profile)):
+				return profile
+		node = node.get_parent()
+
+	var haystack := collider.name.to_lower()
+	var parent := collider.get_parent()
+	for _level in 2:
+		if parent == null:
+			break
+		haystack += "/" + parent.name.to_lower()
+		parent = parent.get_parent()
+	for entry: Array in SURFACE_KEYWORDS:
+		for keyword: String in entry[1]:
+			if keyword in haystack:
+				return entry[0] as StringName
+	return &"wood"
+
+
+func _current_floor_surface() -> StringName:
+	# La colisión del último move_and_slide ya trae el suelo pisado; no hace
+	# falta un rayo extra por paso.
+	for index in get_slide_collision_count():
+		var collision := get_slide_collision(index)
+		if collision.get_normal().y < 0.6:
+			continue
+		var collider := collision.get_collider() as Node
+		if collider != null:
+			return _classify_surface(collider)
+	return &"wood"
+
+
 func _update_footsteps(_delta: float, input_vector: Vector2, is_sprinting: bool) -> void:
 	var moving := is_on_floor() and input_vector.length_squared() > 0.01 and Vector2(velocity.x, velocity.z).length() > 0.18
 	if not moving or _jump_phase != JumpPhase.IDLE or _stance_transition_timer > 0.0:
@@ -1129,34 +1193,39 @@ func _update_footsteps(_delta: float, input_vector: Vector2, is_sprinting: bool)
 	_footstep_variant = (_footstep_variant + randi_range(1, 3)) % 4
 	_footstep_voice_index = 1 - _footstep_voice_index
 	var step_player: AudioStreamPlayer = footstep_sound if _footstep_voice_index == 0 else footstep_sound_right
-	step_player.stream = GameplaySounds.make_outdoor_footstep(_footstep_variant)
+	var surface := _current_floor_surface()
+	step_player.stream = GameplaySounds.make_surface_footstep(surface, _footstep_variant)
 
 	var volume := volumen_pasos_normal_db
 	var pitch_min := 0.95
 	var pitch_max := 1.05
+	var hearing_radius := 3.4
 	if is_sprinting:
 		volume = volumen_pasos_corriendo_db
 		pitch_min = 1.04
 		pitch_max = 1.13
+		hearing_radius = 5.2
 	elif _stance == Stance.CROUCHED:
 		volume = volumen_pasos_agachado_db
 		pitch_min = 0.88
 		pitch_max = 0.97
+		hearing_radius = 1.35
 	elif _stance == Stance.PRONE:
 		volume = volumen_pasos_tumbado_db
 		pitch_min = 0.76
 		pitch_max = 0.86
-	step_player.volume_db = volume + randf_range(-0.9, 0.7)
+		hearing_radius = 0.65
+
+	var surface_gain := GameplaySounds.footstep_gain_db(surface)
+	# Nadie apoya los dos pies igual. Un pie ligeramente más suave rompe el
+	# metrónomo perfecto que delataba que era un bucle.
+	var foot_bias := -1.1 if _footstep_voice_index == 1 else 0.0
+	step_player.volume_db = volume + surface_gain + foot_bias + randf_range(-1.4, 0.8)
 	step_player.pitch_scale = randf_range(pitch_min, pitch_max)
 	step_player.play()
-	var hearing_radius := 3.4
-	if is_sprinting:
-		hearing_radius = 5.2
-	elif _stance == Stance.CROUCHED:
-		hearing_radius = 1.35
-	elif _stance == Stance.PRONE:
-		hearing_radius = 0.65
-	footstep_heard.emit(global_position, hearing_radius)
+	# La superficie también decide cuánto lejos se oye: la moqueta es un escondite
+	# real frente a la abuela, la baldosa te delata.
+	footstep_heard.emit(global_position, hearing_radius * db_to_linear(surface_gain))
 
 func _get_interactable() -> Node:
 	var collider := _get_interactable_in_sight()

@@ -2,6 +2,8 @@ extends "res://monster_grandmother.gd"
 
 enum PhotoBehavior { PATROL, STATIC_LIGHT, FLASHLIGHT, LIGHT_MEMORY, CLOSE_PLAYER, CLOSE_MEMORY, FOOTSTEP, REVEALED_PLAYER }
 
+const LIGHT_SCAN_INTERVAL := 0.18
+
 @export var remain_still := false
 @export_group("Activación de habitación")
 @export var dormant_until_door_opens := false
@@ -11,11 +13,14 @@ enum PhotoBehavior { PATROL, STATIC_LIGHT, FLASHLIGHT, LIGHT_MEMORY, CLOSE_PLAYE
 @export var close_player_memory_seconds := 0.85
 @export var light_detection_distance := 13.0
 @export var same_floor_player_tolerance := 1.35
+@export var ledge_detection_distance := 7.0
 @export var same_floor_light_tolerance := 4.4
 @export var flashlight_memory_seconds := 2.4
 @export var static_light_memory_seconds := 0.8
 @export var light_wander_radius := 1.15
 @export var static_light_attention_seconds := 5.0
+# Debe superar el `blackout_max_duration` de flickering_light.gd (0,58 s).
+@export var light_off_confirm_seconds := 0.7
 @export var static_light_approach_timeout := 8.0
 @export var player_pursuit_break_distance := 8.0
 @export var player_hidden_memory_seconds := 1.8
@@ -32,6 +37,12 @@ enum PhotoBehavior { PATROL, STATIC_LIGHT, FLASHLIGHT, LIGHT_MEMORY, CLOSE_PLAYE
 @export var reveal_reset_distance := 6.0
 @export var reveal_search_seconds := 12.0
 @export_group("Patrulla alterna")
+# Sin esto la patrulla son dos puntos pegados al spawn y la abuela se queda
+# rondando la misma esquina toda la partida. Con el paseo activo elige destinos
+# al azar por toda la malla, comprobando que exista ruta real hasta ellos.
+@export var patrol_roams_house := true
+@export_range(5.0, 120.0, 1.0) var roam_radius := 34.0
+@export_range(1.0, 30.0, 0.5) var roam_minimum_distance := 6.0
 @export var patrol_offset_a := Vector3(-4.2, 0.0, 0.0)
 @export var patrol_offset_b := Vector3(1.8, 0.0, -4.6)
 @export var patrol_wait_min := 1.4
@@ -56,6 +67,7 @@ var _static_light_attention_timer := 0.0
 var _static_light_approach_timer := 0.0
 var _static_light_arrived := false
 var _light_on_states: Dictionary = {}
+var _light_dark_seconds: Dictionary = {}
 var _ignored_light_ids: Dictionary = {}
 var _pending_new_light: Node3D
 var _player_hunt_active := false
@@ -76,6 +88,7 @@ var _photo_sense_timer := 0.0
 var _sees_personal_light := false
 var _senses_close_player := false
 var _sees_known_player := false
+var _senses_ledge_player := false
 
 
 func _ready() -> void:
@@ -211,9 +224,9 @@ func _physics_process(delta: float) -> void:
 	_apply_gravity(delta)
 	_light_scan_timer = maxf(0.0, _light_scan_timer - delta)
 	if _light_scan_timer <= 0.0:
-		_light_scan_timer = 0.18
+		_light_scan_timer = LIGHT_SCAN_INTERVAL
 		_remove_invalid_light_sources()
-		_refresh_light_activation_states()
+		_refresh_light_activation_states(LIGHT_SCAN_INTERVAL)
 
 	# Terminar el ataque comprometido antes de aceptar una distracción.
 	if current_state == State.ATTACK:
@@ -227,6 +240,7 @@ func _physics_process(delta: float) -> void:
 		_sees_personal_light = _can_see_flashlight()
 		_senses_close_player = _is_player_close_enough()
 		_sees_known_player = _player_hunt_active and _can_see_hunted_player()
+		_senses_ledge_player = _is_player_on_reachable_ledge()
 	var sees_flashlight := _sees_personal_light
 	var player_is_close := _senses_close_player
 	var position_is_revealed := _update_player_reveal(delta)
@@ -238,6 +252,11 @@ func _physics_process(delta: float) -> void:
 	if sees_flashlight:
 		_focus_flashlight()
 	elif player_is_close:
+		_focus_close_player()
+	elif _senses_ledge_player:
+		# Subirse a un muro la sacaba del radar: todas las reglas fotosensibles
+		# exigen estar en la misma altura. Ahora un jugador encaramado a su
+		# alcance es un estimulo por derecho propio.
 		_focus_close_player()
 	elif sees_hunted_player:
 		_continue_player_hunt(delta)
@@ -375,8 +394,7 @@ func _update_photo_movement(delta: float) -> void:
 	match _photo_behavior:
 		PhotoBehavior.PATROL:
 			if _patrol_wait_timer > 0.0:
-				velocity.x = move_toward(velocity.x, 0.0, delta * 8.0)
-				velocity.z = move_toward(velocity.z, 0.0, delta * 8.0)
+				_brake_planar(8.0, delta)
 				return
 			_set_state(State.PATROL)
 			_update_movement(delta)
@@ -406,11 +424,50 @@ func _update_patrol_wait(delta: float) -> void:
 	if _patrol_wait_timer <= 0.0:
 		return
 	_patrol_wait_timer = maxf(0.0, _patrol_wait_timer - delta)
-	if _patrol_wait_timer <= 0.0 and not _patrol_points.is_empty():
+	if _patrol_wait_timer > 0.0:
+		return
+	if patrol_roams_house and _choose_roaming_target():
+		return
+	if not _patrol_points.is_empty():
 		_patrol_point_index = (_patrol_point_index + 1) % _patrol_points.size()
 		_patrol_target = _patrol_points[_patrol_point_index]
 		_patrol_travel_timer = patrol_travel_timeout
 		_target_refresh_timer = 0.0
+
+
+# Elige un destino al azar de toda la malla y comprueba que haya camino hasta el.
+# El mapa contiene islas sin conexion con la casa (catacumbas, escuela, tejados):
+# sin la comprobacion de ruta se pasaria el temporizador entero caminando contra
+# una pared hacia un sitio al que no puede llegar.
+func _choose_roaming_target() -> bool:
+	if not _navigation_available:
+		return false
+	var map := get_world_3d().navigation_map
+	for _attempt in 12:
+		var candidate := NavigationServer3D.map_get_random_point(map, navigation_agent.navigation_layers, false)
+		if candidate.distance_to(_spawn_position) > roam_radius:
+			continue
+		var travel := global_position.distance_to(candidate)
+		if travel < roam_minimum_distance:
+			continue
+		var path := NavigationServer3D.map_get_path(map, global_position, candidate, true)
+		if path.size() < 2:
+			continue
+		# Las puertas cerradas no se hornean, asi que cada habitacion es una isla
+		# de navegacion propia y casi ningun destino "se alcanza" segun el mapa.
+		# Exigirlo la dejaba encerrada donde apareciera. Basta con que la ruta
+		# avance de verdad: el borde de la isla es justo donde esta la puerta, y
+		# alli el sistema de travesia la abre y continua al otro lado.
+		var reaches_candidate := path[-1].distance_to(candidate) <= 1.0
+		if not reaches_candidate and global_position.distance_to(path[-1]) < roam_minimum_distance:
+			continue
+		_patrol_target = candidate
+		# El limite fijo de 10 s solo daba para 8,8 m a velocidad de patrulla, asi
+		# que cualquier destino lejano se abortaba a mitad de camino.
+		_patrol_travel_timer = clampf(travel / maxf(patrol_speed, 0.1) * 1.8 + 4.0, patrol_travel_timeout, 60.0)
+		_target_refresh_timer = 0.0
+		return true
+	return false
 
 
 func _begin_patrol_wait() -> void:
@@ -425,7 +482,9 @@ func _return_to_patrol() -> void:
 	_close_player_memory_timer = 0.0
 	_light_memory_timer = 0.0
 	_set_state(State.PATROL)
-	if _patrol_points.is_empty():
+	if patrol_roams_house and _choose_roaming_target():
+		pass
+	elif _patrol_points.is_empty():
 		_patrol_target = _spawn_position
 	else:
 		_patrol_point_index = _closest_patrol_point_index()
@@ -549,6 +608,23 @@ func _update_lost_player_search(delta: float) -> void:
 	_target_refresh_timer = 0.0
 
 
+func _give_up_unreachable_target() -> void:
+	# La capa fotosensible vuelve a fijar el mismo estímulo en cuanto la base se
+	# rinde, así que aquí hay que consumirlo: una luz a la que no hay ruta pasa a
+	# la lista de ignoradas y un jugador inalcanzable se convierte en búsqueda.
+	if _photo_behavior == PhotoBehavior.STATIC_LIGHT and is_instance_valid(_focused_static_light):
+		_ignored_light_ids[_focused_static_light.get_instance_id()] = true
+		_focused_static_light = null
+		_return_to_patrol()
+		return
+	if _player_hunt_active or _photo_behavior in [
+		PhotoBehavior.FLASHLIGHT, PhotoBehavior.CLOSE_PLAYER, PhotoBehavior.REVEALED_PLAYER
+	]:
+		_begin_lost_player_search()
+		return
+	_return_to_patrol()
+
+
 func _update_static_light_attention(delta: float) -> void:
 	if not is_instance_valid(_focused_static_light):
 		_return_to_patrol()
@@ -631,6 +707,20 @@ func _is_player_close_enough() -> bool:
 		and _player_planar_distance() <= close_player_distance
 		and _has_clear_line_to(_player.global_position + Vector3.UP * 0.85, _player)
 	)
+
+
+# Un jugador encaramado esta fuera de `same_floor_player_tolerance`, pero si lo
+# tiene justo encima y a su alcance no deberia ignorarlo: se planta debajo y
+# sacude. El radio es generoso para que llegue a acercarse desde media sala.
+func _is_player_on_reachable_ledge() -> bool:
+	if not is_instance_valid(_player):
+		return false
+	var height := _player.global_position.y - global_position.y
+	if height <= same_floor_player_tolerance or height > ledge_reach_height:
+		return false
+	if _player_planar_distance() > ledge_detection_distance:
+		return false
+	return _has_clear_line_to(_player.global_position + Vector3.UP * 0.5, _player)
 
 
 func _can_see_hunted_player() -> bool:
@@ -720,18 +810,35 @@ func _find_best_visible_static_light() -> Node3D:
 	return best_source
 
 
-func _refresh_light_activation_states() -> void:
+func _refresh_light_activation_states(elapsed: float) -> void:
 	var best_new_light: Node3D
 	var best_distance := INF
 	for source in _light_sources:
 		if not is_instance_valid(source):
 			continue
 		var source_id := source.get_instance_id()
-		var is_on := bool(source.get("is_on")) and _find_visible_emission(source) != null
+		# Un parpadeo no es un interruptor, y la lámpara ya distingue ambos: el
+		# interruptor vive en `is_on`, el apagón de flickering_light.gd sólo pone
+		# la emisión a cero. Accionar el interruptor cuenta al instante; una
+		# bombilla que titila con el interruptor puesto sigue contando como
+		# encendida hasta `light_off_confirm_seconds`. Sin esta distinción cada
+		# apagón se leía como lámpara nueva y le reiniciaba la atención, dejándola
+		# clavada delante de una luz parpadeante para siempre.
+		var switch_on := bool(source.get("is_on"))
+		var is_emitting := switch_on and _find_visible_emission(source) != null
+		if is_emitting or not switch_on:
+			_light_dark_seconds[source_id] = 0.0
+		else:
+			_light_dark_seconds[source_id] = float(_light_dark_seconds.get(source_id, 0.0)) + elapsed
+		var is_on := is_emitting or (
+			switch_on and float(_light_dark_seconds[source_id]) < light_off_confirm_seconds
+		)
 		var was_on := bool(_light_on_states.get(source_id, false))
 		_light_on_states[source_id] = is_on
 		if not is_on:
 			_ignored_light_ids.erase(source_id)
+			continue
+		if not is_emitting:
 			continue
 		if was_on or _ignored_light_ids.has(source_id) or not _is_static_source_visible(source):
 			continue
@@ -756,10 +863,13 @@ func _is_static_source_visible(source: Node3D) -> bool:
 
 
 func _is_focused_static_light_active() -> bool:
+	# Se apoya en el estado antirrebote, no en la emisión instantánea: si no, un
+	# apagón de parpadeo la mandaba a LIGHT_MEMORY y al volver la luz reentraba
+	# por la rama de luz nueva.
 	return (
 		is_instance_valid(_focused_static_light)
 		and bool(_focused_static_light.get("is_on"))
-		and _find_visible_emission(_focused_static_light) != null
+		and bool(_light_on_states.get(_focused_static_light.get_instance_id(), false))
 	)
 
 
@@ -841,8 +951,7 @@ func _apply_gravity(delta: float) -> void:
 
 func _stop_and_apply_gravity(delta: float) -> void:
 	_apply_gravity(delta)
-	velocity.x = move_toward(velocity.x, 0.0, delta * 12.0)
-	velocity.z = move_toward(velocity.z, 0.0, delta * 12.0)
+	_brake_planar(12.0, delta)
 	move_and_slide()
 	_update_animation(delta)
 

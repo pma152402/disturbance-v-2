@@ -11,11 +11,11 @@ const STATE_SEARCH := 3
 const STATE_ATTACK := 4
 const STATE_EAT := 5
 
-@export var idle_speed := 1.15
 @export var idle_arm_sway := 0.045
 @export var walk_arm_swing := 0.34
 @export var chase_arm_swing := 0.52
 @export var walk_bob_height := 0.018
+@export_range(0.0, 0.5, 0.005) var turn_lean := 0.16
 @export var pose_transition_speed := 9.0
 @export_range(1.0, 1.5, 0.01) var head_scale_multiplier := 1.12
 @export var head_down_offset := 0.5722
@@ -64,6 +64,8 @@ var _left_lower_rest_direction := Vector3.DOWN
 var _right_upper_rest_direction := Vector3.DOWN
 var _right_lower_rest_direction := Vector3.DOWN
 var _skin_material: StandardMaterial3D
+var _previous_yaw := 0.0
+var _lean_amount := 0.0
 
 
 func _ready() -> void:
@@ -105,6 +107,8 @@ func _ready() -> void:
 	_left_lower_rest_direction = (_left_elbow.global_basis.inverse() * (_left_wrist.global_position - _left_elbow.global_position)).normalized()
 	_right_upper_rest_direction = (_right_shoulder.global_basis.inverse() * (_right_elbow.global_position - _right_shoulder.global_position)).normalized()
 	_right_lower_rest_direction = (_right_elbow.global_basis.inverse() * (_right_wrist.global_position - _right_elbow.global_position)).normalized()
+	if is_instance_valid(_body):
+		_previous_yaw = _body.rotation.y
 
 
 func _physics_process(delta: float) -> void:
@@ -123,10 +127,22 @@ func _physics_process(delta: float) -> void:
 	var attack_timer := maxf(float(_body.get("_attack_timer")), 0.0)
 	var crossing_door := _body.has_method(&"is_crossing_door") and bool(_body.call(&"is_crossing_door"))
 
-	var cadence := lerpf(idle_speed, 6.2, moving)
-	if state == STATE_CHASE:
-		cadence = lerpf(4.6, 8.2, moving)
-	_phase += delta * cadence
+	# Una sola fase para todo el personaje. Antes este nodo llevaba su propio
+	# contador y el bob visual iba por libre respecto al sonido de paso que
+	# dispara el controlador base; ahora ambos salen del mismo `_motion_phase`,
+	# que a su vez avanza con la distancia recorrida.
+	_phase = float(_body.get("_motion_phase"))
+
+	# Inclinación hacia el interior del giro, tomada de la velocidad angular real
+	# del cuerpo. Es lo que da peso a los cambios de dirección en un rig sin
+	# piernas: sin ella la silueta rota sobre su eje como una torreta.
+	var yaw_rate := wrapf(_body.rotation.y - _previous_yaw, -PI, PI) / maxf(delta, 0.0001)
+	_previous_yaw = _body.rotation.y
+	_lean_amount = lerpf(
+		_lean_amount,
+		clampf(yaw_rate * 0.11, -1.0, 1.0) * turn_lean * clampf(moving * 1.6, 0.0, 1.0),
+		1.0 - exp(-6.0 * delta)
+	)
 
 	var player_distance := INF
 	if is_instance_valid(_player):
@@ -387,7 +403,12 @@ func _apply_body_motion(delta: float, state: int, moving: float, duck_amount: fl
 		lean_x = -0.18
 	elif crossing_door:
 		lean_x = -0.14
+	# `_phase * 0.5` es un balanceo por cada dos zancadas: el traspaso de peso de
+	# un pie al otro. Ahora que la fase sigue la velocidad real, coincide con el
+	# paso que suena.
 	var sway_z := sin(_phase * 0.5) * lerpf(0.012, 0.035, moving) + sin(_phase * 0.7) * 0.025 * eating_amount
+	if not covered_eyes and not crossing_door:
+		sway_z += _lean_amount
 	_pose_node(_rig, _offset_pose(_base_rig_rotation, lean_x, 0.0, sway_z), delta, 7.0)
 
 	var bob := (absf(sin(_phase)) - 0.5) * walk_bob_height * moving

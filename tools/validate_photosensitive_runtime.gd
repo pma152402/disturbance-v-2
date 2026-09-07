@@ -76,6 +76,8 @@ func _run() -> void:
 		_fail("Falta el jugador para probar el revelado anti-espera")
 		return
 	player.global_position = monster.global_position + Vector3(12.0, 0.0, 0.0)
+	# test.tscn deja el revelado desactivado; hay que armarlo para poder medirlo.
+	monster.set("supernatural_player_reveal", true)
 	monster.set("reveal_after_seconds", 0.2)
 	monster.set("reveal_live_seconds", 0.3)
 	monster.set("_reveal_countdown", 0.2)

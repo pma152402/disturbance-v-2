@@ -13,6 +13,25 @@
 9. **Código de techo residual.** La rama experimental seguía mezclada con la máquina de estados terrestre aunque estuviese desactivada.
 10. **Puertas sin compromiso de cruce.** La navegación general recalculaba esquinas mientras la hoja giraba y podía dejarla rozando el marco. La variante fotosensible tampoco ejecutaba el detector de puertas en su bucle propio.
 
+## Segunda revisión: locomoción, navmesh y parpadeo
+
+11. **Aceleración dependiente del rumbo.** La velocidad se integraba con un `move_toward` por eje. En diagonal los dos ejes avanzaban a la vez, así que aceleraba hasta 1,41x más rápido que en un pasillo recto y la respuesta cambiaba según la orientación. Ahora es un único `move_toward` sobre el plano, con `acceleration` y `braking` separados: arranca con peso y frena antes.
+12. **Giro instantáneo y dependiente de los FPS.** Todas las orientaciones usaban `lerp_angle(..., minf(delta * k, 1.0))`, que no es un suavizado exponencial: a 30 FPS gira distinto que a 144, y sin tope el cuerpo encaraba de golpe cada esquina nueva de la ruta. Ahora es `1 - exp(-k·delta)` limitado por `max_turn_speed_degrees`. El ataque queda exento a propósito: ahí el giro rápido es intencionado.
+13. **Cadencia de paso desacoplada de la velocidad.** La fase de animación subía por una rampa fija por estado, así que los pies patinaban al acelerar o al frenar contra una pared. Ahora avanza `PI` por cada `stride_length` recorrido: sonido de paso, balanceo de piernas y bob del rig salen de la distancia real.
+14. **Dos relojes de animación.** El rig importado llevaba su propio contador de fase, independiente del `_motion_phase` que dispara el sonido de paso. El bob visual y el paso audible iban por libre. Ahora el animador lee la fase del cuerpo.
+15. **Silueta sin peso en los giros.** El rig no tiene piernas, así que un cambio de dirección lo hacía rotar sobre su eje como una torreta. Se añade una inclinación hacia el interior del giro tomada de la velocidad angular real.
+16. **Navmesh demasiado grueso.** Celda de 0,25 m sobre huecos de puerta de menos de un metro: el borde navegable quedaba a hasta media celda de su sitio y los pasillos salían con dientes de sierra que el agente convertía en zigzag. Se baja a 0,15 m con altura de celda 0,1 m, y se activa `simplify_path` para que el funnel no devuelva ristras de puntos casi colineales.
+17. **Rejilla del mapa desalineada.** El `NavigationServer` seguía a 0,25/0,25 mientras el navmesh se horneaba a otra resolución, lo que rompe la fusión de bordes entre regiones vecinas. Se fija la rejilla del mapa en `project.godot`.
+18. **Un parpadeo se leía como un interruptor.** `flickering_light.gd` pone la emisión a cero hasta 0,58 s seguidos. Cada apagón se interpretaba como "han apagado la lámpara" y el encendido siguiente como una lámpara nueva, lo que reiniciaba el temporizador de atención: delante de una luz parpadeante nunca perdía el interés. Ahora el interruptor (`is_on`) cuenta al instante y sólo la emisión se filtra con `light_off_confirm_seconds`.
+
+19. **Bloqueo permanente ante un objetivo inalcanzable.** Si la presa se subia a un muro, a una repisa o a cualquier punto fuera del navmesh, la ruta terminaba lejos del destino (o degeneraba en dos puntos sobre la propia abuela cuando el destino caia en una isla de navegacion desconectada). `next_point` colapsaba sobre su posicion, la direccion quedaba a cero y frenaba; ademas `_was_trying_to_move` pasaba a falso, con lo que la recuperacion de atascos se desactivaba justo en el unico momento en que hacia falta. Medido: **inmovil 9,6 s y subiendo**, sin salida. Ahora detecta la inalcanzabilidad comparando el final real de la ruta con el destino pedido, acecha encarando la presa durante `stalk_seconds` y despues se rinde hacia busqueda o patrulla.
+20. **Persecucion eterna entre alturas.** La rama `changing_floor` (mas de 1,15 m de diferencia vertical) refrescaba la memoria de persecucion sin limite alguno. Estaba pensada para que la losa de la escalera no le hiciera olvidar al jugador, pero convertia cualquier sitio elevado e inalcanzable en persecucion infinita. Ahora solo insiste mientras gane terreno: si deja de acercarse durante `floor_change_grace_seconds`, la memoria decae y pasa a busqueda.
+
+21. **Un saliente la neutralizaba por completo.** Todas las reglas fotosensibles exigen estar dentro de `same_floor_player_tolerance` (1,35 m), asi que un jugador subido a un muro desaparecia de su radar: no era que no supiese llegar, es que no lo detectaba. Ahora `_is_player_on_reachable_ledge()` lo trata como estimulo propio, se planta debajo y sacude hacia arriba con el mismo `receive_monster_attack` del resto de golpes, que ya aplica empuje horizontal y vertical: el muro deja de ser refugio porque te tira de el. El zarpazo se comprueba en cada frame de `_update_movement` y no en la rama de "sin direccion de avance": a medio metro del muro todavia le queda rumbo hacia el punto de debajo, y aquella rama no llegaba a ejecutarse nunca.
+22. **Patrulla clavada en el punto de aparicion.** Eran dos puntos fijos relativos al spawn, unos 6 m en total, asi que se pasaba la partida rondando la misma esquina. Con `patrol_roams_house` elige destinos al azar por toda la malla. Detalle que costo encontrar: **las puertas cerradas no se hornean, asi que cada habitacion es una isla de navegacion independiente** y practicamente ningun destino "se alcanza" segun el mapa. Exigir que la ruta terminase en el destino la dejaba encerrada donde apareciese; basta con exigir que la ruta avance de verdad, porque el borde de la isla es justo donde esta la puerta y alli el sistema de travesia la abre y continua. Medido: **43,4 m y 14 celdas de 3 m en 60 s**, frente a 6 celdas antes.
+
+Coste medido del horneado más fino: **48 ms → 76 ms**, absorbido por la pantalla de carga.
+
 ## Comportamiento actual
 
 ### Patrulla
@@ -70,6 +89,19 @@
 
 ## Parámetros de ajuste
 
+El grupo **Suavizado de movimiento** gobierna la sensación de peso:
+
+- `acceleration` / `braking`: arranque y frenada, en m/s². Subir `acceleration` la hace más nerviosa; bajarla, más pesada.
+- `max_turn_speed_degrees`: tope de velocidad angular. Es el control que impide el giro de torreta.
+- `heading_smoothing`: suavizado del rumbo antes de aplicar el tope.
+- `stride_length`: metros por zancada. Gobierna a la vez el ritmo del sonido de paso y el bob del rig.
+
+En la variante fotosensible, **Patrulla alterna** gobierna el paseo: `patrol_roams_house`, `roam_radius` y `roam_minimum_distance`. `ledge_detection_distance` es a que distancia nota a un jugador encaramado.
+
+El grupo **Objetivos inalcanzables** decide que hace cuando no hay ruta hasta la presa: `unreachable_tolerance` (cuanto puede quedarse corta la ruta antes de darla por imposible), `stalk_seconds` (cuanto acecha antes de rendirse) y `floor_change_grace_seconds` (cuanto insiste al perseguir entre alturas sin ganar terreno). `ledge_reach_height` y `ledge_reach_radius` definen el alcance del zarpazo hacia arriba.
+
+En el animador visual, `turn_lean` regula cuánto se inclina hacia el interior del giro.
+
 Los controles principales están en el inspector bajo **Navegación y recuperación**:
 
 - `obstacle_probe_distance`: anticipación frente a objetos pequeños.
@@ -86,6 +118,9 @@ El grupo **Cruce de puertas** permite ajustar `door_approach_distance`, `door_cr
 
 ## Validaciones reproducibles
 
+- `tools/validate_grandmother_roaming_and_ledge.gd`: paseo por la casa y zarpazo con empuje a un saliente.
+- `tools/validate_grandmother_unreachable_target.gd`: presa sobre un saliente; acecho acotado y regreso a la actividad.
+- `tools/validate_grandmother_locomotion.gd`: aceleración isótropa, tope de giro y zancada por distancia.
 - `tools/validate_grandmother_pathfinding.gd`: recorrido con geometría entre lavandería y cocina.
 - `tools/validate_grandmother_close_combat.gd`: tiempo de entrada en ataque y órbita acumulada.
 - `tools/validate_grandmother_search_behavior.gd`: última posición, barrido y regreso a patrulla.
@@ -94,8 +129,8 @@ El grupo **Cruce de puertas** permite ajustar `door_approach_distance`, `door_cr
 
 Resultados actuales:
 
-- Recorrido con obstáculos: **3,86 m**.
-- Bloqueo continuo máximo: **0,15 s**.
-- Entrada en ataque: **0,75 s** desde 2,4 m.
+- Recorrido con obstáculos: **3,71 m**.
+- Bloqueo continuo máximo: **0,28 s** (sube desde 0,15 s: la salida es más lenta a propósito).
+- Entrada en ataque: **0,78 s** desde 2,4 m.
 - Órbita acumulada antes de atacar: **0°**.
 - Búsqueda local: **4,2 s**, seguida de retorno a patrulla.

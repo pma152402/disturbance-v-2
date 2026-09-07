@@ -29,6 +29,24 @@ const STAIR_UPPER_ANCHOR := Vector3(-1.328, 4.18, -2.18)
 @export var attack_animation_seconds := 0.98
 @export var attack_vertical_tolerance := 1.35
 @export var target_refresh_seconds := 0.16
+@export_group("Objetivos inalcanzables")
+# Cuando la presa se sube a un muro, a una repisa o a cualquier sitio que el
+# navmesh no cubre, la ruta termina en el punto transitable más cercano. Sin
+# estos controles la abuela se quedaba parada ahí para siempre.
+@export var unreachable_tolerance := 1.1
+@export_range(1.0, 30.0, 0.5) var stalk_seconds := 5.0
+@export_range(1.0, 20.0, 0.5) var floor_change_grace_seconds := 6.0
+# Un muro no la detiene: se planta debajo y sacude hacia arriba. El empujón sale
+# del mismo `receive_monster_attack` que el resto de golpes, así que también te
+# tira del saliente.
+@export_range(1.0, 5.0, 0.1) var ledge_reach_height := 3.2
+@export_range(0.5, 3.0, 0.1) var ledge_reach_radius := 1.5
+@export_group("Suavizado de movimiento")
+@export_range(2.0, 20.0, 0.1) var acceleration := 6.2
+@export_range(2.0, 30.0, 0.1) var braking := 10.5
+@export_range(60.0, 720.0, 5.0) var max_turn_speed_degrees := 235.0
+@export_range(1.0, 20.0, 0.5) var heading_smoothing := 5.0
+@export_range(0.3, 1.6, 0.02) var stride_length := 0.72
 @export_group("Navegación y recuperación")
 @export var obstacle_probe_distance := 0.85
 @export var stuck_check_seconds := 0.65
@@ -143,6 +161,10 @@ var _eating_elapsed := 0.0
 var _eating_approach_timer := 0.0
 var _eating_started := false
 var _eating_pose_amount := 0.0
+var _stalk_timer := 0.0
+var _ledge_attack_active := false
+var _floor_change_grace := 0.0
+var _closest_floor_change_distance := INF
 
 
 func _ready() -> void:
@@ -158,6 +180,11 @@ func _ready() -> void:
 	# NavigationAgent. CORRIDORFUNNEL evita los bucles que EDGE_CENTERED producia
 	# en pasillos; los portales explicitos se encargan de centrar las puertas.
 	navigation_agent.path_postprocessing = NavigationPathQueryParameters3D.PATH_POSTPROCESSING_CORRIDORFUNNEL
+	# Con celdas finas el funnel devuelve muchos puntos casi colineales y el
+	# cuerpo corrige el rumbo en cada uno, produciendo un zigzag visible. La
+	# simplificación deja sólo los vértices que cambian la dirección de verdad.
+	navigation_agent.simplify_path = true
+	navigation_agent.simplify_epsilon = 0.18
 	navigation_agent.avoidance_enabled = false
 	door_ray.enabled = false
 	head_forward_ray.enabled = false
@@ -274,8 +301,7 @@ func _physics_process(delta: float) -> void:
 			_player_start_position_set = true
 		_player_has_moved = player_position_2d.distance_to(_player_start_position) > 0.035 or player_speed_2d > 0.12 or prey_speed_2d > 0.12
 		if not _player_has_moved:
-			velocity.x = move_toward(velocity.x, 0.0, delta * 12.0)
-			velocity.z = move_toward(velocity.z, 0.0, delta * 12.0)
+			_brake_planar(12.0, delta)
 			move_and_slide()
 			_update_animation(delta)
 			return
@@ -290,8 +316,7 @@ func _physics_process(delta: float) -> void:
 
 	var distress_active := _update_distress(delta)
 	if distress_active:
-		velocity.x = move_toward(velocity.x, 0.0, delta * 10.0)
-		velocity.z = move_toward(velocity.z, 0.0, delta * 10.0)
+		_brake_planar(10.0, delta)
 	elif current_state == State.EAT:
 		_update_eating(delta)
 	elif _door_traversal_active:
@@ -323,7 +348,7 @@ func _update_distress(delta: float) -> bool:
 	var to_target := wake_target.global_position - global_position
 	to_target.y = 0.0
 	if to_target.length_squared() > 0.01:
-		rotation.y = lerp_angle(rotation.y, atan2(to_target.x, to_target.z), minf(delta * 8.0, 1.0))
+		_turn_toward(atan2(to_target.x, to_target.z), delta, 8.0)
 	return true
 
 
@@ -352,9 +377,24 @@ func _update_awareness(delta: float, sees_prey: bool, hears_prey: bool) -> void:
 				_change_state(State.SEARCH)
 		State.CHASE:
 			var changing_floor := absf(_prey.global_position.y - global_position.y) > 1.15
-			if sees_prey or changing_floor:
-				# Floors and the stair slab temporarily block line of sight. During that
-				# transition she must keep following the live target instead of forgetting it.
+			var keeps_memory := sees_prey
+			if sees_prey:
+				# El suelo y la losa de la escalera cortan la visión un momento; durante
+				# esa transición debe seguir el objetivo vivo en vez de olvidarlo.
+				_floor_change_grace = floor_change_grace_seconds
+				_closest_floor_change_distance = global_position.distance_to(_prey.global_position)
+			elif changing_floor:
+				# Antes esta rama refrescaba la memoria sin límite, así que una presa
+				# subida a un muro la dejaba en persecución eterna contra un objetivo
+				# al que no hay ruta. Ahora sólo insiste mientras gane terreno: si deja
+				# de acercarse, la cuenta atrás corre y acaba rindiéndose.
+				var prey_distance := global_position.distance_to(_prey.global_position)
+				if prey_distance < _closest_floor_change_distance - 0.25:
+					_closest_floor_change_distance = prey_distance
+					_floor_change_grace = floor_change_grace_seconds
+				_floor_change_grace = maxf(0.0, _floor_change_grace - delta)
+				keeps_memory = _floor_change_grace > 0.0
+			if keeps_memory:
 				_last_known_player_position = _prey.global_position
 				_memory_timer = chase_memory_seconds
 			else:
@@ -395,6 +435,17 @@ func _update_movement(delta: float) -> void:
 		State.SEARCH:
 			target = _last_known_player_position
 			speed = patrol_speed * 0.72
+
+	# El destino real se guarda antes de redirigir: es contra él contra el que se
+	# decide si hay que acechar, sacudir o rendirse.
+	var requested_target := target
+	target = _redirect_unreachable_target(target)
+
+	# El zarpazo al saliente se comprueba aquí y no en la rama de "sin dirección
+	# de avance": a medio metro del muro todavía le queda rumbo hacia el punto de
+	# debajo, así que aquella rama no llegaba a ejecutarse nunca.
+	if current_state in [State.CHASE, State.INVESTIGATE, State.SEARCH] and _try_ledge_attack():
+		return
 
 	if _target_refresh_timer <= 0.0:
 		_target_refresh_timer = target_refresh_seconds
@@ -452,11 +503,10 @@ func _update_movement(delta: float) -> void:
 		if _smoothed_move_direction.length_squared() < 0.01:
 			_smoothed_move_direction = flat_direction
 		else:
-			var heading := lerp_angle(atan2(_smoothed_move_direction.x, _smoothed_move_direction.z), atan2(flat_direction.x, flat_direction.z), 1.0 - exp(-5.0 * delta))
+			var heading := lerp_angle(atan2(_smoothed_move_direction.x, _smoothed_move_direction.z), atan2(flat_direction.x, flat_direction.z), 1.0 - exp(-heading_smoothing * delta))
 			_smoothed_move_direction = Vector3(sin(heading), 0.0, cos(heading))
 		speed *= lerpf(0.35, 1.0, smoothstep(-0.3, 0.8, global_basis.z.dot(flat_direction)))
-		velocity.x = move_toward(velocity.x, _smoothed_move_direction.x * speed, delta * 7.5)
-		velocity.z = move_toward(velocity.z, _smoothed_move_direction.z * speed, delta * 7.5)
+		_accelerate_planar(_smoothed_move_direction, speed, delta)
 		var movement_yaw := atan2(_smoothed_move_direction.x, _smoothed_move_direction.z)
 		clearance_sensor.rotation.y = wrapf(movement_yaw - rotation.y, -PI, PI)
 		door_ray.rotation.y = clearance_sensor.rotation.y
@@ -465,13 +515,111 @@ func _update_movement(delta: float) -> void:
 			facing_direction = _prey.global_position - global_position
 			facing_direction.y = 0.0
 		if facing_direction.length_squared() > 0.01:
-			rotation.y = lerp_angle(rotation.y, atan2(facing_direction.x, facing_direction.z), minf(delta * 7.5, 1.0))
+			_turn_toward(atan2(facing_direction.x, facing_direction.z), delta, 7.5)
 		_was_trying_to_move = speed > 0.05
+		_stalk_timer = 0.0
 	else:
-		velocity.x = move_toward(velocity.x, 0.0, delta * 6.0)
-		velocity.z = move_toward(velocity.z, 0.0, delta * 6.0)
+		_brake_planar(braking * 0.6, delta)
 		_smoothed_move_direction = _smoothed_move_direction.move_toward(Vector3.ZERO, delta * 4.0)
 		_was_trying_to_move = false
+		_update_unreachable_target(delta, requested_target)
+
+
+# Un único move_toward sobre el plano. Aplicarlo por eje aceleraba hasta 1,41x
+# más rápido en diagonal y hacía que la respuesta dependiera del rumbo: en un
+# pasillo norte-sur arrancaba distinto que en una diagonal del salón.
+func _accelerate_planar(direction: Vector3, speed: float, delta: float) -> void:
+	var current := Vector2(velocity.x, velocity.z)
+	var desired := Vector2(direction.x, direction.z) * speed
+	var rate := acceleration if desired.length_squared() >= current.length_squared() else braking
+	current = current.move_toward(desired, rate * delta)
+	velocity.x = current.x
+	velocity.z = current.y
+
+
+func _brake_planar(rate: float, delta: float) -> void:
+	var current := Vector2(velocity.x, velocity.z).move_toward(Vector2.ZERO, rate * delta)
+	velocity.x = current.x
+	velocity.z = current.y
+
+
+# Suavizado exponencial (mismo giro a 30 y a 144 FPS) limitado por una velocidad
+# angular máxima. Sin el tope el cuerpo encaraba de golpe cada esquina nueva de
+# la ruta; es el salto que hacía que la abuela pareciese teledirigida.
+func _turn_toward(target_yaw: float, delta: float, responsiveness: float) -> void:
+	var eased := lerp_angle(rotation.y, target_yaw, 1.0 - exp(-responsiveness * delta))
+	var max_step := deg_to_rad(max_turn_speed_degrees) * delta
+	rotation.y = rotation.y + clampf(wrapf(eased - rotation.y, -PI, PI), -max_step, max_step)
+
+
+# Sin dirección de avance hay dos casos muy distintos: o ha llegado, o el
+# objetivo está donde ella no puede pisar. El segundo la dejaba congelada de
+# espaldas, porque además `_was_trying_to_move` se ponía en falso y desactivaba
+# la recuperación de atascos justo cuando hacía falta.
+# Si el destino no está sobre la malla (presa subida a un muro), apuntar a él
+# deja una ruta degenerada y la abuela no se mueve. Redirigirla al punto
+# transitable más cercano la lleva hasta debajo del saliente, que es desde donde
+# puede hacer algo.
+func _redirect_unreachable_target(target: Vector3) -> Vector3:
+	if not _navigation_available:
+		return target
+	var closest := NavigationServer3D.map_get_closest_point(get_world_3d().navigation_map, target)
+	if closest.distance_to(target) <= unreachable_tolerance:
+		return target
+	return closest
+
+
+func _try_ledge_attack() -> bool:
+	if not is_instance_valid(_prey) or not can_begin_attack():
+		return false
+	var height := _prey.global_position.y - global_position.y
+	if height <= attack_vertical_tolerance or height > ledge_reach_height:
+		return false
+	if _prey_planar_distance() > ledge_reach_radius:
+		return false
+	_ledge_attack_active = true
+	_stalk_timer = 0.0
+	_change_state(State.ATTACK)
+	return true
+
+
+func _update_unreachable_target(delta: float, target: Vector3) -> void:
+	# Se mide contra el final real de la ruta, no contra su posición: cuando el
+	# destino cae en una isla de navegación desconectada el servidor devuelve una
+	# ruta degenerada de dos puntos sobre ella misma, y entonces no llega a
+	# moverse en ningún momento. Comparar "posición contra objetivo" no distingue
+	# ese caso de haber llegado.
+	# Distancia en 3D a propósito: una presa justo encima de su cabeza tiene
+	# distancia horizontal casi nula y parecería alcanzada.
+	var reachable_end := global_position
+	if _navigation_available:
+		reachable_end = navigation_agent.get_final_position()
+	if reachable_end.distance_to(target) <= navigation_agent.target_desired_distance + unreachable_tolerance:
+		_stalk_timer = 0.0
+		return
+	# Ya está debajo: sacude hacia arriba. Mientras la presa siga al alcance no se
+	# rinde, así que quedarse en el muro deja de ser un refugio seguro.
+	if _try_ledge_attack():
+		return
+	# Acecha: la encara desde el punto transitable más cercano en vez de quedarse
+	# mirando a una pared. Es lo que se ve desde arriba de un muro.
+	var to_target := target - global_position
+	to_target.y = 0.0
+	if to_target.length_squared() > 0.01:
+		_turn_toward(atan2(to_target.x, to_target.z), delta, 4.0)
+	_stalk_timer += delta
+	if _stalk_timer < stalk_seconds:
+		return
+	_stalk_timer = 0.0
+	_give_up_unreachable_target()
+
+
+func _give_up_unreachable_target() -> void:
+	_memory_timer = 0.0
+	_floor_change_grace = 0.0
+	_closest_floor_change_distance = INF
+	if current_state != State.SEARCH:
+		_change_state(State.SEARCH)
 
 
 func _update_stuck_recovery(delta: float) -> void:
@@ -603,9 +751,21 @@ func _player_planar_distance() -> float:
 
 
 func _has_attack_contact(distance: float = attack_distance) -> bool:
+	if not is_instance_valid(_prey):
+		return false
+	# Sacudir hacia un saliente llega mucho más alto que un golpe normal, y a esa
+	# distancia no necesita ver: está pegada al muro palpando por encima del
+	# borde. Exigir línea de visión aquí haría que el propio muro anulase el
+	# golpe justo cuando ya lo está tocando.
+	if _ledge_attack_active:
+		var height := _prey.global_position.y - global_position.y
+		return (
+			height > 0.0
+			and height <= ledge_reach_height
+			and _prey_planar_distance() <= maxf(distance, ledge_reach_radius)
+		)
 	return (
-		is_instance_valid(_prey)
-		and absf(_prey.global_position.y - global_position.y) <= attack_vertical_tolerance
+		absf(_prey.global_position.y - global_position.y) <= attack_vertical_tolerance
 		and _prey_planar_distance() <= distance
 		and _has_clear_line_to_prey_body()
 	)
@@ -718,15 +878,18 @@ func _update_attack(delta: float) -> void:
 	var to_prey := _prey.global_position - global_position
 	to_prey.y = 0.0
 	if to_prey.length_squared() > 0.01:
-		rotation.y = lerp_angle(rotation.y, atan2(to_prey.x, to_prey.z), minf(delta * 10.0, 1.0))
+		# El ataque es el único momento en que puede girar sobre sí misma sin tope:
+		# es un movimiento intencionado, no una corrección de ruta.
+		rotation.y = lerp_angle(rotation.y, atan2(to_prey.x, to_prey.z), 1.0 - exp(-10.0 * delta))
 	var lunging := _attack_timer >= attack_windup_seconds and _attack_timer <= attack_hit_seconds
 	if lunging and to_prey.length_squared() > 0.01 and _prey_planar_distance() > 0.48:
-		var lunge_direction := to_prey.normalized()
-		velocity.x = move_toward(velocity.x, lunge_direction.x * 1.35, delta * 10.0)
-		velocity.z = move_toward(velocity.z, lunge_direction.z * 1.35, delta * 10.0)
+		var current_lunge := Vector2(velocity.x, velocity.z).move_toward(
+			Vector2(to_prey.normalized().x, to_prey.normalized().z) * 1.35, delta * 10.0
+		)
+		velocity.x = current_lunge.x
+		velocity.z = current_lunge.y
 	else:
-		velocity.x = move_toward(velocity.x, 0.0, delta * 14.0)
-		velocity.z = move_toward(velocity.z, 0.0, delta * 14.0)
+		_brake_planar(14.0, delta)
 	if _attack_timer >= attack_hit_seconds and not _attack_applied:
 		_attack_applied = true
 		if _has_attack_contact(attack_distance + 0.7):
@@ -762,17 +925,18 @@ func _update_eating(delta: float) -> void:
 		var to_body := _eating_target.global_position - global_position
 		to_body.y = 0.0
 		if to_body.length_squared() > 0.01:
-			rotation.y = lerp_angle(rotation.y, atan2(to_body.x, to_body.z), minf(delta * 5.5, 1.0))
+			_turn_toward(atan2(to_body.x, to_body.z), delta, 5.5)
 		var body_distance := to_body.length()
 		if not _eating_started and body_distance > eating_distance and _eating_approach_timer > 0.0:
 			_eating_approach_timer = maxf(0.0, _eating_approach_timer - delta)
-			var approach_direction := to_body.normalized()
-			velocity.x = move_toward(velocity.x, approach_direction.x * eating_approach_speed, delta * 5.0)
-			velocity.z = move_toward(velocity.z, approach_direction.z * eating_approach_speed, delta * 5.0)
+			var approach := Vector2(velocity.x, velocity.z).move_toward(
+				Vector2(to_body.normalized().x, to_body.normalized().z) * eating_approach_speed, delta * 5.0
+			)
+			velocity.x = approach.x
+			velocity.z = approach.y
 			return
 	_eating_started = true
-	velocity.x = move_toward(velocity.x, 0.0, delta * 14.0)
-	velocity.z = move_toward(velocity.z, 0.0, delta * 14.0)
+	_brake_planar(14.0, delta)
 	_eating_elapsed += delta
 	_eating_timer = maxf(0.0, _eating_timer - delta)
 	if _eating_timer > 0.0:
@@ -798,6 +962,8 @@ func _change_state(new_state: State) -> void:
 		return
 	var previous := current_state
 	current_state = new_state
+	if new_state != State.ATTACK:
+		_ledge_attack_active = false
 	_state_timer = search_seconds if new_state == State.SEARCH else randf_range(0.8, 2.0)
 	if new_state == State.ATTACK:
 		_attack_timer = 0.0
@@ -1035,17 +1201,19 @@ func _update_door_traversal(delta: float) -> void:
 		return
 	_door_blocked_timer = 0.0
 	_smoothed_move_direction = direction
-	velocity.x = move_toward(velocity.x, direction.x * door_cross_speed, delta * 12.0)
-	velocity.z = move_toward(velocity.z, direction.z * door_cross_speed, delta * 12.0)
-	rotation.y = lerp_angle(rotation.y, atan2(direction.x, direction.z), minf(delta * 11.0, 1.0))
+	var crossing_velocity := Vector2(velocity.x, velocity.z).move_toward(
+		Vector2(direction.x, direction.z) * door_cross_speed, delta * 12.0
+	)
+	velocity.x = crossing_velocity.x
+	velocity.z = crossing_velocity.y
+	_turn_toward(atan2(direction.x, direction.z), delta, 11.0)
 	clearance_sensor.rotation.y = wrapf(atan2(direction.x, direction.z) - rotation.y, -PI, PI)
 	door_ray.rotation.y = clearance_sensor.rotation.y
 	_was_trying_to_move = true
 
 
 func _brake_at_door(delta: float) -> void:
-	velocity.x = move_toward(velocity.x, 0.0, delta * 14.0)
-	velocity.z = move_toward(velocity.z, 0.0, delta * 14.0)
+	_brake_planar(14.0, delta)
 	_was_trying_to_move = false
 
 
@@ -1092,8 +1260,12 @@ func _update_animation(delta: float) -> void:
 	var actual_velocity := get_real_velocity()
 	var horizontal_speed := Vector2(actual_velocity.x, actual_velocity.z).length()
 	var moving_amount := clampf(horizontal_speed / maxf(chase_speed, 0.01), 0.0, 1.0)
-	var cadence := lerpf(2.8, 8.2, moving_amount)
-	_motion_phase += delta * cadence
+	# Una zancada cada `stride_length` metros recorridos en lugar de una rampa
+	# fija por estado. Los pasos (que se disparan cada PI de fase), el balanceo de
+	# piernas y el bob del rig importado quedan atados a la velocidad real, así
+	# que dejan de patinar al acelerar, frenar o rozar una pared.
+	var stride_cadence := PI * horizontal_speed / maxf(stride_length, 0.05)
+	_motion_phase += delta * maxf(stride_cadence, 1.6)
 	var leg_swing := sin(_motion_phase) * lerpf(0.18, 0.72, moving_amount)
 	var arm_swing := sin(_motion_phase) * lerpf(0.08, 0.46, moving_amount)
 	var chase_amount := 1.0 if current_state == State.CHASE else 0.0
