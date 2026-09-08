@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://environment/recording_only_components/recording_only_pen_circle.gd" id="1_circle"]
+
+[node name="RecordingOnlyPenCircle" type="Node3D"]
+editor_description = "Círculo irregular trazado con bolígrafo. Visible completo en el editor; durante el juego solo queda registrado en la cinta y dentro de la distancia configurada."
+script = ExtResource("1_circle")

@@ -4,6 +4,7 @@ extends StaticBody3D
 @export var key_name := "LLAVE ANTIGUA"
 @export var starts_hidden_until_revealed := false
 @export var requires_crouch := false
+@export_range(0.5, 2.35, 0.05, "suffix:m") var interaction_distance := 1.55
 
 var _collected := false
 var _revealing := false
@@ -18,6 +19,14 @@ func _ready() -> void:
 
 func get_interaction_key() -> Key:
 	return KEY_F
+
+
+func get_interaction_distance() -> float:
+	return interaction_distance
+
+
+func get_interaction_priority() -> int:
+	return 100
 
 
 func get_interaction_text(player: Node = null) -> String:
@@ -77,6 +86,8 @@ func reveal_from_toilet(start_global_position: Vector3, landing_global_position:
 
 func _set_interaction_enabled(enabled: bool) -> void:
 	collision_layer = 2 if enabled else 0
-	for child in get_children():
-		if child is CollisionShape3D:
-			child.set_deferred("disabled", not enabled)
+	for child in find_children("*", "CollisionShape3D", true, false):
+		(child as CollisionShape3D).set_deferred("disabled", not enabled)
+	var interaction_area := get_node_or_null("InteractionArea") as Area3D
+	if interaction_area != null:
+		interaction_area.collision_layer = 2 if enabled else 0

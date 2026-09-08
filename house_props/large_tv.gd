@@ -7,10 +7,12 @@ const FRAME_COUNT := GRID_COLUMNS * GRID_ROWS
 const SCREEN_LIGHT_ENERGY := 0.65
 
 @export_range(0.2, 5.0, 0.05, "suffix:s") var frame_duration := 1.5
-@export_range(0.5, 2.35, 0.05, "suffix:m") var interaction_distance := 2.0
 
 @onready var screen: MeshInstance3D = $SquareGreyScreen
 @onready var screen_light: OmniLight3D = $ScreenLight
+@onready var channel_indicator: Node3D = $ChannelControl/Visual/IndicatorPivot
+@onready var volume_indicator: Node3D = $VolumeControl/Visual/IndicatorPivot
+@onready var power_button: Node3D = $PowerControl/Visual
 
 var _programs: Array[Texture2D] = []
 var _screen_material: ShaderMaterial
@@ -18,12 +20,16 @@ var _is_on := false
 var _channel := 0
 var _frame := 0
 var _frame_time := 0.0
+var _volume_level := 5
+var _volume_direction := 1
 
 
 func _ready() -> void:
+	add_to_group(&"televisions")
 	_load_programs()
 	_prepare_screen_material()
 	_show_powered_off_screen()
+	_update_control_positions()
 
 
 func _process(delta: float) -> void:
@@ -36,42 +42,83 @@ func _process(delta: float) -> void:
 		_update_frame_uv()
 
 
-func get_interaction_key() -> Key:
-	return KEY_F
+func get_control_prompt(action: String) -> String:
+	match action:
+		"power": return "F  %s TELE" % ("APAGAR" if _is_on else "ENCENDER")
+		"channel":
+			if not _is_on:
+				return "TELE APAGADA"
+			return "F  CAMBIAR CANAL  [%d/%d]" % [_channel + 1, _programs.size()]
+		"volume":
+			if not _is_on:
+				return "TELE APAGADA"
+			var shown_direction := _volume_direction
+			if _volume_level >= 10:
+				shown_direction = -1
+			elif _volume_level <= 0:
+				shown_direction = 1
+			return "F  %s VOLUMEN  [%d/10]" % [
+				"SUBIR" if shown_direction > 0 else "BAJAR",
+				_volume_level,
+			]
+	return ""
 
 
-func get_interaction_distance() -> float:
-	return interaction_distance
+func activate_control(action: String) -> bool:
+	match action:
+		"power": return toggle_power()
+		"channel": return next_channel()
+		"volume": return step_volume()
+	return false
 
 
-func get_interaction_text(_player: Node = null) -> String:
-	if _programs.is_empty():
-		return "TELE SIN SENAL"
-	if not _is_on:
-		return "F  ENCENDER TELE"
-	if _channel == _programs.size() - 1:
-		return "F  APAGAR TELE  [%d/%d]" % [_channel + 1, _programs.size()]
-	return "F  CAMBIAR CANAL  [%d/%d]" % [_channel + 1, _programs.size()]
-
-
-func interact(_player: Node = null) -> bool:
+func toggle_power() -> bool:
 	if _programs.is_empty():
 		return false
-	if not _is_on:
-		_is_on = true
-		_channel = 0
-	elif _channel == _programs.size() - 1:
-		_is_on = false
-		_frame = 0
-		_frame_time = 0.0
-		_show_powered_off_screen()
-		return true
+	_is_on = not _is_on
+	_frame = 0
+	_frame_time = 0.0
+	if _is_on:
+		_show_current_program()
 	else:
-		_channel += 1
+		_show_powered_off_screen()
+	_update_control_positions()
+	return true
+
+
+func next_channel() -> bool:
+	if not _is_on or _programs.is_empty():
+		return false
+	_channel = (_channel + 1) % _programs.size()
 	_frame = 0
 	_frame_time = 0.0
 	_show_current_program()
+	_update_control_positions()
 	return true
+
+
+func step_volume() -> bool:
+	if not _is_on:
+		return false
+	if _volume_level >= 10:
+		_volume_direction = -1
+	elif _volume_level <= 0:
+		_volume_direction = 1
+	return adjust_volume(_volume_direction)
+
+
+func adjust_volume(amount: int) -> bool:
+	if not _is_on or amount == 0:
+		return false
+	_volume_level = clampi(_volume_level + signi(amount), 0, 10)
+	_update_control_positions()
+	return true
+
+
+func get_remote_status() -> String:
+	if not _is_on:
+		return "TELE APAGADA"
+	return "CANAL %d/%d    VOLUMEN %d/10" % [_channel + 1, _programs.size(), _volume_level]
 
 
 func _load_programs() -> void:
@@ -114,3 +161,13 @@ func _show_current_program() -> void:
 
 func _update_frame_uv() -> void:
 	_screen_material.set_shader_parameter(&"frame_index", _frame)
+
+
+func _update_control_positions() -> void:
+	# Las ruedas permanecen fijas: solo gira el pivote de la marca blanca sobre
+	# el eje perpendicular a la cara del mando, como la aguja de un reloj.
+	channel_indicator.rotation.y = -float(_channel) * TAU / maxf(float(_programs.size()), 1.0)
+	volume_indicator.rotation.y = lerpf(-2.2, 2.2, float(_volume_level) / 10.0)
+	# Encendida queda fisicamente enclavada dentro de la carcasa; apagada vuelve
+	# a sobresalir. El eje +Z apunta hacia el interior de esta tele.
+	power_button.position.z = 0.022 if _is_on else 0.0

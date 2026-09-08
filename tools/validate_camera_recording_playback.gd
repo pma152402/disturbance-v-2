@@ -42,9 +42,29 @@ func _run() -> void:
 			or not is_equal_approx((zoom_plus.offset_top + zoom_plus.offset_bottom) * 0.5, segment_center):
 		_fail("Los signos -/+ no comparten centro vertical con el zoom")
 		return
+	var camera_frame := recorder.get("_camera_corner_frame") as Control
+	var menu_frame := recorder.get("_menu_outline_frame") as Control
+	var inner_brackets := recorder.get("_menu_inner_brackets") as Control
+	if not camera_frame.visible or menu_frame.visible or inner_brackets.visible:
+		_fail("El directo no usa exclusivamente el encuadre de esquinas")
+		return
+	var stance_indicator := game.get_node("Player/StanceUI/StanceIndicator") as Control
+	if stance_indicator.position != Vector2(329.0, 66.0) or stance_indicator.size != Vector2(74.0, 80.0):
+		_fail("El monigote no conservó su posición relativa dentro del HUD desplazado")
+		return
+	if (recorder.get_node("Recording") as Control).offset_left < 70.0 \
+			or (recorder.get_node("Battery") as Control).offset_right > -70.0 \
+			or (zoom_meter as Control).offset_right > -70.0:
+		_fail("El HUD del directo invade la zona segura de las esquinas")
+		return
 	var low_res_viewport := recorder.get("_recording_viewport") as SubViewport
 	if low_res_viewport == null or low_res_viewport.size != Vector2i(426, 240):
 		_fail("La grabación no usa el viewport pequeño de bajo coste")
+		return
+	var candle_preview := game.get_node("Player/CandlePlacementPreview") as VisualInstance3D
+	var tape_camera := recorder.get("_recording_camera") as Camera3D
+	if not candle_preview.get_layer_mask_value(19) or tape_camera.get_cull_mask_value(19):
+		_fail("La guía verde de la vela sigue incluida en las grabaciones")
 		return
 	recorder.call(&"start_recording")
 	if int(recorder.call(&"_maximum_frames_per_clip")) != 60:
@@ -88,6 +108,21 @@ func _run() -> void:
 	if bool(recorder.get("_mode_transitioning")):
 		_fail("El loader de entrada no terminó")
 		return
+	if camera_frame.visible or not menu_frame.visible or not inner_brackets.visible:
+		_fail("ARCHIVO no combina el encuadre completo con los corchetes interiores")
+		return
+	var playback_tabs_for_bracket := recorder.get("_playback_tabs") as Control
+	var expected_bracket_top := playback_tabs_for_bracket.offset_top + (recorder.get("_camera_tab_label") as Label).size.y * 0.5
+	var progress_for_bracket := recorder.get("_playback_progress_track") as Control
+	var expected_bracket_bottom := (progress_for_bracket.offset_top + progress_for_bracket.offset_bottom) * 0.5
+	if inner_brackets.offset_left != -inner_brackets.offset_right \
+			or not is_equal_approx(inner_brackets.offset_top, expected_bracket_top) \
+			or not is_equal_approx(inner_brackets.offset_bottom, expected_bracket_bottom):
+		_fail("Los corchetes interiores no conectan pestañas y barra de duración")
+		return
+	if float(inner_brackets.get("line_width")) != float(camera_frame.get("line_width")):
+		_fail("Los corchetes interiores no tienen el grosor de las esquinas")
+		return
 	recorder.call(&"_toggle_recording")
 	if (recorder.get_node("Recording") as CanvasItem).visible:
 		_fail("El parpadeo volvió a mostrar REC dentro de ARCHIVO")
@@ -105,7 +140,7 @@ func _run() -> void:
 		_fail("PLAYBACK no mostró el fotograma grabado")
 		return
 	var side_menu := recorder.get("_playback_menu_left") as RichTextLabel
-	var side_controls := recorder.get("_playback_controls_right") as Label
+	var side_controls := recorder.get("_playback_controls_right") as RichTextLabel
 	var parsed_menu := side_menu.get_parsed_text()
 	if not side_menu.visible or "▶ CINTA 01 A" not in parsed_menu:
 		_fail("El menú lateral no señala la cinta seleccionada")
@@ -116,7 +151,7 @@ func _run() -> void:
 	if "DIRECTO" in parsed_menu:
 		_fail("El archivo todavía muestra la entrada DIRECTO")
 		return
-	if not side_controls.visible or "VOLVER" not in side_controls.text:
+	if not side_controls.visible or "TAB / ESC" not in side_controls.text or "CAMARA" not in side_controls.text:
 		_fail("Faltan los controles grandes del lateral derecho")
 		return
 	if "ESPACIO" not in side_controls.text:
@@ -140,14 +175,18 @@ func _run() -> void:
 			or (pause_bars[0] as ColorRect).size != (pause_bars[1] as ColorRect).size:
 		_fail("Las dos barras de pausa no están alineadas entre sí")
 		return
-	if "W / S" not in side_controls.text or "Q / E" in side_controls.text:
-		_fail("El menú no usa W/S para cambiar de cinta")
+	var play_icon := recorder.get("_playback_play_icon") as Polygon2D
+	if not play_icon.visible or (pause_bars[0] as ColorRect).visible:
+		_fail("El transporte pausado no muestra el botón PLAY")
+		return
+	if "W / S" not in side_controls.text or "Q / E" not in side_controls.text or "CAMBIAR MENU" not in side_controls.text:
+		_fail("El menú no separa W/S para cintas y Q/E para pestañas")
 		return
 	if side_menu.vertical_alignment != VERTICAL_ALIGNMENT_CENTER:
 		_fail("El archivo perdió su centrado vertical original")
 		return
-	if side_menu.get_theme_font(&"normal_font") != side_controls.get_theme_font(&"font") \
-			or side_menu.get_theme_font_size(&"normal_font_size") != side_controls.get_theme_font_size(&"font_size"):
+	if side_menu.get_theme_font(&"normal_font") != side_controls.get_theme_font(&"normal_font") \
+			or side_menu.get_theme_font_size(&"normal_font_size") != side_controls.get_theme_font_size(&"normal_font_size"):
 		_fail("El archivo no comparte tipografía y tamaño con los controles")
 		return
 	var tabs := recorder.get("_playback_tabs") as Control
@@ -165,6 +204,9 @@ func _run() -> void:
 		_fail("La pestaña CAMARA todavía conserva el acento")
 		return
 	recorder.call(&"_toggle_playback_running")
+	if play_icon.visible or not (pause_bars[0] as ColorRect).visible:
+		_fail("El transporte en marcha no muestra el botón PAUSA")
+		return
 	recorder.call(&"_process", 0.31)
 	if int(recorder.get("_selected_frame")) != 1:
 		_fail("PLAY no avanzó tras 0,3 segundos")
@@ -192,8 +234,13 @@ func _run() -> void:
 		return
 	recorder.call(&"_set_delete_confirmation", true)
 	var confirmation := recorder.get("_delete_confirmation") as Label
-	if not bool(recorder.get("_delete_armed")) or not confirmation.visible or "CONFIRMAR" not in confirmation.text:
+	var confirmation_backdrop := recorder.get("_delete_confirmation_backdrop") as ColorRect
+	if not bool(recorder.get("_delete_armed")) or not confirmation.visible \
+			or "▶  ELIMINAR" not in confirmation.text or "ESPACIO  ACEPTAR" not in confirmation.text:
 		_fail("X no solicita confirmación antes de eliminar")
+		return
+	if not confirmation_backdrop.visible or confirmation_backdrop.color.a < 0.5:
+		_fail("La confirmación no oscurece el cuadro de vídeo")
 		return
 	recorder.call(&"_delete_selected_clip")
 	if clips.size() != 1 or bool(recorder.get("_delete_armed")) or confirmation.visible:
@@ -208,6 +255,11 @@ func _run() -> void:
 		return
 	if not volume_indicator.visible or volume_indicator.get_child_count() != 5:
 		_fail("Falta el indicador VOL decorativo de cuatro niveles")
+		return
+	var battery_center_x := ((recorder.get_node("Battery") as Control).offset_left + (recorder.get_node("Battery") as Control).offset_right) * 0.5
+	var volume_center_x := (volume_indicator.offset_left + volume_indicator.offset_right) * 0.5
+	if absf(battery_center_x - volume_center_x) > 0.5:
+		_fail("VOL no está centrado horizontalmente con BAT")
 		return
 	for level_index in range(1, 5):
 		var volume_level := volume_indicator.get_child(level_index) as Panel
@@ -226,9 +278,9 @@ func _run() -> void:
 	if playback_material == null or playback_material.shader == null:
 		_fail("El vídeo de ARCHIVO no tiene su filtro pixelado local")
 		return
-	recorder.call(&"toggle_avdv")
+	recorder.call(&"step_camera_menu", 1)
 	if not bool(recorder.get("_mode_transitioning")) or not bool(recorder.get("_playback_open")):
-		_fail("BLOQ MAYUS no inició el paso de ARCHIVO a AV / DV")
+		_fail("E no inició el paso de ARCHIVO a AV / DV")
 		return
 	var avdv_tab := recorder.get("_avdv_tab_label") as Label
 	var archive_tab := recorder.get("_archive_tab_label") as Label
@@ -239,10 +291,45 @@ func _run() -> void:
 	var avdv_menu := recorder.get("_avdv_menu") as RichTextLabel
 	if not avdv_menu.visible or "SACAR CINTA" not in avdv_menu.get_parsed_text() \
 			or "METER CINTA" not in avdv_menu.get_parsed_text() \
-			or "SIN CONEXIÓN" not in avdv_menu.get_parsed_text():
+			or "SIN CONEXION" not in avdv_menu.get_parsed_text():
 		_fail("El menú AV / DV no expone sus operaciones y bloqueos")
 		return
+	var avdv_explanation := recorder.get("_avdv_explanation") as RichTextLabel
+	var avdv_controls := recorder.get("_avdv_controls_right") as RichTextLabel
+	if not avdv_controls.visible or (recorder.get("_avdv_status") as Label).visible \
+			or "CAMBIAR MENU" not in avdv_controls.get_parsed_text():
+		_fail("AV / DV no tiene su panel derecho o conserva la barra inferior")
+		return
+	recorder.set("_avdv_selection", 2)
+	recorder.call(&"_refresh_avdv_menu")
+	if not avdv_explanation.visible or "DVD EXTERNO" not in avdv_explanation.get_parsed_text() \
+			or avdv_explanation.get_theme_font_size(&"normal_font_size") >= avdv_menu.get_theme_font_size(&"normal_font_size"):
+		_fail("Las opciones AV / DV bloqueadas no tienen explicación secundaria")
+		return
 	recorder.set("_avdv_selection", 0)
+	recorder.call(&"_refresh_avdv_menu")
+	if not avdv_explanation.get_parsed_text().strip_edges().is_empty():
+		_fail("AV / DV muestra descripciones de opciones ajenas al cursor")
+		return
+	clips.append([test_frame])
+	recorder.set("_avdv_selection", 3)
+	recorder.call(&"_refresh_avdv_menu")
+	if "VACIA LA CINTA POR COMPLETO" not in avdv_explanation.get_parsed_text():
+		_fail("REBOBINAR no advierte que vacía la cinta")
+		return
+	recorder.call(&"_activate_avdv_option")
+	if not bool(recorder.get("_avdv_erase_armed")) or clips.is_empty():
+		_fail("REBOBINAR no exige confirmación antes de vaciar")
+		return
+	if avdv_explanation.get_parsed_text().strip_edges() != "SE ELIMINARA LA GRABACION DEFINITIVAMENTE":
+		_fail("La confirmación de REBOBINAR no muestra el aviso definitivo")
+		return
+	recorder.call(&"_activate_avdv_option")
+	if not clips.is_empty() or bool(recorder.get("_avdv_erase_armed")):
+		_fail("La segunda confirmación no vació la cinta")
+		return
+	recorder.set("_avdv_selection", 0)
+	recorder.call(&"_refresh_avdv_menu")
 	recorder.call(&"_activate_avdv_option")
 	if bool(recorder.get("_tape_inserted")):
 		_fail("SACAR CINTA no cambió el estado físico")
@@ -256,9 +343,9 @@ func _run() -> void:
 	if not bool(recorder.get("_tape_inserted")):
 		_fail("METER CINTA no restauró el estado físico")
 		return
-	recorder.call(&"toggle_avdv")
+	recorder.call(&"step_camera_menu", 1)
 	if not bool(recorder.get("_mode_transitioning")):
-		_fail("BLOQ MAYUS no inició el regreso de AV / DV a CAMARA")
+		_fail("E no inició el regreso de AV / DV a CAMARA")
 		return
 	var camera_tab := recorder.get("_camera_tab_label") as Label
 	if camera_tab.get_theme_color(&"font_color").r <= avdv_tab.get_theme_color(&"font_color").r:

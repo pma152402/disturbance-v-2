@@ -1,4 +1,6 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://house_props/retro_tv_remote.gd" id="1_remote"]
 
 [sub_resource type="StandardMaterial3D" id="Plastic"]
 albedo_color = Color(0.075, 0.078, 0.08, 1)
@@ -31,12 +33,18 @@ radial_segments = 10
 material = SubResource("Button")
 size = Vector3(0.045, 0.018, 0.13)
 [sub_resource type="BoxShape3D" id="Collision"]
-size = Vector3(0.24, 0.08, 0.63)
+size = Vector3(0.3, 0.18, 0.68)
 
-[node name="RetroTVRemote" type="StaticBody3D"]
+[node name="RetroTVRemote" type="RigidBody3D"]
 editor_description = "Mando de tele antiguo con boton de encendido, teclado numerico y cruceta."
+collision_layer = 2
+collision_mask = 1
+mass = 0.32
+gravity_scale = 0.9
+freeze = true
+script = ExtResource("1_remote")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.04, 0)
+position = Vector3(0, 0.085, 0)
 shape = SubResource("Collision")
 [node name="Body" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.03, 0)

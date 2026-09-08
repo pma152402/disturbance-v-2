@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="PackedScene" path="res://house_props/old_house_key.tscn" id="1_key"]
 [ext_resource type="Script" path="res://pickups/collectible_key.gd" id="2_script"]
+
+[sub_resource type="BoxShape3D" id="Shape_interaction"]
+size = Vector3(0.86, 0.58, 0.42)
 
 [node name="CollectibleKey" instance=ExtResource("1_key")]
 collision_layer = 2
@@ -9,3 +12,12 @@ collision_mask = 1
 script = ExtResource("2_script")
 key_id = &"old_house_key"
 key_name = "LLAVE ANTIGUA"
+
+[node name="InteractionArea" type="Area3D" parent="."]
+position = Vector3(-0.04, 0.26, 0.025)
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+
+[node name="InteractionShape" type="CollisionShape3D" parent="InteractionArea"]
+shape = SubResource("Shape_interaction")

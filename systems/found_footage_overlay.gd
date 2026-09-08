@@ -2,10 +2,15 @@ extends Control
 
 const TapeLoadingSpinner := preload("res://systems/camera_tape_spinner.gd")
 const ArchivePlaybackShader := preload("res://shaders/archive_playback_filter.gdshader")
+const CameraInterfaceFrame := preload("res://systems/camera_interface_frame.gd")
 const TAPE_SLOT_NAMES := ["CINTA 01 A", "CINTA 02 A", "CINTA 01 B", "CINTA 02 B"]
 const MODE_CAMERA := 0
 const MODE_ARCHIVE := 1
 const MODE_AV_DV := 2
+const RECORDING_ONLY_VISIBILITY_LAYER := 20
+const RECORDING_ONLY_VISIBILITY_MASK := 1 << (RECORDING_ONLY_VISIBILITY_LAYER - 1)
+const LIVE_ONLY_VISIBILITY_LAYER := 19
+const LIVE_ONLY_VISIBILITY_MASK := 1 << (LIVE_ONLY_VISIBILITY_LAYER - 1)
 
 @onready var recording_label: Label = $Recording
 @onready var tape_mode_label: Label = $TapeMode
@@ -45,12 +50,18 @@ var _camera_tab_label: Label
 var _archive_tab_label: Label
 var _avdv_tab_label: Label
 var _tabs_underline: ColorRect
+var _delete_confirmation_backdrop: ColorRect
 var _delete_confirmation: Label
 var _playback_volume_indicator: Control
 var _avdv_menu: RichTextLabel
 var _avdv_status: Label
+var _avdv_explanation: RichTextLabel
+var _avdv_controls_right: RichTextLabel
+var _camera_corner_frame: Control
+var _menu_outline_frame: Control
+var _menu_inner_brackets: Control
 var _playback_menu_left: RichTextLabel
-var _playback_controls_right: Label
+var _playback_controls_right: RichTextLabel
 var _playback_progress_track: Control
 var _playback_progress_segments: Array[ColorRect] = []
 var _playback_texture: ImageTexture
@@ -63,6 +74,7 @@ var _tape_loading := false
 var _tape_load_timer := 0.0
 var _pending_clip := -1
 var _delete_armed := false
+var _delete_selection := 0
 var _mode_transitioning := false
 var _active_mode := MODE_CAMERA
 var _transition_target_mode := MODE_CAMERA
@@ -70,6 +82,7 @@ var _mode_transition_timer := 0.0
 var _tape_inserted := true
 var _avdv_selection := 0
 var _external_recorder_connected := false
+var _avdv_erase_armed := false
 
 
 func _ready() -> void:
@@ -81,6 +94,7 @@ func _ready() -> void:
 	tape_mode_label.text = "CAM 01"
 	_build_playback_interface()
 	_build_low_resolution_recorder()
+	_exclude_recording_only_layer_from_live_camera()
 	_update_timestamp()
 	_update_fps()
 	set_process(true)
@@ -126,20 +140,35 @@ func _input(event: InputEvent) -> void:
 		return
 	if event is InputEventKey:
 		var key := (event as InputEventKey).physical_keycode
+		if key == KEY_T:
+			get_viewport().set_input_as_handled()
+			get_tree().paused = false
+			get_tree().reload_current_scene()
+			return
 		if _delete_armed:
-			if key == KEY_X:
-				_delete_selected_clip()
+			if key == KEY_W or key == KEY_S or key == KEY_UP or key == KEY_DOWN:
+				_delete_selection = 1 - _delete_selection
+				_refresh_delete_confirmation()
+			elif key == KEY_SPACE or key == KEY_ENTER or key == KEY_KP_ENTER:
+				if _delete_selection == 0:
+					_delete_selected_clip()
+				else:
+					_set_delete_confirmation(false)
 			elif key == KEY_ESCAPE or key == KEY_TAB:
 				_set_delete_confirmation(false)
+				if key == KEY_TAB:
+					_begin_mode_transition(MODE_CAMERA)
 			get_viewport().set_input_as_handled()
 			return
 		match key:
 			KEY_TAB:
 				toggle_playback()
-			KEY_CAPSLOCK:
-				toggle_avdv()
 			KEY_ESCAPE:
 				_begin_mode_transition(MODE_CAMERA)
+			KEY_Q:
+				step_camera_menu(-1)
+			KEY_E:
+				step_camera_menu(1)
 			KEY_SPACE:
 				if _active_mode == MODE_AV_DV:
 					_activate_avdv_option()
@@ -210,9 +239,9 @@ func stop_recording() -> void:
 func toggle_playback() -> void:
 	if _mode_transitioning:
 		return
-	if _is_recording:
-		stop_recording()
 	if not _playback_open:
+		if _is_recording:
+			stop_recording()
 		_playback_open = true
 		_playback_running = false
 		_tape_loading = false
@@ -227,23 +256,26 @@ func toggle_playback() -> void:
 		_begin_mode_transition(MODE_CAMERA)
 
 
-func toggle_avdv() -> void:
+func step_camera_menu(direction: int) -> void:
 	if _mode_transitioning:
 		return
 	if _is_recording:
 		stop_recording()
+	var source_mode := _active_mode if _playback_open else MODE_CAMERA
+	var target_mode := wrapi(source_mode + direction, MODE_CAMERA, MODE_AV_DV + 1)
 	if not _playback_open:
+		if target_mode == MODE_CAMERA:
+			return
 		_playback_open = true
 		_playback_running = false
 		_tape_loading = false
+		_playback_frame_timer = playback_frame_seconds
+		_selected_clip = clampi(_selected_clip, 0, maxi(_saved_clips.size() - 1, 0))
+		_selected_frame = 0
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		get_tree().paused = true
 		_hide_live_hud_for_playback()
-		_begin_mode_transition(MODE_AV_DV)
-	elif _active_mode == MODE_AV_DV:
-		_begin_mode_transition(MODE_CAMERA)
-	else:
-		_begin_mode_transition(MODE_AV_DV)
+	_begin_mode_transition(target_mode)
 
 
 func _begin_mode_transition(target_mode: int) -> void:
@@ -267,6 +299,8 @@ func _begin_mode_transition(target_mode: int) -> void:
 	_playback_volume_indicator.visible = false
 	_avdv_menu.visible = false
 	_avdv_status.visible = false
+	_avdv_explanation.visible = false
+	_avdv_controls_right.visible = false
 	_playback_progress_track.visible = false
 	_tape_spinner.visible = true
 
@@ -289,7 +323,9 @@ func _finish_mode_transition() -> void:
 		_playback_backdrop.visible = true
 		_playback_tabs.visible = true
 		_avdv_menu.visible = true
-		_avdv_status.visible = true
+		_avdv_status.visible = false
+		_avdv_explanation.visible = true
+		_avdv_controls_right.visible = true
 		_refresh_avdv_menu()
 		return
 	_playback_open = false
@@ -305,6 +341,8 @@ func _finish_mode_transition() -> void:
 	_playback_controls_right.visible = false
 	_avdv_menu.visible = false
 	_avdv_status.visible = false
+	_avdv_explanation.visible = false
+	_avdv_controls_right.visible = false
 	_playback_progress_track.visible = false
 	_playback_volume_indicator.visible = false
 	_restore_live_hud_after_playback()
@@ -355,6 +393,13 @@ func _build_low_resolution_recorder() -> void:
 	_recording_camera.name = "TapeCamera"
 	_recording_viewport.add_child(_recording_camera)
 	_recording_camera.current = true
+	_recording_camera.cull_mask = RECORDING_ONLY_VISIBILITY_MASK
+
+
+func _exclude_recording_only_layer_from_live_camera() -> void:
+	var live_camera := get_viewport().get_camera_3d()
+	if live_camera != null and live_camera != _recording_camera:
+		live_camera.cull_mask &= ~RECORDING_ONLY_VISIBILITY_MASK
 
 
 func _request_capture_frame() -> void:
@@ -363,6 +408,7 @@ func _request_capture_frame() -> void:
 	var live_camera := get_viewport().get_camera_3d()
 	if live_camera == null:
 		return
+	live_camera.cull_mask &= ~RECORDING_ONLY_VISIBILITY_MASK
 	_capture_pending = true
 	_recording_camera.global_transform = live_camera.global_transform
 	_recording_camera.fov = live_camera.fov
@@ -370,7 +416,10 @@ func _request_capture_frame() -> void:
 	_recording_camera.size = live_camera.size
 	_recording_camera.near = live_camera.near
 	_recording_camera.far = live_camera.far
-	_recording_camera.cull_mask = live_camera.cull_mask
+	_recording_camera.cull_mask = (
+		(live_camera.cull_mask | RECORDING_ONLY_VISIBILITY_MASK)
+		& ~LIVE_ONLY_VISIBILITY_MASK
+	)
 	_recording_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	RenderingServer.frame_post_draw.connect(_finish_capture_frame, CONNECT_ONE_SHOT)
 
@@ -447,10 +496,23 @@ func _toggle_playback_running() -> void:
 
 func _set_delete_confirmation(enabled: bool) -> void:
 	_delete_armed = enabled and not _saved_clips.is_empty() and not _tape_loading
+	_delete_confirmation_backdrop.visible = _playback_open and _delete_armed
 	_delete_confirmation.visible = _playback_open and _delete_armed
 	if _delete_armed:
 		_playback_running = false
-		_delete_confirmation.text = "¿ELIMINAR %s?\n\nX  CONFIRMAR     ESC  CANCELAR" % TAPE_SLOT_NAMES[_selected_clip]
+		_delete_selection = 0
+		_refresh_delete_confirmation()
+
+
+func _refresh_delete_confirmation() -> void:
+	if not _delete_armed:
+		return
+	var delete_pointer := "▶" if _delete_selection == 0 else " "
+	var cancel_pointer := "▶" if _delete_selection == 1 else " "
+	_delete_confirmation.text = (
+		"¿ELIMINAR %s?\n\n%s  ELIMINAR\n%s  CANCELAR\n\nW / S  ELEGIR     ESPACIO  ACEPTAR"
+		% [TAPE_SLOT_NAMES[_selected_clip], delete_pointer, cancel_pointer]
+	)
 
 
 func _delete_selected_clip() -> void:
@@ -588,9 +650,9 @@ func _build_playback_interface() -> void:
 		_playback_progress_segments.append(segment)
 	_playback_menu_left = RichTextLabel.new()
 	_playback_menu_left.set_anchors_preset(Control.PRESET_CENTER_LEFT)
-	_playback_menu_left.offset_left = 38.0
+	_playback_menu_left.offset_left = 48.0
 	_playback_menu_left.offset_top = -330.0
-	_playback_menu_left.offset_right = 390.0
+	_playback_menu_left.offset_right = 400.0
 	_playback_menu_left.offset_bottom = 330.0
 	_playback_menu_left.bbcode_enabled = true
 	_playback_menu_left.fit_content = false
@@ -606,24 +668,37 @@ func _build_playback_interface() -> void:
 	_playback_menu_left.add_theme_constant_override(&"outline_size", 2)
 	_playback_menu_left.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_playback_menu_left)
-	_playback_controls_right = Label.new()
+	_playback_controls_right = RichTextLabel.new()
 	_playback_controls_right.set_anchors_preset(Control.PRESET_CENTER_RIGHT)
-	_playback_controls_right.offset_left = -365.0
+	_playback_controls_right.offset_left = -375.0
 	_playback_controls_right.offset_top = -330.0
-	_playback_controls_right.offset_right = -38.0
+	_playback_controls_right.offset_right = -48.0
 	_playback_controls_right.offset_bottom = 330.0
-	_playback_controls_right.text = "CONTROLES\n\nESPACIO\nPLAY / PAUSA\n\nW / S\nCAMBIAR CINTA\n\nA\nRETROCEDER\n\nD\nAVANZAR\n\nX\nELIMINAR\n\nBLOQ MAYUS\nAV / DV\n\nTAB\nVOLVER"
-	_playback_controls_right.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_playback_controls_right.bbcode_enabled = true
+	_playback_controls_right.fit_content = false
+	_playback_controls_right.scroll_active = false
 	_playback_controls_right.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_playback_controls_right.add_theme_font_override(&"font", camera_font)
-	_playback_controls_right.add_theme_font_size_override(&"font_size", 25)
-	_playback_controls_right.add_theme_color_override(&"font_color", Color(0.9, 0.93, 0.86, 0.96))
+	_playback_controls_right.text = "[right]CONTROLES\n[font_size=21]\n[/font_size]\nCAMBIAR MENU\n[color=#69716a]Q / E[/color]\n\nPLAY / PAUSA\n[color=#69716a]ESPACIO[/color]\n\nCAMBIAR CINTA\n[color=#69716a]W / S[/color]\n\nRETROCEDER / AVANZAR\n[color=#69716a]A / D[/color]\n\nELIMINAR\n[color=#69716a]X[/color]\n\nCAMARA\n[color=#69716a]TAB / ESC[/color][/right]"
+	_playback_controls_right.add_theme_font_override(&"normal_font", camera_font)
+	_playback_controls_right.add_theme_font_size_override(&"normal_font_size", 25)
+	_playback_controls_right.add_theme_color_override(&"default_color", Color(0.9, 0.93, 0.86, 0.96))
 	_playback_controls_right.add_theme_constant_override(&"outline_size", 2)
 	_playback_controls_right.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_playback_controls_right)
 	_build_archive_tabs(camera_font)
 	_build_volume_indicator(camera_font)
 	_build_avdv_menu(camera_font)
+	_build_interface_frames()
+	_delete_confirmation_backdrop = ColorRect.new()
+	_delete_confirmation_backdrop.set_anchors_preset(Control.PRESET_CENTER)
+	_delete_confirmation_backdrop.offset_left = -510.0
+	_delete_confirmation_backdrop.offset_top = -310.0
+	_delete_confirmation_backdrop.offset_right = 510.0
+	_delete_confirmation_backdrop.offset_bottom = 310.0
+	_delete_confirmation_backdrop.color = Color(0.0, 0.0, 0.0, 0.58)
+	_delete_confirmation_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_delete_confirmation_backdrop.visible = false
+	add_child(_delete_confirmation_backdrop)
 	_delete_confirmation = Label.new()
 	_delete_confirmation.set_anchors_preset(Control.PRESET_CENTER)
 	_delete_confirmation.offset_left = -355.0
@@ -659,6 +734,8 @@ func _build_playback_interface() -> void:
 	_playback_volume_indicator.visible = false
 	_avdv_menu.visible = false
 	_avdv_status.visible = false
+	_avdv_explanation.visible = false
+	_avdv_controls_right.visible = false
 	_playback_menu_left.visible = false
 	_playback_controls_right.visible = false
 	_playback_progress_track.visible = false
@@ -669,9 +746,10 @@ func _build_volume_indicator(camera_font: Font) -> void:
 	_playback_volume_indicator = Control.new()
 	# Ocupa la franja inferior derecha usada por la fecha/hora en el directo.
 	_playback_volume_indicator.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	_playback_volume_indicator.offset_left = -470.0
+	# Centro X=-194, alineado con el centro X=-193.5 del bloque BAT.
+	_playback_volume_indicator.offset_left = -325.0
 	_playback_volume_indicator.offset_top = -108.0
-	_playback_volume_indicator.offset_right = -38.0
+	_playback_volume_indicator.offset_right = -63.0
 	_playback_volume_indicator.offset_bottom = -30.0
 	_playback_volume_indicator.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_playback_volume_indicator)
@@ -730,15 +808,48 @@ func _build_avdv_menu(camera_font: Font) -> void:
 	_avdv_status.add_theme_color_override(&"font_color", Color(0.55, 0.62, 0.55, 0.92))
 	_avdv_status.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_avdv_status)
+	_avdv_controls_right = RichTextLabel.new()
+	_avdv_controls_right.set_anchors_preset(Control.PRESET_CENTER_RIGHT)
+	_avdv_controls_right.offset_left = -375.0
+	_avdv_controls_right.offset_top = -330.0
+	_avdv_controls_right.offset_right = -48.0
+	_avdv_controls_right.offset_bottom = 330.0
+	_avdv_controls_right.bbcode_enabled = true
+	_avdv_controls_right.fit_content = false
+	_avdv_controls_right.scroll_active = false
+	_avdv_controls_right.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_avdv_controls_right.text = "[right]CONTROLES\n[font_size=21]\n[/font_size]\nCAMBIAR MENU\n[color=#69716a]Q / E[/color]\n\nSELECCIONAR\n[color=#69716a]W / S[/color]\n\nACEPTAR\n[color=#69716a]ESPACIO / ENTER[/color]\n\nCAMARA\n[color=#69716a]TAB / ESC[/color][/right]"
+	_avdv_controls_right.add_theme_font_override(&"normal_font", camera_font)
+	_avdv_controls_right.add_theme_font_size_override(&"normal_font_size", 25)
+	_avdv_controls_right.add_theme_color_override(&"default_color", Color(0.9, 0.93, 0.86, 0.96))
+	_avdv_controls_right.add_theme_constant_override(&"outline_size", 2)
+	_avdv_controls_right.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_avdv_controls_right)
+	_avdv_explanation = RichTextLabel.new()
+	_avdv_explanation.set_anchors_preset(Control.PRESET_CENTER)
+	_avdv_explanation.offset_left = -500.0
+	_avdv_explanation.offset_top = 185.0
+	_avdv_explanation.offset_right = 500.0
+	_avdv_explanation.offset_bottom = 330.0
+	_avdv_explanation.bbcode_enabled = true
+	_avdv_explanation.fit_content = false
+	_avdv_explanation.scroll_active = false
+	_avdv_explanation.add_theme_font_override(&"normal_font", camera_font)
+	_avdv_explanation.add_theme_font_size_override(&"normal_font_size", 14)
+	_avdv_explanation.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_avdv_explanation)
 
 
 func _step_avdv_option(direction: int) -> void:
+	_avdv_erase_armed = false
 	_avdv_selection = wrapi(_avdv_selection + direction, 0, 4)
-	_avdv_status.text = "W / S  SELECCIONAR     ESPACIO  ACEPTAR     BLOQ MAYUS  VOLVER"
+	_avdv_status.text = "Q / E  CAMBIAR MENU     W / S  SELECCIONAR     ESPACIO  ACEPTAR     TAB / ESC  CAMARA"
 	_refresh_avdv_menu()
 
 
 func _activate_avdv_option() -> void:
+	if _avdv_selection != 3:
+		_avdv_erase_armed = false
 	match _avdv_selection:
 		0:
 			if not _tape_inserted:
@@ -756,15 +867,22 @@ func _activate_avdv_option() -> void:
 			if not _tape_inserted:
 				_avdv_status.text = "INSERTA UNA CINTA"
 			elif not _external_recorder_connected:
-				_avdv_status.text = "SIN CONEXIÓN — REQUIERE APARATO EXTERNO"
+				_avdv_status.text = "SIN CONEXION — REQUIERE APARATO EXTERNO"
 		3:
 			if not _tape_inserted:
 				_avdv_status.text = "INSERTA UNA CINTA"
 			elif _saved_clips.is_empty():
 				_avdv_status.text = "LA CINTA ESTÁ VACÍA"
+			elif not _avdv_erase_armed:
+				_avdv_erase_armed = true
+				_avdv_status.text = "CONFIRMA PARA VACIAR LA CINTA"
 			else:
+				_saved_clips.remove_at(_selected_clip)
+				_selected_clip = clampi(_selected_clip, 0, maxi(_saved_clips.size() - 1, 0))
 				_selected_frame = 0
-				_avdv_status.text = "CINTA REBOBINADA"
+				_playback_texture = null
+				_avdv_erase_armed = false
+				_avdv_status.text = "CINTA VACIADA"
 	_refresh_avdv_menu()
 
 
@@ -776,18 +894,60 @@ func _refresh_avdv_menu() -> void:
 		_tape_inserted and _external_recorder_connected,
 		_tape_inserted and not _saved_clips.is_empty(),
 	]
-	var menu := "[center][color=#e6ede0]TRANSFERENCIA AV / DV[/color]\n\n"
+	var menu := "[center][color=#e6ede0]TRANSFERENCIA AV / DV[/color]\n[font_size=21]\n[/font_size]\n"
 	for index in labels.size():
 		var pointer := "▶" if index == _avdv_selection else " "
 		var color := "#e6ede0" if enabled[index] else "#59615a"
 		var suffix := ""
 		if index == 2 and not _external_recorder_connected:
-			suffix = "  [ SIN CONEXIÓN ]"
+			suffix = "  [ SIN CONEXION ]"
 		menu += "[color=%s]%s  %s%s[/color]\n\n" % [color, pointer, labels[index], suffix]
 	menu += "[/center]"
 	_avdv_menu.text = menu
+	var description := ""
+	if _avdv_selection == 2:
+		description = "REQUIERE DVD EXTERNO PARA GRABAR LA CINTA DEFINITIVAMENTE"
+	elif _avdv_selection == 3:
+		description = (
+			"SE ELIMINARA LA GRABACION DEFINITIVAMENTE"
+			if _avdv_erase_armed
+			else "VACIA LA CINTA POR COMPLETO"
+		)
+	# La ayuda secundaria sigue al cursor: nunca se apilan explicaciones de
+	# opciones que el jugador no está inspeccionando.
+	_avdv_explanation.text = "[center][color=#69716a]%s[/color][/center]" % description
 	if _avdv_status.text.is_empty():
-		_avdv_status.text = "W / S  SELECCIONAR     ESPACIO  ACEPTAR     BLOQ MAYUS  VOLVER"
+		_avdv_status.text = "Q / E  CAMBIAR MENU     W / S  SELECCIONAR     ESPACIO  ACEPTAR     TAB / ESC  CAMARA"
+
+
+func _build_interface_frames() -> void:
+	_camera_corner_frame = CameraInterfaceFrame.new()
+	_camera_corner_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_camera_corner_frame.full_frame = false
+	add_child(_camera_corner_frame)
+	_menu_outline_frame = CameraInterfaceFrame.new()
+	_menu_outline_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_menu_outline_frame.full_frame = true
+	_menu_outline_frame.inset = 22.0
+	add_child(_menu_outline_frame)
+	_menu_inner_brackets = CameraInterfaceFrame.new()
+	_menu_inner_brackets.anchor_left = 0.5
+	_menu_inner_brackets.anchor_top = 0.0
+	_menu_inner_brackets.anchor_right = 0.5
+	_menu_inner_brackets.anchor_bottom = 1.0
+	_menu_inner_brackets.offset_left = -545.0
+	_menu_inner_brackets.offset_top = 133.0
+	_menu_inner_brackets.offset_right = 545.0
+	_menu_inner_brackets.offset_bottom = -110.0
+	_menu_inner_brackets.full_frame = false
+	_menu_inner_brackets.side_brackets = true
+	_menu_inner_brackets.inset = 0.0
+	_menu_inner_brackets.corner_length = 48.0
+	_menu_inner_brackets.line_width = 3.0
+	add_child(_menu_inner_brackets)
+	_camera_corner_frame.visible = true
+	_menu_outline_frame.visible = false
+	_menu_inner_brackets.visible = false
 
 
 func _make_transport_toggle() -> Control:
@@ -817,20 +977,19 @@ func _make_transport_toggle() -> Control:
 
 func _update_transport_toggle() -> void:
 	for bar in _playback_pause_bars:
-		bar.visible = not _playback_running
+		bar.visible = _playback_running
 	if is_instance_valid(_playback_play_icon):
-		_playback_play_icon.visible = _playback_running
+		_playback_play_icon.visible = not _playback_running
 
 
 func _build_archive_tabs(camera_font: Font) -> void:
 	_playback_tabs = Control.new()
 	_playback_tabs.set_anchors_preset(Control.PRESET_CENTER_TOP)
 	_playback_tabs.offset_left = -450.0
-	# SP ocupa Y=95..147: con esta caja, el centro de los títulos cae
-	# exactamente en Y=121, la misma línea óptica del HUD superior.
-	_playback_tabs.offset_top = 94.0
+	# SP ocupa Y=107..159: el centro de los títulos cae también en Y=133.
+	_playback_tabs.offset_top = 106.0
 	_playback_tabs.offset_right = 450.0
-	_playback_tabs.offset_bottom = 154.0
+	_playback_tabs.offset_bottom = 166.0
 	_playback_tabs.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_playback_tabs)
 	_camera_tab_label = _make_tab_label("CAMARA", 0.0, 280.0, camera_font, false)
@@ -861,6 +1020,9 @@ func _set_active_tab(mode: int) -> void:
 	# VOL en archivo. Durante el loader el indicador se activa al finalizar.
 	timestamp_label.visible = mode == MODE_CAMERA
 	_playback_volume_indicator.visible = mode == MODE_ARCHIVE and not _mode_transitioning
+	_camera_corner_frame.visible = mode == MODE_CAMERA
+	_menu_outline_frame.visible = mode != MODE_CAMERA
+	_menu_inner_brackets.visible = mode != MODE_CAMERA
 
 
 func _make_tab_label(text_value: String, left: float, right: float, camera_font: Font, active: bool) -> Label:

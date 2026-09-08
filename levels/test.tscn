@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://dnxlh2257qini" path="res://systems/camera_battery_indicator.gd" id="13_camera_battery"]
 [ext_resource type="PackedScene" uid="uid://btj1tf3hf2k6t" path="res://enemies/monster_grandmother_imported.tscn" id="15_imported_grandmother"]
 [ext_resource type="PackedScene" uid="uid://c0dwhce1bymdn" path="res://sounds/ambient/wood_cracking_ambience.tscn" id="16_wood_cracking"]
+[ext_resource type="PackedScene" path="res://environment/recording_only_components/4_recording_only_footsteps.tscn" id="17_recording_footsteps"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_storm"]
 panorama = ExtResource("5_storm_panorama")
@@ -230,9 +231,13 @@ script = ExtResource("10_indoor_weather")
 
 [node name="RuntimeHouseNavigation" parent="." unique_id=187039915 instance=ExtResource("11_runtime_navigation")]
 
+[node name="RecordingOnlyFootstepsDemo" parent="." unique_id=1110708897 instance=ExtResource("17_recording_footsteps")]
+editor_description = "Demostración frente al spawn: graba mirando por el pasillo y abre ARCHIVO para revelar el rastro."
+transform = Transform3D(0.9835713, 0, 0.18051943, 0, 1, 0, -0.18051943, 0, 0.9835713, -4.226201, 4.2, -24.476236)
+
 [node name="Player" parent="." unique_id=546288329 instance=ExtResource("1_player")]
 editor_description = "Spawn de prueba en el pasillo, fuera del sótano y mirando hacia su puerta, con todas las llaves."
-transform = Transform3D(0.9835713, 0, 0.18051943, 0, 1, 0, -0.18051943, 0, 0.9835713, -4.0817857, 5.1559386, -23.689379)
+transform = Transform3D(0.9835713, 0, 0.18051943, 0, 1, 0, -0.18051943, 0, 0.9835713, 0.7585788, 0.772645, 8.210395)
 starts_with_lit_candle = true
 debug_all_keys = true
 
@@ -317,10 +322,10 @@ script = ExtResource("7_footage_overlay")
 
 [node name="Recording" type="Label" parent="PS2PostProcess/CameraHUD" unique_id=1125802489]
 layout_mode = 0
-offset_left = 38.0
-offset_top = 28.0
-offset_right = 310.0
-offset_bottom = 92.0
+offset_left = 70.0
+offset_top = 40.0
+offset_right = 342.0
+offset_bottom = 104.0
 theme_override_colors/font_color = Color(0.94, 0.13, 0.1, 0.94)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
 theme_override_colors/font_outline_color = Color(0.12, 0.015, 0.01, 0.96)
@@ -333,10 +338,10 @@ text = "● REC"
 
 [node name="TapeMode" type="Label" parent="PS2PostProcess/CameraHUD" unique_id=1770821697]
 layout_mode = 0
-offset_left = 40.0
-offset_top = 93.0
-offset_right = 244.0
-offset_bottom = 147.0
+offset_left = 72.0
+offset_top = 105.0
+offset_right = 276.0
+offset_bottom = 159.0
 theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.86)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
 theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.02, 0.96)
@@ -349,10 +354,10 @@ text = "CAM 01"
 
 [node name="TapeSpeed" type="Label" parent="PS2PostProcess/CameraHUD" unique_id=112574735]
 layout_mode = 0
-offset_left = 400.0
-offset_top = 95.0
-offset_right = 476.0
-offset_bottom = 147.0
+offset_left = 432.0
+offset_top = 107.0
+offset_right = 508.0
+offset_bottom = 159.0
 theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.86)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
 theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.02, 0.96)
@@ -368,10 +373,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -285.0
-offset_top = 18.0
-offset_right = -38.0
-offset_bottom = 76.0
+offset_left = -317.0
+offset_top = 30.0
+offset_right = -70.0
+offset_bottom = 88.0
 grow_horizontal = 0
 theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.86)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
@@ -390,10 +395,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -610.0
-offset_top = 30.0
-offset_right = -410.0
-offset_bottom = 88.0
+offset_left = -642.0
+offset_top = 42.0
+offset_right = -442.0
+offset_bottom = 100.0
 grow_horizontal = 0
 theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.86)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
@@ -413,10 +418,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -1080.0
-offset_top = -104.0
-offset_right = -38.0
-offset_bottom = -30.0
+offset_left = -1112.0
+offset_top = -124.0
+offset_right = -70.0
+offset_bottom = -50.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.9, 0.93, 0.86, 0.92)

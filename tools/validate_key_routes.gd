@@ -72,6 +72,11 @@ func _check_key(house: Node, path: String, expected_id: StringName, expected_nam
 		return
 	if key.get("key_id") != expected_id or key.get("key_name") != expected_name:
 		_fail("Datos incorrectos en: %s" % path)
+	var interaction_area := key.get_node_or_null("InteractionArea") as Area3D
+	if interaction_area == null or interaction_area.collision_layer != 2:
+		_fail("Falta la zona elevada para recoger la llave: %s" % path)
+	elif interaction_area.get_node_or_null("InteractionShape") == null:
+		_fail("Falta el collider de interacción de la llave: %s" % path)
 
 
 func _fail(message: String) -> void:

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://environment/recording_only_components/recording_only_footsteps.gd" id="1_footsteps"]
+
+[node name="RecordingOnlyFootsteps4" type="Node3D"]
+editor_description = "Variante corta de 4 pisadas sobrenaturales. Se previsualiza completa en el editor; al jugar solo aparece en la grabación y dentro de la distancia configurada."
+script = ExtResource("1_footsteps")
+step_count = 4

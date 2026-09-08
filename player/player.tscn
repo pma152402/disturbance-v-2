@@ -21,6 +21,7 @@
 [ext_resource type="AudioStream" uid="uid://bgjk0g3r3jie2" path="res://sounds/interactions/camera_zoom.mp3" id="20_zoom_sound"]
 [ext_resource type="AudioStream" path="res://sounds/objects/camera_background_noise.mp3" id="21_camera_noise"]
 [ext_resource type="Script" path="res://sounds/camera_audio_filter.gd" id="22_camera_filter"]
+[ext_resource type="PackedScene" path="res://house_props/retro_tv_remote.tscn" id="23_tv_remote"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.34
@@ -117,7 +118,7 @@ floor_snap_length = 0.48
 script = ExtResource("1_player")
 volumen_pasos_normal_db = -10.0
 volumen_pasos_corriendo_db = -5.0
-volumen_ruido_camara_db = -40.0
+volumen_ruido_camara_db = -32.0
 
 [node name="CameraAudioFilter" type="Node" parent="."]
 script = ExtResource("22_camera_filter")
@@ -265,8 +266,17 @@ visible = false
 transform = Transform3D(0.85277236, -0.09867575, -0.05140411, 0.10262323, 0.8510847, 0.06872664, 0.04298558, -0.07428306, 0.85570693, 0.2, -0.32, -0.6)
 visible = false
 
+[node name="HeldTVRemote" parent="Head/Camera3D/RightHandRig" instance=ExtResource("23_tv_remote")]
+position = Vector3(0.32, -0.31, -0.43)
+rotation = Vector3(1.570796, 0.08, -0.12)
+scale = Vector3(0.68, 0.68, 0.68)
+visible = false
+collision_layer = 0
+collision_mask = 0
+
 [node name="CandlePlacementPreview" type="MeshInstance3D" parent="." unique_id=1806168459]
 visible = false
+layers = 262144
 cast_shadow = 0
 mesh = SubResource("CandlePlacementMesh")
 
@@ -302,10 +312,10 @@ z_index = 100
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 0
-offset_left = 297.0
-offset_top = 54.0
-offset_right = 371.0
-offset_bottom = 134.0
+offset_left = 329.0
+offset_top = 66.0
+offset_right = 403.0
+offset_bottom = 146.0
 mouse_filter = 2
 script = ExtResource("16_stance_indicator")
 
@@ -435,10 +445,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -370.0
-offset_top = -154.0
-offset_right = -38.0
-offset_bottom = -116.0
+offset_left = -402.0
+offset_top = -174.0
+offset_right = -70.0
+offset_bottom = -136.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2

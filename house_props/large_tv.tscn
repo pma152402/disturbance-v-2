@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://house_props/large_tv.gd" id="1_tv_script"]
 [ext_resource type="Shader" path="res://house_props/tv_screen.gdshader" id="2_tv_screen"]
+[ext_resource type="Script" path="res://house_props/tv_control.gd" id="3_tv_control"]
 [sub_resource type="StandardMaterial3D" id="Material_case"]
 albedo_color = Color(0.28, 0.285, 0.28, 1)
 roughness = 0.86
@@ -10,6 +11,9 @@ shader = ExtResource("2_tv_screen")
 [sub_resource type="StandardMaterial3D" id="Material_dark"]
 albedo_color = Color(0.055, 0.052, 0.047, 1)
 roughness = 0.8
+[sub_resource type="StandardMaterial3D" id="Material_power"]
+albedo_color = Color(0.64, 0.65, 0.62, 1)
+roughness = 0.74
 [sub_resource type="BoxMesh" id="Mesh_front_case"]
 material = SubResource("Material_case")
 size = Vector3(1.62, 1.2, 0.28)
@@ -24,11 +28,21 @@ top_radius = 0.065
 bottom_radius = 0.065
 height = 0.055
 radial_segments = 9
+[sub_resource type="BoxMesh" id="Mesh_power"]
+material = SubResource("Material_power")
+size = Vector3(0.09, 0.09, 0.045)
+[sub_resource type="BoxMesh" id="Mesh_dial_indicator"]
+material = SubResource("Material_power")
+size = Vector3(0.014, 0.012, 0.035)
 [sub_resource type="BoxMesh" id="Mesh_foot"]
 material = SubResource("Material_dark")
 size = Vector3(0.3, 0.07, 0.24)
 [sub_resource type="BoxShape3D" id="Shape_tv"]
 size = Vector3(1.62, 1.27, 0.9)
+[sub_resource type="SphereShape3D" id="Shape_dial"]
+radius = 0.085
+[sub_resource type="BoxShape3D" id="Shape_power"]
+size = Vector3(0.12, 0.12, 0.08)
 [node name="SmallGreyTubeTV" type="StaticBody3D"]
 editor_description = "Tele de tubo pequena reconstruida: gris, pantalla casi cuadrada y carcasa profunda escalonada."
 script = ExtResource("1_tv_script")
@@ -50,14 +64,50 @@ light_energy = 0.65
 omni_range = 3.5
 omni_attenuation = 1.35
 shadow_enabled = false
-[node name="UpperDial" type="MeshInstance3D" parent="."]
-position = Vector3(0.67, 0.2, -0.17)
+[node name="ChannelControl" type="StaticBody3D" parent="."]
+position = Vector3(0.67, 0.2, -0.225)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("3_tv_control")
+action = "channel"
+[node name="Visual" type="MeshInstance3D" parent="ChannelControl"]
 rotation = Vector3(1.5708, 0, 0)
 mesh = SubResource("Mesh_dial")
-[node name="LowerDial" type="MeshInstance3D" parent="."]
-position = Vector3(0.67, -0.04, -0.17)
+[node name="IndicatorPivot" type="Node3D" parent="ChannelControl/Visual"]
+position = Vector3(0, -0.034, 0)
+[node name="Indicator" type="MeshInstance3D" parent="ChannelControl/Visual/IndicatorPivot"]
+position = Vector3(0, 0, -0.038)
+mesh = SubResource("Mesh_dial_indicator")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ChannelControl"]
+shape = SubResource("Shape_dial")
+
+[node name="VolumeControl" type="StaticBody3D" parent="."]
+position = Vector3(0.67, -0.04, -0.225)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("3_tv_control")
+action = "volume"
+[node name="Visual" type="MeshInstance3D" parent="VolumeControl"]
 rotation = Vector3(1.5708, 0, 0)
 mesh = SubResource("Mesh_dial")
+[node name="IndicatorPivot" type="Node3D" parent="VolumeControl/Visual"]
+position = Vector3(0, -0.034, 0)
+[node name="Indicator" type="MeshInstance3D" parent="VolumeControl/Visual/IndicatorPivot"]
+position = Vector3(0, 0, -0.038)
+mesh = SubResource("Mesh_dial_indicator")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VolumeControl"]
+shape = SubResource("Shape_dial")
+
+[node name="PowerControl" type="StaticBody3D" parent="."]
+position = Vector3(0.67, -0.25, -0.225)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("3_tv_control")
+action = "power"
+[node name="Visual" type="MeshInstance3D" parent="PowerControl"]
+mesh = SubResource("Mesh_power")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PowerControl"]
+shape = SubResource("Shape_power")
 [node name="LeftFoot" type="MeshInstance3D" parent="."]
 position = Vector3(-0.48, -0.635, 0.08)
 mesh = SubResource("Mesh_foot")

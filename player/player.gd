@@ -71,7 +71,7 @@ const ZOOM_OUT_SOUND_START := 1.55
 @export_range(0.15, 1.5, 0.05) var duracion_sonido_zoom := 0.55
 @export_range(0.02, 0.25, 0.01) var fundido_sonido_zoom := 0.08
 @export_category("Audio - Ruido permanente de cámara")
-@export_range(-60.0, 0.0, 0.5) var volumen_ruido_camara_db := -40.0
+@export_range(-60.0, 0.0, 0.5) var volumen_ruido_camara_db := -32.0
 
 enum Stance { STANDING, CROUCHED, PRONE }
 enum JumpPhase { IDLE, WINDUP, RECOVERING }
@@ -91,6 +91,7 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var held_recipe_book_closed: Node3D = $Head/Camera3D/RightHandRig/HeldRecipeBookClosed
 @onready var held_matchbox: Node3D = $Head/Camera3D/RightHandRig/HeldMatchbox
 @onready var held_candle: Node3D = $Head/Camera3D/RightHandRig/HeldCandle
+@onready var held_tv_remote: Node3D = $Head/Camera3D/RightHandRig/HeldTVRemote
 @onready var flashlight: SpotLight3D = $Head/Camera3D/HandRig/Flashlight
 @onready var interaction_ray: RayCast3D = $Head/Camera3D/InteractionRay
 @onready var interaction_focus_cast: ShapeCast3D = $Head/Camera3D/InteractionFocusCast
@@ -206,6 +207,7 @@ const DroppedNoteScene := preload("res://pickups/dropped_note.tscn")
 const DroppedRecipeBookScene := preload("res://pickups/dropped_recipe_book.tscn")
 const MatchboxPickupScene := preload("res://house_props/matchbox_pickup.tscn")
 const CandlePickupScene := preload("res://house_props/candle_pickup.tscn")
+const TVRemoteScene := preload("res://house_props/retro_tv_remote.tscn")
 const GoodPanelFuseScene := preload("res://house_props/light_panel_fuse_good.tscn")
 const BrokenPanelFuseScene := preload("res://house_props/light_panel_fuse_broken.tscn")
 
@@ -226,6 +228,7 @@ const INVENTORY_ITEM_NAMES := {
 	&"recipe_book": "RECETARIO",
 	&"matchbox": "CERILLAS",
 	&"candle": "VELA",
+	&"tv_remote": "MANDO TV",
 	&"panel_fuse_good": "FUSIBLE BUENO",
 	&"panel_fuse_broken": "FUSIBLE ROTO",
 }
@@ -280,7 +283,7 @@ func _ready() -> void:
 	stamina_bar.add_theme_stylebox_override("fill", _stamina_fill_style)
 	camera.make_current()
 	camera_background_noise.set("volume_db", volumen_ruido_camara_db)
-	camera_background_noise.set("volume_ceiling_db", -40.0)
+	camera_background_noise.set("volume_ceiling_db", -32.0)
 	camera_background_noise.call(&"set_active", true)
 	camera.fov = zoom_max_fov
 	_zoom_fov_target = zoom_max_fov
@@ -304,6 +307,10 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		var key_event := event as InputEventKey
 		var pressed_key := key_event.physical_keycode if key_event.physical_keycode != 0 else key_event.keycode
+		if pressed_key == KEY_T:
+			get_viewport().set_input_as_handled()
+			get_tree().reload_current_scene()
+			return
 		if is_instance_valid(_active_companion_menu):
 			if pressed_key == KEY_ESCAPE:
 				end_companion_command()
@@ -339,10 +346,6 @@ func _input(event: InputEvent) -> void:
 		if pressed_key == KEY_TAB:
 			get_viewport().set_input_as_handled()
 			get_tree().call_group(&"camera_recorder", &"toggle_playback")
-			return
-		if pressed_key == KEY_CAPSLOCK:
-			get_viewport().set_input_as_handled()
-			get_tree().call_group(&"camera_recorder", &"toggle_avdv")
 			return
 		if is_instance_valid(_freezer_controller):
 			if pressed_key == KEY_F:
@@ -439,6 +442,26 @@ func _input(event: InputEvent) -> void:
 
 	if event is InputEventMouseButton:
 		var mouse_button := event as InputEventMouseButton
+		if mouse_button.pressed and _held_item == &"tv_remote" and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			var remote_tv := _get_remote_television()
+			if remote_tv != null:
+				if mouse_button.button_index == MOUSE_BUTTON_LEFT:
+					remote_tv.call(&"toggle_power")
+					_pulse_held_remote(&"Power")
+				elif mouse_button.button_index == MOUSE_BUTTON_RIGHT:
+					remote_tv.call(&"next_channel")
+					_pulse_held_remote(&"Button1")
+				elif mouse_button.button_index == MOUSE_BUTTON_WHEEL_UP:
+					remote_tv.call(&"adjust_volume", 1)
+					_pulse_held_remote(&"DPadVertical")
+				elif mouse_button.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+					remote_tv.call(&"adjust_volume", -1)
+					_pulse_held_remote(&"DPadVertical")
+				else:
+					return
+				_update_interaction_prompt()
+			get_viewport().set_input_as_handled()
+			return
 		if mouse_button.pressed and is_instance_valid(_active_valve):
 			if mouse_button.button_index == MOUSE_BUTTON_WHEEL_UP:
 				_active_valve.call(&"adjust_with_mouse_wheel", 1.0)
@@ -838,6 +861,7 @@ func _hide_all_held_visuals() -> void:
 		_sync_held_candle_data()
 	held_candle.visible = false
 	held_candle.process_mode = Node.PROCESS_MODE_DISABLED
+	held_tv_remote.visible = false
 	candle_forward_light.visible = false
 	right_hand.visible = false
 	right_hand.transform = _right_hand_rest_transform
@@ -950,6 +974,7 @@ func _equip_inventory_slot(slot_index: int) -> bool:
 				held_candle.visible = true
 				held_candle.call(&"configure_candle", _inventory_item_data[slot_index])
 				_update_candle_forward_light()
+			&"tv_remote": held_tv_remote.visible = true
 	_update_inventory_ui()
 	return true
 
@@ -1239,6 +1264,9 @@ func _get_interactable() -> Node:
 	var collider := _get_interactable_in_sight()
 	if collider != null and _is_interactable_in_range(collider):
 		return collider
+	var focused_target := _get_focused_interactable()
+	if focused_target != null and _is_interactable_in_range(focused_target):
+		return focused_target
 	return null
 
 func _get_interactable_in_sight() -> Node:
@@ -1246,9 +1274,61 @@ func _get_interactable_in_sight() -> Node:
 	if not interaction_ray.is_colliding():
 		return null
 	var collider := interaction_ray.get_collider() as Node
-	if collider != null and collider.has_method(&"interact"):
-		return collider
+	return _resolve_interactable(collider)
+
+
+func _resolve_interactable(collider: Node) -> Node:
+	var candidate := collider
+	for _depth in range(5):
+		if candidate == null:
+			break
+		if candidate.has_method(&"interact"):
+			return candidate
+		candidate = candidate.get_parent()
 	return null
+
+
+func _get_focused_interactable() -> Node:
+	interaction_focus_cast.target_position = Vector3(0.0, 0.0, -interaction_focus_distance)
+	interaction_focus_cast.force_shapecast_update()
+	var best_target: Node3D
+	var best_priority := -1
+	var best_distance := INF
+	for collision_index in interaction_focus_cast.get_collision_count():
+		var candidate := _resolve_interactable(interaction_focus_cast.get_collider(collision_index) as Node)
+		if not candidate is Node3D:
+			continue
+		var interactable := candidate as Node3D
+		var priority := int(interactable.call(&"get_interaction_priority")) if interactable.has_method(&"get_interaction_priority") else 0
+		var distance := interaction_ray.global_position.distance_to(interactable.global_position)
+		var interaction_hit_point := interaction_focus_cast.get_collision_point(collision_index)
+		if priority < best_priority or (priority == best_priority and distance >= best_distance):
+			continue
+		if not _has_clear_interaction_view(interactable, interaction_hit_point):
+			continue
+		best_target = interactable
+		best_priority = priority
+		best_distance = distance
+	return best_target
+
+
+func _has_clear_interaction_view(target: Node3D, hit_point: Vector3) -> bool:
+	var ray_direction := interaction_ray.global_position.direction_to(hit_point)
+	var query := PhysicsRayQueryParameters3D.create(
+		interaction_ray.global_position,
+		hit_point + ray_direction * 0.04,
+		interaction_ray.collision_mask
+	)
+	query.collide_with_areas = true
+	query.exclude = [get_rid()]
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		return true
+	if _resolve_interactable(hit.get("collider") as Node) == target:
+		return true
+	# Pickups often rest a few centimetres inside sofa, chair or cabinet colliders.
+	# A very short obstruction at the endpoint is their supporting surface, not a wall.
+	return (hit.get("position") as Vector3).distance_to(hit_point) <= 0.22
 
 
 func _update_interaction_focus_dot(delta: float) -> void:
@@ -1265,7 +1345,7 @@ func _update_interaction_focus_dot(delta: float) -> void:
 		interaction_focus_cast.force_shapecast_update()
 		for collision_index in interaction_focus_cast.get_collision_count():
 			var collider := interaction_focus_cast.get_collider(collision_index) as Node
-			if collider != null and collider.has_method(&"interact"):
+			if _resolve_interactable(collider) != null:
 				should_show = true
 				break
 	var target_alpha := 1.0 if should_show else 0.0
@@ -1283,7 +1363,11 @@ func _is_interactable_in_range(target: Node) -> bool:
 	if target == null or not target.has_method(&"get_interaction_distance"):
 		return true
 	var allowed_distance := maxf(0.0, float(target.call(&"get_interaction_distance")))
-	return interaction_ray.global_position.distance_to(interaction_ray.get_collision_point()) <= allowed_distance
+	var target_position := interaction_ray.get_collision_point()
+	var direct_target := _get_interactable_in_sight()
+	if direct_target != target and target is Node3D:
+		target_position = (target as Node3D).global_position
+	return interaction_ray.global_position.distance_to(target_position) <= allowed_distance
 
 
 func _try_interact(pressed_key: Key) -> bool:
@@ -1328,6 +1412,18 @@ func _update_interaction_prompt() -> void:
 	if is_instance_valid(_walker_controller):
 		interaction_prompt.visible = true
 		interaction_prompt.text = "F  SOLTAR ANDADOR"
+		return
+	if _held_item == &"tv_remote":
+		var remote_target := _get_remote_television()
+		interaction_prompt.visible = false
+		note_controls_prompt.visible = true
+		if remote_target == null:
+			note_controls_prompt.text = "G  SOLTAR MANDO    SIN TELE A LA VISTA"
+		else:
+			note_controls_prompt.text = (
+				"LMB  ENCENDER/APAGAR    RMB  CANAL    RUEDA  VOLUMEN    G  SOLTAR\n%s"
+				% str(remote_target.call(&"get_remote_status"))
+			)
 		return
 	if _held_item == &"note":
 		var note_target := _get_interactable()
@@ -1494,6 +1590,10 @@ func pick_up_candle(data: Dictionary = {}, ignite_on_pickup := false) -> bool:
 	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(held_candle, "scale", Vector3.ONE * 0.86, 0.2)
 	return true
+
+
+func pick_up_tv_remote() -> bool:
+	return _store_inventory_item(&"tv_remote", {}, true)
 
 
 func _on_candle_state_changed(data: Dictionary) -> void:
@@ -1957,6 +2057,12 @@ func _drop_selected_inventory_item() -> void:
 		dropped_candle.global_position = drop_position + Vector3.UP * 0.42
 		dropped_candle.global_rotation = Vector3(0.0, rotation.y, 0.0)
 		dropped_candle.call(&"set_dropped", velocity * 0.15)
+	elif item_type == &"tv_remote":
+		var dropped_remote := TVRemoteScene.instantiate() as RigidBody3D
+		scene_root.add_child(dropped_remote)
+		dropped_remote.global_position = drop_position + Vector3.UP * 0.24
+		dropped_remote.global_rotation = Vector3(0.18, rotation.y, -0.12)
+		dropped_remote.call(&"set_dropped", velocity * 0.12 + forward * 0.22)
 	elif item_type in [&"panel_fuse_good", &"panel_fuse_broken"]:
 		var fuse_scene: PackedScene = GoodPanelFuseScene if item_type == &"panel_fuse_good" else BrokenPanelFuseScene
 		var dropped_fuse := fuse_scene.instantiate() as RigidBody3D
@@ -2120,6 +2226,40 @@ func _throw_held_item() -> void:
 	thrown_item.apply_central_impulse(forward * can_throw_force + Vector3.UP * can_throw_upward_force)
 	thrown_item.apply_torque_impulse(Vector3(0.45, 0.8, -0.55))
 	_return_to_flashlight_slot()
+
+
+func _get_remote_television() -> Node3D:
+	var best_tv: Node3D
+	var best_score := INF
+	var view_forward := -camera.global_basis.z.normalized()
+	for candidate: Node in get_tree().get_nodes_in_group(&"televisions"):
+		if not candidate is Node3D:
+			continue
+		var television := candidate as Node3D
+		var offset := television.global_position - camera.global_position
+		var distance := offset.length()
+		if distance > 12.0 or distance < 0.01:
+			continue
+		var alignment := view_forward.dot(offset / distance)
+		if alignment < 0.35:
+			continue
+		var score := distance + (1.0 - alignment) * 5.0
+		if score < best_score:
+			best_score = score
+			best_tv = television
+	return best_tv
+
+
+func _pulse_held_remote(button_name: StringName) -> void:
+	var button := held_tv_remote.get_node_or_null(NodePath(button_name)) as Node3D
+	if button == null:
+		return
+	if not button.has_meta(&"remote_rest_y"):
+		button.set_meta(&"remote_rest_y", button.position.y)
+	var rest_y := float(button.get_meta(&"remote_rest_y"))
+	var tween := create_tween()
+	tween.tween_property(button, "position:y", rest_y - 0.009, 0.045)
+	tween.tween_property(button, "position:y", rest_y, 0.075)
 
 func _request_stance(target_stance: Stance) -> void:
 	if _stance_transition_timer > 0.0 or target_stance == _stance:
