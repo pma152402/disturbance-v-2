@@ -14,7 +14,7 @@ const FIXED_BRIGHTNESS := 0.5
 @export_range(16, 96, 1) var segment_count := 52
 @export var ink_color := Color(0.68, 0.76, 0.68, 0.72)
 @export_category("Revelado en la cinta")
-@export_range(1.0, 12.0, 0.1) var maximum_recording_distance := 3.2
+@export_range(1.0, 12.0, 0.1) var maximum_recording_distance := 3.9
 @export_range(0.0, 2.0, 0.05) var distance_fade_margin := 0.65
 @export_category("Vista del editor")
 @export var show_editor_preview := true

@@ -6,13 +6,16 @@ const CameraInterfaceFrame := preload("res://systems/camera_interface_frame.gd")
 const TAPE_SLOT_NAMES := ["CINTA 01 A", "CINTA 02 A", "CINTA 01 B", "CINTA 02 B"]
 const MODE_CAMERA := 0
 const MODE_ARCHIVE := 1
-const MODE_AV_DV := 2
+const MODE_AV_IO := 2
 const RECORDING_ONLY_VISIBILITY_LAYER := 20
 const RECORDING_ONLY_VISIBILITY_MASK := 1 << (RECORDING_ONLY_VISIBILITY_LAYER - 1)
 const LIVE_ONLY_VISIBILITY_LAYER := 19
 const LIVE_ONLY_VISIBILITY_MASK := 1 << (LIVE_ONLY_VISIBILITY_LAYER - 1)
+const RECORDING_ON_SECONDS := 2.0
+const RECORDING_OFF_SECONDS := 1.0
 
 @onready var recording_label: Label = $Recording
+@onready var recording_dot: Polygon2D = $RecordingDot
 @onready var tape_mode_label: Label = $TapeMode
 @onready var timestamp_label: Label = $Timestamp
 @onready var fps_label: Label = $FPS
@@ -26,7 +29,11 @@ const LIVE_ONLY_VISIBILITY_MASK := 1 << (LIVE_ONLY_VISIBILITY_LAYER - 1)
 @export_range(4.0, 64.0, 1.0) var maximum_archive_memory_mb := 24.0
 @export_range(0.1, 1.0, 0.05) var playback_frame_seconds := 0.3
 
+@export_category("Conexión AV / IO (debug)")
+@export var debug_external_recorder_connected := true
+
 var _recording_bright := true
+var _recording_blink_timer: Timer
 var _is_recording := false
 var _playback_open := false
 var _capture_timer := 0.0
@@ -48,15 +55,15 @@ var _playback_next_button: Label
 var _playback_tabs: Control
 var _camera_tab_label: Label
 var _archive_tab_label: Label
-var _avdv_tab_label: Label
+var _avio_tab_label: Label
 var _tabs_underline: ColorRect
 var _delete_confirmation_backdrop: ColorRect
 var _delete_confirmation: Label
 var _playback_volume_indicator: Control
-var _avdv_menu: RichTextLabel
-var _avdv_status: Label
-var _avdv_explanation: RichTextLabel
-var _avdv_controls_right: RichTextLabel
+var _avio_menu: RichTextLabel
+var _avio_status: Label
+var _avio_explanation: RichTextLabel
+var _avio_controls_right: RichTextLabel
 var _camera_corner_frame: Control
 var _menu_outline_frame: Control
 var _menu_inner_brackets: Control
@@ -68,6 +75,7 @@ var _playback_texture: ImageTexture
 var _recording_viewport: SubViewport
 var _recording_camera: Camera3D
 var _capture_pending := false
+var _recorder_destroy_pending := false
 var _hidden_live_hud_items: Array[Dictionary] = []
 var _tape_spinner: Control
 var _tape_loading := false
@@ -80,9 +88,8 @@ var _active_mode := MODE_CAMERA
 var _transition_target_mode := MODE_CAMERA
 var _mode_transition_timer := 0.0
 var _tape_inserted := true
-var _avdv_selection := 0
-var _external_recorder_connected := false
-var _avdv_erase_armed := false
+var _avio_selection := 0
+var _avio_erase_armed := false
 
 
 func _ready() -> void:
@@ -91,9 +98,10 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	recording_label.visible = true
 	recording_label.modulate.a = 0.22
+	recording_dot.visible = true
+	recording_dot.modulate.a = 0.22
 	tape_mode_label.text = "CAM 01"
 	_build_playback_interface()
-	_build_low_resolution_recorder()
 	_exclude_recording_only_layer_from_live_camera()
 	_update_timestamp()
 	_update_fps()
@@ -104,7 +112,11 @@ func _ready() -> void:
 	refresh.timeout.connect(_refresh_readouts)
 	add_child(refresh)
 	refresh.start()
-	_schedule_recording_blink()
+	_recording_blink_timer = Timer.new()
+	_recording_blink_timer.name = "RecordingBlinkTimer"
+	_recording_blink_timer.one_shot = true
+	_recording_blink_timer.timeout.connect(_toggle_recording)
+	add_child(_recording_blink_timer)
 
 
 func _process(delta: float) -> void:
@@ -170,8 +182,8 @@ func _input(event: InputEvent) -> void:
 			KEY_E:
 				step_camera_menu(1)
 			KEY_SPACE:
-				if _active_mode == MODE_AV_DV:
-					_activate_avdv_option()
+				if _active_mode == MODE_AV_IO:
+					_activate_avio_option()
 				else:
 					_toggle_playback_running()
 			KEY_LEFT, KEY_A:
@@ -181,21 +193,21 @@ func _input(event: InputEvent) -> void:
 				if _active_mode == MODE_ARCHIVE:
 					_step_frame(1)
 			KEY_W:
-				if _active_mode == MODE_AV_DV:
-					_step_avdv_option(-1)
+				if _active_mode == MODE_AV_IO:
+					_step_avio_option(-1)
 				else:
 					_step_clip(-1)
 			KEY_S:
-				if _active_mode == MODE_AV_DV:
-					_step_avdv_option(1)
+				if _active_mode == MODE_AV_IO:
+					_step_avio_option(1)
 				else:
 					_step_clip(1)
 			KEY_X:
 				if _active_mode == MODE_ARCHIVE:
 					_set_delete_confirmation(true)
 			KEY_ENTER, KEY_KP_ENTER:
-				if _active_mode == MODE_AV_DV:
-					_activate_avdv_option()
+				if _active_mode == MODE_AV_IO:
+					_activate_avio_option()
 			_:
 				return
 		get_viewport().set_input_as_handled()
@@ -211,20 +223,29 @@ func toggle_recording() -> void:
 
 
 func start_recording() -> void:
+	_ensure_low_resolution_recorder()
+	_recorder_destroy_pending = false
 	_is_recording = true
 	_current_clip.clear()
 	_capture_timer = 0.0
 	_recording_bright = true
 	recording_label.modulate.a = 1.0
 	recording_label.visible = true
+	recording_dot.modulate.a = 1.0
+	recording_dot.visible = true
+	_schedule_recording_blink()
 
 
 func stop_recording() -> void:
 	if not _is_recording:
 		return
 	_is_recording = false
+	_recording_blink_timer.stop()
+	_recording_bright = true
 	recording_label.visible = true
 	recording_label.modulate.a = 0.22
+	recording_dot.visible = true
+	recording_dot.modulate.a = 0.22
 	if not _current_clip.is_empty():
 		_saved_clips.append(_current_clip.duplicate())
 		while _saved_clips.size() > 1 and (
@@ -234,6 +255,7 @@ func stop_recording() -> void:
 			_saved_clips.pop_front()
 		_selected_clip = _saved_clips.size() - 1
 	_current_clip.clear()
+	_release_low_resolution_recorder()
 
 
 func toggle_playback() -> void:
@@ -248,7 +270,7 @@ func toggle_playback() -> void:
 		_playback_frame_timer = playback_frame_seconds
 		_selected_clip = clampi(_selected_clip, 0, maxi(_saved_clips.size() - 1, 0))
 		_selected_frame = 0
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 		get_tree().paused = true
 		_hide_live_hud_for_playback()
 		_begin_mode_transition(MODE_ARCHIVE)
@@ -262,7 +284,7 @@ func step_camera_menu(direction: int) -> void:
 	if _is_recording:
 		stop_recording()
 	var source_mode := _active_mode if _playback_open else MODE_CAMERA
-	var target_mode := wrapi(source_mode + direction, MODE_CAMERA, MODE_AV_DV + 1)
+	var target_mode := wrapi(source_mode + direction, MODE_CAMERA, MODE_AV_IO + 1)
 	if not _playback_open:
 		if target_mode == MODE_CAMERA:
 			return
@@ -272,13 +294,14 @@ func step_camera_menu(direction: int) -> void:
 		_playback_frame_timer = playback_frame_seconds
 		_selected_clip = clampi(_selected_clip, 0, maxi(_saved_clips.size() - 1, 0))
 		_selected_frame = 0
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 		get_tree().paused = true
 		_hide_live_hud_for_playback()
 	_begin_mode_transition(target_mode)
 
 
 func _begin_mode_transition(target_mode: int) -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	_set_delete_confirmation(false)
 	_playback_running = false
 	_tape_loading = false
@@ -297,10 +320,10 @@ func _begin_mode_transition(target_mode: int) -> void:
 	_playback_menu_left.visible = false
 	_playback_controls_right.visible = false
 	_playback_volume_indicator.visible = false
-	_avdv_menu.visible = false
-	_avdv_status.visible = false
-	_avdv_explanation.visible = false
-	_avdv_controls_right.visible = false
+	_avio_menu.visible = false
+	_avio_status.visible = false
+	_avio_explanation.visible = false
+	_avio_controls_right.visible = false
 	_playback_progress_track.visible = false
 	_tape_spinner.visible = true
 
@@ -319,14 +342,14 @@ func _finish_mode_transition() -> void:
 		_playback_volume_indicator.visible = true
 		_refresh_playback()
 		return
-	if _active_mode == MODE_AV_DV:
+	if _active_mode == MODE_AV_IO:
 		_playback_backdrop.visible = true
 		_playback_tabs.visible = true
-		_avdv_menu.visible = true
-		_avdv_status.visible = false
-		_avdv_explanation.visible = true
-		_avdv_controls_right.visible = true
-		_refresh_avdv_menu()
+		_avio_menu.visible = true
+		_avio_status.visible = false
+		_avio_explanation.visible = true
+		_avio_controls_right.visible = true
+		_refresh_avio_menu()
 		return
 	_playback_open = false
 	_playback_backdrop.visible = false
@@ -339,10 +362,10 @@ func _finish_mode_transition() -> void:
 	_playback_tabs.visible = false
 	_playback_menu_left.visible = false
 	_playback_controls_right.visible = false
-	_avdv_menu.visible = false
-	_avdv_status.visible = false
-	_avdv_explanation.visible = false
-	_avdv_controls_right.visible = false
+	_avio_menu.visible = false
+	_avio_status.visible = false
+	_avio_explanation.visible = false
+	_avio_controls_right.visible = false
 	_playback_progress_track.visible = false
 	_playback_volume_indicator.visible = false
 	_restore_live_hud_after_playback()
@@ -380,7 +403,9 @@ func _restore_live_hud_after_playback() -> void:
 	_hidden_live_hud_items.clear()
 
 
-func _build_low_resolution_recorder() -> void:
+func _ensure_low_resolution_recorder() -> void:
+	if is_instance_valid(_recording_viewport) and is_instance_valid(_recording_camera):
+		return
 	_recording_viewport = SubViewport.new()
 	_recording_viewport.name = "LowResolutionTapeRecorder"
 	_recording_viewport.size = capture_resolution
@@ -394,6 +419,24 @@ func _build_low_resolution_recorder() -> void:
 	_recording_viewport.add_child(_recording_camera)
 	_recording_camera.current = true
 	_recording_camera.cull_mask = RECORDING_ONLY_VISIBILITY_MASK
+
+
+func _release_low_resolution_recorder() -> void:
+	if _capture_pending:
+		_recorder_destroy_pending = true
+		return
+	_destroy_low_resolution_recorder()
+
+
+func _destroy_low_resolution_recorder() -> void:
+	_recorder_destroy_pending = false
+	if is_instance_valid(_recording_camera):
+		_recording_camera.current = false
+	if is_instance_valid(_recording_viewport):
+		_recording_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
+		_recording_viewport.queue_free()
+	_recording_camera = null
+	_recording_viewport = null
 
 
 func _exclude_recording_only_layer_from_live_camera() -> void:
@@ -426,8 +469,13 @@ func _request_capture_frame() -> void:
 
 func _finish_capture_frame() -> void:
 	_capture_pending = false
-	_recording_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
+	if is_instance_valid(_recording_viewport):
+		_recording_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
 	if not _is_recording:
+		if _recorder_destroy_pending:
+			_destroy_low_resolution_recorder()
+		return
+	if not is_instance_valid(_recording_viewport):
 		return
 	var image := _recording_viewport.get_texture().get_image()
 	if image == null or image.is_empty():
@@ -687,7 +735,7 @@ func _build_playback_interface() -> void:
 	add_child(_playback_controls_right)
 	_build_archive_tabs(camera_font)
 	_build_volume_indicator(camera_font)
-	_build_avdv_menu(camera_font)
+	_build_avio_menu(camera_font)
 	_build_interface_frames()
 	_delete_confirmation_backdrop = ColorRect.new()
 	_delete_confirmation_backdrop.set_anchors_preset(Control.PRESET_CENTER)
@@ -732,10 +780,10 @@ func _build_playback_interface() -> void:
 	_playback_next_button.visible = false
 	_playback_tabs.visible = false
 	_playback_volume_indicator.visible = false
-	_avdv_menu.visible = false
-	_avdv_status.visible = false
-	_avdv_explanation.visible = false
-	_avdv_controls_right.visible = false
+	_avio_menu.visible = false
+	_avio_status.visible = false
+	_avio_explanation.visible = false
+	_avio_controls_right.visible = false
 	_playback_menu_left.visible = false
 	_playback_controls_right.visible = false
 	_playback_progress_track.visible = false
@@ -780,144 +828,179 @@ func _build_volume_indicator(camera_font: Font) -> void:
 		_playback_volume_indicator.add_child(level)
 
 
-func _build_avdv_menu(camera_font: Font) -> void:
-	_avdv_menu = RichTextLabel.new()
-	_avdv_menu.set_anchors_preset(Control.PRESET_CENTER)
-	_avdv_menu.offset_left = -430.0
-	_avdv_menu.offset_top = -245.0
-	_avdv_menu.offset_right = 430.0
-	_avdv_menu.offset_bottom = 185.0
-	_avdv_menu.bbcode_enabled = true
-	_avdv_menu.fit_content = false
-	_avdv_menu.scroll_active = false
-	_avdv_menu.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_avdv_menu.add_theme_font_override(&"normal_font", camera_font)
-	_avdv_menu.add_theme_font_size_override(&"normal_font_size", 25)
-	_avdv_menu.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_avdv_menu)
-	_avdv_status = Label.new()
-	_avdv_status.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	_avdv_status.offset_left = -500.0
-	_avdv_status.offset_top = -175.0
-	_avdv_status.offset_right = 500.0
-	_avdv_status.offset_bottom = -115.0
-	_avdv_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_avdv_status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_avdv_status.add_theme_font_override(&"font", camera_font)
-	_avdv_status.add_theme_font_size_override(&"font_size", 18)
-	_avdv_status.add_theme_color_override(&"font_color", Color(0.55, 0.62, 0.55, 0.92))
-	_avdv_status.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_avdv_status)
-	_avdv_controls_right = RichTextLabel.new()
-	_avdv_controls_right.set_anchors_preset(Control.PRESET_CENTER_RIGHT)
-	_avdv_controls_right.offset_left = -375.0
-	_avdv_controls_right.offset_top = -330.0
-	_avdv_controls_right.offset_right = -48.0
-	_avdv_controls_right.offset_bottom = 330.0
-	_avdv_controls_right.bbcode_enabled = true
-	_avdv_controls_right.fit_content = false
-	_avdv_controls_right.scroll_active = false
-	_avdv_controls_right.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_avdv_controls_right.text = "[right]CONTROLES\n[font_size=21]\n[/font_size]\nCAMBIAR MENU\n[color=#69716a]Q / E[/color]\n\nSELECCIONAR\n[color=#69716a]W / S[/color]\n\nACEPTAR\n[color=#69716a]ESPACIO / ENTER[/color]\n\nCAMARA\n[color=#69716a]TAB / ESC[/color][/right]"
-	_avdv_controls_right.add_theme_font_override(&"normal_font", camera_font)
-	_avdv_controls_right.add_theme_font_size_override(&"normal_font_size", 25)
-	_avdv_controls_right.add_theme_color_override(&"default_color", Color(0.9, 0.93, 0.86, 0.96))
-	_avdv_controls_right.add_theme_constant_override(&"outline_size", 2)
-	_avdv_controls_right.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_avdv_controls_right)
-	_avdv_explanation = RichTextLabel.new()
-	_avdv_explanation.set_anchors_preset(Control.PRESET_CENTER)
-	_avdv_explanation.offset_left = -500.0
-	_avdv_explanation.offset_top = 185.0
-	_avdv_explanation.offset_right = 500.0
-	_avdv_explanation.offset_bottom = 330.0
-	_avdv_explanation.bbcode_enabled = true
-	_avdv_explanation.fit_content = false
-	_avdv_explanation.scroll_active = false
-	_avdv_explanation.add_theme_font_override(&"normal_font", camera_font)
-	_avdv_explanation.add_theme_font_size_override(&"normal_font_size", 14)
-	_avdv_explanation.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_avdv_explanation)
+func _build_avio_menu(camera_font: Font) -> void:
+	_avio_menu = RichTextLabel.new()
+	_avio_menu.set_anchors_preset(Control.PRESET_CENTER)
+	_avio_menu.offset_left = -430.0
+	_avio_menu.offset_top = -245.0
+	_avio_menu.offset_right = 430.0
+	_avio_menu.offset_bottom = 185.0
+	_avio_menu.bbcode_enabled = true
+	_avio_menu.fit_content = false
+	_avio_menu.scroll_active = false
+	_avio_menu.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_avio_menu.add_theme_font_override(&"normal_font", camera_font)
+	_avio_menu.add_theme_font_size_override(&"normal_font_size", 25)
+	_avio_menu.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_avio_menu)
+	_avio_status = Label.new()
+	_avio_status.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	_avio_status.offset_left = -500.0
+	_avio_status.offset_top = -175.0
+	_avio_status.offset_right = 500.0
+	_avio_status.offset_bottom = -115.0
+	_avio_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_avio_status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_avio_status.add_theme_font_override(&"font", camera_font)
+	_avio_status.add_theme_font_size_override(&"font_size", 18)
+	_avio_status.add_theme_color_override(&"font_color", Color(0.55, 0.62, 0.55, 0.92))
+	_avio_status.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_avio_status)
+	_avio_controls_right = RichTextLabel.new()
+	_avio_controls_right.set_anchors_preset(Control.PRESET_CENTER_RIGHT)
+	_avio_controls_right.offset_left = -375.0
+	_avio_controls_right.offset_top = -330.0
+	_avio_controls_right.offset_right = -48.0
+	_avio_controls_right.offset_bottom = 330.0
+	_avio_controls_right.bbcode_enabled = true
+	_avio_controls_right.fit_content = false
+	_avio_controls_right.scroll_active = false
+	_avio_controls_right.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_avio_controls_right.text = "[right]CONTROLES\n[font_size=21]\n[/font_size]\nCAMBIAR MENU\n[color=#69716a]Q / E[/color]\n\nSELECCIONAR\n[color=#69716a]W / S[/color]\n\nACEPTAR\n[color=#69716a]ESPACIO / ENTER[/color]\n\nCAMARA\n[color=#69716a]TAB / ESC[/color][/right]"
+	_avio_controls_right.add_theme_font_override(&"normal_font", camera_font)
+	_avio_controls_right.add_theme_font_size_override(&"normal_font_size", 25)
+	_avio_controls_right.add_theme_color_override(&"default_color", Color(0.9, 0.93, 0.86, 0.96))
+	_avio_controls_right.add_theme_constant_override(&"outline_size", 2)
+	_avio_controls_right.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_avio_controls_right)
+	_avio_explanation = RichTextLabel.new()
+	_avio_explanation.set_anchors_preset(Control.PRESET_CENTER)
+	_avio_explanation.offset_left = -500.0
+	_avio_explanation.offset_top = 185.0
+	_avio_explanation.offset_right = 500.0
+	_avio_explanation.offset_bottom = 330.0
+	_avio_explanation.bbcode_enabled = true
+	_avio_explanation.fit_content = false
+	_avio_explanation.scroll_active = false
+	_avio_explanation.add_theme_font_override(&"normal_font", camera_font)
+	_avio_explanation.add_theme_font_size_override(&"normal_font_size", 14)
+	_avio_explanation.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_avio_explanation)
 
 
-func _step_avdv_option(direction: int) -> void:
-	_avdv_erase_armed = false
-	_avdv_selection = wrapi(_avdv_selection + direction, 0, 4)
-	_avdv_status.text = "Q / E  CAMBIAR MENU     W / S  SELECCIONAR     ESPACIO  ACEPTAR     TAB / ESC  CAMARA"
-	_refresh_avdv_menu()
+func _step_avio_option(direction: int) -> void:
+	_avio_erase_armed = false
+	_avio_selection = wrapi(_avio_selection + direction, 0, 4)
+	_avio_status.text = "Q / E  CAMBIAR MENU     W / S  SELECCIONAR     ESPACIO  ACEPTAR     TAB / ESC  CAMARA"
+	_refresh_avio_menu()
 
 
-func _activate_avdv_option() -> void:
-	if _avdv_selection != 3:
-		_avdv_erase_armed = false
-	match _avdv_selection:
+func _activate_avio_option() -> void:
+	if _avio_selection != 3:
+		_avio_erase_armed = false
+	match _avio_selection:
 		0:
 			if not _tape_inserted:
-				_avdv_status.text = "NO HAY NINGUNA CINTA INSERTADA"
+				_avio_status.text = "NO HAY NINGUNA CINTA INSERTADA"
 				return
 			_tape_inserted = false
-			_avdv_status.text = "CINTA EXTRAÍDA"
+			_avio_status.text = "CINTA EXTRAÍDA"
 		1:
 			if _tape_inserted:
-				_avdv_status.text = "YA HAY UNA CINTA INSERTADA"
+				_avio_status.text = "YA HAY UNA CINTA INSERTADA"
 				return
 			_tape_inserted = true
-			_avdv_status.text = "CINTA INSERTADA"
+			_avio_status.text = "CINTA INSERTADA"
 		2:
 			if not _tape_inserted:
-				_avdv_status.text = "INSERTA UNA CINTA"
-			elif not _external_recorder_connected:
-				_avdv_status.text = "SIN CONEXION — REQUIERE APARATO EXTERNO"
+				_avio_status.text = "INSERTA UNA CINTA"
+			elif not debug_external_recorder_connected:
+				_avio_status.text = "SIN CONEXION — REQUIERE APARATO EXTERNO"
+			elif _saved_clips.is_empty():
+				_avio_status.text = "NO HAY GRABACIONES PARA TRANSFERIR"
+			else:
+				var result := _write_archive_to_debug_cassettes()
+				var cassette_count := int(result.cassettes)
+				var side_count := int(result.sides)
+				if cassette_count == 0:
+					_avio_status.text = "NO HAY NINGUN CASETE CONECTADO"
+				elif side_count == 0:
+					_avio_status.text = "LOS CASETES NO TIENEN HUECOS COMPATIBLES"
+				else:
+					_avio_status.text = "%d CARAS GRABADAS EN %d CASETES" % [side_count, cassette_count]
 		3:
 			if not _tape_inserted:
-				_avdv_status.text = "INSERTA UNA CINTA"
+				_avio_status.text = "INSERTA UNA CINTA"
 			elif _saved_clips.is_empty():
-				_avdv_status.text = "LA CINTA ESTÁ VACÍA"
-			elif not _avdv_erase_armed:
-				_avdv_erase_armed = true
-				_avdv_status.text = "CONFIRMA PARA VACIAR LA CINTA"
+				_avio_erase_armed = false
+				_avio_status.text = "LA CINTA ESTÁ VACÍA"
+			elif not _avio_erase_armed:
+				_avio_erase_armed = true
+				_avio_status.text = "CONFIRMA PARA VACIAR LA CINTA"
 			else:
-				_saved_clips.remove_at(_selected_clip)
-				_selected_clip = clampi(_selected_clip, 0, maxi(_saved_clips.size() - 1, 0))
+				_saved_clips.clear()
+				_selected_clip = 0
+				_pending_clip = -1
 				_selected_frame = 0
+				_playback_running = false
 				_playback_texture = null
-				_avdv_erase_armed = false
-				_avdv_status.text = "CINTA VACIADA"
-	_refresh_avdv_menu()
+				_avio_erase_armed = false
+				_avio_status.text = "CINTA VACIADA"
+	_refresh_avio_menu()
 
 
-func _refresh_avdv_menu() -> void:
+func _refresh_avio_menu() -> void:
+	if _saved_clips.is_empty():
+		_avio_erase_armed = false
 	var labels := ["SACAR CINTA", "METER CINTA", "GRABAR CINTA", "REBOBINAR CINTA"]
 	var enabled := [
 		_tape_inserted,
 		not _tape_inserted,
-		_tape_inserted and _external_recorder_connected,
+		_tape_inserted and debug_external_recorder_connected and not _saved_clips.is_empty(),
 		_tape_inserted and not _saved_clips.is_empty(),
 	]
-	var menu := "[center][color=#e6ede0]TRANSFERENCIA AV / DV[/color]\n[font_size=21]\n[/font_size]\n"
+	var menu := "[center][color=#e6ede0]TRANSFERENCIA AV / IO[/color]\n[font_size=21]\n[/font_size]\n"
 	for index in labels.size():
-		var pointer := "▶" if index == _avdv_selection else " "
+		var pointer := "▶" if index == _avio_selection else " "
 		var color := "#e6ede0" if enabled[index] else "#59615a"
 		var suffix := ""
-		if index == 2 and not _external_recorder_connected:
+		if index == 2 and not debug_external_recorder_connected:
 			suffix = "  [ SIN CONEXION ]"
+		elif index == 2 and _saved_clips.is_empty():
+			suffix = "  [ SIN GRABACIONES ]"
 		menu += "[color=%s]%s  %s%s[/color]\n\n" % [color, pointer, labels[index], suffix]
 	menu += "[/center]"
-	_avdv_menu.text = menu
+	_avio_menu.text = menu
 	var description := ""
-	if _avdv_selection == 2:
-		description = "REQUIERE DVD EXTERNO PARA GRABAR LA CINTA DEFINITIVAMENTE"
-	elif _avdv_selection == 3:
+	if _avio_selection == 2:
+		if not debug_external_recorder_connected:
+			description = "REQUIERE DVD EXTERNO PARA GRABAR LA CINTA DEFINITIVAMENTE"
+		elif _saved_clips.is_empty():
+			description = "GRABA ALGO EN LA CAMARA ANTES DE TRANSFERIR"
+		else:
+			description = "TRANSFIERE EL ARCHIVO A LOS CASETES 01 Y 02 CONECTADOS"
+	elif _avio_selection == 3 and not _saved_clips.is_empty():
 		description = (
 			"SE ELIMINARA LA GRABACION DEFINITIVAMENTE"
-			if _avdv_erase_armed
+			if _avio_erase_armed
 			else "VACIA LA CINTA POR COMPLETO"
 		)
 	# La ayuda secundaria sigue al cursor: nunca se apilan explicaciones de
 	# opciones que el jugador no está inspeccionando.
-	_avdv_explanation.text = "[center][color=#69716a]%s[/color][/center]" % description
-	if _avdv_status.text.is_empty():
-		_avdv_status.text = "Q / E  CAMBIAR MENU     W / S  SELECCIONAR     ESPACIO  ACEPTAR     TAB / ESC  CAMARA"
+	_avio_explanation.text = "[center][color=#69716a]%s[/color][/center]" % description
+	if _avio_status.text.is_empty():
+		_avio_status.text = "Q / E  CAMBIAR MENU     W / S  SELECCIONAR     ESPACIO  ACEPTAR     TAB / ESC  CAMARA"
+
+
+func _write_archive_to_debug_cassettes() -> Dictionary:
+	var cassette_count := 0
+	var written_sides := 0
+	for cassette: Node in get_tree().get_nodes_in_group(&"recordable_cassette"):
+		if not cassette.has_method(&"write_archive_slots"):
+			continue
+		cassette_count += 1
+		written_sides += int(cassette.call(&"write_archive_slots", _saved_clips))
+	return {"cassettes": cassette_count, "sides": written_sides}
 
 
 func _build_interface_frames() -> void:
@@ -994,10 +1077,10 @@ func _build_archive_tabs(camera_font: Font) -> void:
 	add_child(_playback_tabs)
 	_camera_tab_label = _make_tab_label("CAMARA", 0.0, 280.0, camera_font, false)
 	_archive_tab_label = _make_tab_label("ARCHIVO", 310.0, 590.0, camera_font, true)
-	_avdv_tab_label = _make_tab_label("AV / DV", 620.0, 900.0, camera_font, false)
+	_avio_tab_label = _make_tab_label("AV / IO", 620.0, 900.0, camera_font, false)
 	_playback_tabs.add_child(_camera_tab_label)
 	_playback_tabs.add_child(_archive_tab_label)
-	_playback_tabs.add_child(_avdv_tab_label)
+	_playback_tabs.add_child(_avio_tab_label)
 	_tabs_underline = ColorRect.new()
 	_tabs_underline.position = Vector2(20.0, 54.0)
 	_tabs_underline.size = Vector2(240.0, 4.0)
@@ -1011,10 +1094,11 @@ func _set_active_tab(mode: int) -> void:
 	var inactive_color := Color(0.34, 0.38, 0.35, 0.9)
 	_camera_tab_label.add_theme_color_override(&"font_color", active_color if mode == MODE_CAMERA else inactive_color)
 	_archive_tab_label.add_theme_color_override(&"font_color", active_color if mode == MODE_ARCHIVE else inactive_color)
-	_avdv_tab_label.add_theme_color_override(&"font_color", active_color if mode == MODE_AV_DV else inactive_color)
+	_avio_tab_label.add_theme_color_override(&"font_color", active_color if mode == MODE_AV_IO else inactive_color)
 	_tabs_underline.position.x = [20.0, 330.0, 640.0][mode]
 	# Estos indicadores describen el directo, no el material archivado.
 	recording_label.visible = mode == MODE_CAMERA
+	recording_dot.visible = mode == MODE_CAMERA
 	fps_label.visible = mode == MODE_CAMERA
 	# La esquina inferior alterna contenido: fecha/hora en directo, únicamente
 	# VOL en archivo. Durante el loader el indicador se activa al finalizar.
@@ -1063,24 +1147,26 @@ func _refresh_readouts() -> void:
 
 
 func _schedule_recording_blink() -> void:
-	var delay := 0.68 if _recording_bright else 0.32
-	get_tree().create_timer(delay).timeout.connect(_toggle_recording, CONNECT_ONE_SHOT)
+	if not _is_recording:
+		return
+	_recording_blink_timer.start(RECORDING_ON_SECONDS if _recording_bright else RECORDING_OFF_SECONDS)
 
 
 func _toggle_recording() -> void:
-	# El temporizador de REC continúa ejecutándose con el árbol pausado. Nunca
-	# debe poder reactivar el indicador mientras estamos dentro de ARCHIVO.
+	# La bola es el piloto fijo; únicamente parpadea el texto REC.
 	if _playback_open and _transition_target_mode != MODE_CAMERA:
 		recording_label.visible = false
-		_schedule_recording_blink()
+		recording_dot.visible = false
 		return
+	recording_label.visible = true
+	recording_dot.visible = true
 	if not _is_recording:
-		recording_label.visible = true
 		recording_label.modulate.a = 0.22
-		_schedule_recording_blink()
+		recording_dot.modulate.a = 0.22
 		return
 	_recording_bright = not _recording_bright
 	recording_label.modulate.a = 1.0 if _recording_bright else 0.28
+	recording_dot.modulate.a = 1.0
 	_schedule_recording_blink()
 
 

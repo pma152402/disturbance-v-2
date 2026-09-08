@@ -125,6 +125,7 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var zoom_sound: AudioStreamPlayer = $ZoomSound
 # Ruido electrónico propio de la videocámara; no pertenece a la vela.
 @onready var camera_background_noise: Node = $Head/Camera3D/CameraBackgroundNoise
+@onready var camera_damage_overlay: CanvasLayer = $CameraDamageOverlay
 
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 var _camera_rest_position: Vector3
@@ -288,6 +289,7 @@ func _ready() -> void:
 	camera.fov = zoom_max_fov
 	_zoom_fov_target = zoom_max_fov
 	_update_zoom_meter()
+	camera_damage_overlay.set_damage_level(_monster_hits, false)
 	_update_inventory_ui()
 	inventory_slots_ui.visible = false
 	inventory_slots_ui.modulate.a = 0.0
@@ -2418,6 +2420,7 @@ func receive_monster_attack(attacker: Node3D) -> void:
 		return
 	_monster_hit_cooldown = 1.15
 	_monster_hits += 1
+	camera_damage_overlay.set_damage_level(_monster_hits)
 	_stamina = maxf(0.0, _stamina - 34.0)
 	_is_exhausted = true
 	var away := global_position - attacker.global_position

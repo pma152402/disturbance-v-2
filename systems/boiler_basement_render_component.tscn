@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://systems/door_linked_render_component.gd" id="1_gate"]
+
+[node name="BoilerBasementRenderComponent" type="Node"]
+editor_description = "Componente de render del sotano de la caldera. Solo oculta la parte visual; conserva fisica, navegacion e interacciones."
+script = ExtResource("1_gate")
+door_path = NodePath("../Doors/BasementDoor2/Hinge")
+nested_container_paths = Array[NodePath]([NodePath("../BasementStairGuardrails")])

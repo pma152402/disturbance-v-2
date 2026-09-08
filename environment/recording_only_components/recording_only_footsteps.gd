@@ -23,7 +23,7 @@ const FOOTPRINT_WIDTH_FACTOR := 0.85
 @export_category("Revelado en la cinta")
 ## Distancia máxima desde la cámara de grabación. Obliga a registrar y revisar
 ## el recorrido por tramos en lugar de revelar el rastro completo de una vez.
-@export_range(1.0, 12.0, 0.1) var maximum_recording_distance := 3.2
+@export_range(1.0, 12.0, 0.1) var maximum_recording_distance := 3.9
 @export_range(0.0, 2.0, 0.05) var distance_fade_margin := 0.65
 @export_category("Vista del editor")
 @export var show_editor_preview := true

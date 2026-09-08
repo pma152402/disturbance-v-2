@@ -37,6 +37,9 @@ signal navigation_baked
 
 var _navigation_mesh: NavigationMesh
 var _source_geometry := NavigationMeshSourceGeometryData3D.new()
+var _bake_in_progress := false
+var _rebake_queued := false
+var bake_revision := 0
 
 
 func _ready() -> void:
@@ -49,7 +52,12 @@ func _ready() -> void:
 
 
 func _begin_bake() -> void:
+	if _bake_in_progress:
+		_rebake_queued = true
+		return
+	_bake_in_progress = true
 	_navigation_mesh = NavigationMesh.new()
+	_source_geometry = NavigationMeshSourceGeometryData3D.new()
 	_navigation_mesh.agent_radius = agent_radius
 	# Bake for the real door clearance; the monster's tall visual rig bends over it.
 	_navigation_mesh.agent_height = agent_height
@@ -74,6 +82,7 @@ func _begin_bake() -> void:
 		parsing_root = get_parent()
 	if parsing_root == null:
 		push_error("Runtime %s navigation has no geometry parsing root" % navigation_label)
+		_bake_in_progress = false
 		return
 	NavigationServer3D.parse_source_geometry_data(
 		_navigation_mesh,
@@ -93,6 +102,20 @@ func _on_geometry_parsed() -> void:
 
 func _on_navigation_baked() -> void:
 	navigation_mesh = _navigation_mesh
+	bake_revision += 1
+	_bake_in_progress = false
 	if OS.is_debug_build():
 		print("Runtime %s navigation ready" % navigation_label)
 	emit_signal(&"navigation_baked")
+	if _rebake_queued:
+		_rebake_queued = false
+		call_deferred(&"_begin_bake")
+
+
+func request_rebake() -> void:
+	# Deferred content can appear after the startup bake. Coalesce rebuilds so
+	# two asynchronous navigation parsers never operate on this region together.
+	if _bake_in_progress:
+		_rebake_queued = true
+	else:
+		call_deferred(&"_begin_bake")

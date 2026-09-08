@@ -13,6 +13,8 @@ const VOLUMES: Array[AABB] = [
 ]
 
 static func install(school: Node3D) -> void:
+	if school.get_node_or_null("RuntimeRainShelter") != null:
+		return
 	var group := Node3D.new()
 	group.name = "RuntimeRainShelter"
 	school.add_child(group)

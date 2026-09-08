@@ -15,8 +15,32 @@ func _run() -> void:
 	if recorder == null:
 		_fail("No existe el grabador de la cámara")
 		return
-	if not recorder.get_node("Recording").visible or recorder.get_node("Recording").modulate.a > 0.23:
+	if game.get_node_or_null("PS2Distortion") != null:
+		_fail("La distorsión continúa ejecutándose como segunda pasada de pantalla")
+		return
+	var postprocess := game.get_node("PS2PostProcess")
+	var screen_filter := postprocess.get_node("ScreenFilter") as ColorRect
+	var combined_material := screen_filter.material as ShaderMaterial
+	if combined_material == null or combined_material.shader == null \
+			or not combined_material.shader.resource_path.ends_with("ps2_camera_combined.gdshader"):
+		_fail("El filtro principal no utiliza el shader PS2 fusionado")
+		return
+	if postprocess.find_children("*", "BackBufferCopy", true, false).size() != 0 \
+			or screen_filter.get_index() >= recorder.get_index():
+		_fail("El filtro único conserva un BackBufferCopy manual o tapa el HUD nítido")
+		return
+	if not is_equal_approx(float(ProjectSettings.get_setting("rendering/scaling_3d/scale", 1.0)), 0.75):
+		_fail("La escena 3D no está configurada al 75 por ciento")
+		return
+	var recording_label := recorder.get_node("Recording") as Label
+	var recording_dot := recorder.get_node("RecordingDot") as Polygon2D
+	if not recording_label.visible or recording_label.modulate.a > 0.23 \
+			or not recording_dot.visible or recording_dot.modulate.a > 0.23:
 		_fail("REC no permanece visible y apagado durante STBY")
+		return
+	if recording_label.text != "REC" or recording_label.vertical_alignment != VERTICAL_ALIGNMENT_CENTER \
+			or not is_equal_approx(recording_dot.position.y, (recording_label.offset_top + recording_label.offset_bottom) * 0.5):
+		_fail("La bola de REC no está centrada verticalmente con el texto")
 		return
 	if recorder.get_node("TapeMode").text != "CAM 01":
 		_fail("El texto superior de cámara no permanece fijo")
@@ -58,15 +82,35 @@ func _run() -> void:
 		_fail("El HUD del directo invade la zona segura de las esquinas")
 		return
 	var low_res_viewport := recorder.get("_recording_viewport") as SubViewport
+	if low_res_viewport != null or recorder.get("_recording_camera") != null:
+		_fail("La segunda cámara existe antes de comenzar a grabar")
+		return
+	recorder.call(&"start_recording")
+	low_res_viewport = recorder.get("_recording_viewport") as SubViewport
 	if low_res_viewport == null or low_res_viewport.size != Vector2i(426, 240):
-		_fail("La grabación no usa el viewport pequeño de bajo coste")
+		_fail("La grabación no crea su viewport pequeño bajo demanda")
 		return
 	var candle_preview := game.get_node("Player/CandlePlacementPreview") as VisualInstance3D
 	var tape_camera := recorder.get("_recording_camera") as Camera3D
 	if not candle_preview.get_layer_mask_value(19) or tape_camera.get_cull_mask_value(19):
 		_fail("La guía verde de la vela sigue incluida en las grabaciones")
 		return
-	recorder.call(&"start_recording")
+	var recording_blink_timer := recorder.get("_recording_blink_timer") as Timer
+	if recording_blink_timer == null or not recording_blink_timer.one_shot \
+			or recording_blink_timer.time_left < 1.9:
+		_fail("REC no comienza encendido con una fase completa de dos segundos")
+		return
+	recorder.call(&"_toggle_recording")
+	if not recording_label.visible or recording_label.modulate.a > 0.3 \
+			or not recording_dot.visible or recording_dot.modulate.a < 0.99 \
+			or not is_equal_approx(recording_blink_timer.wait_time, 1.0):
+		_fail("La bola no permanece encendida mientras parpadea el texto REC")
+		return
+	recorder.call(&"_toggle_recording")
+	if recording_label.modulate.a < 0.99 or recording_dot.modulate.a < 0.99 \
+			or not is_equal_approx(recording_blink_timer.wait_time, 2.0):
+		_fail("REC no recupera su fase encendida con la bola fija")
+		return
 	if int(recorder.call(&"_maximum_frames_per_clip")) != 60:
 		_fail("La cinta no admite los 30 segundos configurados")
 		return
@@ -81,6 +125,9 @@ func _run() -> void:
 	current_clip.append(test_frame)
 	current_clip.append(test_frame)
 	recorder.call(&"stop_recording")
+	if recorder.get("_recording_viewport") != null or recorder.get("_recording_camera") != null:
+		_fail("La segunda cámara no se destruyó al detener la grabación")
+		return
 	if recorder.get_node("TapeMode").text != "CAM 01":
 		_fail("Guardar una cinta alteró el texto fijo superior")
 		return
@@ -94,6 +141,9 @@ func _run() -> void:
 	recorder.call(&"toggle_playback")
 	if not paused or not bool(recorder.get("_playback_open")):
 		_fail("La transición a ARCHIVO no pausó el mundo")
+		return
+	if DisplayServer.get_name() != "headless" and Input.mouse_mode != Input.MOUSE_MODE_HIDDEN:
+		_fail("El cursor sigue visible al entrar en ARCHIVO")
 		return
 	if not bool(recorder.get("_mode_transitioning")) or not (recorder.get("_tape_spinner") as Control).visible:
 		_fail("TAB no inició el loader de CÁMARA a ARCHIVO")
@@ -280,80 +330,116 @@ func _run() -> void:
 		return
 	recorder.call(&"step_camera_menu", 1)
 	if not bool(recorder.get("_mode_transitioning")) or not bool(recorder.get("_playback_open")):
-		_fail("E no inició el paso de ARCHIVO a AV / DV")
+		_fail("E no inició el paso de ARCHIVO a AV / IO")
 		return
-	var avdv_tab := recorder.get("_avdv_tab_label") as Label
+	if DisplayServer.get_name() != "headless" and Input.mouse_mode != Input.MOUSE_MODE_HIDDEN:
+		_fail("El cursor reapareció al entrar en AV / IO")
+		return
+	var avio_tab := recorder.get("_avio_tab_label") as Label
 	var archive_tab := recorder.get("_archive_tab_label") as Label
-	if avdv_tab.get_theme_color(&"font_color").r <= archive_tab.get_theme_color(&"font_color").r:
-		_fail("El foco no pasó a la pestaña AV / DV antes del loader")
+	if avio_tab.get_theme_color(&"font_color").r <= archive_tab.get_theme_color(&"font_color").r:
+		_fail("El foco no pasó a la pestaña AV / IO antes del loader")
 		return
+	recorder.set("debug_external_recorder_connected", false)
 	recorder.call(&"_process", 1.2)
-	var avdv_menu := recorder.get("_avdv_menu") as RichTextLabel
-	if not avdv_menu.visible or "SACAR CINTA" not in avdv_menu.get_parsed_text() \
-			or "METER CINTA" not in avdv_menu.get_parsed_text() \
-			or "SIN CONEXION" not in avdv_menu.get_parsed_text():
-		_fail("El menú AV / DV no expone sus operaciones y bloqueos")
+	var avio_menu := recorder.get("_avio_menu") as RichTextLabel
+	if not avio_menu.visible or "SACAR CINTA" not in avio_menu.get_parsed_text() \
+			or "METER CINTA" not in avio_menu.get_parsed_text() \
+			or "SIN CONEXION" not in avio_menu.get_parsed_text():
+		_fail("El menú AV / IO no expone sus operaciones y bloqueos")
 		return
-	var avdv_explanation := recorder.get("_avdv_explanation") as RichTextLabel
-	var avdv_controls := recorder.get("_avdv_controls_right") as RichTextLabel
-	if not avdv_controls.visible or (recorder.get("_avdv_status") as Label).visible \
-			or "CAMBIAR MENU" not in avdv_controls.get_parsed_text():
-		_fail("AV / DV no tiene su panel derecho o conserva la barra inferior")
+	var avio_explanation := recorder.get("_avio_explanation") as RichTextLabel
+	var avio_controls := recorder.get("_avio_controls_right") as RichTextLabel
+	if not avio_controls.visible or (recorder.get("_avio_status") as Label).visible \
+			or "CAMBIAR MENU" not in avio_controls.get_parsed_text():
+		_fail("AV / IO no tiene su panel derecho o conserva la barra inferior")
 		return
-	recorder.set("_avdv_selection", 2)
-	recorder.call(&"_refresh_avdv_menu")
-	if not avdv_explanation.visible or "DVD EXTERNO" not in avdv_explanation.get_parsed_text() \
-			or avdv_explanation.get_theme_font_size(&"normal_font_size") >= avdv_menu.get_theme_font_size(&"normal_font_size"):
-		_fail("Las opciones AV / DV bloqueadas no tienen explicación secundaria")
+	recorder.set("_avio_selection", 2)
+	recorder.call(&"_refresh_avio_menu")
+	if not avio_explanation.visible or "DVD EXTERNO" not in avio_explanation.get_parsed_text() \
+			or avio_explanation.get_theme_font_size(&"normal_font_size") >= avio_menu.get_theme_font_size(&"normal_font_size"):
+		_fail("Las opciones AV / IO bloqueadas no tienen explicación secundaria")
 		return
-	recorder.set("_avdv_selection", 0)
-	recorder.call(&"_refresh_avdv_menu")
-	if not avdv_explanation.get_parsed_text().strip_edges().is_empty():
-		_fail("AV / DV muestra descripciones de opciones ajenas al cursor")
+	recorder.set("_avio_selection", 0)
+	recorder.call(&"_refresh_avio_menu")
+	if not avio_explanation.get_parsed_text().strip_edges().is_empty():
+		_fail("AV / IO muestra descripciones de opciones ajenas al cursor")
 		return
+	var cassette_scene := load("res://house_props/cassette_tape.tscn") as PackedScene
+	if cassette_scene == null:
+		_fail("No se puede cargar el componente CassetteTape")
+		return
+	var cassette_1 := cassette_scene.instantiate()
+	var cassette_2 := cassette_scene.instantiate()
+	cassette_1.set("tape_number", 1)
+	cassette_2.set("tape_number", 2)
+	game.add_child(cassette_1)
+	game.add_child(cassette_2)
+	for _slot in 4:
+		clips.append([test_frame])
+	recorder.set("debug_external_recorder_connected", true)
+	recorder.set("_avio_selection", 2)
+	recorder.call(&"_refresh_avio_menu")
+	recorder.call(&"_activate_avio_option")
+	if "4 CARAS GRABADAS EN 2 CASETES" not in (recorder.get("_avio_status") as Label).text \
+			or not bool(cassette_1.call(&"has_recording", "A")) \
+			or not bool(cassette_1.call(&"has_recording", "B")) \
+			or not bool(cassette_2.call(&"has_recording", "A")) \
+			or not bool(cassette_2.call(&"has_recording", "B")):
+		_fail("GRABAR CINTA no transfirió las cuatro caras a los dos casetes")
+		return
+	clips.clear()
 	clips.append([test_frame])
-	recorder.set("_avdv_selection", 3)
-	recorder.call(&"_refresh_avdv_menu")
-	if "VACIA LA CINTA POR COMPLETO" not in avdv_explanation.get_parsed_text():
+	clips.append([test_frame])
+	recorder.set("_avio_selection", 3)
+	recorder.call(&"_refresh_avio_menu")
+	if "VACIA LA CINTA POR COMPLETO" not in avio_explanation.get_parsed_text():
 		_fail("REBOBINAR no advierte que vacía la cinta")
 		return
-	recorder.call(&"_activate_avdv_option")
-	if not bool(recorder.get("_avdv_erase_armed")) or clips.is_empty():
+	recorder.call(&"_activate_avio_option")
+	if not bool(recorder.get("_avio_erase_armed")) or clips.size() != 2:
 		_fail("REBOBINAR no exige confirmación antes de vaciar")
 		return
-	if avdv_explanation.get_parsed_text().strip_edges() != "SE ELIMINARA LA GRABACION DEFINITIVAMENTE":
+	if avio_explanation.get_parsed_text().strip_edges() != "SE ELIMINARA LA GRABACION DEFINITIVAMENTE":
 		_fail("La confirmación de REBOBINAR no muestra el aviso definitivo")
 		return
-	recorder.call(&"_activate_avdv_option")
-	if not clips.is_empty() or bool(recorder.get("_avdv_erase_armed")):
+	recorder.call(&"_activate_avio_option")
+	if not clips.is_empty() or bool(recorder.get("_avio_erase_armed")):
 		_fail("La segunda confirmación no vació la cinta")
 		return
-	recorder.set("_avdv_selection", 0)
-	recorder.call(&"_refresh_avdv_menu")
-	recorder.call(&"_activate_avdv_option")
+	if not avio_explanation.get_parsed_text().strip_edges().is_empty() \
+			or "[color=#59615a]▶  REBOBINAR CINTA" not in avio_menu.text:
+		_fail("REBOBINAR no queda deshabilitado y sin acción al vaciar la cinta")
+		return
+	recorder.set("_avio_selection", 0)
+	recorder.call(&"_refresh_avio_menu")
+	recorder.call(&"_activate_avio_option")
 	if bool(recorder.get("_tape_inserted")):
 		_fail("SACAR CINTA no cambió el estado físico")
 		return
-	recorder.call(&"_activate_avdv_option")
-	if (recorder.get("_avdv_status") as Label).text != "NO HAY NINGUNA CINTA INSERTADA":
+	recorder.call(&"_activate_avio_option")
+	if (recorder.get("_avio_status") as Label).text != "NO HAY NINGUNA CINTA INSERTADA":
 		_fail("SACAR CINTA no queda bloqueado tras extraerla")
 		return
-	recorder.set("_avdv_selection", 1)
-	recorder.call(&"_activate_avdv_option")
+	recorder.set("_avio_selection", 1)
+	recorder.call(&"_activate_avio_option")
 	if not bool(recorder.get("_tape_inserted")):
 		_fail("METER CINTA no restauró el estado físico")
 		return
 	recorder.call(&"step_camera_menu", 1)
 	if not bool(recorder.get("_mode_transitioning")):
-		_fail("E no inició el regreso de AV / DV a CAMARA")
+		_fail("E no inició el regreso de AV / IO a CAMARA")
 		return
 	var camera_tab := recorder.get("_camera_tab_label") as Label
-	if camera_tab.get_theme_color(&"font_color").r <= avdv_tab.get_theme_color(&"font_color").r:
+	if camera_tab.get_theme_color(&"font_color").r <= avio_tab.get_theme_color(&"font_color").r:
 		_fail("El foco no pasó a CAMARA antes del loader final")
 		return
 	recorder.call(&"_process", 1.2)
 	if paused or bool(recorder.get("_playback_open")) or bool(recorder.get("_mode_transitioning")):
 		_fail("La cámara no regresó correctamente tras el loader")
+		return
+	if DisplayServer.get_name() != "headless" and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+		_fail("El cursor no volvió al modo capturado al regresar a CAMARA")
 		return
 	if not (recorder.get_node("Recording") as CanvasItem).visible or not (recorder.get_node("FPS") as CanvasItem).visible:
 		_fail("REC o FPS no reaparecieron al volver a CAMARA")

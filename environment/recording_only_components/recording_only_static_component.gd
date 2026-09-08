@@ -7,7 +7,7 @@ extends Node3D
 const RECORDING_ONLY_VISIBILITY_MASK := 1 << 19
 
 @export_category("Revelado en la cinta")
-@export_range(2.0, 20.0, 0.1) var maximum_recording_distance := 7.0
+@export_range(2.0, 20.0, 0.1) var maximum_recording_distance := 7.7
 @export_range(0.0, 3.0, 0.05) var distance_fade_margin := 1.0
 @export_category("Vista del editor")
 @export var show_editor_preview := true:

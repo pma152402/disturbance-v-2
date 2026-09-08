@@ -1,17 +1,12 @@
 extends SceneTree
 var pieces := 0
 func _init() -> void:
-	var house: Node3D = load("res://levels/house_baked.tscn").instantiate()
-	var school: Node3D = house.get_node("SchoolUpperFloor")
-	var before := signature(house)
-	# A non-instancing duplicate clears Godot's hidden instance SceneState too.
-	var native := school.duplicate(7) as Node3D
-	var slot := school.get_index()
-	house.remove_child(school)
-	school.free()
-	school = native
-	house.add_child(school)
-	house.move_child(school,slot)
+	print("SCHOOL ALREADY STANDALONE: house_baked instances environment/school_upper_floor.tscn at startup")
+	quit()
+	return
+	# Legacy conversion kept below for reference; it must no longer rewrite the
+	# standalone school because doing so would remove its runtime batching script.
+	var school: Node3D = load("res://environment/school_upper_floor.tscn").instantiate()
 	school.set_script(null)
 	freeze(school)
 	if not school.has_node("WeatherSystems"):
@@ -19,24 +14,13 @@ func _init() -> void:
 		systems.name = "WeatherSystems"
 		systems.set_script(load("res://environment/school_environment.gd"))
 		school.add_child(systems)
-	# Save the effective instance, including the user's overrides, as the reusable scene.
-	house.remove_child(school)
 	localize(school, school)
 	var packed := PackedScene.new()
 	assert(packed.pack(school) == OK)
 	assert(ResourceSaver.save(packed,"res://environment/school_upper_floor.tscn") == OK)
-	house.add_child(school)
-	house.move_child(school,slot)
-	localize(school,house)
-	assert(signature(house) == before, "Conversion changed existing geometry or collisions")
-	# Only the school branch becomes local; other scene instances keep their links.
-	packed = PackedScene.new()
-	assert(packed.pack(house) == OK)
-	assert(ResourceSaver.save(packed,"res://levels/house_baked.tscn") == OK)
-	house.free()
-	var verify: Node3D = ResourceLoader.load("res://levels/house_baked.tscn","",ResourceLoader.CACHE_MODE_IGNORE).instantiate()
-	assert(signature(verify) == before,"Saved scene changed transforms or resources")
-	check_local(verify.get_node("SchoolUpperFloor"))
+	school.free()
+	var verify: Node3D = ResourceLoader.load("res://environment/school_upper_floor.tscn", "", ResourceLoader.CACHE_MODE_IGNORE).instantiate()
+	check_local(verify)
 	verify.free()
 	# The reusable streetlamp is already built; its light needs no generator script.
 	var lamp: Node3D = load("res://house_props/courtyard_streetlamp.tscn").instantiate()

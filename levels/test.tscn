@@ -2,8 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c748yu6y7jvnr" path="res://player/player.tscn" id="1_player"]
 [ext_resource type="PackedScene" uid="uid://bijyvsb002u3x" path="res://levels/house_baked.tscn" id="2_house"]
-[ext_resource type="Shader" uid="uid://dtlwspvl68jnn" path="res://shaders/ps2_distortion.gdshader" id="3_distortion"]
-[ext_resource type="Shader" uid="uid://dosdd5ab7itct" path="res://shaders/ps2_postprocess.gdshader" id="3_shader"]
+[ext_resource type="Shader" path="res://shaders/ps2_camera_combined.gdshader" id="3_shader"]
 [ext_resource type="PackedScene" path="res://environment/rainy_weather.tscn" id="4_weather"]
 [ext_resource type="Texture2D" uid="uid://be4d12e4gghv3" path="res://ps2_house/textures/Pasto1.jpg" id="5_a3se8"]
 [ext_resource type="Texture2D" uid="uid://cindg1vkxwdrc" path="res://assets/environment/storm_landscape_panorama.png" id="5_storm_panorama"]
@@ -57,12 +56,9 @@ texture_filter = 0
 material = SubResource("Material_wet_ground")
 size = Vector3(3.2, 0.16, 40.838898)
 
-[sub_resource type="ShaderMaterial" id="Material_ps2_distortion"]
-shader = ExtResource("3_distortion")
-shader_parameter/fisheye_strength = 0.007
-
 [sub_resource type="ShaderMaterial" id="Material_ps2"]
 shader = ExtResource("3_shader")
+shader_parameter/fisheye_strength = 0.007
 shader_parameter/pixel_size = 8.0
 shader_parameter/color_levels = 24.0
 shader_parameter/chromatic_aberration = 1.2
@@ -237,7 +233,7 @@ transform = Transform3D(0.9835713, 0, 0.18051943, 0, 1, 0, -0.18051943, 0, 0.983
 
 [node name="Player" parent="." unique_id=546288329 instance=ExtResource("1_player")]
 editor_description = "Spawn de prueba en el pasillo, fuera del sótano y mirando hacia su puerta, con todas las llaves."
-transform = Transform3D(0.9835713, 0, 0.18051943, 0, 1, 0, -0.18051943, 0, 0.9835713, 0.7585788, 0.772645, 8.210395)
+transform = Transform3D(0.9835713, 0, 0.18051943, 0, 1, 0, -0.18051943, 0, 0.9835713, 0.7585788, 1.3244749, -24.588749)
 starts_with_lit_candle = true
 debug_all_keys = true
 
@@ -284,22 +280,8 @@ patrol_wait_min = 1.4
 patrol_wait_max = 5.0
 patrol_travel_timeout = 10.0
 
-[node name="PS2Distortion" type="CanvasLayer" parent="." unique_id=744320580]
-layer = 99
-
-[node name="ScreenDistortion" type="ColorRect" parent="PS2Distortion" unique_id=1211261490]
-material = SubResource("Material_ps2_distortion")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
 [node name="PS2PostProcess" type="CanvasLayer" parent="." unique_id=13050641]
 layer = 101
-
-[node name="FilteredSceneCapture" type="BackBufferCopy" parent="PS2PostProcess" unique_id=1732301880]
 
 [node name="ScreenFilter" type="ColorRect" parent="PS2PostProcess" unique_id=1354811659]
 material = SubResource("Material_ps2")
@@ -322,7 +304,7 @@ script = ExtResource("7_footage_overlay")
 
 [node name="Recording" type="Label" parent="PS2PostProcess/CameraHUD" unique_id=1125802489]
 layout_mode = 0
-offset_left = 70.0
+offset_left = 108.0
 offset_top = 40.0
 offset_right = 342.0
 offset_bottom = 104.0
@@ -334,7 +316,13 @@ theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
 theme_override_fonts/font = ExtResource("8_pixel_font")
 theme_override_font_sizes/font_size = 50
-text = "● REC"
+text = "REC"
+vertical_alignment = 1
+
+[node name="RecordingDot" type="Polygon2D" parent="PS2PostProcess/CameraHUD" unique_id=471925872]
+position = Vector2(84, 72)
+color = Color(0.94, 0.13, 0.1, 0.94)
+polygon = PackedVector2Array(-10, 0, -9.2388, -3.82683, -7.07107, -7.07107, -3.82683, -9.2388, 0, -10, 3.82683, -9.2388, 7.07107, -7.07107, 9.2388, -3.82683, 10, 0, 9.2388, 3.82683, 7.07107, 7.07107, 3.82683, 9.2388, 0, 10, -3.82683, 9.2388, -7.07107, 7.07107, -9.2388, 3.82683)
 
 [node name="TapeMode" type="Label" parent="PS2PostProcess/CameraHUD" unique_id=1770821697]
 layout_mode = 0

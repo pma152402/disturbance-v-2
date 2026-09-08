@@ -57,6 +57,12 @@ func _ready() -> void:
 	_last_motion_position = global_position
 	_waiting_for_scripted_reveal = behavior == Behavior.STAY_STILL and not escape_target_path.is_empty()
 	_sound_timer = randf_range(5.0, 14.0)
+	if _waiting_for_scripted_reveal:
+		# La rata de la trampilla no necesita física, sensores, animación ni audio
+		# mientras espera una señal que puede recibirse aunque el proceso esté parado.
+		velocity = Vector3.ZERO
+		rat_sound.stop()
+		set_physics_process(false)
 
 
 func _physics_process(delta: float) -> void:
@@ -143,6 +149,7 @@ func _on_escape_triggered() -> void:
 	_escape_waypoint_index = 0
 	_scripted_escape = true
 	_waiting_for_scripted_reveal = false
+	set_physics_process(true)
 	_scare_sound_pending = true
 	_sound_timer = 1.0
 

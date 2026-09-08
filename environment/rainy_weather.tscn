@@ -128,7 +128,7 @@ size = Vector2(0.035, 0.72)
 
 [sub_resource type="ParticleProcessMaterial" id="Particles_north_south"]
 emission_shape = 3
-emission_box_extents = Vector3(27.5, 0.5, 27.5)
+emission_box_extents = Vector3(14, 0.5, 14)
 direction = Vector3(0, -1, 0)
 spread = 0.75
 initial_velocity_min = 18.0
@@ -140,7 +140,7 @@ collision_mode = 2
 
 [sub_resource type="ParticleProcessMaterial" id="Particles_east_west"]
 emission_shape = 3
-emission_box_extents = Vector3(27.5, 0.5, 27.5)
+emission_box_extents = Vector3(14, 0.5, 14)
 direction = Vector3(0, -1, 0)
 spread = 0.75
 initial_velocity_min = 18.0
@@ -210,13 +210,13 @@ process_mode = 3
 [node name="NorthRain" type="GPUParticles3D" parent="Rain"]
 position = Vector3(0, 15, 0)
 emitting = true
-amount = 900
+amount = 720
 lifetime = 1.8
 preprocess = 1.8
 randomness = 0.25
 fixed_fps = 24
 local_coords = false
-visibility_aabb = AABB(-30, -45, -30, 60, 50, 60)
+visibility_aabb = AABB(-16, -45, -16, 32, 50, 32)
 process_material = SubResource("Particles_north_south")
 draw_pass_1 = SubResource("Mesh_raindrop")
 
@@ -237,7 +237,7 @@ rotation = Vector3(-0.92, -0.48, -0.12)
 light_color = Color(0.58, 0.67, 0.8, 1)
 light_energy = 0.52
 shadow_enabled = true
-directional_shadow_max_distance = 70.0
+directional_shadow_max_distance = 35.0
 directional_shadow_fade_start = 0.75
 
 [node name="InteriorLightning" type="Node3D" parent="."]
@@ -246,6 +246,8 @@ directional_shadow_fade_start = 0.75
 position = Vector3(0, 2.0, 0)
 light_color = Color(0.67, 0.78, 1, 1)
 light_energy = 0.24
+light_specular = 0.0
+light_volumetric_fog_energy = 0.0
 omni_range = 38.0
 omni_attenuation = 1.15
 shadow_enabled = false
@@ -254,6 +256,8 @@ shadow_enabled = false
 position = Vector3(0, 6.2, 0)
 light_color = Color(0.67, 0.78, 1, 1)
 light_energy = 0.24
+light_specular = 0.0
+light_volumetric_fog_energy = 0.0
 omni_range = 38.0
 omni_attenuation = 1.15
 shadow_enabled = false
@@ -262,6 +266,8 @@ shadow_enabled = false
 position = Vector3(0, -2.2, 0)
 light_color = Color(0.67, 0.78, 1, 1)
 light_energy = 0.24
+light_specular = 0.0
+light_volumetric_fog_energy = 0.0
 omni_range = 38.0
 omni_attenuation = 1.15
 shadow_enabled = false

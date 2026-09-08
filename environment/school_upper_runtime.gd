@@ -1,7 +1,8 @@
 extends Node3D
 ## The saved scene stays fully editable; merge only static school primitives at runtime.
 func _ready() -> void:
-	preload("res://environment/school_rain_shelter.gd").install(self)
+	# WeatherSystems owns the rain shelter. This root only batches marked static
+	# details after the school has been streamed near its entrance.
 	var groups := {}
 	for visual in find_children("*", "MeshInstance3D", true, false):
 		if not visual.has_meta("school_static_detail") or not visual.is_visible_in_tree():

@@ -20,17 +20,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.018, 0)
 mesh = SubResource("MatMesh")
 
 [node name="TopEdge" type="CSGBox3D" parent="." unique_id=2058226622]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, -0.345)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.029210873, -0.345)
+size = Vector3(1.38, 0.018, 0.035)
+material = SubResource("EdgeMat")
+
+[node name="TopEdge2" type="CSGBox3D" parent="." unique_id=2006581364]
+transform = Transform3D(-2.3990577e-05, 0, -1.0000285, 0, 1, 0, 0.49165335, 0, -4.879711e-05, -0.67244583, 0.02876047, -0.005030647)
+size = Vector3(1.38, 0.018, 0.035)
+material = SubResource("EdgeMat")
+
+[node name="TopEdge3" type="CSGBox3D" parent="." unique_id=178057852]
+transform = Transform3D(-2.3990577e-05, 0, -1.0000285, 0, 1, 0, 0.49165335, 0, -4.879711e-05, 0.67249763, 0.02876047, -0.005030647)
 size = Vector3(1.38, 0.018, 0.035)
 material = SubResource("EdgeMat")
 
 [node name="BottomEdge" type="CSGBox3D" parent="." unique_id=891862141]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0.345)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.029210873, 0.345)
 size = Vector3(1.38, 0.018, 0.035)
 material = SubResource("EdgeMat")
 
 [node name="WelcomeText" type="Label3D" parent="." unique_id=1666388557]
-transform = Transform3D(0.80889934, 0, 0, 0, 3.899897e-07, 0.9999999, 0, -1.2423359, 3.1391642e-07, 0, 0.042, 0.02)
+transform = Transform3D(0.73517257, 0, 0, 0, 3.899897e-07, 0.9999999, 0, -1.2423359, 3.1391642e-07, 0.014030218, 0.040704343, 0.02)
 pixel_size = 0.006
 modulate = Color(0.19, 0.102, 0.043, 1)
 outline_modulate = Color(0.145, 0.074, 0.03, 0.22)

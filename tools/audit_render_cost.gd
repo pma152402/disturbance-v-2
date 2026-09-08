@@ -1,16 +1,16 @@
 extends SceneTree
 func _init() -> void:
 	var house: Node3D = load("res://levels/house_baked.tscn").instantiate()
+	var school: Node3D = load("res://environment/school_upper_floor.tscn").instantiate()
 	var weather: Node3D = load("res://environment/rainy_weather.tscn").instantiate()
 	var totals := {"meshes":0,"surfaces":0,"triangles":0,"materials":{},"lights":0,"shadow_lights":0,"unfaded_lights":0,"particles":0,"particle_amount":0,"multimeshes":0}
 	scan(house,totals)
 	scan(weather,totals)
 	print(JSON.stringify({"meshes":totals.meshes,"surfaces":totals.surfaces,"triangles":totals.triangles,"materials":totals.materials.size(),"lights":totals.lights,"shadow_lights":totals.shadow_lights,"unfaded_lights":totals.unfaded_lights,"particles":totals.particles,"particle_amount":totals.particle_amount,"multimeshes":totals.multimeshes},"  "))
-	var school := house.get_node("SchoolUpperFloor")
 	var school_totals := {"meshes":0,"surfaces":0,"triangles":0,"materials":{},"lights":0,"shadow_lights":0,"unfaded_lights":0,"particles":0,"particle_amount":0,"multimeshes":0}
 	scan(school,school_totals)
 	print("SCHOOL ",JSON.stringify({"meshes":school_totals.meshes,"triangles":school_totals.triangles,"lights":school_totals.lights,"shadow_lights":school_totals.shadow_lights,"materials":school_totals.materials.size()}))
-	house.free(); weather.free(); quit()
+	house.free(); school.free(); weather.free(); quit()
 func scan(node: Node, totals: Dictionary) -> void:
 	if node is MeshInstance3D and node.mesh:
 		totals.meshes += 1

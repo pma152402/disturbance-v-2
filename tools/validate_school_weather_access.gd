@@ -10,7 +10,7 @@ func run() -> void:
 	var house: Node3D = load("res://levels/house_baked.tscn").instantiate()
 	house.set_script(null)
 	root.add_child(house)
-	var school: Node3D = house.get_node("SchoolUpperFloor")
+	var school := house.get_node("SchoolUpperFloor") as Node3D
 	var weather: Node3D = load("res://environment/rainy_weather.tscn").instantiate()
 	# Keep the same collision volumes without lightning/audio during visual review.
 	weather.set_script(null)

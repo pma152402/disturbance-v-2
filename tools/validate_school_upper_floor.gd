@@ -28,7 +28,8 @@ func run() -> void:
 		unchanged += 1
 	print("PRESERVED: ", unchanged, " existing colliders outside the updated upper access/window.")
 	root.add_child(h)
-	school = h.get_node("SchoolUpperFloor")
+	school = load("res://environment/school_upper_floor.tscn").instantiate() as Node3D
+	h.add_child(school)
 	await process_frame
 	await physics_frame
 	await physics_frame

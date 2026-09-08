@@ -22,6 +22,7 @@
 [ext_resource type="AudioStream" path="res://sounds/objects/camera_background_noise.mp3" id="21_camera_noise"]
 [ext_resource type="Script" path="res://sounds/camera_audio_filter.gd" id="22_camera_filter"]
 [ext_resource type="PackedScene" path="res://house_props/retro_tv_remote.tscn" id="23_tv_remote"]
+[ext_resource type="PackedScene" path="res://systems/camera_damage_overlay.tscn" id="24_camera_damage"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.34
@@ -279,6 +280,8 @@ visible = false
 layers = 262144
 cast_shadow = 0
 mesh = SubResource("CandlePlacementMesh")
+
+[node name="CameraDamageOverlay" parent="." instance=ExtResource("24_camera_damage")]
 
 [node name="StaminaUI" type="CanvasLayer" parent="." unique_id=1898289555]
 layer = 20

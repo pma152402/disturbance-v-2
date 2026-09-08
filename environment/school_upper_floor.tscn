@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Puerta.jpg" id="7_7kh6b"]
 [ext_resource type="Script" path="res://house_props/school_furniture_navigation.gd" id="7_ln5c0"]
 [ext_resource type="Script" path="res://environment/school_environment.gd" id="8_so8cw"]
+[ext_resource type="Script" path="res://environment/school_upper_runtime.gd" id="9_runtime"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4a3of"]
 render_priority = 0
@@ -3138,6 +3139,7 @@ backface_collision = true
 
 [node name="SchoolUpperFloor" type="Node3D" unique_id=1155908564]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.16, 0)
+script = ExtResource("9_runtime")
 metadata/skip_wall_band = true
 metadata/layout = "Existing upper slabs; north dormitory and classroom; south dining and kitchen; east exterior bridge."
 
