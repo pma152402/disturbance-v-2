@@ -1,3 +1,8 @@
 # Godot genera esta carpeta localmente al importar y abrir el proyecto.
 # No debe versionarse: contiene caches, rutas del editor y nombres temporales.
 .godot/
+
+# Resultados regenerables de herramientas (no son recursos del juego).
+/tools/output/*
+!/tools/output/.gdignore
+/tools/*.log

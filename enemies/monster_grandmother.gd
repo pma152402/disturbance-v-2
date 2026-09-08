@@ -8,6 +8,7 @@ signal child_caught(child: Node3D)
 signal finished_eating_child(child: Node3D)
 
 enum State { PATROL, INVESTIGATE, CHASE, SEARCH, ATTACK, EAT }
+enum StairCommitment { NONE, ASCENDING, DESCENDING }
 
 const STAIR_LOWER_ANCHOR := Vector3(-1.328, 0.12, 3.0)
 const STAIR_UPPER_ANCHOR := Vector3(-1.328, 4.18, -2.18)
@@ -73,6 +74,10 @@ const STAIR_UPPER_ANCHOR := Vector3(-1.328, 4.18, -2.18)
 @export var door_center_tolerance := 0.20
 @export_range(0.05, 0.5, 0.01) var door_scan_interval := 0.12
 @export_range(0.05, 0.5, 0.01) var clearance_probe_interval := 0.1
+@export_group("Recorrido de escaleras")
+@export_range(0.6, 2.0, 0.05) var stair_corridor_radius := 1.05
+@export_range(0.6, 2.0, 0.05) var stair_landing_radius := 0.82
+@export_range(0.6, 2.0, 0.05) var stair_close_prey_distance := 1.25
 
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var door_ray: RayCast3D = $DoorRay
@@ -124,6 +129,8 @@ var _smoothed_move_direction := Vector3.ZERO
 var _duck_amount := 0.0
 var _duck_hold_timer := 0.0
 var _force_stair_steering := false
+var _stair_commitment := StairCommitment.NONE
+var _stair_close_prey_override := false
 var _waiting_covered_eyes := false
 var _mouth_close_amount := 0.0
 var _mouth_rest_scale := Vector3.ONE
@@ -424,6 +431,7 @@ func _update_movement(delta: float) -> void:
 	var target := _patrol_target
 	var speed := patrol_speed
 	_force_stair_steering = false
+	_stair_close_prey_override = false
 	match current_state:
 		State.INVESTIGATE:
 			target = _last_known_player_position
@@ -431,10 +439,13 @@ func _update_movement(delta: float) -> void:
 		State.CHASE:
 			target = _predicted_prey_position()
 			speed = chase_speed
-			target = _get_floor_transition_target(target)
 		State.SEARCH:
 			target = _last_known_player_position
 			speed = patrol_speed * 0.72
+	# El estado de percepción puede cambiar al perderla de vista bajo la losa.
+	# El recorrido comprometido debe sobrevivir a CHASE/INVESTIGATE/SEARCH.
+	if _stair_commitment != StairCommitment.NONE or current_state in [State.CHASE, State.INVESTIGATE, State.SEARCH]:
+		target = _get_floor_transition_target(target)
 
 	# El destino real se guarda antes de redirigir: es contra él contra el que se
 	# decide si hay que acechar, sacudir o rendirse.
@@ -480,6 +491,7 @@ func _update_movement(delta: float) -> void:
 				planar_prey_distance <= chase_slowdown_distance
 				and absf(_prey.global_position.y - global_position.y) <= attack_vertical_tolerance
 				and _has_clear_line_to_prey_body()
+				and (_stair_commitment == StairCommitment.NONE or _stair_close_prey_override)
 			)
 			if close_visible_prey and planar_prey_distance <= chase_slowdown_distance:
 				var direct_prey_direction := _prey.global_position - global_position
@@ -496,9 +508,9 @@ func _update_movement(delta: float) -> void:
 				if approach_scale <= 0.01:
 					_recovery_timer = 0.0
 					_recovery_direction = Vector3.ZERO
-		if _recovery_timer > 0.0 and _recovery_direction.length_squared() > 0.01:
+		if _stair_commitment == StairCommitment.NONE and _recovery_timer > 0.0 and _recovery_direction.length_squared() > 0.01:
 			flat_direction = _recovery_direction
-		if not close_visible_prey:
+		if not close_visible_prey and _stair_commitment == StairCommitment.NONE:
 			flat_direction = _steer_around_nearby_obstacle(flat_direction)
 		if _smoothed_move_direction.length_squared() < 0.01:
 			_smoothed_move_direction = flat_direction
@@ -805,6 +817,22 @@ func _get_prey_aim_position() -> Vector3:
 
 
 func _get_floor_transition_target(player_target: Vector3) -> Vector3:
+	# Una vez que mete el cuerpo en la escalera, conserva el sentido hasta el
+	# descansillo. Antes esta decisión se rehacía cada frame y cualquier cambio
+	# de altura/objetivo la hacía darse la vuelta en medio de la rampa.
+	if _stair_commitment != StairCommitment.NONE:
+		if _has_completed_stair_commitment():
+			_stair_commitment = StairCommitment.NONE
+			_smoothed_move_direction = Vector3.ZERO
+		else:
+			_force_stair_steering = true
+			_recovery_timer = 0.0
+			_recovery_direction = Vector3.ZERO
+			if _is_prey_right_beside_on_stairs():
+				_stair_close_prey_override = true
+				return player_target
+			return _stair_commitment_destination()
+
 	var player_is_upstairs := player_target.y > 2.65
 	var player_is_downstairs := player_target.y < 1.65
 	if player_is_upstairs and global_position.y < 3.72:
@@ -814,6 +842,7 @@ func _get_floor_transition_target(player_target: Vector3) -> Vector3:
 		).length()
 		if global_position.y < 0.8 and lower_distance > 0.72:
 			return STAIR_LOWER_ANCHOR
+		_stair_commitment = StairCommitment.ASCENDING
 		_force_stair_steering = true
 		return STAIR_UPPER_ANCHOR
 	if player_is_downstairs and global_position.y > 0.62:
@@ -823,9 +852,42 @@ func _get_floor_transition_target(player_target: Vector3) -> Vector3:
 		).length()
 		if global_position.y > 3.55 and upper_distance > 0.72:
 			return STAIR_UPPER_ANCHOR
+		_stair_commitment = StairCommitment.DESCENDING
 		_force_stair_steering = true
 		return STAIR_LOWER_ANCHOR
 	return player_target
+
+
+func _stair_commitment_destination() -> Vector3:
+	return STAIR_UPPER_ANCHOR if _stair_commitment == StairCommitment.ASCENDING else STAIR_LOWER_ANCHOR
+
+
+func _has_completed_stair_commitment() -> bool:
+	var destination := _stair_commitment_destination()
+	var planar_distance := Vector2(global_position.x - destination.x, global_position.z - destination.z).length()
+	if planar_distance <= stair_landing_radius:
+		return true
+	if _stair_commitment == StairCommitment.ASCENDING:
+		return global_position.y >= STAIR_UPPER_ANCHOR.y - 0.28
+	return global_position.y <= STAIR_LOWER_ANCHOR.y + 0.28
+
+
+func _is_point_on_stair_corridor(point: Vector3) -> bool:
+	var stair_segment := STAIR_UPPER_ANCHOR - STAIR_LOWER_ANCHOR
+	var segment_length_squared := stair_segment.length_squared()
+	if segment_length_squared <= 0.001:
+		return false
+	var progress := clampf((point - STAIR_LOWER_ANCHOR).dot(stair_segment) / segment_length_squared, 0.0, 1.0)
+	var closest_point := STAIR_LOWER_ANCHOR + stair_segment * progress
+	return point.distance_to(closest_point) <= stair_corridor_radius
+
+
+func _is_prey_right_beside_on_stairs() -> bool:
+	if not is_instance_valid(_prey):
+		return false
+	if not _is_point_on_stair_corridor(global_position) or not _is_point_on_stair_corridor(_prey.global_position):
+		return false
+	return global_position.distance_to(_prey.global_position) <= stair_close_prey_distance
 
 
 func _get_next_useful_path_point(first_point: Vector3) -> Vector3:

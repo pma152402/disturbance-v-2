@@ -15,7 +15,7 @@ func run() -> void:
 		rows[path] = {"transform":str(n.global_transform),"bounds":str(b),"disabled":n.disabled,"type":n.shape.get_class()}
 		if path.begins_with("GroundFloor/LowerNorth_ConnectorFloor") or (b.position.x < -4.8 and b.end.x > -5.7 and b.end.y > 4.3 and b.position.y < 7.5 and b.end.z > -4.1 and b.position.z < -1.8):
 			print(path, " | ", b)
-	var f := FileAccess.open("res://tools/school_collision_baseline.json", FileAccess.WRITE)
+	var f := FileAccess.open("res://tools/output/school_collision_snapshot.json", FileAccess.WRITE)
 	f.store_string(JSON.stringify(rows,"\t"))
 	f.close()
 	h.free()

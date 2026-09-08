@@ -61,7 +61,7 @@ func run() -> void:
 			await process_frame
 		await RenderingServer.frame_post_draw
 		var img := root.get_texture().get_image()
-		img.save_png("res://tools/school_assets_preview.png")
+		img.save_png("res://tools/output/school_assets_preview.png")
 		print("Preview saved.")
 	stage.queue_free()
 	await process_frame

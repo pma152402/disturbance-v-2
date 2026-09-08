@@ -77,6 +77,9 @@ func _run() -> void:
 		return
 	grandma.position = Vector3.ZERO
 	player.position = Vector3(8, 0, 8)
+	# Esta comprobación aísla el modo puramente sensorial; el nivel jugable sí
+	# activa aparte el pulso anti-espera solicitado.
+	grandma.set("supernatural_player_reveal", false)
 	grandma.set("_last_known_player_position", Vector3(0, 0, 2))
 	grandma.call(&"_begin_lost_player_search")
 	for frame in 60:

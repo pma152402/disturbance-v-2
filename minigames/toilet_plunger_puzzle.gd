@@ -11,6 +11,9 @@ var _completed := false
 var _minigame_active := false
 var _plunger_rest_position := Vector3.ZERO
 var _plunger_pump_tween: Tween
+var _active_player: Node
+var _active_layer: CanvasLayer
+var _plunger_committed := false
 
 
 func _ready() -> void:
@@ -43,14 +46,19 @@ func interact(player: Node = null) -> bool:
 func _start_skill_checks(player: Node) -> void:
 	if _minigame_active:
 		return
+	# Commit the held tool before showing its world model. Keeping both representations
+	# alive was the source of the duplicated plunger and the stuck interaction state.
+	if not player.has_method(&"consume_held_item") or not player.consume_held_item(&"plunger"):
+		return
 	_minigame_active = true
+	_plunger_committed = true
+	_active_player = player
 	var layer := SkillCheckScene.instantiate() as CanvasLayer
-	get_tree().current_scene.add_child(layer)
+	_active_layer = layer
+	get_tree().root.add_child(layer)
 	plunger_in_bowl.visible = true
 	plunger_in_bowl.position = _plunger_rest_position
 	plunger_in_bowl.scale = Vector3(0.88, 0.88, 0.88)
-	if player.has_method(&"set_plunger_minigame_pose"):
-		player.set_plunger_minigame_pose(true)
 	var skill_check := layer.get_node("SkillCheck")
 	skill_check.completed.connect(_on_skill_checks_completed.bind(player, layer))
 	skill_check.cancelled.connect(_on_skill_checks_cancelled.bind(layer))
@@ -82,15 +90,8 @@ func _on_skill_check_attempted() -> void:
 
 
 func _on_skill_checks_completed(player: Node, layer: CanvasLayer) -> void:
-	_minigame_active = false
-	if is_instance_valid(player) and player.has_method(&"set_skill_check_active"):
-		player.set_skill_check_active(false)
-	if is_instance_valid(layer):
-		layer.queue_free()
-	if not is_instance_valid(player) or not player.has_method(&"consume_held_item"):
-		return
-	if not player.consume_held_item(&"plunger"):
-		return
+	_finish_minigame_state(player, layer)
+	_plunger_committed = false
 	_completed = true
 	_show_plunger_in_bowl()
 	var key := _find_puzzle_key()
@@ -105,16 +106,31 @@ func _show_plunger_in_bowl() -> void:
 
 
 func _on_skill_checks_cancelled(layer: CanvasLayer) -> void:
-	_minigame_active = false
-	var player := get_tree().get_first_node_in_group(&"player")
-	if player != null and player.has_method(&"set_skill_check_active"):
-		player.set_skill_check_active(false)
-	if player != null and player.has_method(&"set_plunger_minigame_pose"):
-		player.set_plunger_minigame_pose(false)
+	var player := _active_player
+	_finish_minigame_state(player, layer)
 	plunger_in_bowl.visible = false
 	plunger_in_bowl.position = _plunger_rest_position
+	if _plunger_committed and is_instance_valid(player) and player.has_method(&"pick_up_plunger"):
+		player.pick_up_plunger()
+	_plunger_committed = false
+
+
+func _finish_minigame_state(player: Node, layer: CanvasLayer) -> void:
+	_minigame_active = false
+	if is_instance_valid(player) and player.has_method(&"set_skill_check_active"):
+		player.set_skill_check_active(false)
 	if is_instance_valid(layer):
 		layer.queue_free()
+	_active_player = null
+	_active_layer = null
+
+
+func _exit_tree() -> void:
+	# Never leave the player blocked if this toilet or its room is removed mid-check.
+	if is_instance_valid(_active_player) and _active_player.has_method(&"set_skill_check_active"):
+		_active_player.set_skill_check_active(false)
+	if is_instance_valid(_active_layer):
+		_active_layer.queue_free()
 
 
 func _find_puzzle_key() -> Node3D:

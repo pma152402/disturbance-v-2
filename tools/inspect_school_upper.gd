@@ -14,7 +14,7 @@ func run() -> void:
 			rows.append({"path":path,"min":[b.position.x,b.position.y,b.position.z],"max":[b.end.x,b.end.y,b.end.z]})
 			if b.size.x > 2 or b.size.z > 2:
 				print(path, " | ", b)
-	var f := FileAccess.open("res://tools/school_existing_bounds.json", FileAccess.WRITE)
+	var f := FileAccess.open("res://tools/output/school_existing_bounds.json", FileAccess.WRITE)
 	f.store_string(JSON.stringify(rows,"\t"))
 	f.close()
 	h.free()

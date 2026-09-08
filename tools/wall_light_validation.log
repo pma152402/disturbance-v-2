@@ -1,6 +1,0 @@
-Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
-
-ERROR: Failed to read the root certificate store.
-   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
-Render optimizer: 6947 details culled by distance; 54 lights managed.
-WALL LIGHTS: 15 switches, 18 resolved assignments, 0 errors; debug power bypass=true

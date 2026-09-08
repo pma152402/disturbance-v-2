@@ -49,7 +49,7 @@ func _render() -> void:
 		push_error("The active display driver cannot render the preview.")
 		quit(2)
 		return
-	var output_path := ProjectSettings.globalize_path("res://tools/companion_preview.png")
+	var output_path := ProjectSettings.globalize_path("res://tools/output/companion_preview.png")
 	var error := image.save_png(output_path)
 	if error == OK:
 		print("Companion preview saved: %s" % output_path)
@@ -63,7 +63,7 @@ func _render() -> void:
 			var sample_image := viewport.get_texture().get_image()
 			sample_image.convert(Image.FORMAT_RGBA8)
 			motion_sheet.blit_rect(sample_image, Rect2i(0, 0, 640, 720), Vector2i(sample * 640, 0))
-		motion_sheet.save_png(ProjectSettings.globalize_path("res://tools/companion_motion_preview.png"))
+		motion_sheet.save_png(ProjectSettings.globalize_path("res://tools/output/companion_motion_preview.png"))
 		quit(0)
 	else:
 		push_error("Could not save companion preview: %s" % error_string(error))

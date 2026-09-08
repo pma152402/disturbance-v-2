@@ -66,7 +66,7 @@ func run():
 	for i in 10:
 		await process_frame
 	await RenderingServer.frame_post_draw
-	root.get_texture().get_image().save_png("res://tools/office_decor_preview.png")
+	root.get_texture().get_image().save_png("res://tools/output/office_decor_preview.png")
 	stage.queue_free()
 	await process_frame
 	quit()

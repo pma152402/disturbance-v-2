@@ -74,4 +74,4 @@ func screenshot(name_: String, _camera: Camera3D) -> void:
 	for i in range(8): await process_frame
 	if DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
-		root.get_texture().get_image().save_png("res://tools/" + name_ + ".png")
+		root.get_texture().get_image().save_png("res://tools/output/" + name_ + ".png")

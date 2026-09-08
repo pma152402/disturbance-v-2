@@ -17,16 +17,7 @@ func run() -> void:
 	h = load("res://levels/house_baked.tscn").instantiate() as Node3D
 	h.set_script(null)
 	# Compare serialized rest geometry before scripts can animate old actors/doors.
-	var baseline: Dictionary
-	if FileAccess.file_exists("res://tools/school_upper_before.tscn"):
-		var before := load("res://tools/school_upper_before.tscn").instantiate() as Node3D
-		baseline = rest_colliders(before)
-		before.free()
-		var f := FileAccess.open("res://tools/school_collision_baseline.json", FileAccess.WRITE)
-		f.store_string(JSON.stringify(baseline, "\t"))
-		f.close()
-	else:
-		baseline = JSON.parse_string(FileAccess.get_file_as_string("res://tools/school_collision_baseline.json"))
+	var baseline: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://tools/fixtures/school_collision_baseline.json"))
 	var current := rest_colliders(h)
 	var unchanged := 0
 	for path in baseline:

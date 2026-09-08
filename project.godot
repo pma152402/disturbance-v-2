@@ -74,9 +74,6 @@ jump={
 
 [navigation]
 
-; El navmesh se hornea a 0,15/0,1 m. El mapa del NavigationServer debe usar la
-; misma rejilla o los bordes de regiones vecinas dejan de fundirse y los
-; NavigationLink3D se enganchan a un poligono equivocado.
 3d/default_cell_size=0.15
 3d/default_cell_height=0.1
 

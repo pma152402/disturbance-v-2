@@ -17,3 +17,13 @@ pero accesibles para el script de recorte.
 Los modelos que aparecen en las manos del jugador se agrupan en
 `player/held_items`, y los scripts de cada objeto permanecen junto a su escena
 en `house_props`.
+
+## Organización y resultados
+
+- Los scripts validate_* y check_* son validaciones reutilizables; audit_* e inspect_* son diagnósticos.
+- fixtures/ conserva las referencias JSON necesarias para las pruebas.
+- output/ contiene capturas e informes regenerables. Está excluida de Git y de la importación de Godot; conservar su .gdignore.
+- Los constructores build_* y las migraciones restantes modifican escenas: no ejecutarlos como una suite de pruebas.
+- validate_resource_paths.ps1 comprueba referencias literales sin iniciar Godot.
+
+Véase ../docs/CLEANUP_2026-09-08.md para el detalle de la limpieza.

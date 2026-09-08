@@ -37,7 +37,7 @@ func _run() -> void:
 		primitives / 180,
 	]
 	print(report)
-	var report_file := FileAccess.open("res://tools/full_benchmark_current.log", FileAccess.WRITE)
+	var report_file := FileAccess.open("res://tools/output/full_benchmark_current.log", FileAccess.WRITE)
 	if report_file != null:
 		report_file.store_line(report)
 	quit(0)

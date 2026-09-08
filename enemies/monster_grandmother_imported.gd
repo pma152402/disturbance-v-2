@@ -31,7 +31,9 @@ const LIGHT_SCAN_INTERVAL := 0.18
 @export var search_step_seconds := 1.05
 @export var search_sweep_radius := 1.45
 @export_group("Revelado anti-espera")
-@export var supernatural_player_reveal := false
+# Evita que una partida se estanque si luces, pasos y visión no producen ninguna
+# pista durante demasiado tiempo. Es un pulso breve, no seguimiento omnisciente.
+@export var supernatural_player_reveal := true
 @export var reveal_after_seconds := 20.0
 @export var reveal_live_seconds := 1.0
 @export var reveal_reset_distance := 6.0
@@ -95,6 +97,7 @@ func _ready() -> void:
 	super._ready()
 	_waiting_covered_eyes = false
 	_player_has_moved = true
+	_reveal_countdown = reveal_after_seconds
 	if dormant_until_door_opens:
 		call_deferred(&"_arm_dormant_monitor")
 

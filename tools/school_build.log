@@ -1,6 +1,0 @@
-Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
-
-ERROR: Failed to read the root certificate store.
-   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
-SAVED res://house_props/school_double_door.tscn ; rigid mesh groups: 3
-SAVED res://house_props/school_lockers.tscn ; rigid mesh groups: 1

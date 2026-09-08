@@ -30,6 +30,8 @@ func _run() -> void:
 	if monster == null or lamp == null:
 		_fail("Faltan la grandmother o la lámpara de prueba")
 		return
+	# Aislamos luz y patrulla del pulso global; se reactiva y comprueba abajo.
+	monster.set("supernatural_player_reveal", false)
 	monster.set("light_wander_radius", 100.0)
 	monster.set("static_light_attention_seconds", 0.6)
 	lamp.call(&"set_lamp_enabled", true)
@@ -76,7 +78,7 @@ func _run() -> void:
 		_fail("Falta el jugador para probar el revelado anti-espera")
 		return
 	player.global_position = monster.global_position + Vector3(12.0, 0.0, 0.0)
-	# test.tscn deja el revelado desactivado; hay que armarlo para poder medirlo.
+	# Acortamos el sistema activo del nivel para poder medirlo sin esperar 20 s.
 	monster.set("supernatural_player_reveal", true)
 	monster.set("reveal_after_seconds", 0.2)
 	monster.set("reveal_live_seconds", 0.3)

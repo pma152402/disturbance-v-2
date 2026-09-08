@@ -1,5 +1,7 @@
 extends Node3D
 
+const ContinuousArm := preload("res://enemies/granny_continuous_arm.gd")
+
 ## Adaptador visual del rig editable a los estados de monster_grandmother.gd.
 ## Todas las poses son offsets sobre la colocacion guardada en la escena, de
 ## modo que los ajustes manuales de brazos, manos y cabeza no se pierden.
@@ -28,6 +30,7 @@ const STATE_EAT := 5
 @onready var _left_shoulder: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot
 @onready var _left_elbow: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot
 @onready var _left_wrist: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot
+@onready var _left_palm: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot/LeftPalm
 @onready var _left_shoulder_joint: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftShoulderJoint
 @onready var _left_sleeve: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftDressSleeve
 @onready var _left_upper_arm: MeshInstance3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftUpperArm
@@ -37,6 +40,7 @@ const STATE_EAT := 5
 @onready var _right_shoulder: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot
 @onready var _right_elbow: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot
 @onready var _right_wrist: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot
+@onready var _right_palm: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot/RightPalm
 @onready var _right_shoulder_joint: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightShoulderJoint
 @onready var _right_sleeve: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightDressSleeve
 @onready var _right_upper_arm: MeshInstance3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightUpperArm
@@ -66,6 +70,7 @@ var _right_lower_rest_direction := Vector3.DOWN
 var _skin_material: StandardMaterial3D
 var _previous_yaw := 0.0
 var _lean_amount := 0.0
+var _continuous_arms: Array[MeshInstance3D] = []
 
 
 func _ready() -> void:
@@ -88,13 +93,8 @@ func _ready() -> void:
 	_neck_seal.visible = false
 	_remove_unused_hair_nodes()
 	_remove_round_joint_markers()
-	_left_sleeve.scale *= Vector3(0.92, 1.02, 0.88)
-	_right_sleeve.scale *= Vector3(0.92, 1.02, 0.88)
-	_refine_limb_shape(_left_upper_arm)
-	_refine_limb_shape(_left_forearm)
-	_refine_limb_shape(_right_upper_arm)
-	_refine_limb_shape(_right_forearm)
 	_apply_muted_skin_material()
+	_install_continuous_arms()
 	_base_rig_rotation = _rig.quaternion
 	_base_head_rotation = _head.quaternion
 	_base_left_shoulder = _left_shoulder.quaternion
@@ -172,6 +172,40 @@ func _physics_process(delta: float) -> void:
 
 	_lock_head_to_body(state, delta)
 	_apply_body_motion(delta, state, moving, duck_amount, waiting_covered_eyes, crossing_door)
+	for arm in _continuous_arms:
+		arm.update_surface()
+
+
+func _install_continuous_arms() -> void:
+	var torso_mesh := _rig.get_node("Body") as MeshInstance3D
+	_fit_torso_shoulders(torso_mesh)
+	for chain in [[_left_shoulder, _left_elbow, _left_wrist], [_right_shoulder, _right_elbow, _right_wrist]]:
+		var arm := ContinuousArm.new()
+		arm.name = "ContinuousArmLeft" if chain[0] == _left_shoulder else "ContinuousArmRight"
+		_rig.add_child(arm)
+		arm.configure(chain[0], chain[1], chain[2], torso_mesh, _skin_material)
+		_continuous_arms.append(arm)
+	for old_piece in [_left_upper_arm, _left_forearm, _right_upper_arm, _right_forearm, _left_sleeve, _right_sleeve]:
+		old_piece.visible = false
+
+
+func _fit_torso_shoulders(torso_mesh: MeshInstance3D) -> void:
+	# Fold the remaining original sleeve panels into the chest silhouette.
+	# Keep the exported closing surfaces; deleting those would open the dress.
+	var fitted := ArrayMesh.new()
+	for surface in torso_mesh.mesh.get_surface_count():
+		var arrays := torso_mesh.mesh.surface_get_arrays(surface)
+		var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+		for index in vertices.size():
+			var point := vertices[index]
+			if point.y > 5.0:
+				var half_width := lerpf(1.65, 1.15, clampf((point.y - 5.0) / 4.4, 0.0, 1.0))
+				point.x = clampf(point.x, -half_width, half_width)
+				vertices[index] = point
+		arrays[Mesh.ARRAY_VERTEX] = vertices
+		fitted.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+		fitted.surface_set_material(surface, torso_mesh.get_active_material(surface))
+	torso_mesh.mesh = fitted
 
 
 func _apply_door_cross_pose(delta: float) -> void:
@@ -206,7 +240,10 @@ func _apply_locomotion_pose(delta: float, state: int, moving: float) -> void:
 	var chase_amount := 1.0 if state == STATE_CHASE else 0.0
 	var target_center := _body.global_position + Vector3.UP * (resting_hand_height + breathing + chase_amount * 0.08)
 	target_center += forward * (resting_hand_forward + chase_amount * 0.22)
-	var left_target := target_center + side * resting_hand_width + forward * stride
+	# La palma izquierda del asset tiene el centro desplazado hacia fuera unos
+	# centímetros más que la derecha. Compensamos esa asimetría visual aquí para
+	# que ambas manos descansen a la misma distancia del vestido.
+	var left_target := target_center + side * (resting_hand_width - 0.075) + forward * stride
 	var right_target := target_center - side * resting_hand_width - forward * stride
 	_pose_arm_ik(
 		_left_shoulder, _left_elbow, _left_wrist,
@@ -255,25 +292,34 @@ func _apply_covered_eyes_pose(delta: float) -> void:
 	var face_right := _body.global_basis.x.normalized()
 	# El nodo de ojos del GLB conserva un origen exportado incorrecto; la cara
 	# visible esta centrada respecto a HeadPivot.
-	# El pivote de la muneca debe quedar por encima del ojo porque la palma del
-	# modelo cuelga unos centimetros por debajo de ese pivote.
-	var eye_center := _head.global_position + Vector3.UP * 0.235 + face_forward * 0.07
+	# Apuntamos con el centro visible de las palmas, no con el pivote de muñeca.
+	# En este asset ambas palmas tienen offsets distintos; usar directamente el
+	# mismo destino para las muñecas colocaba una mano detrás de la cabeza.
+	var eye_center := _head.global_position + Vector3.UP * 0.205 + face_forward * 0.18
+	_pose_node(_left_wrist, _offset_pose(_base_left_wrist, 0.02, 0.0, -0.08), delta, 10.0)
+	_pose_node(_right_wrist, _offset_pose(_base_right_wrist, 0.02, 0.0, 0.08), delta, 10.0)
+	var left_palm_target := eye_center + face_right * 0.105
+	var right_palm_target := eye_center - face_right * 0.105
 	_pose_arm_ik(
 		_left_shoulder, _left_elbow, _left_wrist,
 		_base_left_shoulder, _base_left_elbow,
 		_left_upper_rest_direction, _left_lower_rest_direction,
-		eye_center + face_right * 0.115 + Vector3.DOWN * 0.035,
+		_correct_wrist_target_for_palm(_left_wrist, _left_palm, left_palm_target),
 		1.0, delta, 7.5
 	)
 	_pose_arm_ik(
 		_right_shoulder, _right_elbow, _right_wrist,
 		_base_right_shoulder, _base_right_elbow,
 		_right_upper_rest_direction, _right_lower_rest_direction,
-		eye_center - face_right * 0.115 + Vector3.DOWN * 0.035,
+		_correct_wrist_target_for_palm(_right_wrist, _right_palm, right_palm_target),
 		-1.0, delta, 7.5
 	)
-	_pose_node(_left_wrist, _offset_pose(_base_left_wrist, 0.08, 0.0, -0.18), delta, 8.0)
-	_pose_node(_right_wrist, _offset_pose(_base_right_wrist, 0.08, 0.0, 0.18), delta, 8.0)
+
+
+func _correct_wrist_target_for_palm(wrist: Node3D, palm: Node3D, desired_palm_position: Vector3) -> Vector3:
+	# El offset se recalcula durante la transición, de modo que la mano converge
+	# al punto correcto aunque la muñeca esté girando a la vez.
+	return desired_palm_position - (palm.global_position - wrist.global_position)
 
 
 func _apply_reaching_pose(delta: float) -> void:
@@ -447,20 +493,37 @@ func _remove_round_joint_markers() -> void:
 			seal.visible = false
 
 
-func _refine_limb_shape(limb: Node3D) -> void:
-	# Un poco mas largos para solapar el corte del codo y mas estrechos para
-	# recuperar una proporcion humana, sin volver a introducir bolas de union.
-	limb.scale *= Vector3(0.88, 1.18, 0.88)
-
-
 func _apply_muted_skin_material() -> void:
 	_skin_material = StandardMaterial3D.new()
-	_skin_material.albedo_color = Color(0.48, 0.34, 0.31, 1.0)
+	# Parte del tono secundario real de la cara y añade el moteado que sí tiene
+	# su textura. El material anterior era uniforme y por eso se leían los brazos
+	# como cilindros marrones aun teniendo un RGB relativamente cercano.
+	_skin_material.albedo_color = Color(0.78, 0.77, 0.75, 1.0)
+	_skin_material.albedo_texture = _build_aged_skin_texture()
 	_skin_material.roughness = 0.96
 	for shoulder in [_left_shoulder, _right_shoulder]:
 		for mesh in _collect_meshes(shoulder):
 			if "DressSleeve" not in mesh.name:
 				mesh.material_override = _skin_material
+
+
+func _build_aged_skin_texture() -> ImageTexture:
+	var image := Image.create(64, 64, false, Image.FORMAT_RGBA8)
+	var random := RandomNumberGenerator.new()
+	random.seed = 4917
+	for y in 64:
+		for x in 64:
+			var broad := sin(x * 0.31 + y * 0.17) * 0.045 + sin(x * 0.09 - y * 0.23) * 0.025
+			var pores := random.randf_range(-0.025, 0.02)
+			var bruise := maxf(0.0, sin(x * 0.16 + 1.8) * sin(y * 0.13 - 0.7)) * 0.065
+			image.set_pixel(x, y, Color(
+				clampf(0.84 + broad + pores - bruise * 0.45, 0.68, 0.94),
+				clampf(0.825 + broad * 0.85 + pores - bruise * 0.8, 0.65, 0.92),
+				clampf(0.81 + broad * 0.75 + pores - bruise, 0.62, 0.9),
+				1.0
+			))
+	image.generate_mipmaps()
+	return ImageTexture.create_from_image(image)
 
 
 func _collect_meshes(root_node: Node) -> Array[MeshInstance3D]:

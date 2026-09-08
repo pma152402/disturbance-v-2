@@ -1,8 +1,0 @@
-Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
-
-ERROR: Failed to read the root certificate store.
-   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
-Exterior forest ready: 220 trees, AABB [P: (0.0, 0.0, 0.0), S: (0.0, 0.0, 0.0)]
-Exterior vegetation ready: 4600 varied clumps
-Runtime house navigation ready
-PERFORMANCE_INVENTORY {"AnimatableBody3D":19,"Area3D":38,"AudioStreamPlayer":6,"AudioStreamPlayer3D":61,"BackBufferCopy":1,"CPUParticles3D":2,"CSGBox3D":9,"CSGCombiner3D":1,"CSGCylinder3D":10,"CSGMesh3D":1,"CSGPolygon3D":8,"CSGSphere3D":1,"Camera3D":1,"CanvasLayer":8,"CharacterBody3D":7,"CollisionShape3D":740,"ColorRect":14,"Control":5,"DirectionalLight3D":1,"GPUParticles3D":4,"GPUParticlesCollisionBox3D":3,"HBoxContainer":1,"Label":14,"Label3D":71,"Marker3D":28,"MeshInstance3D":6931,"MultiMeshInstance3D":181,"NavigationAgent3D":2,"NavigationLink3D":1,"NavigationRegion3D":1,"Node":1,"Node3D":864,"OmniLight3D":48,"Panel":1,"PanelContainer":3,"ProgressBar":1,"RayCast3D":11,"RigidBody3D":23,"ShapeCast3D":1,"SpotLight3D":30,"StaticBody3D":645,"TextureRect":1,"WorldEnvironment":1}

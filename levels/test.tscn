@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://4dg6d2nyvkm" path="res://sounds/ambient/indoor_weather_audio.gd" id="10_indoor_weather"]
 [ext_resource type="PackedScene" path="res://systems/runtime_house_navigation.tscn" id="11_runtime_navigation"]
 [ext_resource type="PackedScene" uid="uid://d2nkf5x4tmuwa" path="res://enemies/monster_grandmother.tscn" id="12_monster_grandmother"]
+[ext_resource type="Script" uid="uid://dnxlh2257qini" path="res://systems/camera_battery_indicator.gd" id="13_camera_battery"]
 [ext_resource type="PackedScene" uid="uid://btj1tf3hf2k6t" path="res://enemies/monster_grandmother_imported.tscn" id="15_imported_grandmother"]
 [ext_resource type="PackedScene" uid="uid://c0dwhce1bymdn" path="res://sounds/ambient/wood_cracking_ambience.tscn" id="16_wood_cracking"]
 
@@ -240,7 +241,7 @@ process_mode = 4
 transform = Transform3D(-0.24663237, 0, -0.9691091, 0, 1, 0, 0.9691091, 0, -0.24663237, 10.15, 4.35, 8.65)
 
 [node name="ImportedGrandmotherGroundFloor" parent="." unique_id=1485663130 instance=ExtResource("15_imported_grandmother")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -12.154203, 0.18374014, -3.5844693)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.0501447, 1.0776441, -36.835663)
 remain_still = false
 dormant_until_door_opens = false
 activation_door_path = NodePath("")
@@ -248,11 +249,13 @@ close_player_distance = 1.2
 close_player_memory_seconds = 0.85
 light_detection_distance = 13.0
 same_floor_player_tolerance = 1.35
+ledge_detection_distance = 7.0
 same_floor_light_tolerance = 4.4
 flashlight_memory_seconds = 2.4
 static_light_memory_seconds = 0.8
 light_wander_radius = 1.15
 static_light_attention_seconds = 5.0
+light_off_confirm_seconds = 0.7
 static_light_approach_timeout = 8.0
 player_pursuit_break_distance = 8.0
 player_hidden_memory_seconds = 1.8
@@ -262,11 +265,14 @@ footstep_interest_seconds = 1.6
 lost_player_search_seconds = 8.0
 search_step_seconds = 1.05
 search_sweep_radius = 1.45
-supernatural_player_reveal = false
+supernatural_player_reveal = true
 reveal_after_seconds = 20.0
 reveal_live_seconds = 1.0
 reveal_reset_distance = 6.0
 reveal_search_seconds = 12.0
+patrol_roams_house = true
+roam_radius = 34.0
+roam_minimum_distance = 6.0
 patrol_offset_a = Vector3(-4.2, 0, 0)
 patrol_offset_b = Vector3(1.8, 0, -4.6)
 patrol_wait_min = 1.4
@@ -362,10 +368,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -390.0
-offset_top = 30.0
+offset_left = -285.0
+offset_top = 18.0
 offset_right = -38.0
-offset_bottom = 88.0
+offset_bottom = 76.0
 grow_horizontal = 0
 theme_override_colors/font_color = Color(0.86, 0.9, 0.83, 0.86)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
@@ -375,8 +381,9 @@ theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
 theme_override_fonts/font = ExtResource("8_pixel_font")
 theme_override_font_sizes/font_size = 34
-text = "BAT [|||]"
-horizontal_alignment = 2
+text = "BAT"
+vertical_alignment = 1
+script = ExtResource("13_camera_battery")
 
 [node name="FPS" type="Label" parent="PS2PostProcess/CameraHUD" unique_id=1521398124]
 layout_mode = 1

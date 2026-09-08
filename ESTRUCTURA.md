@@ -3,7 +3,7 @@
 Mapa de carpetas de `DisturbanceV2`. Describe **lo que hay hoy**, incluida la raíz
 sin ordenar: no es una propuesta de reorganización.
 
-Escena de arranque: `test.tscn`. Todo lo que se ve en pantalla cuelga de ahí.
+Escena de arranque: `levels/test.tscn`. Todo lo que se ve en pantalla cuelga de ahí.
 
 ## Carpetas
 
@@ -60,9 +60,7 @@ originales** para poder actualizarlos. No los reordenes.
 importa. Nada de aquí llega al juego. `legacy_resources/` guarda recursos sin
 referencias en lugar de borrarlos.
 
-**`tools/`** — 54 `validate_*.gd`, 10 `audit_*.gd`, 5 constructores, 5 scripts de
-Python y 46 `.log` históricos. Los `validate_*` son la suite de pruebas del
-proyecto (ver `CLAUDE.md`).
+**`tools/`** — validaciones, diagnósticos y generadores. `fixtures/` contiene entradas de pruebas; `output/` contiene resultados regenerables ignorados por Git y Godot. Véase `tools/README.md`.
 
 ## Convenciones de colocación
 
@@ -78,12 +76,6 @@ El proyecto tiene **457 rutas `res://` escritas a mano** en scripts y **415
 `ext_resource` sin UID** en escenas, que van por ruta y no se actualizan solos.
 Mover un archivo a mano deja referencias rotas silenciosas.
 
-Comprobación rápida de que no queda ninguna rota:
+Comprobación de rutas literales:
 
-```bash
-grep -rhoE 'res://[A-Za-z0-9_ ()./-]+[.](gd|tscn|tres|gdshader)'   --include=*.gd --include=*.tscn --include=*.tres --include=*.godot .   | sort -u | while read r; do p="${r#res://}"; [ -e "$p" ] || echo "ROTA: $r"; done
-```
-
-Hoy devuelve cuatro rutas rotas que ya lo estaban de antes:
-`keyhole_overlay.gdshader`, `stairwell_guardrail_collision.tres`,
-`stairwell_guardrail_mesh.tres` y `tools/school_upper_before.tscn`.
+powershell -ExecutionPolicy Bypass -File tools/validate_resource_paths.ps1

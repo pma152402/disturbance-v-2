@@ -6,7 +6,7 @@ func _init() -> void:
 	var collisions := {}
 	collect(scene, Transform3D.IDENTITY, geometry, collisions)
 	var snapshot := {"geometry": geometry, "collisions": collisions}
-	var path := "res://tools/school_edit_geometry.json"
+	var path := "res://tools/fixtures/school_edit_geometry.json"
 	# Baseline captured from the original merged scene before conversion.
 	if FileAccess.file_exists(path):
 		var before: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))

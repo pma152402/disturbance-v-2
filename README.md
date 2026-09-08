@@ -4,8 +4,8 @@ Juego de terror en primera persona hecho con Godot 4 y renderer Forward+.
 
 ## Escenas principales
 
-- `test.tscn`: escena de arranque; integra casa, jugador, exterior, clima y postprocesado.
-- `house_baked.tscn`: mapa editable y decoracion de la casa.
+- `levels/test.tscn`: escena de arranque; integra casa, jugador, exterior, clima y postprocesado.
+- `levels/house_baked.tscn`: mapa editable y decoracion de la casa.
 - `player/player.tscn`: personaje, camara, manos, interaccion y audio de movimiento.
 
 ## Organizacion

@@ -334,7 +334,15 @@ func _input(event: InputEvent) -> void:
 			_request_stance(Stance.STANDING)
 		if pressed_key == KEY_R:
 			get_viewport().set_input_as_handled()
-			get_tree().call_deferred(&"reload_current_scene")
+			get_tree().call_group(&"camera_recorder", &"toggle_recording")
+			return
+		if pressed_key == KEY_TAB:
+			get_viewport().set_input_as_handled()
+			get_tree().call_group(&"camera_recorder", &"toggle_playback")
+			return
+		if pressed_key == KEY_CAPSLOCK:
+			get_viewport().set_input_as_handled()
+			get_tree().call_group(&"camera_recorder", &"toggle_avdv")
 			return
 		if is_instance_valid(_freezer_controller):
 			if pressed_key == KEY_F:

@@ -23,7 +23,13 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	get_viewport().size_changed.connect(_fit_to_viewport)
 	_start_check(0)
+	queue_redraw()
+
+
+func _fit_to_viewport() -> void:
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	queue_redraw()
 
 

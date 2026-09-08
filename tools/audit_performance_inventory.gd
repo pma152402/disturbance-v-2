@@ -21,7 +21,7 @@ func _run() -> void:
 		await physics_frame
 	_scan(game)
 	var result := {"engine": Engine.get_version_info().string, "note": "Inventario tras 120 ticks; no es benchmark de FPS. Visible no implica dentro del frustum.", "elapsed_including_load_ms": Time.get_ticks_msec() - started, "counts": counts, "active_scripts": scripts, "branches": branches, "lights": lights, "multimeshes": multimeshes, "unique_mesh_resources": meshes.size(), "occlusion_enabled": root.use_occlusion_culling}
-	var output := FileAccess.open("res://tools/performance_inventory.json", FileAccess.WRITE)
+	var output := FileAccess.open("res://tools/output/performance_inventory.json", FileAccess.WRITE)
 	output.store_string(JSON.stringify(result, "\t"))
 	output.close()
 	print("PERFORMANCE_INVENTORY ", JSON.stringify(counts))

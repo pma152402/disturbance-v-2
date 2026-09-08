@@ -4,6 +4,12 @@
 [ext_resource type="PackedScene" uid="uid://bxs0yptey3210" path="res://characters/granny_editable/granny_editable_rig.glb" id="2_model"]
 [ext_resource type="Script" uid="uid://bheamlmppqwb5" path="res://enemies/monster_grandmother_imported.gd" id="3_controller"]
 [ext_resource type="Script" uid="uid://cgwfngdqbx0j1" path="res://enemies/granny_editable_visual_animator.gd" id="4_animator"]
+[ext_resource type="Script" path="res://enemies/granny_floating_hair.gd" id="5_hair_controller"]
+[ext_resource type="Shader" path="res://enemies/granny_floating_hair.gdshader" id="6_hair_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_floating_hair"]
+render_priority = 1
+shader = ExtResource("6_hair_shader")
 
 [sub_resource type="StandardMaterial3D" id="Material_dress_repair"]
 albedo_color = Color(0.64, 0.63, 0.61, 1)
@@ -37,8 +43,13 @@ remain_still = true
 visible = false
 
 [node name="EditableVisual" type="Node3D" parent="." index="8" unique_id=1381199113]
-transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 0.18, 0, 0, 0)
+transform = Transform3D(0.207, 0, 0, 0, 0.207, 0, 0, 0, 0.207, 0, 0, 0)
 script = ExtResource("4_animator")
+
+[node name="FloatingHair" type="MeshInstance3D" parent="." index="9"]
+material_override = SubResource("ShaderMaterial_floating_hair")
+script = ExtResource("5_hair_controller")
+head_path = NodePath("../EditableVisual/CleanModel/EditableGrannyRig/HeadPivot")
 
 [node name="CleanModel" parent="EditableVisual" index="0" unique_id=217428942 instance=ExtResource("2_model")]
 

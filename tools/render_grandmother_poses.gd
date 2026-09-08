@@ -26,7 +26,7 @@ func _run() -> void:
 	viewport.add_child(camera)
 	camera.position = Vector3(1.6, 1.4, 3.0)
 	camera.look_at(Vector3(0, 1.1, 0))
-	camera.fov = 40
+	camera.fov = 46
 	camera.make_current()
 	var actor := (load("res://enemies/monster_grandmother_imported.tscn") as PackedScene).instantiate()
 	viewport.add_child(actor)
@@ -36,6 +36,10 @@ func _run() -> void:
 	actor.set("_last_known_player_position", Vector3(0, 0, 2))
 	var sheet := Image.create(480 * 3, 600 * 2, false, Image.FORMAT_RGBA8)
 	for pose in 6:
+		camera.position = Vector3(1.6, 1.4, 3.0) if pose != 5 else Vector3(1.7, 0.9, 2.8)
+		if "--back" in OS.get_cmdline_user_args():
+			camera.position.z *= -1.0
+		camera.look_at(Vector3(0, 1.1, 0) if pose != 5 else Vector3(0, 0.45, 0.2))
 		actor.set("current_state", [0,3,2,4,0,5][pose])
 		actor.set("_waiting_covered_eyes", pose == 4)
 		actor.set("_door_traversal_active", pose == 2)
@@ -50,7 +54,9 @@ func _run() -> void:
 		shot.convert(Image.FORMAT_RGBA8)
 		sheet.blit_rect(shot, Rect2i(0,0,480,600), Vector2i((pose % 3) * 480, (pose / 3) * 600))
 	var suffix := "before" if "--before" in OS.get_cmdline_user_args() else "after"
-	var path := "res://tools/grandmother_poses_%s.png" % suffix
+	if "--back" in OS.get_cmdline_user_args():
+		suffix += "_back"
+	var path := "res://tools/output/grandmother_poses_%s.png" % suffix
 	sheet.save_png(ProjectSettings.globalize_path(path))
 	print("POSE SHEET: " + path)
 	quit(0)

@@ -15,18 +15,6 @@ func _ready() -> void:
 	_refresh()
 
 
-func get_interaction_key() -> Key:
-	return KEY_F
-
-
-func get_interaction_text(_player: Node = null) -> String:
-	return "F  LEER CUADRO"
-
-
-func interact(_player: Node = null) -> bool:
-	return false
-
-
 func _refresh() -> void:
 	if not is_inside_tree():
 		return
