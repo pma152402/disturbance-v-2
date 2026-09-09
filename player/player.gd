@@ -2157,8 +2157,11 @@ func _drop_selected_inventory_item() -> void:
 			pickup_scene = CrowbarPickupScene
 		var dropped_pickup := pickup_scene.instantiate() as Node3D
 		scene_root.add_child(dropped_pickup)
-		dropped_pickup.global_position = drop_position
-		dropped_pickup.rotation = Vector3(0.0, rotation.y, 0.12 if item_type == &"crowbar" else 0.0)
+		dropped_pickup.global_position = drop_position + Vector3.UP * 0.22
+		var drop_tilt := 0.34 if item_type == &"plunger" else (0.48 if item_type == &"crowbar" else 0.62)
+		dropped_pickup.global_rotation = Vector3(0.18, rotation.y, drop_tilt)
+		if dropped_pickup.has_method(&"set_dropped"):
+			dropped_pickup.call(&"set_dropped", velocity * 0.16 + forward * 0.42)
 
 	_clear_inventory_item(item_type)
 	_tool_inventory.erase(item_type)

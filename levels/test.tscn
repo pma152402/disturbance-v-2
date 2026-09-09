@@ -233,7 +233,7 @@ transform = Transform3D(0.9835713, 0, 0.18051943, 0, 1, 0, -0.18051943, 0, 0.983
 
 [node name="Player" parent="." unique_id=546288329 instance=ExtResource("1_player")]
 editor_description = "Spawn de prueba en el pasillo, fuera del sótano y mirando hacia su puerta, con todas las llaves."
-transform = Transform3D(0.9835713, 0, 0.18051943, 0, 1, 0, -0.18051943, 0, 0.9835713, 0.7585788, 1.3244749, -24.588749)
+transform = Transform3D(0.9835713, 0, 0.18051943, 0, 1, 0, -0.18051943, 0, 0.9835713, 0.7585788, 1.3244749, 8.066787)
 starts_with_lit_candle = true
 debug_all_keys = true
 

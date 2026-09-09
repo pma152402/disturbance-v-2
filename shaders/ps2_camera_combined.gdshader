@@ -53,6 +53,10 @@ void fragment() {
 	float edge_blur = smoothstep(0.18, 1.15, lens_radius) * 0.24;
 	vec2 soft_uv = clamp(uv + vec2(block.x * 1.5, block.y), vec2(0.0), vec2(1.0));
 	source = mix(source, texture(screen_texture, soft_uv).rgb, edge_blur);
+	// La marca magenta solo la emite el material de grietas. Se detecta antes
+	// de desaturar para preservar su legibilidad sin analizar colores de la escena.
+	float crack_marker = smoothstep(0.24, 0.54, min(source.r, source.b) - source.g)
+		* smoothstep(0.42, 0.76, min(source.r, source.b));
 	float flicker = 0.965 + hash21(vec2(frame, 4.0)) * 0.055;
 	source *= flicker;
 	float luminance = dot(source, vec3(0.299, 0.587, 0.114));
@@ -72,5 +76,7 @@ void fragment() {
 	limited *= 0.82;
 	vec3 minimum_edge_light = vec3(0.002, 0.0022, 0.002) * vignette;
 	limited = max(limited * (1.0 - vignette * vignette_strength), minimum_edge_light);
+	vec3 readable_crack = vec3(0.78, 0.91, 0.98) * flicker * (0.82 + scanline * 0.18);
+	limited = mix(limited, readable_crack, crack_marker * 0.74);
 	COLOR = vec4(limited, 1.0);
 }

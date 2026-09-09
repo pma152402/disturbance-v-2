@@ -349,9 +349,10 @@ func _run() -> void:
 		_fail("El archivo vacío no muestra el cassette grande con símbolo de prohibido")
 		return
 	var empty_cassette_source := FileAccess.get_file_as_string("res://systems/camera_empty_archive_cassette.gd")
-	if "PROHIBITED_RADIUS := 205.0" not in empty_cassette_source \
+	if "PROHIBITED_RADIUS := 300.0" not in empty_cassette_source \
+			or "BLACK_PLASTIC" not in empty_cassette_source or "EDGE_PLASTIC" not in empty_cassette_source \
 			or "BODY_LIGHT" in empty_cassette_source or "SYMBOL :=" in empty_cassette_source:
-		_fail("El cassette vacío no usa el símbolo superpuesto grande y su paleta oscura de dos tonos")
+		_fail("El cassette vacío no conserva el diseño simple y suave del casete 3D")
 		return
 	if not volume_indicator.visible or volume_indicator.get_child_count() != 5:
 		_fail("Falta el indicador VOL decorativo de cuatro niveles")

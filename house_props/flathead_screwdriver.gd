@@ -1,4 +1,4 @@
-extends StaticBody3D
+extends RigidBody3D
 
 @export var tool_id: StringName = &"flathead_screwdriver"
 @export var tool_name := "DESTORNILLADOR PLANO"
@@ -22,6 +22,7 @@ func interact(player: Node = null) -> bool:
 	if not bool(player.call(&"pick_up_screwdriver")):
 		return false
 	_collected = true
+	freeze = true
 	collision_layer = 0
 	for child in get_children():
 		if child is CollisionShape3D:
@@ -33,3 +34,17 @@ func interact(player: Node = null) -> bool:
 	tween.tween_property(self, "scale", Vector3.ONE * 0.03, 0.24)
 	tween.chain().tween_callback(queue_free)
 	return true
+
+
+func set_dropped(inherited_velocity := Vector3.ZERO) -> void:
+	_collected = false
+	collision_layer = 2
+	collision_mask = 1
+	freeze = false
+	sleeping = false
+	linear_velocity = inherited_velocity + Vector3.UP * 0.06
+	angular_velocity = Vector3(
+		randf_range(-2.8, 2.8),
+		randf_range(-2.0, 2.0),
+		randf_range(-3.2, 3.2)
+	)

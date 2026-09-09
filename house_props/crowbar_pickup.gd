@@ -1,4 +1,4 @@
-extends StaticBody3D
+extends RigidBody3D
 
 @export var tool_id: StringName = &"crowbar"
 @export var tool_name := "PALANCA"
@@ -22,6 +22,7 @@ func interact(player: Node = null) -> bool:
 	if not player.pick_up_crowbar():
 		return false
 	_collected = true
+	freeze = true
 	collision_layer = 0
 	for child in get_children():
 		if child is CollisionShape3D:
@@ -35,3 +36,17 @@ func interact(player: Node = null) -> bool:
 	tween.tween_property(self, "scale", Vector3.ONE * 0.03, 0.24)
 	tween.chain().tween_callback(queue_free)
 	return true
+
+
+func set_dropped(inherited_velocity := Vector3.ZERO) -> void:
+	_collected = false
+	collision_layer = 2
+	collision_mask = 1
+	freeze = false
+	sleeping = false
+	linear_velocity = inherited_velocity + Vector3.UP * 0.08
+	angular_velocity = Vector3(
+		randf_range(-1.8, 1.8),
+		randf_range(-1.2, 1.2),
+		randf_range(-2.2, 2.2)
+	)

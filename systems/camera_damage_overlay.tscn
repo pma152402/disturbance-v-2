@@ -19,6 +19,7 @@ shader_parameter/white_mix = 0.0
 shader_parameter/crack_tint = Color(0.56, 0.9, 1, 1)
 shader_parameter/tint_mix = 0.0
 shader_parameter/edge_thickness = 1.0
+shader_parameter/postfilter_readability = 0.0
 
 [node name="CameraDamageOverlay" type="CanvasLayer"]
 # La grieta forma parte de la imagen de camara y atraviesa su postproceso.

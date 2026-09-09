@@ -943,7 +943,8 @@ func _build_volume_indicator(camera_font: Font) -> void:
 	_playback_volume_indicator.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_playback_volume_indicator)
 	var volume_label := Label.new()
-	volume_label.position = Vector2.ZERO
+	# Corrección óptica: el glifo de esta fuente queda alto dentro de su caja.
+	volume_label.position = Vector2(0.0, 3.0)
 	volume_label.size = Vector2(108.0, 78.0)
 	volume_label.text = "VOL"
 	volume_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER

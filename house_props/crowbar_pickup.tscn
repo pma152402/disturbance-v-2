@@ -48,9 +48,13 @@ radial_segments = 10
 radius = 0.11
 height = 1.78
 
-[node name="CrowbarPickup" type="StaticBody3D" unique_id=1875665869]
+[node name="CrowbarPickup" type="RigidBody3D" unique_id=1875665869]
 editor_description = "Palanca de acero rojo desgastado con gancho curvo, uña de palanca y metal expuesto. Se recoge con F."
+mass = 2.2
+freeze = true
+continuous_cd = true
 collision_layer = 2
+collision_mask = 1
 script = ExtResource("1_script")
 
 [node name="Visual" type="Node3D" parent="." unique_id=1537882401]

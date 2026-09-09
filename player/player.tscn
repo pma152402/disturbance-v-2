@@ -241,15 +241,20 @@ visible = false
 [node name="HeldPlunger" parent="Head/Camera3D/RightHandRig" unique_id=1252743930 instance=ExtResource("9_plunger")]
 transform = Transform3D(0.68443674, -0.2172239, -0.05253784, 0.21924244, 0.6197896, 0.29358754, -0.04334975, -0.29508418, 0.6553214, 0.42, -0.57, -0.48)
 visible = false
+collision_layer = 0
+collision_mask = 0
 
 [node name="HeldCrowbar" parent="Head/Camera3D/RightHandRig" unique_id=1164428919 instance=ExtResource("10_crowbar")]
 transform = Transform3D(0.5411603, -0.20467278, -0.040676404, 0.1982131, 0.46881807, 0.2780668, -0.065246336, -0.2733471, 0.50736994, 0.43, -0.62, -0.5)
 visible = false
+collision_layer = 0
+collision_mask = 0
 
 [node name="HeldScrewdriver" parent="Head/Camera3D/RightHandRig" unique_id=475670536 instance=ExtResource("17_screwdriver")]
 transform = Transform3D(0.40938202, -0.63367635, -0.32134193, 0.70933807, 0.3433463, 0.22661163, -0.040569365, -0.39111072, 0.71957386, 0.4, -0.43, -0.52)
 visible = false
 collision_layer = 0
+collision_mask = 0
 
 [node name="HeldNote" parent="Head/Camera3D/RightHandRig" unique_id=1183787652 instance=ExtResource("11_note")]
 transform = Transform3D(0.9802297, -0.11887504, -0.15817249, 0.13853961, 0.983095, 0.119712204, 0.14126779, -0.13925861, 0.98012775, 0.38, -0.38, -0.48)

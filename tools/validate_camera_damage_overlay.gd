@@ -108,6 +108,9 @@ func _init() -> void:
 					or float(crack_material.get_shader_parameter(&"edge_thickness")) < 5.0:
 				push_error("El nivel %d no atraviesa con suficiente fuerza el postfiltro" % level)
 				failed = true
+			if float(crack_material.get_shader_parameter(&"postfilter_readability")) < 0.85:
+				push_error("El nivel %d no conserva suficiente claridad tras la viñeta" % level)
+				failed = true
 	overlay.set_damage_level(0, false)
 	overlay.set_damage_level(1, true)
 	if not cracks.texture.resource_path.ends_with("camera_cracks_hit_1_more.png"):

@@ -51,6 +51,9 @@ extends CanvasLayer
 @export_range(1.0, 2.0, 0.05) var second_hit_alpha_boost := 2.0
 @export_range(1.0, 2.5, 0.05) var fatal_hit_brightness := 1.7
 @export_range(0.0, 0.35, 0.01) var fatal_hit_shadow_lift := 0.18
+@export_range(0.0, 1.0, 0.05) var first_hit_postfilter_readability := 0.95
+@export_range(0.0, 1.0, 0.05) var second_hit_postfilter_readability := 0.90
+@export_range(0.0, 1.0, 0.05) var fatal_hit_postfilter_readability := 0.68
 
 @onready var cracks: TextureRect = $Cracks
 @onready var blood: TextureRect = $Blood
@@ -148,6 +151,7 @@ func _apply_crack_brightness() -> void:
 	var white_mix := 0.10 if _damage_level == 3 else 0.0
 	var tint_mix := 0.12 if _damage_level == 3 else 0.0
 	var edge_thickness := 1.0
+	var postfilter_readability := fatal_hit_postfilter_readability
 	if _damage_level == 1:
 		brightness = first_hit_brightness
 		shadow_lift = first_hit_shadow_lift
@@ -155,6 +159,7 @@ func _apply_crack_brightness() -> void:
 		white_mix = 0.18
 		tint_mix = 0.96
 		edge_thickness = 6.0
+		postfilter_readability = first_hit_postfilter_readability
 	elif _damage_level == 2:
 		brightness = second_hit_brightness
 		shadow_lift = second_hit_shadow_lift
@@ -162,9 +167,11 @@ func _apply_crack_brightness() -> void:
 		white_mix = 0.18
 		tint_mix = 0.94
 		edge_thickness = 5.0
+		postfilter_readability = second_hit_postfilter_readability
 	material.set_shader_parameter(&"crack_brightness", brightness)
 	material.set_shader_parameter(&"shadow_lift", shadow_lift)
 	material.set_shader_parameter(&"alpha_boost", alpha_boost)
 	material.set_shader_parameter(&"white_mix", white_mix)
 	material.set_shader_parameter(&"tint_mix", tint_mix)
 	material.set_shader_parameter(&"edge_thickness", edge_thickness)
+	material.set_shader_parameter(&"postfilter_readability", postfilter_readability)

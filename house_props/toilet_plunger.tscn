@@ -37,8 +37,11 @@ rings = 1
 radius = 0.17
 height = 0.95
 
-[node name="ToiletPlunger" type="StaticBody3D" unique_id=582687857]
+[node name="ToiletPlunger" type="RigidBody3D" unique_id=582687857]
 editor_description = "Desatascador detallado con mango y piezas de goma separadas."
+mass = 0.65
+freeze = true
+continuous_cd = true
 collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_pickup")
