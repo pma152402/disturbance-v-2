@@ -30,7 +30,7 @@ const STATE_EAT := 5
 @onready var _left_shoulder: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot
 @onready var _left_elbow: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot
 @onready var _left_wrist: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot
-@onready var _left_palm: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot/LeftPalm
+@onready var _left_palm: MeshInstance3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftElbowPivot/LeftWristPivot/LeftPalm
 @onready var _left_shoulder_joint: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftShoulderJoint
 @onready var _left_sleeve: Node3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftDressSleeve
 @onready var _left_upper_arm: MeshInstance3D = $CleanModel/EditableGrannyRig/LeftShoulderPivot/LeftUpperArm
@@ -40,7 +40,7 @@ const STATE_EAT := 5
 @onready var _right_shoulder: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot
 @onready var _right_elbow: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot
 @onready var _right_wrist: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot
-@onready var _right_palm: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot/RightPalm
+@onready var _right_palm: MeshInstance3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightElbowPivot/RightWristPivot/RightPalm
 @onready var _right_shoulder_joint: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightShoulderJoint
 @onready var _right_sleeve: Node3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightDressSleeve
 @onready var _right_upper_arm: MeshInstance3D = $CleanModel/EditableGrannyRig/RightShoulderPivot/RightUpperArm
@@ -86,6 +86,7 @@ func _ready() -> void:
 	_recenter_pivot(_right_elbow, _right_elbow_joint)
 	_recenter_pivot(_left_wrist, _left_wrist_joint)
 	_recenter_pivot(_right_wrist, _right_wrist_joint)
+	_replace_left_hand_with_mirrored_right_hand()
 	_base_position = position
 	_base_head_position = _head.position
 	_base_head_scale = _head.scale
@@ -109,6 +110,35 @@ func _ready() -> void:
 	_right_lower_rest_direction = (_right_elbow.global_basis.inverse() * (_right_wrist.global_position - _right_elbow.global_position)).normalized()
 	if is_instance_valid(_body):
 		_previous_yaw = _body.rotation.y
+
+
+func _replace_left_hand_with_mirrored_right_hand() -> void:
+	# La mano derecha permanece intacta: es nuestra referencia buena. Ocultamos
+	# todas las piezas de la izquierda y clonamos cada malla de la derecha ya con
+	# los WristPivot recentrados en sus articulaciones reales.
+	for child in _left_wrist.get_children():
+		if child is MeshInstance3D:
+			(child as MeshInstance3D).visible = false
+
+	var rig_inverse := _rig.global_transform.affine_inverse()
+	var left_wrist_inverse := _left_wrist.global_transform.affine_inverse()
+	for source_child in _right_wrist.get_children():
+		if not source_child is MeshInstance3D:
+			continue
+		var source_mesh := source_child as MeshInstance3D
+		var mirrored_mesh := source_mesh.duplicate() as MeshInstance3D
+		mirrored_mesh.name = "LeftCopyOf%s" % source_mesh.name
+		_left_wrist.add_child(mirrored_mesh)
+
+		# Reflejo completo en el espacio del rig: posición y geometría. Después lo
+		# convertimos al espacio local de la muñeca izquierda para que quede unido
+		# durante todas las rotaciones de la pose de persecución.
+		var mirrored_in_rig := rig_inverse * source_mesh.global_transform
+		mirrored_in_rig.origin.x = -mirrored_in_rig.origin.x
+		mirrored_in_rig.basis.x.x = -mirrored_in_rig.basis.x.x
+		mirrored_in_rig.basis.y.x = -mirrored_in_rig.basis.y.x
+		mirrored_in_rig.basis.z.x = -mirrored_in_rig.basis.z.x
+		mirrored_mesh.transform = left_wrist_inverse * (_rig.global_transform * mirrored_in_rig)
 
 
 func _physics_process(delta: float) -> void:
@@ -240,10 +270,9 @@ func _apply_locomotion_pose(delta: float, state: int, moving: float) -> void:
 	var chase_amount := 1.0 if state == STATE_CHASE else 0.0
 	var target_center := _body.global_position + Vector3.UP * (resting_hand_height + breathing + chase_amount * 0.08)
 	target_center += forward * (resting_hand_forward + chase_amount * 0.22)
-	# La palma izquierda del asset tiene el centro desplazado hacia fuera unos
-	# centímetros más que la derecha. Compensamos esa asimetría visual aquí para
-	# que ambas manos descansen a la misma distancia del vestido.
-	var left_target := target_center + side * (resting_hand_width - 0.075) + forward * stride
+	# La izquierda es ahora el espejo exacto de la derecha, por lo que ambos
+	# destinos deben ser simétricos y no conservar el antiguo parche del asset.
+	var left_target := target_center + side * resting_hand_width + forward * stride
 	var right_target := target_center - side * resting_hand_width - forward * stride
 	_pose_arm_ik(
 		_left_shoulder, _left_elbow, _left_wrist,
@@ -354,23 +383,29 @@ func _apply_attack_pose(delta: float, attack_timer: float) -> void:
 	var strike := clampf((attack_timer - windup_time) / (hit_time - windup_time), 0.0, 1.0)
 	var recovery := clampf((attack_timer - hit_time) / (end_time - hit_time), 0.0, 1.0)
 	var thrust := strike * (1.0 - recovery)
+	var low_pose := 1.0 - thrust
 	var forward := _body.global_basis.z.normalized()
 	var right := _body.global_basis.x.normalized()
 	var target_center := _body.global_position + forward * lerpf(0.28 - windup * 0.14, 1.25, thrust) + Vector3.UP * lerpf(1.18, 1.02, thrust)
+	# Ajuste exclusivo de la pose baja con la que arranca el ataque. Movemos los
+	# objetivos IK, no las mallas sueltas, para que antebrazo, muñeca y mano sigan
+	# formando una única cadena. El offset desaparece al ejecutar el golpe.
+	target_center += (forward * 0.20 + Vector3.DOWN * 0.05) * low_pose
 	if is_instance_valid(_player):
 		target_center = target_center.lerp(_player.global_position + Vector3.UP * 1.0, thrust * 0.85)
+	var hand_half_width := lerpf(0.04, 0.11, thrust)
 	_pose_arm_ik(
 		_left_shoulder, _left_elbow, _left_wrist,
 		_base_left_shoulder, _base_left_elbow,
 		_left_upper_rest_direction, _left_lower_rest_direction,
-		target_center + right * 0.11,
+		target_center + right * hand_half_width,
 		1.0, delta, 16.0
 	)
 	_pose_arm_ik(
 		_right_shoulder, _right_elbow, _right_wrist,
 		_base_right_shoulder, _base_right_elbow,
 		_right_upper_rest_direction, _right_lower_rest_direction,
-		target_center - right * 0.11,
+		target_center - right * hand_half_width,
 		-1.0, delta, 16.0
 	)
 	_pose_node(_left_wrist, _offset_pose(_base_left_wrist, -0.1 * thrust, 0.0, -0.08), delta, 15.0)

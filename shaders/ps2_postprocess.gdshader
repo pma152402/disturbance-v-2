@@ -33,7 +33,6 @@ void fragment() {
 	float edge_blur = smoothstep(0.18, 1.15, lens_radius) * 0.24;
 	vec3 soft_sample = texture(screen_texture, clamp(uv + vec2(block.x * 1.5, block.y), vec2(0.0), vec2(1.0))).rgb;
 	source = mix(source, soft_sample, edge_blur);
-
 	float flicker = 0.965 + hash21(vec2(frame, 4.0)) * 0.055;
 	source *= flicker;
 	float luminance = dot(source, vec3(0.299, 0.587, 0.114));

@@ -23,6 +23,10 @@ var _schedule_timer: Timer
 
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		stop()
+		set_process(false)
+		return
 	_player = get_node_or_null(player_path) as Node3D
 	_schedule_timer = Timer.new()
 	_schedule_timer.name = "CrackScheduleTimer"
@@ -31,6 +35,13 @@ func _ready() -> void:
 	add_child(_schedule_timer)
 	_schedule_next(initial_delay_min, initial_delay_max)
 	set_process(false)
+
+
+func _exit_tree() -> void:
+	stop()
+	set_process(false)
+	if is_instance_valid(_schedule_timer):
+		_schedule_timer.stop()
 
 
 func _process(delta: float) -> void:
@@ -46,6 +57,9 @@ func _process(delta: float) -> void:
 
 
 func _play_crack() -> void:
+	if Engine.is_editor_hint() or not is_inside_tree():
+		stop()
+		return
 	if not is_instance_valid(_player):
 		_player = get_node_or_null(player_path) as Node3D
 	if not is_instance_valid(_player) or stream == null:

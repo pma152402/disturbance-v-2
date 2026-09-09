@@ -4,6 +4,9 @@ extends AudioStreamPlayer
 
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		stop()
+		return
 	if stream == null:
 		return
 	# AudioStreamMP3 y AudioStreamOggVorbis exponen la propiedad loop.
@@ -11,3 +14,7 @@ func _ready() -> void:
 	stream.set("loop", true)
 	if start_automatically:
 		play()
+
+
+func _exit_tree() -> void:
+	stop()

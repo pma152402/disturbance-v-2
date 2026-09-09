@@ -2,6 +2,7 @@ extends Control
 
 const BLOCK_COUNT := 12
 const RADIUS := 55.0
+const INTERFACE_WHITE := Color(0.9, 0.93, 0.86, 1.0)
 var _phase := 0.0
 
 
@@ -25,4 +26,4 @@ func _draw() -> void:
 		var brightness := lerpf(0.16, 1.0, pow(1.0 - distance_from_head / float(BLOCK_COUNT), 2.0))
 		var block_center := center + Vector2(cos(angle), sin(angle)) * RADIUS
 		var block_size := Vector2(15.0, 15.0)
-		draw_rect(Rect2(block_center - block_size * 0.5, block_size), Color(0.82, 0.9, 0.79, brightness))
+		draw_rect(Rect2(block_center - block_size * 0.5, block_size), Color(INTERFACE_WHITE.r, INTERFACE_WHITE.g, INTERFACE_WHITE.b, brightness))

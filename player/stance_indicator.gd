@@ -25,11 +25,23 @@ var _prone_phase := 0.0
 var _running := false
 var _running_blend := 0.0
 var _running_phase := 0.0
+var _disabled := false
 var _raster_texture: ImageTexture
 
 
 func _ready() -> void:
 	set_process(false)
+
+
+func set_disabled(disabled: bool) -> void:
+	if _disabled == disabled:
+		return
+	_disabled = disabled
+	queue_redraw()
+
+
+func _ink() -> Color:
+	return Color(0.37, 0.4, 0.38, 1.0) if _disabled else INK
 
 
 func _process(delta: float) -> void:
@@ -164,7 +176,7 @@ func _style_silhouette(silhouette: Image) -> Image:
 	for y in RASTER_SIZE.y:
 		for x in RASTER_SIZE.x:
 			if silhouette.get_pixel(x, y).a > 0.0:
-				styled.set_pixel(x, y, INK)
+				styled.set_pixel(x, y, _ink())
 	return styled
 
 
@@ -242,7 +254,7 @@ func _stamp_block(image: Image, center: Vector2, radius: int) -> void:
 		for x in range(-radius, radius + 1):
 			var pixel := Vector2i(center) + Vector2i(x, y)
 			if pixel.x >= 0 and pixel.y >= 0 and pixel.x < RASTER_SIZE.x and pixel.y < RASTER_SIZE.y:
-				image.set_pixelv(pixel, INK)
+				image.set_pixelv(pixel, _ink())
 
 
 func _stamp_pixel_head(image: Image, center: Vector2) -> void:
@@ -254,7 +266,7 @@ func _stamp_pixel_head(image: Image, center: Vector2) -> void:
 				continue
 			var pixel := Vector2i(center) + Vector2i(x, y)
 			if pixel.x >= 0 and pixel.y >= 0 and pixel.x < RASTER_SIZE.x and pixel.y < RASTER_SIZE.y:
-				image.set_pixelv(pixel, INK)
+				image.set_pixelv(pixel, _ink())
 
 
 func _pose_for(stance: int) -> Array[Vector2]:

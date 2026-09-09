@@ -6,6 +6,7 @@ const WestExtension = preload("res://environment/west_extension_bounds.gd")
 @export var tree_mesh: ArrayMesh
 @export var grass_mesh: ArrayMesh
 @export var fence_piece_mesh: BoxMesh
+@export_range(12.0, 18.0, 1.0) var vegetation_cell_size := 16.0
 @onready var fence_visual: MultiMeshInstance3D = $Fence/Visual
 @onready var trees: MultiMeshInstance3D = $Trees
 @onready var grass: MultiMeshInstance3D = $Vegetation/Grass
@@ -74,17 +75,9 @@ func _build_tree_instances() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 924173
 	_add_forest_outside_fence(transforms, rng, 220)
-
-	var generated_multimesh := MultiMesh.new()
-	generated_multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	generated_multimesh.mesh = tree_mesh
-	generated_multimesh.instance_count = transforms.size()
-	# Assign first so every transform is uploaded to an active RenderingServer RID.
-	trees.multimesh = generated_multimesh
-	for index in transforms.size():
-		generated_multimesh.set_instance_transform(index, transforms[index])
+	var cell_count := _build_partitioned_multimeshes(trees, tree_mesh, transforms)
 	if OS.is_debug_build():
-		print("Exterior forest ready: ", generated_multimesh.instance_count, " trees, AABB ", generated_multimesh.get_aabb())
+		print("Exterior forest ready: ", transforms.size(), " trees in ", cell_count, " cells")
 
 
 func _build_vegetation_instances() -> void:
@@ -95,24 +88,97 @@ func _build_vegetation_instances() -> void:
 	var grass_transforms: Array[Transform3D] = []
 	_add_yard_vegetation(grass_transforms, rng, 950, 0.42, 1.15)
 	_add_outer_vegetation(grass_transforms, rng, 1550, 0.48, 1.3)
-	grass.multimesh = _make_multimesh(grass_mesh, grass_transforms)
+	var grass_cells := _build_partitioned_multimeshes(grass, grass_mesh, grass_transforms)
 
 	var tall_transforms: Array[Transform3D] = []
 	_add_yard_vegetation(tall_transforms, rng, 320, 0.72, 1.3, 0.7, 1.55)
 	_add_outer_vegetation(tall_transforms, rng, 480, 0.76, 1.48, 0.68, 1.62)
-	tall_grass.multimesh = _make_multimesh(grass_mesh, tall_transforms)
+	var tall_cells := _build_partitioned_multimeshes(tall_grass, grass_mesh, tall_transforms)
 
 	var pale_transforms: Array[Transform3D] = []
 	_add_yard_vegetation(pale_transforms, rng, 220, 0.5, 1.05, 0.82, 1.22)
 	_add_outer_vegetation(pale_transforms, rng, 380, 0.58, 1.18, 0.8, 1.3)
-	pale_weeds.multimesh = _make_multimesh(grass_mesh, pale_transforms)
+	var pale_cells := _build_partitioned_multimeshes(pale_weeds, grass_mesh, pale_transforms)
 
 	var cover_transforms: Array[Transform3D] = []
 	_add_yard_vegetation(cover_transforms, rng, 280, 0.42, 0.88, 1.38, 0.5)
 	_add_outer_vegetation(cover_transforms, rng, 420, 0.48, 0.95, 1.42, 0.52)
-	ground_cover.multimesh = _make_multimesh(grass_mesh, cover_transforms)
+	var cover_cells := _build_partitioned_multimeshes(ground_cover, grass_mesh, cover_transforms)
 	if OS.is_debug_build():
-		print("Exterior vegetation ready: ", grass_transforms.size() + tall_transforms.size() + pale_transforms.size() + cover_transforms.size(), " varied clumps")
+		print(
+			"Exterior vegetation ready: ",
+			grass_transforms.size() + tall_transforms.size() + pale_transforms.size() + cover_transforms.size(),
+			" varied clumps in ",
+			grass_cells + tall_cells + pale_cells + cover_cells,
+			" cells"
+		)
+
+
+func _build_partitioned_multimeshes(template: MultiMeshInstance3D, source_mesh: ArrayMesh, transforms: Array[Transform3D]) -> int:
+	# El nodo original conserva material, sombras y rangos como plantilla. Cada
+	# hijo tiene un AABB pequeno e independiente que Godot puede ocultar entero.
+	template.multimesh = null
+	for child in template.get_children():
+		if child is MultiMeshInstance3D and child.name.begins_with("Cell_"):
+			child.free()
+	var cells := {}
+	for instance_transform in transforms:
+		var cell_key := Vector2i(
+			floori(instance_transform.origin.x / vegetation_cell_size),
+			floori(instance_transform.origin.z / vegetation_cell_size)
+		)
+		if not cells.has(cell_key):
+			var new_bucket: Array[Transform3D] = []
+			cells[cell_key] = new_bucket
+		var bucket: Array[Transform3D] = cells[cell_key]
+		bucket.append(instance_transform)
+
+	for cell_key: Vector2i in cells:
+		var cell_transforms: Array[Transform3D] = cells[cell_key]
+		var cell := MultiMeshInstance3D.new()
+		cell.name = "Cell_%d_%d" % [cell_key.x, cell_key.y]
+		_copy_multimesh_visual_settings(template, cell)
+		cell.multimesh = _make_multimesh(source_mesh, cell_transforms)
+		cell.custom_aabb = _calculate_cell_aabb(source_mesh.get_aabb(), cell_transforms)
+		template.add_child(cell)
+	return cells.size()
+
+
+func _copy_multimesh_visual_settings(source: MultiMeshInstance3D, target: MultiMeshInstance3D) -> void:
+	target.material_override = source.material_override
+	target.cast_shadow = source.cast_shadow
+	target.layers = source.layers
+	target.visibility_range_begin = source.visibility_range_begin
+	target.visibility_range_begin_margin = source.visibility_range_begin_margin
+	target.visibility_range_end = source.visibility_range_end
+	target.visibility_range_end_margin = source.visibility_range_end_margin
+	target.visibility_range_fade_mode = source.visibility_range_fade_mode
+	target.gi_mode = source.gi_mode
+
+
+func _calculate_cell_aabb(mesh_aabb: AABB, transforms: Array[Transform3D]) -> AABB:
+	var result := AABB()
+	var has_bounds := false
+	for instance_transform in transforms:
+		var instance_aabb := _transform_aabb(mesh_aabb, instance_transform)
+		result = result.merge(instance_aabb) if has_bounds else instance_aabb
+		has_bounds = true
+	return result.grow(0.1)
+
+
+func _transform_aabb(source: AABB, instance_transform: Transform3D) -> AABB:
+	var minimum := Vector3(INF, INF, INF)
+	var maximum := Vector3(-INF, -INF, -INF)
+	for corner_index in 8:
+		var corner := source.position + Vector3(
+			source.size.x if corner_index & 1 else 0.0,
+			source.size.y if corner_index & 2 else 0.0,
+			source.size.z if corner_index & 4 else 0.0
+		)
+		var transformed_corner := instance_transform * corner
+		minimum = minimum.min(transformed_corner)
+		maximum = maximum.max(transformed_corner)
+	return AABB(minimum, maximum - minimum)
 
 
 func _make_multimesh(source_mesh: ArrayMesh, transforms: Array[Transform3D]) -> MultiMesh:

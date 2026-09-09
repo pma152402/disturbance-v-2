@@ -3,10 +3,16 @@ extends Control
 const TapeLoadingSpinner := preload("res://systems/camera_tape_spinner.gd")
 const ArchivePlaybackShader := preload("res://shaders/archive_playback_filter.gdshader")
 const CameraInterfaceFrame := preload("res://systems/camera_interface_frame.gd")
-const TAPE_SLOT_NAMES := ["CINTA 01 A", "CINTA 02 A", "CINTA 01 B", "CINTA 02 B"]
+const CameraArchiveControlsBracket := preload("res://systems/camera_archive_controls_bracket.gd")
+const CameraContextAlertsScene := preload("res://systems/camera_context_alerts.tscn")
+const EmptyArchiveCassette := preload("res://systems/camera_empty_archive_cassette.gd")
+const TAPE_SLOT_NAMES := ["CINTA A 01", "CINTA A 02", "CINTA B 03", "CINTA B 04"]
 const MODE_CAMERA := 0
 const MODE_ARCHIVE := 1
 const MODE_AV_IO := 2
+const MODE_SETTINGS := 3
+const MODE_DATA := 4
+const MAX_RECORDING_SEQUENCE := 4
 const RECORDING_ONLY_VISIBILITY_LAYER := 20
 const RECORDING_ONLY_VISIBILITY_MASK := 1 << (RECORDING_ONLY_VISIBILITY_LAYER - 1)
 const LIVE_ONLY_VISIBILITY_LAYER := 19
@@ -17,6 +23,7 @@ const RECORDING_OFF_SECONDS := 1.0
 @onready var recording_label: Label = $Recording
 @onready var recording_dot: Polygon2D = $RecordingDot
 @onready var tape_mode_label: Label = $TapeMode
+@onready var tape_side_label: Label = $TapeSide
 @onready var timestamp_label: Label = $Timestamp
 @onready var fps_label: Label = $FPS
 
@@ -37,6 +44,7 @@ var _recording_blink_timer: Timer
 var _is_recording := false
 var _playback_open := false
 var _capture_timer := 0.0
+var _recording_elapsed_seconds := 0.0
 var _current_clip: Array[PackedByteArray] = []
 var _saved_clips: Array = []
 var _selected_clip := 0
@@ -56,19 +64,39 @@ var _playback_tabs: Control
 var _camera_tab_label: Label
 var _archive_tab_label: Label
 var _avio_tab_label: Label
+var _data_tab_label: Label
+var _tabs_left_arrow: Label
+var _tabs_right_arrow: Label
 var _tabs_underline: ColorRect
 var _delete_confirmation_backdrop: ColorRect
 var _delete_confirmation: Label
 var _playback_volume_indicator: Control
 var _avio_menu: RichTextLabel
+var _avio_title: Label
 var _avio_status: Label
 var _avio_explanation: RichTextLabel
 var _avio_controls_right: RichTextLabel
+var _data_panel: RichTextLabel
+var _data_controls_right: RichTextLabel
+var _settings_menu: RichTextLabel
+var _settings_help: Label
+var _settings_tab_label: Label
+var _settings_selection := 0
+var _camera_brightness := 1.0
+var _camera_zoom := 1.0
+var _night_mode := false
+var _fake_stabilization := true
+var _show_camera_datetime := true
+var _speaker_volume := 0.8
+var _microphone_sensitivity := 0.7
+var _settings_tint: ColorRect
+var _context_alerts: Control
 var _camera_corner_frame: Control
 var _menu_outline_frame: Control
 var _menu_inner_brackets: Control
 var _playback_menu_left: RichTextLabel
 var _playback_controls_right: RichTextLabel
+var _archive_controls_bracket: Control
 var _playback_progress_track: Control
 var _playback_progress_segments: Array[ColorRect] = []
 var _playback_texture: ImageTexture
@@ -88,8 +116,14 @@ var _active_mode := MODE_CAMERA
 var _transition_target_mode := MODE_CAMERA
 var _mode_transition_timer := 0.0
 var _tape_inserted := true
+var _inserted_tape_data := {"tape_number": 1, "display_side": "A", "recordings": {"A": [], "B": []}, "archive_slots": []}
 var _avio_selection := 0
 var _avio_erase_armed := false
+var _avio_scan_armed := false
+var _avio_scan_result := ""
+var _recording_sequence := 1
+var _lifetime_recorded_seconds := 0.0
+var _tapes_spent := 0
 
 
 func _ready() -> void:
@@ -100,8 +134,12 @@ func _ready() -> void:
 	recording_label.modulate.a = 0.22
 	recording_dot.visible = true
 	recording_dot.modulate.a = 0.22
-	tape_mode_label.text = "CAM 01"
+	_update_recording_identifiers()
 	_build_playback_interface()
+	_context_alerts = CameraContextAlertsScene.instantiate() as Control
+	add_child(_context_alerts)
+	_context_alerts.set_camera_font(recording_label.get_theme_font(&"font"))
+	_context_alerts.set_storage_usage(_saved_clips.size(), maximum_saved_clips)
 	_exclude_recording_only_layer_from_live_camera()
 	_update_timestamp()
 	_update_fps()
@@ -120,6 +158,8 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if is_instance_valid(_context_alerts):
+		_context_alerts.set_camera_active(not _playback_open)
 	if _playback_open:
 		if _mode_transitioning:
 			_mode_transition_timer -= delta
@@ -139,6 +179,8 @@ func _process(delta: float) -> void:
 		return
 	if not _is_recording or _playback_open:
 		return
+	_recording_elapsed_seconds += delta
+	_lifetime_recorded_seconds += delta
 	_capture_timer -= delta
 	if _capture_timer <= 0.0:
 		_capture_timer = capture_interval
@@ -184,22 +226,36 @@ func _input(event: InputEvent) -> void:
 			KEY_SPACE:
 				if _active_mode == MODE_AV_IO:
 					_activate_avio_option()
+				elif _active_mode == MODE_SETTINGS:
+					_adjust_setting(1, true)
 				else:
 					_toggle_playback_running()
-			KEY_LEFT, KEY_A:
+			KEY_LEFT:
+				step_camera_menu(-1)
+			KEY_RIGHT:
+				step_camera_menu(1)
+			KEY_A:
 				if _active_mode == MODE_ARCHIVE:
 					_step_frame(-1)
-			KEY_RIGHT, KEY_D:
+				elif _active_mode == MODE_SETTINGS:
+					_adjust_setting(-1)
+			KEY_D:
 				if _active_mode == MODE_ARCHIVE:
 					_step_frame(1)
+				elif _active_mode == MODE_SETTINGS:
+					_adjust_setting(1)
 			KEY_W:
 				if _active_mode == MODE_AV_IO:
 					_step_avio_option(-1)
+				elif _active_mode == MODE_SETTINGS:
+					_step_setting(-1)
 				else:
 					_step_clip(-1)
 			KEY_S:
 				if _active_mode == MODE_AV_IO:
 					_step_avio_option(1)
+				elif _active_mode == MODE_SETTINGS:
+					_step_setting(1)
 				else:
 					_step_clip(1)
 			KEY_X:
@@ -223,10 +279,20 @@ func toggle_recording() -> void:
 
 
 func start_recording() -> void:
+	if not _tape_inserted:
+		return
+	if _saved_clips.size() >= maximum_saved_clips:
+		_context_alerts.set_storage_usage(_saved_clips.size(), maximum_saved_clips)
+		_update_storage_readout_state()
+		_context_alerts.notify_no_space()
+		return
 	_ensure_low_resolution_recorder()
 	_recorder_destroy_pending = false
 	_is_recording = true
 	_current_clip.clear()
+	_recording_elapsed_seconds = 0.0
+	_context_alerts.set_storage_usage(_saved_clips.size(), maximum_saved_clips)
+	_update_recording_identifiers()
 	_capture_timer = 0.0
 	_recording_bright = true
 	recording_label.modulate.a = 1.0
@@ -248,13 +314,18 @@ func stop_recording() -> void:
 	recording_dot.modulate.a = 0.22
 	if not _current_clip.is_empty():
 		_saved_clips.append(_current_clip.duplicate())
+		_tapes_spent += 1
 		while _saved_clips.size() > 1 and (
 			_saved_clips.size() > maximum_saved_clips
 			or _archive_memory_bytes() > int(maximum_archive_memory_mb * 1024.0 * 1024.0)
 		):
 			_saved_clips.pop_front()
 		_selected_clip = _saved_clips.size() - 1
+		_recording_sequence = mini(_recording_sequence + 1, MAX_RECORDING_SEQUENCE)
 	_current_clip.clear()
+	_recording_elapsed_seconds = 0.0
+	_update_recording_identifiers()
+	_context_alerts.set_storage_usage(_saved_clips.size(), maximum_saved_clips)
 	_release_low_resolution_recorder()
 
 
@@ -281,13 +352,13 @@ func toggle_playback() -> void:
 func step_camera_menu(direction: int) -> void:
 	if _mode_transitioning:
 		return
+	var source_mode := _active_mode if _playback_open else MODE_CAMERA
+	var target_mode := clampi(source_mode + direction, MODE_CAMERA, MODE_DATA)
+	if target_mode == source_mode:
+		return
 	if _is_recording:
 		stop_recording()
-	var source_mode := _active_mode if _playback_open else MODE_CAMERA
-	var target_mode := wrapi(source_mode + direction, MODE_CAMERA, MODE_AV_IO + 1)
 	if not _playback_open:
-		if target_mode == MODE_CAMERA:
-			return
 		_playback_open = true
 		_playback_running = false
 		_tape_loading = false
@@ -319,11 +390,17 @@ func _begin_mode_transition(target_mode: int) -> void:
 	_playback_next_button.visible = false
 	_playback_menu_left.visible = false
 	_playback_controls_right.visible = false
+	_archive_controls_bracket.visible = false
 	_playback_volume_indicator.visible = false
 	_avio_menu.visible = false
+	_avio_title.visible = false
 	_avio_status.visible = false
 	_avio_explanation.visible = false
 	_avio_controls_right.visible = false
+	_data_panel.visible = false
+	_data_controls_right.visible = false
+	_settings_menu.visible = false
+	_settings_help.visible = false
 	_playback_progress_track.visible = false
 	_tape_spinner.visible = true
 
@@ -337,6 +414,7 @@ func _finish_mode_transition() -> void:
 		_playback_tabs.visible = true
 		_playback_menu_left.visible = true
 		_playback_controls_right.visible = true
+		_archive_controls_bracket.visible = true
 		_playback_info.visible = true
 		_playback_image.visible = true
 		_playback_volume_indicator.visible = true
@@ -346,10 +424,25 @@ func _finish_mode_transition() -> void:
 		_playback_backdrop.visible = true
 		_playback_tabs.visible = true
 		_avio_menu.visible = true
+		_avio_title.visible = true
 		_avio_status.visible = false
 		_avio_explanation.visible = true
 		_avio_controls_right.visible = true
 		_refresh_avio_menu()
+		return
+	if _active_mode == MODE_DATA:
+		_playback_backdrop.visible = true
+		_playback_tabs.visible = true
+		_data_panel.visible = true
+		_data_controls_right.visible = true
+		_refresh_data_panel()
+		return
+	if _active_mode == MODE_SETTINGS:
+		_playback_backdrop.visible = true
+		_playback_tabs.visible = true
+		_settings_menu.visible = true
+		_settings_help.visible = true
+		_refresh_settings_menu()
 		return
 	_playback_open = false
 	_playback_backdrop.visible = false
@@ -362,10 +455,16 @@ func _finish_mode_transition() -> void:
 	_playback_tabs.visible = false
 	_playback_menu_left.visible = false
 	_playback_controls_right.visible = false
+	_archive_controls_bracket.visible = false
 	_avio_menu.visible = false
+	_avio_title.visible = false
 	_avio_status.visible = false
 	_avio_explanation.visible = false
 	_avio_controls_right.visible = false
+	_data_panel.visible = false
+	_data_controls_right.visible = false
+	_settings_menu.visible = false
+	_settings_help.visible = false
 	_playback_progress_track.visible = false
 	_playback_volume_indicator.visible = false
 	_restore_live_hud_after_playback()
@@ -499,6 +598,28 @@ func _maximum_frames_per_clip() -> int:
 	return maxi(1, int(ceil(maximum_clip_seconds / capture_interval)))
 
 
+func _update_recording_identifiers() -> void:
+	var sequence := clampi(_recording_sequence, 1, MAX_RECORDING_SEQUENCE)
+	tape_mode_label.text = "VID %02d" % sequence
+	tape_side_label.text = "A" if sequence <= 2 else "B"
+	_update_storage_readout_state()
+
+
+func _update_storage_readout_state() -> void:
+	var storage_full := _saved_clips.size() >= maximum_saved_clips
+	var readout_color := (
+		Color(0.37, 0.4, 0.38, 0.68)
+		if storage_full
+		else Color(0.86, 0.9, 0.83, 0.86)
+	)
+	tape_mode_label.add_theme_color_override(&"font_color", readout_color)
+	tape_side_label.add_theme_color_override(&"font_color", readout_color)
+	var player := get_tree().get_first_node_in_group(&"player")
+	var stance_indicator := player.get_node_or_null("StanceUI/StanceIndicator") if is_instance_valid(player) else null
+	if is_instance_valid(stance_indicator) and stance_indicator.has_method(&"set_disabled"):
+		stance_indicator.call(&"set_disabled", storage_full)
+
+
 func _step_frame(direction: int) -> void:
 	if _saved_clips.is_empty():
 		return
@@ -567,6 +688,8 @@ func _delete_selected_clip() -> void:
 	if not _delete_armed or _saved_clips.is_empty():
 		return
 	_saved_clips.remove_at(_selected_clip)
+	_context_alerts.set_storage_usage(_saved_clips.size(), maximum_saved_clips)
+	_update_storage_readout_state()
 	_selected_clip = clampi(_selected_clip, 0, maxi(_saved_clips.size() - 1, 0))
 	_selected_frame = 0
 	_playback_texture = null
@@ -588,7 +711,7 @@ func _refresh_playback() -> void:
 	if _saved_clips.is_empty():
 		_playback_image.texture = null
 		_playback_empty_background.visible = true
-		_playback_info.text = "ARCHIVO VACÍO"
+		_playback_info.text = "ARCHIVO VACIO"
 		_playback_previous_button.visible = false
 		_playback_toggle_button.visible = false
 		_playback_next_button.visible = false
@@ -615,7 +738,7 @@ func _refresh_playback() -> void:
 	var lit_segments := roundi(progress * float(_playback_progress_segments.size()))
 	for segment_index in _playback_progress_segments.size():
 		_playback_progress_segments[segment_index].color = (
-			Color(0.76, 0.86, 0.72, 0.96)
+			Color(0.9, 0.93, 0.86, 0.96)
 			if segment_index < lit_segments
 			else Color(0.12, 0.16, 0.13, 0.92)
 		)
@@ -627,8 +750,10 @@ func _refresh_side_menu(highlight_index := -1) -> void:
 	for slot_index in TAPE_SLOT_NAMES.size():
 		var recorded := slot_index < _saved_clips.size()
 		var color := "#e6ede0" if recorded else "#59615a"
-		var pointer := "▶" if recorded and slot_index == active_index else " "
-		menu += "\n\n[color=%s]%s %s[/color]" % [color, pointer, TAPE_SLOT_NAMES[slot_index]]
+		var pointer := "◀" if recorded and slot_index == active_index else " "
+		# Conserva la columna de texto existente y coloca el indicador después del
+		# nombre, donde no interfiere con las uniones del árbol.
+		menu += "\n\n[color=%s]  %s %s[/color]" % [color, TAPE_SLOT_NAMES[slot_index], pointer]
 	_playback_menu_left.text = menu
 
 
@@ -645,9 +770,13 @@ func _build_playback_interface() -> void:
 	_playback_empty_background.offset_top = -310.0
 	_playback_empty_background.offset_right = 510.0
 	_playback_empty_background.offset_bottom = 310.0
-	_playback_empty_background.color = Color(0.16, 0.18, 0.17, 1.0)
+	_playback_empty_background.color = Color(0.07, 0.08, 0.075, 1.0)
 	_playback_empty_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_playback_empty_background)
+	var empty_cassette := EmptyArchiveCassette.new()
+	empty_cassette.name = "EmptyArchiveCassette"
+	empty_cassette.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_playback_empty_background.add_child(empty_cassette)
 	move_child(_playback_empty_background, 1)
 	_playback_image = TextureRect.new()
 	_playback_image.set_anchors_preset(Control.PRESET_CENTER)
@@ -726,16 +855,22 @@ func _build_playback_interface() -> void:
 	_playback_controls_right.fit_content = false
 	_playback_controls_right.scroll_active = false
 	_playback_controls_right.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_playback_controls_right.text = "[right]CONTROLES\n[font_size=21]\n[/font_size]\nCAMBIAR MENU\n[color=#69716a]Q / E[/color]\n\nPLAY / PAUSA\n[color=#69716a]ESPACIO[/color]\n\nCAMBIAR CINTA\n[color=#69716a]W / S[/color]\n\nRETROCEDER / AVANZAR\n[color=#69716a]A / D[/color]\n\nELIMINAR\n[color=#69716a]X[/color]\n\nCAMARA\n[color=#69716a]TAB / ESC[/color][/right]"
+	_playback_controls_right.text = "[right]CONTROLES\n[font_size=21]\n[/font_size]\nCAMBIAR MENU\n[color=#69716a]Q / E  ·  ◀ / ▶[/color]\n\nPLAY / PAUSA\n[color=#69716a]ESPACIO[/color]\n\nCAMBIAR CINTA\n[color=#69716a]W / S[/color]\n\nRETROCEDER / AVANZAR\n[color=#69716a]A / D[/color]\n\nELIMINAR\n[color=#69716a]X[/color]\n\nCAMARA\n[color=#69716a]TAB / ESC[/color][/right]"
 	_playback_controls_right.add_theme_font_override(&"normal_font", camera_font)
 	_playback_controls_right.add_theme_font_size_override(&"normal_font_size", 25)
 	_playback_controls_right.add_theme_color_override(&"default_color", Color(0.9, 0.93, 0.86, 0.96))
 	_playback_controls_right.add_theme_constant_override(&"outline_size", 2)
 	_playback_controls_right.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_playback_controls_right)
+	_archive_controls_bracket = CameraArchiveControlsBracket.new()
+	_archive_controls_bracket.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_archive_controls_bracket.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_archive_controls_bracket)
 	_build_archive_tabs(camera_font)
 	_build_volume_indicator(camera_font)
 	_build_avio_menu(camera_font)
+	_build_data_panel(camera_font)
+	_build_settings_menu(camera_font)
 	_build_interface_frames()
 	_delete_confirmation_backdrop = ColorRect.new()
 	_delete_confirmation_backdrop.set_anchors_preset(Control.PRESET_CENTER)
@@ -781,11 +916,17 @@ func _build_playback_interface() -> void:
 	_playback_tabs.visible = false
 	_playback_volume_indicator.visible = false
 	_avio_menu.visible = false
+	_avio_title.visible = false
 	_avio_status.visible = false
 	_avio_explanation.visible = false
 	_avio_controls_right.visible = false
+	_data_panel.visible = false
+	_data_controls_right.visible = false
+	_settings_menu.visible = false
+	_settings_help.visible = false
 	_playback_menu_left.visible = false
 	_playback_controls_right.visible = false
+	_archive_controls_bracket.visible = false
 	_playback_progress_track.visible = false
 	_tape_spinner.visible = false
 
@@ -794,10 +935,10 @@ func _build_volume_indicator(camera_font: Font) -> void:
 	_playback_volume_indicator = Control.new()
 	# Ocupa la franja inferior derecha usada por la fecha/hora en el directo.
 	_playback_volume_indicator.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	# Centro X=-194, alineado con el centro X=-193.5 del bloque BAT.
-	_playback_volume_indicator.offset_left = -325.0
+	# Conserva la alineación horizontal con BAT tras desplazar ese bloque 5 px.
+	_playback_volume_indicator.offset_left = -315.0
 	_playback_volume_indicator.offset_top = -108.0
-	_playback_volume_indicator.offset_right = -63.0
+	_playback_volume_indicator.offset_right = -53.0
 	_playback_volume_indicator.offset_bottom = -30.0
 	_playback_volume_indicator.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_playback_volume_indicator)
@@ -829,6 +970,20 @@ func _build_volume_indicator(camera_font: Font) -> void:
 
 
 func _build_avio_menu(camera_font: Font) -> void:
+	_avio_title = Label.new()
+	_avio_title.set_anchors_preset(Control.PRESET_CENTER)
+	_avio_title.offset_left = -400.0
+	_avio_title.offset_top = -198.0
+	_avio_title.offset_right = 460.0
+	_avio_title.offset_bottom = -148.0
+	_avio_title.text = "TRANSFERENCIA AV / IO"
+	_avio_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_avio_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_avio_title.add_theme_font_override(&"font", camera_font)
+	_avio_title.add_theme_font_size_override(&"font_size", 25)
+	_avio_title.add_theme_color_override(&"font_color", Color(0.9, 0.93, 0.86, 0.96))
+	_avio_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_avio_title)
 	_avio_menu = RichTextLabel.new()
 	_avio_menu.set_anchors_preset(Control.PRESET_CENTER)
 	_avio_menu.offset_left = -430.0
@@ -866,7 +1021,7 @@ func _build_avio_menu(camera_font: Font) -> void:
 	_avio_controls_right.fit_content = false
 	_avio_controls_right.scroll_active = false
 	_avio_controls_right.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_avio_controls_right.text = "[right]CONTROLES\n[font_size=21]\n[/font_size]\nCAMBIAR MENU\n[color=#69716a]Q / E[/color]\n\nSELECCIONAR\n[color=#69716a]W / S[/color]\n\nACEPTAR\n[color=#69716a]ESPACIO / ENTER[/color]\n\nCAMARA\n[color=#69716a]TAB / ESC[/color][/right]"
+	_avio_controls_right.text = "[right]CONTROLES\n[font_size=21]\n[/font_size]\nCAMBIAR MENU\n[color=#69716a]Q / E  ·  ◀ / ▶[/color]\n\nSELECCIONAR\n[color=#69716a]W / S[/color]\n\nACEPTAR\n[color=#69716a]ESPACIO / ENTER[/color]\n\nCAMARA\n[color=#69716a]TAB / ESC[/color][/right]"
 	_avio_controls_right.add_theme_font_override(&"normal_font", camera_font)
 	_avio_controls_right.add_theme_font_size_override(&"normal_font_size", 25)
 	_avio_controls_right.add_theme_color_override(&"default_color", Color(0.9, 0.93, 0.86, 0.96))
@@ -875,59 +1030,213 @@ func _build_avio_menu(camera_font: Font) -> void:
 	add_child(_avio_controls_right)
 	_avio_explanation = RichTextLabel.new()
 	_avio_explanation.set_anchors_preset(Control.PRESET_CENTER)
-	_avio_explanation.offset_left = -500.0
-	_avio_explanation.offset_top = 185.0
-	_avio_explanation.offset_right = 500.0
-	_avio_explanation.offset_bottom = 330.0
+	# Continuación exacta del menú AV / IO (-430..430), separada de su borde
+	# inferior por 20 px para que se lea como su texto auxiliar.
+	_avio_explanation.offset_left = -400.0
+	_avio_explanation.offset_top = 205.0
+	_avio_explanation.offset_right = 460.0
+	_avio_explanation.offset_bottom = 305.0
 	_avio_explanation.bbcode_enabled = true
 	_avio_explanation.fit_content = false
 	_avio_explanation.scroll_active = false
+	_avio_explanation.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_avio_explanation.add_theme_font_override(&"normal_font", camera_font)
 	_avio_explanation.add_theme_font_size_override(&"normal_font_size", 14)
 	_avio_explanation.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_avio_explanation)
 
 
+func _build_data_panel(camera_font: Font) -> void:
+	_data_panel = RichTextLabel.new()
+	_data_panel.set_anchors_preset(Control.PRESET_CENTER)
+	_data_panel.offset_left = -430.0
+	_data_panel.offset_top = -255.0
+	_data_panel.offset_right = 430.0
+	_data_panel.offset_bottom = 285.0
+	_data_panel.bbcode_enabled = true
+	_data_panel.fit_content = false
+	_data_panel.scroll_active = false
+	_data_panel.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_data_panel.add_theme_font_override(&"normal_font", camera_font)
+	_data_panel.add_theme_font_size_override(&"normal_font_size", 22)
+	_data_panel.add_theme_color_override(&"default_color", Color(0.9, 0.93, 0.86, 0.96))
+	_data_panel.add_theme_constant_override(&"outline_size", 2)
+	_data_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_data_panel)
+
+	_data_controls_right = RichTextLabel.new()
+	_data_controls_right.set_anchors_preset(Control.PRESET_CENTER_RIGHT)
+	_data_controls_right.offset_left = -375.0
+	_data_controls_right.offset_top = -330.0
+	_data_controls_right.offset_right = -48.0
+	_data_controls_right.offset_bottom = 330.0
+	_data_controls_right.bbcode_enabled = true
+	_data_controls_right.fit_content = false
+	_data_controls_right.scroll_active = false
+	_data_controls_right.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_data_controls_right.text = "[right]CONTROLES\n[font_size=21]\n[/font_size]\nCAMBIAR MENU\n[color=#69716a]Q / E  ·  ◀ / ▶[/color]\n\nCAMARA\n[color=#69716a]TAB / ESC[/color][/right]"
+	_data_controls_right.add_theme_font_override(&"normal_font", camera_font)
+	_data_controls_right.add_theme_font_size_override(&"normal_font_size", 25)
+	_data_controls_right.add_theme_color_override(&"default_color", Color(0.9, 0.93, 0.86, 0.96))
+	_data_controls_right.add_theme_constant_override(&"outline_size", 2)
+	_data_controls_right.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_data_controls_right)
+	_refresh_data_panel()
+
+
+func _refresh_data_panel() -> void:
+	if not is_instance_valid(_data_panel):
+		return
+	var recorded_minutes := _lifetime_recorded_seconds / 60.0
+	var archive_memory_mb := float(_archive_memory_bytes()) / (1024.0 * 1024.0)
+	var tape_state := "INSERTADA" if _tape_inserted else "EXTRAIDA"
+	_data_panel.text = (
+		"[center][color=#e6ede0]DATOS DE CAMARA[/color]\n\n"
+		+ "[table=2]"
+		+ "[cell][color=#8b948a]MINUTOS GRABADOS[/color][/cell][cell][right]%06.1f MIN[/right][/cell]" % recorded_minutes
+		+ "[cell][color=#8b948a]CINTAS GASTADAS[/color][/cell][cell][right]%03d[/right][/cell]" % _tapes_spent
+		+ "[cell][color=#8b948a]VIDEOS GUARDADOS[/color][/cell][cell][right]%02d / %02d[/right][/cell]" % [_saved_clips.size(), maximum_saved_clips]
+		+ "[cell][color=#8b948a]MEMORIA UTILIZADA[/color][/cell][cell][right]%.2f / %.0f MB[/right][/cell]" % [archive_memory_mb, maximum_archive_memory_mb]
+		+ "[cell][color=#8b948a]CINTA[/color][/cell][cell][right]%s[/right][/cell]" % tape_state
+		+ "[cell][color=#8b948a]UBICACION[/color][/cell][cell][right][color=#d6ded2]DESCONOCIDA[/color][/right][/cell]"
+		+ "[/table][/center]"
+	)
+
+
+func _build_settings_menu(camera_font: Font) -> void:
+	_settings_menu = RichTextLabel.new()
+	_settings_menu.set_anchors_preset(Control.PRESET_CENTER)
+	_settings_menu.offset_left = -430.0
+	_settings_menu.offset_top = -260.0
+	_settings_menu.offset_right = 430.0
+	_settings_menu.offset_bottom = 245.0
+	_settings_menu.bbcode_enabled = true
+	_settings_menu.fit_content = false
+	_settings_menu.scroll_active = false
+	_settings_menu.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_settings_menu.add_theme_font_override(&"normal_font", camera_font)
+	_settings_menu.add_theme_font_size_override(&"normal_font_size", 23)
+	_settings_menu.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_settings_menu)
+	_settings_help = Label.new()
+	_settings_help.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	_settings_help.offset_left = -430.0
+	_settings_help.offset_top = -105.0
+	_settings_help.offset_right = 430.0
+	_settings_help.offset_bottom = -55.0
+	_settings_help.text = "W / S  SELECCIONAR     A / D  AJUSTAR     ESPACIO  ACTIVAR"
+	_settings_help.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_settings_help.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_settings_help.add_theme_font_override(&"font", camera_font)
+	_settings_help.add_theme_font_size_override(&"font_size", 17)
+	_settings_help.add_theme_color_override(&"font_color", Color(0.42, 0.46, 0.43, 0.95))
+	_settings_help.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_settings_help)
+	_settings_tint = ColorRect.new()
+	_settings_tint.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_settings_tint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_settings_tint.visible = false
+	add_child(_settings_tint)
+	move_child(_settings_tint, 0)
+	_refresh_settings_menu()
+
+
+func _step_setting(direction: int) -> void:
+	_settings_selection = wrapi(_settings_selection + direction, 0, 7)
+	_refresh_settings_menu()
+
+
+func _adjust_setting(direction: int, toggle := false) -> void:
+	match _settings_selection:
+		0: _camera_brightness = clampf(_camera_brightness + direction * 0.1, 0.5, 1.5)
+		1: _camera_zoom = clampf(_camera_zoom + direction * 0.1, 1.0, 2.0)
+		2: _night_mode = not _night_mode if toggle or direction != 0 else _night_mode
+		3: _fake_stabilization = not _fake_stabilization if toggle or direction != 0 else _fake_stabilization
+		4: _show_camera_datetime = not _show_camera_datetime if toggle or direction != 0 else _show_camera_datetime
+		5: _speaker_volume = clampf(_speaker_volume + direction * 0.1, 0.0, 1.0)
+		6: _microphone_sensitivity = clampf(_microphone_sensitivity + direction * 0.1, 0.0, 1.0)
+	_apply_camera_settings()
+	_refresh_settings_menu()
+
+
+func _refresh_settings_menu() -> void:
+	if not is_instance_valid(_settings_menu):
+		return
+	var labels := ["BRILLO DE CÁMARA", "ZOOM", "MODO NOCTURNO", "ESTABILIZACIÓN", "FECHA / HORA", "VOLUMEN DEL ALTAVOZ", "SENSIBILIDAD DE MICRÓFONO"]
+	var values := [
+		"%d%%" % roundi(_camera_brightness * 100.0),
+		"%.1fx" % _camera_zoom,
+		"ACTIVO" if _night_mode else "INACTIVO",
+		"ACTIVA" if _fake_stabilization else "INACTIVA",
+		"VISIBLE" if _show_camera_datetime else "OCULTA",
+		"%d%%" % roundi(_speaker_volume * 100.0),
+		"%d%%" % roundi(_microphone_sensitivity * 100.0),
+	]
+	var menu := "[center][color=#e6ede0]AJUSTES DE CÁMARA[/color]\n[font_size=12]\n[/font_size]\n"
+	for index in labels.size():
+		var pointer := "▶" if index == _settings_selection else " "
+		menu += "%s  %s   [color=#69716a]%s[/color]\n\n" % [pointer, labels[index], values[index]]
+	_settings_menu.text = menu + "[/center]"
+
+
+func _apply_camera_settings() -> void:
+	if is_instance_valid(_settings_tint):
+		_settings_tint.visible = _night_mode or not is_equal_approx(_camera_brightness, 1.0)
+		if _night_mode:
+			_settings_tint.color = Color(0.02, 0.22 * _camera_brightness, 0.055, 0.28)
+		elif _camera_brightness < 1.0:
+			_settings_tint.color = Color(0.0, 0.0, 0.0, (1.0 - _camera_brightness) * 0.55)
+		else:
+			_settings_tint.color = Color(1.0, 1.0, 0.92, (_camera_brightness - 1.0) * 0.16)
+	var live_camera := get_viewport().get_camera_3d()
+	if is_instance_valid(live_camera) and live_camera != _recording_camera:
+		live_camera.fov = 75.0 / _camera_zoom
+	timestamp_label.visible = _show_camera_datetime and _active_mode == MODE_CAMERA
+
+
+func notify_camera_object_out_of_range() -> void:
+	_context_alerts.notify_object_out_of_range()
+
+
+func notify_camera_connection_lost() -> void:
+	_context_alerts.notify_connection_lost()
+
+
 func _step_avio_option(direction: int) -> void:
 	_avio_erase_armed = false
+	_avio_scan_armed = false
+	_avio_scan_result = ""
 	_avio_selection = wrapi(_avio_selection + direction, 0, 4)
-	_avio_status.text = "Q / E  CAMBIAR MENU     W / S  SELECCIONAR     ESPACIO  ACEPTAR     TAB / ESC  CAMARA"
+	_avio_status.text = "Q / E · ◀ / ▶  CAMBIAR MENU     W / S  SELECCIONAR     ESPACIO  ACEPTAR     TAB / ESC  CAMARA"
 	_refresh_avio_menu()
 
 
 func _activate_avio_option() -> void:
 	if _avio_selection != 3:
 		_avio_erase_armed = false
+	if _avio_selection != 1:
+		_avio_scan_armed = false
 	match _avio_selection:
 		0:
 			if not _tape_inserted:
-				_avio_status.text = "NO HAY NINGUNA CINTA INSERTADA"
-				return
-			_tape_inserted = false
-			_avio_status.text = "CINTA EXTRAÍDA"
+				_avio_scan_result = "NO HAY NINGUNA CINTA INSERTADA"
+				_avio_status.text = _avio_scan_result
+			else:
+				_eject_inserted_tape()
 		1:
 			if _tape_inserted:
-				_avio_status.text = "YA HAY UNA CINTA INSERTADA"
-				return
-			_tape_inserted = true
-			_avio_status.text = "CINTA INSERTADA"
-		2:
-			if not _tape_inserted:
-				_avio_status.text = "INSERTA UNA CINTA"
-			elif not debug_external_recorder_connected:
-				_avio_status.text = "SIN CONEXION — REQUIERE APARATO EXTERNO"
-			elif _saved_clips.is_empty():
-				_avio_status.text = "NO HAY GRABACIONES PARA TRANSFERIR"
+				_avio_scan_result = "YA HAY UNA CINTA INSERTADA"
+			elif not _player_has_inventory_cassette():
+				_avio_scan_result = "NO LLEVAS NINGUNA CINTA"
+			elif not _avio_scan_armed:
+				_avio_scan_armed = true
+				_avio_scan_result = ""
 			else:
-				var result := _write_archive_to_debug_cassettes()
-				var cassette_count := int(result.cassettes)
-				var side_count := int(result.sides)
-				if cassette_count == 0:
-					_avio_status.text = "NO HAY NINGUN CASETE CONECTADO"
-				elif side_count == 0:
-					_avio_status.text = "LOS CASETES NO TIENEN HUECOS COMPATIBLES"
-				else:
-					_avio_status.text = "%d CARAS GRABADAS EN %d CASETES" % [side_count, cassette_count]
+				_insert_inventory_cassette()
+		2:
+			# La transferencia física aún no forma parte del flujo de AV / IO.
+			# La opción se muestra como referencia, pero no puede activarse.
+			pass
 		3:
 			if not _tape_inserted:
 				_avio_status.text = "INSERTA UNA CINTA"
@@ -938,12 +1247,7 @@ func _activate_avio_option() -> void:
 				_avio_erase_armed = true
 				_avio_status.text = "CONFIRMA PARA VACIAR LA CINTA"
 			else:
-				_saved_clips.clear()
-				_selected_clip = 0
-				_pending_clip = -1
-				_selected_frame = 0
-				_playback_running = false
-				_playback_texture = null
+				_clear_archive()
 				_avio_erase_armed = false
 				_avio_status.text = "CINTA VACIADA"
 	_refresh_avio_menu()
@@ -954,31 +1258,31 @@ func _refresh_avio_menu() -> void:
 		_avio_erase_armed = false
 	var labels := ["SACAR CINTA", "METER CINTA", "GRABAR CINTA", "REBOBINAR CINTA"]
 	var enabled := [
-		_tape_inserted,
-		not _tape_inserted,
-		_tape_inserted and debug_external_recorder_connected and not _saved_clips.is_empty(),
+		_tape_inserted and _player_can_store_cassette(),
+		not _tape_inserted and _player_has_inventory_cassette(),
+		false,
 		_tape_inserted and not _saved_clips.is_empty(),
 	]
-	var menu := "[center][color=#e6ede0]TRANSFERENCIA AV / IO[/color]\n[font_size=21]\n[/font_size]\n"
+	# Conservamos el hueco vertical que ocupaba el título, pero las opciones usan
+	# de nuevo el eje central original. El título vive en su Label desplazado.
+	var menu := "[center]\n[font_size=21]\n[/font_size]\n"
 	for index in labels.size():
 		var pointer := "▶" if index == _avio_selection else " "
 		var color := "#e6ede0" if enabled[index] else "#59615a"
-		var suffix := ""
-		if index == 2 and not debug_external_recorder_connected:
-			suffix = "  [ SIN CONEXION ]"
-		elif index == 2 and _saved_clips.is_empty():
-			suffix = "  [ SIN GRABACIONES ]"
-		menu += "[color=%s]%s  %s%s[/color]\n\n" % [color, pointer, labels[index], suffix]
+		menu += "[color=%s]%s  %s[/color]\n\n" % [color, pointer, labels[index]]
 	menu += "[/center]"
 	_avio_menu.text = menu
 	var description := ""
-	if _avio_selection == 2:
-		if not debug_external_recorder_connected:
-			description = "REQUIERE DVD EXTERNO PARA GRABAR LA CINTA DEFINITIVAMENTE"
-		elif _saved_clips.is_empty():
-			description = "GRABA ALGO EN LA CAMARA ANTES DE TRANSFERIR"
-		else:
-			description = "TRANSFIERE EL ARCHIVO A LOS CASETES 01 Y 02 CONECTADOS"
+	if _avio_selection == 1 and _avio_scan_armed:
+		description = "SE HA ENCONTRADO UNA NUEVA CINTA\n¿ESCANEAR?    ESPACIO  SI"
+	elif not _avio_scan_result.is_empty():
+		description = _avio_scan_result
+	elif _avio_selection == 0 and _tape_inserted and not _player_can_store_cassette():
+		description = "NO HAY ESPACIO PARA SACAR LA CINTA"
+	elif _avio_selection == 1 and not _tape_inserted and not _player_has_inventory_cassette():
+		description = "NECESITAS UNA CINTA EN EL INVENTARIO"
+	elif _avio_selection == 2:
+		description = "REQUIERE DVD EXTERNO PARA GRABAR LA CINTA DEFINITIVAMENTE"
 	elif _avio_selection == 3 and not _saved_clips.is_empty():
 		description = (
 			"SE ELIMINARA LA GRABACION DEFINITIVAMENTE"
@@ -989,7 +1293,113 @@ func _refresh_avio_menu() -> void:
 	# opciones que el jugador no está inspeccionando.
 	_avio_explanation.text = "[center][color=#69716a]%s[/color][/center]" % description
 	if _avio_status.text.is_empty():
-		_avio_status.text = "Q / E  CAMBIAR MENU     W / S  SELECCIONAR     ESPACIO  ACEPTAR     TAB / ESC  CAMARA"
+		_avio_status.text = "Q / E · ◀ / ▶  CAMBIAR MENU     W / S  SELECCIONAR     ESPACIO  ACEPTAR     TAB / ESC  CAMARA"
+
+
+func _eject_inserted_tape() -> void:
+	var player := get_tree().get_first_node_in_group(&"player")
+	if player == null or not player.has_method(&"store_camera_cassette"):
+		_avio_scan_result = "NO SE PUEDE EXTRAER LA CINTA"
+		return
+	var cassette_data := _make_inserted_tape_data()
+	if not bool(player.call(&"store_camera_cassette", cassette_data)):
+		_avio_scan_result = "NO HAY ESPACIO PARA SACAR LA CINTA"
+		return
+	_tape_inserted = false
+	_inserted_tape_data = {}
+	_clear_archive()
+	_avio_scan_result = "CINTA EXTRAIDA · G PARA SOLTARLA"
+
+
+func _insert_inventory_cassette() -> void:
+	var player := get_tree().get_first_node_in_group(&"player")
+	if player == null or not player.has_method(&"take_inventory_cassette"):
+		_avio_scan_result = "NO SE PUEDE LEER LA CINTA"
+		return
+	var cassette_data := player.call(&"take_inventory_cassette") as Dictionary
+	if cassette_data.is_empty():
+		_avio_scan_result = "NO LLEVAS NINGUNA CINTA"
+		return
+	_inserted_tape_data = cassette_data.duplicate(true)
+	_tape_inserted = true
+	_avio_scan_armed = false
+	_load_archive_from_cassette(cassette_data)
+	_avio_scan_result = (
+		"ESCANEO COMPLETO · CINTA VACIA"
+		if _saved_clips.is_empty()
+		else "ESCANEO COMPLETO · %d GRABACION/ES" % _saved_clips.size()
+	)
+
+
+func _make_inserted_tape_data() -> Dictionary:
+	var result := _inserted_tape_data.duplicate(true)
+	result["archive_slots"] = _duplicate_archive_slots(_saved_clips)
+	var recordings := {"A": [], "B": []}
+	for index in mini(2, _saved_clips.size()):
+		if not (_saved_clips[index] as Array).is_empty():
+			recordings["A"] = _duplicate_clip(_saved_clips[index] as Array)
+			break
+	for index in range(2, mini(4, _saved_clips.size())):
+		if not (_saved_clips[index] as Array).is_empty():
+			recordings["B"] = _duplicate_clip(_saved_clips[index] as Array)
+			break
+	result["recordings"] = recordings
+	return result
+
+
+func _load_archive_from_cassette(data: Dictionary) -> void:
+	_clear_archive()
+	for archived_clip in _duplicate_archive_slots(data.get("archive_slots", []) as Array):
+		_saved_clips.append(archived_clip)
+	if _saved_clips.is_empty():
+		var recordings := data.get("recordings", {}) as Dictionary
+		for side in ["A", "B"]:
+			var clip := _duplicate_clip(recordings.get(side, []) as Array)
+			if not clip.is_empty():
+				_saved_clips.append(clip)
+	while _saved_clips.size() > maximum_saved_clips:
+		_saved_clips.pop_back()
+	_selected_clip = 0
+	_recording_sequence = clampi(_saved_clips.size() + 1, 1, MAX_RECORDING_SEQUENCE)
+	_context_alerts.set_storage_usage(_saved_clips.size(), maximum_saved_clips)
+	_update_storage_readout_state()
+
+
+func _clear_archive() -> void:
+	_saved_clips.clear()
+	_selected_clip = 0
+	_pending_clip = -1
+	_selected_frame = 0
+	_playback_running = false
+	_playback_texture = null
+	_recording_sequence = 1
+	_context_alerts.set_storage_usage(0, maximum_saved_clips)
+	_update_storage_readout_state()
+
+
+func _duplicate_archive_slots(source: Array) -> Array:
+	var result: Array = []
+	for clip in source:
+		result.append(_duplicate_clip(clip as Array))
+	return result
+
+
+func _duplicate_clip(source: Array) -> Array[PackedByteArray]:
+	var result: Array[PackedByteArray] = []
+	for frame in source:
+		if frame is PackedByteArray:
+			result.append((frame as PackedByteArray).duplicate())
+	return result
+
+
+func _player_has_inventory_cassette() -> bool:
+	var player := get_tree().get_first_node_in_group(&"player")
+	return player != null and player.has_method(&"has_inventory_cassette") and bool(player.call(&"has_inventory_cassette"))
+
+
+func _player_can_store_cassette() -> bool:
+	var player := get_tree().get_first_node_in_group(&"player")
+	return player != null and player.has_method(&"can_store_inventory_item") and bool(player.call(&"can_store_inventory_item"))
 
 
 func _write_archive_to_debug_cassettes() -> Dictionary:
@@ -1075,15 +1485,23 @@ func _build_archive_tabs(camera_font: Font) -> void:
 	_playback_tabs.offset_bottom = 166.0
 	_playback_tabs.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_playback_tabs)
-	_camera_tab_label = _make_tab_label("CAMARA", 0.0, 280.0, camera_font, false)
-	_archive_tab_label = _make_tab_label("ARCHIVO", 310.0, 590.0, camera_font, true)
-	_avio_tab_label = _make_tab_label("AV / IO", 620.0, 900.0, camera_font, false)
+	_tabs_left_arrow = _make_tab_label("◀", 0.0, 60.0, camera_font, false)
+	_tabs_right_arrow = _make_tab_label("▶", 840.0, 900.0, camera_font, false)
+	_camera_tab_label = _make_tab_label("CAMARA", 65.0, 310.0, camera_font, false)
+	_archive_tab_label = _make_tab_label("ARCHIVO", 322.0, 567.0, camera_font, true)
+	_avio_tab_label = _make_tab_label("AV / IO", 579.0, 824.0, camera_font, false)
+	_data_tab_label = _make_tab_label("DATOS", 579.0, 824.0, camera_font, false)
+	_settings_tab_label = _make_tab_label("AJUSTES", 579.0, 824.0, camera_font, false)
+	_playback_tabs.add_child(_tabs_left_arrow)
 	_playback_tabs.add_child(_camera_tab_label)
 	_playback_tabs.add_child(_archive_tab_label)
 	_playback_tabs.add_child(_avio_tab_label)
+	_playback_tabs.add_child(_data_tab_label)
+	_playback_tabs.add_child(_settings_tab_label)
+	_playback_tabs.add_child(_tabs_right_arrow)
 	_tabs_underline = ColorRect.new()
-	_tabs_underline.position = Vector2(20.0, 54.0)
-	_tabs_underline.size = Vector2(240.0, 4.0)
+	_tabs_underline.position = Vector2(337.0, 54.0)
+	_tabs_underline.size = Vector2(215.0, 4.0)
 	_tabs_underline.color = Color(0.82, 0.88, 0.79, 0.9)
 	_tabs_underline.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_playback_tabs.add_child(_tabs_underline)
@@ -1095,18 +1513,51 @@ func _set_active_tab(mode: int) -> void:
 	_camera_tab_label.add_theme_color_override(&"font_color", active_color if mode == MODE_CAMERA else inactive_color)
 	_archive_tab_label.add_theme_color_override(&"font_color", active_color if mode == MODE_ARCHIVE else inactive_color)
 	_avio_tab_label.add_theme_color_override(&"font_color", active_color if mode == MODE_AV_IO else inactive_color)
-	_tabs_underline.position.x = [20.0, 330.0, 640.0][mode]
+	_data_tab_label.add_theme_color_override(&"font_color", active_color if mode == MODE_DATA else inactive_color)
+	_settings_tab_label.add_theme_color_override(&"font_color", active_color if mode == MODE_SETTINGS else inactive_color)
+	_layout_tab_carousel(mode)
 	# Estos indicadores describen el directo, no el material archivado.
 	recording_label.visible = mode == MODE_CAMERA
 	recording_dot.visible = mode == MODE_CAMERA
 	fps_label.visible = mode == MODE_CAMERA
 	# La esquina inferior alterna contenido: fecha/hora en directo, únicamente
 	# VOL en archivo. Durante el loader el indicador se activa al finalizar.
-	timestamp_label.visible = mode == MODE_CAMERA
+	timestamp_label.visible = mode == MODE_CAMERA and _show_camera_datetime
 	_playback_volume_indicator.visible = mode == MODE_ARCHIVE and not _mode_transitioning
 	_camera_corner_frame.visible = mode == MODE_CAMERA
 	_menu_outline_frame.visible = mode != MODE_CAMERA
 	_menu_inner_brackets.visible = mode != MODE_CAMERA
+
+
+func _layout_tab_carousel(mode: int) -> void:
+	var all_tabs: Array[Label] = [
+		_camera_tab_label,
+		_archive_tab_label,
+		_avio_tab_label,
+		_settings_tab_label,
+		_data_tab_label,
+	]
+	for tab in all_tabs:
+		tab.visible = false
+	# Con CAMARA / ARCHIVO / AV-IO ya visibles no existe contenido oculto a la
+	# izquierda; la flecha aparece solo al avanzar hasta AJUSTES o DATOS.
+	_tabs_left_arrow.visible = mode > MODE_AV_IO
+	_tabs_right_arrow.visible = mode < MODE_DATA
+	var visible_tabs: Array[Label]
+	if mode <= MODE_AV_IO:
+		visible_tabs = [_camera_tab_label, _archive_tab_label, _avio_tab_label]
+	elif mode == MODE_SETTINGS:
+		visible_tabs = [_archive_tab_label, _avio_tab_label, _settings_tab_label]
+	else:
+		visible_tabs = [_avio_tab_label, _settings_tab_label, _data_tab_label]
+	var slot_left := [65.0, 322.0, 579.0]
+	for index in visible_tabs.size():
+		var tab := visible_tabs[index]
+		tab.visible = true
+		tab.position = Vector2(slot_left[index], 0.0)
+		tab.size = Vector2(245.0, 54.0)
+		if tab == all_tabs[mode]:
+			_tabs_underline.position.x = slot_left[index] + 15.0
 
 
 func _make_tab_label(text_value: String, left: float, right: float, camera_font: Font, active: bool) -> Label:
@@ -1144,6 +1595,8 @@ func _make_transport_button(text_value: String, left: float, right: float, top: 
 func _refresh_readouts() -> void:
 	_update_timestamp()
 	_update_fps()
+	if _active_mode == MODE_DATA:
+		_refresh_data_panel()
 
 
 func _schedule_recording_blink() -> void:
@@ -1172,9 +1625,9 @@ func _toggle_recording() -> void:
 
 func _update_timestamp() -> void:
 	var datetime := Time.get_datetime_dict_from_system()
-	timestamp_label.text = "%02d/%02d/%04d  %02d:%02d:%02d" % [
-		datetime.day, datetime.month, datetime.year,
-		datetime.hour, datetime.minute, datetime.second
+	timestamp_label.text = "%02d:%02d:%02d  %02d/%02d/%04d" % [
+		datetime.hour, datetime.minute, datetime.second,
+		datetime.day, datetime.month, datetime.year
 	]
 
 

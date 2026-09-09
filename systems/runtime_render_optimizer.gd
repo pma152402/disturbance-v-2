@@ -3,6 +3,10 @@ extends Node
 const UPDATE_INTERVAL := 0.18
 const LIGHT_MARGIN := 4.0
 const MAX_SHADOW_LIGHTS := 3
+const SHADOWLESS_MULTIMESH_HINTS := [
+	"bulb", "feet", "foot", "nail", "page", "band", "hinge", "cable",
+	"grass", "weed", "reed", "groundcover",
+]
 var _lights: Array[Light3D] = []
 var _shadow_capable := {}
 
@@ -21,6 +25,14 @@ static func install(branch: Node) -> Dictionary:
 			mesh.visibility_range_end_margin = 5.0
 			mesh.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_SELF
 			detail_meshes += 1
+	var shadowless_multimeshes := 0
+	for node in branch.find_children("*", "MultiMeshInstance3D", true, false):
+		var multi := node as MultiMeshInstance3D
+		if multi.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+			continue
+		if controller._is_shadowless_multimesh_detail(multi):
+			multi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			shadowless_multimeshes += 1
 	# Presupuesta conjuntamente sombras omni y spot. Antes los focos spot se
 	# sumaban por fuera del límite de sombras dinámicas.
 	for node in branch.find_children("*", "Light3D", true, false):
@@ -50,7 +62,11 @@ static func install(branch: Node) -> Dictionary:
 	controller.add_child(update_timer)
 	update_timer.start()
 	controller._update_shadow_budget()
-	return {"detail_meshes":detail_meshes,"managed_lights":controller._lights.size()}
+	return {
+		"detail_meshes": detail_meshes,
+		"managed_lights": controller._lights.size(),
+		"shadowless_multimeshes": shadowless_multimeshes,
+	}
 
 func _update_shadow_budget() -> void:
 	var camera := get_viewport().get_camera_3d()
@@ -87,4 +103,11 @@ func _has_moving_parent(node: Node) -> bool:
 		if parent is AnimatableBody3D or parent is RigidBody3D or parent is CharacterBody3D:
 			return true
 		parent = parent.get_parent()
+	return false
+
+func _is_shadowless_multimesh_detail(multi: MultiMeshInstance3D) -> bool:
+	var lower_name := String(multi.name).to_lower().replace("_", "")
+	for hint: String in SHADOWLESS_MULTIMESH_HINTS:
+		if hint in lower_name:
+			return true
 	return false

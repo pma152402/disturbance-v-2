@@ -53,7 +53,6 @@ void fragment() {
 	float edge_blur = smoothstep(0.18, 1.15, lens_radius) * 0.24;
 	vec2 soft_uv = clamp(uv + vec2(block.x * 1.5, block.y), vec2(0.0), vec2(1.0));
 	source = mix(source, texture(screen_texture, soft_uv).rgb, edge_blur);
-
 	float flicker = 0.965 + hash21(vec2(frame, 4.0)) * 0.055;
 	source *= flicker;
 	float luminance = dot(source, vec3(0.299, 0.587, 0.114));
@@ -70,10 +69,8 @@ void fragment() {
 	vec2 centered = original_uv - vec2(0.5);
 	centered.x *= screen_aspect;
 	float vignette = smoothstep(vignette_inner, vignette_outer, length(centered));
-	float outside_lens = step(0.0, -uv.x) + step(1.0, uv.x) + step(0.0, -uv.y) + step(1.0, uv.y);
 	limited *= 0.82;
 	vec3 minimum_edge_light = vec3(0.002, 0.0022, 0.002) * vignette;
 	limited = max(limited * (1.0 - vignette * vignette_strength), minimum_edge_light);
-	limited *= 1.0 - clamp(outside_lens, 0.0, 1.0);
 	COLOR = vec4(limited, 1.0);
 }

@@ -8,12 +8,24 @@ var _rng := RandomNumberGenerator.new()
 
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		stop()
+		set_process(false)
+		return
 	_rng.randomize()
 	volume_db = thunder_volume_db
 	set_process(false)
 
 
+func _exit_tree() -> void:
+	stop()
+	set_process(false)
+
+
 func play_lightning_fragment() -> void:
+	if Engine.is_editor_hint() or not is_inside_tree():
+		stop()
+		return
 	if stream == null:
 		return
 	var audio_length := stream.get_length()

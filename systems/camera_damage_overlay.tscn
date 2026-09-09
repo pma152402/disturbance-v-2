@@ -1,35 +1,69 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://systems/camera_damage_overlay.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/ui/camera_damage/camera_cracks_hit_1_a.png" id="2_hit_1"]
-[ext_resource type="Texture2D" path="res://assets/ui/camera_damage/camera_cracks_hit_1_b.png" id="3_hit_1_b"]
-[ext_resource type="Texture2D" path="res://assets/ui/camera_damage/camera_cracks_hit_2_a.png" id="4_hit_2"]
-[ext_resource type="Texture2D" path="res://assets/ui/camera_damage/camera_cracks_hit_2_b.png" id="5_hit_2_b"]
-[ext_resource type="Texture2D" path="res://assets/ui/camera_damage/camera_cracks_hit_3_fatal.png" id="6_hit_3"]
+[ext_resource type="Texture2D" path="res://assets/ui/camera_damage/camera_cracks_hit_1_more.png" id="3_hit_1"]
+[ext_resource type="Texture2D" path="res://assets/ui/camera_damage/camera_cracks_hit_2_a.png" id="5_hit_2_b"]
+[ext_resource type="Texture2D" path="res://assets/ui/camera_damage/camera_cracks_hit_3_fatal_clear_center.png" id="6_hit_3"]
 [ext_resource type="Shader" path="res://shaders/camera_crack_brightness.gdshader" id="7_brightness"]
+[ext_resource type="Texture2D" path="res://assets/ui/blood_damage/blood_damage_hit_1.png" id="8_blood_1"]
+[ext_resource type="Texture2D" path="res://assets/ui/blood_damage/blood_damage_hit_2.png" id="9_blood_2"]
+[ext_resource type="Texture2D" path="res://assets/ui/blood_damage/blood_damage_hit_3.png" id="10_blood_3"]
 
 [sub_resource type="ShaderMaterial" id="CrackBrightnessMaterial"]
 resource_local_to_scene = true
 shader = ExtResource("7_brightness")
 shader_parameter/crack_brightness = 1.45
 shader_parameter/shadow_lift = 0.12
+shader_parameter/alpha_boost = 1.0
+shader_parameter/white_mix = 0.0
+shader_parameter/crack_tint = Color(0.56, 0.9, 1, 1)
+shader_parameter/tint_mix = 0.0
+shader_parameter/edge_thickness = 1.0
 
 [node name="CameraDamageOverlay" type="CanvasLayer"]
-# Se dibuja antes de las capas 99/101 de distorsion y postproceso de test.tscn,
-# para que las grietas formen parte de la propia imagen de la videocamara.
-layer = 98
+# La grieta forma parte de la imagen de camara y atraviesa su postproceso.
+layer = 100
 script = ExtResource("1_script")
-first_hit_texture = ExtResource("2_hit_1")
-first_hit_settled_texture = ExtResource("3_hit_1_b")
-second_hit_texture = ExtResource("4_hit_2")
-second_hit_settled_texture = ExtResource("5_hit_2_b")
+first_hit_texture = ExtResource("3_hit_1")
+second_hit_texture = ExtResource("5_hit_2_b")
 fatal_hit_texture = ExtResource("6_hit_3")
+first_hit_blood_texture = ExtResource("8_blood_1")
+second_hit_blood_texture = ExtResource("9_blood_2")
+fatal_hit_blood_texture = ExtResource("10_blood_3")
+
+[node name="ImpactFlash" type="ColorRect" parent="."]
+modulate = Color(0.72, 0.84, 1, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[node name="Blood" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -18.0
+offset_right = 18.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
 
 [node name="Cracks" type="TextureRect" parent="."]
 material = SubResource("CrackBrightnessMaterial")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -18.0
+offset_right = 18.0
+offset_bottom = 18.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2

@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://systems/camera_context_alerts.gd" id="1_script"]
+[ext_resource type="Script" path="res://systems/camera_alert_pixel_icon.gd" id="2_icon"]
+
+[sub_resource type="StyleBoxFlat" id="Style_alert"]
+bg_color = Color(0.015, 0.024, 0.018, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.56, 0.62, 0.54, 0.82)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxEmpty" id="Style_empty"]
+
+[node name="CameraContextAlerts" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="AlertPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -185.0
+offset_top = 76.0
+offset_right = 185.0
+offset_bottom = 124.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("Style_alert")
+mouse_filter = 2
+
+[node name="PixelIcon" type="Control" parent="AlertPanel"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 42.0
+offset_bottom = 40.0
+mouse_filter = 2
+script = ExtResource("2_icon")
+
+[node name="Message" type="Label" parent="AlertPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = 4.0
+offset_right = -8.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9, 0.93, 0.86, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 23
+text = "ESPACIO LIMITADO"
+horizontal_alignment = 1
+vertical_alignment = 1
+mouse_filter = 2

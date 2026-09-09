@@ -1,50 +1,22 @@
-[gd_scene load_steps=32 format=3]
+[gd_scene format=3 uid="uid://dhkhwg2b2wju0"]
 
-[ext_resource type="Script" path="res://house_props/cassette_tape.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://clpagosch3m8w" path="res://house_props/cassette_tape.gd" id="1_script"]
+
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(0.69, 0.085, 0.44)
 
 [sub_resource type="StandardMaterial3D" id="BlackPlastic"]
 albedo_color = Color(0.018, 0.021, 0.024, 1)
 metallic = 0.08
 roughness = 0.68
 
-[sub_resource type="StandardMaterial3D" id="EdgePlastic"]
-albedo_color = Color(0.045, 0.049, 0.052, 1)
-roughness = 0.58
-
-[sub_resource type="StandardMaterial3D" id="LabelPaper"]
-albedo_color = Color(0.88, 0.865, 0.79, 1)
-roughness = 0.94
-
-[sub_resource type="StandardMaterial3D" id="LabelInk"]
-albedo_color = Color(0.075, 0.08, 0.078, 1)
-roughness = 0.82
-
-[sub_resource type="StandardMaterial3D" id="RecordedInk"]
-albedo_color = Color(0.55, 0.045, 0.035, 1)
-roughness = 0.84
-
-[sub_resource type="StandardMaterial3D" id="WindowGlass"]
-transparency = 1
-albedo_color = Color(0.19, 0.23, 0.23, 0.32)
-metallic = 0.22
-roughness = 0.16
-
-[sub_resource type="StandardMaterial3D" id="TapeRibbon"]
-albedo_color = Color(0.105, 0.052, 0.025, 1)
-roughness = 0.48
-
-[sub_resource type="StandardMaterial3D" id="ReelIvory"]
-albedo_color = Color(0.73, 0.7, 0.59, 1)
-roughness = 0.72
-
-[sub_resource type="StandardMaterial3D" id="Metal"]
-albedo_color = Color(0.28, 0.29, 0.27, 1)
-metallic = 0.72
-roughness = 0.35
-
 [sub_resource type="BoxMesh" id="BodyMesh"]
 material = SubResource("BlackPlastic")
 size = Vector3(0.68, 0.058, 0.43)
+
+[sub_resource type="StandardMaterial3D" id="EdgePlastic"]
+albedo_color = Color(0.045, 0.049, 0.052, 1)
+roughness = 0.58
 
 [sub_resource type="BoxMesh" id="EdgeRailMesh"]
 material = SubResource("EdgePlastic")
@@ -54,33 +26,39 @@ size = Vector3(0.62, 0.018, 0.018)
 material = SubResource("EdgePlastic")
 size = Vector3(0.018, 0.018, 0.37)
 
-[sub_resource type="BoxMesh" id="LabelMesh"]
-material = SubResource("LabelPaper")
-size = Vector3(0.57, 0.008, 0.09)
+[sub_resource type="StandardMaterial3D" id="LabelPaper"]
+albedo_color = Color(0.88, 0.865, 0.79, 1)
+roughness = 0.94
 
 [sub_resource type="BoxMesh" id="LabelLowerMesh"]
 material = SubResource("LabelPaper")
-size = Vector3(0.57, 0.008, 0.065)
+size = Vector3(0.41890624, 0.008, 0.103896484)
 
-[sub_resource type="BoxMesh" id="LabelSideMesh"]
-material = SubResource("LabelPaper")
-size = Vector3(0.075, 0.008, 0.12)
+[sub_resource type="StandardMaterial3D" id="LabelInk"]
+albedo_color = Color(0.075, 0.08, 0.078, 1)
+roughness = 0.82
 
 [sub_resource type="BoxMesh" id="LabelRuleMesh"]
 material = SubResource("LabelInk")
-size = Vector3(0.39, 0.002, 0.004)
+size = Vector3(0.36406738, 0.002, 0.004)
 
-[sub_resource type="BoxMesh" id="WindowMesh"]
-material = SubResource("WindowGlass")
-size = Vector3(0.405, 0.009, 0.12)
+[sub_resource type="StandardMaterial3D" id="TapeRibbon"]
+albedo_color = Color(0.105, 0.052, 0.025, 1)
+roughness = 0.48
 
 [sub_resource type="BoxMesh" id="RibbonMesh"]
 material = SubResource("TapeRibbon")
 size = Vector3(0.31, 0.012, 0.045)
 
-[sub_resource type="BoxMesh" id="HubSpokeMesh"]
-material = SubResource("BlackPlastic")
-size = Vector3(0.009, 0.006, 0.062)
+[sub_resource type="StandardMaterial3D" id="WindowGlass"]
+transparency = 1
+albedo_color = Color(0.19, 0.23, 0.23, 0.32)
+metallic = 0.22
+roughness = 0.16
+
+[sub_resource type="BoxMesh" id="WindowMesh"]
+material = SubResource("WindowGlass")
+size = Vector3(0.590437, 0.009, 0.35330015)
 
 [sub_resource type="CylinderMesh" id="ReelMesh"]
 material = SubResource("BlackPlastic")
@@ -88,6 +66,10 @@ top_radius = 0.073
 bottom_radius = 0.073
 height = 0.018
 radial_segments = 32
+
+[sub_resource type="StandardMaterial3D" id="ReelIvory"]
+albedo_color = Color(0.73, 0.7, 0.59, 1)
+roughness = 0.72
 
 [sub_resource type="CylinderMesh" id="HubMesh"]
 material = SubResource("ReelIvory")
@@ -103,6 +85,49 @@ bottom_radius = 0.016
 height = 0.027
 radial_segments = 16
 
+[sub_resource type="BoxMesh" id="HubSpokeMesh"]
+material = SubResource("BlackPlastic")
+size = Vector3(0.009, 0.006, 0.062)
+
+[sub_resource type="TextMesh" id="TextSideA"]
+resource_local_to_scene = true
+material = SubResource("LabelInk")
+text = "A"
+font_size = 48
+pixel_size = 0.00145
+depth = 0.001
+
+[sub_resource type="StandardMaterial3D" id="RecordedInk"]
+albedo_color = Color(0.55, 0.045, 0.035, 1)
+roughness = 0.84
+
+[sub_resource type="TextMesh" id="TextRecordedA"]
+resource_local_to_scene = true
+material = SubResource("RecordedInk")
+font_size = 22
+pixel_size = 0.00125
+depth = 0.001
+
+[sub_resource type="TextMesh" id="TextSideB"]
+resource_local_to_scene = true
+material = SubResource("LabelInk")
+text = "B"
+font_size = 48
+pixel_size = 0.00145
+depth = 0.001
+
+[sub_resource type="TextMesh" id="TextRecordedB"]
+resource_local_to_scene = true
+material = SubResource("RecordedInk")
+font_size = 22
+pixel_size = 0.00125
+depth = 0.001
+
+[sub_resource type="StandardMaterial3D" id="Metal"]
+albedo_color = Color(0.28, 0.29, 0.27, 1)
+metallic = 0.72
+roughness = 0.35
+
 [sub_resource type="CylinderMesh" id="ScrewMesh"]
 material = SubResource("Metal")
 top_radius = 0.012
@@ -110,325 +135,222 @@ bottom_radius = 0.012
 height = 0.009
 radial_segments = 12
 
-[sub_resource type="BoxShape3D" id="Collision"]
-size = Vector3(0.69, 0.085, 0.44)
-
-[sub_resource type="TextMesh" id="TextSideA"]
-material = SubResource("LabelInk")
-resource_local_to_scene = true
-text = "A"
-font_size = 48
-pixel_size = 0.00145
-depth = 0.001
-
-[sub_resource type="TextMesh" id="TextNumberA"]
-material = SubResource("LabelInk")
-resource_local_to_scene = true
-text = "01"
-font_size = 34
-pixel_size = 0.00145
-depth = 0.001
-
-[sub_resource type="TextMesh" id="TextRecordedA"]
-material = SubResource("RecordedInk")
-resource_local_to_scene = true
-text = ""
-font_size = 22
-pixel_size = 0.00125
-depth = 0.001
-
-[sub_resource type="TextMesh" id="TextSideB"]
-material = SubResource("LabelInk")
-resource_local_to_scene = true
-text = "B"
-font_size = 48
-pixel_size = 0.00145
-depth = 0.001
-
-[sub_resource type="TextMesh" id="TextNumberB"]
-material = SubResource("LabelInk")
-resource_local_to_scene = true
-text = "01"
-font_size = 34
-pixel_size = 0.00145
-depth = 0.001
-
-[sub_resource type="TextMesh" id="TextRecordedB"]
-material = SubResource("RecordedInk")
-resource_local_to_scene = true
-text = ""
-font_size = 22
-pixel_size = 0.00125
-depth = 0.001
-
-[node name="CassetteTape" type="RigidBody3D"]
+[node name="CassetteTape" type="RigidBody3D" unique_id=352992523]
 editor_description = "Casete negro editable. tape_number elige CINTA 01/02; display_side muestra la cara A/B. Cada cara conserva su propia grabación."
 collision_layer = 2
-collision_mask = 1
 mass = 0.16
 freeze = true
 script = ExtResource("1_script")
+register_as_world_cassette = null
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=926021637]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.0004277446, 0.0038843548, -0.0020481516)
 shape = SubResource("Collision")
 
-[node name="Shell" type="Node3D" parent="."]
+[node name="Shell" type="Node3D" parent="." unique_id=560643408]
 
-[node name="Body" type="MeshInstance3D" parent="Shell"]
+[node name="Body" type="MeshInstance3D" parent="Shell" unique_id=787938076]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.0004277446, 0.0038843548, -0.0020481516)
 mesh = SubResource("BodyMesh")
 
-[node name="TopRail" type="MeshInstance3D" parent="Shell"]
-position = Vector3(0, 0.036, -0.194)
+[node name="TopRail" type="MeshInstance3D" parent="Shell" unique_id=1084587639]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.0004277446, 0.020847907, -0.05531569)
 mesh = SubResource("EdgeRailMesh")
 
-[node name="BottomRail" type="MeshInstance3D" parent="Shell"]
-position = Vector3(0, 0.036, 0.194)
+[node name="BottomRail" type="MeshInstance3D" parent="Shell" unique_id=284247477]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.0004277446, 0.020847907, 0.05121939)
 mesh = SubResource("EdgeRailMesh")
 
-[node name="LeftRail" type="MeshInstance3D" parent="Shell"]
-position = Vector3(-0.314, 0.036, 0)
+[node name="LeftRail" type="MeshInstance3D" parent="Shell" unique_id=1275960953]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.08395968, 0.020847907, -0.0020481516)
 mesh = SubResource("SideRailMesh")
 
-[node name="RightRail" type="MeshInstance3D" parent="Shell"]
-position = Vector3(0.314, 0.036, 0)
+[node name="RightRail" type="MeshInstance3D" parent="Shell" unique_id=1692201045]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, 0.083104186, 0.020847907, -0.0020481516)
 mesh = SubResource("SideRailMesh")
 
-[node name="HeadPlate" type="MeshInstance3D" parent="Shell"]
-position = Vector3(0, 0.037, 0.174)
+[node name="HeadPlate" type="MeshInstance3D" parent="Shell" unique_id=1745332703]
+transform = Transform3D(0.14631388, 0, 0, 0, 0.4712098, 0, 0, 0, 0.7688098, -0.0004277446, 0.021319117, 0.04572789)
 mesh = SubResource("EdgeRailMesh")
-scale = Vector3(0.55, 1, 2.8)
 
-[node name="TapeSlotLeft" type="MeshInstance3D" parent="Shell"]
-position = Vector3(-0.175, 0.049, 0.176)
-mesh = SubResource("RibbonMesh")
-scale = Vector3(0.35, 0.7, 0.65)
+[node name="FaceA" type="Node3D" parent="." unique_id=1539150642]
 
-[node name="TapeSlotCenter" type="MeshInstance3D" parent="Shell"]
-position = Vector3(0, 0.049, 0.184)
-mesh = SubResource("RibbonMesh")
-scale = Vector3(0.22, 0.7, 0.48)
-
-[node name="TapeSlotRight" type="MeshInstance3D" parent="Shell"]
-position = Vector3(0.175, 0.049, 0.176)
-mesh = SubResource("RibbonMesh")
-scale = Vector3(0.35, 0.7, 0.65)
-
-[node name="FaceA" type="Node3D" parent="."]
-
-[node name="Label" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(0, 0.035, -0.126)
-mesh = SubResource("LabelMesh")
-
-[node name="LabelLower" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(0, 0.035, 0.102)
+[node name="LabelLower" type="MeshInstance3D" parent="FaceA" unique_id=2041318896]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.00022220876, 0.020376699, 0.03382711)
 mesh = SubResource("LabelLowerMesh")
 
-[node name="LabelLeft" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(-0.247, 0.035, -0.018)
-mesh = SubResource("LabelSideMesh")
-
-[node name="LabelRight" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(0.247, 0.035, -0.018)
-mesh = SubResource("LabelSideMesh")
-
-[node name="WritingRuleTop" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(0, 0.041, -0.139)
+[node name="WritingRuleTop" type="MeshInstance3D" parent="FaceA" unique_id=32644714]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.003877109, 0.023203958, -0.040214065)
 mesh = SubResource("LabelRuleMesh")
 
-[node name="WritingRuleBottom" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(0, 0.041, 0.102)
+[node name="WritingRuleBottom" type="MeshInstance3D" parent="FaceA" unique_id=620556206]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.0004277446, 0.023203958, 0.025958491)
 mesh = SubResource("LabelRuleMesh")
 
-[node name="Ribbon" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(0, 0.044, -0.018)
+[node name="Ribbon" type="MeshInstance3D" parent="FaceA" unique_id=385698110]
+transform = Transform3D(0.18359603, -0.007819182, -7.802919e-05, 0.00018744668, 0.016372424, -0.21700108, 0.0047096163, 0.30416524, 0.011678603, -0.0004277446, 0.017522126, -0.019421197)
 mesh = SubResource("RibbonMesh")
 
-[node name="Window" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(0, 0.057, -0.018)
+[node name="Ribbon2" type="MeshInstance3D" parent="FaceA" unique_id=790801484]
+transform = Transform3D(0.18359603, -0.007819182, -7.802919e-05, 0.00018744668, 0.016372424, -0.21700108, 0.0047096163, 0.30416524, 0.011678603, -0.0004277446, 0.017522126, 0.008386312)
+mesh = SubResource("RibbonMesh")
+
+[node name="Window" type="MeshInstance3D" parent="FaceA" unique_id=210137786]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.00113729, 0.02467588, -0.0005059624)
 mesh = SubResource("WindowMesh")
 
-[node name="ReelLeft" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(-0.142, 0.052, -0.018)
+[node name="ReelLeft" type="MeshInstance3D" parent="FaceA" unique_id=1278784065]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.038203325, 0.018157037, -0.0069905)
 mesh = SubResource("ReelMesh")
 
-[node name="ReelLeftHub" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(-0.142, 0.065, -0.018)
+[node name="ReelLeftHub" type="MeshInstance3D" parent="FaceA" unique_id=1979427452]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.038203325, 0.018661123, -0.0069905)
 mesh = SubResource("HubMesh")
 
-[node name="ReelLeftAxle" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(-0.142, 0.077, -0.018)
+[node name="ReelLeftAxle" type="MeshInstance3D" parent="FaceA" unique_id=1081946519]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.038203325, 0.018626712, -0.0069905)
 mesh = SubResource("AxleMesh")
 
-[node name="ReelLeftSpoke1" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(-0.142, 0.079, -0.018)
+[node name="ReelLeftSpoke1" type="MeshInstance3D" parent="FaceA" unique_id=923498513]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.038203325, 0.022979926, -0.0069905)
 mesh = SubResource("HubSpokeMesh")
 
-[node name="ReelLeftSpoke2" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(-0.142, 0.079, -0.018)
-rotation = Vector3(0, 1.047198, 0)
+[node name="ReelLeftSpoke2" type="MeshInstance3D" parent="FaceA" unique_id=1962246517]
+transform = Transform3D(0.096629314, 0, 0.4337806, 0, 0.4712098, 0, -0.16736712, 0, 0.25044307, -0.038203325, 0.022979926, -0.0069905)
 mesh = SubResource("HubSpokeMesh")
 
-[node name="ReelLeftSpoke3" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(-0.142, 0.079, -0.018)
-rotation = Vector3(0, 2.094395, 0)
+[node name="ReelLeftSpoke3" type="MeshInstance3D" parent="FaceA" unique_id=1733621599]
+transform = Transform3D(-0.28399166, 0, 0.16756527, 0, 0.4712098, 0, -0.49188823, 0, -0.096743815, -0.038203325, 0.022979926, -0.0069905)
 mesh = SubResource("HubSpokeMesh")
 
-[node name="ReelRight" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(0.142, 0.052, -0.018)
+[node name="ReelRight" type="MeshInstance3D" parent="FaceA" unique_id=2065540080]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, 0.037347842, 0.01857067, -0.0069905)
 mesh = SubResource("ReelMesh")
 
-[node name="ReelRightHub" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(0.142, 0.065, -0.018)
+[node name="ReelRightHub" type="MeshInstance3D" parent="FaceA" unique_id=529266576]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, 0.037347842, 0.019331992, -0.0069905)
 mesh = SubResource("HubMesh")
 
-[node name="ReelRightAxle" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(0.142, 0.077, -0.018)
+[node name="ReelRightAxle" type="MeshInstance3D" parent="FaceA" unique_id=247164708]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, 0.037347842, 0.019476142, -0.0069905)
 mesh = SubResource("AxleMesh")
 
-[node name="ReelRightSpoke1" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(0.142, 0.079, -0.018)
+[node name="ReelRightSpoke1" type="MeshInstance3D" parent="FaceA" unique_id=1175174842]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, 0.037347842, 0.023621572, -0.0069905)
 mesh = SubResource("HubSpokeMesh")
 
-[node name="ReelRightSpoke2" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(0.142, 0.079, -0.018)
-rotation = Vector3(0, 1.047198, 0)
+[node name="ReelRightSpoke2" type="MeshInstance3D" parent="FaceA" unique_id=418311369]
+transform = Transform3D(0.096629314, 0, 0.4337806, 0, 0.4712098, 0, -0.16736712, 0, 0.25044307, 0.037347842, 0.023621572, -0.0069905)
 mesh = SubResource("HubSpokeMesh")
 
-[node name="ReelRightSpoke3" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(0.142, 0.079, -0.018)
-rotation = Vector3(0, 2.094395, 0)
+[node name="ReelRightSpoke3" type="MeshInstance3D" parent="FaceA" unique_id=2001127405]
+transform = Transform3D(-0.28399166, 0, 0.16756527, 0, 0.4712098, 0, -0.49188823, 0, -0.096743815, 0.037347842, 0.023621572, -0.0069905)
 mesh = SubResource("HubSpokeMesh")
 
-[node name="SideLetter" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(-0.238, 0.061, -0.125)
-rotation = Vector3(-1.570796, 0, 0)
+[node name="SideLetter" type="MeshInstance3D" parent="FaceA" unique_id=1256360237]
+transform = Transform3D(0.26602525, 0, 0, 0, 8.619358e-08, 0.47120994, 0, -0.27457488, 1.4792057e-07, -0.06374175, 0.026317641, -0.03637002)
 mesh = SubResource("TextSideA")
 
-[node name="TapeNumber" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(0.204, 0.061, -0.125)
-rotation = Vector3(-1.570796, 0, 0)
-mesh = SubResource("TextNumberA")
-
-[node name="RecordedMark" type="MeshInstance3D" parent="FaceA"]
-position = Vector3(-0.025, 0.061, 0.108)
-rotation = Vector3(-1.570796, 0, 0)
+[node name="RecordedMark" type="MeshInstance3D" parent="FaceA" unique_id=2075189731]
+transform = Transform3D(0.26602525, 0, 0, 0, 8.619358e-08, 0.47120994, 0, -0.27457488, 1.4792057e-07, -0.0070783747, 0.032628153, 0.02760594)
 mesh = SubResource("TextRecordedA")
 
-[node name="FaceB" type="Node3D" parent="."]
+[node name="FaceB" type="Node3D" parent="." unique_id=1181761895]
 
-[node name="Label" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(0, -0.035, -0.126)
-mesh = SubResource("LabelMesh")
-
-[node name="LabelLower" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(0, -0.035, 0.102)
+[node name="LabelLower" type="MeshInstance3D" parent="FaceB" unique_id=1085588920]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.00022220876, -0.012607988, 0.03382711)
 mesh = SubResource("LabelLowerMesh")
 
-[node name="LabelLeft" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(-0.247, -0.035, -0.018)
-mesh = SubResource("LabelSideMesh")
-
-[node name="LabelRight" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(0.247, -0.035, -0.018)
-mesh = SubResource("LabelSideMesh")
-
-[node name="WritingRuleTop" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(0, -0.041, -0.139)
+[node name="WritingRuleTop" type="MeshInstance3D" parent="FaceB" unique_id=844203665]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.003877109, -0.015435247, -0.040214065)
 mesh = SubResource("LabelRuleMesh")
 
-[node name="WritingRuleBottom" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(0, -0.041, 0.102)
+[node name="WritingRuleBottom" type="MeshInstance3D" parent="FaceB" unique_id=1726370012]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.0004277446, -0.015435247, 0.025958491)
 mesh = SubResource("LabelRuleMesh")
 
-[node name="Ribbon" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(0, -0.044, -0.018)
+[node name="Ribbon" type="MeshInstance3D" parent="FaceB" unique_id=2053450308]
+transform = Transform3D(0.18359603, -0.007819182, -7.802919e-05, 0.00018744668, 0.016372424, -0.21700108, 0.0047096163, 0.30416524, 0.011678603, -0.0004277446, -0.0097534135, -0.019421197)
 mesh = SubResource("RibbonMesh")
 
-[node name="Window" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(0, -0.057, -0.018)
+[node name="Ribbon2" type="MeshInstance3D" parent="FaceB" unique_id=1263465133]
+transform = Transform3D(0.18359603, -0.007819182, -7.802919e-05, 0.00018744668, 0.016372424, -0.21700108, 0.0047096163, 0.30416524, 0.011678603, -0.0004277446, -0.0097534135, 0.008386312)
+mesh = SubResource("RibbonMesh")
+
+[node name="Window" type="MeshInstance3D" parent="FaceB" unique_id=2075281479]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.00113729, -0.016907169, -0.0005059624)
 mesh = SubResource("WindowMesh")
 
-[node name="ReelLeft" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(-0.142, -0.052, -0.018)
+[node name="ReelLeft" type="MeshInstance3D" parent="FaceB" unique_id=2024516077]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.038203325, -0.010388326, -0.0069905)
 mesh = SubResource("ReelMesh")
 
-[node name="ReelLeftHub" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(-0.142, -0.065, -0.018)
+[node name="ReelLeftHub" type="MeshInstance3D" parent="FaceB" unique_id=1431450866]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.038203325, -0.010892412, -0.0069905)
 mesh = SubResource("HubMesh")
 
-[node name="ReelLeftAxle" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(-0.142, -0.077, -0.018)
+[node name="ReelLeftAxle" type="MeshInstance3D" parent="FaceB" unique_id=474124818]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.038203325, -0.010858003, -0.0069905)
 mesh = SubResource("AxleMesh")
 
-[node name="ReelLeftSpoke1" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(-0.142, -0.079, -0.018)
+[node name="ReelLeftSpoke1" type="MeshInstance3D" parent="FaceB" unique_id=631012846]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.038203325, -0.015211217, -0.0069905)
 mesh = SubResource("HubSpokeMesh")
 
-[node name="ReelLeftSpoke2" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(-0.142, -0.079, -0.018)
-rotation = Vector3(0, 1.047198, 0)
+[node name="ReelLeftSpoke2" type="MeshInstance3D" parent="FaceB" unique_id=1392570564]
+transform = Transform3D(0.096629314, 0, 0.4337806, 0, 0.4712098, 0, -0.16736712, 0, 0.25044307, -0.038203325, -0.015211217, -0.0069905)
 mesh = SubResource("HubSpokeMesh")
 
-[node name="ReelLeftSpoke3" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(-0.142, -0.079, -0.018)
-rotation = Vector3(0, 2.094395, 0)
+[node name="ReelLeftSpoke3" type="MeshInstance3D" parent="FaceB" unique_id=1873991203]
+transform = Transform3D(-0.28399166, 0, 0.16756527, 0, 0.4712098, 0, -0.49188823, 0, -0.096743815, -0.038203325, -0.015211217, -0.0069905)
 mesh = SubResource("HubSpokeMesh")
 
-[node name="ReelRight" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(0.142, -0.052, -0.018)
+[node name="ReelRight" type="MeshInstance3D" parent="FaceB" unique_id=1622116097]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, 0.037347842, -0.010801958, -0.0069905)
 mesh = SubResource("ReelMesh")
 
-[node name="ReelRightHub" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(0.142, -0.065, -0.018)
+[node name="ReelRightHub" type="MeshInstance3D" parent="FaceB" unique_id=806486410]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, 0.037347842, -0.011563282, -0.0069905)
 mesh = SubResource("HubMesh")
 
-[node name="ReelRightAxle" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(0.142, -0.077, -0.018)
+[node name="ReelRightAxle" type="MeshInstance3D" parent="FaceB" unique_id=1666335380]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, 0.037347842, -0.011707431, -0.0069905)
 mesh = SubResource("AxleMesh")
 
-[node name="ReelRightSpoke1" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(0.142, -0.079, -0.018)
+[node name="ReelRightSpoke1" type="MeshInstance3D" parent="FaceB" unique_id=584824709]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, 0.037347842, -0.015852863, -0.0069905)
 mesh = SubResource("HubSpokeMesh")
 
-[node name="ReelRightSpoke2" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(0.142, -0.079, -0.018)
-rotation = Vector3(0, 1.047198, 0)
+[node name="ReelRightSpoke2" type="MeshInstance3D" parent="FaceB" unique_id=255878133]
+transform = Transform3D(0.096629314, 0, 0.4337806, 0, 0.4712098, 0, -0.16736712, 0, 0.25044307, 0.037347842, -0.015852863, -0.0069905)
 mesh = SubResource("HubSpokeMesh")
 
-[node name="ReelRightSpoke3" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(0.142, -0.079, -0.018)
-rotation = Vector3(0, 2.094395, 0)
+[node name="ReelRightSpoke3" type="MeshInstance3D" parent="FaceB" unique_id=226750209]
+transform = Transform3D(-0.28399166, 0, 0.16756527, 0, 0.4712098, 0, -0.49188823, 0, -0.096743815, 0.037347842, -0.015852863, -0.0069905)
 mesh = SubResource("HubSpokeMesh")
 
-[node name="SideLetter" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(0.238, -0.061, -0.125)
-rotation = Vector3(1.570796, 0, 3.141593)
+[node name="SideLetter" type="MeshInstance3D" parent="FaceB" unique_id=1495834958]
+transform = Transform3D(-0.26602516, 8.946789e-08, 0, -2.7210906e-14, -8.61936e-08, -0.47120994, -8.6682014e-08, -0.274575, 1.4792057e-07, 0.06288627, -0.0140099935, -0.03637002)
 mesh = SubResource("TextSideB")
 
-[node name="TapeNumber" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(-0.204, -0.061, -0.125)
-rotation = Vector3(1.570796, 0, 3.141593)
-mesh = SubResource("TextNumberB")
-
-[node name="RecordedMark" type="MeshInstance3D" parent="FaceB"]
-position = Vector3(0.025, -0.061, 0.108)
-rotation = Vector3(1.570796, 0, 3.141593)
+[node name="RecordedMark" type="MeshInstance3D" parent="FaceB" unique_id=1587771460]
+transform = Transform3D(-0.26602516, 8.946789e-08, 0, -2.7210906e-14, -8.61936e-08, -0.47120994, -8.6682014e-08, -0.274575, 1.4792057e-07, 0.006222887, -0.024859445, 0.02760594)
 mesh = SubResource("TextRecordedB")
 
-[node name="Details" type="Node3D" parent="."]
+[node name="Details" type="Node3D" parent="." unique_id=1235486121]
 
-[node name="ScrewTL" type="MeshInstance3D" parent="Details"]
-position = Vector3(-0.29, 0.046, -0.17)
+[node name="ScrewTL" type="MeshInstance3D" parent="Details" unique_id=1979132223]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.07757506, 0.025560006, -0.048725888)
 mesh = SubResource("ScrewMesh")
 
-[node name="ScrewTR" type="MeshInstance3D" parent="Details"]
-position = Vector3(0.29, 0.046, -0.17)
+[node name="ScrewTR" type="MeshInstance3D" parent="Details" unique_id=539440549]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, 0.076719575, 0.025560006, -0.048725888)
 mesh = SubResource("ScrewMesh")
 
-[node name="ScrewBL" type="MeshInstance3D" parent="Details"]
-position = Vector3(-0.29, 0.046, 0.17)
+[node name="ScrewBL" type="MeshInstance3D" parent="Details" unique_id=1747764877]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, -0.07757506, 0.025560006, 0.04462959)
 mesh = SubResource("ScrewMesh")
 
-[node name="ScrewBR" type="MeshInstance3D" parent="Details"]
-position = Vector3(0.29, 0.046, 0.17)
+[node name="ScrewBR" type="MeshInstance3D" parent="Details" unique_id=1002996251]
+transform = Transform3D(0.26602525, 0, 0, 0, 0.4712098, 0, 0, 0, 0.27457494, 0.076719575, 0.025560006, 0.04462959)
 mesh = SubResource("ScrewMesh")

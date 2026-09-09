@@ -64,7 +64,7 @@ No unir toda la casa en una única malla: su volumen de visibilidad enorme dific
 
 ## 2. Luces y sombras — prioridad alta
 
-`project.godot` configura ambos filtros de sombras en nivel 3. `rainy_weather.tscn` mantiene una luz direccional con sombras hasta 70 metros. Varias luminarias generan sombras desde una OmniLight y también desde una SpotLight: chandelier y faroles de iglesia, además de lámparas de techo que pueden encenderse durante el juego.
+Estado actualizado: `project.godot` usa mapas direccionales y atlas posicional de 4096 px con filtrado medio. `rainy_weather.tscn` limita la luz direccional a 35 metros. El presupuesto runtime permite como máximo tres luces locales con sombras simultáneas y evita duplicar Omni + Spot en una misma luminaria.
 
 En el arranque, las 20 luces visibles con sombras incluyen 11 pertenecientes al chandelier, faroles y apliques de iglesia. No hay desvanecimiento por distancia configurado en ninguna luz.
 
@@ -79,7 +79,7 @@ Las sombras necesitan renderizados adicionales de geometría; por eso esta revis
 
 ## 3. Resolución y postprocesado — prioridad alta para una prueba rápida
 
-El proyecto configura 1920 × 1080 y MSAA 4× (`msaa_3d=2`). No configura una escala reducida de renderizado 3D. `test.tscn` aplica dos efectos de pantalla completa, `ps2_distortion.gdshader` y `ps2_postprocess.gdshader`, con una copia intermedia de pantalla.
+Estado actualizado: el proyecto configura 1920 × 1080, MSAA 2× y escala 3D 0,75. `test.tscn` aplica distorsión, pixelado y acabado VHS mediante un único `ps2_camera_combined.gdshader`, sin `BackBufferCopy` manual ni segunda pasada. Conserva la oscuridad y viñeta VHS originales, pero los laterales distorsionados continúan mostrando imagen en vez de convertirse en marcos negros planos.
 
 El `pixel_size=8` del shader cuantiza las coordenadas de muestreo después de renderizar el mundo. **No hace que la escena 3D se dibuje a una octava parte de resolución.**
 
@@ -89,9 +89,7 @@ La estética pixelada hace esta prueba especialmente interesante. Si se busca ab
 
 ## 4. Exterior y lluvia — prioridad media/alta según la cámara
 
-`exterior_environment.gd` ya utiliza MultiMesh y la hierba no proyecta sombras. Hay distancias de visibilidad de 34–48 metros para las cuatro capas de vegetación y de 90 metros para los árboles. Son optimizaciones existentes, no tareas pendientes.
-
-La limitación está en agrupar 2.500, 800, 600 y 700 plantas en cuatro bloques que abarcan áreas extensas. MultiMesh se descarta como conjunto, no planta por planta. Probar dividir cada capa en celdas espaciales, inicialmente de unos 10–20 metros, y ajustar según el equilibrio entre llamadas de dibujo y descarte. Los árboles también admiten sectores. Referencia: [optimización con MultiMesh](https://docs.godotengine.org/en/stable/tutorials/performance/using_multimesh.html).
+`exterior_environment.gd` utiliza MultiMesh, la hierba no proyecta sombras y las cinco capas exteriores están divididas en celdas espaciales de 16 metros. Cada parcela posee un AABB independiente, de modo que Godot puede descartar grupos completos sin mantener activas las 2.500, 800, 600 y 700 plantas ni los 220 árboles como bloques globales. Se conservan las distancias de visibilidad de 34–48 metros para la vegetación y de 90 metros para los árboles. Referencia: [optimización con MultiMesh](https://docs.godotengine.org/en/stable/tutorials/performance/using_multimesh.html).
 
 La lluvia mantiene cuatro emisores de 2.200 partículas, simulación a 60 Hz, colisiones y AABB de 60 × 50 × 60 metros por emisor. Probar menos partículas, simulación a 30 Hz y emisores cercanos al jugador o activados por sectores. En interiores, mantener lluvia donde sea visible por puertas y ventanas; en zonas subterráneas cerradas, se puede prescindir de ella visualmente conservando el sonido. Los nodos llamados RainOccluder son colisionadores de partículas, no oclusores del renderizado del mundo.
 

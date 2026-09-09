@@ -72,6 +72,13 @@ const ZOOM_OUT_SOUND_START := 1.55
 @export_range(0.02, 0.25, 0.01) var fundido_sonido_zoom := 0.08
 @export_category("Audio - Ruido permanente de cámara")
 @export_range(-60.0, 0.0, 0.5) var volumen_ruido_camara_db := -32.0
+@export_category("Muerte")
+@export_range(1.5, 15.0, 0.1) var death_sequence_seconds := 7.1
+@export_range(0.05, 0.25, 0.01) var death_camera_radius := 0.09
+@export_range(0.1, 4.0, 0.05) var death_side_velocity := 2.0
+@export_range(1.0, 8.0, 0.1) var death_roll_speed := 4.0
+@export_range(0.2, 2.0, 0.05) var death_look_delay := 0.7
+@export_range(1.0, 16.0, 0.5) var death_look_strength := 8.0
 
 enum Stance { STANDING, CROUCHED, PRONE }
 enum JumpPhase { IDLE, WINDUP, RECOVERING }
@@ -92,6 +99,7 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var held_matchbox: Node3D = $Head/Camera3D/RightHandRig/HeldMatchbox
 @onready var held_candle: Node3D = $Head/Camera3D/RightHandRig/HeldCandle
 @onready var held_tv_remote: Node3D = $Head/Camera3D/RightHandRig/HeldTVRemote
+@onready var held_cassette: Node3D = $Head/Camera3D/RightHandRig/HeldCassette
 @onready var flashlight: SpotLight3D = $Head/Camera3D/HandRig/Flashlight
 @onready var interaction_ray: RayCast3D = $Head/Camera3D/InteractionRay
 @onready var interaction_focus_cast: ShapeCast3D = $Head/Camera3D/InteractionFocusCast
@@ -123,6 +131,7 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var footstep_sound: AudioStreamPlayer = $FootstepSound
 @onready var footstep_sound_right: AudioStreamPlayer = $FootstepSoundRight
 @onready var zoom_sound: AudioStreamPlayer = $ZoomSound
+@onready var camera_damage_sound: AudioStreamPlayer = $CameraDamageSound
 # Ruido electrónico propio de la videocámara; no pertenece a la vela.
 @onready var camera_background_noise: Node = $Head/Camera3D/CameraBackgroundNoise
 @onready var camera_damage_overlay: CanvasLayer = $CameraDamageOverlay
@@ -181,6 +190,9 @@ var _zoom_segments: Array[ColorRect] = []
 var _monster_hits := 0
 var _monster_hit_cooldown := 0.0
 var _monster_restart_pending := false
+var _death_elapsed := 0.0
+var _death_camera_rig: RigidBody3D
+var _death_child_visual: Node3D
 var _skill_check_active := false
 var _active_valve: Node3D
 var _active_screw_panel: Node3D
@@ -209,6 +221,8 @@ const DroppedRecipeBookScene := preload("res://pickups/dropped_recipe_book.tscn"
 const MatchboxPickupScene := preload("res://house_props/matchbox_pickup.tscn")
 const CandlePickupScene := preload("res://house_props/candle_pickup.tscn")
 const TVRemoteScene := preload("res://house_props/retro_tv_remote.tscn")
+const CassetteTapeScene := preload("res://house_props/cassette_tape.tscn")
+const DeathChildVisualScene := preload("res://characters/companion/child_visual.tscn")
 const GoodPanelFuseScene := preload("res://house_props/light_panel_fuse_good.tscn")
 const BrokenPanelFuseScene := preload("res://house_props/light_panel_fuse_broken.tscn")
 
@@ -230,6 +244,7 @@ const INVENTORY_ITEM_NAMES := {
 	&"matchbox": "CERILLAS",
 	&"candle": "VELA",
 	&"tv_remote": "MANDO TV",
+	&"cassette": "CINTA",
 	&"panel_fuse_good": "FUSIBLE BUENO",
 	&"panel_fuse_broken": "FUSIBLE ROTO",
 }
@@ -296,6 +311,7 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	stance_indicator.call(&"set_stance", _stance)
 	holster_sound.stream = GameplaySounds.make_switch_click()
+	camera_damage_sound.stream = GameplaySounds.make_glass_break()
 	GameplaySounds.prewarm_footsteps()
 	footstep_sound.stream = GameplaySounds.make_outdoor_footstep(0)
 	footstep_sound_right.stream = GameplaySounds.make_outdoor_footstep(1)
@@ -306,6 +322,9 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if _monster_restart_pending:
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		var key_event := event as InputEventKey
 		var pressed_key := key_event.physical_keycode if key_event.physical_keycode != 0 else key_event.keycode
@@ -532,6 +551,9 @@ func _input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _monster_restart_pending:
+		_update_death_sequence(delta)
+		return
 	_update_zoom_sound(delta)
 	_update_interaction_focus_dot(delta)
 	_monster_hit_cooldown = maxf(0.0, _monster_hit_cooldown - delta)
@@ -864,6 +886,7 @@ func _hide_all_held_visuals() -> void:
 	held_candle.visible = false
 	held_candle.process_mode = Node.PROCESS_MODE_DISABLED
 	held_tv_remote.visible = false
+	held_cassette.visible = false
 	candle_forward_light.visible = false
 	right_hand.visible = false
 	right_hand.transform = _right_hand_rest_transform
@@ -977,6 +1000,10 @@ func _equip_inventory_slot(slot_index: int) -> bool:
 				held_candle.call(&"configure_candle", _inventory_item_data[slot_index])
 				_update_candle_forward_light()
 			&"tv_remote": held_tv_remote.visible = true
+			&"cassette":
+				held_cassette.visible = true
+				if held_cassette.has_method(&"configure_cassette"):
+					held_cassette.call(&"configure_cassette", _inventory_item_data[slot_index])
 	_update_inventory_ui()
 	return true
 
@@ -1598,6 +1625,47 @@ func pick_up_tv_remote() -> bool:
 	return _store_inventory_item(&"tv_remote", {}, true)
 
 
+func pick_up_cassette(data: Dictionary) -> bool:
+	if not _store_inventory_item(&"cassette", data, true):
+		return false
+	if _held_item == &"cassette":
+		held_cassette.scale = Vector3.ZERO
+		var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(held_cassette, "scale", Vector3.ONE * 0.32, 0.2)
+	return true
+
+
+func has_inventory_cassette() -> bool:
+	return _inventory_slots.has(&"cassette")
+
+
+func store_camera_cassette(data: Dictionary) -> bool:
+	# La cinta recién expulsada queda equipada: al cerrar el menú, G la suelta.
+	return _store_inventory_item(&"cassette", data, false)
+
+
+func take_inventory_cassette() -> Dictionary:
+	var slot := -1
+	if (
+		_selected_inventory_slot >= 0
+		and _selected_inventory_slot < _inventory_slots.size()
+		and _inventory_slots[_selected_inventory_slot] == &"cassette"
+	):
+		slot = _selected_inventory_slot
+	else:
+		slot = _inventory_slots.find(&"cassette")
+	if slot < 0:
+		return {}
+	var result := _inventory_item_data[slot].duplicate(true)
+	_inventory_slots[slot] = &""
+	_inventory_item_data[slot] = {}
+	if slot == _selected_inventory_slot:
+		_return_to_flashlight_slot()
+	else:
+		_update_inventory_ui()
+	return result
+
+
 func _on_candle_state_changed(data: Dictionary) -> void:
 	if _held_item != &"candle":
 		return
@@ -2065,6 +2133,13 @@ func _drop_selected_inventory_item() -> void:
 		dropped_remote.global_position = drop_position + Vector3.UP * 0.24
 		dropped_remote.global_rotation = Vector3(0.18, rotation.y, -0.12)
 		dropped_remote.call(&"set_dropped", velocity * 0.12 + forward * 0.22)
+	elif item_type == &"cassette":
+		var dropped_cassette := CassetteTapeScene.instantiate() as RigidBody3D
+		scene_root.add_child(dropped_cassette)
+		dropped_cassette.global_position = drop_position + Vector3.UP * 0.18
+		dropped_cassette.global_rotation = Vector3(0.08, rotation.y, -0.12)
+		dropped_cassette.scale = Vector3.ONE * 0.25
+		dropped_cassette.call(&"set_dropped", item_data, velocity * 0.12 + forward * 0.18)
 	elif item_type in [&"panel_fuse_good", &"panel_fuse_broken"]:
 		var fuse_scene: PackedScene = GoodPanelFuseScene if item_type == &"panel_fuse_good" else BrokenPanelFuseScene
 		var dropped_fuse := fuse_scene.instantiate() as RigidBody3D
@@ -2421,6 +2496,9 @@ func receive_monster_attack(attacker: Node3D) -> void:
 	_monster_hit_cooldown = 1.15
 	_monster_hits += 1
 	camera_damage_overlay.set_damage_level(_monster_hits)
+	camera_damage_sound.pitch_scale = 1.22 if _monster_hits == 1 else (1.0 if _monster_hits == 2 else 0.82)
+	camera_damage_sound.volume_db = -6.0 if _monster_hits == 1 else (-4.0 if _monster_hits == 2 else -2.0)
+	camera_damage_sound.play()
 	_stamina = maxf(0.0, _stamina - 34.0)
 	_is_exhausted = true
 	var away := global_position - attacker.global_position
@@ -2433,12 +2511,145 @@ func receive_monster_attack(attacker: Node3D) -> void:
 	_look_pitch = clampf(_look_pitch + deg_to_rad(randf_range(-7.0, 5.0)), deg_to_rad(-max_look_angle), deg_to_rad(max_look_angle))
 	if _monster_hits >= 3:
 		_monster_restart_pending = true
-		_restart_after_monster_catch()
+		_begin_death_sequence(attacker)
 
 
-func _restart_after_monster_catch() -> void:
-	await get_tree().create_timer(0.85).timeout
-	get_tree().reload_current_scene()
+func _begin_death_sequence(attacker: Node3D) -> void:
+	_death_elapsed = 0.0
+	get_tree().call_group(&"camera_recorder", &"notify_camera_connection_lost")
+	var inherited_velocity := velocity
+	velocity = Vector3.ZERO
+	_monster_hit_cooldown = death_sequence_seconds
+	_set_candle_placement_mode(false)
+	_set_note_reading(false, true)
+	_set_recipe_book_reading(false, true)
+	hand_rig.visible = false
+	right_hand_rig.visible = false
+	candle_placement_preview.visible = false
+	flashlight.visible = false
+	interaction_ray.enabled = false
+	interaction_focus_cast.enabled = false
+	collision_shape.set_deferred(&"disabled", true)
+	for ui_path: NodePath in [
+		^"StaminaUI",
+		^"StanceUI",
+		^"InventoryUI",
+		^"InventoryStoredMessageUI",
+		^"ZoomUI",
+		^"InteractionUI",
+	]:
+		var ui := get_node_or_null(ui_path) as CanvasLayer
+		if ui != null:
+			ui.visible = false
+
+	_spawn_death_child_visual()
+	_release_camera_to_physics(attacker, inherited_velocity)
+
+
+func _spawn_death_child_visual() -> void:
+	_death_child_visual = DeathChildVisualScene.instantiate() as Node3D
+	if _death_child_visual == null:
+		return
+	_death_child_visual.name = "PlayerDeathChildVisual"
+	get_parent().add_child(_death_child_visual)
+	var floor_position := global_position - global_basis.y * 0.9
+	var capsule := collision_shape.shape as CapsuleShape3D
+	if capsule != null:
+		var local_floor_y := collision_shape.position.y - capsule.height * 0.5
+		floor_position = to_global(Vector3(0.0, local_floor_y, 0.0))
+	var floor_query := PhysicsRayQueryParameters3D.create(
+		global_position + Vector3.UP * 0.35,
+		global_position + Vector3.DOWN * 3.0,
+		collision_mask if collision_mask != 0 else 1,
+		[get_rid()]
+	)
+	var floor_hit := get_world_3d().direct_space_state.intersect_ray(floor_query)
+	if not floor_hit.is_empty():
+		floor_position = floor_hit.position
+	_death_child_visual.global_position = floor_position + Vector3.UP * 0.015
+	_death_child_visual.global_rotation.y = global_rotation.y
+	_death_child_visual.scale = Vector3.ONE * 0.44
+	_death_child_visual.call(&"set_companion_dead", true)
+
+
+func _release_camera_to_physics(attacker: Node3D, inherited_velocity: Vector3) -> void:
+	var world_collision_mask := collision_mask if collision_mask != 0 else 1
+	_death_camera_rig = RigidBody3D.new()
+	_death_camera_rig.name = "DeathCameraPhysics"
+	_death_camera_rig.mass = 0.72
+	_death_camera_rig.gravity_scale = 1.18
+	_death_camera_rig.linear_damp = 0.65
+	_death_camera_rig.angular_damp_mode = RigidBody3D.DAMP_MODE_REPLACE
+	_death_camera_rig.angular_damp = 3.2
+	_death_camera_rig.can_sleep = false
+	_death_camera_rig.continuous_cd = true
+	_death_camera_rig.collision_layer = 0
+	_death_camera_rig.collision_mask = world_collision_mask
+	var material := PhysicsMaterial.new()
+	# Una lente esférica con mucha fricción convierte el deslizamiento en giros
+	# arbitrarios. Fricción baja conserva el golpe lateral y deja que se asiente.
+	material.friction = 0.18
+	material.bounce = 0.12
+	_death_camera_rig.physics_material_override = material
+	var camera_collision := CollisionShape3D.new()
+	var camera_shape := SphereShape3D.new()
+	camera_shape.radius = death_camera_radius
+	camera_collision.shape = camera_shape
+	_death_camera_rig.add_child(camera_collision)
+	get_parent().add_child(_death_camera_rig)
+	_death_camera_rig.global_transform = camera.global_transform
+	_death_camera_rig.add_collision_exception_with(self)
+	camera.reparent(_death_camera_rig, true)
+	camera.position = Vector3.ZERO
+	camera.rotation = Vector3.ZERO
+	camera.make_current()
+
+	var attacker_direction := global_position.direction_to(attacker.global_position)
+	var side_alignment := camera.global_basis.x.dot(attacker_direction)
+	var fall_side := -signf(side_alignment)
+	if absf(side_alignment) < 0.15:
+		fall_side = -1.0
+	var inherited_motion := Vector3(inherited_velocity.x, 0.0, inherited_velocity.z) * 0.03
+	_death_camera_rig.linear_velocity = inherited_motion + camera.global_basis.x * fall_side * death_side_velocity
+	_death_camera_rig.angular_velocity = -camera.global_basis.z * fall_side * death_roll_speed
+
+
+func _update_death_sequence(delta: float) -> void:
+	_death_elapsed += delta
+	if is_instance_valid(_death_child_visual):
+		_death_child_visual.call(&"update_companion_animation", delta, 0.0, true)
+	if (
+		_death_elapsed >= death_look_delay
+		and is_instance_valid(_death_camera_rig)
+		and is_instance_valid(_death_child_visual)
+	):
+		_steer_dead_camera_toward_child(delta)
+	if _death_elapsed >= death_sequence_seconds:
+		get_tree().reload_current_scene()
+
+
+func _steer_dead_camera_toward_child(delta: float) -> void:
+	# Corrige la velocidad angular sin teleportar ni anular colisiones. Si una
+	# pared bloquea la cámara, la física conserva prioridad sobre el encuadre.
+	var look_target := _death_child_visual.global_position + Vector3.UP * 0.42
+	var target_offset := look_target - _death_camera_rig.global_position
+	if target_offset.length_squared() < 0.0001:
+		return
+	var target_direction := target_offset.normalized()
+	var stable_basis := _death_camera_rig.global_basis.orthonormalized()
+	var current_forward := -stable_basis.z
+	var alignment := clampf(current_forward.dot(target_direction), -1.0, 1.0)
+	var desired_angular_velocity := Vector3.ZERO
+	if alignment < 0.999:
+		var turn_axis := current_forward.cross(target_direction)
+		turn_axis = stable_basis.y if turn_axis.length_squared() < 0.0001 else turn_axis.normalized()
+		var turn_angle := acos(alignment)
+		desired_angular_velocity = turn_axis * minf(turn_angle * 2.4, 2.6)
+	var steering_weight := 1.0 - exp(-death_look_strength * delta)
+	_death_camera_rig.angular_velocity = _death_camera_rig.angular_velocity.lerp(
+		desired_angular_velocity,
+		steering_weight
+	)
 
 
 func _update_stamina_ui(delta: float, previous_stamina: float, is_sprinting: bool) -> void:

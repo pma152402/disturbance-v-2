@@ -4,6 +4,8 @@ extends Node3D
 const BAND_SHADER := preload("res://shaders/pastel_wall_band.gdshader")
 const STATIC_DECOR_BATCHER := preload("res://systems/static_decor_batcher.gd")
 const RENDER_OPTIMIZER := preload("res://systems/runtime_render_optimizer.gd")
+const OCCLUSION_BUILDER := preload("res://systems/runtime_occlusion_builder.gd")
+const SECTOR_ACTIVITY_OPTIMIZER := preload("res://systems/runtime_sector_activity_optimizer.gd")
 const SKIP_WALL_BAND_GROUP := &"skip_wall_band"
 
 
@@ -14,7 +16,18 @@ func _ready() -> void:
 	if not Engine.is_editor_hint():
 		STATIC_DECOR_BATCHER.optimize(self)
 		var result := RENDER_OPTIMIZER.install(self)
-		print("Render optimizer: ", result.detail_meshes, " details culled by distance; ", result.managed_lights, " lights managed.")
+		var occlusion := OCCLUSION_BUILDER.install(self)
+		var scene_root := get_tree().current_scene
+		if scene_root == null:
+			scene_root = get_parent()
+		var activity := SECTOR_ACTIVITY_OPTIMIZER.install(scene_root, self)
+		print(
+			"Render optimizer: ", result.detail_meshes, " details culled; ",
+			result.managed_lights, " lights; ", result.shadowless_multimeshes,
+			" MultiMesh shadows removed; ", occlusion.occluders, " occluders; ",
+			activity.audio, " spatial loops, ", activity.lights, " lights and ",
+			activity.optional_collisions, " decorative colliders sector-managed."
+		)
 
 
 func ensure_church_catacombs() -> bool:

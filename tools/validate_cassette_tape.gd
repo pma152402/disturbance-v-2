@@ -21,18 +21,30 @@ func _run() -> void:
 		_fail("El casete no conserva el detalle geométrico esperado")
 		return
 	for required_path in [
-		"FaceA/Label", "FaceA/Window", "FaceA/ReelLeft", "FaceA/ReelRight",
-		"FaceB/Label", "FaceB/Window", "FaceB/ReelLeft", "FaceB/ReelRight",
+		"FaceA/LabelLower", "FaceA/Ribbon", "FaceA/Ribbon2", "FaceA/Window",
+		"FaceA/ReelLeft", "FaceA/ReelRight", "FaceB/LabelLower", "FaceB/Ribbon",
+		"FaceB/Ribbon2", "FaceB/Window", "FaceB/ReelLeft", "FaceB/ReelRight",
 	]:
 		if tape_1.get_node_or_null(required_path) == null:
 			_fail("Falta una pieza esencial del casete: %s" % required_path)
 			return
-	var number_1 := tape_1.get_node("FaceA/TapeNumber") as MeshInstance3D
-	var number_2 := tape_2.get_node("FaceA/TapeNumber") as MeshInstance3D
-	if (number_1.mesh as TextMesh).text != "01" or (number_2.mesh as TextMesh).text != "02" \
-			or number_1.mesh == number_2.mesh:
-		_fail("Los números 01/02 no son independientes por instancia")
-		return
+	var face_a := tape_1.get_node("FaceA") as Node3D
+	var face_b := tape_1.get_node("FaceB") as Node3D
+	for child_a in face_a.get_children():
+		if child_a.name in [&"SideLetter", &"TapeNumber", &"RecordedMark"]:
+			continue
+		var child_b := face_b.get_node_or_null(NodePath(child_a.name)) as MeshInstance3D
+		if child_b == null:
+			_fail("La cara B no copia la pieza de A: %s" % child_a.name)
+			return
+		var mesh_a := child_a as MeshInstance3D
+		if mesh_a.mesh != child_b.mesh \
+				or not mesh_a.basis.is_equal_approx(child_b.basis) \
+				or not is_equal_approx(mesh_a.position.x, child_b.position.x) \
+				or not is_equal_approx(mesh_a.position.y, -child_b.position.y) \
+				or not is_equal_approx(mesh_a.position.z, child_b.position.z):
+			_fail("La pieza %s no está copiada exactamente de A a B" % child_a.name)
+			return
 	var slots := [
 		[PackedByteArray([1, 10])],
 		[PackedByteArray([2, 20])],
@@ -49,11 +61,10 @@ func _run() -> void:
 			or (tape_2.call(&"get_recording", "B") as Array)[0][0] != 4:
 		_fail("El mapeo 01A/02A/01B/02B mezcló las caras")
 		return
-	var original_rotation: float = (tape_1 as Node3D).rotation.z
-	tape_1.call(&"interact")
-	if str(tape_1.get("display_side")) != "B" \
-			or not is_equal_approx((tape_1 as Node3D).rotation.z, original_rotation + PI):
-		_fail("La interacción no gira el casete de A a B")
+	var archived_slots := tape_1.call(&"get_archive_slots") as Array
+	if archived_slots.size() != 4 or (archived_slots[0] as Array)[0][0] != 1 \
+			or "RECOGER CINTA" not in str(tape_1.call(&"get_interaction_text")):
+		_fail("El casete no conserva el archivo o no se puede recoger")
 		return
 	print("CASSETTE TAPE PASSED")
 	tape_1.queue_free()

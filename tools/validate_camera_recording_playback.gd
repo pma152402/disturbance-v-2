@@ -25,6 +25,18 @@ func _run() -> void:
 			or not combined_material.shader.resource_path.ends_with("ps2_camera_combined.gdshader"):
 		_fail("El filtro principal no utiliza el shader PS2 fusionado")
 		return
+	if not is_equal_approx(float(combined_material.get_shader_parameter("vignette_strength")), 0.94) \
+			or not is_equal_approx(float(combined_material.get_shader_parameter("vignette_inner")), 0.07) \
+			or not is_equal_approx(float(combined_material.get_shader_parameter("vignette_outer")), 0.47):
+		_fail("La cámara no conserva la oscuridad y viñeta VHS originales")
+		return
+	var combined_source := FileAccess.get_file_as_string("res://shaders/ps2_camera_combined.gdshader")
+	if "outside_lens" in combined_source:
+		_fail("El shader vuelve a pintar marcos negros fuera de la lente")
+		return
+	if "cool_highlight" in combined_source or "blood_highlight" in combined_source:
+		_fail("El postfiltro general vuelve a confundir la iglesia con sangre o grietas")
+		return
 	if postprocess.find_children("*", "BackBufferCopy", true, false).size() != 0 \
 			or screen_filter.get_index() >= recorder.get_index():
 		_fail("El filtro único conserva un BackBufferCopy manual o tapa el HUD nítido")
@@ -42,8 +54,9 @@ func _run() -> void:
 			or not is_equal_approx(recording_dot.position.y, (recording_label.offset_top + recording_label.offset_bottom) * 0.5):
 		_fail("La bola de REC no está centrada verticalmente con el texto")
 		return
-	if recorder.get_node("TapeMode").text != "CAM 01":
-		_fail("El texto superior de cámara no permanece fijo")
+	if recorder.get_node("TapeMode").text != "VID 01" \
+			or recorder.get_node("TapeSide").text != "A":
+		_fail("El HUD de cámara no muestra el vídeo y la cara A inicial")
 		return
 	var battery := recorder.get_node("Battery") as Label
 	if battery.get_script() == null or battery.text != "BAT" or battery.vertical_alignment != VERTICAL_ALIGNMENT_CENTER:
@@ -73,11 +86,26 @@ func _run() -> void:
 		_fail("El directo no usa exclusivamente el encuadre de esquinas")
 		return
 	var stance_indicator := game.get_node("Player/StanceUI/StanceIndicator") as Control
-	if stance_indicator.position != Vector2(329.0, 66.0) or stance_indicator.size != Vector2(74.0, 80.0):
+	if stance_indicator.position != Vector2(329.0, 76.0) or stance_indicator.size != Vector2(74.0, 80.0):
 		_fail("El monigote no conservó su posición relativa dentro del HUD desplazado")
 		return
+	var tape_mode_geometry := recorder.get_node("TapeMode") as Control
+	var tape_side_geometry := recorder.get_node("TapeSide") as Control
+	var fps_geometry := recorder.get_node("FPS") as Control
+	var timestamp_geometry := recorder.get_node("Timestamp") as Control
+	if recording_label.offset_top != 50.0 or recording_dot.position.y != 82.0 \
+			or tape_mode_geometry.offset_top != 115.0 or tape_side_geometry.offset_top != 117.0:
+		_fail("La sección superior izquierda no está desplazada 10 px")
+		return
+	if battery.offset_top != 60.0 or battery.offset_left != -307.0 \
+			or fps_geometry.offset_top != 72.0 or fps_geometry.offset_left != -632.0:
+		_fail("La sección superior derecha no está 30 px abajo y 10 px a la derecha")
+		return
+	if timestamp_geometry.offset_top != -104.0 or zoom_meter.offset_top != -154.0:
+		_fail("La sección inferior derecha no está desplazada 20 px hacia abajo")
+		return
 	if (recorder.get_node("Recording") as Control).offset_left < 70.0 \
-			or (recorder.get_node("Battery") as Control).offset_right > -70.0 \
+			or (recorder.get_node("Battery") as Control).offset_right > -60.0 \
 			or (zoom_meter as Control).offset_right > -70.0:
 		_fail("El HUD del directo invade la zona segura de las esquinas")
 		return
@@ -114,6 +142,10 @@ func _run() -> void:
 	if int(recorder.call(&"_maximum_frames_per_clip")) != 60:
 		_fail("La cinta no admite los 30 segundos configurados")
 		return
+	recorder.call(&"_process", 1.05)
+	if recorder.get_node("TapeSide").text != "A":
+		_fail("La cara de la cinta cambia durante una grabación")
+		return
 	for _frame in 3:
 		await process_frame
 	# Headless usa un renderer dummy sin framebuffer. Inyectamos dos capturas JPEG
@@ -128,8 +160,19 @@ func _run() -> void:
 	if recorder.get("_recording_viewport") != null or recorder.get("_recording_camera") != null:
 		_fail("La segunda cámara no se destruyó al detener la grabación")
 		return
-	if recorder.get_node("TapeMode").text != "CAM 01":
-		_fail("Guardar una cinta alteró el texto fijo superior")
+	if recorder.get_node("TapeMode").text != "VID 02":
+		_fail("Guardar un vídeo no avanzó su identificador")
+		return
+	recorder.set("_recording_sequence", 99)
+	recorder.call(&"_update_recording_identifiers")
+	if recorder.get_node("TapeMode").text != "VID 04" \
+			or recorder.get_node("TapeSide").text != "B":
+		_fail("El identificador de vídeo o la cara B final son incorrectos")
+		return
+	recorder.set("_recording_sequence", 2)
+	recorder.call(&"_update_recording_identifiers")
+	if recorder.get_node("TapeSide").text != "A":
+		_fail("El segundo vídeo no permanece en la cara A")
 		return
 	var clips: Array = recorder.get("_saved_clips")
 	if clips.size() != 1 or (clips[0] as Array).is_empty():
@@ -192,10 +235,10 @@ func _run() -> void:
 	var side_menu := recorder.get("_playback_menu_left") as RichTextLabel
 	var side_controls := recorder.get("_playback_controls_right") as RichTextLabel
 	var parsed_menu := side_menu.get_parsed_text()
-	if not side_menu.visible or "▶ CINTA 01 A" not in parsed_menu:
+	if not side_menu.visible or "CINTA A 01 ◀" not in parsed_menu:
 		_fail("El menú lateral no señala la cinta seleccionada")
 		return
-	if "CINTA 02 A" not in parsed_menu or "CINTA 01 B" not in parsed_menu or "CINTA 02 B" not in parsed_menu:
+	if "CINTA A 02" not in parsed_menu or "CINTA B 03" not in parsed_menu or "CINTA B 04" not in parsed_menu:
 		_fail("El archivo no muestra siempre sus cuatro ranuras")
 		return
 	if "DIRECTO" in parsed_menu:
@@ -243,12 +286,9 @@ func _run() -> void:
 	if not tabs.visible or tabs.get_child_count() < 3:
 		_fail("Faltan las pestañas decorativas CÁMARA / ARCHIVO")
 		return
-	var tape_speed := recorder.get_node("TapeSpeed") as Label
 	var camera_tab_geometry := recorder.get("_camera_tab_label") as Label
-	var tab_center_y := tabs.offset_top + camera_tab_geometry.position.y + camera_tab_geometry.size.y * 0.5
-	var speed_center_y := (tape_speed.offset_top + tape_speed.offset_bottom) * 0.5
-	if not is_equal_approx(tab_center_y, speed_center_y) or tabs.offset_left != -tabs.offset_right:
-		_fail("Las pestañas no están centradas a la altura exacta de SP")
+	if tabs.offset_left != -tabs.offset_right or camera_tab_geometry.size.y <= 0.0:
+		_fail("Las pestañas no están centradas horizontalmente")
 		return
 	if (recorder.get("_camera_tab_label") as Label).text != "CAMARA":
 		_fail("La pestaña CAMARA todavía conserva el acento")
@@ -299,9 +339,19 @@ func _run() -> void:
 	recorder.call(&"_set_delete_confirmation", true)
 	recorder.call(&"_delete_selected_clip")
 	var empty_background := recorder.get("_playback_empty_background") as ColorRect
+	var empty_cassette := empty_background.get_node_or_null("EmptyArchiveCassette") as Control
 	var volume_indicator := recorder.get("_playback_volume_indicator") as Control
-	if not clips.is_empty() or not empty_background.visible or empty_background.color.r <= 0.1:
-		_fail("El hueco de vídeo vacío no muestra su fondo gris")
+	if not clips.is_empty() or not empty_background.visible or empty_background.color.r >= 0.1:
+		_fail("El hueco de vídeo vacío no se integra con el fondo oscuro")
+		return
+	if empty_cassette == null or empty_cassette.get_script() == null \
+			or empty_cassette.size.x < 900.0 or empty_cassette.size.y < 500.0:
+		_fail("El archivo vacío no muestra el cassette grande con símbolo de prohibido")
+		return
+	var empty_cassette_source := FileAccess.get_file_as_string("res://systems/camera_empty_archive_cassette.gd")
+	if "PROHIBITED_RADIUS := 205.0" not in empty_cassette_source \
+			or "BODY_LIGHT" in empty_cassette_source or "SYMBOL :=" in empty_cassette_source:
+		_fail("El cassette vacío no usa el símbolo superpuesto grande y su paleta oscura de dos tonos")
 		return
 	if not volume_indicator.visible or volume_indicator.get_child_count() != 5:
 		_fail("Falta el indicador VOL decorativo de cuatro niveles")
@@ -345,7 +395,9 @@ func _run() -> void:
 	var avio_menu := recorder.get("_avio_menu") as RichTextLabel
 	if not avio_menu.visible or "SACAR CINTA" not in avio_menu.get_parsed_text() \
 			or "METER CINTA" not in avio_menu.get_parsed_text() \
-			or "SIN CONEXION" not in avio_menu.get_parsed_text():
+			or "GRABAR CINTA" not in avio_menu.get_parsed_text() \
+			or "SIN CONEXION" in avio_menu.get_parsed_text() \
+			or "SIN GRABACIONES" in avio_menu.get_parsed_text():
 		_fail("El menú AV / IO no expone sus operaciones y bloqueos")
 		return
 	var avio_explanation := recorder.get("_avio_explanation") as RichTextLabel
@@ -356,9 +408,11 @@ func _run() -> void:
 		return
 	recorder.set("_avio_selection", 2)
 	recorder.call(&"_refresh_avio_menu")
-	if not avio_explanation.visible or "DVD EXTERNO" not in avio_explanation.get_parsed_text() \
-			or avio_explanation.get_theme_font_size(&"normal_font_size") >= avio_menu.get_theme_font_size(&"normal_font_size"):
-		_fail("Las opciones AV / IO bloqueadas no tienen explicación secundaria")
+	if "GRABAR CINTA" not in avio_menu.get_parsed_text() \
+			or "SIN GRABACIONES" in avio_menu.get_parsed_text() \
+			or "REQUIERE DVD EXTERNO PARA GRABAR LA CINTA DEFINITIVAMENTE" not in avio_explanation.get_parsed_text() \
+			or avio_explanation.vertical_alignment != VERTICAL_ALIGNMENT_CENTER:
+		_fail("GRABAR CINTA no conserva su mensaje inferior centrado")
 		return
 	recorder.set("_avio_selection", 0)
 	recorder.call(&"_refresh_avio_menu")
@@ -377,16 +431,14 @@ func _run() -> void:
 	game.add_child(cassette_2)
 	for _slot in 4:
 		clips.append([test_frame])
-	recorder.set("debug_external_recorder_connected", true)
 	recorder.set("_avio_selection", 2)
 	recorder.call(&"_refresh_avio_menu")
 	recorder.call(&"_activate_avio_option")
-	if "4 CARAS GRABADAS EN 2 CASETES" not in (recorder.get("_avio_status") as Label).text \
-			or not bool(cassette_1.call(&"has_recording", "A")) \
-			or not bool(cassette_1.call(&"has_recording", "B")) \
-			or not bool(cassette_2.call(&"has_recording", "A")) \
-			or not bool(cassette_2.call(&"has_recording", "B")):
-		_fail("GRABAR CINTA no transfirió las cuatro caras a los dos casetes")
+	if bool(cassette_1.call(&"has_recording", "A")) \
+			or bool(cassette_1.call(&"has_recording", "B")) \
+			or bool(cassette_2.call(&"has_recording", "A")) \
+			or bool(cassette_2.call(&"has_recording", "B")):
+		_fail("GRABAR CINTA no debe transferir contenido mientras esté desactivada")
 		return
 	clips.clear()
 	clips.append([test_frame])
@@ -423,13 +475,73 @@ func _run() -> void:
 		return
 	recorder.set("_avio_selection", 1)
 	recorder.call(&"_activate_avio_option")
-	if not bool(recorder.get("_tape_inserted")):
-		_fail("METER CINTA no restauró el estado físico")
+	if bool(recorder.get("_tape_inserted")) or not bool(recorder.get("_avio_scan_armed")) \
+			or "¿ESCANEAR?" not in avio_explanation.get_parsed_text():
+		_fail("METER CINTA no solicita escanear la cinta nueva")
+		return
+	recorder.call(&"_activate_avio_option")
+	if not bool(recorder.get("_tape_inserted")) or bool(recorder.get("_avio_scan_armed")):
+		_fail("La confirmación del escaneo no insertó la cinta")
 		return
 	recorder.call(&"step_camera_menu", 1)
 	if not bool(recorder.get("_mode_transitioning")):
-		_fail("E no inició el regreso de AV / IO a CAMARA")
+		_fail("E no inició el paso de AV / IO a AJUSTES")
 		return
+	recorder.call(&"_process", 1.2)
+	if int(recorder.get("_active_mode")) != 3 or not (recorder.get("_settings_menu") as RichTextLabel).visible:
+		_fail("La pestaña AJUSTES no aparece detrás de AV / IO")
+		return
+	var settings_tab := recorder.get("_settings_tab_label") as Label
+	var data_tab := recorder.get("_data_tab_label") as Label
+	var camera_carousel_tab := recorder.get("_camera_tab_label") as Label
+	if not settings_tab.visible or not avio_tab.visible or not (recorder.get("_archive_tab_label") as Label).visible or camera_carousel_tab.visible:
+		_fail("El carrusel superior no desplaza sus tres opciones para mostrar AJUSTES")
+		return
+	var left_tab_arrow := recorder.get("_tabs_left_arrow") as Label
+	var right_tab_arrow := recorder.get("_tabs_right_arrow") as Label
+	if not left_tab_arrow.visible or not right_tab_arrow.visible or left_tab_arrow.text != "◀" or right_tab_arrow.text != "▶":
+		_fail("Las tres opciones superiores no tienen flechas izquierda y derecha")
+		return
+	recorder.call(&"step_camera_menu", -1)
+	recorder.call(&"_process", 1.2)
+	if int(recorder.get("_active_mode")) != 2 or not avio_tab.visible:
+		_fail("La flecha izquierda no regresa de AJUSTES a AV / IO")
+		return
+	recorder.call(&"step_camera_menu", 1)
+	recorder.call(&"_process", 1.2)
+	if int(recorder.get("_active_mode")) != 3 or not settings_tab.visible:
+		_fail("La flecha derecha no vuelve a abrir AJUSTES")
+		return
+	clips.append([test_frame])
+	recorder.set("_lifetime_recorded_seconds", 756.0)
+	recorder.set("_tapes_spent", 7)
+	recorder.call(&"step_camera_menu", 1)
+	recorder.call(&"_process", 1.2)
+	if int(recorder.get("_active_mode")) != 4 or not (recorder.get("_data_panel") as RichTextLabel).visible:
+		_fail("La pestaña DATOS no aparece después de AJUSTES")
+		return
+	var data_text := (recorder.get("_data_panel") as RichTextLabel).text
+	var required_data := [
+		"MINUTOS GRABADOS", "012.6 MIN", "CINTAS GASTADAS", "007",
+		"VIDEOS GUARDADOS", "01 / 04", "MEMORIA UTILIZADA",
+		"CINTA", "INSERTADA", "UBICACION", "DESCONOCIDA",
+	]
+	for required_text in required_data:
+		if required_text not in data_text:
+			_fail("DATOS no muestra correctamente: %s" % required_text)
+			return
+	for fabricated_text in ["ULTIMA SEÑAL", "TEMPERATURA", "INTERFERENCIA", "DISPOSITIVOS DETECTADOS", "OPERADORES REGISTRADOS"]:
+		if fabricated_text in data_text:
+			_fail("DATOS conserva información inventada: %s" % fabricated_text)
+			return
+	if not left_tab_arrow.visible or right_tab_arrow.visible:
+		_fail("DATOS debe mostrar solo la flecha hacia una opción existente")
+		return
+	recorder.call(&"step_camera_menu", 1)
+	if bool(recorder.get("_mode_transitioning")) or int(recorder.get("_active_mode")) != 4:
+		_fail("La navegación avanzó desde DATOS aunque no existe otra opción a la derecha")
+		return
+	recorder.call(&"_begin_mode_transition", 0)
 	var camera_tab := recorder.get("_camera_tab_label") as Label
 	if camera_tab.get_theme_color(&"font_color").r <= avio_tab.get_theme_color(&"font_color").r:
 		_fail("El foco no pasó a CAMARA antes del loader final")
@@ -437,6 +549,9 @@ func _run() -> void:
 	recorder.call(&"_process", 1.2)
 	if paused or bool(recorder.get("_playback_open")) or bool(recorder.get("_mode_transitioning")):
 		_fail("La cámara no regresó correctamente tras el loader")
+		return
+	if left_tab_arrow.visible or not right_tab_arrow.visible:
+		_fail("CAMARA debe mostrar solo la flecha hacia una opción existente")
 		return
 	if DisplayServer.get_name() != "headless" and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 		_fail("El cursor no volvió al modo capturado al regresar a CAMARA")

@@ -80,14 +80,14 @@ position = Vector3(13.35, 0.75, 24)
 shape = SubResource("Shape_south")
 
 [node name="Trees" type="MultiMeshInstance3D" parent="."]
-editor_description = "Bosque frondoso de 220 arboles instanciados en una sola llamada de dibujado."
+editor_description = "Plantilla del bosque. En ejecucion genera parcelas MultiMesh independientes de 16 m."
 cast_shadow = 1
 visibility_range_end = 90.0
 visibility_range_fade_mode = 1
 custom_aabb = AABB(-54, 0, -54, 108, 15, 108)
 
 [node name="Vegetation" type="Node3D" parent="."]
-editor_description = "Vegetacion frondosa en cuatro capas optimizadas mediante MultiMesh."
+editor_description = "Vegetacion frondosa en cuatro capas, parcelada espacialmente mediante MultiMesh."
 
 [node name="Grass" type="MultiMeshInstance3D" parent="Vegetation"]
 editor_description = "Capa principal de hierba."
