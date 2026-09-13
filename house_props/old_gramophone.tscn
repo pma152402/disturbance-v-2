@@ -1,4 +1,5 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="1_camera_observable"]
 [sub_resource type="StandardMaterial3D" id="wood"]
 albedo_color = Color(0.25, 0.09, 0.025, 1)
 roughness = 0.86
@@ -14,6 +15,13 @@ height = 0.7
 radial_segments = 14
 [node name="OldGramophone" type="Node3D"]
 editor_description = "Gramofono de sobremesa con caja de madera, plato y gran bocina de laton."
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("1_camera_observable")
+observation_id = &"gramophone"
+display_name = "GRAMOFONO"
+local_focus_offset = Vector3(0, 0.58, 0)
+framing_radius = 0.88
+maximum_distance = 18.0
 [node name="Cabinet" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.28, 0)
 scale = Vector3(0.72, 0.55, 0.62)

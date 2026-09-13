@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c5h0feik4wva8"]
 
 [ext_resource type="Script" uid="uid://c7di1psgb3n2b" path="res://house_props/double_cabinet_doors.gd" id="1_doors"]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="2_camera_observable"]
 
 [sub_resource type="StandardMaterial3D" id="inside"]
 albedo_color = Color(0.16, 0.145, 0.11, 1)
@@ -88,6 +89,14 @@ size = Vector3(1.56, 1.02, 0.7)
 editor_description = "Encimera modular antigua con dos puertas, cajon, zocalo, tablero grueso y tiradores."
 collision_layer = 3
 script = ExtResource("1_doors")
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("2_camera_observable")
+observation_id = &"kitchen_cabinet"
+display_name = "MUEBLES DE COCINA"
+local_focus_offset = Vector3(0, 0.58, 0)
+framing_radius = 1.05
+maximum_distance = 22.0
 
 [node name="CabinetInterior" type="Node3D" parent="." unique_id=81934988]
 

@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://enemies/church_grandmother.tscn" id="1"]
+[ext_resource type="Script" path="res://enemies/grandmother_crawler.gd" id="2"]
+[ext_resource type="Script" path="res://enemies/grandmother_crawler_animator.gd" id="3"]
+
+[sub_resource type="CapsuleShape3D" id="Collider"]
+radius = 0.36
+height = 1.4
+
+[node name="GrandmotherCrawler" instance=ExtResource("1")]
+script = ExtResource("2")
+editor_description = "Variante independiente: torso corto, piernas visibles, marcha a cuatro patas y trepado. La vieja de la iglesia se conserva en church_grandmother.tscn."
+climb_speed = 1.55
+evidence_memory_seconds = 6.0
+starts_waiting_covered_eyes = false
+obstacle_jump_enabled = false
+
+[node name="Collision" parent="." index="0"]
+position = Vector3(0, 0.7, 0)
+shape = SubResource("Collider")
+
+[node name="NavigationAgent3D" parent="." index="1"]
+height = 1.4
+radius = 0.36
+
+[node name="HeadForward" parent="ClearanceSensor" index="0"]
+position = Vector3(0, 1.3, 0.25)
+
+[node name="BodyForward" parent="ClearanceSensor" index="1"]
+position = Vector3(0, 0.65, 0.15)
+
+[node name="Overhead" parent="ClearanceSensor" index="2"]
+position = Vector3(0, 0.9, 0)
+target_position = Vector3(0, 0.65, 0)
+
+[node name="EditableVisual" parent="." index="8"]
+script = ExtResource("3")
+head_scale_multiplier = 0.75
+
+[node name="FloatingHair" parent="." index="9"]
+minimum_length = 0.32
+maximum_length = 0.58

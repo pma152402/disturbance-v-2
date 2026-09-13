@@ -1,0 +1,325 @@
+[gd_scene format=3 uid="uid://ckc60g3ju5e36"]
+
+[ext_resource type="Script" uid="uid://6506v184ngm4" path="res://house_props/camera_tripod.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://house_props/retro_camera.tscn" id="2_camera"]
+[ext_resource type="Script" uid="uid://dsc4d8gky521k" path="res://systems/camera_observable.gd" id="3_observable"]
+
+[sub_resource type="StandardMaterial3D" id="mat_black"]
+albedo_color = Color(0.035, 0.041, 0.043, 1)
+metallic = 0.72
+roughness = 0.3
+
+[sub_resource type="CylinderMesh" id="mesh_hub"]
+material = SubResource("mat_black")
+top_radius = 0.07441406
+bottom_radius = 0.099414065
+height = 0.13
+radial_segments = 14
+
+[sub_resource type="StandardMaterial3D" id="mat_metal"]
+albedo_color = Color(0.39, 0.43, 0.44, 1)
+metallic = 0.9
+roughness = 0.19
+
+[sub_resource type="CylinderMesh" id="mesh_hub_cap"]
+material = SubResource("mat_metal")
+top_radius = 0.105
+bottom_radius = 0.105
+height = 0.028
+radial_segments = 14
+
+[sub_resource type="CylinderMesh" id="mesh_hinge"]
+material = SubResource("mat_black")
+top_radius = 0.086
+bottom_radius = 0.086
+height = 0.07
+radial_segments = 12
+
+[sub_resource type="StandardMaterial3D" id="mat_brass"]
+albedo_color = Color(0.57, 0.38, 0.12, 1)
+metallic = 0.85
+roughness = 0.25
+
+[sub_resource type="CylinderMesh" id="mesh_small_metal"]
+material = SubResource("mat_brass")
+top_radius = 0.022
+bottom_radius = 0.022
+height = 0.055
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="mesh_upper_leg"]
+material = SubResource("mat_black")
+top_radius = 0.043
+bottom_radius = 0.043
+height = 0.62
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="mat_red"]
+albedo_color = Color(0.38, 0.025, 0.022, 1)
+metallic = 0.35
+roughness = 0.46
+
+[sub_resource type="CylinderMesh" id="mesh_lock"]
+material = SubResource("mat_red")
+top_radius = 0.054
+bottom_radius = 0.054
+height = 0.055
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="mesh_lower_leg"]
+material = SubResource("mat_metal")
+top_radius = 0.029
+bottom_radius = 0.029
+height = 0.66
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="mat_rubber"]
+albedo_color = Color(0.018, 0.02, 0.019, 1)
+roughness = 0.92
+
+[sub_resource type="CapsuleMesh" id="mesh_foot"]
+material = SubResource("mat_rubber")
+radius = 0.055
+height = 0.15
+radial_segments = 10
+rings = 4
+
+[sub_resource type="BoxMesh" id="mesh_spreader"]
+material = SubResource("mat_metal")
+size = Vector3(0.35, 0.022, 0.028)
+
+[sub_resource type="CylinderMesh" id="mesh_column"]
+material = SubResource("mat_metal")
+top_radius = 0.036
+bottom_radius = 0.036
+height = 0.39
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="mesh_column_lock"]
+material = SubResource("mat_black")
+top_radius = 0.073
+bottom_radius = 0.073
+height = 0.075
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="mesh_knob"]
+material = SubResource("mat_black")
+top_radius = 0.052
+bottom_radius = 0.052
+height = 0.075
+radial_segments = 10
+
+[sub_resource type="CapsuleShape3D" id="shape_body"]
+radius = 0.068847656
+height = 1.3366797
+
+[sub_resource type="BoxShape3D" id="shape_deployed_leg"]
+size = Vector3(0.1, 1.18, 0.1)
+
+[sub_resource type="BoxShape3D" id="shape_head"]
+size = Vector3(0.42, 0.3, 0.36)
+
+[node name="CameraTripod" type="RigidBody3D" unique_id=487942350]
+editor_description = "Tripode fotografico transportable de tres apoyos: F lo recoge o lo coloca abierto, G lo suelta de lado y O previsualiza la camara antes de confirmar su orientacion."
+mass = 2.4
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, 0.48, 0)
+linear_damp = 0.7
+angular_damp = 1.25
+freeze = true
+freeze_mode = 1
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_script")
+
+[node name="TripodRig" type="Node3D" parent="." unique_id=1767134529]
+
+[node name="Hub" type="MeshInstance3D" parent="TripodRig" unique_id=1388538036]
+transform = Transform3D(0.62230855, 0, 0, 0, 0.62329656, 0, 0, 0, 0.548275, 0, 1.2272061, 0)
+mesh = SubResource("mesh_hub")
+
+[node name="Hub2" type="MeshInstance3D" parent="TripodRig" unique_id=1308056355]
+transform = Transform3D(0.6657736, 0, 0, 0, 0.62329656, 0, 0, 0, 0.6369155, 0, 1.2337159, 0)
+mesh = SubResource("mesh_hub")
+
+[node name="HubCap" type="MeshInstance3D" parent="TripodRig" unique_id=1695541334]
+transform = Transform3D(0.62230855, 0, 0, 0, 0.62329656, 0, 0, 0, 0.548275, 0, 1.2652068, 0)
+mesh = SubResource("mesh_hub_cap")
+
+[node name="LegA" type="Node3D" parent="TripodRig" unique_id=1355726019]
+transform = Transform3D(0.99904823, -0.043619387, 0, 0.043619387, 0.99904823, 0, 0, 0, 1, 0, 1.18, 0)
+
+[node name="Hinge" type="MeshInstance3D" parent="TripodRig/LegA" unique_id=617109266]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0)
+mesh = SubResource("mesh_hinge")
+
+[node name="HingeBolt" type="MeshInstance3D" parent="TripodRig/LegA" unique_id=2078015224]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, -0.043)
+mesh = SubResource("mesh_small_metal")
+
+[node name="UpperTube" type="MeshInstance3D" parent="TripodRig/LegA" unique_id=1761853771]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.33, 0)
+mesh = SubResource("mesh_upper_leg")
+
+[node name="ExtensionLock" type="MeshInstance3D" parent="TripodRig/LegA" unique_id=917994969]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.62, 0)
+mesh = SubResource("mesh_lock")
+
+[node name="LowerTube" type="MeshInstance3D" parent="TripodRig/LegA" unique_id=300811791]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.82, 0)
+mesh = SubResource("mesh_lower_leg")
+
+[node name="Foot" type="MeshInstance3D" parent="TripodRig/LegA" unique_id=927973262]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.16, 0)
+mesh = SubResource("mesh_foot")
+
+[node name="LegB" type="Node3D" parent="TripodRig" unique_id=159798532]
+transform = Transform3D(-0.49952418, 0.021809695, 0.8660254, 0.043619387, 0.99904823, 0, -0.8652011, 0.037775498, -0.50000006, 0, 1.18, 0)
+
+[node name="Hinge" type="MeshInstance3D" parent="TripodRig/LegB" unique_id=933595152]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0)
+mesh = SubResource("mesh_hinge")
+
+[node name="HingeBolt" type="MeshInstance3D" parent="TripodRig/LegB" unique_id=154335695]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, -0.043)
+mesh = SubResource("mesh_small_metal")
+
+[node name="UpperTube" type="MeshInstance3D" parent="TripodRig/LegB" unique_id=1175596590]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.33, 0)
+mesh = SubResource("mesh_upper_leg")
+
+[node name="ExtensionLock" type="MeshInstance3D" parent="TripodRig/LegB" unique_id=664845683]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.62, 0)
+mesh = SubResource("mesh_lock")
+
+[node name="LowerTube" type="MeshInstance3D" parent="TripodRig/LegB" unique_id=262200728]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.82, 0)
+mesh = SubResource("mesh_lower_leg")
+
+[node name="Foot" type="MeshInstance3D" parent="TripodRig/LegB" unique_id=298002422]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.16, 0)
+mesh = SubResource("mesh_foot")
+
+[node name="LegC" type="Node3D" parent="TripodRig" unique_id=69462754]
+transform = Transform3D(-0.49952403, 0.02180969, -0.86602545, 0.043619387, 0.99904823, 0, 0.8652012, -0.037775498, -0.4999999, 0, 1.18, 0)
+
+[node name="Hinge" type="MeshInstance3D" parent="TripodRig/LegC" unique_id=1668499871]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0)
+mesh = SubResource("mesh_hinge")
+
+[node name="HingeBolt" type="MeshInstance3D" parent="TripodRig/LegC" unique_id=776936507]
+transform = Transform3D(1, 0, 0, 0, 7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, -0.043)
+mesh = SubResource("mesh_small_metal")
+
+[node name="UpperTube" type="MeshInstance3D" parent="TripodRig/LegC" unique_id=1411751195]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.33, 0)
+mesh = SubResource("mesh_upper_leg")
+
+[node name="ExtensionLock" type="MeshInstance3D" parent="TripodRig/LegC" unique_id=1317426631]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.62, 0)
+mesh = SubResource("mesh_lock")
+
+[node name="LowerTube" type="MeshInstance3D" parent="TripodRig/LegC" unique_id=968882772]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.82, 0)
+mesh = SubResource("mesh_lower_leg")
+
+[node name="Foot" type="MeshInstance3D" parent="TripodRig/LegC" unique_id=2041331671]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.16, 0)
+mesh = SubResource("mesh_foot")
+
+[node name="Spreader" type="Node3D" parent="TripodRig" unique_id=719013191]
+transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 0.18, 0, 0.72, 0)
+
+[node name="CenterBoss" type="MeshInstance3D" parent="TripodRig/Spreader" unique_id=52495352]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0, 0, 0)
+mesh = SubResource("mesh_hub_cap")
+
+[node name="ArmA" type="MeshInstance3D" parent="TripodRig/Spreader" unique_id=1326030982]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0, 0)
+mesh = SubResource("mesh_spreader")
+
+[node name="ArmB" type="MeshInstance3D" parent="TripodRig/Spreader" unique_id=1359393178]
+transform = Transform3D(-0.50000006, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.50000006, -0.09, 0, -0.155885)
+mesh = SubResource("mesh_spreader")
+
+[node name="ArmC" type="MeshInstance3D" parent="TripodRig/Spreader" unique_id=972742784]
+transform = Transform3D(-0.4999999, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, -0.4999999, -0.09, 0, 0.155885)
+mesh = SubResource("mesh_spreader")
+
+[node name="CarryGrip" type="Marker3D" parent="."]
+position = Vector3(0, 0.98, 0)
+
+[node name="CenterAssembly" type="Node3D" parent="TripodRig" unique_id=1973224130]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+
+[node name="Column" type="MeshInstance3D" parent="TripodRig/CenterAssembly" unique_id=1557029386]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.205, 0)
+mesh = SubResource("mesh_column")
+
+[node name="ColumnLock" type="MeshInstance3D" parent="TripodRig/CenterAssembly" unique_id=438198260]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.055, 0)
+mesh = SubResource("mesh_column_lock")
+
+[node name="ColumnLockKnob" type="MeshInstance3D" parent="TripodRig/CenterAssembly" unique_id=170693507]
+transform = Transform3D(4.1523847e-08, -0.55, 0, 0.55, 4.1523847e-08, 0, 0, 0, 0.55, -0.060218677, 1.055, 0)
+mesh = SubResource("mesh_knob")
+
+[node name="PanHead" type="Node3D" parent="TripodRig/CenterAssembly" unique_id=369184622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42, 0)
+
+[node name="CameraPlate" type="Node3D" parent="TripodRig/CenterAssembly/PanHead" unique_id=44453796]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.155, 0)
+
+[node name="ReleaseLever" type="MeshInstance3D" parent="TripodRig/CenterAssembly/PanHead/CameraPlate" unique_id=333136462]
+transform = Transform3D(2.3308868e-08, -0.6040472, 0.34100217, 0.45999995, 6.794811e-08, -3.823314e-15, -2.5744944e-08, 0.667178, 0.30873534, -0.03555648, -0.517477, 0.04600567)
+mesh = SubResource("mesh_lock")
+
+[node name="MountedCameraVisual" parent="TripodRig/CenterAssembly/PanHead/CameraPlate" unique_id=268615124 instance=ExtResource("2_camera")]
+transform = Transform3D(0.72, 0, 0, 0, 0.72, 0, 0, 0, 0.72, 0, -0.245, 0.02)
+visible = false
+collision_layer = 0
+collision_mask = 0
+
+[node name="LensAnchor" type="Marker3D" parent="TripodRig/CenterAssembly/PanHead/CameraPlate" unique_id=1041029467]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.101, -0.235)
+
+[node name="FoldedCollision" type="CollisionShape3D" parent="." unique_id=1196811458]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6309272, -0.004781246)
+shape = SubResource("shape_body")
+
+[node name="DeployedLegCollisionA" type="CollisionShape3D" parent="."]
+position = Vector3(0.179236, 0.62836, 0)
+rotation = Vector3(0, 0, 0.3141593)
+shape = SubResource("shape_deployed_leg")
+disabled = true
+
+[node name="DeployedLegCollisionB" type="CollisionShape3D" parent="."]
+position = Vector3(-0.089618, 0.62836, -0.155223)
+rotation = Vector3(0, 2.0943952, 0.3141593)
+shape = SubResource("shape_deployed_leg")
+disabled = true
+
+[node name="DeployedLegCollisionC" type="CollisionShape3D" parent="."]
+position = Vector3(-0.089618, 0.62836, 0.155223)
+rotation = Vector3(0, 4.1887903, 0.3141593)
+shape = SubResource("shape_deployed_leg")
+disabled = true
+
+[node name="HeadCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.47, 0)
+shape = SubResource("shape_head")
+
+[node name="LatchSound" type="AudioStreamPlayer3D" parent="." unique_id=1067351397]
+volume_db = -13.0
+max_distance = 8.0
+
+[node name="CameraObservable" type="Node" parent="." unique_id=483417650]
+script = ExtResource("3_observable")
+observation_id = &"camera_tripod"
+display_name = "TRIPODE"
+focus_path = NodePath("TripodRig/CenterAssembly/PanHead")
+local_focus_offset = Vector3(0, 0.08, 0)
+framing_radius = 0.72
+maximum_distance = 20.0
+minimum_screen_fraction = 0.01
+priority = 1.2

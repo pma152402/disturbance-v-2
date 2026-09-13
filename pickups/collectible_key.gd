@@ -32,7 +32,7 @@ func get_interaction_priority() -> int:
 func get_interaction_text(player: Node = null) -> String:
 	if not _player_meets_stance_requirement(player):
 		return ""
-	return "F  COGER %s" % key_name.to_upper()
+	return "F  COGER %s" % preload("res://systems/key_display_text.gd").clean(key_name).to_upper()
 
 
 func interact(player: Node = null) -> bool:
@@ -45,7 +45,7 @@ func interact(player: Node = null) -> bool:
 		or not player.has_method(&"add_key")
 	):
 		return false
-	if not player.add_key(key_id):
+	if not player.add_key(key_id, key_name):
 		return false
 	_collected = true
 	_set_interaction_enabled(false)

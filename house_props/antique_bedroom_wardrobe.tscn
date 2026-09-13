@@ -1,4 +1,6 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="1_camera_observable"]
 
 [sub_resource type="StandardMaterial3D" id="wood"]
 albedo_color = Color(0.24, 0.105, 0.035, 1)
@@ -27,6 +29,13 @@ size = Vector3(2.1, 2.65, 0.78)
 
 [node name="AntiqueBedroomWardrobe" type="StaticBody3D"]
 editor_description = "Armario ropero grande de dos puertas con paneles, cornisa, cajon inferior, pomos y patas."
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("1_camera_observable")
+observation_id = &"wardrobe"
+display_name = "ARMARIO"
+local_focus_offset = Vector3(0, 1.34, 0)
+framing_radius = 1.48
+maximum_distance = 24.0
 [node name="MainBody" type="MeshInstance3D" parent="."]
 position = Vector3(0, 1.34, 0)
 scale = Vector3(2.05, 2.6, 0.75)
@@ -70,4 +79,3 @@ mesh = SubResource("dark_box")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 1.34, 0)
 shape = SubResource("collision")
-

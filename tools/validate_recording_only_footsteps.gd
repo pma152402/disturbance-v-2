@@ -51,6 +51,8 @@ func _run() -> void:
 			return
 	var live_camera := game.get_node("Player/Head/Camera3D") as Camera3D
 	var recorder := game.get_node("PS2PostProcess/CameraHUD")
+	# The recorder is created on demand; STBY intentionally has no tape camera.
+	recorder.call(&"start_recording")
 	var tape_camera := recorder.get("_recording_camera") as Camera3D
 	if live_camera.get_cull_mask_value(RECORDING_LAYER):
 		_fail("La cámara en directo puede ver las pisadas")

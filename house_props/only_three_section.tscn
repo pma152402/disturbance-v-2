@@ -11,20 +11,14 @@ size = Vector3(1.75, 0.16, 0.62)
 [node name="StraightThreeStepSection" type="Node3D" unique_id=402785590]
 editor_description = "Componente visual de tres peldaños. La colisión transitable pertenece a la rampa continua de la escalera."
 
-[node name="Step01" type="Node3D" parent="." unique_id=291779524]
+[node name="Tread01" type="MeshInstance3D" parent="." unique_id=1656384061]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07451129, -0.5139546)
-
-[node name="Tread" type="MeshInstance3D" parent="Step01" unique_id=1656384061]
 mesh = SubResource("StepMesh")
 
-[node name="Step02" type="Node3D" parent="." unique_id=1207526681]
+[node name="Tread02" type="MeshInstance3D" parent="." unique_id=992390740]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23634756, -0.74250567)
-
-[node name="Tread" type="MeshInstance3D" parent="Step02" unique_id=992390740]
 mesh = SubResource("StepMesh")
 
-[node name="Step03" type="Node3D" parent="." unique_id=1218447288]
+[node name="Tread03" type="MeshInstance3D" parent="." unique_id=509184005]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -0.96)
-
-[node name="Tread" type="MeshInstance3D" parent="Step03" unique_id=509184005]
 mesh = SubResource("StepMesh")

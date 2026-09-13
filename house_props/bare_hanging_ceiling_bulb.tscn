@@ -20,11 +20,11 @@ roughness = 0.72
 
 [sub_resource type="StandardMaterial3D" id="BulbMaterial"]
 transparency = 1
-albedo_color = Color(0.34, 0.3, 0.23, 0.72)
+albedo_color = Color(0.48, 0.3, 0.14, 0.72)
 roughness = 0.22
 emission_enabled = true
-emission = Color(1, 0.55, 0.2, 1)
-emission_energy_multiplier = 2.4
+emission = Color(1, 0.4, 0.1, 1)
+emission_energy_multiplier = 2.0
 
 [sub_resource type="CylinderMesh" id="CanopyMesh"]
 material = SubResource("DarkMetal")
@@ -92,8 +92,8 @@ mesh = SubResource("BulbMesh")
 [node name="GentleWarmGlow" type="OmniLight3D" parent="."]
 position = Vector3(0, -1.08, 0)
 script = ExtResource("2_flicker")
-light_color = Color(1, 0.68, 0.34, 1)
-light_energy = 3.7
+light_color = Color(1, 0.61, 0.25, 1)
+light_energy = 3.45
 omni_range = 7.0
 omni_attenuation = 1.45
 shadow_enabled = true
@@ -108,8 +108,8 @@ flicker_sound_path = NodePath("../FlickerSound")
 [node name="DownwardHalo" type="SpotLight3D" parent="."]
 position = Vector3(0, -1.04, 0)
 rotation = Vector3(-1.570796, 0, 0)
-light_color = Color(1, 0.71, 0.4, 1)
-light_energy = 2.7
+light_color = Color(1, 0.65, 0.3, 1)
+light_energy = 2.5
 shadow_enabled = true
 shadow_bias = 0.04
 shadow_normal_bias = 1.15

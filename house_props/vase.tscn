@@ -1,4 +1,6 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="99_camera_observable"]
 
 [sub_resource type="StandardMaterial3D" id="Material_ceramic"]
 albedo_color = Color(0.24, 0.42, 0.39, 1)
@@ -35,6 +37,15 @@ height = 0.48
 
 [node name="Vase" type="StaticBody3D"]
 editor_description = "Florero decorativo de ceramica, reutilizable e independiente."
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("99_camera_observable")
+observation_id = &"vase"
+display_name = "JARRON"
+local_focus_offset = Vector3(0, 0.25, 0)
+framing_radius = 0.38
+maximum_distance = 12.0
+minimum_screen_fraction = 0.009
 
 [node name="Body" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.2, 0)

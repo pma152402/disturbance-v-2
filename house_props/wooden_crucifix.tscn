@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://ba7lwuaaxjnjo"]
 
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="99_camera_observable"]
+
 [sub_resource type="StandardMaterial3D" id="Material_wood"]
 albedo_color = Color(0.23, 0.105, 0.035, 1)
 roughness = 0.92
@@ -43,6 +45,16 @@ size = Vector3(0.82, 1.45, 0.12)
 
 [node name="WoodenCrucifix" type="StaticBody3D" unique_id=763614938]
 editor_description = "Crucifijo marron con figura estilizada de Cristo y piezas editables por separado."
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("99_camera_observable")
+observation_id = &"crucifix"
+display_name = "CRUCIFIJO"
+local_focus_offset = Vector3(0, 0.72, 0)
+framing_radius = 0.85
+maximum_distance = 24.0
+minimum_screen_fraction = 0.009
+priority = 1.8
 
 [node name="CrossVertical" type="MeshInstance3D" parent="." unique_id=1391546584]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.725, 0)

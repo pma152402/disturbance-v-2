@@ -9,7 +9,7 @@ signal nail_removed(nail_index: int)
 enum Phase { SELECT_NAIL, INSERTING_CROWBAR, PRYING, NAIL_RELEASED, FINISHED }
 
 const NAIL_COUNT := 8
-const REQUIRED_HALF_STROKES := 12
+const REQUIRED_HALF_STROKES := 8
 const PIXEL_FONT := preload("res://assets/fonts/PressStart2P-Regular.ttf")
 
 var _phase := Phase.SELECT_NAIL
@@ -33,6 +33,8 @@ var _handle_radius := 30.0
 var _nail_centers: Array[Vector2] = []
 var _world_camera: Camera3D
 var _world_nails: Array = []
+var _strokes_by_nail: Array[int] = []
+var work_ready := true
 
 
 func bind_world(camera: Camera3D, nails: Array) -> void:
@@ -43,8 +45,10 @@ func bind_world(camera: Camera3D, nails: Array) -> void:
 
 func setup(removed_flags: Array) -> void:
 	_removed_nails.clear()
+	_strokes_by_nail.clear()
 	for index in NAIL_COUNT:
 		_removed_nails.append(index < removed_flags.size() and bool(removed_flags[index]))
+		_strokes_by_nail.append(0)
 	_phase = Phase.FINISHED if _count_removed_nails() >= NAIL_COUNT else Phase.SELECT_NAIL
 	queue_redraw()
 
@@ -55,9 +59,9 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	focus_mode = Control.FOCUS_ALL
 	if _removed_nails.is_empty():
-		for index in NAIL_COUNT:
-			_removed_nails.append(false)
+		setup([])
 	call_deferred(&"grab_focus")
+	call_deferred(&"_select_next_nail")
 	queue_redraw()
 
 
@@ -65,7 +69,7 @@ func _process(delta: float) -> void:
 	_pulse_time += delta
 	if _phase == Phase.INSERTING_CROWBAR:
 		_insertion_amount = minf(_insertion_amount + delta * 3.1, 1.0)
-		if _insertion_amount >= 1.0:
+		if _insertion_amount >= 1.0 and work_ready:
 			_finish_insertion()
 	elif _phase == Phase.NAIL_RELEASED:
 		_release_timer -= delta
@@ -84,8 +88,13 @@ func _input(event: InputEvent) -> void:
 		var key_event := event as InputEventKey
 		var pressed_key := key_event.physical_keycode if key_event.physical_keycode != 0 else key_event.keycode
 		if pressed_key == KEY_SPACE:
-			if key_event.pressed and not key_event.echo and _phase == Phase.PRYING:
+			if key_event.pressed and not key_event.echo and _phase == Phase.PRYING and work_ready:
 				_complete_half_stroke()
+			get_viewport().set_input_as_handled()
+			return
+		if pressed_key in [KEY_ENTER, KEY_KP_ENTER]:
+			if key_event.pressed and not key_event.echo:
+				_select_next_nail()
 			get_viewport().set_input_as_handled()
 			return
 		if pressed_key == KEY_ESCAPE and key_event.pressed and not key_event.echo:
@@ -93,12 +102,18 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		_update_layout()
-		if event.pressed and _phase == Phase.SELECT_NAIL:
-			var clicked_nail := _find_nail_at(event.position)
-			if clicked_nail >= 0:
-				_select_nail(clicked_nail)
 		get_viewport().set_input_as_handled()
+
+
+func _select_next_nail() -> void:
+	if _phase not in [Phase.SELECT_NAIL, Phase.PRYING]:
+		return
+	for offset in range(1, NAIL_COUNT + 1):
+		var index := (_selected_nail + offset) % NAIL_COUNT
+		if not _removed_nails[index]:
+			_phase = Phase.SELECT_NAIL
+			_select_nail(index)
+			return
 
 
 func _select_nail(nail_index: int) -> void:
@@ -107,10 +122,10 @@ func _select_nail(nail_index: int) -> void:
 	_selected_nail = nail_index
 	_phase = Phase.INSERTING_CROWBAR
 	_insertion_amount = 0.0
-	_nail_progress = 0.0
-	_handle_value = 1.0
-	_handle_target = -1.0
-	_half_strokes = 0
+	_half_strokes = _strokes_by_nail[nail_index]
+	_nail_progress = float(_half_strokes) / REQUIRED_HALF_STROKES
+	_handle_value = 1.0 if _half_strokes % 2 == 0 else -1.0
+	_handle_target = -_handle_value
 	nail_selected.emit(_selected_nail)
 	queue_redraw()
 
@@ -127,6 +142,7 @@ func _complete_half_stroke() -> void:
 	if _phase != Phase.PRYING:
 		return
 	_half_strokes += 1
+	_strokes_by_nail[_selected_nail] = _half_strokes
 	_nail_progress = clampf(float(_half_strokes) / float(REQUIRED_HALF_STROKES), 0.0, 1.0)
 	_handle_value = _handle_target
 	_handle_target *= -1.0
@@ -145,7 +161,6 @@ func _advance_after_release() -> void:
 			_completion_emitted = true
 			completed.emit()
 		return
-	_selected_nail = -1
 	_insertion_amount = 0.0
 	_nail_progress = 0.0
 	_phase = Phase.SELECT_NAIL
@@ -157,13 +172,6 @@ func _count_removed_nails() -> int:
 		if removed:
 			count += 1
 	return count
-
-
-func _find_nail_at(mouse_position: Vector2) -> int:
-	for index in _nail_centers.size():
-		if not _removed_nails[index] and mouse_position.distance_to(_nail_centers[index]) <= 31.0:
-			return index
-	return -1
 
 
 func _update_layout() -> void:
@@ -236,9 +244,9 @@ func _draw() -> void:
 
 func _instruction_text() -> String:
 	match _phase:
-		Phase.SELECT_NAIL: return "HAZ CLIC EN UN CLAVO"
-		Phase.INSERTING_CROWBAR: return "METIENDO LA PALANCA BAJO EL CLAVO..."
-		Phase.PRYING: return "PULSA ESPACIO REPETIDAMENTE PARA HACER PALANCA"
+		Phase.SELECT_NAIL: return "INTRO  SIGUIENTE CLAVO"
+		Phase.INSERTING_CROWBAR: return "ACERCANDOSE Y COLOCANDO AMBAS MANOS..."
+		Phase.PRYING: return "ESPACIO  HACER PALANCA  |  INTRO  CAMBIAR CLAVO"
 		Phase.NAIL_RELEASED: return "CLAVO EXTRAÍDO"
 		Phase.FINISHED: return "PUERTA DESPEJADA"
 	return ""

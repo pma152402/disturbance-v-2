@@ -25,6 +25,13 @@ func _run() -> void:
 	monster.set("_player_hunt_active", true)
 	monster.set("_attack_cooldown_timer", 0.0)
 	monster.set("_target_refresh_timer", 0.0)
+	# La variante de iglesia ataca sólo una posición observada; preparar la pista
+	# evita que esta validación heredada dependa del antiguo cerebro fotosensible.
+	monster.set("_player", player)
+	monster.set("_prey", player)
+	monster.set("_sight_confirmed", true)
+	monster.set("_evidence_position", player.global_position)
+	monster.set("_evidence_age", 0.0)
 	var previous_angle := _angle_around(monster.global_position, player.global_position)
 	var accumulated_orbit := 0.0
 	var attack_frame := -1

@@ -4,7 +4,7 @@ extends Area3D
 @export var animation_time := 0.75
 @export_group("Cerradura")
 @export var required_key_id: StringName = &"basement_key"
-@export var required_key_name := "LLAVE DEL SÓTANO"
+@export var required_key_name := "LLAVE DEL SOTANO"
 @export var starts_unlocked := false
 var _open := false
 var _moving := false
@@ -21,8 +21,8 @@ func get_interaction_key() -> Key:
 func get_interaction_text(player: Node = null) -> String:
 	if not _is_unlocked:
 		if player != null and player.has_method(&"has_key") and player.has_key(required_key_id):
-			return "F  USAR %s" % required_key_name.to_upper()
-		return "NECESITAS %s" % required_key_name.to_upper()
+			return "F  USAR %s" % preload("res://systems/key_display_text.gd").clean(required_key_name).to_upper()
+		return "NECESITAS %s" % preload("res://systems/key_display_text.gd").clean(required_key_name).to_upper()
 	return "F  CERRAR SOTANO" if _open else "F  ABRIR SOTANO"
 
 func interact(player: Node = null) -> bool:

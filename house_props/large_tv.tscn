@@ -1,8 +1,9 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="Script" path="res://house_props/large_tv.gd" id="1_tv_script"]
 [ext_resource type="Shader" path="res://house_props/tv_screen.gdshader" id="2_tv_screen"]
 [ext_resource type="Script" path="res://house_props/tv_control.gd" id="3_tv_control"]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="4_camera_observable"]
 [sub_resource type="StandardMaterial3D" id="Material_case"]
 albedo_color = Color(0.28, 0.285, 0.28, 1)
 roughness = 0.86
@@ -46,6 +47,15 @@ size = Vector3(0.12, 0.12, 0.08)
 [node name="SmallGreyTubeTV" type="StaticBody3D"]
 editor_description = "Tele de tubo pequena reconstruida: gris, pantalla casi cuadrada y carcasa profunda escalonada."
 script = ExtResource("1_tv_script")
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("4_camera_observable")
+observation_id = &"television"
+display_name = "TELEVISOR"
+focus_path = NodePath("SquareGreyScreen")
+framing_radius = 0.68
+maximum_distance = 22.0
+minimum_screen_fraction = 0.01
+priority = 1.4
 [node name="FrontCase" type="MeshInstance3D" parent="."]
 mesh = SubResource("Mesh_front_case")
 [node name="DeepRearCase" type="MeshInstance3D" parent="."]

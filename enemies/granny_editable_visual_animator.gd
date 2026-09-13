@@ -19,7 +19,7 @@ const STATE_EAT := 5
 @export var walk_bob_height := 0.018
 @export_range(0.0, 0.5, 0.005) var turn_lean := 0.16
 @export var pose_transition_speed := 9.0
-@export_range(1.0, 1.5, 0.01) var head_scale_multiplier := 1.12
+@export_range(0.5, 1.5, 0.01) var head_scale_multiplier := 1.12
 @export var head_down_offset := 0.5722
 @export var resting_hand_height := 0.92
 @export var resting_hand_width := 0.43
@@ -87,6 +87,8 @@ func _ready() -> void:
 	_recenter_pivot(_left_wrist, _left_wrist_joint)
 	_recenter_pivot(_right_wrist, _right_wrist_joint)
 	_replace_left_hand_with_mirrored_right_hand()
+	_align_wrist_to_hand(_left_wrist, _left_palm)
+	_align_wrist_to_hand(_right_wrist, _right_palm)
 	_base_position = position
 	_base_head_position = _head.position
 	_base_head_scale = _head.scale
@@ -139,6 +141,32 @@ func _replace_left_hand_with_mirrored_right_hand() -> void:
 		mirrored_in_rig.basis.y.x = -mirrored_in_rig.basis.y.x
 		mirrored_in_rig.basis.z.x = -mirrored_in_rig.basis.z.x
 		mirrored_mesh.transform = left_wrist_inverse * (_rig.global_transform * mirrored_in_rig)
+		if source_mesh == _right_palm:
+			_left_palm = mirrored_mesh
+
+
+func _align_wrist_to_hand(wrist: Node3D, palm: MeshInstance3D) -> void:
+	# The exported WristJoint sits toward the fingers, below the visible palm.
+	# Rotating around it folds the end of the forearm back into the hand. Derive
+	# the anatomical heel from the visible palm and proximal fingers instead.
+	var finger_center := Vector3.ZERO
+	var count := 0
+	for child in wrist.get_children():
+		if child is MeshInstance3D and child.visible and str(child.name).ends_with("A") and "Finger" in str(child.name):
+			finger_center += child.to_global(child.get_aabb().get_center())
+			count += 1
+	if count == 0:
+		return
+	var palm_center := palm.to_global(palm.get_aabb().get_center())
+	var toward_fingers := (finger_center / count - palm_center).normalized()
+	if toward_fingers.length_squared() < 0.5:
+		return
+	var half_size := palm.get_aabb().size * 0.5
+	var basis := palm.global_basis
+	var palm_radius := absf(toward_fingers.dot(basis.x)) * half_size.x + absf(toward_fingers.dot(basis.y)) * half_size.y + absf(toward_fingers.dot(basis.z)) * half_size.z
+	# Embed the terminal connection slightly inside the palm, preserving all
+	# authored hand meshes and their world transforms in the rest pose.
+	_move_pivot_preserving_children(wrist, palm_center - toward_fingers * palm_radius * 0.78)
 
 
 func _physics_process(delta: float) -> void:
@@ -600,7 +628,8 @@ func _pose_arm_ik(
 	target_position: Vector3,
 	outward_side: float,
 	delta: float,
-	speed: float
+	speed: float,
+	elbow_pole: Vector3 = Vector3.ZERO
 ) -> void:
 	var shoulder_position := shoulder.global_position
 	var upper_length := shoulder_position.distance_to(elbow.global_position)
@@ -622,6 +651,8 @@ func _pose_arm_ik(
 	) / (2.0 * solved_distance)
 	var bend_height := sqrt(maxf(0.0, upper_length * upper_length - along_distance * along_distance))
 	var outward := _body.global_basis.x.normalized() * outward_side
+	if elbow_pole.length_squared() > 0.001:
+		outward = elbow_pole.normalized()
 	var bend_direction := outward - target_direction * outward.dot(target_direction)
 	if bend_direction.length_squared() < 0.001:
 		bend_direction = Vector3.UP.cross(target_direction)
@@ -648,7 +679,10 @@ func _pose_arm_ik(
 func _recenter_pivot(pivot: Node3D, visible_joint: Node3D) -> void:
 	if not is_instance_valid(pivot) or not is_instance_valid(visible_joint):
 		return
-	var joint_position := visible_joint.global_position
+	_move_pivot_preserving_children(pivot, visible_joint.global_position)
+
+
+func _move_pivot_preserving_children(pivot: Node3D, joint_position: Vector3) -> void:
 	var child_transforms: Array[Transform3D] = []
 	for child in pivot.get_children():
 		if child is Node3D:

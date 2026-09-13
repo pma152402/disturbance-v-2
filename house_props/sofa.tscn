@@ -1,6 +1,7 @@
-[gd_scene format=4]
+[gd_scene format=4 uid="uid://dokbin6kt0ful"]
 
-[ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Tela1.jpg" id="1_37m8u"]
+[ext_resource type="Texture2D" uid="uid://dr6ssxiyyid0k" path="res://ps2_house/Models/Abandoned_House_Tela1.jpg" id="1_37m8u"]
+[ext_resource type="Script" uid="uid://dsc4d8gky521k" path="res://systems/camera_observable.gd" id="2_camera_observable"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0gyfu"]
 resource_name = "Tela1"
@@ -43,15 +44,41 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_77el4")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_rnicf"]
-size = Vector3(2.9296896, 1.1805425, 1.0193045)
+[sub_resource type="BoxShape3D" id="SofaBaseShape"]
+size = Vector3(2.62, 0.32576174, 0.78)
+
+[sub_resource type="BoxShape3D" id="SofaBackShape"]
+size = Vector3(2.72, 0.82, 0.22)
+
+[sub_resource type="BoxShape3D" id="SofaArmShape"]
+size = Vector3(0.27, 0.62, 0.78)
 
 [node name="Sofa" type="StaticBody3D" unique_id=1787486096]
+
+[node name="CameraObservable" type="Node" parent="." unique_id=765877440]
+script = ExtResource("2_camera_observable")
+observation_id = &"sofa"
+display_name = "SOFA"
+local_focus_offset = Vector3(0, 0.7, 0)
+framing_radius = 1.65
+maximum_distance = 24.0
 
 [node name="Mesh" type="MeshInstance3D" parent="." unique_id=534229964]
 transform = Transform3D(0.24411647, 0, 0, 0, 0.24411647, 0, 0, 0, 0.24411647, 0, 0.5890683, 0)
 mesh = SubResource("ArrayMesh_5g6ej")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=360872413]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.386902e-05, 0.59027123, 0.120613575)
-shape = SubResource("BoxShape3D_rnicf")
+[node name="BaseCollision" type="CollisionShape3D" parent="." unique_id=65011550]
+transform = Transform3D(1, 0, 0, 0, 1.4549435, 0, 0, 0, 1, 0, 0.20964207, 0.22498444)
+shape = SubResource("SofaBaseShape")
+
+[node name="BackCollision" type="CollisionShape3D" parent="." unique_id=1404367512]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.7007586, 0, 0.76, -0.28147456)
+shape = SubResource("SofaBackShape")
+
+[node name="LeftArmCollision" type="CollisionShape3D" parent="." unique_id=863464558]
+transform = Transform3D(0.54857624, 0, 0, 0, 1, 0, 0, 0, 1, -1.3551658, 0.5794325, 0.2236445)
+shape = SubResource("SofaArmShape")
+
+[node name="RightArmCollision" type="CollisionShape3D" parent="." unique_id=675539939]
+transform = Transform3D(0.7270514, 0, 0, 0, 1, 0, 0, 0, 1, 1.3520592, 0.5706488, 0.21543695)
+shape = SubResource("SofaArmShape")

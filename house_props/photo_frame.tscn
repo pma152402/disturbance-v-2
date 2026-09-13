@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://house_props/photo_frame.gd" id="1_script"]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="2_camera_observable"]
 
 [sub_resource type="StandardMaterial3D" id="Material_placeholder"]
 albedo_color = Color(0.16, 0.13, 0.1, 1)
@@ -26,6 +27,15 @@ size = Vector3(1.92, 1.18, 0.12)
 [node name="PhotoFrame" type="Node3D"]
 editor_description = "Cuadro reutilizable. Arrastra una imagen a Photo Texture en el Inspector."
 script = ExtResource("1_script")
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("2_camera_observable")
+observation_id = &"framed_photo"
+display_name = "FOTOGRAFIA / CUADRO"
+framing_radius = 0.48
+maximum_distance = 16.0
+minimum_screen_fraction = 0.009
+priority = 1.4
 
 [node name="Backing" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0, -0.045)

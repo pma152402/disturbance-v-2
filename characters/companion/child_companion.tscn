@@ -1,11 +1,4 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://characters/companion/companion_npc_base.tscn" id="1_base"]
-[ext_resource type="PackedScene" path="res://characters/companion/child_visual.tscn" id="2_visual"]
-
-[node name="ChildCompanion" instance=ExtResource("1_base")]
-editor_description = "Nico, acompanante infantil. Hereda toda su logica de CompanionNPCBase; child_visual se puede reemplazar sin afectar las ordenes."
-display_name = "Nico"
-visual_scene = ExtResource("2_visual")
-initial_command = 0
-actor_scale = 0.88
+[node name="ChildCompanionRetired" type="Node3D"]
+editor_description = "Retirado: el nino ya no es un NPC ni tiene IA propia. El modelo activo vive en Player/PlayerAvatar."

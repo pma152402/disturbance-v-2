@@ -1,64 +1,38 @@
-# Acompanante reutilizable
+# Cuerpo infantil del jugador
 
-`child_companion.tscn` es la variante incluida (Nico). La logica vive en
-`companion_npc_base.gd` y el modelo en `child_visual.tscn`.
+`child_visual.tscn` es el aspecto canonico del protagonista. La escena se
+instancia como `Player/PlayerAvatar`; no contiene navegacion, ordenes, colision,
+input ni comportamiento autonomo.
 
-## Cambiar el asset sin rehacer el NPC
+`child_visual.gd` recibe del jugador velocidad local, postura, salto, giro,
+mirada, objeto equipado y accion contextual. Su unica responsabilidad es
+generar una pose procedural suave para que el cuerpo sea coherente en sombras,
+reflejos, camaras externas y durante la muerte.
 
-1. Duplica `child_companion.tscn`.
-2. Asigna otra `PackedScene` a `visual_scene`.
-3. Si el nuevo visual quiere animacion procedural, implementa
-   `update_companion_animation(delta, movement, waiting)` en su nodo raiz.
-4. Para copiar agachado y cuerpo a tierra, implementa tambien el metodo opcional
-   `set_companion_posture(posture)`, donde 0 es de pie, 1 agachado y 2 en suelo.
+La locomocion usa un ciclo de apoyo y recuperacion por pie, con IK de dos
+segmentos para conservar unidos cadera, rodilla y tobillo. Zapato y suela
+articulan talon y punta sobre la cota de apoyo original del modelo. La marcha
+estira la pierna de apoyo y recupera el pie a baja altura; la carrera acorta el
+apoyo, eleva mas el pie y flexiona los codos. Ctrl mantiene la pelvis baja,
+acorta la zancada y alarga el apoyo. La pelvis y el pecho contrarrotan, la cabeza
+compensa el balanceo y los cambios de velocidad, giro y postura se suavizan.
 
-El nuevo asset debe apoyar los pies en Y=0 y mirar hacia +Z. La base conserva
-colision, navegacion, apertura de puertas, ordenes, distancia de interaccion y
-la penalizacion de velocidad de la orden CERCA.
+`player/locomotion_gait.gd` calcula la fase por distancia recorrida. El jugador
+comparte su reloj de pasos/camara con el avatar; las previsualizaciones pueden
+avanzarlo de forma independiente. Los apoyos se resuelven sobre el plano local
+del avatar, sin consultas fisicas adicionales para cada pie.
 
-La IA espera al horneado del mapa de navegacion antes de caminar. Sus destinos
-usan dos radios de llegada (histeresis), direccion suavizada y reintento estable
-si queda bloqueada, evitando el temblor de izquierda a derecha.
+Validacion: `tools/validate_player_locomotion.gd` mide penetracion de suelas,
+elevacion, deslizamiento durante apoyo, articulacion, parada y sincronizacion.
+`tools/render_player_locomotion.gd` genera una hoja de ocho fases de andar,
+correr y Ctrl en `tools/output/player_locomotion_contact_sheet.png`.
 
-SIGUEME usa una zona personal, no un punto pegado a la espalda: girar la camara
-no provoca recolocaciones. Al acercarse, la velocidad cae con una curva suave y
-la animacion se funde hasta el reposo. El visual infantil incluye rodillas
-articuladas para evitar el andar rigido desde la cadera.
+La camara principal excluye la capa visual 2, donde vive el cuerpo completo,
+para que la cabeza no corte la imagen en primera persona. Las manos cercanas a
+la camara son una representacion separada con la misma piel y mangas. Todas
+las manos conservan solo la palma, sin dedos ni animaciones de dedos.
+Al morir, el cuerpo real pasa a la capa normal, se separa del jugador y cae;
+no se crea un segundo nino con otro tamano o postura.
 
-Nico imita automaticamente las tres posturas del jugador. La base interpola la
-capsula y la altura de navegacion, reduce la velocidad al andar agachado o a
-cuatro patas y comprueba que haya espacio antes de volver a levantarse.
-
-Los acompañantes marcados como `is_child_target` son presas prioritarias para la
-abuela. Al morir emiten `killed_by_monster`, caen al suelo y pueden restaurarse
-con `release_after_monster_capture(position)` para comenzar otro trayecto A-B.
-
-Tambien compensa automaticamente la diferencia vertical entre la colision y la
-malla navegable, invalida rutas cuando la casa termina un nuevo bake y rechaza
-destinos proyectados al lado incorrecto de una pared.
-
-## Controles
-
-Mira al personaje y pulsa F. Mientras el menu este abierto:
-
-- 1: QUIETO.
-- 2: SIGUEME, manteniendo una distancia comoda.
-- 3: CERCA, a menos de un metro; reduce la velocidad del jugador al 62 %.
-- 4: AVANZA cinco metros en la direccion del jugador y espera.
-- 5: VE ALLI, hacia el punto al que apunta la camara y espera.
-- Escape: cancela el menu sin cambiar la orden.
-
-Las distancias, velocidades y la penalizacion estan exportadas en el inspector.
-
-## Revisión de locomoción y puertas
-
-El visual puede implementar `set_motion_context(speed, turn_velocity, gaze,
-crossing)` para animar con velocidad física, orientar la cabeza y responder al
-cruce de puertas. `speed` se expresa en metros por segundo a escala del visual;
-`gaze` es un punto global. La interfaz anterior sigue disponible como respaldo.
-
-Las puertas que implementan `is_npc_passage_ready()` permiten esperar a la hoja
-real sin un retraso fijo. QUIETO cancela inmediatamente el cruce. La cápsula
-comprueba obstáculos antes de atravesar el umbral.
-
-Diseño, pruebas y límites en `../../COMPANION_REWORK.md`.
+`child_companion.tscn` se conserva como marcador retirado para no dejar una
+ruta rota en escenas antiguas. Ya no instancia la IA de acompanante.

@@ -14,9 +14,13 @@
 [ext_resource type="PackedScene" path="res://systems/runtime_house_navigation.tscn" id="11_runtime_navigation"]
 [ext_resource type="PackedScene" uid="uid://d2nkf5x4tmuwa" path="res://enemies/monster_grandmother.tscn" id="12_monster_grandmother"]
 [ext_resource type="Script" uid="uid://dnxlh2257qini" path="res://systems/camera_battery_indicator.gd" id="13_camera_battery"]
-[ext_resource type="PackedScene" uid="uid://btj1tf3hf2k6t" path="res://enemies/monster_grandmother_imported.tscn" id="15_imported_grandmother"]
+[ext_resource type="PackedScene" path="res://enemies/grandmother_crawler.tscn" id="15_imported_grandmother"]
 [ext_resource type="PackedScene" uid="uid://c0dwhce1bymdn" path="res://sounds/ambient/wood_cracking_ambience.tscn" id="16_wood_cracking"]
 [ext_resource type="PackedScene" path="res://environment/recording_only_components/4_recording_only_footsteps.tscn" id="17_recording_footsteps"]
+[ext_resource type="PackedScene" path="res://environment/dirt_football_field.tscn" id="18_fivcu"]
+[ext_resource type="PackedScene" path="res://systems/camera_keyring_hud.tscn" id="19_keyring_hud"]
+[ext_resource type="PackedScene" path="res://systems/camera_observer.tscn" id="20_camera_observer"]
+[ext_resource type="Script" path="res://systems/subtle_player_reflections.gd" id="21_player_reflections"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_storm"]
 panorama = ExtResource("5_storm_panorama")
@@ -68,6 +72,9 @@ shader_parameter/vignette_inner = 0.07
 shader_parameter/vignette_outer = 0.47
 
 [node name="ThreeStoreyHouse" type="Node3D" unique_id=1539321156]
+
+[node name="SubtlePlayerReflections" type="Node" parent="."]
+script = ExtResource("21_player_reflections")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2005037581]
 environment = SubResource("Environment_house")
@@ -234,7 +241,8 @@ transform = Transform3D(0.9835713, 0, 0.18051943, 0, 1, 0, -0.18051943, 0, 0.983
 [node name="Player" parent="." unique_id=546288329 instance=ExtResource("1_player")]
 editor_description = "Spawn de prueba en el pasillo, fuera del sótano y mirando hacia su puerta, con todas las llaves."
 transform = Transform3D(0.9835713, 0, 0.18051943, 0, 1, 0, -0.18051943, 0, 0.9835713, 0.7585788, 1.3244749, 8.066787)
-starts_with_lit_candle = true
+starts_with_flashlight = true
+starts_with_flashlight_battery = true
 debug_all_keys = true
 
 [node name="MonsterGrandmother" parent="." unique_id=889727421 instance=ExtResource("12_monster_grandmother")]
@@ -243,7 +251,12 @@ transform = Transform3D(-0.24663237, 0, -0.9691091, 0, 1, 0, 0.9691091, 0, -0.24
 
 [node name="ImportedGrandmotherGroundFloor" parent="." unique_id=1485663130 instance=ExtResource("15_imported_grandmother")]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.0501447, 1.0776441, -36.835663)
-remain_still = false
+dark_sight_distance = 6.5
+recognition_seconds = 0.52
+evidence_memory_seconds = 6.0
+thorough_search_seconds = 26.0
+maximum_search_radius = 6.5
+alert_decay_seconds = 32.0
 dormant_until_door_opens = false
 activation_door_path = NodePath("")
 close_player_distance = 1.2
@@ -266,7 +279,6 @@ footstep_interest_seconds = 1.6
 lost_player_search_seconds = 8.0
 search_step_seconds = 1.05
 search_sweep_radius = 1.45
-supernatural_player_reveal = true
 reveal_after_seconds = 20.0
 reveal_live_seconds = 1.0
 reveal_reset_distance = 6.0
@@ -288,6 +300,8 @@ door_cross_speed = 2.005
 
 [node name="PS2PostProcess" type="CanvasLayer" parent="." unique_id=13050641]
 layer = 101
+
+[node name="CameraKeyringHUD" parent="PS2PostProcess" instance=ExtResource("19_keyring_hud")]
 
 [node name="ScreenFilter" type="ColorRect" parent="PS2PostProcess" unique_id=1354811659]
 material = SubResource("Material_ps2")
@@ -327,6 +341,7 @@ vertical_alignment = 1
 
 [node name="RecordingDot" type="Polygon2D" parent="PS2PostProcess/CameraHUD" unique_id=471925872]
 position = Vector2(84, 82)
+scale = Vector2(1.15, 1.15)
 color = Color(0.94, 0.13, 0.1, 0.94)
 polygon = PackedVector2Array(-10, 0, -9.2388, -3.82683, -7.07107, -7.07107, -3.82683, -9.2388, 0, -10, 3.82683, -9.2388, 7.07107, -7.07107, 9.2388, -3.82683, 10, 0, 9.2388, 3.82683, 7.07107, 7.07107, 3.82683, 9.2388, 0, 10, -3.82683, 9.2388, -7.07107, 7.07107, -9.2388, 3.82683)
 
@@ -429,4 +444,12 @@ theme_override_font_sizes/font_size = 30
 text = "20/08/2026  00:00:00"
 horizontal_alignment = 2
 
+[node name="CameraObserver" parent="PS2PostProcess" instance=ExtResource("20_camera_observer")]
+
+[node name="DirtFootballField" parent="." unique_id=559736938 instance=ExtResource("18_fivcu")]
+transform = Transform3D(0.8721058, 0, 0, 0, 1, 0, 0, 0, 0.7937516, -22.787563, -0.0033996105, -33.8775)
+
 [editable path="Weather"]
+[editable path="DirtFootballField"]
+[editable path="ExteriorEnvironment"]
+[editable path="ExteriorEnvironment/DirtFootballField"]

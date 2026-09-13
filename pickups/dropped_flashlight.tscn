@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://pickups/dropped_flashlight.gd" id="1_script"]
 [ext_resource type="ArrayMesh" path="res://ps2_objects/Flashlight/Flashlight.obj" id="2_mesh"]
@@ -15,6 +15,18 @@ height = 0.48
 [sub_resource type="PhysicsMaterial" id="Physics_flashlight"]
 friction = 0.72
 bounce = 0.12
+
+[sub_resource type="Gradient" id="Gradient_flashlight_two_rings"]
+offsets = PackedFloat32Array(0, 0.385, 0.44, 0.94, 1)
+colors = PackedColorArray(0.88, 0.88, 0.88, 1, 0.88, 0.88, 0.88, 1, 0.65, 0.65, 0.65, 1, 0.65, 0.65, 0.65, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_flashlight_two_rings"]
+gradient = SubResource("Gradient_flashlight_two_rings")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
 
 [node name="DroppedFlashlight" type="RigidBody3D"]
 mass = 0.32
@@ -37,8 +49,9 @@ shape = SubResource("Shape_flashlight")
 [node name="SpotLight3D" type="SpotLight3D" parent="."]
 position = Vector3(0, 0, -0.27)
 visible = false
-light_color = Color(1, 0.9, 0.72, 1)
+light_color = Color(1, 0.68, 0.22, 1)
 light_energy = 6.5
+light_projector = SubResource("GradientTexture2D_flashlight_two_rings")
 shadow_enabled = true
 shadow_bias = 0.03
 shadow_normal_bias = 1.5

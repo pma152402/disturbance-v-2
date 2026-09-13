@@ -54,6 +54,9 @@ func _run() -> void:
 			or not is_equal_approx(recording_dot.position.y, (recording_label.offset_top + recording_label.offset_bottom) * 0.5):
 		_fail("La bola de REC no está centrada verticalmente con el texto")
 		return
+	if recording_dot.scale != Vector2(1.15, 1.15):
+		_fail("La bola de REC no es exactamente un 15 por ciento más grande")
+		return
 	if recorder.get_node("TapeMode").text != "VID 01" \
 			or recorder.get_node("TapeSide").text != "A":
 		_fail("El HUD de cámara no muestra el vídeo y la cara A inicial")
@@ -109,6 +112,11 @@ func _run() -> void:
 			or (zoom_meter as Control).offset_right > -70.0:
 		_fail("El HUD del directo invade la zona segura de las esquinas")
 		return
+	# GPU startup briefly warms the capture pipeline without recording. Wait for
+	# that asynchronous job before asserting the steady-state STBY resources.
+	var warmup_deadline := Time.get_ticks_msec() + 5000
+	while bool(recorder.get("_capture_pending")) and Time.get_ticks_msec() < warmup_deadline:
+		await process_frame
 	var low_res_viewport := recorder.get("_recording_viewport") as SubViewport
 	if low_res_viewport != null or recorder.get("_recording_camera") != null:
 		_fail("La segunda cámara existe antes de comenzar a grabar")
@@ -148,15 +156,40 @@ func _run() -> void:
 		return
 	for _frame in 3:
 		await process_frame
-	# Headless usa un renderer dummy sin framebuffer. Inyectamos dos capturas JPEG
-	# equivalentes para validar el archivo comprimido independientemente del GPU.
+	# La copia TapeCamera debe conservar el encuadre y la política de la cámara
+	# de origen; su propio nombre nunca identifica el modo selfie/externo.
+	var external_camera := Camera3D.new()
+	external_camera.name = "FilmingCamera"
+	external_camera.keep_aspect = Camera3D.KEEP_WIDTH
+	external_camera.h_offset = 0.12
+	external_camera.v_offset = -0.08
+	external_camera.frustum_offset = Vector2(0.05, -0.03)
+	game.add_child(external_camera)
+	recorder.call(&"_sync_recording_camera", external_camera)
+	var external_state: Dictionary = recorder.call(&"_recording_camera_state")
+	if bool(external_state.exclude_player) or int(external_state.keep_aspect) != Camera3D.KEEP_WIDTH \
+			or not is_equal_approx(float(external_state.h_offset), 0.12) \
+			or not is_equal_approx(float(external_state.v_offset), -0.08) \
+			or external_state.frustum_offset != Vector2(0.05, -0.03):
+		_fail("La cinta perdió el encuadre o la oclusión del jugador de la cámara externa")
+		return
+	external_camera.queue_free()
+	recorder.call(&"_sync_recording_camera", root.get_camera_3d())
+	# Capturas JPEG sintéticas para comprobar el archivo comprimido sin GPU.
 	var test_image := Image.create(426, 240, false, Image.FORMAT_RGB8)
 	test_image.fill(Color(0.18, 0.28, 0.22))
 	var test_frame := test_image.save_jpg_to_buffer(0.62)
 	var current_clip: Array = recorder.get("_current_clip")
 	current_clip.append(test_frame)
 	current_clip.append(test_frame)
+	var current_camera_frames: Array = recorder.get("_current_clip_camera_frames")
+	current_camera_frames.append(recorder.call(&"_recording_camera_state"))
+	current_camera_frames.append(recorder.call(&"_recording_camera_state"))
 	recorder.call(&"stop_recording")
+	# STOP invalidates in-flight captures, then releases their viewport on completion.
+	var stop_deadline := Time.get_ticks_msec() + 5000
+	while bool(recorder.get("_capture_pending")) and Time.get_ticks_msec() < stop_deadline:
+		await process_frame
 	if recorder.get("_recording_viewport") != null or recorder.get("_recording_camera") != null:
 		_fail("La segunda cámara no se destruyó al detener la grabación")
 		return
@@ -203,6 +236,20 @@ func _run() -> void:
 		return
 	if camera_frame.visible or not menu_frame.visible or not inner_brackets.visible:
 		_fail("ARCHIVO no combina el encuadre completo con los corchetes interiores")
+		return
+	var observer := game.get_node("PS2PostProcess/CameraObserver") as Control
+	var observer_header := observer.get_node("Header") as Label
+	var observer_readout := observer.get_node("Readout") as RichTextLabel
+	if not observer.visible or not bool(observer.get("_playback_analysis_active")):
+		_fail("El Observador no se activa al analizar una grabación de ARCHIVO")
+		return
+	if observer_header.get_theme_font(&"font") != observer_readout.get_theme_font(&"normal_font") \
+			or not observer_header.get_theme_font(&"font").resource_path.ends_with("PressStart2P-Regular.ttf"):
+		_fail("Todo el Observador no utiliza la tipografía pixelada")
+		return
+	var observation_summaries: Array = recorder.get("_saved_clip_observations")
+	if observation_summaries.is_empty() or int((observation_summaries[0] as Dictionary).get("analyzed_frame", -1)) != 0:
+		_fail("El Observador de ARCHIVO no analizó el fotograma grabado")
 		return
 	var playback_tabs_for_bracket := recorder.get("_playback_tabs") as Control
 	var expected_bracket_top := playback_tabs_for_bracket.offset_top + (recorder.get("_camera_tab_label") as Label).size.y * 0.5

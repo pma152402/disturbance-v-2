@@ -1,4 +1,6 @@
 [gd_scene format=3]
+
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="99_camera_observable"]
 [sub_resource type="StandardMaterial3D" id="m1"]
 albedo_color = Color(0.24,0.28,0.26,1)
 roughness = 0.85
@@ -94,6 +96,13 @@ size = Vector3(0.19,0.065,0.012)
 material = SubResource("m13")
 [node name="OfficeFilingCabinet" type="Node3D"]
 metadata/_edit_group_ = true
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("99_camera_observable")
+observation_id = &"filing_cabinet"
+display_name = "ARCHIVADOR"
+local_focus_offset = Vector3(0, 0.9, 0)
+framing_radius = 1.0
+maximum_distance = 20.0
 [node name="Cabinet" type="StaticBody3D" parent="."]
 position = Vector3(0,0.9,0)
 [node name="Mesh" type="MeshInstance3D" parent="Cabinet"]
@@ -148,4 +157,3 @@ mesh = SubResource("b12")
 [node name="Label3" type="MeshInstance3D" parent="."]
 position = Vector3(0,1.58,0.35)
 mesh = SubResource("b13")
-

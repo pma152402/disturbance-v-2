@@ -1,4 +1,6 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="1_camera_observable"]
 
 [sub_resource type="StandardMaterial3D" id="cream"]
 albedo_color = Color(0.72, 0.69, 0.59, 1)
@@ -32,6 +34,14 @@ size = Vector3(0.92, 0.62, 0.5)
 
 [node name="RetroMicrowave" type="StaticBody3D"]
 editor_description = "Microondas antiguo crema y verde salvia, con puerta, ventana, rejilla, dos mandos y patas."
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("1_camera_observable")
+observation_id = &"microwave"
+display_name = "MICROONDAS"
+local_focus_offset = Vector3(0, 0.31, 0)
+framing_radius = 0.62
+maximum_distance = 16.0
+minimum_screen_fraction = 0.009
 [node name="MainBody" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.3, 0)
 scale = Vector3(0.9, 0.52, 0.46)

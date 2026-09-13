@@ -25,20 +25,15 @@ func get_interaction_text(player: Node = null) -> String:
 		if player != null and player.has_method(&"can_store_inventory_item") and not player.can_store_inventory_item():
 			return "INVENTARIO LLENO"
 		return "F  COGER VELA ENCENDIDA"
-	if not _player_has_flame_in_hand(player):
-		return "NECESITAS UNA CERILLA O VELA ENCENDIDA"
 	if player != null and player.has_method(&"can_store_inventory_item") and not player.can_store_inventory_item():
 		return "INVENTARIO LLENO"
-	return "F  EQUIPAR VELA ENCENDIDA"
+	return "F  COGER VELA"
 
 
 func interact(player: Node = null) -> bool:
 	if _picked_up or player == null or not player.has_method(&"pick_up_candle"):
 		return false
-	var already_lit := bool(visual.get("lit"))
-	if not already_lit and not _player_has_flame_in_hand(player):
-		return false
-	if not bool(player.call(&"pick_up_candle", visual.call(&"get_candle_data"), not already_lit)):
+	if not bool(player.call(&"pick_up_candle", visual.call(&"get_candle_data"), false)):
 		return false
 	var offering_table := get_parent()
 	while offering_table != null and not offering_table.has_method(&"release_candle"):
@@ -50,15 +45,6 @@ func interact(player: Node = null) -> bool:
 	collision_mask = 0
 	queue_free()
 	return true
-
-
-func _player_has_flame_in_hand(player: Node) -> bool:
-	if player == null:
-		return false
-	var has_match_flame := player.has_method(&"has_lit_match_in_hand") and bool(player.call(&"has_lit_match_in_hand"))
-	var has_candle_flame := player.has_method(&"has_lit_candle_in_hand") and bool(player.call(&"has_lit_candle_in_hand"))
-	return has_match_flame or has_candle_flame
-
 
 func configure_candle(data: Dictionary) -> void:
 	visual.call(&"configure_candle", data)

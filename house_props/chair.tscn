@@ -1,6 +1,7 @@
 [gd_scene format=4]
 
 [ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera1.jpg" id="1_8of7a"]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="2_camera_observable"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_svocx"]
 resource_name = "Madera1"
@@ -47,6 +48,15 @@ shadow_mesh = SubResource("ArrayMesh_we6pi")
 size = Vector3(0.676099, 1.2788494, 0.59158146)
 
 [node name="Chair" type="StaticBody3D" unique_id=1785788595]
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("2_camera_observable")
+observation_id = &"chair"
+display_name = "SILLA"
+local_focus_offset = Vector3(0, 0.64, 0)
+framing_radius = 0.72
+maximum_distance = 18.0
+infer_room_from_instance_name = true
 
 [node name="Mesh" type="MeshInstance3D" parent="." unique_id=1702386736]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44109342, 0)

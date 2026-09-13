@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://de35b88lys3nu"]
 
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="1_camera_observable"]
+
 [sub_resource type="StandardMaterial3D" id="cream"]
 albedo_color = Color(0.72, 0.69, 0.59, 1)
 roughness = 0.7
@@ -25,6 +27,14 @@ size = Vector3(1, 2.3461914, 1)
 
 [node name="RetroExtractorHood" type="Node3D" unique_id=1717515654]
 editor_description = "Campana extractora antigua con chimenea, visera, filtro inferior, botonera y luz."
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("1_camera_observable")
+observation_id = &"extractor_hood"
+display_name = "CAMPANA DE COCINA"
+local_focus_offset = Vector3(0, 0.7, 0)
+framing_radius = 0.92
+maximum_distance = 20.0
 
 [node name="Chimney" type="MeshInstance3D" parent="." unique_id=1189529174]
 transform = Transform3D(0.48, 0, 0, 0, 1.1, 0, 0, 0, 0.36, 0, 0.95, 0)

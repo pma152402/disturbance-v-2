@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera2.jpg" id="1_11c0l"]
 [ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera1.jpg" id="2_mno70"]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="3_camera_observable"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xid7h"]
 resource_name = "Madera2"
@@ -78,6 +79,15 @@ size = Vector3(1.6570089, 0.14, 2.535083)
 size = Vector3(0.14, 0.75, 0.14)
 
 [node name="Table" type="StaticBody3D" unique_id=2046591139]
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("3_camera_observable")
+observation_id = &"table"
+display_name = "MESA"
+local_focus_offset = Vector3(0, 0.78, 0)
+framing_radius = 1.35
+maximum_distance = 22.0
+infer_room_from_instance_name = true
 
 [node name="Mesh" type="MeshInstance3D" parent="." unique_id=642687846]
 transform = Transform3D(0, 0, 1.0000001, 0, 1.0000001, 0, -1.0000001, 0, 0, 0, 0.75407654, 0)

@@ -8,6 +8,8 @@ var elbow: Node3D
 var wrist: Node3D
 var palm: MeshInstance3D
 var mount := Vector3.ZERO
+var thickness_scale := 1.0
+var _last_thickness_scale := -1.0
 var _skin: Material
 var _cloth: Material
 var _vertices := PackedVector3Array()
@@ -61,9 +63,10 @@ func update_surface() -> void:
 		joint, joint.lerp(hand, 0.22), joint.lerp(hand, 0.58), hand,
 		palm_center,
 	])
-	if points == _last_points:
+	if points == _last_points and is_equal_approx(thickness_scale, _last_thickness_scale):
 		return
 	_last_points = points
+	_last_thickness_scale = thickness_scale
 	var radii := PackedFloat32Array([0.48, 0.43, 0.34, 0.29, 0.28, 0.275, 0.24, 0.19, 0.17])
 	var radial := Vector3.FORWARD
 	for ring in RINGS:
@@ -79,7 +82,9 @@ func update_surface() -> void:
 			var angle := TAU * float(side) / SIDES
 			var normal := radial * cos(angle) + second * sin(angle)
 			var index := ring * SIDES + side
-			_vertices[index] = points[ring] + normal * radii[ring]
+			# Preserve the torso mount and palm closure; taper only the limb shaft.
+			var taper := lerpf(1.0, thickness_scale, 1.0 if ring in [2, 3, 4, 5, 6] else 0.45 if ring == 1 else 0.0)
+			_vertices[index] = points[ring] + normal * radii[ring] * taper
 			_normals[index] = normal
 			_uvs[index] = Vector2(float(side) / SIDES, float(ring) / (RINGS - 1))
 	var arrays := []

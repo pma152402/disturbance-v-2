@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera4.jpg" id="3_wood"]
 
 [sub_resource type="BoxShape3D" id="Shape_panel"]
-size = Vector3(1.96, 2.7, 0.12)
+size = Vector3(2.08, 2.635, 0.12)
 
 [sub_resource type="StandardMaterial3D" id="Material_frame"]
 resource_local_to_scene = true
@@ -96,7 +96,7 @@ rotation = Vector3(1.5708, 0, 0)
 mesh = SubResource("Mesh_spindle")
 
 [node name="PanelCollision" type="CollisionShape3D" parent="Hinge"]
-position = Vector3(0.98, 1.35, 0)
+position = Vector3(0.98, 1.3825, 0)
 shape = SubResource("Shape_panel")
 
 [node name="DoorSound" type="AudioStreamPlayer3D" parent="Hinge"]

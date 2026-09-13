@@ -12,7 +12,7 @@ func _run() -> void:
 	var visual := actor.get_node("EditableVisual") as Node3D
 	visual.set_physics_process(false)
 	var rig := visual.get_node("CleanModel/EditableGrannyRig") as Node3D
-	var left_palm := rig.get_node("LeftShoulderPivot/LeftElbowPivot/LeftWristPivot/LeftPalm") as Node3D
+	var left_palm := visual.get("_left_palm") as Node3D
 	var right_palm := rig.get_node("RightShoulderPivot/RightElbowPivot/RightWristPivot/RightPalm") as Node3D
 	var head := rig.get_node("HeadPivot") as Node3D
 	actor.set("current_state", 0)

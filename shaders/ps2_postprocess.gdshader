@@ -30,9 +30,6 @@ void fragment() {
 	source.b = texture(screen_texture, clamp(uv - rgb_offset, vec2(0.0), vec2(1.0))).b;
 	vec3 readable_source = texture(screen_texture, clamp(uv, vec2(0.0), vec2(1.0))).rgb;
 	source = mix(readable_source, source, 0.45);
-	float edge_blur = smoothstep(0.18, 1.15, lens_radius) * 0.24;
-	vec3 soft_sample = texture(screen_texture, clamp(uv + vec2(block.x * 1.5, block.y), vec2(0.0), vec2(1.0))).rgb;
-	source = mix(source, soft_sample, edge_blur);
 	float crack_marker = smoothstep(0.24, 0.54, min(source.r, source.b) - source.g)
 		* smoothstep(0.42, 0.76, min(source.r, source.b));
 	float flicker = 0.965 + hash21(vec2(frame, 4.0)) * 0.055;

@@ -147,36 +147,28 @@ func _draw() -> void:
 	image.resize(DISPLAY_RASTER_SIZE.x, DISPLAY_RASTER_SIZE.y, Image.INTERPOLATE_NEAREST)
 	# Conservar la referencia entre fotogramas; una textura local puede liberarse
 	# al terminar _draw y Godot muestra entonces su placeholder blanco.
-	_raster_texture = ImageTexture.create_from_image(image)
+	if _raster_texture == null:
+		_raster_texture = ImageTexture.create_from_image(image)
+	else:
+		_raster_texture.update(image)
 	draw_texture_rect(_raster_texture, Rect2(Vector2.ZERO, size), false)
 
 
 func _style_silhouette(silhouette: Image) -> Image:
 	var styled := Image.create(RASTER_SIZE.x, RASTER_SIZE.y, false, Image.FORMAT_RGBA8)
 	styled.fill(Color.TRANSPARENT)
-	# Sombra dura equivalente al desplazamiento de la fuente del HUD.
-	for y in RASTER_SIZE.y:
-		for x in RASTER_SIZE.x:
-			if silhouette.get_pixel(x, y).a <= 0.0:
-				continue
-			var shadow_pixel := Vector2i(x, y) + SHADOW_OFFSET
-			if shadow_pixel.x < RASTER_SIZE.x and shadow_pixel.y < RASTER_SIZE.y:
-				styled.set_pixelv(shadow_pixel, SHADOW_INK)
-	# Contorno cuadrado y compacto, sin antialiasing, como las letras de cámara.
-	for y in RASTER_SIZE.y:
-		for x in RASTER_SIZE.x:
-			if silhouette.get_pixel(x, y).a <= 0.0:
-				continue
-			for oy in range(-OUTLINE_RADIUS, OUTLINE_RADIUS + 1):
-				for ox in range(-OUTLINE_RADIUS, OUTLINE_RADIUS + 1):
-					var outline_pixel := Vector2i(x + ox, y + oy)
-					if outline_pixel.x >= 0 and outline_pixel.y >= 0 and outline_pixel.x < RASTER_SIZE.x and outline_pixel.y < RASTER_SIZE.y:
-						styled.set_pixelv(outline_pixel, OUTLINE_INK)
-	# El relleno se aplica al final para conservar una silueta limpia y uniforme.
-	for y in RASTER_SIZE.y:
-		for x in RASTER_SIZE.x:
-			if silhouette.get_pixel(x, y).a > 0.0:
-				styled.set_pixel(x, y, _ink())
+	var ink := Image.create(RASTER_SIZE.x, RASTER_SIZE.y, false, Image.FORMAT_RGBA8)
+	var full_rect := Rect2i(Vector2i.ZERO, RASTER_SIZE)
+	# Native masked blits produce the same hard shadow and 5x5 square dilation
+	# without tens of thousands of per-pixel GDScript calls on every moving frame.
+	ink.fill(SHADOW_INK)
+	styled.blit_rect_mask(ink, silhouette, full_rect, SHADOW_OFFSET)
+	ink.fill(OUTLINE_INK)
+	for oy in range(-OUTLINE_RADIUS, OUTLINE_RADIUS + 1):
+		for ox in range(-OUTLINE_RADIUS, OUTLINE_RADIUS + 1):
+			styled.blit_rect_mask(ink, silhouette, full_rect, Vector2i(ox, oy))
+	ink.fill(_ink())
+	styled.blit_rect_mask(ink, silhouette, full_rect, Vector2i.ZERO)
 	return styled
 
 
@@ -250,23 +242,16 @@ func _draw_pixel_bone(image: Image, a: Vector2, b: Vector2) -> void:
 
 
 func _stamp_block(image: Image, center: Vector2, radius: int) -> void:
-	for y in range(-radius, radius + 1):
-		for x in range(-radius, radius + 1):
-			var pixel := Vector2i(center) + Vector2i(x, y)
-			if pixel.x >= 0 and pixel.y >= 0 and pixel.x < RASTER_SIZE.x and pixel.y < RASTER_SIZE.y:
-				image.set_pixelv(pixel, _ink())
+	var rectangle := Rect2i(Vector2i(center) - Vector2i(radius, radius), Vector2i.ONE * (radius * 2 + 1))
+	image.fill_rect(rectangle.intersection(Rect2i(Vector2i.ZERO, RASTER_SIZE)), _ink())
 
 
 func _stamp_pixel_head(image: Image, center: Vector2) -> void:
 	# Cabeza octogonal construida por escalones rectos, como un glifo bitmap.
 	for y in range(-9, 10):
-		for x in range(-11, 12):
-			var corner_cut := 3 if absi(y) >= 7 else 1 if absi(y) >= 5 else 0
-			if absi(x) > 11 - corner_cut:
-				continue
-			var pixel := Vector2i(center) + Vector2i(x, y)
-			if pixel.x >= 0 and pixel.y >= 0 and pixel.x < RASTER_SIZE.x and pixel.y < RASTER_SIZE.y:
-				image.set_pixelv(pixel, _ink())
+		var corner_cut := 3 if absi(y) >= 7 else 1 if absi(y) >= 5 else 0
+		var rectangle := Rect2i(Vector2i(center) + Vector2i(-11 + corner_cut, y), Vector2i(23 - corner_cut * 2, 1))
+		image.fill_rect(rectangle.intersection(Rect2i(Vector2i.ZERO, RASTER_SIZE)), _ink())
 
 
 func _pose_for(stance: int) -> Array[Vector2]:

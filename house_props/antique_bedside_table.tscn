@@ -1,4 +1,6 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="99_camera_observable"]
 
 [sub_resource type="StandardMaterial3D" id="wood"]
 albedo_color = Color(0.24, 0.105, 0.035, 1)
@@ -21,6 +23,13 @@ size = Vector3(0.72, 0.72, 0.58)
 
 [node name="AntiqueBedsideTable" type="StaticBody3D"]
 editor_description = "Mesita de noche de madera con cajon, puerta inferior, balda y patas cortas."
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("99_camera_observable")
+observation_id = &"bedside_table"
+display_name = "MESITA DE NOCHE"
+local_focus_offset = Vector3(0, 0.42, 0)
+framing_radius = 0.68
+maximum_distance = 18.0
 [node name="Body" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.38, 0)
 scale = Vector3(0.7, 0.68, 0.55)
@@ -44,4 +53,3 @@ mesh = SubResource("knob")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.36, 0)
 shape = SubResource("collision")
-

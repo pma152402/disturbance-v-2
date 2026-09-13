@@ -1,5 +1,7 @@
 [gd_scene format=4 uid="uid://h8jpmcuhg4or"]
 
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="99_camera_observable"]
+
 [ext_resource type="Script" uid="uid://b0f8qnjsoryau" path="res://house_props/detailed_basement_boiler.gd" id="1_boiler"]
 
 [sub_resource type="StandardMaterial3D" id="Iron"]
@@ -239,6 +241,15 @@ collision_layer = 3
 script = ExtResource("1_boiler")
 temperature_percent = 84.0
 boiler_state = 2
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("99_camera_observable")
+observation_id = &"basement_boiler"
+display_name = "CALDERA"
+local_focus_offset = Vector3(0, 1.25, 0)
+framing_radius = 1.55
+maximum_distance = 24.0
+priority = 1.6
 
 [node name="Tank" type="MeshInstance3D" parent="." unique_id=1311562742]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)

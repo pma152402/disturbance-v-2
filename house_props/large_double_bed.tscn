@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://cn1cu4ehl0ifk"]
 
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="1_camera_observable"]
+
 [sub_resource type="StandardMaterial3D" id="wood"]
 albedo_color = Color(0.24, 0.105, 0.035, 1)
 roughness = 0.86
@@ -33,6 +35,14 @@ size = Vector3(2.65, 0.72, 3.75)
 
 [node name="LargeDoubleBed" type="StaticBody3D" unique_id=1612810441]
 editor_description = "Cama grande de matrimonio con cabecero alto, colchon, colcha, dos almohadas, largueros y patas."
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("1_camera_observable")
+observation_id = &"bed"
+display_name = "CAMA"
+local_focus_offset = Vector3(0, 0.65, 0)
+framing_radius = 2.1
+maximum_distance = 26.0
 
 [node name="FrameBase" type="MeshInstance3D" parent="." unique_id=1836942072]
 transform = Transform3D(2.65, 0, 0, 0, 0.25, 0, 0, 0, 3.75, 0, 0.34, 0)

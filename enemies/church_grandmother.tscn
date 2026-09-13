@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://enemies/monster_grandmother_imported.tscn" id="1_base"]
+[ext_resource type="Script" path="res://enemies/church_grandmother.gd" id="2_brain"]
+[ext_resource type="Script" path="res://enemies/church_grandmother_animator.gd" id="3_animation"]
+
+[node name="ChurchGrandmother" instance=ExtResource("1_base")]
+script = ExtResource("2_brain")
+remain_still = false
+supernatural_player_reveal = false
+attack_windup_seconds = 0.38
+attack_hit_seconds = 0.6
+attack_animation_seconds = 1.32
+attack_cooldown = 1.85
+investigate_speed = 1.48
+heading_smoothing = 6.0
+
+[node name="EditableVisual" parent="." index="8"]
+script = ExtResource("3_animation")

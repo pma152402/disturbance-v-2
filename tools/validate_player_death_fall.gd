@@ -42,7 +42,8 @@ func _run_validation() -> void:
 	var child_visual := world.get_node_or_null("PlayerDeathChildVisual") as Node3D
 	assert(child_visual != null, "No aparece el asset del nino al morir")
 	assert(child_visual.scene_file_path.ends_with("child_visual.tscn"), "Se instancio logica NPC en vez de solo el asset")
-	assert(child_visual.scale.is_equal_approx(Vector3.ONE * 0.44), "El nino muerto no usa su escala correcta")
+	assert(child_visual == player.get("player_avatar"), "La muerte debe usar el mismo cuerpo del jugador, no crear un duplicado")
+	assert(child_visual.scale.is_equal_approx(Vector3.ONE), "El cuerpo cambia de tamano al morir")
 	assert(child_visual.find_children("*", "CollisionObject3D", true, false).is_empty(), "El asset del nino contiene colision")
 	var death_origin := child_visual.global_position
 

@@ -38,8 +38,6 @@ void fragment() {
 	uv.x += random_tear * (hash21(vec2(horizontal_band, frame)) - 0.5) * 0.006;
 	float sampled_row = floor(original_uv.y / SCREEN_PIXEL_SIZE.y);
 	uv.x += mod(sampled_row, 2.0) * SCREEN_PIXEL_SIZE.x * sin(frame * 0.37) * 1.5;
-	float head_switch = smoothstep(0.82, 0.99, uv.y);
-	uv.x += head_switch * sin(uv.y * 170.0 + TIME * 13.0) * 0.0028;
 	uv = clamp(uv, vec2(0.0), vec2(1.0));
 
 	vec2 rgb_offset = vec2(SCREEN_PIXEL_SIZE.x * chromatic_aberration, 0.0);
@@ -50,9 +48,6 @@ void fragment() {
 		texture(screen_texture, clamp(uv - rgb_offset, vec2(0.0), vec2(1.0))).b
 	);
 	source = mix(center_sample, source, 0.45);
-	float edge_blur = smoothstep(0.18, 1.15, lens_radius) * 0.24;
-	vec2 soft_uv = clamp(uv + vec2(block.x * 1.5, block.y), vec2(0.0), vec2(1.0));
-	source = mix(source, texture(screen_texture, soft_uv).rgb, edge_blur);
 	// La marca magenta solo la emite el material de grietas. Se detecta antes
 	// de desaturar para preservar su legibilidad sin analizar colores de la escena.
 	float crack_marker = smoothstep(0.24, 0.54, min(source.r, source.b) - source.g)

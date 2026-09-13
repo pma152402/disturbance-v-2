@@ -5,7 +5,7 @@ extends RefCounted
 const MIN_OCCLUDER_FACE_AREA := 7.0
 const MAX_OCCLUDER_THICKNESS := 1.25
 const MAX_OCCLUDERS := 256
-const SOLID_NAME_HINTS := ["wall", "partition", "ceiling", "roof", "slab", "floor"]
+const SOLID_NAME_HINTS := ["wall", "partition", "ceiling", "roof", "slab", "floor", "shaft"]
 const OPENING_NAME_HINTS := [
 	"window", "glass", "door", "portal", "opening", "cutout", "stair",
 	"railing", "rail", "fence", "curtain", "gate", "hatch",

@@ -1,63 +1,50 @@
-[gd_scene load_steps=37 format=3]
+[gd_scene format=3 uid="uid://cm86jh1710qo4"]
 
-[ext_resource type="Script" path="res://characters/companion/child_visual.gd" id="1_anim"]
-
-[sub_resource type="StandardMaterial3D" id="Mat_skin"]
-albedo_color = Color(0.64, 0.43, 0.31, 1)
-roughness = 0.92
-
-[sub_resource type="StandardMaterial3D" id="Mat_skin_warm"]
-albedo_color = Color(0.52, 0.28, 0.2, 1)
-roughness = 0.95
-
-[sub_resource type="StandardMaterial3D" id="Mat_hair"]
-albedo_color = Color(0.055, 0.035, 0.026, 1)
-roughness = 0.96
-
-[sub_resource type="StandardMaterial3D" id="Mat_shirt"]
-albedo_color = Color(0.56, 0.48, 0.29, 1)
-roughness = 0.94
-
-[sub_resource type="StandardMaterial3D" id="Mat_cardigan"]
-albedo_color = Color(0.16, 0.255, 0.245, 1)
-roughness = 1.0
+[ext_resource type="Script" uid="uid://bicknti350oyi" path="res://characters/companion/child_visual.gd" id="1_anim"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_shorts"]
 albedo_color = Color(0.11, 0.13, 0.16, 1)
 roughness = 0.9
 
+[sub_resource type="CapsuleMesh" id="Mesh_leg"]
+material = SubResource("Mat_shorts")
+radius = 0.073
+height = 0.34
+radial_segments = 8
+rings = 3
+
 [sub_resource type="StandardMaterial3D" id="Mat_sock"]
 albedo_color = Color(0.55, 0.52, 0.42, 1)
-roughness = 1.0
+
+[sub_resource type="CapsuleMesh" id="Mesh_shin"]
+material = SubResource("Mat_sock")
+radius = 0.058
+height = 0.31
+radial_segments = 8
+rings = 3
 
 [sub_resource type="StandardMaterial3D" id="Mat_shoe"]
 albedo_color = Color(0.12, 0.065, 0.042, 1)
 roughness = 0.78
 
+[sub_resource type="BoxMesh" id="Mesh_shoe"]
+material = SubResource("Mat_shoe")
+size = Vector3(0.15, 0.105, 0.26)
+
 [sub_resource type="StandardMaterial3D" id="Mat_sole"]
 albedo_color = Color(0.035, 0.03, 0.027, 1)
 roughness = 0.88
 
-[sub_resource type="StandardMaterial3D" id="Mat_eye_white"]
-albedo_color = Color(0.78, 0.72, 0.61, 1)
-roughness = 0.86
+[sub_resource type="BoxMesh" id="Mesh_sole"]
+material = SubResource("Mat_sole")
+size = Vector3(0.155, 0.025, 0.27)
 
-[sub_resource type="StandardMaterial3D" id="Mat_eye"]
-albedo_color = Color(0.055, 0.035, 0.02, 1)
-roughness = 0.82
+[sub_resource type="BoxMesh" id="BoxMesh_diff6"]
+material = SubResource("Mat_shoe")
+size = Vector3(0.25322264, 0.105, 0.26)
 
-[sub_resource type="StandardMaterial3D" id="Mat_mouth"]
-albedo_color = Color(0.22, 0.055, 0.045, 1)
-roughness = 0.8
-
-[sub_resource type="StandardMaterial3D" id="Mat_backpack"]
-albedo_color = Color(0.29, 0.075, 0.055, 1)
-roughness = 0.9
-
-[sub_resource type="StandardMaterial3D" id="Mat_metal"]
-albedo_color = Color(0.48, 0.42, 0.27, 1)
-metallic = 0.35
-roughness = 0.58
+[sub_resource type="StandardMaterial3D" id="Mat_cardigan"]
+albedo_color = Color(0.16, 0.255, 0.245, 1)
 
 [sub_resource type="CapsuleMesh" id="Mesh_torso"]
 material = SubResource("Mat_cardigan")
@@ -66,69 +53,32 @@ height = 0.53
 radial_segments = 10
 rings = 5
 
-[sub_resource type="SphereMesh" id="Mesh_head"]
-material = SubResource("Mat_skin")
-radius = 0.235
-height = 0.47
-radial_segments = 12
-rings = 7
+[sub_resource type="StandardMaterial3D" id="Mat_metal"]
+albedo_color = Color(0.48, 0.42, 0.27, 1)
+metallic = 0.35
+roughness = 0.58
 
-[sub_resource type="SphereMesh" id="Mesh_ear"]
-material = SubResource("Mat_skin_warm")
-radius = 0.052
-height = 0.083
-radial_segments = 8
-rings = 4
-
-[sub_resource type="SphereMesh" id="Mesh_hair"]
-material = SubResource("Mat_hair")
-radius = 0.245
-height = 0.33
-radial_segments = 10
-rings = 5
-
-[sub_resource type="SphereMesh" id="Mesh_hair_lock"]
-material = SubResource("Mat_hair")
-radius = 0.07
-height = 0.14
-radial_segments = 7
-rings = 4
-
-[sub_resource type="SphereMesh" id="Mesh_eye_white"]
-material = SubResource("Mat_eye_white")
-radius = 0.047
-height = 0.078
-radial_segments = 8
-rings = 4
-
-[sub_resource type="SphereMesh" id="Mesh_eye"]
-material = SubResource("Mat_eye")
-radius = 0.027
-height = 0.052
-radial_segments = 8
-rings = 4
-
-[sub_resource type="SphereMesh" id="Mesh_nose"]
-material = SubResource("Mat_skin_warm")
-radius = 0.034
-height = 0.06
-radial_segments = 7
-rings = 4
-
-[sub_resource type="BoxMesh" id="Mesh_mouth"]
-material = SubResource("Mat_mouth")
-size = Vector3(0.075, 0.018, 0.012)
-
-[sub_resource type="SphereMesh" id="Mesh_freckle"]
-material = SubResource("Mat_skin_warm")
-radius = 0.009
+[sub_resource type="CylinderMesh" id="Mesh_button"]
+material = SubResource("Mat_metal")
+top_radius = 0.018
+bottom_radius = 0.018
 height = 0.012
-radial_segments = 5
-rings = 3
+radial_segments = 7
 
-[sub_resource type="BoxMesh" id="Mesh_collar"]
-material = SubResource("Mat_shirt")
-size = Vector3(0.17, 0.08, 0.035)
+[sub_resource type="StandardMaterial3D" id="Mat_backpack"]
+albedo_color = Color(0.29, 0.075, 0.055, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Mesh_backpack"]
+material = SubResource("Mat_backpack")
+size = Vector3(0.33, 0.42, 0.14)
+
+[sub_resource type="TorusMesh" id="Mesh_strap"]
+material = SubResource("Mat_backpack")
+inner_radius = 0.025
+outer_radius = 0.045
+rings = 8
+ring_segments = 6
 
 [sub_resource type="CapsuleMesh" id="Mesh_arm"]
 material = SubResource("Mat_cardigan")
@@ -136,6 +86,10 @@ radius = 0.055
 height = 0.29
 radial_segments = 7
 rings = 3
+
+[sub_resource type="StandardMaterial3D" id="Mat_skin"]
+albedo_color = Color(0.64, 0.43, 0.31, 1)
+roughness = 0.92
 
 [sub_resource type="CapsuleMesh" id="Mesh_forearm"]
 material = SubResource("Mat_skin")
@@ -151,305 +105,330 @@ height = 0.085
 radial_segments = 7
 rings = 4
 
-[sub_resource type="CapsuleMesh" id="Mesh_leg"]
-material = SubResource("Mat_shorts")
-radius = 0.073
-height = 0.34
+[sub_resource type="SphereMesh" id="Mesh_head"]
+material = SubResource("Mat_skin")
+radius = 0.235
+height = 0.47
+radial_segments = 12
+rings = 7
+
+[sub_resource type="StandardMaterial3D" id="Mat_skin_warm"]
+albedo_color = Color(0.52, 0.28, 0.2, 1)
+roughness = 0.95
+
+[sub_resource type="SphereMesh" id="Mesh_ear"]
+material = SubResource("Mat_skin_warm")
+radius = 0.052
+height = 0.083
 radial_segments = 8
-rings = 3
+rings = 4
 
-[sub_resource type="CapsuleMesh" id="Mesh_shin"]
-material = SubResource("Mat_sock")
-radius = 0.058
-height = 0.31
-radial_segments = 8
-rings = 3
+[sub_resource type="StandardMaterial3D" id="Mat_hair"]
+albedo_color = Color(0.055, 0.035, 0.026, 1)
+roughness = 0.96
 
-[sub_resource type="BoxMesh" id="Mesh_shoe"]
-material = SubResource("Mat_shoe")
-size = Vector3(0.15, 0.105, 0.26)
+[sub_resource type="SphereMesh" id="Mesh_hair"]
+material = SubResource("Mat_hair")
+radius = 0.245
+height = 0.33
+radial_segments = 10
+rings = 5
 
-[sub_resource type="BoxMesh" id="Mesh_sole"]
-material = SubResource("Mat_sole")
-size = Vector3(0.155, 0.025, 0.27)
-
-[sub_resource type="BoxMesh" id="Mesh_backpack"]
-material = SubResource("Mat_backpack")
-size = Vector3(0.33, 0.42, 0.14)
-
-[sub_resource type="TorusMesh" id="Mesh_strap"]
-material = SubResource("Mat_backpack")
-inner_radius = 0.025
-outer_radius = 0.045
-rings = 8
-ring_segments = 6
-
-[sub_resource type="CylinderMesh" id="Mesh_button"]
-material = SubResource("Mat_metal")
-top_radius = 0.018
-bottom_radius = 0.018
-height = 0.012
+[sub_resource type="SphereMesh" id="Mesh_hair_lock"]
+material = SubResource("Mat_hair")
+radius = 0.07
+height = 0.14
 radial_segments = 7
+rings = 4
 
-[node name="ChildVisual" type="Node3D"]
+[sub_resource type="StandardMaterial3D" id="Mat_eye_white"]
+albedo_color = Color(0.78, 0.72, 0.61, 1)
+roughness = 0.86
+
+[sub_resource type="SphereMesh" id="Mesh_eye_white"]
+material = SubResource("Mat_eye_white")
+radius = 0.047
+height = 0.078
+radial_segments = 8
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="Mat_eye"]
+albedo_color = Color(0.055, 0.035, 0.02, 1)
+roughness = 0.82
+
+[sub_resource type="SphereMesh" id="Mesh_eye"]
+material = SubResource("Mat_eye")
+radius = 0.027
+height = 0.052
+radial_segments = 8
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="Mat_mouth"]
+albedo_color = Color(0.22, 0.055, 0.045, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="Mesh_mouth"]
+material = SubResource("Mat_mouth")
+size = Vector3(0.075, 0.018, 0.012)
+
+[sub_resource type="SphereMesh" id="Mesh_nose"]
+material = SubResource("Mat_skin_warm")
+radius = 0.034
+height = 0.06
+radial_segments = 7
+rings = 4
+
+[node name="ChildVisual" type="Node3D" unique_id=1132548685]
 editor_description = "Visual low-poly PS2 intercambiable: nino de unos ocho anos, ropa gastada y mochila escolar."
 script = ExtResource("1_anim")
 
-[node name="LeftLeg" type="Node3D" parent="."]
-position = Vector3(-0.105, 0.72, 0)
+[node name="LeftLeg" type="Node3D" parent="." unique_id=452787640]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.105, 0.72, 0)
 
-[node name="Upper" type="MeshInstance3D" parent="LeftLeg"]
-position = Vector3(0, -0.16, 0)
+[node name="Upper" type="MeshInstance3D" parent="LeftLeg" unique_id=1165664374]
+transform = Transform3D(1, 0, 0, 0, 1.4861476, 0, 0, 0, 1, 0, -0.15999997, 0)
 mesh = SubResource("Mesh_leg")
 
-[node name="Knee" type="Node3D" parent="LeftLeg"]
-position = Vector3(0, -0.32, 0)
+[node name="Knee" type="Node3D" parent="LeftLeg" unique_id=1638079613]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.32, 0)
 
-[node name="Lower" type="MeshInstance3D" parent="LeftLeg/Knee"]
-position = Vector3(0, -0.11, 0)
+[node name="Lower" type="MeshInstance3D" parent="LeftLeg/Knee" unique_id=1608363377]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.17887545, 0)
 mesh = SubResource("Mesh_shin")
 
-[node name="Shoe" type="MeshInstance3D" parent="LeftLeg/Knee"]
-position = Vector3(0, -0.29, 0.055)
+[node name="Shoe" type="MeshInstance3D" parent="LeftLeg/Knee" unique_id=1643192824]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.29, 0.055)
 mesh = SubResource("Mesh_shoe")
 
-[node name="Sole" type="MeshInstance3D" parent="LeftLeg/Knee"]
-position = Vector3(0, -0.35, 0.055)
+[node name="Sole" type="MeshInstance3D" parent="LeftLeg/Knee" unique_id=309117620]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0.055)
 mesh = SubResource("Mesh_sole")
 
-[node name="RightLeg" type="Node3D" parent="."]
-position = Vector3(0.105, 0.72, 0)
+[node name="RightLeg" type="Node3D" parent="." unique_id=1077355321]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.105, 0.72, 0)
 
-[node name="Upper" type="MeshInstance3D" parent="RightLeg"]
-position = Vector3(0, -0.16, 0)
+[node name="Upper" type="MeshInstance3D" parent="RightLeg" unique_id=129339082]
+transform = Transform3D(1, 0, 0, 0, 1.5695691, 0, 0, 0, 1, 0, -0.15999997, 0)
 mesh = SubResource("Mesh_leg")
 
-[node name="Knee" type="Node3D" parent="RightLeg"]
-position = Vector3(0, -0.32, 0)
+[node name="Knee" type="Node3D" parent="RightLeg" unique_id=1987487185]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.32, 0)
 
-[node name="Lower" type="MeshInstance3D" parent="RightLeg/Knee"]
-position = Vector3(0, -0.11, 0)
+[node name="Lower" type="MeshInstance3D" parent="RightLeg/Knee" unique_id=1330895621]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18542933, 0)
 mesh = SubResource("Mesh_shin")
 
-[node name="Shoe" type="MeshInstance3D" parent="RightLeg/Knee"]
-position = Vector3(0, -0.29, 0.055)
+[node name="Shoe" type="MeshInstance3D" parent="RightLeg/Knee" unique_id=887386440]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.29, 0.055)
 mesh = SubResource("Mesh_shoe")
 
-[node name="Sole" type="MeshInstance3D" parent="RightLeg/Knee"]
-position = Vector3(0, -0.35, 0.055)
+[node name="Sole" type="MeshInstance3D" parent="RightLeg/Knee" unique_id=1078468877]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0.055)
 mesh = SubResource("Mesh_sole")
 
-[node name="Body" type="Node3D" parent="."]
-position = Vector3(0, 0.87, 0)
+[node name="Body" type="Node3D" parent="." unique_id=1394516114]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87, 0)
 
-[node name="Torso" type="MeshInstance3D" parent="Body"]
-position = Vector3(0, 0.16, 0)
-scale = Vector3(1.05, 1.08, 0.8)
+[node name="Shoe2" type="MeshInstance3D" parent="Body" unique_id=1324846758]
+transform = Transform3D(1.5081054, 0, 0, 0, 0.1567201, 0, 0, 0, 0.06806159, -0.00052003, 0.1289445, -0.30230024)
+mesh = SubResource("Mesh_shoe")
+
+[node name="Shoe3" type="MeshInstance3D" parent="Body" unique_id=211573098]
+transform = Transform3D(-0.0047323518, 0.15647578, 0, -0.91479886, -0.0008094652, 0, 0, 0, 0.06806159, 0.10552675, 0.0684951, -0.30230024)
+mesh = SubResource("Mesh_shoe")
+
+[node name="Shoe5" type="MeshInstance3D" parent="Body" unique_id=1926898363]
+transform = Transform3D(2.1043878, 0, 0, 0, 0.1567201, 0, 0, 0, 0.06806159, -0.00167696, 0.36454245, -0.24090919)
+mesh = SubResource("Mesh_shoe")
+
+[node name="Shoe6" type="MeshInstance3D" parent="Body" unique_id=253826609]
+transform = Transform3D(-0.0047323518, 0.15647578, 0, -0.91479886, -0.0008094652, 0, 0, 0, 0.06806159, 0.1595527, 0.25687906, -0.24090919)
+mesh = SubResource("BoxMesh_diff6")
+
+[node name="Shoe7" type="MeshInstance3D" parent="Body" unique_id=1061876285]
+transform = Transform3D(-0.0047323518, 0.15647578, 0, -0.91479886, -0.0008094652, 0, 0, 0, 0.06806159, -0.16019067, 0.25687906, -0.24090919)
+mesh = SubResource("BoxMesh_diff6")
+
+[node name="Shoe4" type="MeshInstance3D" parent="Body" unique_id=1298828626]
+transform = Transform3D(-0.0047323518, 0.15647578, 0, -0.91479886, -0.0008094652, 0, 0, 0, 0.06806159, -0.10893496, 0.0684951, -0.30230024)
+mesh = SubResource("Mesh_shoe")
+
+[node name="Torso" type="MeshInstance3D" parent="Body" unique_id=832531617]
+transform = Transform3D(1.05, 0, 0, 0, 1.08, 0, 0, 0, 0.8, 0, 0.16, 0)
 mesh = SubResource("Mesh_torso")
 
-[node name="Waist" type="MeshInstance3D" parent="Body"]
-position = Vector3(0, -0.085, 0)
-scale = Vector3(0.87, 0.48, 0.72)
-mesh = SubResource("Mesh_torso")
+[node name="Waist" type="MeshInstance3D" parent="Body" unique_id=954607547]
+transform = Transform3D(0.9731548, 0, 0, 0, 0.48, 0, 0, 0, 0.57600343, 0, -0.08499998, 0)
 material_override = SubResource("Mat_shorts")
+mesh = SubResource("Mesh_torso")
 
-[node name="LeftPocket" type="MeshInstance3D" parent="Body"]
-position = Vector3(-0.115, 0.075, 0.15)
-rotation = Vector3(0, 0, -0.05)
-scale = Vector3(0.52, 0.65, 0.2)
-mesh = SubResource("Mesh_collar")
-material_override = SubResource("Mat_cardigan")
-
-[node name="RightPocket" type="MeshInstance3D" parent="Body"]
-position = Vector3(0.115, 0.082, 0.15)
-rotation = Vector3(0, 0, 0.035)
-scale = Vector3(0.52, 0.65, 0.2)
-mesh = SubResource("Mesh_collar")
-material_override = SubResource("Mat_cardigan")
-
-[node name="ShirtCollarLeft" type="MeshInstance3D" parent="Body"]
-position = Vector3(-0.065, 0.395, 0.17)
-rotation = Vector3(0, 0, -0.35)
-scale = Vector3(0.75, 0.65, 0.8)
-mesh = SubResource("Mesh_collar")
-
-[node name="ShirtCollarRight" type="MeshInstance3D" parent="Body"]
-position = Vector3(0.065, 0.395, 0.17)
-rotation = Vector3(0, 0, 0.35)
-scale = Vector3(0.75, 0.65, 0.8)
-mesh = SubResource("Mesh_collar")
-
-[node name="ButtonTop" type="MeshInstance3D" parent="Body"]
-position = Vector3(0, 0.25, 0.205)
-rotation = Vector3(1.5708, 0, 0)
+[node name="ButtonTop" type="MeshInstance3D" parent="Body" unique_id=164928258]
+transform = Transform3D(1, 0, 0, 0, -3.6199901e-06, -1, 0, 1, -3.6199901e-06, 0, 0.27723658, 0.15753363)
 mesh = SubResource("Mesh_button")
 
-[node name="ButtonBottom" type="MeshInstance3D" parent="Body"]
-position = Vector3(0, 0.11, 0.205)
-rotation = Vector3(1.5708, 0, 0)
+[node name="ButtonTop2" type="MeshInstance3D" parent="Body" unique_id=897696708]
+transform = Transform3D(1, 0, 0, 0, -3.6199901e-06, -1, 0, 1, -3.6199901e-06, 0, 0.35301733, 0.14112769)
 mesh = SubResource("Mesh_button")
 
-[node name="Backpack" type="MeshInstance3D" parent="Body"]
-position = Vector3(0, 0.16, -0.205)
+[node name="ButtonTop3" type="MeshInstance3D" parent="Body" unique_id=1795460888]
+transform = Transform3D(1, 0, 0, 0, -3.6199901e-06, -1, 0, 1, -3.6199901e-06, 0, 0.19426692, 0.1582919)
+mesh = SubResource("Mesh_button")
+
+[node name="ButtonBottom" type="MeshInstance3D" parent="Body" unique_id=1830670858]
+transform = Transform3D(1, 0, 0, 0, -3.6199901e-06, -1, 0, 1, -3.6199901e-06, 0, 0.110000014, 0.1582919)
+mesh = SubResource("Mesh_button")
+
+[node name="Backpack" type="MeshInstance3D" parent="Body" unique_id=1629018944]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.16, -0.205)
 mesh = SubResource("Mesh_backpack")
 
-[node name="BackpackPocket" type="MeshInstance3D" parent="Body"]
-position = Vector3(0, 0.06, -0.288)
-scale = Vector3(0.67, 0.35, 0.4)
+[node name="BackpackPocket" type="MeshInstance3D" parent="Body" unique_id=1077054325]
+transform = Transform3D(0.67, 0, 0, 0, 0.35, 0, 0, 0, 0.4, 0, 0.06, -0.288)
 mesh = SubResource("Mesh_backpack")
 
-[node name="LeftStrap" type="MeshInstance3D" parent="Body"]
-position = Vector3(-0.13, 0.2, 0.03)
-rotation = Vector3(1.5708, 0, 0)
-scale = Vector3(1, 1.9, 1)
+[node name="BackpackPocket2" type="MeshInstance3D" parent="Body" unique_id=837125070]
+transform = Transform3D(-0.16390084, 0, 0, 0, 0.20137453, -0.118178755, 0, 0.47746363, 0.049842946, -0.13790642, 0.4033847, -0.07578413)
+mesh = SubResource("Mesh_backpack")
+
+[node name="BackpackPocket5" type="MeshInstance3D" parent="Body" unique_id=1108206135]
+transform = Transform3D(-0.15194112, -0.15488964, -0.0035921666, 0, 0.1245548, -0.1395136, -0.027633928, 0.85163814, 0.019751005, -0.15106498, -0.0035668015, -0.041490376)
+mesh = SubResource("Mesh_backpack")
+
+[node name="BackpackPocket4" type="MeshInstance3D" parent="Body" unique_id=300426457]
+transform = Transform3D(-0.16224596, -0.112990916, -9.863126e-05, 0.02323233, -0.7890864, -0.00068880385, 0, 0.004312075, -0.12863126, -0.15950142, 0.18588686, 0.12988508)
+mesh = SubResource("Mesh_backpack")
+
+[node name="BackpackPocket3" type="MeshInstance3D" parent="Body" unique_id=886868797]
+transform = Transform3D(-0.16390084, 0, 0, 0, -0.24382333, -0.09735656, 0, 0.2844237, -0.08345925, -0.13790642, 0.39592957, 0.07255307)
+mesh = SubResource("Mesh_backpack")
+
+[node name="BackpackPocket6" type="MeshInstance3D" parent="Body" unique_id=657721566]
+transform = Transform3D(-0.16390084, 0, 0, 0, 0.20137453, -0.118178755, 0, 0.47746363, 0.049842946, 0.13584761, 0.4033847, -0.07578413)
+mesh = SubResource("Mesh_backpack")
+
+[node name="BackpackPocket7" type="MeshInstance3D" parent="Body" unique_id=1222142473]
+transform = Transform3D(-0.15202557, 0.15226382, 0.0035312683, -1.5952956e-10, 0.12455476, -0.13951357, 0.02716545, 0.85211134, 0.019761983, 0.15798014, -0.0035668015, -0.041490376)
+mesh = SubResource("Mesh_backpack")
+
+[node name="BackpackPocket8" type="MeshInstance3D" parent="Body" unique_id=1001857228]
+transform = Transform3D(-0.16184282, 0.125927, 0.00010992329, -0.025892142, -0.7871256, -0.0006870924, 1.964105e-11, 0.004312075, -0.12863128, 0.1623347, 0.18588686, 0.12988508)
+mesh = SubResource("Mesh_backpack")
+
+[node name="BackpackPocket9" type="MeshInstance3D" parent="Body" unique_id=405690534]
+transform = Transform3D(-0.16390084, 0, 0, 0, -0.24382333, -0.09735656, 0, 0.2844237, -0.08345925, 0.13584761, 0.39592957, 0.07255307)
+mesh = SubResource("Mesh_backpack")
+
+[node name="LeftStrap" type="MeshInstance3D" parent="Body" unique_id=629428156]
+transform = Transform3D(1, 0, 0, 0, -6.8779814e-06, -1, 0, 1.9, -3.6199901e-06, -0.13, 0.2, 0.03)
 mesh = SubResource("Mesh_strap")
 
-[node name="RightStrap" type="MeshInstance3D" parent="Body"]
-position = Vector3(0.13, 0.2, 0.03)
-rotation = Vector3(1.5708, 0, 0)
-scale = Vector3(1, 1.9, 1)
+[node name="RightStrap" type="MeshInstance3D" parent="Body" unique_id=836535918]
+transform = Transform3D(1, 0, 0, 0, -6.8779814e-06, -1, 0, 1.9, -3.6199901e-06, 0.13, 0.2, 0.03)
 mesh = SubResource("Mesh_strap")
 
-[node name="LeftArm" type="Node3D" parent="Body"]
-position = Vector3(-0.245, 0.33, 0)
+[node name="LeftArm" type="Node3D" parent="Body" unique_id=1774776730]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.245, 0.33, 0)
 
-[node name="Upper" type="MeshInstance3D" parent="Body/LeftArm"]
-position = Vector3(0, -0.12, 0)
+[node name="Upper" type="MeshInstance3D" parent="Body/LeftArm" unique_id=1169970044]
+transform = Transform3D(0.8897192, 0.45650822, 0, -0.45650822, 0.8897192, 0, 0, 0, 1, 0.04969752, -0.044012547, 0)
 mesh = SubResource("Mesh_arm")
 
-[node name="Forearm" type="Node3D" parent="Body/LeftArm"]
-position = Vector3(0, -0.25, 0)
+[node name="Forearm" type="Node3D" parent="Body/LeftArm" unique_id=1609309787]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
 
-[node name="Lower" type="MeshInstance3D" parent="Body/LeftArm/Forearm"]
-position = Vector3(0, -0.1, 0)
+[node name="Lower" type="MeshInstance3D" parent="Body/LeftArm/Forearm" unique_id=303538169]
+transform = Transform3D(0.8897192, 0.45650822, 0, -0.45650822, 0.8897192, 0, 0, 0, 1, -0.0552994, 0.0013520718, 0)
 mesh = SubResource("Mesh_forearm")
 
-[node name="Hand" type="MeshInstance3D" parent="Body/LeftArm/Forearm"]
-position = Vector3(0, -0.235, 0)
+[node name="Hand" type="MeshInstance3D" parent="Body/LeftArm/Forearm" unique_id=38116499]
+transform = Transform3D(0.7858547, 0.5603727, 0, -0.40321612, 1.0921476, 0, 0, 0, 1, -0.11692798, -0.11875999, 0)
 mesh = SubResource("Mesh_hand")
 
-[node name="RightArm" type="Node3D" parent="Body"]
-position = Vector3(0.245, 0.33, 0)
+[node name="RightArm" type="Node3D" parent="Body" unique_id=1685747563]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.245, 0.33, 0)
 
-[node name="Upper" type="MeshInstance3D" parent="Body/RightArm"]
-position = Vector3(0, -0.12, 0)
+[node name="Upper" type="MeshInstance3D" parent="Body/RightArm" unique_id=2069588254]
+transform = Transform3D(0.84954584, -0.5275147, 0, 0.5275147, 0.84954584, 0, 0, 0, 1, -0.04435511, -0.04783976, 0)
 mesh = SubResource("Mesh_arm")
 
-[node name="Forearm" type="Node3D" parent="Body/RightArm"]
-position = Vector3(0, -0.25, 0)
+[node name="Forearm" type="Node3D" parent="Body/RightArm" unique_id=1907072741]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
 
-[node name="Lower" type="MeshInstance3D" parent="Body/RightArm/Forearm"]
-position = Vector3(0, -0.1, 0)
+[node name="Lower" type="MeshInstance3D" parent="Body/RightArm/Forearm" unique_id=1993034643]
+transform = Transform3D(0.84954584, -0.5275147, 0, 0.5275147, 0.84954584, 0, 0, 0, 1, 0.07697329, 0.00676471, 0)
 mesh = SubResource("Mesh_forearm")
 
-[node name="Hand" type="MeshInstance3D" parent="Body/RightArm/Forearm"]
-position = Vector3(0, -0.235, 0)
+[node name="Hand" type="MeshInstance3D" parent="Body/RightArm/Forearm" unique_id=699152502]
+transform = Transform3D(0.72212636, -0.65824693, 0, 0.4483952, 1.0600859, 0, 0, 0, 1, 0.14818779, -0.107923985, 0)
 mesh = SubResource("Mesh_hand")
 
-[node name="Head" type="Node3D" parent="Body"]
-position = Vector3(0, 0.64, 0.015)
-scale = Vector3(0.92, 0.96, 0.94)
+[node name="Head" type="Node3D" parent="Body" unique_id=285327551]
+transform = Transform3D(0.92, 0, 0, 0, 0.96, 0, 0, 0, 0.94, 0, 0.64, 0.015)
 
-[node name="HeadShape" type="MeshInstance3D" parent="Body/Head"]
-scale = Vector3(0.92, 1.08, 0.9)
+[node name="HeadShape" type="MeshInstance3D" parent="Body/Head" unique_id=674697732]
+transform = Transform3D(0.92, 0, 0, 0, 1.08, 0, 0, 0, 0.9, 0, 0, 0)
 mesh = SubResource("Mesh_head")
 
-[node name="LeftEar" type="MeshInstance3D" parent="Body/Head"]
-position = Vector3(-0.222, -0.005, 0)
-scale = Vector3(0.65, 1, 0.55)
+[node name="LeftEar" type="MeshInstance3D" parent="Body/Head" unique_id=2073304474]
+transform = Transform3D(0.6499999, 0, 0, 0, 0.99999994, 0, 0, 0, 0.55, -0.22199999, 0.04565406, 0)
 mesh = SubResource("Mesh_ear")
 
-[node name="RightEar" type="MeshInstance3D" parent="Body/Head"]
-position = Vector3(0.222, -0.005, 0)
-scale = Vector3(0.65, 1, 0.55)
+[node name="RightEar" type="MeshInstance3D" parent="Body/Head" unique_id=1463474579]
+transform = Transform3D(0.6499999, 0, 0, 0, 0.99999994, 0, 0, 0, 0.55, 0.22199999, 0.04216695, 0)
 mesh = SubResource("Mesh_ear")
 
-[node name="HairCap" type="MeshInstance3D" parent="Body/Head"]
-position = Vector3(0, 0.105, -0.012)
-scale = Vector3(0.94, 0.76, 0.92)
+[node name="HairCap" type="MeshInstance3D" parent="Body/Head" unique_id=1554161824]
+transform = Transform3D(0.94, 0, 0, 0, 0.76, 0, 0, 0, 0.92, 0, 0.105, -0.012)
 mesh = SubResource("Mesh_hair")
 
-[node name="HairBack" type="MeshInstance3D" parent="Body/Head"]
-position = Vector3(0, 0.015, -0.17)
-scale = Vector3(2.55, 1.65, 0.75)
+[node name="HairCap2" type="MeshInstance3D" parent="Body/Head" unique_id=1563885484]
+transform = Transform3D(0.7101891, 0, 0, 0, 0.7222864, 0.28621152, 0, -0.23643565, 0.87434715, 0, 0.14828765, -0.012)
+mesh = SubResource("Mesh_hair")
+
+[node name="BangLeft" type="MeshInstance3D" parent="Body/Head" unique_id=1652888802]
+transform = Transform3D(1.1052138, 0.4698046, 0, -0.31147397, 1.6012273, -0.10926814, -0.0631389, 0.3245848, 0.53903663, -0.105, 0.13, 0.175)
 mesh = SubResource("Mesh_hair_lock")
 
-[node name="BangLeft" type="MeshInstance3D" parent="Body/Head"]
-position = Vector3(-0.105, 0.13, 0.175)
-rotation = Vector3(0.2, 0, -0.28)
-scale = Vector3(1.15, 1.7, 0.55)
+[node name="BangMiddle" type="MeshInstance3D" parent="Body/Head" unique_id=45945356]
+transform = Transform3D(0.89712155, -0.1158763, 0, 0.07048954, 1.4165516, -0.099334665, 0.014288937, 0.28714922, 0.4900333, 0, 0.165, 0.19)
 mesh = SubResource("Mesh_hair_lock")
 
-[node name="BangMiddle" type="MeshInstance3D" parent="Body/Head"]
-position = Vector3(0, 0.165, 0.19)
-rotation = Vector3(0.2, 0, 0.08)
-scale = Vector3(0.9, 1.45, 0.5)
+[node name="BangRight" type="MeshInstance3D" parent="Body/Head" unique_id=1379188074]
+transform = Transform3D(1.0370302, -0.51690495, 0, 0.35952353, 1.4321417, -0.10926814, 0.072879024, 0.29030946, 0.53903663, 0.11, 0.125, 0.17)
 mesh = SubResource("Mesh_hair_lock")
 
-[node name="BangRight" type="MeshInstance3D" parent="Body/Head"]
-position = Vector3(0.11, 0.125, 0.17)
-rotation = Vector3(0.2, 0, 0.34)
-scale = Vector3(1.1, 1.55, 0.55)
-mesh = SubResource("Mesh_hair_lock")
+[node name="Face" type="Node3D" parent="Body/Head" unique_id=1483788297]
 
-[node name="Face" type="Node3D" parent="Body/Head"]
-
-[node name="LeftEyeWhite" type="MeshInstance3D" parent="Body/Head/Face"]
-position = Vector3(-0.083, 0.025, 0.202)
-scale = Vector3(1.05, 0.88, 0.55)
+[node name="LeftEyeWhite" type="MeshInstance3D" parent="Body/Head/Face" unique_id=1396787629]
+transform = Transform3D(1.0499998, 0, 0, 0, 0.87999994, 0, 0, 0, 0.55, -0.08299999, 0.024999976, 0.17797367)
 mesh = SubResource("Mesh_eye_white")
 
-[node name="RightEyeWhite" type="MeshInstance3D" parent="Body/Head/Face"]
-position = Vector3(0.083, 0.025, 0.202)
-scale = Vector3(1.05, 0.88, 0.55)
+[node name="RightEyeWhite" type="MeshInstance3D" parent="Body/Head/Face" unique_id=1552992429]
+transform = Transform3D(1.0499998, 0, 0, 0, 0.87999994, 0, 0, 0, 0.55, 0.08299999, 0.024999976, 0.17852257)
 mesh = SubResource("Mesh_eye_white")
 
-[node name="LeftEye" type="MeshInstance3D" parent="Body/Head/Face"]
-position = Vector3(-0.083, 0.025, 0.225)
-scale = Vector3(0.72, 0.82, 0.22)
+[node name="LeftEye" type="MeshInstance3D" parent="Body/Head/Face" unique_id=1376754654]
+transform = Transform3D(0.71999997, 0, 0, 0, 0.81999993, 0, 0, 0, 0.22, -0.08299999, 0.024999976, 0.19801374)
 mesh = SubResource("Mesh_eye")
 
-[node name="RightEye" type="MeshInstance3D" parent="Body/Head/Face"]
-position = Vector3(0.083, 0.025, 0.225)
-scale = Vector3(0.72, 0.82, 0.22)
+[node name="RightEye" type="MeshInstance3D" parent="Body/Head/Face" unique_id=1376333656]
+transform = Transform3D(0.7199999, 0, 0, 0, 0.8199999, 0, 0, 0, 0.22, 0.08299998, 0.024999857, 0.19806106)
 mesh = SubResource("Mesh_eye")
 
-[node name="LeftBrow" type="MeshInstance3D" parent="Body/Head/Face"]
-position = Vector3(-0.085, 0.095, 0.211)
-rotation = Vector3(0, 0, -0.12)
-scale = Vector3(1, 0.34, 0.24)
-mesh = SubResource("Mesh_mouth")
+[node name="LeftBrow" type="MeshInstance3D" parent="Body/Head/Face" unique_id=1905578625]
+transform = Transform3D(0.99280864, 0.04070215, 0, -0.119712204, 0.33755493, 0, 0, 0, 0.24, -0.085, 0.095, 0.211)
 material_override = SubResource("Mat_hair")
-
-[node name="RightBrow" type="MeshInstance3D" parent="Body/Head/Face"]
-position = Vector3(0.085, 0.095, 0.211)
-rotation = Vector3(0, 0, 0.12)
-scale = Vector3(1, 0.34, 0.24)
 mesh = SubResource("Mesh_mouth")
-material_override = SubResource("Mat_hair")
 
-[node name="Nose" type="MeshInstance3D" parent="Body/Head/Face"]
-position = Vector3(0, -0.025, 0.231)
-scale = Vector3(0.72, 0.9, 0.7)
+[node name="RightBrow" type="MeshInstance3D" parent="Body/Head/Face" unique_id=1333725623]
+transform = Transform3D(0.99280864, -0.04070215, 0, 0.119712204, 0.33755493, 0, 0, 0, 0.24, 0.085, 0.095, 0.211)
+material_override = SubResource("Mat_hair")
+mesh = SubResource("Mesh_mouth")
+
+[node name="Nose" type="MeshInstance3D" parent="Body/Head/Face" unique_id=81383404]
+transform = Transform3D(0.7199999, 0, 0, 0, 0.89999986, 0, 0, 0, 0.7, 0, 0.005530119, 0.231)
 mesh = SubResource("Mesh_nose")
 
-[node name="Mouth" type="MeshInstance3D" parent="Body/Head/Face"]
-position = Vector3(0, -0.105, 0.216)
-rotation = Vector3(0, 0, -0.04)
+[node name="Mouth" type="MeshInstance3D" parent="Body/Head/Face" unique_id=1487467807]
+transform = Transform3D(0.99919957, 0.039989315, 0, -0.039989334, 0.9991998, 0, 0, 0, 1, 0, -0.041811466, 0.20449637)
 mesh = SubResource("Mesh_mouth")
-
-[node name="FreckleL1" type="MeshInstance3D" parent="Body/Head/Face"]
-position = Vector3(-0.115, -0.055, 0.219)
-mesh = SubResource("Mesh_freckle")
-
-[node name="FreckleL2" type="MeshInstance3D" parent="Body/Head/Face"]
-position = Vector3(-0.085, -0.068, 0.228)
-mesh = SubResource("Mesh_freckle")
-
-[node name="FreckleR1" type="MeshInstance3D" parent="Body/Head/Face"]
-position = Vector3(0.112, -0.055, 0.219)
-mesh = SubResource("Mesh_freckle")
-
-[node name="FreckleR2" type="MeshInstance3D" parent="Body/Head/Face"]
-position = Vector3(0.078, -0.068, 0.228)
-mesh = SubResource("Mesh_freckle")

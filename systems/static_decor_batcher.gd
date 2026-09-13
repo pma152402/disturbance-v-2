@@ -10,6 +10,7 @@ const FIXED_SCENES := [
 	"kitchen_canned_goods", "kitchen_spice_jar_set", "board_game_stack",
 	"detailed_wooden_barrel", "detailed_wooden_crate", "church_pew",
 	"metal_wall_shelves", "empty_bird_cage", "wood_and_fabric_folding_screen",
+	"manual_three_step_guardrail", "only_three_section", "node_tubo",
 ]
 const RENDER_PROPERTIES := [
 	"layers", "cast_shadow", "gi_mode", "material_override", "material_overlay",
@@ -23,6 +24,12 @@ const RENDER_PROPERTIES := [
 static func optimize(branch: Node) -> Dictionary:
 	var result := {"source_meshes": 0, "batches": 0}
 	_visit(branch, result)
+	return result
+
+
+static func optimize_static_children(parent: Node) -> Dictionary:
+	var result := {"source_meshes": 0, "batches": 0}
+	_batch_parents(parent, result)
 	return result
 
 

@@ -1,6 +1,7 @@
 extends Control
 
 const TapeLoadingSpinner := preload("res://systems/camera_tape_spinner.gd")
+const TapeFrameReadback := preload("res://systems/tape_frame_readback.gd")
 const ArchivePlaybackShader := preload("res://shaders/archive_playback_filter.gdshader")
 const CameraInterfaceFrame := preload("res://systems/camera_interface_frame.gd")
 const CameraArchiveControlsBracket := preload("res://systems/camera_archive_controls_bracket.gd")
@@ -19,6 +20,8 @@ const LIVE_ONLY_VISIBILITY_LAYER := 19
 const LIVE_ONLY_VISIBILITY_MASK := 1 << (LIVE_ONLY_VISIBILITY_LAYER - 1)
 const RECORDING_ON_SECONDS := 2.0
 const RECORDING_OFF_SECONDS := 1.0
+const CAMERA_TIMER_SECONDS := 5.0
+const CAMERA_TIMER_FONT_SIZE := 560
 
 @onready var recording_label: Label = $Recording
 @onready var recording_dot: Polygon2D = $RecordingDot
@@ -33,6 +36,8 @@ const RECORDING_OFF_SECONDS := 1.0
 @export_range(1, 8, 1) var maximum_saved_clips := 4
 @export var capture_resolution := Vector2i(426, 240)
 @export_range(0.3, 0.9, 0.05) var archive_jpeg_quality := 0.62
+## Disable only to diagnose a driver issue or compare the original capture path.
+@export var asynchronous_capture := true
 @export_range(4.0, 64.0, 1.0) var maximum_archive_memory_mb := 24.0
 @export_range(0.1, 1.0, 0.05) var playback_frame_seconds := 0.3
 
@@ -46,7 +51,10 @@ var _playback_open := false
 var _capture_timer := 0.0
 var _recording_elapsed_seconds := 0.0
 var _current_clip: Array[PackedByteArray] = []
+var _current_clip_camera_frames: Array[Dictionary] = []
+var _pending_camera_frame: Dictionary = {}
 var _saved_clips: Array = []
+var _saved_clip_observations: Array[Dictionary] = []
 var _selected_clip := 0
 var _selected_frame := 0
 var _playback_running := false
@@ -103,6 +111,9 @@ var _playback_texture: ImageTexture
 var _recording_viewport: SubViewport
 var _recording_camera: Camera3D
 var _capture_pending := false
+var _capture_generation := 0
+var _capture_job: RefCounted
+var _capture_readback_fallbacks := 0
 var _recorder_destroy_pending := false
 var _hidden_live_hud_items: Array[Dictionary] = []
 var _tape_spinner: Control
@@ -116,7 +127,7 @@ var _active_mode := MODE_CAMERA
 var _transition_target_mode := MODE_CAMERA
 var _mode_transition_timer := 0.0
 var _tape_inserted := true
-var _inserted_tape_data := {"tape_number": 1, "display_side": "A", "recordings": {"A": [], "B": []}, "archive_slots": []}
+var _inserted_tape_data := {"tape_number": 1, "display_side": "A", "recordings": {"A": [], "B": []}, "archive_slots": [], "observation_slots": []}
 var _avio_selection := 0
 var _avio_erase_armed := false
 var _avio_scan_armed := false
@@ -124,6 +135,9 @@ var _avio_scan_result := ""
 var _recording_sequence := 1
 var _lifetime_recorded_seconds := 0.0
 var _tapes_spent := 0
+var _camera_timer_label: Label
+var _camera_timer_remaining := 0.0
+var _camera_timer_displayed_second := 0
 
 
 func _ready() -> void:
@@ -136,6 +150,7 @@ func _ready() -> void:
 	recording_dot.modulate.a = 0.22
 	_update_recording_identifiers()
 	_build_playback_interface()
+	_build_camera_timer()
 	_context_alerts = CameraContextAlertsScene.instantiate() as Control
 	add_child(_context_alerts)
 	_context_alerts.set_camera_font(recording_label.get_theme_font(&"font"))
@@ -155,9 +170,14 @@ func _ready() -> void:
 	_recording_blink_timer.one_shot = true
 	_recording_blink_timer.timeout.connect(_toggle_recording)
 	add_child(_recording_blink_timer)
+	# Prime the extra viewport's render pipelines during scene startup, before
+	# the player presses REC. No tape, HUD state or recorded time is changed.
+	_prewarm_recorder.call_deferred()
 
 
 func _process(delta: float) -> void:
+	if _update_camera_timer(delta):
+		return
 	if is_instance_valid(_context_alerts):
 		_context_alerts.set_camera_active(not _playback_open)
 	if _playback_open:
@@ -189,15 +209,63 @@ func _process(delta: float) -> void:
 		stop_recording()
 
 
+func _build_camera_timer() -> void:
+	_camera_timer_label = Label.new()
+	_camera_timer_label.name = "CameraTimer"
+	_camera_timer_label.visible = false
+	_camera_timer_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_camera_timer_label.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_camera_timer_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_camera_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_camera_timer_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_camera_timer_label.add_theme_font_override(&"font", recording_label.get_theme_font(&"font"))
+	_camera_timer_label.add_theme_font_size_override(&"font_size", CAMERA_TIMER_FONT_SIZE)
+	_camera_timer_label.add_theme_color_override(&"font_color", Color(0.86, 0.9, 0.83, 0.12))
+	_camera_timer_label.add_theme_color_override(&"font_outline_color", Color(0.02, 0.025, 0.02, 0.07))
+	_camera_timer_label.add_theme_constant_override(&"outline_size", 5)
+	add_child(_camera_timer_label)
+
+
+func start_camera_timer() -> void:
+	if _playback_open or _is_recording or _camera_controls_unavailable():
+		return
+	_camera_timer_remaining = CAMERA_TIMER_SECONDS
+	_camera_timer_displayed_second = int(ceil(_camera_timer_remaining))
+	_camera_timer_label.text = str(_camera_timer_displayed_second)
+	_camera_timer_label.visible = true
+
+
+func _update_camera_timer(delta: float) -> bool:
+	if _camera_timer_remaining <= 0.0:
+		return false
+	_camera_timer_remaining = maxf(0.0, _camera_timer_remaining - delta)
+	if _camera_timer_remaining <= 0.0:
+		_camera_timer_displayed_second = 0
+		_camera_timer_label.visible = false
+		# La T solo puede iniciarse con la camara en las manos. Despues el jugador
+		# puede colocarla durante la cuenta atras y REC debe arrancar igualmente.
+		_start_recording(true)
+		return true
+	var displayed_second := int(ceil(_camera_timer_remaining))
+	if displayed_second != _camera_timer_displayed_second:
+		_camera_timer_displayed_second = displayed_second
+		_camera_timer_label.text = str(displayed_second)
+	return false
+
+
 func _input(event: InputEvent) -> void:
 	if not _playback_open or not event.is_pressed() or event.is_echo():
 		return
 	if event is InputEventKey:
 		var key := (event as InputEventKey).physical_keycode
-		if key == KEY_T:
+		if key == KEY_Y:
 			get_viewport().set_input_as_handled()
 			get_tree().paused = false
 			get_tree().reload_current_scene()
+			return
+		if key == KEY_T:
+			get_viewport().set_input_as_handled()
+			start_camera_timer()
 			return
 		if _delete_armed:
 			if key == KEY_W or key == KEY_S or key == KEY_UP or key == KEY_DOWN:
@@ -270,6 +338,8 @@ func _input(event: InputEvent) -> void:
 
 
 func toggle_recording() -> void:
+	if _camera_controls_unavailable():
+		return
 	if _playback_open:
 		return
 	if _is_recording:
@@ -279,6 +349,14 @@ func toggle_recording() -> void:
 
 
 func start_recording() -> void:
+	_start_recording(false)
+
+
+func _start_recording(allow_placed_camera: bool) -> void:
+	if _is_recording or _playback_open:
+		return
+	if not allow_placed_camera and _camera_controls_unavailable():
+		return
 	if not _tape_inserted:
 		return
 	if _saved_clips.size() >= maximum_saved_clips:
@@ -288,8 +366,11 @@ func start_recording() -> void:
 		return
 	_ensure_low_resolution_recorder()
 	_recorder_destroy_pending = false
+	_capture_generation += 1
 	_is_recording = true
 	_current_clip.clear()
+	_current_clip_camera_frames.clear()
+	_pending_camera_frame.clear()
 	_recording_elapsed_seconds = 0.0
 	_context_alerts.set_storage_usage(_saved_clips.size(), maximum_saved_clips)
 	_update_recording_identifiers()
@@ -305,6 +386,11 @@ func start_recording() -> void:
 func stop_recording() -> void:
 	if not _is_recording:
 		return
+	var observation_summary := {
+		"duration_seconds": _recording_elapsed_seconds,
+		"camera_frames": _current_clip_camera_frames.duplicate(true),
+		"observations": [],
+	}
 	_is_recording = false
 	_recording_blink_timer.stop()
 	_recording_bright = true
@@ -314,15 +400,20 @@ func stop_recording() -> void:
 	recording_dot.modulate.a = 0.22
 	if not _current_clip.is_empty():
 		_saved_clips.append(_current_clip.duplicate())
+		_saved_clip_observations.append(observation_summary.duplicate(true))
 		_tapes_spent += 1
 		while _saved_clips.size() > 1 and (
 			_saved_clips.size() > maximum_saved_clips
 			or _archive_memory_bytes() > int(maximum_archive_memory_mb * 1024.0 * 1024.0)
 		):
 			_saved_clips.pop_front()
+			if not _saved_clip_observations.is_empty():
+				_saved_clip_observations.pop_front()
 		_selected_clip = _saved_clips.size() - 1
 		_recording_sequence = mini(_recording_sequence + 1, MAX_RECORDING_SEQUENCE)
 	_current_clip.clear()
+	_current_clip_camera_frames.clear()
+	_pending_camera_frame.clear()
 	_recording_elapsed_seconds = 0.0
 	_update_recording_identifiers()
 	_context_alerts.set_storage_usage(_saved_clips.size(), maximum_saved_clips)
@@ -330,6 +421,8 @@ func stop_recording() -> void:
 
 
 func toggle_playback() -> void:
+	if _camera_controls_unavailable():
+		return
 	if _mode_transitioning:
 		return
 	if not _playback_open:
@@ -409,6 +502,7 @@ func _finish_mode_transition() -> void:
 	_mode_transitioning = false
 	_tape_spinner.visible = false
 	_active_mode = _transition_target_mode
+	_set_camera_observer_playback_active(_active_mode == MODE_ARCHIVE)
 	if _active_mode == MODE_ARCHIVE:
 		_playback_backdrop.visible = true
 		_playback_tabs.visible = true
@@ -513,6 +607,7 @@ func _ensure_low_resolution_recorder() -> void:
 	_recording_viewport.audio_listener_enable_3d = false
 	add_child(_recording_viewport)
 	_recording_viewport.world_3d = get_viewport().world_3d
+	get_tree().call_group(&"camera_lens_grime", &"attach_recording_view", _recording_viewport)
 	_recording_camera = Camera3D.new()
 	_recording_camera.name = "TapeCamera"
 	_recording_viewport.add_child(_recording_camera)
@@ -552,38 +647,88 @@ func _request_capture_frame() -> void:
 		return
 	live_camera.cull_mask &= ~RECORDING_ONLY_VISIBILITY_MASK
 	_capture_pending = true
+	_sync_recording_camera(live_camera)
+	_pending_camera_frame = _recording_camera_state()
+	_recording_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+	RenderingServer.frame_post_draw.connect(_finish_capture_frame.bind(_capture_generation), CONNECT_ONE_SHOT)
+
+
+func _prewarm_recorder() -> void:
+	if DisplayServer.get_name() == "headless" or _is_recording or _capture_pending:
+		return
+	var live_camera := get_viewport().get_camera_3d()
+	if live_camera == null:
+		return
+	_ensure_low_resolution_recorder()
+	_sync_recording_camera(live_camera)
+	_capture_pending = true
+	_recorder_destroy_pending = true
+	_recording_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+	RenderingServer.frame_post_draw.connect(_finish_capture_frame.bind(_capture_generation, true), CONNECT_ONE_SHOT)
+
+
+func _sync_recording_camera(live_camera: Camera3D) -> void:
 	_recording_camera.global_transform = live_camera.global_transform
 	_recording_camera.fov = live_camera.fov
 	_recording_camera.projection = live_camera.projection
 	_recording_camera.size = live_camera.size
 	_recording_camera.near = live_camera.near
 	_recording_camera.far = live_camera.far
+	_recording_camera.keep_aspect = live_camera.keep_aspect
+	_recording_camera.h_offset = live_camera.h_offset
+	_recording_camera.v_offset = live_camera.v_offset
+	_recording_camera.frustum_offset = live_camera.frustum_offset
+	# TapeCamera es una copia: su nombre no identifica si el origen era selfie,
+	# cámara externa o primera persona. Conservar esa política con el fotograma.
+	_recording_camera.set_meta(&"observer_exclude_player", live_camera.name != &"FilmingCamera")
 	_recording_camera.cull_mask = (
 		(live_camera.cull_mask | RECORDING_ONLY_VISIBILITY_MASK)
 		& ~LIVE_ONLY_VISIBILITY_MASK
 	)
-	_recording_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-	RenderingServer.frame_post_draw.connect(_finish_capture_frame, CONNECT_ONE_SHOT)
 
 
-func _finish_capture_frame() -> void:
-	_capture_pending = false
+func _finish_capture_frame(generation: int, warming := false) -> void:
 	if is_instance_valid(_recording_viewport):
 		_recording_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
-	if not _is_recording:
-		if _recorder_destroy_pending:
-			_destroy_low_resolution_recorder()
+	if (not _is_recording and not warming) or generation != _capture_generation or not is_instance_valid(_recording_viewport):
+		_complete_capture_frame(PackedByteArray(), generation)
 		return
-	if not is_instance_valid(_recording_viewport):
+	if not asynchronous_capture:
+		var image := _recording_viewport.get_texture().get_image()
+		var jpeg := PackedByteArray() if image == null or image.is_empty() else image.save_jpg_to_buffer(archive_jpeg_quality)
+		_complete_capture_frame(jpeg, generation)
+		return
+	_capture_job = TapeFrameReadback.new()
+	_capture_job.completed.connect(_complete_capture_frame.bind(generation), CONNECT_ONE_SHOT)
+	_capture_job.fallback_required.connect(_capture_frame_fallback.bind(generation), CONNECT_ONE_SHOT)
+	_capture_job.request(_recording_viewport.get_texture().get_rid(), archive_jpeg_quality)
+
+
+func _capture_frame_fallback(generation: int) -> void:
+	_capture_readback_fallbacks += 1
+	# Compatibility/unsupported texture formats retain the old readback path.
+	# JPEG compression still runs in the worker pool.
+	if not _is_recording or generation != _capture_generation or not is_instance_valid(_recording_viewport):
+		_complete_capture_frame(PackedByteArray(), generation)
 		return
 	var image := _recording_viewport.get_texture().get_image()
 	if image == null or image.is_empty():
+		_complete_capture_frame(PackedByteArray(), generation)
 		return
-	# Guardar una ImageTexture por fotograma llenaba progresivamente la VRAM.
-	# El archivo vive comprimido en RAM y PLAYBACK reutiliza una sola textura.
-	var compressed := image.save_jpg_to_buffer(archive_jpeg_quality)
-	if not compressed.is_empty():
+	_capture_job.encode_image(image, archive_jpeg_quality)
+
+
+func _complete_capture_frame(compressed: PackedByteArray, generation: int) -> void:
+	_capture_job = null
+	_capture_pending = false
+	# A late GPU/worker callback must never add a frame to a newly inserted tape
+	# or a recording started after STOP. Only one job can be in flight.
+	if _is_recording and generation == _capture_generation and not compressed.is_empty():
 		_current_clip.append(compressed)
+		_current_clip_camera_frames.append(_pending_camera_frame.duplicate(true))
+	_pending_camera_frame.clear()
+	if _recorder_destroy_pending:
+		_destroy_low_resolution_recorder()
 
 
 func _archive_memory_bytes() -> int:
@@ -688,6 +833,8 @@ func _delete_selected_clip() -> void:
 	if not _delete_armed or _saved_clips.is_empty():
 		return
 	_saved_clips.remove_at(_selected_clip)
+	if _selected_clip < _saved_clip_observations.size():
+		_saved_clip_observations.remove_at(_selected_clip)
 	_context_alerts.set_storage_usage(_saved_clips.size(), maximum_saved_clips)
 	_update_storage_readout_state()
 	_selected_clip = clampi(_selected_clip, 0, maxi(_saved_clips.size() - 1, 0))
@@ -709,6 +856,7 @@ func _advance_playback_frame() -> void:
 func _refresh_playback() -> void:
 	_refresh_side_menu()
 	if _saved_clips.is_empty():
+		_analyze_current_playback_frame()
 		_playback_image.texture = null
 		_playback_empty_background.visible = true
 		_playback_info.text = "ARCHIVO VACIO"
@@ -742,6 +890,104 @@ func _refresh_playback() -> void:
 			if segment_index < lit_segments
 			else Color(0.12, 0.16, 0.13, 0.92)
 		)
+	_analyze_current_playback_frame()
+
+
+func _recording_camera_state() -> Dictionary:
+	if not is_instance_valid(_recording_camera):
+		return {}
+	return {
+		"transform": _recording_camera.global_transform,
+		"fov": _recording_camera.fov,
+		"projection": int(_recording_camera.projection),
+		"size": _recording_camera.size,
+		"near": _recording_camera.near,
+		"far": _recording_camera.far,
+		"cull_mask": _recording_camera.cull_mask,
+		"keep_aspect": int(_recording_camera.keep_aspect),
+		"h_offset": _recording_camera.h_offset,
+		"v_offset": _recording_camera.v_offset,
+		"frustum_offset": _recording_camera.frustum_offset,
+		"exclude_player": bool(_recording_camera.get_meta(&"observer_exclude_player", true)),
+	}
+
+
+func _set_camera_observer_playback_active(active: bool) -> void:
+	var observer := get_tree().get_first_node_in_group(&"camera_observer")
+	if observer != null and observer.has_method(&"set_playback_analysis_active"):
+		observer.call(&"set_playback_analysis_active", active)
+
+
+func _analyze_current_playback_frame() -> void:
+	var observer := get_tree().get_first_node_in_group(&"camera_observer")
+	if observer == null or not observer.has_method(&"analyze_recorded_frame"):
+		return
+	if _active_mode != MODE_ARCHIVE or _saved_clips.is_empty() or _selected_clip >= _saved_clip_observations.size():
+		observer.call(&"analyze_recorded_frame", {})
+		return
+	var summary := _saved_clip_observations[_selected_clip]
+	var camera_frames := summary.get("camera_frames", []) as Array
+	if _selected_frame < 0 or _selected_frame >= camera_frames.size() or not camera_frames[_selected_frame] is Dictionary:
+		observer.call(&"analyze_recorded_frame", {})
+		return
+	var observations := observer.call(&"analyze_recorded_frame", camera_frames[_selected_frame]) as Array
+	var analyzed_frames := summary.get("analyzed_frames", {}) as Dictionary
+	if not analyzed_frames.has(_selected_frame):
+		analyzed_frames[_selected_frame] = _sanitize_playback_observations(observations)
+		summary["analyzed_frames"] = analyzed_frames
+		summary["observations"] = _aggregate_playback_observations(analyzed_frames)
+	summary["analyzed_frame"] = _selected_frame
+	_saved_clip_observations[_selected_clip] = summary
+
+
+func _sanitize_playback_observations(source: Array) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for value: Variant in source:
+		if not value is Dictionary:
+			continue
+		var observation := value as Dictionary
+		if not bool(observation.get("detection_enabled", true)):
+			continue
+		result.append({
+			"id": StringName(observation.get("id", &"object")),
+			"label": str(observation.get("label", "OBJETO")),
+			"strength": float(observation.get("strength", 0.0)),
+			"instance_count": int(observation.get("instance_count", 1)),
+		})
+	return result
+
+
+func _aggregate_playback_observations(analyzed_frames: Dictionary) -> Array[Dictionary]:
+	var by_id: Dictionary = {}
+	for frame_value: Variant in analyzed_frames.values():
+		if not frame_value is Array:
+			continue
+		for observation_value: Variant in frame_value as Array:
+			if not observation_value is Dictionary:
+				continue
+			var observation := observation_value as Dictionary
+			var id := StringName(observation.get("id", &"object"))
+			var evidence := by_id.get(id, {
+				"id": id,
+				"label": str(observation.get("label", "OBJETO")),
+				"visible_seconds": 0.0,
+				"maximum_strength": 0.0,
+				"samples": 0,
+			}) as Dictionary
+			evidence["visible_seconds"] = float(evidence["visible_seconds"]) + capture_interval
+			evidence["maximum_strength"] = maxf(
+				float(evidence["maximum_strength"]),
+				float(observation.get("strength", 0.0))
+			)
+			evidence["samples"] = int(evidence["samples"]) + 1
+			by_id[id] = evidence
+	var result: Array[Dictionary] = []
+	for evidence: Variant in by_id.values():
+		result.append((evidence as Dictionary).duplicate(true))
+	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return float(a.get("visible_seconds", 0.0)) > float(b.get("visible_seconds", 0.0))
+	)
+	return result
 
 
 func _refresh_side_menu(highlight_index := -1) -> void:
@@ -1163,7 +1409,7 @@ func _adjust_setting(direction: int, toggle := false) -> void:
 func _refresh_settings_menu() -> void:
 	if not is_instance_valid(_settings_menu):
 		return
-	var labels := ["BRILLO DE CÁMARA", "ZOOM", "MODO NOCTURNO", "ESTABILIZACIÓN", "FECHA / HORA", "VOLUMEN DEL ALTAVOZ", "SENSIBILIDAD DE MICRÓFONO"]
+	var labels := ["BRILLO DE CAMARA", "ZOOM", "MODO NOCTURNO", "ESTABILIZACION", "FECHA / HORA", "VOLUMEN DEL ALTAVOZ", "SENSIBILIDAD DE MICROFONO"]
 	var values := [
 		"%d%%" % roundi(_camera_brightness * 100.0),
 		"%.1fx" % _camera_zoom,
@@ -1173,7 +1419,7 @@ func _refresh_settings_menu() -> void:
 		"%d%%" % roundi(_speaker_volume * 100.0),
 		"%d%%" % roundi(_microphone_sensitivity * 100.0),
 	]
-	var menu := "[center][color=#e6ede0]AJUSTES DE CÁMARA[/color]\n[font_size=12]\n[/font_size]\n"
+	var menu := "[center][color=#e6ede0]AJUSTES DE CAMARA[/color]\n[font_size=12]\n[/font_size]\n"
 	for index in labels.size():
 		var pointer := "▶" if index == _settings_selection else " "
 		menu += "%s  %s   [color=#69716a]%s[/color]\n\n" % [pointer, labels[index], values[index]]
@@ -1243,7 +1489,7 @@ func _activate_avio_option() -> void:
 				_avio_status.text = "INSERTA UNA CINTA"
 			elif _saved_clips.is_empty():
 				_avio_erase_armed = false
-				_avio_status.text = "LA CINTA ESTÁ VACÍA"
+				_avio_status.text = "LA CINTA ESTA VACIA"
 			elif not _avio_erase_armed:
 				_avio_erase_armed = true
 				_avio_status.text = "CONFIRMA PARA VACIAR LA CINTA"
@@ -1335,6 +1581,7 @@ func _insert_inventory_cassette() -> void:
 func _make_inserted_tape_data() -> Dictionary:
 	var result := _inserted_tape_data.duplicate(true)
 	result["archive_slots"] = _duplicate_archive_slots(_saved_clips)
+	result["observation_slots"] = _saved_clip_observations.duplicate(true)
 	var recordings := {"A": [], "B": []}
 	for index in mini(2, _saved_clips.size()):
 		if not (_saved_clips[index] as Array).is_empty():
@@ -1360,6 +1607,12 @@ func _load_archive_from_cassette(data: Dictionary) -> void:
 				_saved_clips.append(clip)
 	while _saved_clips.size() > maximum_saved_clips:
 		_saved_clips.pop_back()
+	var stored_observations := data.get("observation_slots", []) as Array
+	for index in _saved_clips.size():
+		if index < stored_observations.size() and stored_observations[index] is Dictionary:
+			_saved_clip_observations.append((stored_observations[index] as Dictionary).duplicate(true))
+		else:
+			_saved_clip_observations.append({})
 	_selected_clip = 0
 	_recording_sequence = clampi(_saved_clips.size() + 1, 1, MAX_RECORDING_SEQUENCE)
 	_context_alerts.set_storage_usage(_saved_clips.size(), maximum_saved_clips)
@@ -1368,6 +1621,7 @@ func _load_archive_from_cassette(data: Dictionary) -> void:
 
 func _clear_archive() -> void:
 	_saved_clips.clear()
+	_saved_clip_observations.clear()
 	_selected_clip = 0
 	_pending_clip = -1
 	_selected_frame = 0
@@ -1391,6 +1645,36 @@ func _duplicate_clip(source: Array) -> Array[PackedByteArray]:
 		if frame is PackedByteArray:
 			result.append((frame as PackedByteArray).duplicate())
 	return result
+
+
+func is_recording_active() -> bool:
+	return _is_recording
+
+
+func get_saved_clip_observation_summary(index: int) -> Dictionary:
+	if index < 0 or index >= _saved_clip_observations.size():
+		return {}
+	return _saved_clip_observations[index].duplicate(true)
+
+
+func _begin_camera_observation_recording() -> void:
+	var observer := get_tree().get_first_node_in_group(&"camera_observer")
+	if observer != null and observer.has_method(&"begin_recording_observation"):
+		observer.call(&"begin_recording_observation")
+
+
+func _end_camera_observation_recording() -> Dictionary:
+	var observer := get_tree().get_first_node_in_group(&"camera_observer")
+	if observer != null and observer.has_method(&"end_recording_observation"):
+		var summary: Variant = observer.call(&"end_recording_observation")
+		if summary is Dictionary:
+			return (summary as Dictionary).duplicate(true)
+	return {}
+
+
+func _camera_controls_unavailable() -> bool:
+	var player := get_tree().get_first_node_in_group(&"player")
+	return is_instance_valid(player) and player.has_method(&"is_camera_on_ground") and bool(player.call(&"is_camera_on_ground"))
 
 
 func _player_has_inventory_cassette() -> bool:

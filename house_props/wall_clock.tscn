@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://house_props/wall_clock.gd" id="1_script"]
 [ext_resource type="Script" path="res://sounds/seamless_spatial_loop.gd" id="2_loop"]
 [ext_resource type="AudioStream" path="res://sounds/objects/clock_tickling_sound.mp3" id="3_tick_sound"]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="4_camera_observable"]
 
 [sub_resource type="StandardMaterial3D" id="Material_wood"]
 albedo_color = Color(0.19, 0.075, 0.025, 1)
@@ -60,6 +61,16 @@ rings = 5
 [node name="WallClock" type="Node3D"]
 editor_description = "Reloj de pared funcional sincronizado con la hora del sistema."
 script = ExtResource("1_script")
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("4_camera_observable")
+observation_id = &"wall_clock"
+display_name = "RELOJ DE PARED"
+local_focus_offset = Vector3(0, 0, 0)
+framing_radius = 0.56
+maximum_distance = 18.0
+minimum_screen_fraction = 0.009
+priority = 1.5
 
 [node name="TickSoundLoop" type="Node3D" parent="."]
 position = Vector3(0, 0, 0.12)

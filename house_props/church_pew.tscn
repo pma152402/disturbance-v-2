@@ -1,4 +1,5 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="99_camera_observable"]
 [sub_resource type="StandardMaterial3D" id="wood"]
 albedo_color = Color(0.27,0.105,0.035,1)
 roughness = 0.9
@@ -10,6 +11,13 @@ roughness = 0.94
 size = Vector3(4.2,1.15,0.82)
 [node name="ChurchPew" type="StaticBody3D"]
 editor_description = "Banco de iglesia de madera oscura con asiento, respaldo inclinado, apoyabrazos y reclinatorio trasero."
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("99_camera_observable")
+observation_id = &"church_pew"
+display_name = "BANCO DE IGLESIA"
+local_focus_offset = Vector3(0, 0.65, 0)
+framing_radius = 2.15
+maximum_distance = 28.0
 [node name="Collision" type="CollisionShape3D" parent="."]
 position = Vector3(0,0.575,0)
 shape = SubResource("shape")
@@ -49,4 +57,3 @@ position = Vector3(0,0.3,0.58)
 scale = Vector3(3.75,0.1,0.18)
 mesh = SubResource("box")
 material_override = SubResource("wood")
-

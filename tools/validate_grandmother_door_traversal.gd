@@ -36,7 +36,10 @@ func _exercise_door(door_scene: PackedScene, start_side: float) -> String:
 
 	var door_root := door_scene.instantiate() as Node3D
 	stage.add_child(door_root)
-	var grandmother := GRANDMOTHER.instantiate() as CharacterBody3D
+	var actor_scene: PackedScene = load("res://enemies/church_grandmother.tscn") if "--church" in OS.get_cmdline_user_args() else GRANDMOTHER
+	if "--crawler" in OS.get_cmdline_user_args():
+		actor_scene = load("res://enemies/grandmother_crawler.tscn")
+	var grandmother := actor_scene.instantiate() as CharacterBody3D
 	grandmother.starts_waiting_covered_eyes = false
 	grandmother.position = Vector3(0.0, 0.0, start_side * 0.92)
 	grandmother.rotation.y = 0.0 if start_side < 0.0 else PI

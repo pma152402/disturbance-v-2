@@ -34,7 +34,7 @@ var _light_masks := {}
 var _collision_disabled := {}
 
 
-static func install(scene_root: Node, host: Node) -> Dictionary:
+static func install(scene_root: Node, host: Node, distance_light_culling := true) -> Dictionary:
 	var existing := scene_root.find_child("RuntimeSectorActivityOptimizer", true, false)
 	if existing != null:
 		return existing.inventory()
@@ -43,7 +43,7 @@ static func install(scene_root: Node, host: Node) -> Dictionary:
 	# The scene root is still dispatching _ready while this is installed. Hosting
 	# under the already-ready House avoids a deferred frame with no controller.
 	host.add_child(controller)
-	controller._collect(scene_root)
+	controller._collect(scene_root, distance_light_culling)
 	var timer := Timer.new()
 	timer.name = "SectorActivityTimer"
 	timer.wait_time = UPDATE_INTERVAL
@@ -64,7 +64,7 @@ func inventory() -> Dictionary:
 	}
 
 
-func _collect(scene_root: Node) -> void:
+func _collect(scene_root: Node, distance_light_culling := true) -> void:
 	for node in scene_root.find_children("*", "AudioStreamPlayer3D", true, false):
 		var player := node as AudioStreamPlayer3D
 		# Autoplay spatial players are continuous ambience or machinery. One-shot
@@ -82,7 +82,7 @@ func _collect(scene_root: Node) -> void:
 			_auxiliary_rays.append(ray)
 	for node in scene_root.find_children("*", "Light3D", true, false):
 		var light := node as Light3D
-		if light is not DirectionalLight3D and not _is_essential(light):
+		if distance_light_culling and light is not DirectionalLight3D and not _is_essential(light):
 			_local_lights.append(light)
 			_light_masks[light] = light.light_cull_mask
 	for node in scene_root.find_children("*", "CollisionShape3D", true, false):

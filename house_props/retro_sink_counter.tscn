@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://cyjgii5dmtwrp"]
 
 [ext_resource type="Script" uid="uid://c7di1psgb3n2b" path="res://house_props/double_cabinet_doors.gd" id="1_doors"]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="2_camera_observable"]
+[ext_resource type="Script" path="res://house_props/camera_wash_spot.gd" id="lens_wash"]
 
 [sub_resource type="StandardMaterial3D" id="inside"]
 albedo_color = Color(0.135, 0.14, 0.115, 1)
@@ -83,6 +85,18 @@ size = Vector3(1.6, 1.04, 0.73)
 editor_description = "Modulo fregadero coordinado con seno metalico, grifo alto, dos mandos y puertas inferiores."
 collision_layer = 3
 script = ExtResource("1_doors")
+
+[node name="CameraWashSpot" type="Area3D" parent="."]
+position = Vector3(0, 1.12, 0.12)
+script = ExtResource("lens_wash")
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("2_camera_observable")
+observation_id = &"kitchen_sink"
+display_name = "FREGADERO"
+local_focus_offset = Vector3(0, 0.72, 0)
+framing_radius = 1.05
+maximum_distance = 22.0
 
 [node name="CabinetInterior" type="Node3D" parent="." unique_id=1566854883]
 

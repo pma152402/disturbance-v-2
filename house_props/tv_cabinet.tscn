@@ -1,5 +1,6 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 [ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera4.jpg" id="1_wood"]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="2_camera_observable"]
 [sub_resource type="StandardMaterial3D" id="Material_wood"]
 albedo_color = Color(0.27, 0.135, 0.055, 1)
 albedo_texture = ExtResource("1_wood")
@@ -26,6 +27,13 @@ size = Vector3(2.8, 1, 0.055)
 size = Vector3(2.8, 1, 0.48)
 [node name="TVCabinet" type="Node3D"]
 editor_description = "Mueble de TV con dos secciones verticales independientes: izquierda con dos baldas y derecha con una."
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("2_camera_observable")
+observation_id = &"living_room_cabinet"
+display_name = "MUEBLE DEL SALON"
+local_focus_offset = Vector3(0, 0.5, 0)
+framing_radius = 1.5
+maximum_distance = 22.0
 [node name="Shell" type="StaticBody3D" parent="."]
 [node name="Top" type="MeshInstance3D" parent="Shell"]
 position = Vector3(0, 0.94, 0)

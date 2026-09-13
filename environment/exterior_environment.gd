@@ -2,6 +2,8 @@
 extends Node3D
 
 const WestExtension = preload("res://environment/west_extension_bounds.gd")
+const FOOTBALL_FIELD_CENTER := Vector2(39.0, -13.0)
+const FOOTBALL_FIELD_HALF_EXTENTS := Vector2(11.5, 18.0)
 
 @export var tree_mesh: ArrayMesh
 @export var grass_mesh: ArrayMesh
@@ -217,6 +219,8 @@ func _add_outer_vegetation(transforms: Array[Transform3D], rng: RandomNumberGene
 		var plant_position := Vector3(rng.randf_range(-52.0, 52.0), 0.02, rng.randf_range(-52.0, 52.0))
 		if _is_inside_house_footprint(plant_position, 0.75):
 			continue
+		if _is_inside_football_field(plant_position, 0.75):
+			continue
 		if plant_position.x > -35.5 and plant_position.x < 25.5 and plant_position.z > -49.5 and plant_position.z < 25.5:
 			continue
 		if plant_position.z > 23.5 and absf(plant_position.x) < 7.5:
@@ -235,6 +239,8 @@ func _add_forest_outside_fence(transforms: Array[Transform3D], rng: RandomNumber
 	while added < amount:
 		var tree_position := Vector3(rng.randf_range(-51.5, 51.5), 0.0, rng.randf_range(-51.5, 51.5))
 		if _is_inside_house_footprint(tree_position, 3.2):
+			continue
+		if _is_inside_football_field(tree_position, 2.8):
 			continue
 		# El cercado norte queda en Z=-48 para rodear tambien la sala inferior.
 		if tree_position.x > -37.5 and tree_position.x < 27.5 and tree_position.z > -51.5 and tree_position.z < 27.5:
@@ -281,3 +287,10 @@ func _is_inside_house_footprint(world_position: Vector3, margin: float) -> bool:
 		and world_position.z < -21.8 + margin
 	)
 	return inside_original_house or inside_north_connector or inside_north_wing
+
+
+func _is_inside_football_field(world_position: Vector3, margin: float) -> bool:
+	return (
+		absf(world_position.x - FOOTBALL_FIELD_CENTER.x) < FOOTBALL_FIELD_HALF_EXTENTS.x + margin
+		and absf(world_position.z - FOOTBALL_FIELD_CENTER.y) < FOOTBALL_FIELD_HALF_EXTENTS.y + margin
+	)

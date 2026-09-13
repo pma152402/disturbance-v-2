@@ -17,7 +17,8 @@ func get_interaction_text(_player: Node = null) -> String:
 func interact(player: Node = null) -> bool:
 	if _collected or player == null or not player.has_method(&"add_tool"):
 		return false
-	if not player.add_tool(item_id):
+	var installed := player.has_method(&"install_flashlight_battery") and bool(player.call(&"install_flashlight_battery"))
+	if not installed and not player.add_tool(item_id):
 		return false
 	_collected = true
 	collision_layer = 0

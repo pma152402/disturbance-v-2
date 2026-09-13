@@ -15,7 +15,8 @@ func _run() -> void:
 	level.add_child(child)
 	child.global_position = Vector3(0.0, 0.0, 0.65)
 	child.call(&"receive_monster_attack", null)
-	var grandmother := GrandmotherScene.instantiate() as CharacterBody3D
+	var actor_scene: PackedScene = load("res://enemies/church_grandmother.tscn") if "--church" in OS.get_cmdline_user_args() else GrandmotherScene
+	var grandmother := actor_scene.instantiate() as CharacterBody3D
 	level.add_child(grandmother)
 	grandmother.set_physics_process(false)
 	grandmother.global_position = Vector3.ZERO

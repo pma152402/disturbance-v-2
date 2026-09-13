@@ -7,6 +7,11 @@ const RENDER_OPTIMIZER := preload("res://systems/runtime_render_optimizer.gd")
 const OCCLUSION_BUILDER := preload("res://systems/runtime_occlusion_builder.gd")
 const SECTOR_ACTIVITY_OPTIMIZER := preload("res://systems/runtime_sector_activity_optimizer.gd")
 const SKIP_WALL_BAND_GROUP := &"skip_wall_band"
+const FULL_STARTUP_VISIBILITY := preload("res://systems/full_startup_visibility.gd")
+
+## Keep church, courtyard props and exterior visible through distant windows.
+## Basement remains door-gated and the labyrinth remains loaded on demand.
+@export var full_startup_visibility := true
 
 
 func _ready() -> void:
@@ -15,12 +20,17 @@ func _ready() -> void:
 	_apply_to_wall_meshes(self, overlay)
 	if not Engine.is_editor_hint():
 		STATIC_DECOR_BATCHER.optimize(self)
-		var result := RENDER_OPTIMIZER.install(self)
-		var occlusion := OCCLUSION_BUILDER.install(self)
+		var result := RENDER_OPTIMIZER.install(self, not full_startup_visibility)
+		var occlusion := {"occluders": 0}
+		if not full_startup_visibility:
+			occlusion = OCCLUSION_BUILDER.install(self)
 		var scene_root := get_tree().current_scene
 		if scene_root == null:
 			scene_root = get_parent()
-		var activity := SECTOR_ACTIVITY_OPTIMIZER.install(scene_root, self)
+		var activity := SECTOR_ACTIVITY_OPTIMIZER.install(scene_root, self, not full_startup_visibility)
+		if full_startup_visibility:
+			# Exterior vegetation is generated in a later sibling's _ready().
+			_apply_full_startup_visibility.call_deferred()
 		print(
 			"Render optimizer: ", result.detail_meshes, " details culled; ",
 			result.managed_lights, " lights; ", result.shadowless_multimeshes,
@@ -28,6 +38,12 @@ func _ready() -> void:
 			activity.audio, " spatial loops, ", activity.lights, " lights and ",
 			activity.optional_collisions, " decorative colliders sector-managed."
 		)
+
+
+func _apply_full_startup_visibility() -> void:
+	var result := FULL_STARTUP_VISIBILITY.apply(get_parent())
+	print("Full startup visibility: ", result.geometry, " distance-limited meshes restored; ",
+		result.lights, " light fades removed; automatic box occlusion disabled.")
 
 
 func ensure_church_catacombs() -> bool:

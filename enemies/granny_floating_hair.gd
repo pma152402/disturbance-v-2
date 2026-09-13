@@ -15,6 +15,7 @@ extends MeshInstance3D
 @export_range(0.005, 0.05, 0.001) var minimum_width := 0.016
 @export_range(0.005, 0.06, 0.001) var maximum_width := 0.034
 @export var random_seed := 7331
+@export_range(0.5, 1.5, 0.01) var head_size_multiplier := 1.0
 
 var _head: Node3D
 
@@ -39,7 +40,9 @@ func _follow_head() -> void:
 		return
 	# Conserva posición y rotación de la cabeza sin heredar la escala irregular
 	# del GLB. Así los parámetros del pelo permanecen expresados en metros.
-	global_transform = Transform3D(_head.global_basis.orthonormalized(), _head.global_position)
+	# Uniform sizing preserves the root envelope, strand length and animated
+	# displacement together, without inheriting the imported rig's scale.
+	global_transform = Transform3D(_head.global_basis.orthonormalized().scaled(Vector3.ONE * head_size_multiplier), _head.global_position)
 
 
 func _build_hair_mesh() -> ArrayMesh:

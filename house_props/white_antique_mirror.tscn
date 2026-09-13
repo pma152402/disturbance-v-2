@@ -1,4 +1,6 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="1_camera_observable"]
 
 [sub_resource type="StandardMaterial3D" id="frame_mat"]
 albedo_color = Color(0.9, 0.9, 0.86, 1)
@@ -27,6 +29,16 @@ size = Vector3(0.92, 1.72, 0.1)
 [node name="WhiteAntiqueMirror" type="StaticBody3D"]
 editor_description = "Copia exacta del espejo antiguo, con el marco acabado en blanco calido."
 
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("1_camera_observable")
+observation_id = &"mirror"
+display_name = "ESPEJO"
+focus_path = NodePath("MirrorSurface")
+framing_radius = 0.82
+maximum_distance = 20.0
+minimum_screen_fraction = 0.008
+priority = 1.5
+
 [node name="MirrorSurface" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.91, -0.015)
 mesh = SubResource("glass")
@@ -50,4 +62,3 @@ mesh = SubResource("horizontal")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.91, 0)
 shape = SubResource("shape")
-

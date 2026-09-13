@@ -121,6 +121,14 @@ func get_remote_status() -> String:
 	return "CANAL %d/%d    VOLUMEN %d/10" % [_channel + 1, _programs.size(), _volume_level]
 
 
+func get_camera_observation_state() -> Dictionary:
+	return {
+		"id": &"television",
+		"label": "TELE ENCENDIDA" if _is_on else "TELE APAGADA",
+		"state": &"on" if _is_on else &"off",
+	}
+
+
 func _load_programs() -> void:
 	var file_names := DirAccess.get_files_at(PROGRAMS_DIRECTORY)
 	file_names.sort()

@@ -50,12 +50,21 @@ const STAIR_UPPER_ANCHOR := Vector3(-1.328, 4.18, -2.18)
 @export_range(0.3, 1.6, 0.02) var stride_length := 0.72
 @export_group("Navegación y recuperación")
 @export var obstacle_probe_distance := 0.85
-@export var stuck_check_seconds := 0.65
+@export var stuck_check_seconds := 0.4
 @export var stuck_minimum_progress := 0.12
-@export var recovery_duration := 0.7
+@export var recovery_duration := 0.35
 @export var chase_prediction_seconds := 0.22
 @export var chase_slowdown_distance := 2.1
 @export var chase_stop_distance := 0.68
+@export_group("Salto de obstáculos")
+@export var obstacle_jump_enabled := true
+@export_range(0.45, 1.2, 0.05) var obstacle_jump_max_height := 0.9
+@export_range(0.7, 1.8, 0.05) var obstacle_jump_probe_distance := 1.15
+@export_range(2.5, 7.0, 0.1) var obstacle_jump_vertical_speed := 5.4
+@export_range(1.5, 6.0, 0.1) var obstacle_jump_forward_speed := 3.6
+@export_range(0.2, 3.0, 0.1) var obstacle_jump_cooldown := 1.2
+@export_range(1, 6, 1) var obstacle_jump_max_consecutive := 6
+@export_range(0.08, 0.5, 0.02) var obstacle_jump_chain_interval := 0.14
 @export_group("Prioridad de presas")
 @export var prioritize_children := true
 @export_range(0.05, 1.0, 0.05) var prey_refresh_seconds := 0.2
@@ -80,6 +89,7 @@ const STAIR_UPPER_ANCHOR := Vector3(-1.328, 4.18, -2.18)
 @export_range(0.6, 2.0, 0.05) var stair_close_prey_distance := 1.25
 
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
+@onready var body_collision: CollisionShape3D = $Collision
 @onready var door_ray: RayCast3D = $DoorRay
 @onready var clearance_sensor: Node3D = $ClearanceSensor
 @onready var head_forward_ray: RayCast3D = $ClearanceSensor/HeadForward
@@ -143,6 +153,23 @@ var _was_trying_to_move := false
 var _recovery_timer := 0.0
 var _recovery_direction := Vector3.ZERO
 var _recovery_side := 1.0
+var _navigation_detour := Vector3.ZERO
+var _navigation_detour_timer := 0.0
+var _stuck_sample_count := 0
+var _last_route_sample_target := Vector3.ZERO
+var _last_route_sample_distance := INF
+var _route_stall_sample_count := 0
+var _obstacle_jump_active := false
+var _obstacle_jump_direction := Vector3.ZERO
+var _obstacle_jump_elapsed := 0.0
+var _obstacle_jump_cooldown_timer := 0.0
+var _obstacle_jump_count := 0
+var _obstacle_jump_chain_count := 0
+var _obstacle_jump_chain_reset_timer := 0.0
+var _obstacle_jump_probe_timer := 0.0
+var _obstacle_jump_landing := Vector3.ZERO
+var _obstacle_jump_duration := 0.0
+var _obstacle_jump_floor_snap := 0.0
 var _door_traversal_active := false
 var _door_traversal_phase := 0
 var _door_traversal_door: Node
@@ -299,6 +326,12 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.y = -0.2
 
+	if _obstacle_jump_active:
+		_update_movement(delta)
+		move_and_slide()
+		_update_animation(delta)
+		return
+
 	if not _player_has_moved:
 		var player_position_2d := Vector2(_player.global_position.x, _player.global_position.z)
 		var player_speed_2d := Vector2(_player.velocity.x, _player.velocity.z).length()
@@ -424,8 +457,18 @@ func _update_awareness(delta: float, sees_prey: bool, hears_prey: bool) -> void:
 
 func _update_movement(delta: float) -> void:
 	_door_reentry_timer = maxf(0.0, _door_reentry_timer - delta)
+	_obstacle_jump_cooldown_timer = maxf(0.0, _obstacle_jump_cooldown_timer - delta)
+	_obstacle_jump_probe_timer = maxf(0.0, _obstacle_jump_probe_timer - delta)
+	if not _obstacle_jump_active and is_on_floor():
+		_obstacle_jump_chain_reset_timer = maxf(0.0, _obstacle_jump_chain_reset_timer - delta)
+		if _obstacle_jump_chain_reset_timer <= 0.0:
+			_obstacle_jump_chain_count = 0
+	_navigation_detour_timer = maxf(0.0, _navigation_detour_timer - delta)
 	if _door_traversal_active:
 		_update_door_traversal(delta)
+		return
+	if _obstacle_jump_active:
+		_update_obstacle_jump(delta)
 		return
 	_update_stuck_recovery(delta)
 	var target := _patrol_target
@@ -451,6 +494,12 @@ func _update_movement(delta: float) -> void:
 	# decide si hay que acechar, sacudir o rendirse.
 	var requested_target := target
 	target = _redirect_unreachable_target(target)
+	if _navigation_detour_timer > 0.0:
+		if global_position.distance_to(_navigation_detour) <= 0.5:
+			_navigation_detour_timer = 0.0
+			_target_refresh_timer = 0.0
+		else:
+			target = _navigation_detour
 
 	# El zarpazo al saliente se comprueba aquí y no en la rama de "sin dirección
 	# de avance": a medio metro del muro todavía le queda rumbo hacia el punto de
@@ -481,6 +530,9 @@ func _update_movement(delta: float) -> void:
 		next_point = target
 	var flat_direction := next_point - global_position
 	flat_direction.y = 0.0
+	# También intentar superar el borde cuando la ruta acaba justo debajo de él.
+	if _try_begin_obstacle_jump(requested_target):
+		return
 	if flat_direction.length_squared() > 0.015:
 		flat_direction = flat_direction.normalized()
 		var planar_prey_distance := INF
@@ -489,6 +541,7 @@ func _update_movement(delta: float) -> void:
 			planar_prey_distance = _prey_planar_distance()
 			close_visible_prey = (
 				planar_prey_distance <= chase_slowdown_distance
+				and _navigation_detour_timer <= 0.0
 				and absf(_prey.global_position.y - global_position.y) <= attack_vertical_tolerance
 				and _has_clear_line_to_prey_body()
 				and (_stair_commitment == StairCommitment.NONE or _stair_close_prey_override)
@@ -498,12 +551,7 @@ func _update_movement(delta: float) -> void:
 				direct_prey_direction.y = 0.0
 				if direct_prey_direction.length_squared() > 0.01:
 					flat_direction = direct_prey_direction.normalized()
-				var approach_scale := clampf(
-					(planar_prey_distance - chase_stop_distance) /
-					maxf(chase_slowdown_distance - chase_stop_distance, 0.01),
-					0.0,
-					1.0
-				)
+				var approach_scale := _get_pursuit_approach_scale(planar_prey_distance)
 				speed *= approach_scale
 				if approach_scale <= 0.01:
 					_recovery_timer = 0.0
@@ -537,9 +585,11 @@ func _update_movement(delta: float) -> void:
 		_update_unreachable_target(delta, requested_target)
 
 
-# Un único move_toward sobre el plano. Aplicarlo por eje aceleraba hasta 1,41x
-# más rápido en diagonal y hacía que la respuesta dependiera del rumbo: en un
-# pasillo norte-sur arrancaba distinto que en una diagonal del salón.
+func _get_pursuit_approach_scale(distance: float) -> float:
+	return clampf((distance - chase_stop_distance) / maxf(chase_slowdown_distance - chase_stop_distance, 0.01), 0.0, 1.0)
+
+
+# Un único move_toward sobre el plano evita acelerar más rápido en diagonal.
 func _accelerate_planar(direction: Vector3, speed: float, delta: float) -> void:
 	var current := Vector2(velocity.x, velocity.z)
 	var desired := Vector2(direction.x, direction.z) * speed
@@ -643,7 +693,33 @@ func _update_stuck_recovery(delta: float) -> void:
 		global_position.x - _last_motion_sample_position.x,
 		global_position.z - _last_motion_sample_position.z
 	).length()
-	if _was_trying_to_move and progress < stuck_minimum_progress:
+	var route_target := navigation_agent.target_position
+	var route_distance := Vector2(
+		route_target.x - global_position.x,
+		route_target.z - global_position.z
+	).length()
+	var same_route_target := (
+		_last_route_sample_distance < INF
+		and Vector2(
+			route_target.x - _last_route_sample_target.x,
+			route_target.z - _last_route_sample_target.z
+		).length() < 0.75
+	)
+	var closing_progress := _last_route_sample_distance - route_distance
+	var physically_stuck := _was_trying_to_move and progress < stuck_minimum_progress
+	var circling_without_progress := (
+		_was_trying_to_move
+		and same_route_target
+		and progress >= stuck_minimum_progress
+		and closing_progress < stuck_minimum_progress * 0.35
+		and _navigation_detour_timer <= 0.0
+	)
+	if circling_without_progress:
+		_route_stall_sample_count += 1
+	elif not _was_trying_to_move or not same_route_target or closing_progress >= stuck_minimum_progress * 0.35:
+		_route_stall_sample_count = 0
+	if physically_stuck:
+		_stuck_sample_count += 1
 		var basis_direction := _smoothed_move_direction
 		if basis_direction.length_squared() < 0.01:
 			basis_direction = global_basis.z
@@ -656,10 +732,252 @@ func _update_stuck_recovery(delta: float) -> void:
 		_recovery_timer = recovery_duration
 		_target_refresh_timer = 0.0
 		navigation_agent.target_position = navigation_agent.target_position
+		if _stuck_sample_count >= 2:
+			_choose_navigation_detour(navigation_agent.target_position, basis_direction)
 	elif progress >= stuck_minimum_progress:
 		_recovery_direction = Vector3.ZERO
+		_stuck_sample_count = 0
+	if _route_stall_sample_count >= 3:
+		var route_direction := _smoothed_move_direction
+		if route_direction.length_squared() < 0.01:
+			route_direction = global_basis.z
+		_choose_navigation_detour(route_target, route_direction)
+		_route_stall_sample_count = 0
 	_motion_sample_timer = 0.0
 	_last_motion_sample_position = global_position
+	_last_route_sample_target = route_target
+	_last_route_sample_distance = route_distance
+
+
+func _try_begin_obstacle_jump(requested_target: Vector3) -> bool:
+	if (
+		not obstacle_jump_enabled
+		or _obstacle_jump_active
+		or _obstacle_jump_cooldown_timer > 0.0
+		or _obstacle_jump_probe_timer > 0.0
+		or _obstacle_jump_chain_count >= obstacle_jump_max_consecutive
+		or not is_on_floor()
+		or _door_traversal_active
+		or _stair_commitment != StairCommitment.NONE
+		or current_state in [State.ATTACK, State.EAT]
+	):
+		return false
+	_obstacle_jump_probe_timer = 0.12
+	var toward_target := requested_target - global_position
+	toward_target.y = 0.0
+	var target_distance := toward_target.length()
+	if target_distance < 1.1 or target_distance > 12.0:
+		return false
+	var exclusions := _movement_probe_exclusions()
+	var direct_direction := toward_target / target_distance
+	var direction := Vector3.ZERO
+	var jump_plan: Dictionary = {}
+	# El altar ocupa parte de la plataforma. Se prueba primero de frente y luego
+	# a ambos lados para aterrizar junto al mueble sin atravesarlo.
+	for yaw_offset: float in [0.0, -0.42, 0.42, -0.82, 0.82]:
+		var candidate := direct_direction.rotated(Vector3.UP, yaw_offset)
+		jump_plan = _find_obstacle_jump_landing(candidate, exclusions)
+		if not jump_plan.is_empty():
+			direction = candidate
+			break
+	if direction.length_squared() < 0.01:
+		return false
+
+	_obstacle_jump_active = true
+	_obstacle_jump_direction = direction
+	_obstacle_jump_elapsed = 0.0
+	_obstacle_jump_count += 1
+	_obstacle_jump_chain_count += 1
+	_obstacle_jump_landing = jump_plan.position
+	_obstacle_jump_duration = jump_plan.duration
+	_obstacle_jump_floor_snap = floor_snap_length
+	floor_snap_length = 0.0
+	_navigation_detour_timer = 0.0
+	_recovery_timer = 0.0
+	_recovery_direction = Vector3.ZERO
+	_smoothed_move_direction = direction
+	var launch_velocity := (_obstacle_jump_landing - global_position) * Vector3(1, 0, 1) / _obstacle_jump_duration
+	velocity.x = launch_velocity.x
+	velocity.z = launch_velocity.z
+	velocity.y = obstacle_jump_vertical_speed
+	# La cápsula permanece vertical; la pose de impulso sólo pertenece al rig.
+	global_basis = Basis(Vector3.UP, atan2(direction.x, direction.z))
+	_was_trying_to_move = true
+	return true
+
+
+func _find_obstacle_jump_landing(direction: Vector3, exclusions: Array[RID]) -> Dictionary:
+	var space := get_world_3d().direct_space_state
+	var low_origin := global_position + Vector3.UP * 0.14
+	var low_query := PhysicsRayQueryParameters3D.create(
+		low_origin,
+		low_origin + direction * obstacle_jump_probe_distance,
+		collision_mask,
+		exclusions
+	)
+	low_query.collide_with_areas = false
+	var obstacle_hit := space.intersect_ray(low_query)
+	if obstacle_hit.is_empty():
+		return {}
+	var obstacle := obstacle_hit.get("collider") as Node
+	if obstacle is not StaticBody3D or _find_npc_door(obstacle) != null:
+		return {}
+	var obstacle_normal := obstacle_hit.get("normal", Vector3.ZERO) as Vector3
+	if absf(obstacle_normal.y) > 0.55:
+		return {}
+
+	# Un segundo rayo a la altura máxima distingue un peldaño/plataforma de una
+	# pared. Saltar solo se autoriza cuando la cara frontal termina por debajo.
+	var high_origin := global_position + Vector3.UP * (obstacle_jump_max_height + 0.12)
+	var high_query := PhysicsRayQueryParameters3D.create(
+		high_origin,
+		high_origin + direction * obstacle_jump_probe_distance,
+		collision_mask,
+		exclusions
+	)
+	high_query.collide_with_areas = false
+	if not space.intersect_ray(high_query).is_empty():
+		return {}
+
+	var capsule_radius := 0.3
+	if body_collision.shape is CapsuleShape3D:
+		capsule_radius = (body_collision.shape as CapsuleShape3D).radius
+	var landing_probe := (obstacle_hit.get("position") as Vector3) - obstacle_normal * (capsule_radius + 0.12)
+	var down_query := PhysicsRayQueryParameters3D.create(
+		Vector3(landing_probe.x, global_position.y + obstacle_jump_max_height + 0.35, landing_probe.z),
+		Vector3(landing_probe.x, global_position.y - 0.15, landing_probe.z),
+		collision_mask,
+		exclusions
+	)
+	down_query.collide_with_areas = false
+	var landing_hit := space.intersect_ray(down_query)
+	if landing_hit.is_empty():
+		return {}
+	var landing_normal := landing_hit.get("normal", Vector3.ZERO) as Vector3
+	var landing_height := (landing_hit.get("position") as Vector3).y - global_position.y
+	if landing_normal.y < 0.72 or landing_height < 0.08 or landing_height > obstacle_jump_max_height:
+		return {}
+
+	# Comprueba que la cápsula cabe erguida sobre el punto de recepción. Se eleva
+	# unos centímetros para no contar el contacto legítimo con la superficie.
+	var upright_basis := Basis(Vector3.UP, atan2(direction.x, direction.z))
+	var landing_transform := Transform3D(upright_basis, Vector3.ZERO) * body_collision.transform
+	landing_transform.origin = (
+		landing_hit.get("position") as Vector3
+		+ Vector3.UP * (body_collision.position.y + 0.06)
+	)
+	var landing_query := PhysicsShapeQueryParameters3D.new()
+	landing_query.shape = body_collision.shape
+	landing_query.transform = landing_transform
+	landing_query.collision_mask = collision_mask
+	landing_query.exclude = exclusions
+	landing_query.margin = 0.002
+	if not space.intersect_shape(landing_query, 1).is_empty():
+		return {}
+	var landing_position: Vector3 = landing_hit.position
+	var discriminant := obstacle_jump_vertical_speed * obstacle_jump_vertical_speed - 2.0 * _gravity * landing_height
+	if discriminant <= 0.0:
+		return {}
+	var flight_time := (obstacle_jump_vertical_speed + sqrt(discriminant)) / _gravity
+	var planar_motion := (landing_position - global_position) * Vector3(1, 0, 1)
+	if planar_motion.length() / flight_time > obstacle_jump_forward_speed:
+		return {}
+	# Validar todo el arco con la cápsula, no sólo un punto libre al otro lado.
+	var previous_position := global_position + Vector3.UP * 0.04
+	for sample in range(1, 13):
+		var fraction := float(sample) / 12.0
+		var time := flight_time * fraction
+		var next_position := global_position + planar_motion * fraction
+		next_position.y += obstacle_jump_vertical_speed * time - 0.5 * _gravity * time * time + 0.04
+		landing_query.transform = Transform3D(upright_basis, previous_position) * body_collision.transform
+		landing_query.motion = next_position - previous_position
+		if space.cast_motion(landing_query)[0] < 0.999:
+			return {}
+		previous_position = next_position
+	return {"position": landing_position, "duration": flight_time}
+
+
+func _update_obstacle_jump(delta: float) -> void:
+	_obstacle_jump_elapsed += delta
+	var offset := (_obstacle_jump_landing - global_position) * Vector3(1, 0, 1)
+	var remaining := maxf(_obstacle_jump_duration - _obstacle_jump_elapsed, delta)
+	var desired := (offset / remaining).limit_length(obstacle_jump_forward_speed)
+	# Frenar antes del borde de recepción evita pasarlo de largo y caer de lado.
+	velocity.x = desired.x
+	velocity.z = desired.z
+	global_basis = Basis(Vector3.UP, atan2(_obstacle_jump_direction.x, _obstacle_jump_direction.z))
+	_was_trying_to_move = true
+	# Una colisión imprevista durante el arco no puede dejar el controlador
+	# secuestrado indefinidamente en estado de salto.
+	if _obstacle_jump_elapsed > 1.6:
+		_finish_obstacle_jump()
+		return
+	if _obstacle_jump_elapsed <= 0.12 or not is_on_floor():
+		return
+	_finish_obstacle_jump()
+
+
+func _finish_obstacle_jump() -> void:
+	_obstacle_jump_active = false
+	floor_snap_length = _obstacle_jump_floor_snap
+	var chain_complete := _obstacle_jump_chain_count >= obstacle_jump_max_consecutive
+	_obstacle_jump_cooldown_timer = obstacle_jump_cooldown if chain_complete else obstacle_jump_chain_interval
+	_obstacle_jump_chain_reset_timer = obstacle_jump_cooldown if chain_complete else 2.0
+	_obstacle_jump_probe_timer = 0.0
+	velocity.x = 0.0
+	velocity.z = 0.0
+	_obstacle_jump_direction = Vector3.ZERO
+	_obstacle_jump_elapsed = 0.0
+	_stuck_sample_count = 0
+	_route_stall_sample_count = 0
+	_recovery_direction = Vector3.ZERO
+	_target_refresh_timer = 0.0
+	_last_motion_sample_position = global_position
+	_motion_sample_timer = 0.0
+	_last_route_sample_distance = INF
+
+
+func _choose_navigation_detour(destination: Vector3, forward: Vector3) -> void:
+	if not _navigation_available or _door_traversal_active or _stair_commitment != StairCommitment.NONE:
+		return
+	forward.y = 0.0
+	if forward.length_squared() < 0.01:
+		forward = global_basis.z
+	forward = forward.normalized()
+	var side := Vector3(-forward.z, 0.0, forward.x)
+	var map := get_world_3d().navigation_map
+	var best := Vector3.ZERO
+	var best_score := INF
+	for candidate_offset: Vector2 in [Vector2(0.65, -1.45), Vector2(0.65, 1.45), Vector2(-0.6, -1.2), Vector2(-0.6, 1.2)]:
+		var raw_candidate := global_position + forward * candidate_offset.x + side * candidate_offset.y
+		var candidate := NavigationServer3D.map_get_closest_point(map, raw_candidate)
+		if absf(candidate.y - global_position.y) > 0.75 or candidate.distance_to(global_position) < 0.75:
+			continue
+		var path := NavigationServer3D.map_get_path(map, global_position, candidate, true)
+		if path.size() < 2 or path[-1].distance_to(candidate) > 0.6:
+			continue
+		var clearance := PhysicsShapeQueryParameters3D.new()
+		clearance.shape = body_collision.shape
+		clearance.transform = body_collision.global_transform
+		clearance.transform.origin += Vector3.UP * 0.05
+		clearance.motion = candidate - global_position
+		clearance.exclude = _movement_probe_exclusions()
+		clearance.collision_mask = collision_mask
+		if get_world_3d().direct_space_state.cast_motion(clearance)[0] < 0.99:
+			continue
+		var score := candidate.distance_to(destination)
+		if signf(candidate_offset.y) != _recovery_side:
+			score += 0.12
+		if score < best_score:
+			best_score = score
+			best = candidate
+	if best_score == INF:
+		return
+	_navigation_detour = best
+	_navigation_detour_timer = 2.4
+	_recovery_timer = 0.0
+	_recovery_direction = Vector3.ZERO
+	_target_refresh_timer = 0.0
 
 
 func _refresh_navigation_state() -> void:
@@ -845,7 +1163,9 @@ func _get_floor_transition_target(player_target: Vector3) -> Vector3:
 		_stair_commitment = StairCommitment.ASCENDING
 		_force_stair_steering = true
 		return STAIR_UPPER_ANCHOR
-	if player_is_downstairs and global_position.y > 0.62:
+	# Plataformas bajas como el altar llegan a y=0,62 y no son otra planta. Sólo
+	# una abuela realmente arriba debe comprometerse con la escalera de la casa.
+	if player_is_downstairs and global_position.y > 2.65:
 		var upper_distance := Vector2(
 			global_position.x - STAIR_UPPER_ANCHOR.x,
 			global_position.z - STAIR_UPPER_ANCHOR.z

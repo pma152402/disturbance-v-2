@@ -189,6 +189,12 @@ func _physics_process(delta: float) -> void:
 		if not is_instance_valid(_player):
 			_stop_and_apply_gravity(delta)
 			return
+	if bool(get(&"_obstacle_jump_active")):
+		_apply_gravity(delta)
+		_update_movement(delta)
+		move_and_slide()
+		_update_animation(delta)
+		return
 	_prey_refresh_timer = maxf(0.0, _prey_refresh_timer - delta)
 	_door_scan_timer = maxf(0.0, _door_scan_timer - delta)
 	if _prey_refresh_timer <= 0.0 or not _is_valid_prey(_prey):

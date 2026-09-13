@@ -10,6 +10,13 @@ func _initialize() -> void:
 
 
 func _run() -> void:
+	var child_probe := ChildScene.instantiate()
+	if child_probe is not CharacterBody3D:
+		child_probe.free()
+		print("OMITIDA: el antiguo NPC niño está retirado; esta prueba histórica requiere ese controlador, no el avatar del jugador")
+		quit(0)
+		return
+	child_probe.free()
 	var level := Node3D.new()
 	root.add_child(level)
 	var player := PlayerScene.instantiate() as CharacterBody3D
@@ -21,7 +28,10 @@ func _run() -> void:
 	var child_b := ChildScene.instantiate() as CharacterBody3D
 	level.add_child(child_b)
 	child_b.global_position = Vector3(3.0, 0.0, 0.0)
-	var grandmother := GrandmotherScene.instantiate() as CharacterBody3D
+	var actor_scene: PackedScene = load("res://enemies/church_grandmother.tscn") if "--church" in OS.get_cmdline_user_args() else GrandmotherScene
+	if "--crawler" in OS.get_cmdline_user_args():
+		actor_scene = load("res://enemies/grandmother_crawler.tscn")
+	var grandmother := actor_scene.instantiate() as CharacterBody3D
 	level.add_child(grandmother)
 	grandmother.set_physics_process(false)
 	grandmother.global_position = Vector3.ZERO
@@ -49,12 +59,17 @@ func _run() -> void:
 	var mouth := grandmother.get_node("Model/TorsoRig/HeadRig/Mouth") as MeshInstance3D
 	var mouth_min := INF
 	var mouth_max := 0.0
+	var church := "--church" in OS.get_cmdline_user_args() or "--crawler" in OS.get_cmdline_user_args()
+	var imported_visual := grandmother.get_node_or_null("EditableVisual") as Node3D
 	for _frame in range(120):
 		grandmother.call(&"_update_eating", 1.0 / 60.0)
 		grandmother.call(&"_update_animation", 1.0 / 60.0)
+		if church:
+			imported_visual.call(&"_physics_process", 1.0 / 60.0)
 		mouth_min = minf(mouth_min, mouth.scale.y)
 		mouth_max = maxf(mouth_max, mouth.scale.y)
-	if float(grandmother.get("_eating_pose_amount")) < 0.95 or mouth_max - mouth_min < 0.2:
+	var eating_pose_valid := imported_visual.position.y < -0.45 if church else float(grandmother.get("_eating_pose_amount")) >= 0.95 and mouth_max - mouth_min >= 0.2
+	if not eating_pose_valid:
 		push_error("La animacion de comer no completo arrodillado, agarre y mordida")
 		quit(7)
 		return

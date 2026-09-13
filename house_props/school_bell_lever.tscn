@@ -1,0 +1,115 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://house_props/school_bell_lever.gd" id="1_lever"]
+[ext_resource type="AudioStream" path="res://sounds/interactions/light_switch_on.wav" id="2_click"]
+
+[sub_resource type="StandardMaterial3D" id="Plate"]
+albedo_color = Color(0.20, 0.22, 0.195, 1)
+metallic = 0.36
+roughness = 0.58
+
+[sub_resource type="StandardMaterial3D" id="Brass"]
+albedo_color = Color(0.48, 0.31, 0.10, 1)
+metallic = 0.86
+roughness = 0.29
+
+[sub_resource type="StandardMaterial3D" id="Handle"]
+albedo_color = Color(0.25, 0.035, 0.025, 1)
+metallic = 0.08
+roughness = 0.42
+
+[sub_resource type="StandardMaterial3D" id="Label"]
+albedo_color = Color(0.72, 0.61, 0.37, 1)
+metallic = 0.47
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="PlateMesh"]
+size = Vector3(0.30, 0.52, 0.07)
+
+[sub_resource type="BoxMesh" id="LabelMesh"]
+size = Vector3(0.19, 0.075, 0.012)
+
+[sub_resource type="CylinderMesh" id="PivotMesh"]
+top_radius = 0.075
+bottom_radius = 0.075
+height = 0.09
+radial_segments = 16
+
+[sub_resource type="CylinderMesh" id="ShaftMesh"]
+top_radius = 0.025
+bottom_radius = 0.032
+height = 0.32
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="GripMesh"]
+top_radius = 0.055
+bottom_radius = 0.055
+height = 0.20
+radial_segments = 16
+
+[sub_resource type="CylinderMesh" id="ScrewMesh"]
+top_radius = 0.018
+bottom_radius = 0.018
+height = 0.016
+radial_segments = 10
+
+[sub_resource type="BoxShape3D" id="LeverShape"]
+size = Vector3(0.38, 0.78, 0.23)
+
+[node name="SchoolBellLever" type="StaticBody3D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_lever")
+
+[node name="BackPlate" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlateMesh")
+material_override = SubResource("Plate")
+
+[node name="BellLabel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.185, -0.044)
+mesh = SubResource("LabelMesh")
+material_override = SubResource("Label")
+
+[node name="TopScrew" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.225, -0.055)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("ScrewMesh")
+material_override = SubResource("Brass")
+
+[node name="BottomScrew" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.225, -0.055)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("ScrewMesh")
+material_override = SubResource("Brass")
+
+[node name="LeverPivot" type="Node3D" parent="."]
+position = Vector3(0, 0.055, -0.095)
+rotation_degrees = Vector3(12, 0, 0)
+
+[node name="PivotHousing" type="MeshInstance3D" parent="LeverPivot"]
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("PivotMesh")
+material_override = SubResource("Brass")
+
+[node name="LeverShaft" type="MeshInstance3D" parent="LeverPivot"]
+position = Vector3(0, -0.20, -0.035)
+mesh = SubResource("ShaftMesh")
+material_override = SubResource("Brass")
+
+[node name="RedGrip" type="MeshInstance3D" parent="LeverPivot"]
+position = Vector3(0, -0.385, -0.072)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("GripMesh")
+material_override = SubResource("Handle")
+
+[node name="SwitchAudio" type="AudioStreamPlayer3D" parent="."]
+position = Vector3(0, 0, -0.14)
+stream = ExtResource("2_click")
+volume_db = -7.0
+unit_size = 2.5
+max_distance = 8.0
+attenuation_model = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, -0.08, -0.08)
+shape = SubResource("LeverShape")

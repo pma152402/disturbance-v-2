@@ -1,4 +1,5 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="99_camera_observable"]
 
 [sub_resource type="StandardMaterial3D" id="glass"]
 transparency = 1
@@ -51,6 +52,14 @@ size = Vector3(0.78, 0.92, 0.45)
 
 [node name="KitchenCookingEssentials" type="StaticBody3D"]
 editor_description = "Aceitera de cristal, salero y molinillo de pimienta para la encimera."
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("99_camera_observable")
+observation_id = &"cooking_essentials"
+display_name = "UTENSILIOS DE COCINA"
+local_focus_offset = Vector3(0, 0.24, 0)
+framing_radius = 0.48
+maximum_distance = 12.0
+minimum_screen_fraction = 0.009
 [node name="OilBottle" type="Node3D" parent="."]
 position = Vector3(-0.24, 0.3, 0)
 [node name="Bottle" type="MeshInstance3D" parent="OilBottle"]

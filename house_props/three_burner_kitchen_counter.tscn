@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c8g5x02ct35aj"]
 
 [ext_resource type="Script" uid="uid://c7di1psgb3n2b" path="res://house_props/double_cabinet_doors.gd" id="1_doors"]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="2_camera_observable"]
 
 [sub_resource type="StandardMaterial3D" id="inside"]
 albedo_color = Color(0.14, 0.135, 0.105, 1)
@@ -97,6 +98,14 @@ size = Vector3(1.56, 0.97444826, 0.7)
 editor_description = "Encimera antigua coordinada con tres hornillas de hierro, mandos frontales y armario inferior."
 collision_layer = 3
 script = ExtResource("1_doors")
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("2_camera_observable")
+observation_id = &"stove"
+display_name = "FOGONES"
+local_focus_offset = Vector3(0, 0.65, 0)
+framing_radius = 1.05
+maximum_distance = 22.0
 
 [node name="CabinetInterior" type="Node3D" parent="." unique_id=1031267097]
 

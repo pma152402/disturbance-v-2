@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://djho52n7udhkk"]
 
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="1_camera_observable"]
+
 [sub_resource type="StandardMaterial3D" id="cream"]
 albedo_color = Color(0.72, 0.69, 0.59, 1)
 roughness = 0.74
@@ -27,6 +29,14 @@ size = Vector3(1.05, 2.1, 0.82)
 
 [node name="RetroRefrigerator" type="StaticBody3D" unique_id=575883289]
 editor_description = "Nevera antigua de dos puertas con bordes redondeados simulados, rejilla, bisagras y tiradores."
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("1_camera_observable")
+observation_id = &"refrigerator"
+display_name = "NEVERA"
+local_focus_offset = Vector3(0, 1.05, 0)
+framing_radius = 1.12
+maximum_distance = 24.0
 
 [node name="Cabinet" type="MeshInstance3D" parent="." unique_id=1191369441]
 transform = Transform3D(1.05, 0, 0, 0, 2.1, 0, 0, 0, 0.82, 0, 1.05, 0)

@@ -1,5 +1,7 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="1_camera_observable"]
+
 [sub_resource type="StandardMaterial3D" id="wood"]
 albedo_color = Color(0.23,0.12,0.06, 1)
 roughness = 0.75
@@ -69,6 +71,16 @@ size = Vector3(0.26,0.22,0.15)
 
 [node name="OfficeDeskCalendar" type="StaticBody3D"]
 
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("1_camera_observable")
+observation_id = &"calendar"
+display_name = "CALENDARIO"
+local_focus_offset = Vector3(0, 0.14, 0)
+framing_radius = 0.24
+maximum_distance = 11.0
+minimum_screen_fraction = 0.009
+priority = 1.8
+
 [node name="Foot" type="MeshInstance3D" parent="."]
 position = Vector3(0,0.009,0)
 rotation = Vector3(0,0,0)
@@ -127,4 +139,3 @@ mesh = SubResource("m4")
 [node name="Collision5" type="CollisionShape3D" parent="."]
 position = Vector3(0,0.11,0)
 shape = SubResource("c5")
-

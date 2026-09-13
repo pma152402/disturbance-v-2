@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ddbddbgj72i36" path="res://house_props/recipe_book.gd" id="1_script"]
 [ext_resource type="Script" uid="uid://dcxhl3c7j63ij" path="res://house_props/recipe_page.gd" id="2_page"]
 [ext_resource type="PackedScene" path="res://house_props/recipe_book_closed_visual.tscn" id="3_visual"]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="4_camera_observable"]
 
 [sub_resource type="Resource" id="RecipePage_1"]
 script = ExtResource("2_page")
@@ -56,6 +57,16 @@ editor_description = "Libro de recetas reutilizable. Edita Book Title y el array
 collision_layer = 3
 script = ExtResource("1_script")
 pages = Array[ExtResource("2_page")]([SubResource("RecipePage_1"), SubResource("RecipePage_2"), SubResource("RecipePage_3"), SubResource("RecipePage_4"), SubResource("RecipePage_5"), SubResource("RecipePage_6")])
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("4_camera_observable")
+observation_id = &"recipe_book"
+display_name = "RECETARIO"
+local_focus_offset = Vector3(0, 0.08, 0)
+framing_radius = 0.36
+maximum_distance = 11.0
+minimum_screen_fraction = 0.009
+priority = 1.6
 
 [node name="Visual" parent="." unique_id=242822719 instance=ExtResource("3_visual")]
 book_title = "RECETAS DE LA ABUELA"

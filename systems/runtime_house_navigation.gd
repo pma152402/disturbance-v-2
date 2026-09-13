@@ -71,6 +71,9 @@ func _begin_bake() -> void:
 	_navigation_mesh.detail_sample_max_error = detail_sample_max_error
 	_navigation_mesh.filter_baking_aabb = baking_aabb
 	_navigation_mesh.geometry_parsed_geometry_type = NavigationMesh.PARSED_GEOMETRY_STATIC_COLLIDERS
+	# Layer 20 contains ceiling-grip hulls, not walkable floors. The exterior
+	# roof already supplies the building shell to the ground navigation bake.
+	_navigation_mesh.geometry_collision_mask &= ~(1 << 19)
 	var parsing_root: Node = null
 	if not parsing_root_path.is_empty():
 		parsing_root = get_node_or_null(parsing_root_path)

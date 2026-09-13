@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://d285xtf1e7xdr"]
 
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="1_camera_observable"]
+
 [sub_resource type="StandardMaterial3D" id="Material_phone"]
 albedo_color = Color(0.075, 0.068, 0.055, 1)
 roughness = 0.68
@@ -50,6 +52,15 @@ size = Vector3(0.68, 0.42, 0.5)
 
 [node name="RotaryPhone" type="StaticBody3D" unique_id=8882910]
 editor_description = "Telefono negro antiguo con disco y auricular, construido con pocas piezas estilo PS2."
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("1_camera_observable")
+observation_id = &"telephone"
+display_name = "TELEFONO"
+local_focus_offset = Vector3(0, 0.2, 0)
+framing_radius = 0.4
+maximum_distance = 13.0
+minimum_screen_fraction = 0.009
 
 [node name="Base" type="MeshInstance3D" parent="." unique_id=2098750689]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.11, 0)

@@ -19,9 +19,9 @@ func run() -> void:
 		check(n.process_material.collision_mode == ParticleProcessMaterial.COLLISION_HIDE_ON_CONTACT, "Rain must disappear on particle shelter contact")
 	var blockers := school.find_children("*","GPUParticlesCollisionBox3D",true,false)
 	blockers.append_array(weather.find_children("*","GPUParticlesCollisionBox3D",true,false))
-	for point in [Vector3(-23.5,6,-10),Vector3(-17.3,6,-10),Vector3(-17,6,2),Vector3(-21,6,2),Vector3(-28.4,6,-15),Vector3(-20,6,-4),Vector3(-22,1,-10),Vector3(-28,1,4),Vector3(-10,1,-4)]:
+	for point in [Vector3(-23.5,6,-10),Vector3(-17.3,6,-10),Vector3(-17,6,2),Vector3(-21,6,2),Vector3(-28.4,6,-15),Vector3(-20,6,-4),Vector3(-22,1,-10),Vector3(-28,1,4),Vector3(-10,1,-4),Vector3(-28,6,3),Vector3(-32,1,-10),Vector3(-32,10,-10),Vector3(-21,10,-9)]:
 		check(sheltered(point,blockers), "Unprotected school interior " + str(point))
-	for point in [Vector3(-10,6,-4),Vector3(-28,6,3),Vector3(-24,6,3),Vector3(-32,1,-10)]:
+	for point in [Vector3(-10,6,-4),Vector3(-24,6,3),Vector3(-34,1,-10)]:
 		check(not sheltered(point,blockers), "Outdoor area incorrectly protected " + str(point))
 	await physics_frame
 	await physics_frame

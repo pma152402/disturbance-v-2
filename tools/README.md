@@ -10,6 +10,12 @@
 - `split_graffiti_sheets.py`: recorta las hojas maestras en texturas individuales.
 - `validate_catacombs.gd`: comprueba geometria y navegacion hasta la cripta.
 - `validate_labyrinth_barricade.gd`: comprueba palanca, tablones e inventario.
+- `validate_camera_tripod.gd`: comprueba recogida con F, colocacion exclusiva
+  con LMB, superficie invalida, cursor liberado, minijuego y montaje de camara.
+  Ejecutar sin `--headless`: el servidor dummy no captura el raton.
+- `validate_player_tripod_grip.gd`: 60 muestras de contacto del tripode con la
+  palma, reequipado, vista externa y selfie sin dedos. `-- --render` guarda
+  una captura en `tools/output/player_tripod_grip.png` (sin `--headless`).
 
 Las hojas maestras permanecen en `assets/graffiti_sheets`, ignoradas por Godot
 pero accesibles para el script de recorte.
@@ -25,5 +31,115 @@ en `house_props`.
 - output/ contiene capturas e informes regenerables. Está excluida de Git y de la importación de Godot; conservar su .gdignore.
 - Los constructores build_* y las migraciones restantes modifican escenas: no ejecutarlos como una suite de pruebas.
 - validate_resource_paths.ps1 comprueba referencias literales sin iniciar Godot.
+- run_performance_benchmark.ps1 mide casa, iglesia, patio, escuela y sotano con
+  tres pasadas deterministas, guarda medianas y compara automaticamente contra
+  un baseline. Vease ../docs/PERFORMANCE_BENCHMARK.md.
 
 Véase ../docs/CLEANUP_2026-09-08.md para el detalle de la limpieza.
+
+## Auditoría de grabación y HUD
+
+- `validate_camera_observer_audit.gd`: 31 comprobaciones del Observador: catálogo
+  dinámico, colisiones de decoración, luces, oclusión, encuadre y entradas disabled.
+- `benchmark_observer_triangles.gd`: comparación de consultas por caras y árbol
+  nativo, con igualdad de resultados y conservación de huecos.
+- Revisión conjunta de la vieja/Observador, retirada del prototipo y límites del
+  análisis histórico: `../docs/GRANDMOTHER_OBSERVER_AUDIT_2026-09-14.md`.
+- `run_recording_benchmark.ps1`: compara STBY, grabación síncrona y asíncrona
+  alternadas dos veces y STOP en cinco zonas, con renderizado real. `-WalkingHud`
+  mantiene animado el indicador de postura. Guarda `output/recording_current.json`.
+- `validate_async_recording.gd`: requiere GPU; compara JPEGs byte a byte y comprueba
+  START repetido, carreras STOP/START y cierre de escena con lectura pendiente.
+- `validate_stance_raster_performance.gd`: funciona con `--headless`; compara 195
+  máscaras con la referencia original y mide el coste de dibujar el HUD.
+
+Resultados, alcance y limitaciones: `../docs/PERFORMANCE_AUDIT_2026-09-10.md`.
+
+## Visibilidad desde ventanas
+
+`House.full_startup_visibility` está activado por defecto. Mantiene iglesia,
+escuela, tendederos y exterior sin recortes de distancia y desactiva los
+oclusores automáticos basados en cajas de colisión, que tapaban vistas por las
+ventanas. Conserva agrupación de mallas, presupuesto de sombras y las mejoras
+del HUD y de la grabación. El sótano sigue oculto hasta abrir su puerta (sus
+colisiones y recursos siguen en la escena); el laberinto sí se carga a demanda.
+
+`validate_full_startup_visibility.gd` comprueba esta política y sus excepciones.
+Desactivar `full_startup_visibility` en House antes de arrancar recupera el modo
+de recortes anterior para comparar. Los benchmarks anteriores a este cambio
+corresponden a ese modo y no deben confundirse con el escenario visible completo.
+
+## Nueva abuela de la iglesia
+
+- `validate_church_grandmother.gd`: percepción, memoria, oído, búsqueda, bloqueos,
+  ataques esquivables y persecución real; ejecutar con `--headless`.
+- `validate_grandmother_obstacle_jump.gd`: salto seguro de obstáculos bajos y
+  rechazo de paredes altas.
+- `validate_church_grandmother_altar_jump.gd`: aproximación frontal en el nivel
+  real de la variante original, con IA completa: salto junto al mueble del altar
+  y aterrizaje sin falsa transición de planta.
+- `validate_grandmother_jump_chain.gd`: siete gradas consecutivas; verifica el
+  máximo de seis saltos seguidos, pausa posterior, orientación y punto de recepción.
+- `validate_granny_overhead_attack.gd`: trayectoria completa de ambos ataques a
+  30/60/120 FPS, codos y manos por delante, anticipación sobre la cabeza y brazos
+  altos en persecución. `-- --child` comprueba el ataque a otro objetivo;
+  `-- --render` genera secuencias laterales reales, sin congelar cada pose.
+- Las pruebas de `grandmother_arm_continuity`, `grandmother_door_traversal`,
+  `grandmother_child_priority` e `imported_grandmother_eating` aceptan `-- --church`
+  para comprobar esta variante conservando sus casos anteriores por defecto.
+- `audit_church_grandmother_runtime.gd`: nivel real, traza de decisiones y tiempo
+  CPU del controlador/animador. `-- --legacy` compara el comportamiento anterior;
+  `-- --search` prueba 40 s con ocultación del jugador. Resultados en `output/`.
+- `render_church_grandmother.gd`: seis poses con GPU; `-- --back` muestra la espalda.
+- `validate_granny_surfaces.gd`: subida, inversión, aterrizaje, ausencia de apoyo,
+  pérdida de memoria y golpes descendentes con ambos brazos. `-- --church` usa
+  las colisiones de paredes y bóveda del nivel y comprueba movimientos continuos.
+- `render_church_grandmother.gd -- --surfaces`: poses de pared, techo y descenso.
+- `bake_church_vault_collisions.gd`: añade una sola vez ocho hulls convexos que
+  coinciden con la bóveda visible, incluyendo sus transformaciones deformadas.
+  Las colisiones ya están guardadas en `house_baked.tscn`; no ejecutarlo al jugar.
+  Usan la capa física 20, reservada para apoyos de escalada y excluida del
+  horneado de navegación del suelo.
+
+La escalada se activa durante una búsqueda/persecución con pistas recientes y
+pared cercana. Solo acepta apoyos estáticos, adapta la orientación a techos
+inclinados y suelta el apoyo al perder la pista, encontrar un borde u obstáculo,
+acercarse al destino o agotar la excursión (12 s; máximo 5 s sobre el techo).
+Después del aterrizaje retoma la investigación y espera 10 s antes de volver a
+trepar. `can_climb` permite desactivarlo y `climb_speed` ajusta la velocidad.
+
+Auditoría, parámetros y límites: `../docs/CHURCH_GRANDMOTHER_AUDIT_2026-09-10.md`.
+
+## Saltos de la variante trepadora
+
+- `validate_crawler_recovery_timing.gd`: bloqueo físico en 0,8 s, órbita sin
+  progreso en 1,5 s; no interrumpe avance, desvíos válidos ni pausas de ataque.
+- `validate_crawler_church_spider_escape.gd`: seis saltos encadenados entre los
+  bancos reales, destinos seguros, orientación final y continuidad física.
+- `validate_crawler_jump_safety.gd`: cápsula barrida, obstáculos móviles, techo
+  bajo, cancelación y retroceso; orientación y pies desplegados antes de recibir
+  el peso a 30/60/120 FPS.
+- `validate_crawler_spider_jump.gd`: preparación, alcance, cadenas de uno a seis,
+  reanudación de persecución y exclusión de muebles como destinos.
+- `validate_grandmother_door_traversal.gd -- --crawler`: cruce de puerta normal
+  y doble con la variante activa, en ambos sentidos. La prueba histórica de
+  prioridad infantil se omite explícitamente si el NPC niño está retirado.
+- `audit_crawler_pursuit_stability.gd`: 60 s de persecución con IA completa en dos
+  pasillos de la iglesia. `-- --trace` añade el motivo y posición de cada escape.
+
+Parámetros y resultados: `../docs/CRAWLER_STABILITY_AUDIT_2026-09-13.md`.
+
+## Escuela terminada: tres plantas
+
+- `validate_school_completion.gd`: puertas abiertas, pasos con cápsula del jugador,
+  paredes y techos, refugios de lluvia, vegetación, nueve salas nuevas y mobiliario
+  existente. Recorre ambas escaleras en los dos sentidos y el acceso al escenario.
+  `-- --navigation` comprueba diez destinos conectados entre las tres plantas.
+  `-- --preview` requiere GPU y guarda seis vistas en `output/school_finished_*.png`.
+- `build_school_completion.gd`: reconstruye **solo** la ampliación editable
+  `environment/school_completion.tscn` e integra sus huecos de acceso. Sobrescribe
+  los cambios manuales hechos dentro de esta ampliación; no ejecutarlo para jugar.
+- `validate_school_weather_access.gd` y `validate_full_startup_visibility.gd`
+  incluyen los interiores nuevos y su presencia desde el inicio.
+
+Distribución y decisiones de integración: `../docs/SCHOOL_COMPLETION.md`.

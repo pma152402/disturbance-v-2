@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://kswr5ya6yjel"]
 
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="99_camera_observable"]
+
 [sub_resource type="BoxShape3D" id="shape"]
 size = Vector3(4.2, 1.25, 1.45)
 
@@ -41,6 +43,15 @@ rings = 4
 
 [node name="ChurchAltar" type="StaticBody3D" unique_id=950695025]
 editor_description = "Altar de piedra con frontal textil, cruz dorada, gradas y dos cirios."
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("99_camera_observable")
+observation_id = &"church_altar"
+display_name = "ALTAR"
+local_focus_offset = Vector3(0, 0.8, 0)
+framing_radius = 1.8
+maximum_distance = 30.0
+priority = 1.8
 
 [node name="Collision" type="CollisionShape3D" parent="." unique_id=1449303952]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62, 0)

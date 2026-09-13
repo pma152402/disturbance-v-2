@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://ddrvx46yq3koc"]
+[gd_scene load_steps=9 format=3 uid="uid://ddrvx46yq3koc"]
 
 [ext_resource type="Script" path="res://minigames/toilet_plunger_puzzle.gd" id="1_puzzle"]
 [ext_resource type="PackedScene" path="res://player/held_items/plunger.tscn" id="2_plunger_visual"]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="3_camera_observable"]
 
 [sub_resource type="StandardMaterial3D" id="porcelain"]
 albedo_color = Color(0.82, 0.83, 0.79, 1)
@@ -54,6 +55,16 @@ editor_description = "Inodoro detallado con pie, taza, agua, asiento, cisterna, 
 collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_puzzle")
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("3_camera_observable")
+observation_id = &"clogged_toilet"
+display_name = "WC ATASCADO"
+focus_path = NodePath("BowlWater")
+framing_radius = 0.72
+maximum_distance = 14.0
+minimum_screen_fraction = 0.012
+priority = 1.8
 
 [node name="BowlRim" type="MeshInstance3D" parent="." unique_id=1569088249]
 transform = Transform3D(1, 0, 0, 0, 4.1001806, 0, 0, 0, 1.25, 0, 0.3405676, -0.12)

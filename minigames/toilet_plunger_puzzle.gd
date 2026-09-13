@@ -20,6 +20,27 @@ func _ready() -> void:
 	_plunger_rest_position = plunger_in_bowl.position
 
 
+func get_camera_observation_state() -> Dictionary:
+	if _minigame_active:
+		return {
+			"id": &"unclogging_toilet",
+			"label": "DESATASCANDO WC",
+			"state": &"in_progress",
+			"priority": 4.0,
+		}
+	if _completed:
+		return {
+			"id": &"toilet_unclogged",
+			"label": "WC DESATASCADO",
+			"state": &"completed",
+		}
+	return {
+		"id": &"clogged_toilet",
+		"label": "WC ATASCADO",
+		"state": &"clogged",
+	}
+
+
 func get_interaction_key() -> Key:
 	return KEY_F
 

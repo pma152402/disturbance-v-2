@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://bhq6eti3xlyrw"]
 
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="99_camera_observable"]
+
 [sub_resource type="StandardMaterial3D" id="cardboard"]
 albedo_color = Color(0.48, 0.44, 0.31, 1)
 
@@ -26,6 +28,15 @@ size = Vector3(0.78, 0.35, 0.5)
 
 [node name="KitchenEggCarton" type="StaticBody3D" unique_id=1694633601]
 editor_description = "Huevera abierta de carton con seis huevos individualizados."
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("99_camera_observable")
+observation_id = &"egg_carton"
+display_name = "HUEVERA"
+local_focus_offset = Vector3(0, 0.14, 0)
+framing_radius = 0.48
+maximum_distance = 11.0
+minimum_screen_fraction = 0.009
 
 [node name="CartonBase" type="MeshInstance3D" parent="." unique_id=1825092418]
 transform = Transform3D(0.76, 0, 0, 0, 0.08, 0, 0, 0, 0.46, 0, 0.023203127, 0)

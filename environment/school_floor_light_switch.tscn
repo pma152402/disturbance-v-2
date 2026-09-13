@@ -1,0 +1,11 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://house_props/wall_light_switch.tscn" id="1_visual"]
+[ext_resource type="Script" path="res://environment/school_floor_light_switch.gd" id="2_script"]
+[ext_resource type="AudioStream" path="res://sounds/interactions/light_switch_on.wav" id="3_switch_on"]
+[ext_resource type="AudioStream" path="res://sounds/interactions/light_switch_off.wav" id="4_switch_off"]
+
+[node name="SchoolFloorLightSwitch" instance=ExtResource("1_visual")]
+script = ExtResource("2_script")
+switch_on_sound = ExtResource("3_switch_on")
+switch_off_sound = ExtResource("4_switch_off")

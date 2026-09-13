@@ -24,10 +24,15 @@
 [ext_resource type="PackedScene" path="res://house_props/retro_tv_remote.tscn" id="23_tv_remote"]
 [ext_resource type="PackedScene" path="res://systems/camera_damage_overlay.tscn" id="24_camera_damage"]
 [ext_resource type="PackedScene" uid="uid://dhkhwg2b2wju0" path="res://house_props/cassette_tape.tscn" id="25_cassette"]
+[ext_resource type="PackedScene" uid="uid://cm86jh1710qo4" path="res://characters/companion/child_visual.tscn" id="26_player_avatar"]
+[ext_resource type="PackedScene" path="res://house_props/retro_camera.tscn" id="27_camera_preview"]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="28_camera_observable"]
+[ext_resource type="PackedScene" path="res://house_props/camera_tripod.tscn" id="29_camera_tripod"]
+[ext_resource type="Script" path="res://player/held_items/camera_tripod_held.gd" id="30_held_tripod"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.34
-height = 2.1
+height = 1.7
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_player"]
 albedo_color = Color(0.18, 0.22, 0.28, 1)
@@ -41,11 +46,15 @@ size = Vector3(0.68, 1.55, 0.48)
 radius = 0.26
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hand"]
-albedo_color = Color(0.12, 0.13, 0.16, 1)
+albedo_color = Color(0.64, 0.43, 0.31, 1)
 roughness = 0.95
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sleeve"]
+albedo_color = Color(0.16, 0.255, 0.245, 1)
+roughness = 1.0
+
 [sub_resource type="CylinderMesh" id="BoxMesh_hand"]
-material = SubResource("StandardMaterial3D_hand")
+material = SubResource("StandardMaterial3D_sleeve")
 top_radius = 0.032
 bottom_radius = 0.038
 height = 0.72
@@ -59,11 +68,24 @@ height = 0.134
 radial_segments = 10
 rings = 6
 
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_flashlight"]
 albedo_texture = ExtResource("3_flashlight_texture")
 metallic = 0.2
 roughness = 0.62
 texture_filter = 0
+
+[sub_resource type="Gradient" id="Gradient_flashlight_two_rings"]
+offsets = PackedFloat32Array(0, 0.385, 0.44, 0.94, 1)
+colors = PackedColorArray(0.88, 0.88, 0.88, 1, 0.88, 0.88, 0.88, 1, 0.65, 0.65, 0.65, 1, 0.65, 0.65, 0.65, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_flashlight_two_rings"]
+gradient = SubResource("Gradient_flashlight_two_rings")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="CandlePlacementMaterial"]
 transparency = 1
@@ -122,6 +144,17 @@ volumen_pasos_normal_db = -10.0
 volumen_pasos_corriendo_db = -5.0
 volumen_ruido_camara_db = -32.0
 
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("28_camera_observable")
+observation_id = &"player_self"
+display_name = "NOSOTROS MISMOS"
+focus_path = NodePath("PlayerAvatar")
+local_focus_offset = Vector3(0, 0.9, 0)
+framing_radius = 0.82
+maximum_distance = 32.0
+minimum_screen_fraction = 0.012
+priority = 3.0
+
 [node name="CameraAudioFilter" type="Node" parent="."]
 script = ExtResource("22_camera_filter")
 
@@ -148,7 +181,7 @@ volume_db = -18.0
 volume_db = -6.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1245257827]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
 shape = SubResource("CapsuleShape3D_player")
 
 [node name="Body" type="MeshInstance3D" parent="." unique_id=2016906643]
@@ -156,12 +189,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.13, 0)
 visible = false
 mesh = SubResource("BoxMesh_player")
 
+[node name="PlayerAvatar" parent="." instance=ExtResource("26_player_avatar")]
+position = Vector3(0, -0.9, 0)
+rotation = Vector3(0, 3.1415927, 0)
+
 [node name="Head" type="Node3D" parent="." unique_id=1724098262]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head" unique_id=369524132]
 current = true
 fov = 95.0
+cull_mask = 1048573
 
 [node name="CameraBackgroundNoise" type="Node" parent="Head/Camera3D"]
 script = ExtResource("18_camera_loop")
@@ -200,6 +238,11 @@ transform = Transform3D(0.9, 0, 0, 0, 0.82, 0, 0, 0, 1.08, 0.22, -0.145, -0.175)
 cast_shadow = 0
 mesh = SubResource("SphereMesh_hand")
 
+
+
+
+
+
 [node name="FlashlightBody" type="MeshInstance3D" parent="Head/Camera3D/HandRig" unique_id=1761331193]
 transform = Transform3D(0.61209726, 0.098573856, -0.0044925157, -0.0044925157, 0.056036603, 0.6174461, 0.098573856, -0.6095434, 0.056036603, 0.22, -0.135, -0.14)
 material_override = SubResource("StandardMaterial3D_flashlight")
@@ -208,8 +251,9 @@ mesh = ExtResource("2_flashlight_mesh")
 
 [node name="Flashlight" type="SpotLight3D" parent="Head/Camera3D/HandRig" unique_id=928817132]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22, -0.135, -0.4)
-light_color = Color(1, 0.9, 0.72, 1)
+light_color = Color(1, 0.68, 0.22, 1)
 light_energy = 6.5
+light_projector = SubResource("GradientTexture2D_flashlight_two_rings")
 shadow_enabled = true
 shadow_normal_bias = 1.5
 shadow_blur = 2.0
@@ -229,6 +273,11 @@ mesh = SubResource("BoxMesh_hand")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, 0)
 cast_shadow = 0
 mesh = SubResource("SphereMesh_hand")
+
+
+
+
+
 
 [node name="HeldCan" parent="Head/Camera3D/RightHandRig" unique_id=1446701995 instance=ExtResource("4_can_visual")]
 transform = Transform3D(0.9838437, -0.17902958, 0, 0.17674288, 0.9712773, -0.15931821, 0.028522672, 0.15674421, 0.98722726, 0.35, -0.29, -0.38)
@@ -287,17 +336,38 @@ collision_mask = 0
 [node name="HeldCassette" parent="Head/Camera3D/RightHandRig" instance=ExtResource("25_cassette")]
 position = Vector3(0.34, -0.34, -0.48)
 rotation = Vector3(1.38, 0.08, -0.18)
-scale = Vector3(0.32, 0.32, 0.32)
 visible = false
 collision_layer = 0
 collision_mask = 0
 register_as_world_cassette = false
+
+[node name="HeldCameraTripod" type="Node3D" parent="Head/Camera3D/RightHandRig"]
+position = Vector3(0.43, -0.9, -0.36)
+rotation = Vector3(0.03, 0.1, 0.02)
+scale = Vector3(0.72, 0.72, 0.72)
+visible = false
+script = ExtResource("30_held_tripod")
+
+[node name="TripodPlacementPreview" parent="." instance=ExtResource("29_camera_tripod")]
+visible = false
+top_level = true
+collision_layer = 0
+collision_mask = 0
+freeze = true
+starts_deployed = true
 
 [node name="CandlePlacementPreview" type="MeshInstance3D" parent="." unique_id=1806168459]
 visible = false
 layers = 262144
 cast_shadow = 0
 mesh = SubResource("CandlePlacementMesh")
+
+[node name="CameraPlacementPreview" parent="." instance=ExtResource("27_camera_preview")]
+visible = false
+top_level = true
+collision_layer = 0
+collision_mask = 0
+scale = Vector3(0.62, 0.62, 0.62)
 
 [node name="CameraDamageOverlay" parent="." instance=ExtResource("24_camera_damage")]
 

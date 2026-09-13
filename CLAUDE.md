@@ -55,12 +55,13 @@ Los `audit_*.gd` son diagnósticos que imprimen inventarios (rendimiento, colisi
 
 ### Jerarquía de la abuela
 
-Tres enemigos comparten una sola máquina de estados. Un cambio en la base afecta a los tres:
+Las variantes actuales comparten la base de navegación y combate. La trepadora activa añade su controlador de superficies:
 
 ```
-enemies/monster_grandmother.gd  (CharacterBody3D, 1495 lineas — máquina de estados, navegación, puertas, ataque, comer)
-├── enemies/monster_grandmother_imported.gd   → enemies/monster_grandmother_imported.tscn   (variante FOTOSENSIBLE; la usada en test.tscn)
-└── enemies/monster_grandmother_crawler.gd    → enemies/monster_grandmother_crawler.tscn    (variante reptante)
+enemies/monster_grandmother.gd  (máquina de estados, navegación, puertas, ataque, comer)
+└── enemies/monster_grandmother_imported.gd  (variante fotosensible)
+    └── enemies/church_grandmother.gd       (percepción y memoria de la iglesia)
+        └── enemies/grandmother_crawler.gd (variante activa en test.tscn)
 ```
 
 `State { PATROL, INVESTIGATE, CHASE, SEARCH, ATTACK, EAT }` vive en la base. La variante importada **añade una segunda capa de decisión encima**, `PhotoBehavior { PATROL, STATIC_LIGHT, FLASHLIGHT, LIGHT_MEMORY, CLOSE_PLAYER, CLOSE_MEMORY, FOOTSTEP, REVEALED_PLAYER }`: `PhotoBehavior` elige el estímulo (¿linterna? ¿lámpara encendida? ¿pasos?) y luego mapea a un `State` de la base, que es quien mueve el cuerpo. Al depurar, mira siempre **los dos**: `_photo_behavior` explica el porqué, `current_state` explica el cómo.

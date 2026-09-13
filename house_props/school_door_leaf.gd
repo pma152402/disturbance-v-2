@@ -53,13 +53,16 @@ func interact(player: Node) -> bool:
 		if leaf.get_script() == get_script() and leaf._is_animating:
 			return true
 	var opening := not _is_open
+	# Keep the authored leaf signs for the normal approach, but mirror the
+	# whole double-door set when the player pushes from the opposite side.
+	var approach_multiplier := _approach_multiplier(player)
 	for leaf in get_parent().get_children():
 		if leaf.get_script() == get_script():
 			leaf._play_door_sound(opening)
 			break
 	for leaf in get_parent().get_children():
 		if leaf.get_script() == get_script():
-			leaf._set_open(opening, player)
+			leaf._set_open(opening, player, approach_multiplier)
 	return true
 
 
@@ -96,7 +99,7 @@ func get_npc_traversal_portal() -> Dictionary:
 	}
 
 
-func _set_open(opening: bool, player: Node) -> void:
+func _set_open(opening: bool, player: Node, approach_multiplier := 1.0) -> void:
 	_is_open = opening
 	_is_animating = true
 	_last_interactor = player as Node3D
@@ -107,13 +110,25 @@ func _set_open(opening: bool, player: Node) -> void:
 	_active_tween = create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 	_active_tween.set_trans(Tween.TRANS_SINE)
 	_active_tween.set_ease(Tween.EASE_IN_OUT)
-	var target := deg_to_rad(open_angle_degrees) * open_sign if _is_open else 0.0
+	var target := deg_to_rad(open_angle_degrees) * open_sign * approach_multiplier if _is_open else 0.0
 	_active_tween.tween_property(self, "rotation:y", target, transition_time)
 	_active_tween.finished.connect(func() -> void:
 		rotation.y = target
 		_is_animating = false
 		_restore_collision(_restore_token)
 	)
+
+
+func _approach_multiplier(actor: Node) -> float:
+	if not is_instance_valid(actor) or not (actor is Node3D):
+		return 1.0
+	# The school door panels are authored in the local X/Y plane.  Local Z
+	# therefore tells us which face was pushed.  A small dead zone avoids a
+	# flip when the interaction point is exactly in the threshold.
+	var local_actor := to_local((actor as Node3D).global_position)
+	if absf(local_actor.z) < 0.12:
+		return 1.0
+	return -1.0 if local_actor.z > 0.0 else 1.0
 
 
 func is_npc_passage_ready() -> bool:

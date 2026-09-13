@@ -5,6 +5,7 @@ signal footstep_heard(world_position: Vector3, hearing_radius: float)
 
 const ZOOM_IN_SOUND_START := 0.0
 const ZOOM_OUT_SOUND_START := 1.55
+const LOCOMOTION_GAIT := preload("res://player/locomotion_gait.gd")
 
 @export var move_speed := 1.4
 @export var sprint_speed := 3.6
@@ -24,6 +25,10 @@ const ZOOM_OUT_SOUND_START := 1.55
 @export var bob_horizontal_amount := 0.032
 @export var bob_roll_degrees := 0.9
 @export var sprint_bob_multiplier := 1.38
+## Escala del movimiento de la lente; 0 elimina el balanceo automatico.
+@export_range(0.0, 2.0, 0.05) var camera_motion_strength := 1.0
+@export_range(0.0, 2.0, 0.05) var camera_inertia_strength := 1.0
+@export_range(0.0, 2.0, 0.05) var camera_breathing_strength := 1.0
 @export var lean_distance := 0.48
 @export var lean_angle_degrees := 16.0
 @export var lean_speed := 1.65
@@ -51,6 +56,7 @@ const ZOOM_OUT_SOUND_START := 1.55
 @export_range(0.3, 2.35, 0.05) var interaction_focus_distance := 2.35
 @export_category("Equipo inicial")
 @export var starts_with_flashlight := false
+@export var starts_with_flashlight_battery := false
 @export var starts_with_matchbox := false
 @export var starts_with_lit_candle := false
 @export var starts_with_basement_key := false
@@ -85,6 +91,8 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
+var filming_modes: Node
+@onready var player_avatar: Node3D = $PlayerAvatar
 @onready var hand_rig: Node3D = $Head/Camera3D/HandRig
 @onready var right_hand_rig: Node3D = $Head/Camera3D/RightHandRig
 @onready var right_hand: MeshInstance3D = $Head/Camera3D/RightHandRig/RightHand
@@ -100,11 +108,14 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 @onready var held_candle: Node3D = $Head/Camera3D/RightHandRig/HeldCandle
 @onready var held_tv_remote: Node3D = $Head/Camera3D/RightHandRig/HeldTVRemote
 @onready var held_cassette: Node3D = $Head/Camera3D/RightHandRig/HeldCassette
+@onready var held_camera_tripod: Node3D = $Head/Camera3D/RightHandRig/HeldCameraTripod
 @onready var flashlight: SpotLight3D = $Head/Camera3D/HandRig/Flashlight
 @onready var interaction_ray: RayCast3D = $Head/Camera3D/InteractionRay
 @onready var interaction_focus_cast: ShapeCast3D = $Head/Camera3D/InteractionFocusCast
 @onready var candle_placement_ray: RayCast3D = $Head/Camera3D/CandlePlacementRay
 @onready var candle_placement_preview: MeshInstance3D = $CandlePlacementPreview
+@onready var camera_placement_preview: Node3D = $CameraPlacementPreview
+@onready var tripod_placement_preview: Node3D = $TripodPlacementPreview
 @onready var candle_forward_light: SpotLight3D = $Head/Camera3D/RightHandRig/HeldCandle/WickRoot/Flame/ForwardLight
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
 @onready var stamina_bar: ProgressBar = $StaminaUI/StaminaBar
@@ -139,6 +150,21 @@ enum JumpPhase { IDLE, WINDUP, RECOVERING }
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 var _camera_rest_position: Vector3
 var _bob_phase := 0.0
+var _camera_gait_weight := 0.0
+var _camera_motion_offset := Vector3.ZERO
+var _camera_motion_velocity := Vector3.ZERO
+var _camera_angular_offset := Vector3.ZERO
+var _camera_angular_velocity := Vector3.ZERO
+var _camera_previous_velocity := Vector3.ZERO
+var _camera_previous_yaw := 0.0
+var _camera_previous_pitch := 0.0
+var _camera_acceleration := Vector3.ZERO
+var _camera_turn_rate := Vector2.ZERO
+var _camera_breath_phase := 0.0
+var _camera_exertion := 0.0
+var _camera_landing_impact := 0.0
+var _camera_lean_position := 0.0
+var _camera_lean_roll := 0.0
 var _lean_amount := 0.0
 var _stamina := 100.0
 var _is_exhausted := false
@@ -158,7 +184,7 @@ var _stance_start_values := Vector3.ZERO
 var _stance_target_values := Vector3.ZERO
 var _jump_phase := JumpPhase.IDLE
 var _jump_timer := 0.0
-var _jump_start_head_y := 0.9
+var _jump_start_head_y := 0.62
 var _held_item: StringName = &""
 var _right_hand_rest_transform := Transform3D.IDENTITY
 var _inventory_slots: Array[StringName] = [&"flashlight", &"", &""]
@@ -180,6 +206,7 @@ var _tool_inventory: Dictionary = {}
 var _flashlight_holstered := true
 var _flashlight_was_on := true
 var _flashlight_available := true
+var _flashlight_has_battery := false
 var _zoom_fov_target := 95.0
 var _zoom_sound_timer := 0.0
 var _zoom_sound_direction := 0
@@ -201,6 +228,20 @@ var _candle_placement_valid := false
 var _candle_placement_point := Vector3.ZERO
 var _candle_placement_table: Node3D
 var _candle_placement_slot := -1
+var _camera_placement_mode := false
+var _camera_placement_valid := false
+var _camera_placement_point := Vector3.ZERO
+var _camera_preview_material: StandardMaterial3D
+var _tripod_preview_material: StandardMaterial3D
+var _tripod_placement_valid := false
+var _tripod_placement_point := Vector3.ZERO
+var _tripod_camera_preview: Node3D
+var _camera_retrieval_active := false
+var _camera_retrieval_target := Vector3.ZERO
+var _camera_retrieval_best_distance := INF
+var _camera_retrieval_stuck_time := 0.0
+var _camera_retrieval_last_position := Vector3.ZERO
+var _camera_tripod: Node3D
 var _walker_controller: Node3D
 var _walker_flashlight_was_drawn := false
 var _walker_flashlight_slot := -1
@@ -209,7 +250,7 @@ var _freezer_controller: Node3D
 var _freezer_previous_stance := Stance.STANDING
 var _freezer_return_transform := Transform3D.IDENTITY
 var _freezer_exit_lock_timer := 0.0
-var _active_companion_menu: Node3D
+var _avatar_last_yaw := 0.0
 const ZOOM_SEGMENT_ON := Color(0.86, 0.9, 0.83, 0.92)
 const ZOOM_SEGMENT_OFF := Color(0.20, 0.23, 0.20, 0.42)
 
@@ -222,7 +263,7 @@ const MatchboxPickupScene := preload("res://house_props/matchbox_pickup.tscn")
 const CandlePickupScene := preload("res://house_props/candle_pickup.tscn")
 const TVRemoteScene := preload("res://house_props/retro_tv_remote.tscn")
 const CassetteTapeScene := preload("res://house_props/cassette_tape.tscn")
-const DeathChildVisualScene := preload("res://characters/companion/child_visual.tscn")
+const CameraTripodScene := preload("res://house_props/camera_tripod.tscn")
 const GoodPanelFuseScene := preload("res://house_props/light_panel_fuse_good.tscn")
 const BrokenPanelFuseScene := preload("res://house_props/light_panel_fuse_broken.tscn")
 
@@ -234,6 +275,7 @@ const CrowbarPickupScene := preload("res://house_props/crowbar_pickup.tscn")
 const ScrewdriverPickupScene := preload("res://house_props/flathead_screwdriver.tscn")
 const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
 const INVENTORY_ITEM_NAMES := {
+	&"flashlight": "LINTERNA",
 	&"can": "LATA",
 	&"bottle": "BOTELLA",
 	&"plunger": "DESATASCADOR",
@@ -244,6 +286,7 @@ const INVENTORY_ITEM_NAMES := {
 	&"matchbox": "CERILLAS",
 	&"candle": "VELA",
 	&"tv_remote": "MANDO TV",
+	&"camera_tripod": "TRIPODE",
 	&"cassette": "CINTA",
 	&"panel_fuse_good": "FUSIBLE BUENO",
 	&"panel_fuse_broken": "FUSIBLE ROTO",
@@ -251,12 +294,18 @@ const INVENTORY_ITEM_NAMES := {
 
 
 func _ready() -> void:
+	var lens := preload("res://systems/camera_lens_grime.gd").new()
+	lens.name = "CameraLensGrime"
+	add_child(lens)
 	add_to_group(&"player")
+	_avatar_last_yaw = global_rotation.y
+	player_avatar.call(&"set_hidden_from_player_camera", true)
 	interaction_focus_dot.modulate.a = 0.0
 	interaction_focus_dot.visible = true
 	if starts_with_basement_key:
 		add_key(&"basement_key")
 	_flashlight_available = starts_with_flashlight
+	_flashlight_has_battery = starts_with_flashlight and starts_with_flashlight_battery
 	_flashlight_was_on = false
 	_flashlight_holstered = true
 	_inventory_slots = [&"", &"", &""]
@@ -265,6 +314,8 @@ func _ready() -> void:
 	var initial_slot_to_equip := -1
 	if starts_with_flashlight:
 		_inventory_slots[next_initial_slot] = &"flashlight"
+		_inventory_item_data[next_initial_slot] = {"has_battery": _flashlight_has_battery}
+		initial_slot_to_equip = next_initial_slot
 		next_initial_slot += 1
 	if starts_with_matchbox:
 		_inventory_slots[next_initial_slot] = &"matchbox"
@@ -292,6 +343,10 @@ func _ready() -> void:
 	_held_recipe_book_rest_transform = held_recipe_book.transform
 	flashlight.visible = false
 	_camera_rest_position = camera.position
+	_camera_previous_yaw = global_rotation.y
+	_camera_previous_pitch = _look_pitch
+	_configure_camera_placement_preview()
+	_configure_tripod_placement_preview()
 	_stamina = max_stamina
 	stamina_bar.max_value = max_stamina
 	stamina_bar.value = _stamina
@@ -322,28 +377,38 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if is_camera_on_ground():
+		if event is InputEventKey:
+			var camera_key: int = event.physical_keycode if event.physical_keycode != 0 else event.keycode
+			if event.pressed and not event.echo and camera_key == KEY_O:
+				_begin_ground_camera_retrieval()
+				get_viewport().set_input_as_handled()
+				return
+			# I (selfie) y O (camara en el suelo) son estados excluyentes. Mientras
+			# O siga colocada, primero hay que recuperarla con O.
+			if camera_key == KEY_I:
+				get_viewport().set_input_as_handled()
+				return
+			if camera_key in [KEY_R, KEY_T, KEY_TAB]:
+				get_viewport().set_input_as_handled()
+				return
+		if event is InputEventMouseButton and event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
+			get_viewport().set_input_as_handled()
+			return
 	if _monster_restart_pending:
 		get_viewport().set_input_as_handled()
 		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		var key_event := event as InputEventKey
 		var pressed_key := key_event.physical_keycode if key_event.physical_keycode != 0 else key_event.keycode
-		if pressed_key == KEY_T:
+		if pressed_key == KEY_Y:
 			get_viewport().set_input_as_handled()
 			get_tree().reload_current_scene()
 			return
-		if is_instance_valid(_active_companion_menu):
-			if pressed_key == KEY_ESCAPE:
-				end_companion_command()
-				get_viewport().set_input_as_handled()
-				return
-			if pressed_key >= KEY_1 and pressed_key <= KEY_5:
-				var command_index := pressed_key - KEY_0
-				var command_target := _get_companion_aim_target(_active_companion_menu)
-				if bool(_active_companion_menu.call(&"receive_menu_command", command_index, command_target)):
-					end_companion_command()
-					get_viewport().set_input_as_handled()
-					return
+		if pressed_key == KEY_T:
+			get_viewport().set_input_as_handled()
+			get_tree().call_group(&"camera_recorder", &"start_camera_timer")
+			return
 		if is_instance_valid(_active_screw_panel):
 			if pressed_key == KEY_F:
 				_active_screw_panel.call(&"end_screw_manipulation")
@@ -363,6 +428,35 @@ func _input(event: InputEvent) -> void:
 		if pressed_key == KEY_R:
 			get_viewport().set_input_as_handled()
 			get_tree().call_group(&"camera_recorder", &"toggle_recording")
+			return
+		if pressed_key == KEY_L and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and not _skill_check_active:
+			get_tree().call_group(&"camera_keyring", &"show_or_cycle")
+			get_viewport().set_input_as_handled()
+			return
+		if pressed_key in [KEY_I, KEY_O] and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and not _skill_check_active:
+			_ensure_filming_modes()
+			if pressed_key == KEY_I:
+				_cancel_tripod_camera_preview()
+				if filming_modes.placing:
+					filming_modes.cancel_placement()
+				filming_modes.toggle_selfie()
+			else:
+				if is_instance_valid(_tripod_camera_preview):
+					_cancel_tripod_camera_preview()
+				elif filming_modes.placing or not _try_begin_camera_on_tripod_preview():
+					filming_modes.toggle_ground()
+			get_viewport().set_input_as_handled()
+			return
+		if pressed_key == KEY_ESCAPE and is_instance_valid(_tripod_camera_preview):
+			_cancel_tripod_camera_preview()
+			get_viewport().set_input_as_handled()
+			return
+		if pressed_key == KEY_ESCAPE and _camera_placement_mode:
+			if is_instance_valid(filming_modes) and filming_modes.placing:
+				filming_modes.cancel_placement()
+			else:
+				_set_camera_placement_mode(false)
+			get_viewport().set_input_as_handled()
 			return
 		if pressed_key == KEY_TAB:
 			get_viewport().set_input_as_handled()
@@ -426,7 +520,7 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 
-	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+	if event is InputEventMouseMotion and (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED or is_camera_on_ground()):
 		var mouse_motion := event as InputEventMouseMotion
 		if is_instance_valid(_active_screw_panel):
 			_active_screw_panel.call(&"handle_screwdriver_mouse", mouse_motion.screen_relative)
@@ -463,6 +557,19 @@ func _input(event: InputEvent) -> void:
 
 	if event is InputEventMouseButton:
 		var mouse_button := event as InputEventMouseButton
+		if mouse_button.pressed and is_instance_valid(_tripod_camera_preview):
+			if mouse_button.button_index == MOUSE_BUTTON_WHEEL_UP:
+				_tripod_camera_preview.call(&"rotate_camera_mount_preview", -5.0)
+				get_viewport().set_input_as_handled()
+				return
+			if mouse_button.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				_tripod_camera_preview.call(&"rotate_camera_mount_preview", 5.0)
+				get_viewport().set_input_as_handled()
+				return
+			if mouse_button.button_index == MOUSE_BUTTON_LEFT:
+				_confirm_tripod_camera_preview()
+				get_viewport().set_input_as_handled()
+				return
 		if mouse_button.pressed and _held_item == &"tv_remote" and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			var remote_tv := _get_remote_television()
 			if remote_tv != null:
@@ -508,6 +615,11 @@ func _input(event: InputEvent) -> void:
 					_play_zoom_sound(false)
 				get_viewport().set_input_as_handled()
 				return
+		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_LEFT and _held_item == &"camera_tripod" and not _camera_placement_mode and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			if not _skill_check_active and not is_instance_valid(_active_screw_panel) and not is_instance_valid(_active_valve):
+				_place_held_camera_tripod()
+			get_viewport().set_input_as_handled()
+			return
 		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and _held_item == &"note" and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			_set_note_reading(not _note_reading)
 			get_viewport().set_input_as_handled()
@@ -527,12 +639,16 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_RIGHT and _flashlight_available and not _flashlight_holstered and _inventory_slots[_selected_inventory_slot] == &"flashlight":
-			flashlight.visible = not flashlight.visible
+			flashlight.visible = not flashlight.visible if _flashlight_has_battery else false
 			flashlight_click_sound.pitch_scale = randf_range(0.98, 1.02)
 			flashlight_click_sound.play()
 			get_viewport().set_input_as_handled()
 			return
 		if mouse_button.pressed and mouse_button.button_index == MOUSE_BUTTON_LEFT:
+			if _camera_placement_mode and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+				_place_ground_camera()
+				get_viewport().set_input_as_handled()
+				return
 			if _held_item == &"candle" and _candle_placement_mode and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 				_place_held_candle()
 				get_viewport().set_input_as_handled()
@@ -550,6 +666,67 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 
 
+func _process(delta: float) -> void:
+	if not _monster_restart_pending:
+		_update_player_avatar(delta)
+	if is_instance_valid(filming_modes):
+		filming_modes.update_view(delta)
+
+
+func _ensure_filming_modes() -> void:
+	if is_instance_valid(filming_modes):
+		return
+	filming_modes = preload("res://player/camera_modes.gd").new()
+	add_child(filming_modes)
+	filming_modes.setup(self, camera)
+
+
+func is_camera_on_ground() -> bool:
+	return is_instance_valid(filming_modes) and filming_modes.mode == filming_modes.Mode.GROUND
+
+
+# Contrato compartido para herramientas e interacciones que ocupan ambas manos.
+var _two_hand_owner: Node
+var _two_hand_tool: Node3D
+
+func is_two_hand_interaction_active() -> bool:
+	return is_instance_valid(_two_hand_owner)
+
+func can_begin_two_hand_interaction(item_type: StringName = &"") -> bool:
+	return is_camera_on_ground() and not _camera_retrieval_active and not _skill_check_active and not is_instance_valid(_two_hand_owner) and (item_type.is_empty() or is_holding_item_type(item_type))
+
+func begin_two_hand_interaction(owner_node: Node, item_type: StringName = &"") -> bool:
+	if not is_instance_valid(owner_node) or not can_begin_two_hand_interaction(item_type):
+		return false
+	_two_hand_owner = owner_node
+	return true
+
+func end_two_hand_interaction(owner_node: Node) -> void:
+	if _two_hand_owner != owner_node:
+		return
+	_two_hand_owner = null
+	_two_hand_tool = null
+	player_avatar.call(&"set_two_hand_tool", null)
+
+func set_two_hand_tool(tool: Node3D) -> void:
+	_two_hand_tool = tool
+	player_avatar.call(&"set_two_hand_tool", tool)
+
+
+func get_camera_observation_state() -> Dictionary:
+	var alternate_camera_active: bool = bool(
+		is_instance_valid(filming_modes)
+		and filming_modes.mode != filming_modes.Mode.FIRST_PERSON
+	)
+	return {
+		"id": &"player_self",
+		"label": "NOSOTROS MISMOS",
+		"enabled": alternate_camera_active,
+		"state": &"selfie" if alternate_camera_active else &"hidden",
+		"priority": 3.0,
+	}
+
+
 func _physics_process(delta: float) -> void:
 	if _monster_restart_pending:
 		_update_death_sequence(delta)
@@ -560,6 +737,12 @@ func _physics_process(delta: float) -> void:
 	_update_stance_transition(delta)
 	head.rotation.x = _look_pitch
 	head.rotation.y = 0.0
+	_update_tripod_placement_preview()
+	if is_instance_valid(_tripod_camera_preview):
+		if global_position.distance_to(_tripod_camera_preview.global_position) > 4.5:
+			_cancel_tripod_camera_preview()
+		elif _tripod_camera_preview.has_method(&"update_camera_mount_preview_target"):
+			_tripod_camera_preview.call(&"update_camera_mount_preview_target", global_position + Vector3.UP * 0.7)
 	if is_instance_valid(_freezer_controller):
 		velocity = Vector3.ZERO
 		_update_interaction_prompt()
@@ -622,6 +805,9 @@ func _physics_process(delta: float) -> void:
 	_update_jump(delta)
 
 	var input_vector := Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
+	if _camera_retrieval_active:
+		# Conserva las animaciones de marcha aunque el trayecto sea automático.
+		input_vector = Vector2(0.0, -1.0)
 	_update_auto_prone(input_vector)
 	if (
 		Input.is_action_just_pressed(&"sprint")
@@ -673,12 +859,23 @@ func _physics_process(delta: float) -> void:
 		current_speed = crouch_speed
 	elif _stance == Stance.PRONE:
 		current_speed = prone_speed
-	current_speed *= _get_companion_speed_scale()
 	if _stance_transition_timer > 0.0:
 		current_speed *= 0.4
 	if _jump_phase == JumpPhase.WINDUP:
 		current_speed *= 0.45
-	var move_direction := (transform.basis * Vector3(input_vector.x, 0.0, input_vector.y)).normalized()
+	if _camera_retrieval_active:
+		var retrieval_distance := Vector2(global_position.x, global_position.z).distance_to(
+			Vector2(_camera_retrieval_target.x, _camera_retrieval_target.z)
+		)
+		current_speed = clampf(retrieval_distance * 1.45, 0.48, 1.85)
+	var movement_basis: Basis = transform.basis
+	if is_camera_on_ground():
+		movement_basis = filming_modes.get_ground_movement_basis()
+	var move_direction := (
+		_get_camera_retrieval_direction(delta)
+		if _camera_retrieval_active
+		else (movement_basis * Vector3(input_vector.x, 0.0, input_vector.y)).normalized()
+	)
 	var target_velocity := move_direction * current_speed
 	var movement_acceleration := acceleration
 	var horizontal_velocity := Vector3(velocity.x, 0.0, velocity.z)
@@ -690,11 +887,17 @@ func _physics_process(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, target_velocity.x, movement_acceleration * delta)
 	velocity.z = move_toward(velocity.z, target_velocity.z, movement_acceleration * delta)
 	var horizontal_motion := Vector3(velocity.x, 0.0, velocity.z) * delta
+	var was_grounded := is_on_floor()
+	var impact_speed := maxf(0.0, -velocity.y)
 	if not _try_step_up(horizontal_motion):
 		move_and_slide()
+	if not was_grounded and is_on_floor():
+		_camera_landing_impact = clampf((impact_speed - 1.5) / 8.0, 0.0, 1.0)
+	_update_ground_camera_retrieval(delta)
 	_update_held_candle_motion(is_sprinting)
 	_update_held_match_motion(is_sprinting)
 	_update_candle_placement_preview()
+	_update_camera_placement_preview()
 	_update_interaction_prompt()
 	_update_camera_motion(delta, input_vector, is_sprinting)
 	_update_footsteps(delta, input_vector, is_sprinting)
@@ -774,57 +977,172 @@ func _update_zoom_meter() -> void:
 	for index in _zoom_segments.size():
 		_zoom_segments[index].color = ZOOM_SEGMENT_ON if index < lit_segments else ZOOM_SEGMENT_OFF
 func _update_camera_motion(delta: float, _input_vector: Vector2, _is_sprinting: bool) -> void:
+	if delta <= 0.0:
+		return
 	var horizontal_speed := Vector2(velocity.x, velocity.z).length()
 	var is_walking := is_on_floor() and horizontal_speed > 0.12
-	var target_position := _camera_rest_position
-	var bob_roll := 0.0
-	var hand_bob_position := Vector3.ZERO
-	var hand_bob_roll := 0.0
-
+	var sprint_blend := clampf(inverse_lerp(move_speed, sprint_speed, horizontal_speed), 0.0, 1.0)
+	var stance_speed := move_speed
+	var stance_weight := 1.0
+	if _stance == Stance.CROUCHED:
+		stance_speed = crouch_speed
+		stance_weight = 0.48
+	elif _stance == Stance.PRONE:
+		stance_speed = prone_speed
+		stance_weight = 0.25
+	# El apoyo sigue el avance efectivo. Empujar una pared o empezar a moverse
+	# no debe producir el mismo vaiven que una zancada a velocidad completa.
+	var stride_speed := clampf(horizontal_speed / maxf(stance_speed, 0.1), 0.0, 1.0)
+	var gait_target := stride_speed if is_walking else 0.0
+	_camera_gait_weight = lerpf(_camera_gait_weight, gait_target, 1.0 - exp(-8.0 * delta))
 	if is_walking:
-		var sprint_blend := clampf(inverse_lerp(move_speed, sprint_speed, horizontal_speed), 0.0, 1.0)
-		var bob_multiplier := lerpf(1.0, sprint_bob_multiplier, sprint_blend)
-		var hand_bob_multiplier := lerpf(1.0, 1.15, sprint_blend)
-		var cadence_multiplier := lerpf(1.0, 1.55, sprint_blend)
-		if _stance == Stance.CROUCHED:
-			cadence_multiplier = 0.68
-		elif _stance == Stance.PRONE:
-			cadence_multiplier = 0.42
-		_bob_phase += delta * bob_frequency * cadence_multiplier
-		target_position += Vector3(
-			cos(_bob_phase * 0.5) * bob_horizontal_amount * bob_multiplier,
-			(absf(sin(_bob_phase)) - 0.5) * bob_vertical_amount * bob_multiplier,
-			0.0
-		)
-		bob_roll = sin(_bob_phase * 0.5) * deg_to_rad(bob_roll_degrees) * bob_multiplier
-		hand_bob_position = Vector3(
-			-cos(_bob_phase * 0.5) * bob_horizontal_amount * hand_bob_multiplier * 1.2,
-			-(absf(sin(_bob_phase)) - 0.5) * bob_vertical_amount * hand_bob_multiplier,
-			0.0
-		)
-		hand_bob_roll = -sin(_bob_phase * 0.5) * deg_to_rad(bob_roll_degrees) * hand_bob_multiplier
+		_bob_phase += LOCOMOTION_GAIT.phase_advance(delta, horizontal_speed, float(_stance)) * maxf(bob_frequency, 0.1) / 7.0
+
+	var precision_weight := lerpf(0.35, 1.0, clampf(inverse_lerp(zoom_min_fov, zoom_max_fov, camera.fov), 0.0, 1.0))
+	if _note_reading or _recipe_book_reading:
+		precision_weight *= 0.22
+	if is_instance_valid(_freezer_controller) or is_camera_on_ground():
+		precision_weight = 0.0
+	var strength := camera_motion_strength * precision_weight
+	var gait := _camera_gait_weight * stance_weight * lerpf(1.0, sprint_bob_multiplier, sprint_blend)
+	# Un ciclo lateral por cada dos pasos; dos apoyos verticales suaves por ciclo.
+	# El segundo armonico da compresion y recuperacion sin las esquinas de abs(sin).
+	var side := sin(_bob_phase)
+	var lift := -cos(_bob_phase * 2.0) * 0.38 - cos(_bob_phase * 4.0) * 0.06
+	var gait_position := Vector3(
+		side * bob_horizontal_amount * 0.65,
+		lift * bob_vertical_amount * (1.0 + 0.045 * side),
+		sin(_bob_phase * 2.0) * bob_vertical_amount * 0.09
+	) * gait
+	var target_motion := gait_position
+	var target_angles := Vector3(
+		sin(_bob_phase * 2.0 - 0.35) * deg_to_rad(0.16),
+		sin(_bob_phase - 0.2) * deg_to_rad(0.10),
+		-side * deg_to_rad(bob_roll_degrees) * 0.42
+	) * gait
+
+	# Inercia limitada al acelerar/frenar y al girar: la direccion del raton
+	# permanece inmediata; solo la lente y las manos absorben un leve retraso.
+	var flat_velocity := Vector3(velocity.x, 0.0, velocity.z)
+	var acceleration_world := ((flat_velocity - _camera_previous_velocity) / delta).limit_length(16.0)
+	_camera_previous_velocity = flat_velocity
+	_camera_acceleration = _camera_acceleration.lerp(acceleration_world, 1.0 - exp(-10.0 * delta))
+	var local_acceleration := global_basis.inverse() * _camera_acceleration
+	var yaw_rate := clampf(angle_difference(_camera_previous_yaw, global_rotation.y) / delta, -4.0, 4.0)
+	var pitch_rate := clampf((_look_pitch - _camera_previous_pitch) / delta, -3.0, 3.0)
+	_camera_previous_yaw = global_rotation.y
+	_camera_previous_pitch = _look_pitch
+	_camera_turn_rate = _camera_turn_rate.lerp(Vector2(yaw_rate, pitch_rate), 1.0 - exp(-12.0 * delta))
+	var inertia_position := Vector3(-local_acceleration.x * 0.0012, 0.0, -local_acceleration.z * 0.0016)
+	inertia_position.x += _camera_turn_rate.x * 0.003
+	var inertia_angles := Vector3(
+		-local_acceleration.z * 0.0008 - _camera_turn_rate.y * 0.002,
+		-_camera_turn_rate.x * 0.0015,
+		local_acceleration.x * 0.0007 + _camera_turn_rate.x * 0.003
+	)
+	target_motion += inertia_position * camera_inertia_strength
+	target_angles += inertia_angles * camera_inertia_strength
+
+	# Respiracion continua y lenta, con recuperacion gradual despues de correr.
+	var exertion_target := sprint_blend if is_walking else 0.0
+	_camera_exertion = lerpf(_camera_exertion, exertion_target, 1.0 - exp(-delta * (1.8 if exertion_target > _camera_exertion else 0.3)))
+	_camera_breath_phase = fmod(_camera_breath_phase + delta * lerpf(1.55, 2.5, _camera_exertion), TAU * 2.0)
+	var breath := camera_breathing_strength * lerpf(1.0, 1.55, _camera_exertion) * lerpf(1.0, 0.35, _camera_gait_weight)
+	target_motion += Vector3(sin(_camera_breath_phase * 0.5) * 0.0007, sin(_camera_breath_phase) * 0.0018, 0.0) * breath
+	target_angles.x += sin(_camera_breath_phase - 0.4) * deg_to_rad(0.045) * breath
+
+	if _camera_landing_impact > 0.0:
+		_camera_motion_velocity.y -= _camera_landing_impact * 1.35 * strength
+		_camera_angular_velocity.x -= _camera_landing_impact * 0.11 * strength
+		_camera_landing_impact = 0.0
+	_update_camera_springs(target_motion * strength, target_angles * strength, delta)
 
 	var lock_lean := _recipe_book_reading or is_instance_valid(_freezer_controller)
 	var lean_input := 0.0 if lock_lean else Input.get_axis(&"lean_left", &"lean_right")
 	var current_lean_speed := lean_return_speed if is_zero_approx(lean_input) else lean_speed
 	_lean_amount = move_toward(_lean_amount, lean_input, current_lean_speed * delta)
-	target_position.x += _lean_amount * lean_distance
-	var target_roll := bob_roll - _lean_amount * deg_to_rad(lean_angle_degrees)
-
-	camera.position = camera.position.lerp(target_position, minf(delta * 13.0, 1.0))
-	camera.rotation.z = lerpf(camera.rotation.z, target_roll, minf(delta * 11.0, 1.0))
+	_camera_lean_position = lerpf(_camera_lean_position, _lean_amount * lean_distance, 1.0 - exp(-13.0 * delta))
+	_camera_lean_roll = lerpf(_camera_lean_roll, -_lean_amount * deg_to_rad(lean_angle_degrees), 1.0 - exp(-11.0 * delta))
+	var lean_offset := Vector3(_camera_lean_position, 0.0, 0.0)
+	camera.position = _camera_rest_position + _camera_motion_offset + lean_offset
+	camera.rotation = _camera_angular_offset + Vector3(0.0, 0.0, _camera_lean_roll)
 
 	if not Input.is_key_pressed(KEY_ALT):
 		_is_aiming_hand = false
-		_hand_yaw = lerpf(_hand_yaw, 0.0, minf(delta * hand_return_speed, 1.0))
-		_hand_pitch = lerpf(_hand_pitch, 0.0, minf(delta * hand_return_speed, 1.0))
-	hand_rig.position = hand_rig.position.lerp(hand_bob_position, minf(delta * 14.0, 1.0))
-	var right_vertical_bob := Vector3(0.0, -hand_bob_position.y * 0.72, 0.0)
-	right_hand_rig.position = right_hand_rig.position.lerp(right_vertical_bob, minf(delta * 14.0, 1.0))
-	var target_hand_rotation := Vector3(_hand_pitch, _hand_yaw, hand_bob_roll)
-	hand_rig.rotation = hand_rig.rotation.lerp(target_hand_rotation, minf(delta * 12.0, 1.0))
+		_hand_yaw = lerpf(_hand_yaw, 0.0, 1.0 - exp(-delta * hand_return_speed))
+		_hand_pitch = lerpf(_hand_pitch, 0.0, 1.0 - exp(-delta * hand_return_speed))
+	var hand_bob_position := (-gait_position * 0.38 + inertia_position * camera_inertia_strength * 0.6) * strength
+	hand_rig.position = hand_rig.position.lerp(hand_bob_position, 1.0 - exp(-delta * 12.0))
+	var right_vertical_bob := Vector3(hand_bob_position.x * 0.2, hand_bob_position.y * 0.65, hand_bob_position.z * 0.4)
+	right_hand_rig.position = right_hand_rig.position.lerp(right_vertical_bob, 1.0 - exp(-delta * 10.0))
+	var target_hand_rotation := Vector3(_hand_pitch, _hand_yaw, -_camera_angular_offset.z * 0.45)
+	hand_rig.rotation = hand_rig.rotation.lerp(target_hand_rotation, 1.0 - exp(-delta * 12.0))
 	var right_hand_target_rotation := target_hand_rotation if _held_item == &"candle" else Vector3.ZERO
-	right_hand_rig.rotation = right_hand_rig.rotation.lerp(right_hand_target_rotation, minf(delta * 12.0, 1.0))
+	right_hand_rig.rotation = right_hand_rig.rotation.lerp(right_hand_target_rotation, 1.0 - exp(-delta * 12.0))
+
+
+func _update_camera_springs(target_position: Vector3, target_rotation: Vector3, delta: float) -> void:
+	# Solucion exacta de un muelle criticamente amortiguado: estable incluso con
+	# frames largos, conserva la velocidad al cambiar de objetivo y no rebota.
+	var position_omega := 22.0
+	var offset := _camera_motion_offset - target_position
+	var impulse := _camera_motion_velocity + offset * position_omega
+	var decay := exp(-position_omega * delta)
+	_camera_motion_offset = target_position + (offset + impulse * delta) * decay
+	_camera_motion_velocity = (_camera_motion_velocity - impulse * position_omega * delta) * decay
+	var rotation_omega := 18.0
+	var angle_offset := _camera_angular_offset - target_rotation
+	var angular_impulse := _camera_angular_velocity + angle_offset * rotation_omega
+	var angular_decay := exp(-rotation_omega * delta)
+	_camera_angular_offset = target_rotation + (angle_offset + angular_impulse * delta) * angular_decay
+	_camera_angular_velocity = (_camera_angular_velocity - angular_impulse * rotation_omega * delta) * angular_decay
+
+
+func _update_player_avatar(delta: float) -> void:
+	if not is_instance_valid(player_avatar) or not player_avatar.has_method(&"update_player_animation"):
+		return
+	var stance_value := float(_stance)
+	if _stance_transition_timer > 0.0 and _stance_transition_duration > 0.0:
+		var progress := clampf(_stance_transition_elapsed / _stance_transition_duration, 0.0, 1.0)
+		var eased := progress * progress * (3.0 - 2.0 * progress)
+		stance_value = lerpf(float(_stance), float(_pending_stance), eased)
+	var yaw := global_rotation.y
+	var turn_speed := clampf(angle_difference(_avatar_last_yaw, yaw) / maxf(delta, 0.0001), -5.0, 5.0)
+	_avatar_last_yaw = yaw
+	var equipped_item := _held_item
+	if _flashlight_available and not _flashlight_holstered:
+		equipped_item = &"flashlight"
+	var action: StringName = &""
+	if is_instance_valid(_active_valve):
+		action = &"valve"
+	elif is_instance_valid(_active_screw_panel):
+		action = &"tool"
+	elif _candle_placement_mode:
+		action = &"place"
+	elif _note_reading or _recipe_book_reading:
+		action = &"read"
+	elif is_instance_valid(_ladder_controller):
+		action = &"ladder"
+	elif is_instance_valid(_walker_controller):
+		action = &"walker"
+	var local_velocity := global_basis.inverse() * velocity
+	if is_instance_valid(_two_hand_owner):
+		stance_value = 0.0
+	player_avatar.call(
+		&"update_player_animation",
+		delta,
+		local_velocity,
+		stance_value,
+		is_on_floor() or is_instance_valid(_two_hand_owner),
+		Input.is_action_pressed(&"sprint") and _stance == Stance.STANDING,
+		_look_pitch,
+		turn_speed,
+		equipped_item,
+		action,
+		is_flashlight_on(),
+		_bob_phase,
+		7.0 / maxf(bob_frequency, 0.1)
+	)
 
 
 func _select_inventory_slot(slot_index: int) -> void:
@@ -887,6 +1205,8 @@ func _hide_all_held_visuals() -> void:
 	held_candle.process_mode = Node.PROCESS_MODE_DISABLED
 	held_tv_remote.visible = false
 	held_cassette.visible = false
+	held_camera_tripod.visible = false
+	tripod_placement_preview.visible = false
 	candle_forward_light.visible = false
 	right_hand.visible = false
 	right_hand.transform = _right_hand_rest_transform
@@ -956,6 +1276,8 @@ func _set_recipe_book_reading(active: bool, immediate := false) -> void:
 func _equip_inventory_slot(slot_index: int) -> bool:
 	if slot_index < 0 or slot_index >= _inventory_slots.size():
 		return false
+	if is_instance_valid(_tripod_camera_preview):
+		_cancel_tripod_camera_preview()
 	var item_type := _inventory_slots[slot_index]
 	if _inventory_slots[_selected_inventory_slot] == &"flashlight" and not _flashlight_holstered:
 		_flashlight_was_on = flashlight.visible
@@ -971,8 +1293,9 @@ func _equip_inventory_slot(slot_index: int) -> bool:
 			_update_inventory_ui()
 			return false
 		_flashlight_holstered = false
+		_flashlight_has_battery = bool(_inventory_item_data[slot_index].get("has_battery", _flashlight_has_battery))
 		hand_rig.visible = true
-		flashlight.visible = _flashlight_was_on
+		flashlight.visible = _flashlight_was_on and _flashlight_has_battery
 	else:
 		_flashlight_holstered = true
 		_held_item = item_type
@@ -1004,6 +1327,9 @@ func _equip_inventory_slot(slot_index: int) -> bool:
 				held_cassette.visible = true
 				if held_cassette.has_method(&"configure_cassette"):
 					held_cassette.call(&"configure_cassette", _inventory_item_data[slot_index])
+			&"camera_tripod":
+				held_camera_tripod.visible = true
+				_set_tripod_hand_pose()
 	_update_inventory_ui()
 	return true
 
@@ -1418,18 +1744,20 @@ func _update_interaction_prompt() -> void:
 	interaction_prompt.offset_top = 76.0
 	interaction_prompt.offset_bottom = 121.0
 	interaction_prompt.add_theme_font_size_override(&"font_size", 12)
-	if is_instance_valid(_active_companion_menu):
-		if global_position.distance_to(_active_companion_menu.global_position) > 4.5:
-			end_companion_command()
-		else:
-			# El menu del acompanante necesita mas presencia que un aviso de objeto:
-			# veinte pixeles mas alto y con una tipografia algo mayor.
-			interaction_prompt.offset_top = 56.0
-			interaction_prompt.offset_bottom = 101.0
-			interaction_prompt.add_theme_font_size_override(&"font_size", 14)
-			interaction_prompt.text = str(_active_companion_menu.call(&"get_command_menu_text"))
-			interaction_prompt.visible = true
-			return
+	if is_instance_valid(_tripod_camera_preview):
+		interaction_prompt.visible = false
+		note_controls_prompt.visible = true
+		note_controls_prompt.text = "MUEVETE  GIRAR CAMARA    RUEDA  AJUSTAR    LMB  COLOCAR    O / ESC  CANCELAR"
+		return
+	if _camera_placement_mode:
+		interaction_prompt.visible = false
+		note_controls_prompt.visible = true
+		note_controls_prompt.text = (
+			"LMB  COLOCAR CÁMARA    O / ESC  CANCELAR"
+			if _camera_placement_valid
+			else "BUSCA UNA SUPERFICIE    O / ESC  CANCELAR"
+		)
+		return
 	if is_instance_valid(_freezer_controller):
 		interaction_prompt.visible = true
 		interaction_prompt.text = "F  SALIR DEL CONGELADOR"
@@ -1499,6 +1827,22 @@ func _update_interaction_prompt() -> void:
 		else:
 			note_controls_prompt.text = "%s    G  COLOCAR" % str(held_candle.call(&"get_status_text", _can_ignite_candle()))
 		return
+	if _held_item == &"camera_tripod":
+		interaction_prompt.visible = false
+		note_controls_prompt.visible = true
+		note_controls_prompt.text = (
+			"LMB  COLOCAR TRIPODE ABIERTO    G  SOLTAR"
+			if _tripod_placement_valid
+			else "BUSCA SUELO LIBRE    G  SOLTAR"
+		)
+		return
+	if _flashlight_available and not _flashlight_holstered and _inventory_slots[_selected_inventory_slot] == &"flashlight":
+		note_controls_prompt.visible = true
+		note_controls_prompt.text = (
+			"LINTERNA    RMB  ENCENDER/APAGAR    G  SOLTAR"
+			if _flashlight_has_battery
+			else "LINTERNA SIN PILA    G  SOLTAR"
+		)
 	var target := _get_interactable()
 	if target != null:
 		var prompt_text := str(target.get_interaction_text(self))
@@ -1506,38 +1850,6 @@ func _update_interaction_prompt() -> void:
 		interaction_prompt.visible = not prompt_text.is_empty()
 	else:
 		interaction_prompt.visible = false
-
-
-func begin_companion_command(companion: Node3D) -> void:
-	_active_companion_menu = companion
-	_update_interaction_prompt()
-
-
-func end_companion_command() -> void:
-	_active_companion_menu = null
-	_update_interaction_prompt()
-
-
-func _get_companion_speed_scale() -> float:
-	var speed_scale := 1.0
-	for companion in get_tree().get_nodes_in_group(&"companion_npc"):
-		if companion != null and companion.has_method(&"get_player_speed_scale"):
-			speed_scale = minf(speed_scale, float(companion.call(&"get_player_speed_scale")))
-	return speed_scale
-
-
-func _get_companion_aim_target(companion: Node3D) -> Vector3:
-	var ray_origin := camera.global_position
-	var ray_end := ray_origin - camera.global_basis.z * float(companion.get("go_there_distance"))
-	var query := PhysicsRayQueryParameters3D.create(ray_origin, ray_end, 1)
-	var excluded_rids: Array[RID] = [get_rid()]
-	if companion is CollisionObject3D:
-		excluded_rids.append((companion as CollisionObject3D).get_rid())
-	query.exclude = excluded_rids
-	var hit := get_world_3d().direct_space_state.intersect_ray(query)
-	if not hit.is_empty():
-		return hit.position
-	return ray_end
 
 
 func pick_up_item(item_type: StringName) -> bool:
@@ -1631,7 +1943,7 @@ func pick_up_cassette(data: Dictionary) -> bool:
 	if _held_item == &"cassette":
 		held_cassette.scale = Vector3.ZERO
 		var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tween.tween_property(held_cassette, "scale", Vector3.ONE * 0.32, 0.2)
+		tween.tween_property(held_cassette, "scale", Vector3.ONE, 0.2)
 	return true
 
 
@@ -1715,6 +2027,8 @@ func _set_candle_hand_pose() -> void:
 
 
 func _set_candle_placement_mode(active: bool) -> void:
+	if active:
+		_set_camera_placement_mode(false)
 	_candle_placement_mode = active and _held_item == &"candle"
 	_candle_placement_valid = false
 	_candle_placement_table = null
@@ -1786,6 +2100,251 @@ func _find_candle_placement_table(node: Node) -> Node3D:
 			return current as Node3D
 		current = current.get_parent()
 	return null
+
+
+func _configure_camera_placement_preview() -> void:
+	camera_placement_preview.visible = false
+	if camera_placement_preview is CollisionObject3D:
+		(camera_placement_preview as CollisionObject3D).collision_layer = 0
+		(camera_placement_preview as CollisionObject3D).collision_mask = 0
+	_camera_preview_material = StandardMaterial3D.new()
+	_camera_preview_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	_camera_preview_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	_camera_preview_material.albedo_color = Color(0.18, 0.95, 0.42, 0.42)
+	for child: Node in camera_placement_preview.find_children("*", "GeometryInstance3D", true, false):
+		var geometry := child as GeometryInstance3D
+		geometry.layers = 262144
+		geometry.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		geometry.material_override = _camera_preview_material
+
+
+func _configure_tripod_placement_preview() -> void:
+	tripod_placement_preview.visible = false
+	if tripod_placement_preview is CollisionObject3D:
+		(tripod_placement_preview as CollisionObject3D).collision_layer = 0
+		(tripod_placement_preview as CollisionObject3D).collision_mask = 0
+	if tripod_placement_preview.has_method(&"set_deployed"):
+		tripod_placement_preview.call(&"set_deployed", true, false)
+	for observable: Node in tripod_placement_preview.find_children("*", "Node", true, false):
+		if observable.is_in_group(&"camera_observable"):
+			observable.remove_from_group(&"camera_observable")
+	_tripod_preview_material = StandardMaterial3D.new()
+	_tripod_preview_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	_tripod_preview_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	_tripod_preview_material.albedo_color = Color(0.18, 0.95, 0.42, 0.42)
+	for child: Node in tripod_placement_preview.find_children("*", "GeometryInstance3D", true, false):
+		var geometry := child as GeometryInstance3D
+		geometry.layers = 262144
+		geometry.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		geometry.material_override = _tripod_preview_material
+
+
+func _update_tripod_placement_preview() -> void:
+	if _held_item != &"camera_tripod" or is_camera_on_ground() or is_instance_valid(_tripod_camera_preview):
+		tripod_placement_preview.visible = false
+		_tripod_placement_valid = false
+		return
+	candle_placement_ray.force_raycast_update()
+	if not candle_placement_ray.is_colliding():
+		tripod_placement_preview.visible = false
+		_tripod_placement_valid = false
+		return
+	var surface_normal := candle_placement_ray.get_collision_normal().normalized()
+	_tripod_placement_point = candle_placement_ray.get_collision_point()
+	_tripod_placement_valid = surface_normal.dot(Vector3.UP) >= 0.82
+	tripod_placement_preview.visible = true
+	tripod_placement_preview.global_position = _tripod_placement_point + Vector3.UP * 0.015
+	tripod_placement_preview.global_rotation = Vector3(0.0, rotation.y, 0.0)
+	if _tripod_preview_material != null:
+		_tripod_preview_material.albedo_color = (
+			Color(0.18, 0.95, 0.42, 0.42)
+			if _tripod_placement_valid
+			else Color(0.95, 0.16, 0.12, 0.38)
+		)
+
+
+func _place_held_camera_tripod() -> bool:
+	if _held_item != &"camera_tripod" or not _tripod_placement_valid:
+		return false
+	var scene_root := get_tree().current_scene
+	if scene_root == null:
+		return false
+	var placed_tripod := CameraTripodScene.instantiate() as RigidBody3D
+	scene_root.add_child(placed_tripod)
+	placed_tripod.global_position = _tripod_placement_point + Vector3.UP * 0.015
+	placed_tripod.global_rotation = Vector3(0.0, rotation.y, 0.0)
+	placed_tripod.call(&"configure_tripod", {"deployed": true})
+	placed_tripod.freeze = true
+	tripod_placement_preview.visible = false
+	_tripod_placement_valid = false
+	_clear_inventory_item(&"camera_tripod")
+	_return_to_flashlight_slot()
+	return true
+
+
+func _set_camera_placement_mode(active: bool) -> void:
+	if active and is_instance_valid(_tripod_camera_preview):
+		_cancel_tripod_camera_preview()
+	_camera_placement_mode = active and not is_camera_on_ground()
+	_camera_placement_valid = false
+	camera_placement_preview.visible = false
+	if not _camera_placement_mode:
+		return
+	_set_candle_placement_mode(false)
+	_ensure_filming_modes()
+	filming_modes.set_first_person()
+	_update_camera_placement_preview()
+
+
+func _update_camera_placement_preview() -> void:
+	if not _camera_placement_mode:
+		camera_placement_preview.visible = false
+		_camera_placement_valid = false
+		return
+	candle_placement_ray.force_raycast_update()
+	if not candle_placement_ray.is_colliding():
+		camera_placement_preview.visible = false
+		_camera_placement_valid = false
+		return
+	var surface_normal := candle_placement_ray.get_collision_normal().normalized()
+	_camera_placement_point = candle_placement_ray.get_collision_point()
+	_camera_placement_valid = surface_normal.dot(Vector3.UP) >= 0.82
+	camera_placement_preview.visible = true
+	camera_placement_preview.global_position = _camera_placement_point + Vector3.UP * 0.015
+	camera_placement_preview.global_rotation = Vector3(0.0, rotation.y + PI, 0.0)
+	if _camera_preview_material != null:
+		_camera_preview_material.albedo_color = (
+			Color(0.18, 0.95, 0.42, 0.42)
+			if _camera_placement_valid
+			else Color(0.95, 0.16, 0.12, 0.38)
+		)
+
+
+func _place_ground_camera() -> bool:
+	if not _camera_placement_mode or not _camera_placement_valid:
+		return false
+	_ensure_filming_modes()
+	var placement_point := _camera_placement_point
+	_set_camera_placement_mode(false)
+	_camera_tripod = null
+	return bool(filming_modes.place_ground(placement_point))
+
+
+func _try_begin_camera_on_tripod_preview() -> bool:
+	var target := _get_interactable()
+	if target == null or not target.has_method(&"can_mount_camera"):
+		return false
+	if not bool(target.call(&"can_mount_camera")):
+		return false
+	if not target.has_method(&"begin_camera_mount_preview"):
+		return false
+	if not bool(target.call(&"begin_camera_mount_preview")):
+		return false
+	_tripod_camera_preview = target as Node3D
+	_update_interaction_prompt()
+	return true
+
+
+func _cancel_tripod_camera_preview() -> void:
+	if is_instance_valid(_tripod_camera_preview) and _tripod_camera_preview.has_method(&"cancel_camera_mount_preview"):
+		_tripod_camera_preview.call(&"cancel_camera_mount_preview")
+	_tripod_camera_preview = null
+	_update_interaction_prompt()
+
+
+func _confirm_tripod_camera_preview() -> bool:
+	if not is_instance_valid(_tripod_camera_preview):
+		return false
+	var tripod := _tripod_camera_preview
+	if not tripod.has_method(&"get_camera_mount_transform") or not tripod.has_method(&"get_camera_retrieval_position"):
+		_cancel_tripod_camera_preview()
+		return false
+	var mount_transform: Transform3D = tripod.call(&"get_camera_mount_transform")
+	var retrieval_position: Vector3 = tripod.call(&"get_camera_retrieval_position")
+	if not place_camera_on_tripod(tripod, mount_transform, retrieval_position):
+		_cancel_tripod_camera_preview()
+		return false
+	_tripod_camera_preview = null
+	return true
+
+
+func place_camera_on_tripod(tripod: Node3D, lens_transform: Transform3D, retrieval_position: Vector3) -> bool:
+	if tripod == null or is_camera_on_ground() or _camera_placement_mode or _monster_restart_pending:
+		return false
+	_ensure_filming_modes()
+	_set_camera_placement_mode(false)
+	if not bool(filming_modes.place_on_tripod(lens_transform, retrieval_position)):
+		return false
+	_camera_tripod = tripod
+	if tripod.has_method(&"set_camera_occupied"):
+		tripod.call(&"set_camera_occupied", true)
+	return true
+
+
+func _begin_ground_camera_retrieval() -> void:
+	if not is_camera_on_ground() or _camera_retrieval_active or is_instance_valid(_two_hand_owner):
+		return
+	_camera_retrieval_target = filming_modes.get_ground_surface_position()
+	_camera_retrieval_target.y = global_position.y
+	_camera_retrieval_active = true
+	_camera_retrieval_best_distance = global_position.distance_to(_camera_retrieval_target)
+	_camera_retrieval_stuck_time = 0.0
+	_camera_retrieval_last_position = global_position
+	if _stance != Stance.STANDING and _stance_transition_timer <= 0.0:
+		_request_stance(Stance.STANDING)
+	if _camera_retrieval_best_distance <= 0.48:
+		_finish_ground_camera_retrieval()
+
+
+func _get_camera_retrieval_direction(delta: float) -> Vector3:
+	var direct_direction := _camera_retrieval_target - global_position
+	direct_direction.y = 0.0
+	if direct_direction.length_squared() <= 0.0025:
+		return Vector3.ZERO
+	direct_direction = direct_direction.normalized()
+	# Al recogerla, el personaje se gira hacia la cámara y avanza de frente.
+	# Evita la sensación de alternar entre marcha hacia delante y hacia atrás.
+	var target_yaw := atan2(-direct_direction.x, -direct_direction.z)
+	rotation.y = lerp_angle(rotation.y, target_yaw, minf(delta * 7.5, 1.0))
+	return direct_direction
+
+
+func _update_ground_camera_retrieval(delta: float) -> void:
+	if not _camera_retrieval_active:
+		return
+	var planar_offset := _camera_retrieval_target - global_position
+	planar_offset.y = 0.0
+	var distance := planar_offset.length()
+	if distance <= 0.48:
+		_finish_ground_camera_retrieval()
+		return
+	var travelled := global_position - _camera_retrieval_last_position
+	travelled.y = 0.0
+	if travelled.length() >= 0.035 or distance < _camera_retrieval_best_distance - 0.025:
+		_camera_retrieval_stuck_time = 0.0
+		_camera_retrieval_last_position = global_position
+		_camera_retrieval_best_distance = minf(_camera_retrieval_best_distance, distance)
+	else:
+		_camera_retrieval_stuck_time += delta
+	# Rescate magnético: evita dejar al jugador bloqueado si una puerta se
+	# cierra o algún objeto invade el trayecto corto de regreso.
+	if _camera_retrieval_stuck_time >= 2.4:
+		_finish_ground_camera_retrieval()
+
+
+func _finish_ground_camera_retrieval() -> void:
+	_camera_retrieval_active = false
+	_camera_retrieval_stuck_time = 0.0
+	velocity.x = 0.0
+	velocity.z = 0.0
+	if is_camera_on_ground():
+		filming_modes.toggle_ground()
+	if is_instance_valid(_camera_tripod) and _camera_tripod.has_method(&"set_camera_occupied"):
+		_camera_tripod.call(&"set_camera_occupied", false)
+	_camera_tripod = null
+	if is_instance_valid(holster_sound):
+		holster_sound.pitch_scale = randf_range(0.98, 1.02)
+		holster_sound.play()
 
 
 func _can_ignite_candle() -> bool:
@@ -2028,6 +2587,23 @@ func pick_up_screwdriver() -> bool:
 	return true
 
 
+func pick_up_camera_tripod(_data: Dictionary = {}) -> bool:
+	return _store_inventory_item(&"camera_tripod", {"deployed": false})
+
+
+func _set_tripod_hand_pose() -> void:
+	# Palma y empunadura comparten el rig: ni el balanceo ni una animacion de
+	# escala independiente pueden separar el tripode de la mano derecha.
+	var palm := Vector3(0.23, -0.20, -0.36)
+	var forearm_direction := Vector3(-0.06, 0.24, -0.42).normalized()
+	right_hand.basis = Basis(Quaternion(Vector3.UP, forearm_direction)).scaled(Vector3.ONE * 0.65)
+	var hand_ball := right_hand.get_node("HandBall") as Node3D
+	right_hand.position = palm - right_hand.basis * hand_ball.position
+	held_camera_tripod.scale = Vector3.ONE * 0.72
+	var grip := held_camera_tripod.get_node("CarryGrip") as Node3D
+	held_camera_tripod.position = palm - held_camera_tripod.basis * grip.position
+
+
 func consume_held_item(item_type: StringName) -> bool:
 	if _held_item != item_type:
 		return false
@@ -2045,20 +2621,32 @@ func consume_held_item(item_type: StringName) -> bool:
 	return true
 
 
-func recover_flashlight(was_on: bool) -> bool:
+func recover_flashlight(was_on: bool, has_battery := true) -> bool:
 	if _flashlight_available:
 		return false
 	var flashlight_slot := _find_empty_inventory_slot()
 	if flashlight_slot < 0:
 		return false
 	_flashlight_available = true
-	_flashlight_was_on = was_on
+	_flashlight_has_battery = has_battery
+	_flashlight_was_on = was_on and has_battery
 	_inventory_slots[flashlight_slot] = &"flashlight"
-	_inventory_item_data[flashlight_slot] = {}
+	_inventory_item_data[flashlight_slot] = {"has_battery": has_battery}
 	_flashlight_holstered = true
 	flashlight.visible = false
 	hand_rig.visible = false
+	return _equip_inventory_slot(flashlight_slot)
+
+
+func install_flashlight_battery() -> bool:
+	if not _flashlight_available or _flashlight_has_battery:
+		return false
+	_flashlight_has_battery = true
+	var flashlight_slot := _inventory_slots.find(&"flashlight")
+	if flashlight_slot >= 0:
+		_inventory_item_data[flashlight_slot]["has_battery"] = true
 	_update_inventory_ui()
+	_update_interaction_prompt()
 	return true
 
 
@@ -2138,8 +2726,13 @@ func _drop_selected_inventory_item() -> void:
 		scene_root.add_child(dropped_cassette)
 		dropped_cassette.global_position = drop_position + Vector3.UP * 0.18
 		dropped_cassette.global_rotation = Vector3(0.08, rotation.y, -0.12)
-		dropped_cassette.scale = Vector3.ONE * 0.25
 		dropped_cassette.call(&"set_dropped", item_data, velocity * 0.12 + forward * 0.18)
+	elif item_type == &"camera_tripod":
+		var dropped_tripod := CameraTripodScene.instantiate() as RigidBody3D
+		scene_root.add_child(dropped_tripod)
+		dropped_tripod.global_position = drop_position + Vector3.UP * 0.34
+		dropped_tripod.global_rotation = Vector3(0.08, rotation.y, deg_to_rad(88.0))
+		dropped_tripod.call(&"set_dropped", item_data, velocity * 0.16 + forward * 0.2)
 	elif item_type in [&"panel_fuse_good", &"panel_fuse_broken"]:
 		var fuse_scene: PackedScene = GoodPanelFuseScene if item_type == &"panel_fuse_good" else BrokenPanelFuseScene
 		var dropped_fuse := fuse_scene.instantiate() as RigidBody3D
@@ -2182,25 +2775,38 @@ func _drop_flashlight() -> void:
 	dropped.linear_velocity = Vector3.ZERO
 	dropped.angular_velocity = Vector3.ZERO
 	dropped.call(&"set_light_enabled", was_on)
+	dropped.call(&"set_battery_installed", _flashlight_has_battery)
 	_flashlight_available = false
 	_inventory_slots[_selected_inventory_slot] = &""
 	_inventory_item_data[_selected_inventory_slot] = {}
 	_flashlight_holstered = true
 	_flashlight_was_on = was_on
+	_flashlight_has_battery = false
 	flashlight.visible = false
 	hand_rig.visible = false
 	_update_inventory_ui()
 
 
-func add_key(key_id: StringName) -> bool:
+func add_key(key_id: StringName, key_name := "") -> bool:
 	if key_id.is_empty():
 		return false
-	_key_inventory[key_id] = true
+	var resolved_name := preload("res://systems/key_display_text.gd").clean(key_name.strip_edges())
+	if resolved_name.is_empty():
+		resolved_name = str(key_id).replace("_", " ").to_upper()
+	_key_inventory[key_id] = resolved_name
+	get_tree().call_group(&"camera_keyring", &"add_key", key_id, resolved_name)
 	return true
 
 
 func has_key(key_id: StringName) -> bool:
 	return debug_all_keys or (not key_id.is_empty() and _key_inventory.has(key_id))
+
+
+func get_collected_key_entries() -> Array[Dictionary]:
+	var entries: Array[Dictionary] = []
+	for key_id in _key_inventory:
+		entries.append({"id": key_id, "name": str(_key_inventory[key_id])})
+	return entries
 
 
 func is_crouched() -> bool:
@@ -2209,12 +2815,6 @@ func is_crouched() -> bool:
 
 func is_prone() -> bool:
 	return _stance == Stance.PRONE and _stance_transition_timer <= 0.0
-
-
-func get_companion_stance() -> int:
-	# Los acompanantes comienzan su propia transicion a la vez que el jugador,
-	# en vez de esperar a que la animacion de camara haya terminado.
-	return int(_pending_stance if _stance_transition_timer > 0.0 else _stance)
 
 
 func add_tool(tool_id: StringName) -> bool:
@@ -2428,12 +3028,12 @@ func _update_stance_transition(delta: float) -> void:
 func _get_stance_values(target_stance: Stance) -> Vector3:
 	match target_stance:
 		Stance.STANDING:
-			return Vector3(0.9, 2.1, 0.15)
+			return Vector3(0.62, 1.7, -0.05)
 		Stance.CROUCHED:
-			return Vector3(0.17, 1.2, -0.3)
+			return Vector3(0.0, 0.95, -0.425)
 		Stance.PRONE:
-			return Vector3(-0.36, 0.65, -0.575)
-	return Vector3(0.9, 2.1, 0.15)
+			return Vector3(-0.42, 0.55, -0.625)
+	return Vector3(0.62, 1.7, -0.05)
 
 
 func _request_jump() -> void:
@@ -2459,7 +3059,7 @@ func _update_jump(delta: float) -> void:
 	if _jump_phase == JumpPhase.WINDUP:
 		var windup_progress := clampf(_jump_timer / jump_windup_time, 0.0, 1.0)
 		var eased_windup := windup_progress * windup_progress * (3.0 - 2.0 * windup_progress)
-		head.position.y = lerpf(_jump_start_head_y, 0.51, eased_windup)
+		head.position.y = lerpf(_jump_start_head_y, 0.32, eased_windup)
 		if windup_progress >= 1.0:
 			velocity.y = jump_velocity
 			_jump_phase = JumpPhase.RECOVERING
@@ -2468,9 +3068,9 @@ func _update_jump(delta: float) -> void:
 	elif _jump_phase == JumpPhase.RECOVERING:
 		var recovery_progress := clampf(_jump_timer / jump_recovery_time, 0.0, 1.0)
 		var eased_recovery := recovery_progress * recovery_progress * (3.0 - 2.0 * recovery_progress)
-		head.position.y = lerpf(_jump_start_head_y, 0.9, eased_recovery)
+		head.position.y = lerpf(_jump_start_head_y, 0.62, eased_recovery)
 		if recovery_progress >= 1.0:
-			head.position.y = 0.9
+			head.position.y = 0.62
 			_jump_phase = JumpPhase.IDLE
 
 
@@ -2498,6 +3098,9 @@ func receive_monster_attack(attacker: Node3D) -> void:
 		return
 	_monster_hit_cooldown = 1.15
 	_monster_hits += 1
+	# Notify only accepted damage: blocked hits must not unlock enemy abilities.
+	if is_instance_valid(attacker) and attacker.has_method(&"on_player_attack_landed"):
+		attacker.call(&"on_player_attack_landed", self, _monster_hits)
 	camera_damage_overlay.set_damage_level(_monster_hits)
 	camera_damage_sound.pitch_scale = 1.22 if _monster_hits == 1 else (1.0 if _monster_hits == 2 else 0.82)
 	camera_damage_sound.volume_db = -6.0 if _monster_hits == 1 else (-4.0 if _monster_hits == 2 else -2.0)
@@ -2516,14 +3119,26 @@ func receive_monster_attack(attacker: Node3D) -> void:
 		_monster_restart_pending = true
 		_begin_death_sequence(attacker)
 
+func get_camera_lens_grime() -> Node:
+	return get_node("CameraLensGrime")
+
+func receive_camera_splatter(amount: float) -> void:
+	get_camera_lens_grime().add_splatter(amount)
+
 
 func _begin_death_sequence(attacker: Node3D) -> void:
 	_death_elapsed = 0.0
+	_camera_retrieval_active = false
+	_cancel_tripod_camera_preview()
 	get_tree().call_group(&"camera_recorder", &"notify_camera_connection_lost")
 	var inherited_velocity := velocity
 	velocity = Vector3.ZERO
 	_monster_hit_cooldown = death_sequence_seconds
 	_set_candle_placement_mode(false)
+	if is_instance_valid(filming_modes) and filming_modes.placing:
+		filming_modes.cancel_placement()
+	else:
+		_set_camera_placement_mode(false)
 	_set_note_reading(false, true)
 	_set_recipe_book_reading(false, true)
 	hand_rig.visible = false
@@ -2550,11 +3165,11 @@ func _begin_death_sequence(attacker: Node3D) -> void:
 
 
 func _spawn_death_child_visual() -> void:
-	_death_child_visual = DeathChildVisualScene.instantiate() as Node3D
-	if _death_child_visual == null:
+	if not is_instance_valid(player_avatar):
 		return
+	_death_child_visual = player_avatar
+	_death_child_visual.reparent(get_parent(), true)
 	_death_child_visual.name = "PlayerDeathChildVisual"
-	get_parent().add_child(_death_child_visual)
 	var floor_position := global_position - global_basis.y * 0.9
 	var capsule := collision_shape.shape as CapsuleShape3D
 	if capsule != null:
@@ -2570,9 +3185,10 @@ func _spawn_death_child_visual() -> void:
 	if not floor_hit.is_empty():
 		floor_position = floor_hit.position
 	_death_child_visual.global_position = floor_position + Vector3.UP * 0.015
-	_death_child_visual.global_rotation.y = global_rotation.y
-	_death_child_visual.scale = Vector3.ONE * 0.44
-	_death_child_visual.call(&"set_companion_dead", true)
+	_death_child_visual.global_rotation = Vector3(0.0, global_rotation.y + PI, 0.0)
+	_death_child_visual.scale = Vector3.ONE
+	_death_child_visual.call(&"set_hidden_from_player_camera", false)
+	_death_child_visual.call(&"set_player_dead", true)
 
 
 func _release_camera_to_physics(attacker: Node3D, inherited_velocity: Vector3) -> void:
@@ -2620,7 +3236,18 @@ func _release_camera_to_physics(attacker: Node3D, inherited_velocity: Vector3) -
 func _update_death_sequence(delta: float) -> void:
 	_death_elapsed += delta
 	if is_instance_valid(_death_child_visual):
-		_death_child_visual.call(&"update_companion_animation", delta, 0.0, true)
+		_death_child_visual.call(
+			&"update_player_animation",
+			delta,
+			Vector3.ZERO,
+			0.0,
+			true,
+			false,
+			0.0,
+			0.0,
+			&"",
+			&"death"
+		)
 	if (
 		_death_elapsed >= death_look_delay
 		and is_instance_valid(_death_camera_rig)

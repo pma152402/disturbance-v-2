@@ -1,4 +1,6 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://house_props/interactive_curtains.gd" id="1_curtains"]
 
 [sub_resource type="StandardMaterial3D" id="RedVelvet"]
 albedo_color = Color(0.29, 0.025, 0.035, 1)
@@ -46,6 +48,7 @@ height = 0.62
 radial_segments = 10
 
 [node name="LivingRoomCurtains" type="Node3D"]
+script = ExtResource("1_curtains")
 editor_description = "Cortinas rojas recogidas: cenefa superior unida, triángulos amplios hacia dentro y colas finas."
 [node name="CurtainRod" type="MeshInstance3D" parent="."]
 position = Vector3(0, 2.78, 0.08)

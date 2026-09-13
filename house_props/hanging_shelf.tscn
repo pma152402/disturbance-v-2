@@ -1,4 +1,6 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="99_camera_observable"]
 
 [ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera4.jpg" id="1_wood"]
 
@@ -22,6 +24,13 @@ points = PackedVector3Array(-0.15, 0.15, -0.06, 0.15, 0.15, -0.06, 0.15, -0.15, 
 
 [node name="HangingShelf" type="StaticBody3D"]
 editor_description = "Estanteria de pared reutilizable: tabla superior y dos soportes independientes."
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("99_camera_observable")
+observation_id = &"wall_shelf"
+display_name = "ESTANTERIA"
+framing_radius = 0.92
+maximum_distance = 18.0
 
 [node name="TopBoard" type="MeshInstance3D" parent="."]
 mesh = SubResource("Mesh_shelf")

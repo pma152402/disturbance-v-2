@@ -32,6 +32,7 @@ var _rain_collider_masks: Dictionary = {}
 var _rain_is_outdoors := true
 var _window_rain_anchor := Vector3.ZERO
 var _window_anchor_origin := Vector3(INF, INF, INF)
+var _benchmark_frozen := false
 var _flash_strength := 0.0:
 	set(value):
 		_flash_strength = value
@@ -193,7 +194,19 @@ func _set_rain_outdoors(outdoors: bool) -> void:
 func is_rain_collision_active() -> bool:
 	return _rain_is_outdoors
 
+
+func set_benchmark_frozen(frozen: bool) -> void:
+	_benchmark_frozen = frozen
+	if frozen:
+		if is_instance_valid(_lightning_tween):
+			_lightning_tween.kill()
+		_flash_strength = 0.0
+		if is_instance_valid(thunder_player):
+			thunder_player.stop()
+
 func _schedule_lightning() -> void:
+	if _benchmark_frozen:
+		return
 	get_tree().create_timer(randf_range(minimum_lightning_delay, maximum_lightning_delay)).timeout.connect(
 		_flash_and_reschedule,
 		CONNECT_ONE_SHOT
@@ -201,6 +214,8 @@ func _schedule_lightning() -> void:
 
 
 func _flash_and_reschedule() -> void:
+	if _benchmark_frozen:
+		return
 	_flash_lightning()
 	_schedule_lightning()
 

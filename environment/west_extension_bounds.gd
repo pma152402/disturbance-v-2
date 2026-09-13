@@ -1,6 +1,7 @@
 extends RefCounted
 ## Shared X/Z footprint of the ground-floor west extension (world coordinates).
 const FOOTPRINTS: Array[Rect2] = [
+	Rect2(-33.7, -14.2, 3.65, 11.4), # School staff rooms, all three storeys.
 	Rect2(-24.2, -14.2, 10.4, 8.4), # Office.
 	Rect2(-22.8, -2.1, 8.1, 7.4), # Darkroom.
 	Rect2(-29.7, -6.2, 26.7, 4.5), # Connecting corridor.

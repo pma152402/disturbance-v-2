@@ -4,6 +4,9 @@ render_mode cull_disabled, diffuse_burley;
 uniform float drift_strength : hint_range(0.0, 0.15) = 0.052;
 uniform float drift_speed : hint_range(0.1, 5.0) = 1.15;
 uniform float unnatural_lift : hint_range(0.0, 0.12) = 0.035;
+// Zero preserves the original grandmother. Only the crawler's local material
+// drives this value; keep the existing vertex animation and opaque rendering.
+uniform float shadow_coat : hint_range(0.0, 1.0) = 0.0;
 
 void vertex() {
 	float loose = smoothstep(0.025, 1.0, UV.y);
@@ -20,9 +23,9 @@ void vertex() {
 
 void fragment() {
 	float greasy_streak = 0.82 + 0.18 * sin(UV.y * 41.0 + UV2.x * 19.0);
-	ALBEDO = COLOR.rgb * greasy_streak;
+	ALBEDO = COLOR.rgb * greasy_streak * (1.0 - shadow_coat);
 	ROUGHNESS = 0.72;
-	SPECULAR = 0.34;
-	RIM = 0.08;
+	SPECULAR = 0.34 * (1.0 - shadow_coat);
+	RIM = 0.08 * (1.0 - shadow_coat);
 	RIM_TINT = 0.72;
 }

@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://doors/push_door.tscn" id="1_base"]
+
+[sub_resource type="BoxShape3D" id="Shape_original_panel"]
+size = Vector3(1.96, 2.7, 0.12)
+
+[node name="BasementPushDoor" instance=ExtResource("1_base")]
+editor_description = "Puerta del sotano conservada con la geometria y holguras originales."
+
+[node name="PanelVisual" parent="Hinge" index="0"]
+transform = Transform3D(1.93034, 0, 0, 0, 1.29788, 0, 0, 0, 2.4, 0.06978, -0.0666, 0)
+
+[node name="PanelCollision" parent="Hinge" index="2"]
+position = Vector3(0.98, 1.35, 0)
+shape = SubResource("Shape_original_panel")
+
+[editable path="Hinge"]
+[editable path="Hinge/PanelVisual"]
+[editable path="Hinge/PanelCollision"]

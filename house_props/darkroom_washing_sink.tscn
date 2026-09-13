@@ -1,5 +1,9 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="99_camera_observable"]
+
+[ext_resource type="Script" path="res://house_props/camera_wash_spot.gd" id="lens_wash"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yktwr"]
 albedo_color = Color(0.24705882, 0.27058825, 0.27058825, 1)
 metallic = 0.55
@@ -234,6 +238,18 @@ size = Vector3(0.19, 0.045, 0.11)
 [node name="DarkroomWashingSink" type="Node3D" unique_id=1135071806]
 editor_description = "Fregadero metalico de laboratorio fotografico independiente."
 metadata/_edit_group_ = true
+
+[node name="CameraWashSpot" type="Area3D" parent="."]
+position = Vector3(0, 1.15, 0.14)
+script = ExtResource("lens_wash")
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("99_camera_observable")
+observation_id = &"darkroom_sink"
+display_name = "LAVADERO FOTOGRAFICO"
+local_focus_offset = Vector3(0, 0.65, 0)
+framing_radius = 1.15
+maximum_distance = 20.0
 
 [node name="GeneratedDetail" type="Node3D" parent="." unique_id=328597212]
 

@@ -21,7 +21,5 @@ void fragment() {
 	uv.x += sin(uv.y * 18.0 + TIME * 1.7) * 0.00085;
 	uv.x += random_tear * (hash21(vec2(horizontal_band, frame)) - 0.5) * 0.006;
 	uv.x += mod(floor(FRAGCOORD.y), 2.0) * SCREEN_PIXEL_SIZE.x * sin(frame * 0.37) * 1.5;
-	float head_switch = smoothstep(0.82, 0.99, uv.y);
-	uv.x += head_switch * sin(uv.y * 170.0 + TIME * 13.0) * 0.0028;
 	COLOR = texture(screen_texture, clamp(uv, vec2(0.0), vec2(1.0)));
 }

@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://l8msy1x5kuid"]
 
+[ext_resource type="Script" path="res://house_props/interactive_curtains.gd" id="1_curtains"]
+
 [sub_resource type="StandardMaterial3D" id="dark_wood"]
 albedo_color = Color(0.105, 0.04, 0.018, 1)
 roughness = 0.93
@@ -137,6 +139,16 @@ mesh = SubResource("roof_prism")
 [node name="CenterCrossVertical" type="MeshInstance3D" parent="." unique_id=384484391]
 transform = Transform3D(0.12, 0, 0, 0, 0.64, 0, 0, 0, 0.1, 0, 3.93, -0.94)
 mesh = SubResource("wood_box")
+
+[node name="CurtainControls" type="Node3D" parent="."]
+position = Vector3(0, 0, -0.79)
+script = ExtResource("1_curtains")
+profile = 2
+initial_mode = 1
+source_parent = NodePath("..")
+curtain_width = 1.45
+bottom_height = 0.255
+top_height = 2.905
 
 [node name="CenterCrossHorizontal" type="MeshInstance3D" parent="." unique_id=1297601308]
 transform = Transform3D(0.5, 0, 0, 0, 0.12, 0, 0, 0, 0.1, 0, 4.02, -0.94)

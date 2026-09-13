@@ -5,6 +5,7 @@ const CrowbarVisual := preload("res://player/held_items/crowbar.tscn")
 
 @export var required_tool_id: StringName = &"crowbar"
 @export var required_tool_name := "PALANCA"
+@export var requires_two_hands := true
 @export_node_path("Node3D") var deferred_content_path: NodePath
 
 @onready var collision_shape: CollisionShape3D = $Collision
@@ -24,6 +25,14 @@ var _boards: Array[Node3D] = []
 var _board_removed_flags: Array[bool] = []
 var _pry_pivot: Node3D
 var _pry_tween: Tween
+var _pry_visual: Node3D
+var _minigame: Control
+var _work_position := Vector3.ZERO
+var _work_normal := Vector3.FORWARD
+var _alignment_time := 0.0
+var _grip_settle_time := 0.0
+var _pry_rest_basis := Basis.IDENTITY
+var _previous_mouse_mode := Input.MOUSE_MODE_CAPTURED
 
 
 func _ready() -> void:
@@ -43,6 +52,7 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	if _minigame_active:
 		_restore_player()
+	_close_minigame_layer()
 
 
 func get_interaction_key() -> Key:
@@ -55,7 +65,9 @@ func get_interaction_text(player: Node = null) -> String:
 	if player != null and player.has_method(&"has_tool") and player.has_tool(required_tool_id):
 		if player.has_method(&"is_holding_item_type") and not player.is_holding_item_type(required_tool_id):
 			return "EQUIPA %s" % required_tool_name.to_upper()
-		return "F  QUITAR TABLONES"
+		if requires_two_hands and (not player.has_method(&"is_camera_on_ground") or not player.is_camera_on_ground()):
+			return "O  DEJA LA CAMARA  |  NECESITAS DOS MANOS"
+		return "F  QUITAR TABLONES CON DOS MANOS"
 	return "NECESITAS %s" % required_tool_name.to_upper()
 
 
@@ -71,6 +83,8 @@ func interact(player: Node = null) -> bool:
 
 
 func _start_minigame(player: Node) -> void:
+	if requires_two_hands and (not player.has_method(&"can_begin_two_hand_interaction") or not player.can_begin_two_hand_interaction(required_tool_id)):
+		return
 	if not deferred_content_path.is_empty():
 		var content := get_node_or_null(deferred_content_path)
 		if content == null or not content.has_method(&"ensure_church_catacombs"):
@@ -78,11 +92,15 @@ func _start_minigame(player: Node) -> void:
 			return
 		if not bool(content.call(&"ensure_church_catacombs")):
 			return
+	if requires_two_hands:
+		if not player.has_method(&"begin_two_hand_interaction") or not player.begin_two_hand_interaction(self, required_tool_id):
+			return
 	_minigame_active = true
 	_active_player = player
 	_active_layer = MinigameScene.instantiate() as CanvasLayer
 	get_tree().current_scene.add_child(_active_layer)
 	var minigame := _active_layer.get_node("BoardedDoorMinigame")
+	_minigame = minigame
 	minigame.call(&"setup", _nail_removed_flags)
 	minigame.call(&"bind_world", get_viewport().get_camera_3d(), _nails)
 	minigame.completed.connect(_on_minigame_completed)
@@ -91,7 +109,8 @@ func _start_minigame(player: Node) -> void:
 	minigame.pry_motion.connect(_on_pry_motion)
 	minigame.nail_removed.connect(_on_nail_removed)
 	_lock_player()
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_previous_mouse_mode = Input.mouse_mode
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
 func _lock_player() -> void:
@@ -111,32 +130,63 @@ func _lock_player() -> void:
 
 func _restore_player() -> void:
 	if is_instance_valid(_active_player):
-		_active_player.set_process_input(_player_was_processing_input)
-		_active_player.set_physics_process(_player_was_processing_physics)
+		var dying := bool(_active_player.get("_monster_restart_pending"))
+		_active_player.set_process_input(_player_was_processing_input and not dying)
+		_active_player.set_physics_process(_player_was_processing_physics and not dying)
 		if _active_player.has_method(&"set_skill_check_active"):
 			_active_player.call(&"set_skill_check_active", false)
 		if _active_player.has_method(&"set_crowbar_minigame_pose"):
 			_active_player.call(&"set_crowbar_minigame_pose", false)
+		if _active_player.has_method(&"end_two_hand_interaction"):
+			_active_player.call(&"end_two_hand_interaction", self)
+		if _active_player is CharacterBody3D:
+			_active_player.velocity = Vector3.ZERO
 	_active_player = null
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	Input.mouse_mode = _previous_mouse_mode
 
 
 func _on_nail_selected(nail_index: int) -> void:
 	if nail_index < 0 or nail_index >= _nails.size() or not is_instance_valid(_nails[nail_index]):
 		return
 	var nail := _nails[nail_index]
+	if _pry_tween != null and _pry_tween.is_valid():
+		_pry_tween.kill()
 	if is_instance_valid(_pry_pivot):
 		_pry_pivot.free()
 	_pry_pivot = Node3D.new()
 	add_child(_pry_pivot)
 	_pry_pivot.global_transform = (nail.get_parent() as Node3D).global_transform
-	_pry_pivot.global_position = nail.global_position - _pry_pivot.global_basis.z.normalized() * 0.07
+	_work_normal = -global_basis.z.normalized()
+	if (_active_player.global_position - global_position).dot(_work_normal) < 0:
+		_work_normal = -_work_normal
+	_pry_pivot.global_position = nail.global_position + _work_normal * 0.045
+	# El mango apunta hacia el cuerpo: arriba en clavos bajos, abajo en altos.
+	var low_nail: bool = nail.global_position.y < _active_player.global_position.y - 0.05
+	var waist_nail: bool = nail.global_position.y < _active_player.global_position.y + 0.5
+	var left_side := to_local(nail.global_position).x < 0.0
+	var working_angle := PI if low_nail else ((-PI * 0.5 if left_side else PI * 0.5) if waist_nail else 0.0)
+	_pry_pivot.global_basis = global_basis.orthonormalized() * Basis(Vector3.FORWARD, working_angle)
+	if (low_nail and not left_side) or (not waist_nail and left_side):
+		_pry_pivot.global_basis *= Basis(Vector3.UP, PI)
+	_pry_rest_basis = _pry_pivot.basis
 	var visual := CrowbarVisual.instantiate() as Node3D
+	_pry_visual = visual
 	_pry_pivot.add_child(visual)
-	visual.scale = Vector3.ONE * 0.42
-	var inserted := -Vector3(0.41, 1.45, 0) * 0.42
-	visual.position = inserted + Vector3(0, -0.2, -0.3)
-	visual.create_tween().tween_property(visual, "position", inserted, 0.3)
+	visual.scale = Vector3.ONE * 0.72
+	# Deslizar las manos por el mango permite llegar a clavos altos sin alargar brazos.
+	var high_nail: bool = nail.global_position.y > _active_player.global_position.y + 1.0
+	visual.get_node("SupportGrip").position.y = 0.30 if high_nail else 0.78
+	visual.get_node("PowerGrip").position.y = 0.16 if high_nail else 0.48
+	var inserted: Vector3 = -visual.get_node("HookContact").position * 0.72
+	visual.position = inserted
+	var grip: Vector3 = (visual.get_node("SupportGrip").global_position + visual.get_node("PowerGrip").global_position) * 0.5
+	_work_position = grip + _work_normal * 0.46
+	_work_position.y = _active_player.global_position.y
+	_alignment_time = 0.0
+	_grip_settle_time = 0.0
+	_minigame.work_ready = false
+	visual.visible = false
+	_active_player.call(&"set_two_hand_tool", null)
 	var tween := nail.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	tween.tween_property(nail, "scale", Vector3.ONE * 1.24, 0.12)
 	tween.tween_property(nail, "scale", Vector3.ONE, 0.16)
@@ -152,7 +202,41 @@ func _on_pry_motion(nail_index: int, progress: float, handle_value: float) -> vo
 		if _pry_tween != null and _pry_tween.is_valid():
 			_pry_tween.kill()
 		_pry_tween = _pry_pivot.create_tween()
-		_pry_tween.tween_property(_pry_pivot, "rotation:x", handle_value * 0.22, 0.1)
+		_pry_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		# El mango oscila desde reposo hacia el jugador, sin atravesar los tablones.
+		var side := -1.0 if _work_normal.dot(global_basis * _pry_rest_basis.z) > 0.0 else 1.0
+		var target_basis := _pry_rest_basis * Basis(Vector3.RIGHT, side * (0.03 + (handle_value + 1.0) * 0.07))
+		_pry_tween.tween_property(_pry_pivot, "basis", target_basis, 0.14)
+		_pry_tween.parallel().tween_property(_pry_pivot, "global_position", nail.global_position + _work_normal * 0.045, 0.14)
+
+
+func _physics_process(delta: float) -> void:
+	if not _minigame_active or not is_instance_valid(_active_player) or not is_instance_valid(_pry_visual):
+		return
+	if _active_player.get("_monster_restart_pending"):
+		_on_minigame_cancelled()
+		return
+	var actor := _active_player as CharacterBody3D
+	var offset := _work_position - actor.global_position
+	offset.y = 0
+	var motion := offset.limit_length(1.35 * delta)
+	actor.move_and_collide(motion)
+	actor.velocity = motion / maxf(delta, 0.001) if offset.length() > 0.03 else Vector3.ZERO
+	var facing := -_work_normal
+	actor.rotation.y = lerp_angle(actor.rotation.y, atan2(-facing.x, -facing.z), minf(delta * 8, 1))
+	_alignment_time += delta
+	if offset.length() < 0.04:
+		_grip_settle_time += delta
+		if not _pry_visual.visible:
+			_pry_visual.visible = true
+			_active_player.call(&"set_two_hand_tool", _pry_visual)
+			var inserted := _pry_visual.position
+			_pry_visual.position += _pry_pivot.global_basis.inverse() * _work_normal * 0.12
+			_pry_visual.create_tween().tween_property(_pry_visual, "position", inserted, 0.28)
+		_minigame.work_ready = _grip_settle_time > 0.4
+	elif _alignment_time > 4.0:
+		# Un obstáculo real cancela el acercamiento; nunca atravesamos colisiones.
+		_on_minigame_cancelled()
 
 
 func _on_nail_removed(nail_index: int) -> void:

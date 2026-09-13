@@ -1,4 +1,5 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="1_camera_observable"]
 [sub_resource type="StandardMaterial3D" id="wood"]
 albedo_color = Color(0.25, 0.105, 0.035, 1)
 roughness = 0.9
@@ -30,6 +31,14 @@ radial_segments = 8
 size = Vector3(0.78, 0.48, 0.28)
 [node name="OldRadio" type="StaticBody3D"]
 editor_description = "Radio antigua de madera con altavoz, dial y mandos separados."
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("1_camera_observable")
+observation_id = &"radio"
+display_name = "RADIO"
+local_focus_offset = Vector3(0, 0.27, 0)
+framing_radius = 0.48
+maximum_distance = 15.0
+minimum_screen_fraction = 0.009
 [node name="Body" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.24, 0)
 mesh = SubResource("body")

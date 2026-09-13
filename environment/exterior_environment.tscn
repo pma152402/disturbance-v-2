@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="ArrayMesh" path="res://environment/exterior_tree_mesh.tres" id="2_tree_mesh"]
 [ext_resource type="Texture2D" path="res://ps2_house/Models/Abandoned_House_Madera4.jpg" id="3_wood"]
@@ -6,6 +6,7 @@
 [ext_resource type="ArrayMesh" path="res://environment/exterior_grass_mesh.tres" id="5_grass_mesh"]
 [ext_resource type="PackedScene" path="res://house_props/large_dead_entry_tree.tscn" id="6_dead_tree"]
 [ext_resource type="PackedScene" path="res://environment/exterior_landscape.tscn" id="7_landscape"]
+[ext_resource type="PackedScene" path="res://environment/dirt_football_field.tscn" id="8_field"]
 
 [sub_resource type="StandardMaterial3D" id="Material_fence"]
 albedo_color = Color(0.28, 0.2, 0.13, 1)
@@ -125,3 +126,9 @@ position = Vector3(-7.8, 0, 20.2)
 rotation = Vector3(0, 0.38, 0)
 
 [node name="Landscape" parent="." instance=ExtResource("7_landscape")]
+
+[node name="DirtFootballField" parent="." instance=ExtResource("8_field")]
+position = Vector3(39, 0.025, -13)
+rotation = Vector3(0, -0.035, 0)
+
+[editable path="DirtFootballField"]

@@ -1,0 +1,132 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://house_props/school_wall_bell.gd" id="1_bell"]
+
+[sub_resource type="StandardMaterial3D" id="Enamel"]
+albedo_color = Color(0.255, 0.276, 0.25, 1)
+metallic = 0.28
+roughness = 0.48
+
+[sub_resource type="StandardMaterial3D" id="Steel"]
+albedo_color = Color(0.63, 0.66, 0.64, 1)
+metallic = 0.92
+roughness = 0.19
+
+[sub_resource type="StandardMaterial3D" id="DarkSteel"]
+albedo_color = Color(0.095, 0.105, 0.098, 1)
+metallic = 0.74
+roughness = 0.32
+
+[sub_resource type="StandardMaterial3D" id="Brass"]
+albedo_color = Color(0.48, 0.31, 0.105, 1)
+metallic = 0.83
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="CaseMesh"]
+size = Vector3(0.48, 0.38, 0.15)
+
+[sub_resource type="BoxMesh" id="CaseLipMesh"]
+size = Vector3(0.53, 0.43, 0.035)
+
+[sub_resource type="SphereMesh" id="DomeMesh"]
+radius = 0.36
+height = 0.72
+radial_segments = 32
+rings = 16
+
+[sub_resource type="TorusMesh" id="RimMesh"]
+inner_radius = 0.325
+outer_radius = 0.36
+rings = 32
+ring_segments = 10
+
+[sub_resource type="CylinderMesh" id="BoltMesh"]
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.025
+radial_segments = 12
+
+[sub_resource type="BoxMesh" id="ArmMesh"]
+size = Vector3(0.045, 0.34, 0.035)
+
+[sub_resource type="CylinderMesh" id="HammerMesh"]
+top_radius = 0.045
+bottom_radius = 0.045
+height = 0.065
+radial_segments = 12
+
+[sub_resource type="BoxShape3D" id="BellShape"]
+size = Vector3(0.82, 1.13, 0.34)
+
+[node name="SchoolWallBell" type="StaticBody3D"]
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("1_bell")
+
+[node name="MountingCase" type="MeshInstance3D" parent="."]
+position = Vector3(0.13, 0.36, 0.015)
+mesh = SubResource("CaseMesh")
+material_override = SubResource("Enamel")
+
+[node name="CaseBackLip" type="MeshInstance3D" parent="."]
+position = Vector3(0.13, 0.36, 0.102)
+mesh = SubResource("CaseLipMesh")
+material_override = SubResource("DarkSteel")
+
+[node name="CaseBoltLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.045, 0.36, -0.075)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("BoltMesh")
+material_override = SubResource("Brass")
+
+[node name="CaseBoltRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.305, 0.36, -0.075)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("BoltMesh")
+material_override = SubResource("Brass")
+
+[node name="BellPivot" type="Node3D" parent="."]
+position = Vector3(-0.08, -0.17, -0.11)
+
+[node name="BellDome" type="MeshInstance3D" parent="BellPivot"]
+scale = Vector3(1, 1, 0.28)
+mesh = SubResource("DomeMesh")
+material_override = SubResource("Steel")
+
+[node name="BellRim" type="MeshInstance3D" parent="BellPivot"]
+position = Vector3(0, 0, -0.11)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("RimMesh")
+material_override = SubResource("DarkSteel")
+
+[node name="CenterBolt" type="MeshInstance3D" parent="BellPivot"]
+position = Vector3(0, 0, -0.235)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("BoltMesh")
+material_override = SubResource("Brass")
+
+[node name="StrikerPivot" type="Node3D" parent="."]
+position = Vector3(0.33, 0.18, -0.15)
+
+[node name="StrikerArm" type="MeshInstance3D" parent="StrikerPivot"]
+position = Vector3(0, -0.16, 0)
+rotation_degrees = Vector3(0, 0, -8)
+mesh = SubResource("ArmMesh")
+material_override = SubResource("Brass")
+
+[node name="StrikerHammer" type="MeshInstance3D" parent="StrikerPivot"]
+position = Vector3(-0.043, -0.325, 0)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("HammerMesh")
+material_override = SubResource("DarkSteel")
+
+[node name="RingAudio" type="AudioStreamPlayer3D" parent="."]
+position = Vector3(-0.08, -0.17, -0.2)
+volume_db = -3.0
+unit_size = 5.0
+max_distance = 38.0
+attenuation_model = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.02, -0.04)
+shape = SubResource("BellShape")

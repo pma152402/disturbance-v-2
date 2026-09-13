@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://cemigolydjlpq"]
 
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="1_camera_observable"]
+
 [sub_resource type="StandardMaterial3D" id="wood"]
 albedo_color = Color(0.24, 0.105, 0.035, 1)
 roughness = 0.86
@@ -43,6 +45,24 @@ size = Vector3(1.55, 0.88, 0.55)
 
 [node name="AntiqueVanityTable" type="StaticBody3D" unique_id=695771496]
 editor_description = "Tocador antiguo con tablero, tres cajones, espejo alto enmarcado, patas y pomos."
+
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("1_camera_observable")
+observation_id = &"vanity_table"
+display_name = "TOCADOR"
+local_focus_offset = Vector3(0, 0.85, 0)
+framing_radius = 1.45
+maximum_distance = 22.0
+
+[node name="MirrorObservable" type="Node" parent="."]
+script = ExtResource("1_camera_observable")
+observation_id = &"mirror"
+display_name = "ESPEJO ROTO"
+focus_path = NodePath("MirrorSurface")
+framing_radius = 0.72
+maximum_distance = 18.0
+minimum_screen_fraction = 0.009
+priority = 1.8
 
 [node name="TableTop" type="MeshInstance3D" parent="." unique_id=871382887]
 transform = Transform3D(1.65, 0, 0, 0, 0.1, 0, 0, 0, 0.62, 0, 0.82, 0)

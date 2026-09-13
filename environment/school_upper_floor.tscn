@@ -3137,6 +3137,864 @@ _surfaces = [{
 data = PackedVector3Array(-5.7, 0, -3.94, -5.7, 0, -2.06, -5, 0.04, -3.94, -5.7, 0, -2.06, -5, 0.04, -2.06, -5, 0.04, -3.94)
 backface_collision = true
 
+[sub_resource type="BoxMesh" id="school_seal_mesh_4245962601"]
+size = Vector3(0.65, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1735342109"]
+size = Vector3(0.65, 4, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1767141467"]
+size = Vector3(0.65, 0.2, 0.24)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_130918891"]
+size = Vector3(2.3, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3214925343"]
+size = Vector3(2.3, 1.1, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2368364332"]
+size = Vector3(2.3, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1807233312"]
+size = Vector3(2.3, 1.1, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_803300223"]
+size = Vector3(2.3, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_277793459"]
+size = Vector3(2.3, 1.1, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3040745664"]
+size = Vector3(2.3, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3165068724"]
+size = Vector3(2.3, 1.1, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1624555744"]
+size = Vector3(1.7, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1068596692"]
+size = Vector3(1.7, 4, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093618"]
+size = Vector3(1.7, 0.2, 0.24)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1804479330"]
+size = Vector3(1.15, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2548179926"]
+size = Vector3(1.15, 1.1, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_4041924771"]
+size = Vector3(1.15, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1140487895"]
+size = Vector3(1.15, 1.1, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2625734851"]
+size = Vector3(0.6, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3338983159"]
+size = Vector3(0.6, 4, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093653"]
+size = Vector3(0.6, 0.2, 0.24)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2727296028"]
+size = Vector3(0.9, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2506420752"]
+size = Vector3(0.9, 1.1, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_669774173"]
+size = Vector3(0.9, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1098728721"]
+size = Vector3(0.9, 1.1, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3548551549"]
+size = Vector3(3.4, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3297223985"]
+size = Vector3(3.4, 4, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093711"]
+size = Vector3(3.4, 0.2, 0.24)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3728475135"]
+size = Vector3(0.8, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_481839923"]
+size = Vector3(0.8, 1.1, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1670953280"]
+size = Vector3(0.8, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3369115188"]
+size = Vector3(0.8, 1.1, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_614610532"]
+size = Vector3(2.29, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_4231809624"]
+size = Vector3(2.29, 4, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093750"]
+size = Vector3(2.29, 0.2, 0.24)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_794534118"]
+size = Vector3(1.92, 1.06, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1416425562"]
+size = Vector3(1.92, 1.06, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093776"]
+size = Vector3(1.5, 0.23, 0.028)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1076018881"]
+size = Vector3(2.09, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2063446389"]
+size = Vector3(2.09, 4, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093779"]
+size = Vector3(2.09, 0.2, 0.24)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1435866053"]
+size = Vector3(1.92, 1.06, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_727645561"]
+size = Vector3(1.92, 1.06, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093784"]
+size = Vector3(1.5, 0.23, 0.028)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1897274402"]
+size = Vector3(4.33, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2854249622"]
+size = Vector3(4.33, 4, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093812"]
+size = Vector3(4.33, 0.2, 0.24)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2257121574"]
+size = Vector3(1.92, 1.06, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1518448794"]
+size = Vector3(1.92, 1.06, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093817"]
+size = Vector3(1.5, 0.23, 0.028)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1375288080"]
+size = Vector3(1.7, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_126356484"]
+size = Vector3(1.7, 1.1, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3612733521"]
+size = Vector3(1.7, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3013631749"]
+size = Vector3(1.7, 1.1, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2196543601"]
+size = Vector3(0.95, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_917159717"]
+size = Vector3(0.95, 4, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_271708451"]
+size = Vector3(0.95, 0.2, 0.24)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2298104778"]
+size = Vector3(3.65, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_84597310"]
+size = Vector3(3.65, 1.1, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_240582923"]
+size = Vector3(3.65, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2971872575"]
+size = Vector3(3.65, 1.1, 0.2)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3479207471"]
+size = Vector3(0.2, 1.04, 2.6)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3834567011"]
+size = Vector3(0.2, 1.04, 2.6)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1421685616"]
+size = Vector3(0.2, 1.56, 2.6)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2426874980"]
+size = Vector3(0.2, 1.56, 2.6)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3659131057"]
+size = Vector3(0.2, 4, 0.85)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1019182949"]
+size = Vector3(0.2, 4, 0.85)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_271708515"]
+size = Vector3(0.24, 0.2, 0.85)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3940615820"]
+size = Vector3(0.2, 1.2, 1.55)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1666203776"]
+size = Vector3(0.2, 1.2, 1.55)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1883093965"]
+size = Vector3(0.2, 4, 0.68)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_258511745"]
+size = Vector3(0.2, 4, 0.68)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_271708543"]
+size = Vector3(0.24, 0.2, 0.68)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2063017551"]
+size = Vector3(0.2, 4, 0.77)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1738094979"]
+size = Vector3(0.2, 4, 0.77)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_271708545"]
+size = Vector3(0.24, 0.2, 0.77)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2242941137"]
+size = Vector3(0.2, 1.06, 2.7)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3217678213"]
+size = Vector3(0.2, 1.06, 2.7)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_937759923"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_937759924"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_937759925"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_937759926"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_937759927"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_937759928"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2861653844"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2861653845"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2861653846"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2861653847"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2861653848"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2861653849"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_490580469"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_490580470"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_490580471"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_490580472"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_490580473"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_490580474"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_114199444"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_114199445"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_114199446"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_114199447"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_114199448"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_114199449"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2038093365"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2038093366"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2038093367"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2038093368"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2038093369"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2038093370"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3961987286"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3961987287"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3961987288"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3961987289"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3961987290"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3961987291"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3585606261"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3585606262"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3585606263"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3585606264"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3585606265"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3585606266"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1214532886"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1214532887"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1214532888"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1214532889"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1214532890"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1214532891"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3138426807"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3138426808"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3138426809"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3138426810"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3138426811"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3138426812"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2762045782"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2762045783"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2762045784"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2762045785"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2762045786"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2762045787"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_390972407"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_390972408"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_390972409"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_390972410"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_390972411"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_390972412"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2314866328"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2314866329"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2314866330"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2314866331"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2314866332"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2314866333"]
+size = Vector3(0.15, 0.001, 0.001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_4180529905"]
+size = Vector3(0.4, 0.16, 0.026)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_4180529908"]
+size = Vector3(0.4, 0.16, 0.026)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_4180529911"]
+size = Vector3(0.4, 0.16, 0.026)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_518533409"]
+size = Vector3(0.4, 0.16, 0.026)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_518533412"]
+size = Vector3(0.4, 0.16, 0.026)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_518533415"]
+size = Vector3(0.4, 0.16, 0.026)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_4265147435"]
+size = Vector3(0.014, 0.53, 0.58)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_4265147437"]
+size = Vector3(0.014, 0.53, 0.58)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_4145672313"]
+size = Vector3(0.014, 0.53, 0.58)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_4145672338"]
+size = Vector3(0.014, 0.53, 0.58)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_194112298"]
+size = Vector3(0.014, 0.53, 0.58)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_194112300"]
+size = Vector3(0.014, 0.53, 0.58)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3929175095"]
+size = Vector3(0.014, 0.53, 0.58)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3929175097"]
+size = Vector3(0.014, 0.53, 0.58)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_4274832042"]
+size = Vector3(0.012, 0.003, 3.5)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_4274832043"]
+size = Vector3(0.012, 0.003, 3.5)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_4274832044"]
+size = Vector3(0.012, 0.003, 3.5)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_4274832045"]
+size = Vector3(0.012, 0.003, 3.5)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_4274832046"]
+size = Vector3(0.012, 0.003, 3.5)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3630503830"]
+size = Vector3(0.012, 0.003, 3.5)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3630503831"]
+size = Vector3(0.012, 0.003, 3.5)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3630503832"]
+size = Vector3(0.012, 0.003, 3.5)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3630503833"]
+size = Vector3(0.012, 0.003, 3.5)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3630503834"]
+size = Vector3(8.96, 0.003, 0.012)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3630503835"]
+size = Vector3(8.96, 0.003, 0.012)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_684543598"]
+size = Vector3(0.22, 4, 0.81)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2193337314"]
+size = Vector3(0.22, 4, 0.81)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2193337315"]
+size = Vector3(0.22, 1.15, 1.94)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_684543599"]
+size = Vector3(0.22, 1.15, 1.94)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_267154381"]
+size = Vector3(0.27, 0.24, 0.81)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_4097088412"]
+size = Vector3(0.7500019, 4, 0.20000076)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2302374288"]
+size = Vector3(0.7500019, 4, 0.20000076)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093550"]
+size = Vector3(0.77000237, 0.2, 0.24000168)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_4277011998"]
+size = Vector3(0.20000076, 4, 3.2599993)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3781957522"]
+size = Vector3(0.20000076, 4, 3.2599993)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093552"]
+size = Vector3(0.24000168, 0.2, 3.2399988)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_161968288"]
+size = Vector3(0.20000076, 4, 7.81)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_966573460"]
+size = Vector3(0.20000076, 4, 7.81)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093554"]
+size = Vector3(0.24000168, 0.2, 7.79)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_263529465"]
+size = Vector3(0.20000076, 4, 7.7099996)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_134011053"]
+size = Vector3(0.20000076, 4, 7.7099996)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093579"]
+size = Vector3(0.24000168, 0.2, 7.67)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_443453051"]
+size = Vector3(0.20000076, 4, 7.8099995)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1613594287"]
+size = Vector3(0.20000076, 4, 7.8099995)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093581"]
+size = Vector3(0.23999977, 0.2, 7.79)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_623376637"]
+size = Vector3(0.80000114, 4, 0.20000076)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3093177521"]
+size = Vector3(0.80000114, 4, 0.20000076)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093583"]
+size = Vector3(0.7800007, 0.2, 0.23999977)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_254763360"]
+size = Vector3(0.55000114, 4, 0.20000076)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1272643156"]
+size = Vector3(0.55000114, 4, 0.20000076)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093746"]
+size = Vector3(0.57000065, 0.2, 0.23999977)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_434686946"]
+size = Vector3(2.1900005, 4, 0.19999981)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2752226390"]
+size = Vector3(2.1900005, 4, 0.19999981)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093748"]
+size = Vector3(2.210001, 0.2, 0.23999977)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1255942467"]
+size = Vector3(1.789999, 4, 0.19999981)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3543029623"]
+size = Vector3(1.789999, 4, 0.19999981)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093781"]
+size = Vector3(1.7699995, 0.2, 0.23999977)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1717350816"]
+size = Vector3(4.1099987, 4, 0.20000005)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1374666388"]
+size = Vector3(4.1099987, 4, 0.20000005)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093810"]
+size = Vector3(4.129999, 0.2, 0.24000001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2077197988"]
+size = Vector3(1.3500013, 4, 0.20000005)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_38865560"]
+size = Vector3(1.3500013, 4, 0.20000005)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_2481093814"]
+size = Vector3(1.3700008, 0.2, 0.24000001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_655593736"]
+size = Vector3(0.20000076, 4, 1.8)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2797958140"]
+size = Vector3(0.20000076, 4, 1.8)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_271708410"]
+size = Vector3(0.24000168, 0.2, 1.78)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_835517322"]
+size = Vector3(0.20000076, 4, 6.7799997)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_4277541374"]
+size = Vector3(0.20000076, 4, 6.7799997)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_271708412"]
+size = Vector3(0.24000168, 0.2, 6.74)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1015440908"]
+size = Vector3(0.20000076, 4, 6.7799997)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1462157312"]
+size = Vector3(0.20000076, 4, 6.7799997)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_271708414"]
+size = Vector3(0.23999977, 0.2, 6.74)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_1195364494"]
+size = Vector3(0.69000053, 4, 0.19999981)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2941740546"]
+size = Vector3(0.69000053, 4, 0.19999981)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_271708416"]
+size = Vector3(0.710001, 0.2, 0.23999977)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3119360299"]
+size = Vector3(0.710001, 4, 0.19999981)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_875400543"]
+size = Vector3(0.710001, 4, 0.19999981)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_271708509"]
+size = Vector3(0.7300005, 0.2, 0.23999977)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3299283885"]
+size = Vector3(0.20000076, 4, 1.4800001)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2354983777"]
+size = Vector3(0.20000076, 4, 1.4800001)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_271708511"]
+size = Vector3(0.24000168, 0.2, 1.4600002)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_3839054643"]
+size = Vector3(0.20000076, 4, 0.2999997)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2498766183"]
+size = Vector3(0.20000076, 4, 0.2999997)
+
+[sub_resource type="BoxMesh" id="school_seal_mesh_271708517"]
+size = Vector3(0.24000168, 0.2, 0.27999973)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3469355875"]
+size = Vector3(0.65, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_256023650"]
+size = Vector3(2.3, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2530847325"]
+size = Vector3(2.3, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1277185469"]
+size = Vector3(0.7500019, 4, 0.20000076)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2460817966"]
+size = Vector3(0.20000076, 4, 3.2599993)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_4077015021"]
+size = Vector3(0.20000076, 4, 7.81)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2016451845"]
+size = Vector3(0.20000076, 4, 7.7099996)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_486119668"]
+size = Vector3(0.20000076, 4, 7.8099995)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1595856737"]
+size = Vector3(0.80000114, 4, 0.20000076)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3110005490"]
+size = Vector3(2.3, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1017529421"]
+size = Vector3(2.3, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3354543715"]
+size = Vector3(1.7, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3999095764"]
+size = Vector3(1.15, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_781767599"]
+size = Vector3(1.15, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1718598895"]
+size = Vector3(0.6, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_263104196"]
+size = Vector3(0.9, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_440653576"]
+size = Vector3(0.9, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2103116954"]
+size = Vector3(3.4, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_4156397008"]
+size = Vector3(0.8, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2063895133"]
+size = Vector3(0.8, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1440373450"]
+size = Vector3(0.55000114, 4, 0.20000076)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2985014514"]
+size = Vector3(2.1900005, 4, 0.19999981)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1944749073"]
+size = Vector3(2.29, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3517517918"]
+size = Vector3(1.92, 1.06, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_711710359"]
+size = Vector3(2.09, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2225859112"]
+size = Vector3(1.789999, 4, 0.19999981)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3307494206"]
+size = Vector3(1.92, 1.06, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1105334537"]
+size = Vector3(4.1099987, 4, 0.20000005)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2360523784"]
+size = Vector3(4.33, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1609735184"]
+size = Vector3(1.3500013, 4, 0.20000005)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2865751005"]
+size = Vector3(1.92, 1.06, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_249625865"]
+size = Vector3(0.20000076, 4, 1.8)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_533169393"]
+size = Vector3(0.20000076, 4, 6.7799997)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_4077348848"]
+size = Vector3(0.20000076, 4, 6.7799997)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1038371544"]
+size = Vector3(0.69000053, 4, 0.19999981)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1023379635"]
+size = Vector3(1.7, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1968552510"]
+size = Vector3(1.7, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2271075846"]
+size = Vector3(0.95, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3565733337"]
+size = Vector3(3.65, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2347917780"]
+size = Vector3(3.65, 1.1, 0.2)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_830563254"]
+size = Vector3(0.710001, 4, 0.19999981)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_4013734947"]
+size = Vector3(0.20000076, 4, 1.4800001)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_363293894"]
+size = Vector3(0.2, 1.04, 2.6)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1441784623"]
+size = Vector3(0.2, 1.56, 2.6)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2519423754"]
+size = Vector3(0.2, 4, 0.85)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3163975044"]
+size = Vector3(0.20000076, 4, 0.2999997)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2163152777"]
+size = Vector3(0.2, 1.2, 1.55)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_3241643506"]
+size = Vector3(0.2, 4, 0.68)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_93174221"]
+size = Vector3(0.2, 4, 0.77)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_2503113198"]
+size = Vector3(0.2, 1.06, 2.7)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1559047105"]
+size = Vector3(0.22, 4, 0.81)
+
+[sub_resource type="BoxShape3D" id="school_seal_shape_1559047129"]
+size = Vector3(0.22, 1.15, 1.94)
+
 [node name="SchoolUpperFloor" type="Node3D" unique_id=1155908564]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.16, 0)
 script = ExtResource("9_runtime")
@@ -3145,61 +4003,38 @@ metadata/layout = "Existing upper slabs; north dormitory and classroom; south di
 
 [node name="ExteriorAndPartitions" type="StaticBody3D" parent="." unique_id=1709949153]
 
-[node name="WallSolid0" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1203367917]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.15, 2, -8.64)
-
-[node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid0" unique_id=414786696]
-material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_r5mjg")
-metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid0" unique_id=1354209302]
-shape = SubResource("BoxShape3D_ghbaa")
-
-[node name="FramePart1" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=1905488043]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.15, 0.1, -8.64)
-material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_p1equ")
-metadata/school_static_detail = true
-
 [node name="WallSolid2" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1610614885]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.825, 2, -17.3)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid2" unique_id=1891713017]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_ckdk7")
+mesh = SubResource("school_seal_mesh_4245962601")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid2" unique_id=1743329550]
-shape = SubResource("BoxShape3D_axngy")
 
 [node name="FramePart3" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=76627014]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.825, 0.1, -17.3)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_5oyyf")
+mesh = SubResource("school_seal_mesh_1767141467")
 metadata/school_static_detail = true
 
 [node name="WallSolid4" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1967460695]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.35, 0.55, -17.3)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid4" unique_id=1454673177]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_181yr")
+mesh = SubResource("school_seal_mesh_130918891")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid4" unique_id=1169843209]
-shape = SubResource("BoxShape3D_ib6gg")
 
 [node name="WallSolid5" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1267328868]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.35, 3.45, -17.3)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid5" unique_id=139668905]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_bu8vi")
+mesh = SubResource("school_seal_mesh_2368364332")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid5" unique_id=1960698955]
-shape = SubResource("BoxShape3D_5xwrt")
 
 [node name="GlassSolid6" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1803871434]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.35, 2, -17.3)
@@ -3258,80 +4093,70 @@ metadata/school_static_detail = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.875, 2, -17.3)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid14" unique_id=1255174284]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.049999237, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_0brry")
+mesh = SubResource("school_seal_mesh_4097088412")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid14" unique_id=719230567]
-shape = SubResource("BoxShape3D_6lua0")
-
 [node name="FramePart15" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=1531703643]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.875, 0.1, -17.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.814999, 0.1, -17.3)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_mmsve")
+mesh = SubResource("school_seal_mesh_2481093550")
 metadata/school_static_detail = true
 
 [node name="WallSolid16" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=488394683]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.55, 2, -15.62)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid16" unique_id=298058468]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.05000019)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_m40tp")
+mesh = SubResource("school_seal_mesh_4277011998")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid16" unique_id=99224872]
-shape = SubResource("BoxShape3D_c7wph")
-
 [node name="FramePart17" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=488315283]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.55, 0.1, -15.62)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.55, 0.1, -15.559999)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_sh2ll")
+mesh = SubResource("school_seal_mesh_2481093552")
 metadata/school_static_detail = true
 
 [node name="WallSolid18" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=2008513579]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.55, 2, -9.985)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid18" unique_id=864785738]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.05000019)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_hfuh5")
+mesh = SubResource("school_seal_mesh_161968288")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid18" unique_id=1057534469]
-shape = SubResource("BoxShape3D_qbm1h")
-
 [node name="FramePart19" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=1801485106]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.55, 0.1, -9.985)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.55, 0.1, -10.045)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_7b2bo")
+mesh = SubResource("school_seal_mesh_2481093554")
 metadata/school_static_detail = true
 
 [node name="WallSolid20" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1101755134]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.25, 2, -9.985)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid20" unique_id=116049402]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_dpurq")
+mesh = SubResource("school_seal_mesh_263529465")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid20" unique_id=63683682]
-shape = SubResource("BoxShape3D_x65u7")
 
 [node name="FramePart21" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=640278096]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.25, 0.1, -9.985)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_fbjd8")
+mesh = SubResource("school_seal_mesh_2481093579")
 metadata/school_static_detail = true
 
 [node name="WallSolid22" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=656621413]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.35, 2, -9.985)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid22" unique_id=877256958]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.05000019)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_wsftx")
+mesh = SubResource("school_seal_mesh_443453051")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid22" unique_id=885955121]
-shape = SubResource("BoxShape3D_yesyl")
 
 [node name="CourtyardStreetlamp" type="StaticBody3D" parent="ExteriorAndPartitions/WallSolid22" unique_id=2131820714]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3028574, -6.18935, 14.5931225)
@@ -4426,49 +5251,43 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.77, 0)
 shape = SubResource("BoxShape3D_mynqq")
 
 [node name="FramePart23" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=192562318]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.35, 0.1, -9.985)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.35, 0.1, -9.924999)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_m3fm2")
+mesh = SubResource("school_seal_mesh_2481093581")
 metadata/school_static_detail = true
 
 [node name="WallSolid24" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1588980489]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.1, 2, -13.94)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid24" unique_id=1575992517]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.050001144, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_r6con")
+mesh = SubResource("school_seal_mesh_623376637")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid24" unique_id=552002086]
-shape = SubResource("BoxShape3D_p4wbd")
-
 [node name="FramePart25" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=394979033]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.1, 0.1, -13.94)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.04, 0.1, -13.94)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_0yyhy")
+mesh = SubResource("school_seal_mesh_2481093583")
 metadata/school_static_detail = true
 
 [node name="WallSolid26" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1954146792]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.5, 0.55, -13.94)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid26" unique_id=1579762892]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_05rl7")
+mesh = SubResource("school_seal_mesh_803300223")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid26" unique_id=1084282446]
-shape = SubResource("BoxShape3D_55tkl")
 
 [node name="WallSolid27" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=423743087]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.5, 3.45, -13.94)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid27" unique_id=1920885956]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_p1seg")
+mesh = SubResource("school_seal_mesh_3040745664")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid27" unique_id=1498628516]
-shape = SubResource("BoxShape3D_htu01")
 
 [node name="GlassSolid28" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1992332681]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.5, 2, -13.94)
@@ -4527,40 +5346,34 @@ metadata/school_static_detail = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 2, -13.94)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid36" unique_id=320850486]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_dl60h")
+mesh = SubResource("school_seal_mesh_1624555744")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid36" unique_id=1121269229]
-shape = SubResource("BoxShape3D_7harp")
 
 [node name="FramePart37" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=1023972034]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.1, -13.94)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_21c7v")
+mesh = SubResource("school_seal_mesh_2481093618")
 metadata/school_static_detail = true
 
 [node name="WallSolid38" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1565531035]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.075, 0.55, -13.94)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid38" unique_id=1329608541]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_f5gii")
+mesh = SubResource("school_seal_mesh_1804479330")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid38" unique_id=1532789145]
-shape = SubResource("BoxShape3D_52us2")
 
 [node name="WallSolid39" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=893894949]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.075, 3.45, -13.94)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid39" unique_id=753097870]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_yt7b5")
+mesh = SubResource("school_seal_mesh_4041924771")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid39" unique_id=1839369242]
-shape = SubResource("BoxShape3D_hm18y")
 
 [node name="GlassSolid40" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1320272546]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.075, 2, -13.94)
@@ -4619,40 +5432,34 @@ metadata/school_static_detail = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.2, 2, -13.94)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid48" unique_id=232922234]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_t10mt")
+mesh = SubResource("school_seal_mesh_2625734851")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid48" unique_id=656677538]
-shape = SubResource("BoxShape3D_27hwj")
 
 [node name="FramePart49" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=874725422]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.2, 0.1, -13.94)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_34ajb")
+mesh = SubResource("school_seal_mesh_2481093653")
 metadata/school_static_detail = true
 
 [node name="WallSolid50" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=894398125]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.45, 0.55, -13.94)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid50" unique_id=867955434]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_pic8e")
+mesh = SubResource("school_seal_mesh_2727296028")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid50" unique_id=836572705]
-shape = SubResource("BoxShape3D_an65q")
 
 [node name="WallSolid51" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1887656021]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.45, 3.45, -13.94)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid51" unique_id=1619738197]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_h64vx")
+mesh = SubResource("school_seal_mesh_669774173")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid51" unique_id=1542885221]
-shape = SubResource("BoxShape3D_piwp8")
 
 [node name="GlassSolid52" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1270656857]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.45, 2, -13.94)
@@ -4711,40 +5518,34 @@ metadata/school_static_detail = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.3, 2, -13.94)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid60" unique_id=1886354955]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_dm4q7")
+mesh = SubResource("school_seal_mesh_3548551549")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid60" unique_id=377911808]
-shape = SubResource("BoxShape3D_f6x4g")
 
 [node name="FramePart61" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=1058815439]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.3, 0.1, -13.94)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_5kmnd")
+mesh = SubResource("school_seal_mesh_2481093711")
 metadata/school_static_detail = true
 
 [node name="WallSolid62" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1112613788]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.2, 0.55, -13.94)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid62" unique_id=1869091736]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_ad787")
+mesh = SubResource("school_seal_mesh_3728475135")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid62" unique_id=1803081945]
-shape = SubResource("BoxShape3D_e1jck")
 
 [node name="WallSolid63" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=544786983]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.2, 3.45, -13.94)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid63" unique_id=1374810539]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_sds5s")
+mesh = SubResource("school_seal_mesh_1670953280")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid63" unique_id=1951724596]
-shape = SubResource("BoxShape3D_tqmyh")
 
 [node name="GlassSolid64" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1477469169]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.2, 2, -13.94)
@@ -4803,63 +5604,55 @@ metadata/school_static_detail = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.575, 2, -13.94)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid72" unique_id=492243784]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05000019, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_totac")
+mesh = SubResource("school_seal_mesh_254763360")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid72" unique_id=1300885436]
-shape = SubResource("BoxShape3D_kguac")
-
 [node name="FramePart73" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=1333980181]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.575, 0.1, -13.94)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.514999, 0.1, -13.94)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_57i4x")
+mesh = SubResource("school_seal_mesh_2481093746")
 metadata/school_static_detail = true
 
 [node name="WallSolid74" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1863750505]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.505, 2, -6.03)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid74" unique_id=1921980515]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.050001144, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_3e7e1")
+mesh = SubResource("school_seal_mesh_434686946")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid74" unique_id=45001580]
-shape = SubResource("BoxShape3D_3xm0b")
-
 [node name="FramePart75" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=209754378]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.505, 0.1, -6.03)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.564999, 0.1, -6.03)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_oa6ul")
+mesh = SubResource("school_seal_mesh_2481093748")
 metadata/school_static_detail = true
 
 [node name="WallSolid76" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1406295807]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.395, 2, -6.03)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid76" unique_id=595082892]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_r2e2k")
+mesh = SubResource("school_seal_mesh_614610532")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid76" unique_id=1196135812]
-shape = SubResource("BoxShape3D_jfd5p")
 
 [node name="FramePart77" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=599520877]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.395, 0.1, -6.03)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_x2863")
+mesh = SubResource("school_seal_mesh_2481093750")
 metadata/school_static_detail = true
 
 [node name="WallSolid78" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1896537598]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5, 3.47, -6.03)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid78" unique_id=1213398451]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_7pa2y")
+mesh = SubResource("school_seal_mesh_794534118")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid78" unique_id=700572262]
-shape = SubResource("BoxShape3D_p3563")
 
 [node name="DORMITORIODoor" type="Node3D" parent="ExteriorAndPartitions" unique_id=1126682989]
 transform = Transform3D(-0.7, 0, -8.742278e-08, 0, 1, 0, 6.119594e-08, 0, -1, -23.5, 0, -6.03)
@@ -4926,7 +5719,7 @@ mesh = SubResource("ArrayMesh_fyy03")
 [node name="FramePart80" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=783977061]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5, 3.15, -5.91)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_bte1j")
+mesh = SubResource("school_seal_mesh_2481093776")
 metadata/school_static_detail = true
 
 [node name="PlateText81" type="Label3D" parent="ExteriorAndPartitions" unique_id=680989322]
@@ -4941,46 +5734,40 @@ outline_size = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.205, 2, -6.03)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid82" unique_id=1617298608]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_wsutc")
+mesh = SubResource("school_seal_mesh_1076018881")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid82" unique_id=909377392]
-shape = SubResource("BoxShape3D_nqmdo")
 
 [node name="FramePart83" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=71759472]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.205, 0.1, -6.03)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_c0w7n")
+mesh = SubResource("school_seal_mesh_2481093779")
 metadata/school_static_detail = true
 
 [node name="WallSolid84" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=106767865]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.295, 2, -6.03)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid84" unique_id=211605653]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05000019, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_qgi1x")
+mesh = SubResource("school_seal_mesh_1255942467")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid84" unique_id=59986904]
-shape = SubResource("BoxShape3D_5s7h2")
-
 [node name="FramePart85" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=1928209873]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.295, 0.1, -6.03)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.355, 0.1, -6.03)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_55b8o")
+mesh = SubResource("school_seal_mesh_2481093781")
 metadata/school_static_detail = true
 
 [node name="WallSolid86" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1354439563]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.2, 3.47, -6.03)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid86" unique_id=363647783]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_2mhig")
+mesh = SubResource("school_seal_mesh_1435866053")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid86" unique_id=737084328]
-shape = SubResource("BoxShape3D_43wjg")
 
 [node name="AULADoor" type="Node3D" parent="ExteriorAndPartitions" unique_id=1759750140]
 transform = Transform3D(-0.7, 0, -8.742278e-08, 0, 1, 0, 6.119594e-08, 0, -1, -17.2, 0, -6.03)
@@ -5047,7 +5834,7 @@ mesh = SubResource("ArrayMesh_fyy03")
 [node name="FramePart88" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=1802099563]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.2, 3.15, -5.91)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_ti8iu")
+mesh = SubResource("school_seal_mesh_2481093784")
 metadata/school_static_detail = true
 
 [node name="PlateText89" type="Label3D" parent="ExteriorAndPartitions" unique_id=1059081185]
@@ -5062,63 +5849,55 @@ outline_size = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.545, 2, -1.88)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid90" unique_id=574578489]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.050001144, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_5imlp")
+mesh = SubResource("school_seal_mesh_1717350816")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid90" unique_id=459680330]
-shape = SubResource("BoxShape3D_xtatb")
-
 [node name="FramePart91" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=557738398]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.545, 0.1, -1.88)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.605, 0.1, -1.88)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_6l6bs")
+mesh = SubResource("school_seal_mesh_2481093810")
 metadata/school_static_detail = true
 
 [node name="WallSolid92" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=337028751]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.375, 2, -1.88)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid92" unique_id=710532371]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_y6213")
+mesh = SubResource("school_seal_mesh_1897274402")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid92" unique_id=813940210]
-shape = SubResource("BoxShape3D_vpyw5")
 
 [node name="FramePart93" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=1634409291]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.375, 0.1, -1.88)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_w1iuc")
+mesh = SubResource("school_seal_mesh_2481093812")
 metadata/school_static_detail = true
 
 [node name="WallSolid94" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1353296727]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.665, 2, -1.88)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid94" unique_id=1889190099]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05000019, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_sbxop")
+mesh = SubResource("school_seal_mesh_2077197988")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid94" unique_id=2086531808]
-shape = SubResource("BoxShape3D_ymjkl")
-
 [node name="FramePart95" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=963377756]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.665, 0.1, -1.88)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.6050005, 0.1, -1.88)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_bgv0a")
+mesh = SubResource("school_seal_mesh_2481093814")
 metadata/school_static_detail = true
 
 [node name="WallSolid96" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1355175445]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.25, 3.47, -1.88)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid96" unique_id=310340797]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_qmksn")
+mesh = SubResource("school_seal_mesh_2257121574")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid96" unique_id=2072658092]
-shape = SubResource("BoxShape3D_iffx6")
 
 [node name="COMEDORDoor" type="Node3D" parent="ExteriorAndPartitions" unique_id=529501675]
 transform = Transform3D(0.7, 0, 0, 0, 1, 0, 0, 0, 1, -17.25, 0, -1.88)
@@ -5185,7 +5964,7 @@ mesh = SubResource("ArrayMesh_fyy03")
 [node name="FramePart98" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=1799748561]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.25, 3.15, -1.76)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_pmgc0")
+mesh = SubResource("school_seal_mesh_2481093817")
 metadata/school_static_detail = true
 
 [node name="PlateText99" type="Label3D" parent="ExteriorAndPartitions" unique_id=1909511438]
@@ -5200,91 +5979,79 @@ outline_size = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.55, 2, -0.93)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid100" unique_id=740428359]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.050000012)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_t5qkf")
+mesh = SubResource("school_seal_mesh_655593736")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid100" unique_id=1340013861]
-shape = SubResource("BoxShape3D_6t28k")
-
 [node name="FramePart101" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=541445413]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.55, 0.1, -0.93)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.55, 0.1, -0.87)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_xwqy3")
+mesh = SubResource("school_seal_mesh_271708410")
 metadata/school_static_detail = true
 
 [node name="WallSolid102" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1680145647]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.54, 2, 1.61)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid102" unique_id=431728865]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.1920929e-07)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_427j3")
+mesh = SubResource("school_seal_mesh_835517322")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid102" unique_id=110926564]
-shape = SubResource("BoxShape3D_tymbp")
-
 [node name="FramePart103" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=511554707]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.54, 0.1, 1.61)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.54, 0.1, 1.6099999)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_q1ffs")
+mesh = SubResource("school_seal_mesh_271708412")
 metadata/school_static_detail = true
 
 [node name="WallSolid104" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=2106245106]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.04, 2, 1.61)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid104" unique_id=640902867]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.1920929e-07)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_7w5ru")
+mesh = SubResource("school_seal_mesh_1015440908")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid104" unique_id=1901093123]
-shape = SubResource("BoxShape3D_1e65j")
-
 [node name="FramePart105" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=1141450798]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.04, 0.1, 1.61)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.04, 0.1, 1.6099999)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_2h0s3")
+mesh = SubResource("school_seal_mesh_271708414")
 metadata/school_static_detail = true
 
 [node name="WallSolid106" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1288836259]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.245, 2, 5.1)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid106" unique_id=389472458]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.050001144, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_fxvfy")
+mesh = SubResource("school_seal_mesh_1195364494")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid106" unique_id=463314916]
-shape = SubResource("BoxShape3D_bxovf")
-
 [node name="FramePart107" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=1840136778]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.245, 0.1, 5.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.305, 0.1, 5.1)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_1yc6o")
+mesh = SubResource("school_seal_mesh_271708416")
 metadata/school_static_detail = true
 
 [node name="WallSolid108" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=613280780]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.1, 0.55, 5.1)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid108" unique_id=1478845724]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_2y363")
+mesh = SubResource("school_seal_mesh_1375288080")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid108" unique_id=1385795746]
-shape = SubResource("BoxShape3D_lu6ns")
 
 [node name="WallSolid109" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1665135121]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.1, 3.45, 5.1)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid109" unique_id=662536016]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_esq4i")
+mesh = SubResource("school_seal_mesh_3612733521")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid109" unique_id=1587351233]
-shape = SubResource("BoxShape3D_np5x0")
 
 [node name="GlassSolid110" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1854372192]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.1, 2, 5.1)
@@ -5343,40 +6110,34 @@ metadata/school_static_detail = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.775, 2, 5.1)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid118" unique_id=1899903446]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_nrl26")
+mesh = SubResource("school_seal_mesh_2196543601")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid118" unique_id=1007820855]
-shape = SubResource("BoxShape3D_dslb1")
 
 [node name="FramePart119" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=189711617]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.775, 0.1, 5.1)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_bkj0d")
+mesh = SubResource("school_seal_mesh_271708451")
 metadata/school_static_detail = true
 
 [node name="WallSolid120" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=871564730]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.475, 0.55, 5.1)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid120" unique_id=1995613006]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_bdd3c")
+mesh = SubResource("school_seal_mesh_2298104778")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid120" unique_id=1998851524]
-shape = SubResource("BoxShape3D_blfg5")
 
 [node name="WallSolid121" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1921517487]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.475, 3.45, 5.1)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid121" unique_id=1877219183]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_4pjee")
+mesh = SubResource("school_seal_mesh_240582923")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid121" unique_id=1428483155]
-shape = SubResource("BoxShape3D_jjops")
 
 [node name="GlassSolid122" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1590391088]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.475, 2, 5.1)
@@ -5435,147 +6196,127 @@ metadata/school_static_detail = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.345, 2, 5.1)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid130" unique_id=826131117]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05000019, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_bhxj2")
+mesh = SubResource("school_seal_mesh_3119360299")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid130" unique_id=1092366329]
-shape = SubResource("BoxShape3D_s2yaa")
-
 [node name="FramePart131" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=842154410]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.345, 0.1, 5.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.285, 0.1, 5.1)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_ar8gh")
+mesh = SubResource("school_seal_mesh_271708509")
 metadata/school_static_detail = true
 
 [node name="WallSolid132" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1097527692]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.8, 2, -1.09)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid132" unique_id=677175464]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.05000007)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_lr5g3")
+mesh = SubResource("school_seal_mesh_3299283885")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid132" unique_id=106358589]
-shape = SubResource("BoxShape3D_cem2s")
-
 [node name="FramePart133" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=1657682304]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.8, 0.1, -1.09)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.8, 0.1, -1.03)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_kiqpl")
+mesh = SubResource("school_seal_mesh_271708511")
 metadata/school_static_detail = true
 
 [node name="WallSolid134" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=2143606382]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.8, 0.52, 1)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid134" unique_id=629642246]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_ryuvl")
+mesh = SubResource("school_seal_mesh_3479207471")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid134" unique_id=259033967]
-shape = SubResource("BoxShape3D_vr3up")
 
 [node name="WallSolid135" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1649628505]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.8, 3.22, 1)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid135" unique_id=1501188950]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_2bbef")
+mesh = SubResource("school_seal_mesh_1421685616")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid135" unique_id=1593776920]
-shape = SubResource("BoxShape3D_b4ehh")
 
 [node name="WallSolid136" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1351130104]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.8, 2, 2.725)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid136" unique_id=2003387504]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_jri1b")
+mesh = SubResource("school_seal_mesh_3659131057")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid136" unique_id=1075869961]
-shape = SubResource("BoxShape3D_earc4")
 
 [node name="FramePart137" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=226429381]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.8, 0.1, 2.725)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_jdjiq")
+mesh = SubResource("school_seal_mesh_271708515")
 metadata/school_static_detail = true
 
 [node name="WallSolid138" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=551304534]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.8, 2, 4.9)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid138" unique_id=1049883540]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.049999714)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_ad5ym")
+mesh = SubResource("school_seal_mesh_3839054643")
 metadata/school_static_detail = true
 
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid138" unique_id=1039717445]
-shape = SubResource("BoxShape3D_kfke8")
-
 [node name="FramePart139" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=1224319330]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.8, 0.1, 4.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.8, 0.1, 4.84)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_84lon")
+mesh = SubResource("school_seal_mesh_271708517")
 metadata/school_static_detail = true
 
 [node name="WallSolid140" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1312704349]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.8, 3.4, 3.925)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid140" unique_id=341514967]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_hm8tu")
+mesh = SubResource("school_seal_mesh_3940615820")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid140" unique_id=1748023750]
-shape = SubResource("BoxShape3D_uwou5")
 
 [node name="WallSolid141" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=1182398685]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.35, 2, -5.69)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid141" unique_id=288265859]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_os21m")
+mesh = SubResource("school_seal_mesh_1883093965")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid141" unique_id=200199183]
-shape = SubResource("BoxShape3D_6bj4w")
 
 [node name="FramePart142" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=8879958]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.35, 0.1, -5.69)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_kaqun")
+mesh = SubResource("school_seal_mesh_271708543")
 metadata/school_static_detail = true
 
 [node name="WallSolid143" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=857426792]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.35, 2, -2.265)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid143" unique_id=29731270]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_4vb7y")
+mesh = SubResource("school_seal_mesh_2063017551")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid143" unique_id=1836159741]
-shape = SubResource("BoxShape3D_8i8ks")
 
 [node name="FramePart144" type="MeshInstance3D" parent="ExteriorAndPartitions" unique_id=1082845133]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.35, 0.1, -2.265)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_3upqa")
+mesh = SubResource("school_seal_mesh_271708545")
 metadata/school_static_detail = true
 
 [node name="WallSolid145" type="StaticBody3D" parent="ExteriorAndPartitions" unique_id=151017757]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.35, 3.47, -4)
 
 [node name="WallPart0" type="MeshInstance3D" parent="ExteriorAndPartitions/WallSolid145" unique_id=2073750699]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("BoxMesh_1lnyp")
+mesh = SubResource("school_seal_mesh_2242941137")
 metadata/school_static_detail = true
-
-[node name="Collision" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid145" unique_id=2002077374]
-shape = SubResource("BoxShape3D_lymun")
 
 [node name="BridgeSchoolDoor" type="Node3D" parent="ExteriorAndPartitions" unique_id=1515529012]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -14.35, 0, -4)
@@ -5767,98 +6508,6 @@ metadata/school_static_detail = true
 [node name="Collision" type="CollisionShape3D" parent="UpperCorridor/FloorSolid1" unique_id=57726134]
 shape = SubResource("BoxShape3D_nhep8")
 
-[node name="StairLandingGuard" type="StaticBody3D" parent="UpperCorridor" unique_id=220375830]
-editor_description = "Piezas independientes. Edita mallas y colisión directamente."
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.5, 0, -0.09)
-
-[node name="Collision" type="CollisionShape3D" parent="UpperCorridor/StairLandingGuard" unique_id=381450069]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.54, 0)
-shape = SubResource("BoxShape3D_wu7e8")
-
-[node name="BottomPlinth" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard" unique_id=1378170066]
-transform = Transform3D(1.85, 0, 0, 0, 0.2, 0, 0, 0, 0.28, 0, 0.1, 0)
-material_override = SubResource("plaster")
-mesh = SubResource("box")
-
-[node name="BottomTrim" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard" unique_id=1054476917]
-transform = Transform3D(1.73, 0, 0, 0, 0.07, 0, 0, 0, 0.22, 0, 0.225, 0)
-material_override = SubResource("edge")
-mesh = SubResource("box")
-
-[node name="TopRail" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard" unique_id=1284786909]
-transform = Transform3D(1.85, 0, 0, 0, 0.17, 0, 0, 0, 0.3, 0, 1, 0)
-material_override = SubResource("plaster")
-mesh = SubResource("box")
-
-[node name="TopRailCap" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard" unique_id=1270668109]
-transform = Transform3D(1.97, 0, 0, 0, 0.07, 0, 0, 0, 0.36, 0, 1.115, 0)
-material_override = SubResource("edge")
-mesh = SubResource("box")
-
-[node name="LeftEndPost" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard" unique_id=1497196779]
-transform = Transform3D(0.26, 0, 0, 0, 0.86, 0, 0, 0, 0.26, -0.825, 0.58, 0)
-material_override = SubResource("plaster")
-mesh = SubResource("box")
-
-[node name="LeftPostCap" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard" unique_id=2018812381]
-transform = Transform3D(0.35, 0, 0, 0, 0.11, 0, 0, 0, 0.35, -0.825, 0.96, 0)
-material_override = SubResource("edge")
-mesh = SubResource("box")
-
-[node name="RightEndPost" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard" unique_id=1886731155]
-transform = Transform3D(0.26, 0, 0, 0, 0.86, 0, 0, 0, 0.26, 0.825, 0.58, 0)
-material_override = SubResource("plaster")
-mesh = SubResource("box")
-
-[node name="RightPostCap" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard" unique_id=905518558]
-transform = Transform3D(0.35, 0, 0, 0, 0.11, 0, 0, 0, 0.35, 0.825, 0.96, 0)
-material_override = SubResource("edge")
-mesh = SubResource("box")
-
-[node name="Balusters" type="Node3D" parent="UpperCorridor/StairLandingGuard" unique_id=8421497]
-
-[node name="Shafts" type="Node3D" parent="UpperCorridor/StairLandingGuard/Balusters" unique_id=1621525817]
-
-[node name="Piece01" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard/Balusters/Shafts" unique_id=1733033661]
-mesh = SubResource("shaft_mesh")
-
-[node name="Piece02" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard/Balusters/Shafts" unique_id=75490993]
-mesh = SubResource("shaft_mesh")
-
-[node name="Piece03" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard/Balusters/Shafts" unique_id=216786504]
-mesh = SubResource("shaft_mesh")
-
-[node name="Piece04" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard/Balusters/Shafts" unique_id=1655922682]
-mesh = SubResource("shaft_mesh")
-
-[node name="Bulbs" type="Node3D" parent="UpperCorridor/StairLandingGuard/Balusters" unique_id=1025334364]
-
-[node name="Piece01" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard/Balusters/Bulbs" unique_id=1465716736]
-mesh = SubResource("bulb_mesh")
-
-[node name="Piece02" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard/Balusters/Bulbs" unique_id=385493434]
-mesh = SubResource("bulb_mesh")
-
-[node name="Piece03" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard/Balusters/Bulbs" unique_id=1714082724]
-mesh = SubResource("bulb_mesh")
-
-[node name="Piece04" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard/Balusters/Bulbs" unique_id=1755862872]
-mesh = SubResource("bulb_mesh")
-
-[node name="Feet" type="Node3D" parent="UpperCorridor/StairLandingGuard/Balusters" unique_id=145101029]
-
-[node name="Piece01" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard/Balusters/Feet" unique_id=1731564]
-mesh = SubResource("foot_mesh")
-
-[node name="Piece02" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard/Balusters/Feet" unique_id=386500186]
-mesh = SubResource("foot_mesh")
-
-[node name="Piece03" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard/Balusters/Feet" unique_id=1463544678]
-mesh = SubResource("foot_mesh")
-
-[node name="Piece04" type="MeshInstance3D" parent="UpperCorridor/StairLandingGuard/Balusters/Feet" unique_id=336839192]
-mesh = SubResource("foot_mesh")
-
 [node name="LinenLockers" type="StaticBody3D" parent="UpperCorridor" unique_id=1729106843]
 transform = Transform3D(-3.934025e-08, 0, 1, 0, 1, 0, -0.9, 0, -4.371139e-08, -29.8, 0, -14.9)
 
@@ -5975,7 +6624,7 @@ mesh = SubResource("BoxMesh_oarra")
 metadata/school_static_detail = true
 
 [node name="Light" type="OmniLight3D" parent="UpperCorridor/CeilingFixture11" unique_id=911592341]
-light_color = Color(1, 0.88, 0.69, 1)
+light_color = Color(1, 0.78, 0.5, 1)
 shadow_enabled = true
 distance_fade_enabled = true
 distance_fade_begin = 20.0
@@ -5998,7 +6647,7 @@ mesh = SubResource("BoxMesh_odg3e")
 metadata/school_static_detail = true
 
 [node name="Light" type="OmniLight3D" parent="UpperCorridor/CeilingFixture12" unique_id=217151056]
-light_color = Color(1, 0.88, 0.69, 1)
+light_color = Color(1, 0.78, 0.5, 1)
 light_energy = 0.8
 shadow_enabled = true
 distance_fade_enabled = true
@@ -6022,7 +6671,7 @@ mesh = SubResource("BoxMesh_bvgg3")
 metadata/school_static_detail = true
 
 [node name="Light" type="OmniLight3D" parent="UpperCorridor/CeilingFixture13" unique_id=489649370]
-light_color = Color(1, 0.88, 0.69, 1)
+light_color = Color(1, 0.78, 0.5, 1)
 shadow_enabled = true
 distance_fade_enabled = true
 distance_fade_begin = 20.0
@@ -6207,37 +6856,37 @@ metadata/school_static_detail = true
 [node name="FramePart22" type="MeshInstance3D" parent="Classroom/Desk_1_1/Notebook" unique_id=914757181]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.09)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_kv3et")
+mesh = SubResource("school_seal_mesh_937759923")
 metadata/school_static_detail = true
 
 [node name="FramePart23" type="MeshInstance3D" parent="Classroom/Desk_1_1/Notebook" unique_id=979907370]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.055000003)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_tukeq")
+mesh = SubResource("school_seal_mesh_937759924")
 metadata/school_static_detail = true
 
 [node name="FramePart24" type="MeshInstance3D" parent="Classroom/Desk_1_1/Notebook" unique_id=940753706]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.02)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_d3vxv")
+mesh = SubResource("school_seal_mesh_937759925")
 metadata/school_static_detail = true
 
 [node name="FramePart25" type="MeshInstance3D" parent="Classroom/Desk_1_1/Notebook" unique_id=1618031022]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.015)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_wxugn")
+mesh = SubResource("school_seal_mesh_937759926")
 metadata/school_static_detail = true
 
 [node name="FramePart26" type="MeshInstance3D" parent="Classroom/Desk_1_1/Notebook" unique_id=1980280391]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.049999997)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_6vaqg")
+mesh = SubResource("school_seal_mesh_937759927")
 metadata/school_static_detail = true
 
 [node name="FramePart27" type="MeshInstance3D" parent="Classroom/Desk_1_1/Notebook" unique_id=205354763]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.08499999)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_dqtje")
+mesh = SubResource("school_seal_mesh_937759928")
 metadata/school_static_detail = true
 
 [node name="Desk_1_2" type="StaticBody3D" parent="Classroom" unique_id=1116343531]
@@ -6405,37 +7054,37 @@ metadata/school_static_detail = true
 [node name="FramePart22" type="MeshInstance3D" parent="Classroom/Desk_1_2/Notebook" unique_id=2091147810]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.09)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_kv3et")
+mesh = SubResource("school_seal_mesh_2861653844")
 metadata/school_static_detail = true
 
 [node name="FramePart23" type="MeshInstance3D" parent="Classroom/Desk_1_2/Notebook" unique_id=1706263690]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.055000003)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_tukeq")
+mesh = SubResource("school_seal_mesh_2861653845")
 metadata/school_static_detail = true
 
 [node name="FramePart24" type="MeshInstance3D" parent="Classroom/Desk_1_2/Notebook" unique_id=1055674599]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.02)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_d3vxv")
+mesh = SubResource("school_seal_mesh_2861653846")
 metadata/school_static_detail = true
 
 [node name="FramePart25" type="MeshInstance3D" parent="Classroom/Desk_1_2/Notebook" unique_id=1806825254]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.015)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_wxugn")
+mesh = SubResource("school_seal_mesh_2861653847")
 metadata/school_static_detail = true
 
 [node name="FramePart26" type="MeshInstance3D" parent="Classroom/Desk_1_2/Notebook" unique_id=89614090]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.049999997)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_6vaqg")
+mesh = SubResource("school_seal_mesh_2861653848")
 metadata/school_static_detail = true
 
 [node name="FramePart27" type="MeshInstance3D" parent="Classroom/Desk_1_2/Notebook" unique_id=2059330249]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.08499999)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_dqtje")
+mesh = SubResource("school_seal_mesh_2861653849")
 metadata/school_static_detail = true
 
 [node name="Desk_1_3" type="StaticBody3D" parent="Classroom" unique_id=1884878920]
@@ -6603,37 +7252,37 @@ metadata/school_static_detail = true
 [node name="FramePart22" type="MeshInstance3D" parent="Classroom/Desk_1_3/Notebook" unique_id=1592571947]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.09)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_kv3et")
+mesh = SubResource("school_seal_mesh_490580469")
 metadata/school_static_detail = true
 
 [node name="FramePart23" type="MeshInstance3D" parent="Classroom/Desk_1_3/Notebook" unique_id=2048162552]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.055000003)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_tukeq")
+mesh = SubResource("school_seal_mesh_490580470")
 metadata/school_static_detail = true
 
 [node name="FramePart24" type="MeshInstance3D" parent="Classroom/Desk_1_3/Notebook" unique_id=942094629]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.02)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_d3vxv")
+mesh = SubResource("school_seal_mesh_490580471")
 metadata/school_static_detail = true
 
 [node name="FramePart25" type="MeshInstance3D" parent="Classroom/Desk_1_3/Notebook" unique_id=1293598031]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.015)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_wxugn")
+mesh = SubResource("school_seal_mesh_490580472")
 metadata/school_static_detail = true
 
 [node name="FramePart26" type="MeshInstance3D" parent="Classroom/Desk_1_3/Notebook" unique_id=552411783]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.049999997)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_6vaqg")
+mesh = SubResource("school_seal_mesh_490580473")
 metadata/school_static_detail = true
 
 [node name="FramePart27" type="MeshInstance3D" parent="Classroom/Desk_1_3/Notebook" unique_id=144442094]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.08499999)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_dqtje")
+mesh = SubResource("school_seal_mesh_490580474")
 metadata/school_static_detail = true
 
 [node name="Desk_2_1" type="StaticBody3D" parent="Classroom" unique_id=602506799]
@@ -6801,37 +7450,37 @@ metadata/school_static_detail = true
 [node name="FramePart22" type="MeshInstance3D" parent="Classroom/Desk_2_1/Notebook" unique_id=1428911121]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.09)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_kv3et")
+mesh = SubResource("school_seal_mesh_114199444")
 metadata/school_static_detail = true
 
 [node name="FramePart23" type="MeshInstance3D" parent="Classroom/Desk_2_1/Notebook" unique_id=1267415110]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.055000003)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_tukeq")
+mesh = SubResource("school_seal_mesh_114199445")
 metadata/school_static_detail = true
 
 [node name="FramePart24" type="MeshInstance3D" parent="Classroom/Desk_2_1/Notebook" unique_id=2088100774]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.02)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_d3vxv")
+mesh = SubResource("school_seal_mesh_114199446")
 metadata/school_static_detail = true
 
 [node name="FramePart25" type="MeshInstance3D" parent="Classroom/Desk_2_1/Notebook" unique_id=811104412]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.015)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_wxugn")
+mesh = SubResource("school_seal_mesh_114199447")
 metadata/school_static_detail = true
 
 [node name="FramePart26" type="MeshInstance3D" parent="Classroom/Desk_2_1/Notebook" unique_id=881624362]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.049999997)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_6vaqg")
+mesh = SubResource("school_seal_mesh_114199448")
 metadata/school_static_detail = true
 
 [node name="FramePart27" type="MeshInstance3D" parent="Classroom/Desk_2_1/Notebook" unique_id=94747809]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.08499999)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_dqtje")
+mesh = SubResource("school_seal_mesh_114199449")
 metadata/school_static_detail = true
 
 [node name="Desk_2_2" type="StaticBody3D" parent="Classroom" unique_id=1078283334]
@@ -6999,37 +7648,37 @@ metadata/school_static_detail = true
 [node name="FramePart22" type="MeshInstance3D" parent="Classroom/Desk_2_2/Notebook" unique_id=842060798]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.09)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_kv3et")
+mesh = SubResource("school_seal_mesh_2038093365")
 metadata/school_static_detail = true
 
 [node name="FramePart23" type="MeshInstance3D" parent="Classroom/Desk_2_2/Notebook" unique_id=1179916597]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.055000003)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_tukeq")
+mesh = SubResource("school_seal_mesh_2038093366")
 metadata/school_static_detail = true
 
 [node name="FramePart24" type="MeshInstance3D" parent="Classroom/Desk_2_2/Notebook" unique_id=1704594147]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.02)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_d3vxv")
+mesh = SubResource("school_seal_mesh_2038093367")
 metadata/school_static_detail = true
 
 [node name="FramePart25" type="MeshInstance3D" parent="Classroom/Desk_2_2/Notebook" unique_id=1733620203]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.015)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_wxugn")
+mesh = SubResource("school_seal_mesh_2038093368")
 metadata/school_static_detail = true
 
 [node name="FramePart26" type="MeshInstance3D" parent="Classroom/Desk_2_2/Notebook" unique_id=126613914]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.049999997)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_6vaqg")
+mesh = SubResource("school_seal_mesh_2038093369")
 metadata/school_static_detail = true
 
 [node name="FramePart27" type="MeshInstance3D" parent="Classroom/Desk_2_2/Notebook" unique_id=494736227]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.08499999)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_dqtje")
+mesh = SubResource("school_seal_mesh_2038093370")
 metadata/school_static_detail = true
 
 [node name="Desk_2_3" type="StaticBody3D" parent="Classroom" unique_id=1387565935]
@@ -7197,37 +7846,37 @@ metadata/school_static_detail = true
 [node name="FramePart22" type="MeshInstance3D" parent="Classroom/Desk_2_3/Notebook" unique_id=1801915214]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.09)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_kv3et")
+mesh = SubResource("school_seal_mesh_3961987286")
 metadata/school_static_detail = true
 
 [node name="FramePart23" type="MeshInstance3D" parent="Classroom/Desk_2_3/Notebook" unique_id=781139122]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.055000003)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_tukeq")
+mesh = SubResource("school_seal_mesh_3961987287")
 metadata/school_static_detail = true
 
 [node name="FramePart24" type="MeshInstance3D" parent="Classroom/Desk_2_3/Notebook" unique_id=2040149642]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.02)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_d3vxv")
+mesh = SubResource("school_seal_mesh_3961987288")
 metadata/school_static_detail = true
 
 [node name="FramePart25" type="MeshInstance3D" parent="Classroom/Desk_2_3/Notebook" unique_id=1645742199]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.015)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_wxugn")
+mesh = SubResource("school_seal_mesh_3961987289")
 metadata/school_static_detail = true
 
 [node name="FramePart26" type="MeshInstance3D" parent="Classroom/Desk_2_3/Notebook" unique_id=1764946378]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.049999997)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_6vaqg")
+mesh = SubResource("school_seal_mesh_3961987290")
 metadata/school_static_detail = true
 
 [node name="FramePart27" type="MeshInstance3D" parent="Classroom/Desk_2_3/Notebook" unique_id=392090903]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.08499999)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_dqtje")
+mesh = SubResource("school_seal_mesh_3961987291")
 metadata/school_static_detail = true
 
 [node name="Desk_3_1" type="StaticBody3D" parent="Classroom" unique_id=2019792773]
@@ -7395,37 +8044,37 @@ metadata/school_static_detail = true
 [node name="FramePart22" type="MeshInstance3D" parent="Classroom/Desk_3_1/Notebook" unique_id=1631732105]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.09)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_kv3et")
+mesh = SubResource("school_seal_mesh_3585606261")
 metadata/school_static_detail = true
 
 [node name="FramePart23" type="MeshInstance3D" parent="Classroom/Desk_3_1/Notebook" unique_id=1776049193]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.055000003)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_tukeq")
+mesh = SubResource("school_seal_mesh_3585606262")
 metadata/school_static_detail = true
 
 [node name="FramePart24" type="MeshInstance3D" parent="Classroom/Desk_3_1/Notebook" unique_id=134985378]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.02)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_d3vxv")
+mesh = SubResource("school_seal_mesh_3585606263")
 metadata/school_static_detail = true
 
 [node name="FramePart25" type="MeshInstance3D" parent="Classroom/Desk_3_1/Notebook" unique_id=253283788]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.015)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_wxugn")
+mesh = SubResource("school_seal_mesh_3585606264")
 metadata/school_static_detail = true
 
 [node name="FramePart26" type="MeshInstance3D" parent="Classroom/Desk_3_1/Notebook" unique_id=1101031073]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.049999997)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_6vaqg")
+mesh = SubResource("school_seal_mesh_3585606265")
 metadata/school_static_detail = true
 
 [node name="FramePart27" type="MeshInstance3D" parent="Classroom/Desk_3_1/Notebook" unique_id=496986132]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.08499999)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_dqtje")
+mesh = SubResource("school_seal_mesh_3585606266")
 metadata/school_static_detail = true
 
 [node name="Desk_3_2" type="StaticBody3D" parent="Classroom" unique_id=784539424]
@@ -7593,37 +8242,37 @@ metadata/school_static_detail = true
 [node name="FramePart22" type="MeshInstance3D" parent="Classroom/Desk_3_2/Notebook" unique_id=345394939]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.09)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_kv3et")
+mesh = SubResource("school_seal_mesh_1214532886")
 metadata/school_static_detail = true
 
 [node name="FramePart23" type="MeshInstance3D" parent="Classroom/Desk_3_2/Notebook" unique_id=1666121554]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.055000003)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_tukeq")
+mesh = SubResource("school_seal_mesh_1214532887")
 metadata/school_static_detail = true
 
 [node name="FramePart24" type="MeshInstance3D" parent="Classroom/Desk_3_2/Notebook" unique_id=616246356]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.02)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_d3vxv")
+mesh = SubResource("school_seal_mesh_1214532888")
 metadata/school_static_detail = true
 
 [node name="FramePart25" type="MeshInstance3D" parent="Classroom/Desk_3_2/Notebook" unique_id=1452719609]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.015)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_wxugn")
+mesh = SubResource("school_seal_mesh_1214532889")
 metadata/school_static_detail = true
 
 [node name="FramePart26" type="MeshInstance3D" parent="Classroom/Desk_3_2/Notebook" unique_id=480924820]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.049999997)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_6vaqg")
+mesh = SubResource("school_seal_mesh_1214532890")
 metadata/school_static_detail = true
 
 [node name="FramePart27" type="MeshInstance3D" parent="Classroom/Desk_3_2/Notebook" unique_id=1444464571]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.08499999)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_dqtje")
+mesh = SubResource("school_seal_mesh_1214532891")
 metadata/school_static_detail = true
 
 [node name="Desk_3_3" type="StaticBody3D" parent="Classroom" unique_id=356664345]
@@ -7791,37 +8440,37 @@ metadata/school_static_detail = true
 [node name="FramePart22" type="MeshInstance3D" parent="Classroom/Desk_3_3/Notebook" unique_id=1555822870]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.09)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_kv3et")
+mesh = SubResource("school_seal_mesh_3138426807")
 metadata/school_static_detail = true
 
 [node name="FramePart23" type="MeshInstance3D" parent="Classroom/Desk_3_3/Notebook" unique_id=176103597]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.055000003)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_tukeq")
+mesh = SubResource("school_seal_mesh_3138426808")
 metadata/school_static_detail = true
 
 [node name="FramePart24" type="MeshInstance3D" parent="Classroom/Desk_3_3/Notebook" unique_id=1911690155]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.02)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_d3vxv")
+mesh = SubResource("school_seal_mesh_3138426809")
 metadata/school_static_detail = true
 
 [node name="FramePart25" type="MeshInstance3D" parent="Classroom/Desk_3_3/Notebook" unique_id=564349945]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.015)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_wxugn")
+mesh = SubResource("school_seal_mesh_3138426810")
 metadata/school_static_detail = true
 
 [node name="FramePart26" type="MeshInstance3D" parent="Classroom/Desk_3_3/Notebook" unique_id=1004797289]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.049999997)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_6vaqg")
+mesh = SubResource("school_seal_mesh_3138426811")
 metadata/school_static_detail = true
 
 [node name="FramePart27" type="MeshInstance3D" parent="Classroom/Desk_3_3/Notebook" unique_id=102729728]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.08499999)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_dqtje")
+mesh = SubResource("school_seal_mesh_3138426812")
 metadata/school_static_detail = true
 
 [node name="Desk_4_1" type="StaticBody3D" parent="Classroom" unique_id=1918820428]
@@ -7989,37 +8638,37 @@ metadata/school_static_detail = true
 [node name="FramePart22" type="MeshInstance3D" parent="Classroom/Desk_4_1/Notebook" unique_id=1817891628]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.09)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_kv3et")
+mesh = SubResource("school_seal_mesh_2762045782")
 metadata/school_static_detail = true
 
 [node name="FramePart23" type="MeshInstance3D" parent="Classroom/Desk_4_1/Notebook" unique_id=855415894]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.055000003)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_tukeq")
+mesh = SubResource("school_seal_mesh_2762045783")
 metadata/school_static_detail = true
 
 [node name="FramePart24" type="MeshInstance3D" parent="Classroom/Desk_4_1/Notebook" unique_id=1397159429]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.02)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_d3vxv")
+mesh = SubResource("school_seal_mesh_2762045784")
 metadata/school_static_detail = true
 
 [node name="FramePart25" type="MeshInstance3D" parent="Classroom/Desk_4_1/Notebook" unique_id=1868766267]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.015)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_wxugn")
+mesh = SubResource("school_seal_mesh_2762045785")
 metadata/school_static_detail = true
 
 [node name="FramePart26" type="MeshInstance3D" parent="Classroom/Desk_4_1/Notebook" unique_id=851705409]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.049999997)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_6vaqg")
+mesh = SubResource("school_seal_mesh_2762045786")
 metadata/school_static_detail = true
 
 [node name="FramePart27" type="MeshInstance3D" parent="Classroom/Desk_4_1/Notebook" unique_id=1053176479]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.08499999)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_dqtje")
+mesh = SubResource("school_seal_mesh_2762045787")
 metadata/school_static_detail = true
 
 [node name="Desk_4_2" type="StaticBody3D" parent="Classroom" unique_id=136802668]
@@ -8187,37 +8836,37 @@ metadata/school_static_detail = true
 [node name="FramePart22" type="MeshInstance3D" parent="Classroom/Desk_4_2/Notebook" unique_id=110736024]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.09)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_kv3et")
+mesh = SubResource("school_seal_mesh_390972407")
 metadata/school_static_detail = true
 
 [node name="FramePart23" type="MeshInstance3D" parent="Classroom/Desk_4_2/Notebook" unique_id=772215147]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.055000003)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_tukeq")
+mesh = SubResource("school_seal_mesh_390972408")
 metadata/school_static_detail = true
 
 [node name="FramePart24" type="MeshInstance3D" parent="Classroom/Desk_4_2/Notebook" unique_id=880115462]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.02)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_d3vxv")
+mesh = SubResource("school_seal_mesh_390972409")
 metadata/school_static_detail = true
 
 [node name="FramePart25" type="MeshInstance3D" parent="Classroom/Desk_4_2/Notebook" unique_id=1640891903]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.015)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_wxugn")
+mesh = SubResource("school_seal_mesh_390972410")
 metadata/school_static_detail = true
 
 [node name="FramePart26" type="MeshInstance3D" parent="Classroom/Desk_4_2/Notebook" unique_id=1324052357]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.049999997)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_6vaqg")
+mesh = SubResource("school_seal_mesh_390972411")
 metadata/school_static_detail = true
 
 [node name="FramePart27" type="MeshInstance3D" parent="Classroom/Desk_4_2/Notebook" unique_id=135706446]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.08499999)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_dqtje")
+mesh = SubResource("school_seal_mesh_390972412")
 metadata/school_static_detail = true
 
 [node name="Desk_4_3" type="StaticBody3D" parent="Classroom" unique_id=115864477]
@@ -8385,37 +9034,37 @@ metadata/school_static_detail = true
 [node name="FramePart22" type="MeshInstance3D" parent="Classroom/Desk_4_3/Notebook" unique_id=2078603232]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.09)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_kv3et")
+mesh = SubResource("school_seal_mesh_2314866328")
 metadata/school_static_detail = true
 
 [node name="FramePart23" type="MeshInstance3D" parent="Classroom/Desk_4_3/Notebook" unique_id=290398213]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.055000003)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_tukeq")
+mesh = SubResource("school_seal_mesh_2314866329")
 metadata/school_static_detail = true
 
 [node name="FramePart24" type="MeshInstance3D" parent="Classroom/Desk_4_3/Notebook" unique_id=2105064576]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, -0.02)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_d3vxv")
+mesh = SubResource("school_seal_mesh_2314866330")
 metadata/school_static_detail = true
 
 [node name="FramePart25" type="MeshInstance3D" parent="Classroom/Desk_4_3/Notebook" unique_id=2073421023]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.015)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_wxugn")
+mesh = SubResource("school_seal_mesh_2314866331")
 metadata/school_static_detail = true
 
 [node name="FramePart26" type="MeshInstance3D" parent="Classroom/Desk_4_3/Notebook" unique_id=860499401]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.049999997)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_6vaqg")
+mesh = SubResource("school_seal_mesh_2314866332")
 metadata/school_static_detail = true
 
 [node name="FramePart27" type="MeshInstance3D" parent="Classroom/Desk_4_3/Notebook" unique_id=592178730]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0059999824, 0.08499999)
 material_override = SubResource("StandardMaterial3D_c4loj")
-mesh = SubResource("BoxMesh_dqtje")
+mesh = SubResource("school_seal_mesh_2314866333")
 metadata/school_static_detail = true
 
 [node name="WoodPart13" type="MeshInstance3D" parent="Classroom" unique_id=974821220]
@@ -9194,7 +9843,7 @@ mesh = SubResource("BoxMesh_f5a18")
 metadata/school_static_detail = true
 
 [node name="Light" type="OmniLight3D" parent="Classroom/CeilingFixture30" unique_id=1094042859]
-light_color = Color(1, 0.88, 0.69, 1)
+light_color = Color(1, 0.78, 0.5, 1)
 light_energy = 1.5
 shadow_enabled = true
 distance_fade_enabled = true
@@ -9536,7 +10185,7 @@ metadata/school_static_detail = true
 [node name="FramePart2" type="MeshInstance3D" parent="Dormitory" unique_id=1361737749]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.35, 2.16, -11.42)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_23dkb")
+mesh = SubResource("school_seal_mesh_4180529905")
 metadata/school_static_detail = true
 
 [node name="PlateText3" type="Label3D" parent="Dormitory" unique_id=526501273]
@@ -9868,7 +10517,7 @@ metadata/school_static_detail = true
 [node name="FramePart5" type="MeshInstance3D" parent="Dormitory" unique_id=376995002]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.42, 2.16, -11.42)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_r8qe3")
+mesh = SubResource("school_seal_mesh_4180529908")
 metadata/school_static_detail = true
 
 [node name="PlateText6" type="Label3D" parent="Dormitory" unique_id=2123329984]
@@ -10200,7 +10849,7 @@ metadata/school_static_detail = true
 [node name="FramePart8" type="MeshInstance3D" parent="Dormitory" unique_id=1689103676]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.35, 2.16, -9.04)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_1xeyb")
+mesh = SubResource("school_seal_mesh_4180529911")
 metadata/school_static_detail = true
 
 [node name="PlateText9" type="Label3D" parent="Dormitory" unique_id=1252964827]
@@ -10532,7 +11181,7 @@ metadata/school_static_detail = true
 [node name="FramePart11" type="MeshInstance3D" parent="Dormitory" unique_id=1959171951]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.42, 2.16, -9.04)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_5at4s")
+mesh = SubResource("school_seal_mesh_518533409")
 metadata/school_static_detail = true
 
 [node name="PlateText12" type="Label3D" parent="Dormitory" unique_id=257381038]
@@ -10864,7 +11513,7 @@ metadata/school_static_detail = true
 [node name="FramePart14" type="MeshInstance3D" parent="Dormitory" unique_id=1375840085]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.35, 2.16, -6.66)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_18clx")
+mesh = SubResource("school_seal_mesh_518533412")
 metadata/school_static_detail = true
 
 [node name="PlateText15" type="Label3D" parent="Dormitory" unique_id=814570826]
@@ -11196,7 +11845,7 @@ metadata/school_static_detail = true
 [node name="FramePart17" type="MeshInstance3D" parent="Dormitory" unique_id=1219293350]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.42, 2.16, -6.66)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_alp30")
+mesh = SubResource("school_seal_mesh_518533415")
 metadata/school_static_detail = true
 
 [node name="PlateText18" type="Label3D" parent="Dormitory" unique_id=907497221]
@@ -11397,7 +12046,7 @@ mesh = SubResource("BoxMesh_jprsj")
 metadata/school_static_detail = true
 
 [node name="Light" type="OmniLight3D" parent="Dormitory/CeilingFixture23" unique_id=1148061827]
-light_color = Color(1, 0.88, 0.69, 1)
+light_color = Color(1, 0.78, 0.5, 1)
 light_energy = 1.15
 shadow_enabled = true
 distance_fade_enabled = true
@@ -11854,7 +12503,7 @@ mesh = SubResource("BoxMesh_56mex")
 metadata/school_static_detail = true
 
 [node name="Light" type="OmniLight3D" parent="DiningRoom/CeilingFixture5" unique_id=1762733362]
-light_color = Color(1, 0.88, 0.69, 1)
+light_color = Color(1, 0.78, 0.5, 1)
 light_energy = 1.4
 shadow_enabled = true
 distance_fade_enabled = true
@@ -12283,7 +12932,7 @@ mesh = SubResource("BoxMesh_d1iko")
 metadata/school_static_detail = true
 
 [node name="Light" type="OmniLight3D" parent="Kitchen/CeilingFixture107" unique_id=600013789]
-light_color = Color(1, 0.88, 0.69, 1)
+light_color = Color(1, 0.78, 0.5, 1)
 shadow_enabled = true
 distance_fade_enabled = true
 distance_fade_begin = 20.0
@@ -12345,7 +12994,7 @@ metadata/school_static_detail = true
 [node name="FramePart53" type="MeshInstance3D" parent="Kitchen/Oven" unique_id=865541814]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37000084, 0.55, -0.3)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_kon1j")
+mesh = SubResource("school_seal_mesh_4265147435")
 metadata/school_static_detail = true
 
 [node name="SteelPart54" type="MeshInstance3D" parent="Kitchen/Oven" unique_id=1890999378]
@@ -12357,7 +13006,7 @@ metadata/school_static_detail = true
 [node name="FramePart55" type="MeshInstance3D" parent="Kitchen/Oven" unique_id=1296621156]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37000084, 0.55, 0.3)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_ddgbb")
+mesh = SubResource("school_seal_mesh_4265147437")
 metadata/school_static_detail = true
 
 [node name="SteelPart56" type="MeshInstance3D" parent="Kitchen/Oven" unique_id=1351874470]
@@ -12449,7 +13098,7 @@ metadata/school_static_detail = true
 [node name="FramePart59" type="MeshInstance3D" parent="Kitchen/Counter" unique_id=1276161063]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37000084, 0.55, -0.29999995)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_gnxgg")
+mesh = SubResource("school_seal_mesh_4145672313")
 metadata/school_static_detail = true
 
 [node name="SteelPart60" type="MeshInstance3D" parent="Kitchen/Counter" unique_id=542717823]
@@ -12461,7 +13110,7 @@ metadata/school_static_detail = true
 [node name="FramePart61" type="MeshInstance3D" parent="Kitchen/Counter" unique_id=703673490]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37000084, 0.55, 0.30000007)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_17gea")
+mesh = SubResource("school_seal_mesh_4145672338")
 metadata/school_static_detail = true
 
 [node name="SteelPart62" type="MeshInstance3D" parent="Kitchen/Counter" unique_id=1437740072]
@@ -12487,7 +13136,7 @@ shape = SubResource("BoxShape3D_m2ljh")
 [node name="FramePart64" type="MeshInstance3D" parent="Kitchen/Sink" unique_id=1584452675]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37000084, 0.55, -0.29999995)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_jm0qh")
+mesh = SubResource("school_seal_mesh_194112298")
 metadata/school_static_detail = true
 
 [node name="SteelPart65" type="MeshInstance3D" parent="Kitchen/Sink" unique_id=1670693258]
@@ -12499,7 +13148,7 @@ metadata/school_static_detail = true
 [node name="FramePart66" type="MeshInstance3D" parent="Kitchen/Sink" unique_id=2017716478]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37000084, 0.55, 0.29999995)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_ua6wo")
+mesh = SubResource("school_seal_mesh_194112300")
 metadata/school_static_detail = true
 
 [node name="SteelPart67" type="MeshInstance3D" parent="Kitchen/Sink" unique_id=1664714264]
@@ -12585,7 +13234,7 @@ metadata/school_static_detail = true
 [node name="FramePart70" type="MeshInstance3D" parent="Kitchen/PreparationCounter" unique_id=259544531]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37000084, 0.55, -0.2999997)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_fp048")
+mesh = SubResource("school_seal_mesh_3929175095")
 metadata/school_static_detail = true
 
 [node name="SteelPart71" type="MeshInstance3D" parent="Kitchen/PreparationCounter" unique_id=1724405651]
@@ -12597,7 +13246,7 @@ metadata/school_static_detail = true
 [node name="FramePart72" type="MeshInstance3D" parent="Kitchen/PreparationCounter" unique_id=1904965325]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37000084, 0.55, 0.3000002)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_7ujrf")
+mesh = SubResource("school_seal_mesh_3929175097")
 metadata/school_static_detail = true
 
 [node name="SteelPart73" type="MeshInstance3D" parent="Kitchen/PreparationCounter" unique_id=379039401]
@@ -13202,67 +13851,67 @@ metadata/school_static_detail = true
 [node name="FramePart5" type="MeshInstance3D" parent="ExteriorBridge" unique_id=521804421]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.2, 0.002, -3.9)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_j5xbs")
+mesh = SubResource("school_seal_mesh_4274832042")
 metadata/school_static_detail = true
 
 [node name="FramePart6" type="MeshInstance3D" parent="ExteriorBridge" unique_id=687652447]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.2, 0.002, -3.9)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_xrsvh")
+mesh = SubResource("school_seal_mesh_4274832043")
 metadata/school_static_detail = true
 
 [node name="FramePart7" type="MeshInstance3D" parent="ExteriorBridge" unique_id=1155719975]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.2, 0.002, -3.9)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_dw16q")
+mesh = SubResource("school_seal_mesh_4274832044")
 metadata/school_static_detail = true
 
 [node name="FramePart8" type="MeshInstance3D" parent="ExteriorBridge" unique_id=358826842]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.2, 0.002, -3.9)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_hddpt")
+mesh = SubResource("school_seal_mesh_4274832045")
 metadata/school_static_detail = true
 
 [node name="FramePart9" type="MeshInstance3D" parent="ExteriorBridge" unique_id=1577502597]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.2, 0.002, -3.9)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_ae2xt")
+mesh = SubResource("school_seal_mesh_4274832046")
 metadata/school_static_detail = true
 
 [node name="FramePart10" type="MeshInstance3D" parent="ExteriorBridge" unique_id=1119803625]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.2, 0.002, -3.9)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_ksuk7")
+mesh = SubResource("school_seal_mesh_3630503830")
 metadata/school_static_detail = true
 
 [node name="FramePart11" type="MeshInstance3D" parent="ExteriorBridge" unique_id=1938178795]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.2, 0.002, -3.9)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_xnm3l")
+mesh = SubResource("school_seal_mesh_3630503831")
 metadata/school_static_detail = true
 
 [node name="FramePart12" type="MeshInstance3D" parent="ExteriorBridge" unique_id=693067217]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2, 0.002, -3.9)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_674ia")
+mesh = SubResource("school_seal_mesh_3630503832")
 metadata/school_static_detail = true
 
 [node name="FramePart13" type="MeshInstance3D" parent="ExteriorBridge" unique_id=1896444039]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, 0.002, -3.9)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_73cxy")
+mesh = SubResource("school_seal_mesh_3630503833")
 metadata/school_static_detail = true
 
 [node name="FramePart14" type="MeshInstance3D" parent="ExteriorBridge" unique_id=1547090762]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.81, 0.002, -4.88)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_3tmnx")
+mesh = SubResource("school_seal_mesh_3630503834")
 metadata/school_static_detail = true
 
 [node name="FramePart15" type="MeshInstance3D" parent="ExteriorBridge" unique_id=166269527]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.81, 0.002, -2.92)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("BoxMesh_hcwbq")
+mesh = SubResource("school_seal_mesh_3630503835")
 metadata/school_static_detail = true
 
 [node name="HouseBridgePortal" type="StaticBody3D" parent="." unique_id=108184229]
@@ -13270,27 +13919,19 @@ metadata/school_static_detail = true
 [node name="WallPart0" type="MeshInstance3D" parent="HouseBridgePortal" unique_id=749237015]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2794333, 2.04, -4.345)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("SchoolWindowDoorPier386463177958")
+mesh = SubResource("school_seal_mesh_684543598")
 metadata/school_static_detail = true
 
 [node name="WallPart1" type="MeshInstance3D" parent="HouseBridgePortal" unique_id=1343751055]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2794333, 3.465, -3)
 material_override = SubResource("ShaderMaterial_4a3of")
-mesh = SubResource("HouseDoorFittedLintelMesh")
+mesh = SubResource("school_seal_mesh_684543599")
 metadata/school_static_detail = true
-
-[node name="OriginalWallNorthRemainder" type="CollisionShape3D" parent="HouseBridgePortal" unique_id=719786360]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2818494, 2.04, -4.345)
-shape = SubResource("SchoolWindowDoorPierShape")
-
-[node name="PortalLintel" type="CollisionShape3D" parent="HouseBridgePortal" unique_id=1639409243]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2818494, 3.465, -3)
-shape = SubResource("HouseDoorFittedLintelShape")
 
 [node name="FramePart4" type="MeshInstance3D" parent="HouseBridgePortal" unique_id=2090557777]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2794333, 0.16, -4.345)
 material_override = SubResource("StandardMaterial3D_o5k20")
-mesh = SubResource("SchoolWindowDoorPier386530281267")
+mesh = SubResource("school_seal_mesh_267154381")
 metadata/school_static_detail = true
 
 [node name="HouseBridgeDoor" type="Node3D" parent="HouseBridgePortal" unique_id=1901958720]
@@ -13350,8 +13991,212 @@ max_distance = 18.0
 [node name="ThresholdRamp" type="MeshInstance3D" parent="HouseBridgePortal" unique_id=763257380]
 mesh = SubResource("ArrayMesh_yf6lg")
 
-[node name="ThresholdCollision" type="CollisionShape3D" parent="HouseBridgePortal" unique_id=629580734]
-shape = SubResource("ConcavePolygonShape3D_78wwq")
-
 [node name="WeatherSystems" type="Node3D" parent="." unique_id=1570557308]
 script = ExtResource("8_so8cw")
+[node name="ShellCollision_139476474" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_3469355875")
+
+[node name="ShellCollision_275079228" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_256023650")
+
+[node name="ShellCollision_342880605" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_2530847325")
+
+[node name="ShellCollision_2347524045" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid14"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.049999237, 0, 0)
+shape = SubResource("school_seal_shape_1277185469")
+
+[node name="ShellCollision_2483126799" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid16"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.05000019)
+shape = SubResource("school_seal_shape_2460817966")
+
+[node name="ShellCollision_2618729553" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid18"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.05000019)
+shape = SubResource("school_seal_shape_4077015021")
+
+[node name="ShellCollision_18796682" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid20"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_2016451845")
+
+[node name="ShellCollision_154399436" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid22"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.05000019)
+shape = SubResource("school_seal_shape_486119668")
+
+[node name="ShellCollision_290002190" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid24"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.050001144, 0, 0)
+shape = SubResource("school_seal_shape_1595856737")
+
+[node name="ShellCollision_425604944" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid26"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_3110005490")
+
+[node name="ShellCollision_493406321" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid27"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_1017529421")
+
+[node name="ShellCollision_2663050385" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid36"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_3354543715")
+
+[node name="ShellCollision_2798653139" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid38"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_3999095764")
+
+[node name="ShellCollision_2866454516" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid39"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_781767599")
+
+[node name="ShellCollision_741131284" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid48"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_1718598895")
+
+[node name="ShellCollision_2436165709" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid50"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_263104196")
+
+[node name="ShellCollision_2503967086" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid51"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_440653576")
+
+[node name="ShellCollision_378643854" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid60"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_2103116954")
+
+[node name="ShellCollision_514246608" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid62"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_4156397008")
+
+[node name="ShellCollision_582047985" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid63"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_2063895133")
+
+[node name="ShellCollision_2751692049" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid72"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05000019, 0, 0)
+shape = SubResource("school_seal_shape_1440373450")
+
+[node name="ShellCollision_2887294803" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid74"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.050001144, 0, 0)
+shape = SubResource("school_seal_shape_2985014514")
+
+[node name="ShellCollision_3022897557" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid76"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_1944749073")
+
+[node name="ShellCollision_3158500311" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid78"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_3517517918")
+
+[node name="ShellCollision_694170194" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid82"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_711710359")
+
+[node name="ShellCollision_829772948" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid84"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05000019, 0, 0)
+shape = SubResource("school_seal_shape_2225859112")
+
+[node name="ShellCollision_965375702" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid86"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_3307494206")
+
+[node name="ShellCollision_2796012881" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid90"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.050001144, 0, 0)
+shape = SubResource("school_seal_shape_1105334537")
+
+[node name="ShellCollision_2931615635" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid92"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_2360523784")
+
+[node name="ShellCollision_3067218389" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid94"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05000019, 0, 0)
+shape = SubResource("school_seal_shape_1609735184")
+
+[node name="ShellCollision_3202821143" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid96"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_2865751005")
+
+[node name="ShellCollision_3805042617" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid100"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.050000012)
+shape = SubResource("school_seal_shape_249625865")
+
+[node name="ShellCollision_3940645371" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid102"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.1920929e-07)
+shape = SubResource("school_seal_shape_533169393")
+
+[node name="ShellCollision_4076248125" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid104"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.1920929e-07)
+shape = SubResource("school_seal_shape_4077348848")
+
+[node name="ShellCollision_4211850879" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid106"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.050001144, 0, 0)
+shape = SubResource("school_seal_shape_1038371544")
+
+[node name="ShellCollision_52486337" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid108"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_1023379635")
+
+[node name="ShellCollision_120287714" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid109"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_1968552510")
+
+[node name="ShellCollision_2289931778" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid118"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_2271075846")
+
+[node name="ShellCollision_3984966203" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid120"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_3565733337")
+
+[node name="ShellCollision_4052767580" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid121"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_2347917780")
+
+[node name="ShellCollision_1927444348" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid130"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05000019, 0, 0)
+shape = SubResource("school_seal_shape_830563254")
+
+[node name="ShellCollision_2063047102" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid132"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.05000007)
+shape = SubResource("school_seal_shape_4013734947")
+
+[node name="ShellCollision_2198649856" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid134"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_363293894")
+
+[node name="ShellCollision_2266451233" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid135"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_1441784623")
+
+[node name="ShellCollision_2334252610" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid136"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_2519423754")
+
+[node name="ShellCollision_2469855364" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid138"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.049999714)
+shape = SubResource("school_seal_shape_3163975044")
+
+[node name="ShellCollision_4164889789" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid140"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_2163152777")
+
+[node name="ShellCollision_4232691166" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid141"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_3241643506")
+
+[node name="ShellCollision_73326624" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid143"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_93174221")
+
+[node name="ShellCollision_208929378" type="CollisionShape3D" parent="ExteriorAndPartitions/WallSolid145"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("school_seal_shape_2503113198")
+
+[node name="ShellCollision_1072758879" type="CollisionShape3D" parent="HouseBridgePortal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2794333, 2.04, -4.345)
+shape = SubResource("school_seal_shape_1559047105")
+
+[node name="ShellCollision_1072758880" type="CollisionShape3D" parent="HouseBridgePortal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2794333, 3.465, -3)
+shape = SubResource("school_seal_shape_1559047129")

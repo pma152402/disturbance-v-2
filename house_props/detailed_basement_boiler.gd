@@ -6,6 +6,7 @@ signal puzzle_completed
 
 const MinigameScene := preload("res://minigames/boiler_minigame.tscn")
 const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
+const StaticDecorBatcher := preload("res://systems/static_decor_batcher.gd")
 
 enum BoilerState { OFF, RUNNING, CLOGGED }
 
@@ -70,6 +71,8 @@ func _find_primary_smoke_emitter() -> CPUParticles3D:
 func _ready() -> void:
 	set_process(Engine.is_editor_hint() or boiler_puzzle_enabled)
 	_build_gauge_color_sectors()
+	if not Engine.is_editor_hint():
+		StaticDecorBatcher.optimize_static_children(self)
 	_create_smoke_ramps()
 	if boiler_puzzle_enabled:
 		_apply_boiler_state()
@@ -193,6 +196,9 @@ func _process(delta: float) -> void:
 
 
 func _configure_boiler_puzzle() -> void:
+	# Deferred setup can outlive a scene removal or an editor replacement.
+	if not is_inside_tree() or is_queued_for_deletion():
+		return
 	_discover_physical_valves()
 	if not _valves_discovered:
 		return
@@ -226,9 +232,12 @@ func _configure_boiler_puzzle() -> void:
 
 
 func _discover_physical_valves() -> void:
+	_valves_discovered = false
 	_water_valve = null
 	_air_intake_valve = null
 	_air_outlet_valve = null
+	if not is_inside_tree() or is_queued_for_deletion():
+		return
 	for candidate in get_tree().get_nodes_in_group(&"boiler_valve"):
 		if not is_instance_valid(candidate):
 			continue

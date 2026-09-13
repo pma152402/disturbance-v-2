@@ -1,4 +1,6 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://systems/camera_observable.gd" id="1_camera_observable"]
 
 [sub_resource type="StandardMaterial3D" id="wood"]
 albedo_color = Color(0.24, 0.105, 0.035, 1)
@@ -27,6 +29,13 @@ size = Vector3(1.55, 0.9, 0.9)
 
 [node name="AntiqueBedroomChest" type="StaticBody3D"]
 editor_description = "Cofre antiguo de madera con tapa abombada, bandas metalicas, cerradura y patas."
+[node name="CameraObservable" type="Node" parent="."]
+script = ExtResource("1_camera_observable")
+observation_id = &"bedroom_chest"
+display_name = "BAUL"
+local_focus_offset = Vector3(0, 0.55, 0)
+framing_radius = 1.05
+maximum_distance = 20.0
 [node name="ChestBody" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.42, 0)
 scale = Vector3(1.5, 0.72, 0.82)
@@ -63,4 +72,3 @@ mesh = SubResource("dark_box")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.45, 0)
 shape = SubResource("collision")
-
