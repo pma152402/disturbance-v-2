@@ -1,5 +1,5 @@
 [gd_scene format=3]
-[ext_resource type="Script" path="res://doors/push_door.gd" id="door"]
+[ext_resource type="Script" path="res://doors/thin_metal_gate.gd" id="door"]
 [ext_resource type="ArrayMesh" path="res://house_props/asylum_gate_lattice_complete.obj" id="weave"]
 [ext_resource type="Material" path="res://house_props/catacombs/materials/aged_iron.tres" id="iron"]
 [ext_resource type="Material" path="res://house_props/catacombs/materials/rusted_iron.tres" id="rust"]
@@ -103,6 +103,8 @@ collision_layer = 3
 collision_mask = 1
 script = ExtResource("door")
 panel_half_width = 0.8
+volumen_apertura_db = -10.0
+volumen_cierre_db = -8.0
 
 [node name="PanelCollision" type="CollisionShape3D" parent="Gate"]
 position = Vector3(0.8,1.3,0)

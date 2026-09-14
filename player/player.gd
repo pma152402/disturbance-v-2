@@ -138,6 +138,8 @@ var filming_modes: Node
 @onready var inventory_stored_message: Label = $InventoryStoredMessageUI/Message
 @onready var holster_sound: AudioStreamPlayer = $HolsterSound
 @onready var switch_sound: AudioStreamPlayer = $SwitchSound
+@onready var remote_button_sound: AudioStreamPlayer = $RemoteButtonSound
+@onready var pickup_sound: AudioStreamPlayer = $PickupSound
 @onready var flashlight_click_sound: AudioStreamPlayer = $FlashlightClickSound
 @onready var footstep_sound: AudioStreamPlayer = $FootstepSound
 @onready var footstep_sound_right: AudioStreamPlayer = $FootstepSoundRight
@@ -279,6 +281,35 @@ const ScrewdriverPickupScene := preload("res://house_props/flathead_screwdriver.
 const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
 const RepairKitScene := preload("res://house_props/camera_repair_kit.tscn")
 var camera_repair: Node
+const PickupKeysSound := preload("res://sounds/pickups/pickup_keys.mp3")
+const PickupGlassSound := preload("res://sounds/pickups/pickup_glass_bottle.mp3")
+const PickupPaperSound := preload("res://sounds/pickups/pickup_paper_book.mp3")
+const PickupMetalSound := preload("res://sounds/pickups/pickup_metal_tools.mp3")
+const PickupPlasticSound := preload("res://sounds/pickups/pickup_plastic_objects.mp3")
+const PickupMatchboxSound := preload("res://sounds/pickups/pickup_matchbox.mp3")
+const PickupCassetteSound := preload("res://sounds/pickups/pickup_cassette.mp3")
+const PickupPlungerSound := preload("res://sounds/pickups/pickup_plunger_suction.mp3")
+const PickupTripodSound := preload("res://sounds/pickups/pickup_tripod_mechanical.mp3")
+const PickupCandleSound := preload("res://sounds/pickups/pickup_candle_grab.mp3")
+const PICKUP_SOUND_PROFILES := {
+	&"key": {"stream": PickupKeysSound, "start": 0.08, "duration": 0.72, "volume_db": -8.0, "pitch": 1.0},
+	&"flashlight": {"stream": PickupPlasticSound, "start": 0.12, "duration": 0.48, "volume_db": -12.0, "pitch": 0.88},
+	&"flashlight_battery": {"stream": PickupMetalSound, "start": 0.16, "duration": 0.34, "volume_db": -13.0, "pitch": 1.16},
+	&"can": {"stream": PickupMetalSound, "start": 1.05, "duration": 0.42, "volume_db": -11.0, "pitch": 1.05},
+	&"bottle": {"stream": PickupGlassSound, "start": 0.02, "duration": 0.68, "volume_db": -12.0, "pitch": 0.94},
+	&"plunger": {"stream": PickupPlungerSound, "start": 0.0, "duration": 0.82, "volume_db": -6.0, "pitch": 0.90},
+	&"crowbar": {"stream": PickupMetalSound, "start": 2.30, "duration": 0.48, "volume_db": -9.0, "pitch": 0.76},
+	&"flathead_screwdriver": {"stream": PickupMetalSound, "start": 3.45, "duration": 0.36, "volume_db": -12.0, "pitch": 1.08},
+	&"note": {"stream": PickupPaperSound, "start": 0.06, "duration": 0.46, "volume_db": -13.0, "pitch": 1.05},
+	&"recipe_book": {"stream": PickupPaperSound, "start": 1.10, "duration": 0.62, "volume_db": -11.0, "pitch": 0.84},
+	&"matchbox": {"stream": PickupMatchboxSound, "start": 0.04, "duration": 0.55, "volume_db": -11.0, "pitch": 1.0},
+	&"candle": {"stream": PickupCandleSound, "start": 0.0, "duration": 0.46, "volume_db": -7.0, "pitch": 0.88},
+	&"tv_remote": {"stream": PickupPlasticSound, "start": 1.05, "duration": 0.38, "volume_db": -13.0, "pitch": 1.0},
+	&"camera_tripod": {"stream": PickupTripodSound, "start": 0.0, "duration": 1.05, "volume_db": -7.0, "pitch": 0.92},
+	&"cassette": {"stream": PickupCassetteSound, "start": 0.12, "duration": 0.52, "volume_db": -11.0, "pitch": 0.96},
+	&"panel_fuse_good": {"stream": PickupPlasticSound, "start": 2.15, "duration": 0.34, "volume_db": -14.0, "pitch": 1.14},
+	&"panel_fuse_broken": {"stream": PickupPlasticSound, "start": 2.82, "duration": 0.38, "volume_db": -15.0, "pitch": 0.90},
+}
 const INVENTORY_ITEM_NAMES := {
 	&"flashlight": "LINTERNA",
 	&"can": "LATA",
@@ -297,6 +328,8 @@ const INVENTORY_ITEM_NAMES := {
 	&"panel_fuse_broken": "FUSIBLE ROTO",
 	&"repair_kit": "KIT DE REPARACION",
 }
+
+var _pickup_sound_token := 0
 
 
 func _ready() -> void:
@@ -589,22 +622,30 @@ func _input(event: InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 				return
 		if mouse_button.pressed and _held_item == &"tv_remote" and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			var button_name := &""
+			var button_kind := &""
+			match mouse_button.button_index:
+				MOUSE_BUTTON_LEFT:
+					button_name = &"Power"
+					button_kind = &"power"
+				MOUSE_BUTTON_RIGHT:
+					button_name = &"Button1"
+					button_kind = &"channel"
+				MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN:
+					button_name = &"DPadVertical"
+					button_kind = &"volume"
+				_:
+					return
+			_pulse_held_remote(button_name)
+			_play_tv_remote_button_sound(button_kind)
 			var remote_tv := _get_remote_television()
 			if remote_tv != null:
-				if mouse_button.button_index == MOUSE_BUTTON_LEFT:
-					remote_tv.call(&"toggle_power")
-					_pulse_held_remote(&"Power")
-				elif mouse_button.button_index == MOUSE_BUTTON_RIGHT:
-					remote_tv.call(&"next_channel")
-					_pulse_held_remote(&"Button1")
-				elif mouse_button.button_index == MOUSE_BUTTON_WHEEL_UP:
-					remote_tv.call(&"adjust_volume", 1)
-					_pulse_held_remote(&"DPadVertical")
-				elif mouse_button.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-					remote_tv.call(&"adjust_volume", -1)
-					_pulse_held_remote(&"DPadVertical")
-				else:
-					return
+				match button_kind:
+					&"power": remote_tv.call(&"toggle_power")
+					&"channel": remote_tv.call(&"next_channel", true)
+					&"volume":
+						var amount := 1 if mouse_button.button_index == MOUSE_BUTTON_WHEEL_UP else -1
+						remote_tv.call(&"adjust_volume", amount, true)
 				_update_interaction_prompt()
 			get_viewport().set_input_as_handled()
 			return
@@ -1469,8 +1510,31 @@ func _store_inventory_item(item_type: StringName, item_data: Dictionary = {}, st
 		_update_inventory_ui()
 		_show_inventory_temporarily()
 		_show_inventory_stored_message(item_type)
+		play_pickup_sound(item_type)
 		return true
-	return _equip_inventory_slot(slot_index)
+	var equipped := _equip_inventory_slot(slot_index)
+	if equipped:
+		play_pickup_sound(item_type)
+	return equipped
+
+
+func play_pickup_sound(item_type: StringName) -> void:
+	var profile: Dictionary = PICKUP_SOUND_PROFILES.get(item_type, {})
+	var stream := profile.get("stream") as AudioStream
+	if stream == null:
+		return
+	_pickup_sound_token += 1
+	var playback_token := _pickup_sound_token
+	pickup_sound.stop()
+	pickup_sound.stream = stream
+	pickup_sound.volume_db = float(profile.get("volume_db", -12.0))
+	pickup_sound.pitch_scale = float(profile.get("pitch", 1.0))
+	pickup_sound.play(float(profile.get("start", 0.0)))
+	var duration := float(profile.get("duration", 0.5))
+	get_tree().create_timer(duration).timeout.connect(func() -> void:
+		if playback_token == _pickup_sound_token:
+			pickup_sound.stop()
+	)
 
 
 func _has_equipped_inventory_item() -> bool:
@@ -2737,7 +2801,10 @@ func recover_flashlight(was_on: bool, has_battery := true) -> bool:
 	_flashlight_holstered = true
 	flashlight.visible = false
 	hand_rig.visible = false
-	return _equip_inventory_slot(flashlight_slot)
+	var equipped := _equip_inventory_slot(flashlight_slot)
+	if equipped:
+		play_pickup_sound(&"flashlight")
+	return equipped
 
 
 func install_flashlight_battery() -> bool:
@@ -3049,6 +3116,12 @@ func _pulse_held_remote(button_name: StringName) -> void:
 	var tween := create_tween()
 	tween.tween_property(button, "position:y", rest_y - 0.009, 0.045)
 	tween.tween_property(button, "position:y", rest_y, 0.075)
+
+
+func _play_tv_remote_button_sound(button_kind: StringName) -> void:
+	remote_button_sound.stream = GameplaySounds.make_tv_remote_button(button_kind)
+	remote_button_sound.pitch_scale = randf_range(0.985, 1.015)
+	remote_button_sound.play()
 
 func _request_stance(target_stance: Stance) -> void:
 	if _stance_transition_timer > 0.0 or target_stance == _stance:
