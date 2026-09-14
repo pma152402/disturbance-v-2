@@ -1,11 +1,11 @@
 {
   "mcpServers": {
     "godot": {
-      "command": "npx",
+      "command": "C:\\Users\\jpere\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\a708e72b10c27b59\\bin\\npx.cmd",
       "args": ["-y", "@coding-solo/godot-mcp"],
       "env": {
         "DEBUG": "true",
-        "GODOT_PATH": "C:\\Users\\papar\\Desktop\\godot.exe"
+        "GODOT_PATH": "C:\\Users\\jpere\\Desktop\\godot\\Godot_v4.7.2-stable_win64.exe\\Godot_v4.7.2-stable_win64_console.exe"
       }
     }
   }
