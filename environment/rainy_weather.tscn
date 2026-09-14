@@ -209,6 +209,7 @@ process_mode = 3
 
 [node name="NorthRain" type="GPUParticles3D" parent="Rain"]
 position = Vector3(0, 15, 0)
+cast_shadow = 0
 emitting = true
 amount = 720
 lifetime = 1.8

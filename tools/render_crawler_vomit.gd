@@ -24,6 +24,8 @@ func block(size_: Vector3, position_: Vector3) -> void:
 
 func run() -> void:
 	seed(4501)
+	var rear_view := "--rear" in OS.get_cmdline_user_args()
+	var long_view := "--long" in OS.get_cmdline_user_args()
 	viewport = SubViewport.new()
 	viewport.size = Vector2i(640, 560)
 	viewport.world_3d = World3D.new()
@@ -43,9 +45,10 @@ func run() -> void:
 	light.omni_range = 12
 	light.light_energy = 4
 	viewport.add_child(light)
-	block(Vector3(20, 0.2, 20), Vector3(0, -0.1, 0))
-	block(Vector3(20, 0.2, 20), Vector3(0, 4.1, 0))
-	block(Vector3(0.2, 4.2, 20), Vector3(5.1, 2, 0))
+	var room_height := 8.0 if long_view else 4.0
+	block(Vector3(40, 0.2, 40), Vector3(0, -0.1, 0))
+	block(Vector3(40, 0.2, 40), Vector3(0, room_height + 0.1, 0))
+	block(Vector3(0.2, room_height + 0.2, 40), Vector3(5.1, room_height * 0.5, 0))
 	var player := Target.new()
 	player.add_to_group("player")
 	viewport.add_child(player)
@@ -70,9 +73,20 @@ func run() -> void:
 		actor.surface.phase = attachment
 		actor.surface.normal = [Vector3.UP, Vector3.LEFT, Vector3.DOWN][attachment]
 		actor.transform = [Transform3D.IDENTITY, Transform3D(Basis(Vector3.UP, Vector3.LEFT, Vector3.BACK), Vector3(4.88, 1.8, 0)), Transform3D(Basis(Vector3.BACK, PI), Vector3(0, 3.88, 0))][attachment]
+		if long_view and attachment == 2: actor.position.y = room_height - 0.12
 		player.position = Vector3(2.8 if attachment == 1 else 0, 0, 3.8)
 		camera.position = [Vector3(3.3, 2.3, 4.9), Vector3(0.6, 3.3, 5), Vector3(3.3, 1.5, 4.9)][attachment]
-		camera.look_at([Vector3(0, 0.9, 1.3), Vector3(3.8, 1.8, 1.3), Vector3(0, 2.1, 1.3)][attachment])
+		var focus: Vector3 = [Vector3(0, 0.9, 1.3), Vector3(3.8, 1.8, 1.3), Vector3(0, 2.1, 1.3)][attachment]
+		if long_view:
+			player.position.z = 13.8
+			camera.position = Vector3(-12, 5.5, 14)
+			focus = Vector3(0, 2.8, 6.0)
+			light.omni_range = 30
+		if rear_view:
+			player.position.z *= -1.0
+			camera.position.z *= -1.0
+			focus.z *= -1.0
+		camera.look_at(focus)
 		visual._reset_contacts()
 		for i in 25: visual._physics_process(1.0 / 60.0)
 		await physics_frame
@@ -82,7 +96,7 @@ func run() -> void:
 			if stage == 1:
 				attack.phase = attack.Phase.DRIP
 				attack.elapsed = 0.0
-			for frame in (100 if stage == 0 else 65):
+			for frame in ((150 if long_view else 100) if stage == 0 else 110):
 				attack.step(1.0 / 60.0)
 				visual._physics_process(1.0 / 60.0)
 				attack.effects._physics_process(1.0 / 60.0)
@@ -93,7 +107,7 @@ func run() -> void:
 			var shot := viewport.get_texture().get_image()
 			shot.convert(Image.FORMAT_RGBA8)
 			sheet.blit_rect(shot, Rect2i(0, 0, 640, 560), Vector2i(attachment * 640, stage * 560))
-	sheet.save_png("res://tools/output/crawler_vomit.png")
+	sheet.save_png("res://tools/output/crawler_vomit_long.png" if long_view else "res://tools/output/crawler_vomit_rear.png" if rear_view else "res://tools/output/crawler_vomit.png")
 	print("CRAWLER VOMIT RENDER PASS")
 	viewport.queue_free()
 	await process_frame

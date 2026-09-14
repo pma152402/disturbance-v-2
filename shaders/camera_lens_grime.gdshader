@@ -5,6 +5,7 @@ uniform float central_clear : hint_range(0.0, 1.0) = 0.0;
 uniform float wipe_progress = 0.0;
 uniform bool wiping = false;
 uniform float wash_progress = 0.0;
+uniform float maximum_opacity : hint_range(0.0, 1.0) = 0.70;
 float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float noise(vec2 p) {
  vec2 i = floor(p); vec2 f = fract(p); f = f * f * (3.0 - 2.0 * f);
@@ -20,8 +21,11 @@ void fragment() {
  float oval = 1.0 - smoothstep(0.83, 1.17, length((UV - vec2(0.5,0.5)) / vec2(0.215,0.155)));
  float cleared = central_clear;
  if (wiping) cleared = max(cleared, smoothstep(0.0, 0.15, wipe_progress) * smoothstep(0.95 - wipe_progress * 0.9, 1.05 - wipe_progress * 0.9, UV.x));
- opacity *= 1.0 - oval * cleared * 0.98;
+ // A hand smears the film; even the middle retains translucent streaks.
+ float residue = mix(0.18, 0.28, drops);
+ opacity *= 1.0 - oval * cleared * (1.0 - residue);
  opacity *= 1.0 - wash_progress;
+ opacity = min(opacity * maximum_opacity, maximum_opacity);
  float bits = smoothstep(0.85, 0.94, noise(UV * 110.0));
  vec3 slime = mix(vec3(0.065,0.12,0.008), vec3(0.25,0.34,0.025), small);
  slime = mix(slime, vec3(0.48,0.19,0.022), bits * 0.8);

@@ -30,6 +30,8 @@ func _run() -> void:
 		{"name": "lateral", "velocity": Vector3(1.4, 0, 0), "stance": 0.0},
 	]:
 		_measure_cycle(scenario)
+	_measure_upright_height()
+	_measure_jump_arms()
 	var visual := VISUAL.instantiate() as Node3D
 	root.add_child(visual)
 	for frame in 120:
@@ -89,3 +91,53 @@ func _measure_cycle(scenario: Dictionary) -> void:
 	_check(contacts > 10 and max_slide < 0.15, "%s: patina el pie durante el apoyo" % scenario.name)
 	_check(max_knee - min_knee > 0.35, "%s: la rodilla se mueve rígida" % scenario.name)
 	visual.free()
+
+
+func _measure_upright_height() -> void:
+	# Reposo -> andar -> correr -> reposo. Medir la cabeza y no solo la escala:
+	# la regresión bajaba la posición del torso sin cambiar ningún scale.
+	var visual := VISUAL.instantiate() as Node3D
+	root.add_child(visual)
+	var head := visual.get_node("Body/Head") as Node3D
+	var baseline := head.global_position.y - 0.006
+	for speed in [0.0, 1.4, 3.6, 0.0]:
+		var total := 0.0
+		var minimum := INF
+		var maximum := -INF
+		for frame in 360:
+			visual.update_player_animation(1.0 / 120.0, Vector3(0, 0, -speed), 0.0, true, speed > 2.0, 0.0, 0.0, &"")
+			var height := head.global_position.y
+			minimum = minf(minimum, height)
+			maximum = maxf(maximum, height)
+			if frame >= 120:
+				total += height
+		var average := total / 240.0
+		print("ALTURA %.1f m/s: media %.4f, rango %.4f..%.4f, reposo %.4f" % [speed, average, minimum, maximum, baseline])
+		_check(absf(average - baseline) < 0.012, "El personaje cambia de altura media a %.1f m/s" % speed)
+		_check(minimum >= baseline - 0.025 and maximum <= baseline + 0.025, "La transición produce un encogimiento/estiramiento a %.1f m/s" % speed)
+	visual.free()
+
+
+func _measure_jump_arms() -> void:
+	for item: StringName in [&"", &"flashlight"]:
+		var visual := VISUAL.instantiate() as Node3D
+		root.add_child(visual)
+		var left := visual.get_node("Body/LeftArm/Forearm/Hand") as Node3D
+		var right := visual.get_node("Body/RightArm/Forearm/Hand") as Node3D
+		for frame in 60:
+			visual.update_player_animation(1.0 / 60.0, Vector3.ZERO, 0.0, true, false, 0.0, 0.0, item)
+		var rest_left := left.global_position
+		var rest_right := right.global_position
+		for vertical_speed in [5.8, 0.0, -4.0]:
+			for frame in 24:
+				visual.update_player_animation(1.0 / 60.0, Vector3(0, vertical_speed, -1.4), 0.0, false, false, 0.0, 0.0, item)
+			_check(left.global_position.y > visual.get_node("Body/LeftArm").global_position.y + 0.03, "El salto no eleva la mano izquierda sobre el hombro")
+			_check(right.global_position.y > visual.get_node("Body/RightArm").global_position.y + 0.03, "El salto no eleva la mano derecha sobre el hombro")
+		var airborne_left := left.global_position
+		visual.update_player_animation(1.0 / 60.0, Vector3.ZERO, 0.0, true, false, 0.0, 0.0, item)
+		_check(left.global_position.distance_to(airborne_left) < 0.16, "Los brazos bajan de golpe al aterrizar")
+		for frame in 120:
+			visual.update_player_animation(1.0 / 60.0, Vector3.ZERO, 0.0, true, false, 0.0, 0.0, item)
+		_check(left.global_position.distance_to(rest_left) < 0.02 and right.global_position.distance_to(rest_right) < 0.02, "Los brazos no recuperan la pose tras el salto")
+		visual.free()
+	print("SALTO: brazos elevados en ascenso/caída y retorno suave, con y sin linterna")

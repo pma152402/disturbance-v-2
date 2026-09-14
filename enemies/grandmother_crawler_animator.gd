@@ -181,8 +181,11 @@ func _physics_process(delta: float) -> void:
 		var direction: Vector3 = _body.global_basis.orthonormalized().inverse() * vomit_attack.aim_direction
 		var aim_yaw := clampf(atan2(direction.x, direction.z), -vomit_attack.MAX_HEAD_YAW, vomit_attack.MAX_HEAD_YAW)
 		var aim_pitch := clampf(-atan2(direction.y, maxf(Vector2(direction.x, direction.z).length(), 0.001)), -vomit_attack.MAX_HEAD_PITCH, vomit_attack.MAX_HEAD_PITCH)
-		head_target = Quaternion(Vector3.UP, aim_yaw) * Quaternion(Vector3.RIGHT, aim_pitch)
-	_pose_node(_head, head_target, delta, 12.0 if vomiting else 6.0)
+		head_target = Quaternion(Vector3.UP, aim_yaw) * Quaternion(Vector3.RIGHT, aim_pitch) * Quaternion(Vector3.BACK, vomit_attack.head_roll)
+		# Lift only the articulated head when looking backwards so the mouth
+		# clears the shoulders; the generated neck keeps both ends connected.
+		_head.position.y += smoothstep(0.0, 0.8, -direction.z) * 0.14 / MODEL_SCALE
+	_pose_node(_head, head_target, delta, 24.0 if vomiting else 6.0)
 	_head.scale = _base_head_scale * head_scale_multiplier
 	if _crawler_hair != null:
 		_crawler_hair.head_size_multiplier = head_scale_multiplier

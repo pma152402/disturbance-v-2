@@ -27,6 +27,7 @@ func run() -> void:
 	check(not lens.overlay.visible and not lens.is_processing(), "Clean lens has idle work/visible grime")
 	player.receive_camera_splatter(0.1)
 	check(is_equal_approx(lens.dirt, 0.1) and lens.overlay.visible, "First contact did not stain camera")
+	check(lens.hint.text == "V  LIMPIAR LA CAMARA" and not lens._hint_timer.is_stopped(), "Dirty camera does not explain V")
 	for i in 30: player.receive_camera_splatter(0.04)
 	check(lens.dirt == 1.0 and player._monster_hits == 0, "Repeated splatter damaged health or exceeded coverage")
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -42,6 +43,9 @@ func run() -> void:
 		check(lens._wipe_hand.get_parent() == player.camera, "Wipe hand does not follow camera")
 		lens._tween.custom_step(1.0)
 	check(not lens.busy and lens.central_clear == 1.0 and lens.dirt == 1.0, "V must only clear centre, leaving dirty edges")
+	check(lens.hint.text == "BUSCA UNA FORMA DE LAVAR LA CAMARA", "Wiped camera does not explain washing")
+	if DisplayServer.get_name() != "headless":
+		await check_shader_opacity()
 	check(not lens.wipe(), "Repeated V removed stubborn peripheral residue")
 	player.receive_camera_splatter(0.1)
 	check(lens.central_clear < 0.8, "New splatter did not dirty wiped centre")
@@ -69,6 +73,7 @@ func run() -> void:
 		check(player._try_interact(KEY_F) and lens.busy, "F did not start full wash at " + path)
 		if lens.busy: lens._tween.custom_step(2.5)
 		check(lens.dirt == 0.0 and not lens.overlay.visible, "Sink did not fully wash lens: " + path)
+		check(not lens.hint.visible and lens._hint_timer.is_stopped(), "Clean camera keeps cleaning prompt or idle timer")
 		check(recorded.material.get_shader_parameter("dirt") == 0.0, "Recorder retained old grime after wash")
 		player.receive_camera_splatter(1.0)
 		check(lens.wash_at(station), "Cannot restart washing")
@@ -87,3 +92,27 @@ func run() -> void:
 	world.queue_free()
 	await process_frame
 	quit(1 if failures else 0)
+
+func check_shader_opacity() -> void:
+	var transparent := SubViewport.new()
+	transparent.size = Vector2i(320, 180)
+	transparent.transparent_bg = true
+	transparent.disable_3d = true
+	transparent.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	world.add_child(transparent)
+	lens.attach_recording_view(transparent)
+	lens.central_clear = 0.0
+	lens._refresh()
+	await RenderingServer.frame_post_draw
+	var dirty: Image = transparent.get_texture().get_image()
+	var max_alpha := 0.0
+	for y in dirty.get_height():
+		for x in dirty.get_width(): max_alpha = maxf(max_alpha, dirty.get_pixel(x, y).a)
+	check(max_alpha <= 0.705 and max_alpha > 0.65, "Rendered grime opacity is not capped at 70 percent")
+	lens.central_clear = 1.0
+	lens._refresh()
+	await RenderingServer.frame_post_draw
+	var wiped: Image = transparent.get_texture().get_image()
+	var central_alpha := wiped.get_pixel(160, 90).a
+	check(central_alpha > 0.05 and central_alpha < 0.25, "Hand wipe must retain a faint visible central residue")
+	transparent.queue_free()

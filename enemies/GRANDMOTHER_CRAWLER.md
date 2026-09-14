@@ -59,54 +59,112 @@ atasco de cuatro segundos.
 
 Hay un minimo de 90 segundos entre comienzos de ataque. No puede iniciarse
 durante otro golpe, comida, salto, caida, cambio de esquina o cruce de puerta.
-Necesita apoyo real, jugador visible y un objetivo a menos de siete metros dentro
-del giro anatomico de la cabeza. Funciona en suelo, pared y techo, manteniendo
-el cuerpo fijo; la cabeza sigue al objetivo con un limite de 1,6 rad/s para
-permitir esquivarlo. Actualiza la posicion visible cada 0,08 s y no sigue al
-jugador a traves de paredes. Compensa la caida del liquido por gravedad.
+Necesita apoyo real, jugador visible y un objetivo a un maximo de catorce metros para
+iniciarse. Funciona en suelo, pared y techo, manteniendo el cuerpo fijo. Durante
+la expulsion sigue la posicion actual del jugador cada paso fisico, incluso al
+rodearla o pasar tras una cobertura. Esto no actualiza la memoria visual de la
+IA normal a traves de paredes; la colision del liquido sigue bloqueando impactos.
+El giro central alcanza 7,5 rad/s, sin el antiguo limite lateral de 80 grados.
+Una combinacion de oscilaciones irregulares agrega barridos y sacudidas de unos
+18 grados alrededor de la direccion perseguida, mas inclinaciones laterales de
+la cabeza. Esta eleva ligeramente la boca al mirar atras para librar los hombros;
+el cuello generado mantiene conectadas ambas piezas. El giro opuesto de 180
+grados dispone de un eje de rotacion estable. Compensa la caida por gravedad y
+anticipa 0,07 s de movimiento del jugador.
+La visibilidad sale de la boca y prueba torso/cabeza si un banco tapa parte del
+jugador. Las envolventes exclusivas de trepa no bloquean la vision ni la salida
+del chorro. El tramo corto cuerpo-boca sigue impidiendo disparar con la cabeza
+atravesando una pared real.
 Perder el apoyo o morir el jugador cancela el ataque.
 
 El chorro sale entre las dos piezas originales de dientes y sigue la cabeza
 articulada. El torso se contrae antes y pulsa ligeramente durante la expulsion.
 Las gotas caen por gravedad mundial incluso boca abajo. La colision de cada
 segmento impide atravesar paredes. El vomito nunca llama al sistema de dano:
-cada contacto directo agrega suciedad a la lente, como maximo 0,04 cada 0,1 s.
+cada contacto agrega suciedad a la lente, como maximo 0,09 cada 0,075 s.
 El goteo, las salpicaduras y los charcos tampoco hacen dano.
 
-`crawler_vomit_effects.gd` utiliza un MultiMesh opaco de 80 elementos reutilizados:
-56 para chorro/goteo, 8 para salpicaduras y 16 para escurrimientos hasta el suelo.
-El liquido es tres veces mas grueso; conserva trocitos naranjas y verde oscuro.
-`crawler_vomit_puddles.gd` agrega hasta 32 charcos, con tres lobulos por charco
-en otro MultiMesh opaco. Crecen hasta 0,72 m de radio solo si hay apoyo bajo
-el borde, duran 45 s y se secan al final. El envejecimiento funciona a 4 Hz.
+`crawler_vomit_effects.gd` genera una trayectoria balistica continua hasta 14 m
+desde la boca. Resuelve el arco bajo con gravedad mundial para no perder alcance
+al duplicar la distancia. El frente avanza a 14,5 m/s; no depende de reciclar
+particulas antes de alcanzar el destino. Durante la presion, la trayectoria
+completa sigue la orientacion actual de la cabeza. Al parar, la columna restante
+se vacia desde su ultimo origen, respetando el punto de impacto para que la cola
+no reaparezca al otro lado de una pared.
+`crawler_vomit_stream.gd` dibuja esa trayectoria como una unica malla opaca cerrada,
+con hasta 48 secciones de ocho vertices, bordes unidos y estrias de flujo animadas.
+El radio inicial es 0,105 m y aumenta gradualmente hasta 1,95 m: ligeramente mayor
+que la envolvente anterior de bolas mas dispersion (aproximadamente 1,8 m).
+La colision central detiene el chorro y cada borde se recorta contra el escenario.
+Reutiliza la consulta de los bordes y los indices cuando no cambia el numero de
+secciones. El roce ancho con la capsula tambien mancha, comprobando antes que
+ninguna pared separe el liquido del jugador.
+Un MultiMesh de 80 elementos queda reservado a trocitos naranjas/verde oscuro,
+goteo y salpicaduras: 56 para inclusiones/goteo, 8 para salpicaduras y 16 para
+escurrimientos. Emite 18 trocitos por segundo, sin bolas grandes formando el
+chorro. Los impactos amplios depositan hasta tres manchas verificadas a 20 Hz
+como maximo, sin crear cuerpos por gota.
+`crawler_vomit_puddles.gd` agrega hasta 48 manchas en suelo, paredes, techo y
+objetos fisicos, con tres lobulos planos por mancha en otro MultiMesh opaco.
+Crecen hasta 0,95 m de radio en suelo y 0,64 m en otras superficies, solo si hay
+apoyo bajo el borde. En superficies pequenas reduce la huella inicial. Duran
+45 s y se secan al final. El envejecimiento funciona a 4 Hz; las manchas de
+puertas y cuerpos moviles actualizan su transformacion con el objeto, y se
+retiran si desaparece su soporte. Solo esas manchas moviles precisan actualizacion
+fisica continua. Cada lobulo tiene 16 triangulos y normales planas.
 No hay luces, sombras, cuerpos rigidos ni transparencias 3D nuevas. Las gotas
 desactivan su bucle al terminar; los charcos detienen su temporizador al secarse.
 Estos limites no sustituyen una medicion de FPS del nivel completo.
 
 `systems/camera_lens_grime.gd` mantiene suciedad persistente sin bucles por frame.
-Una pasada 2D dibuja manchas verdes y motas naranjas; desaparece por completo del
-render cuando la lente esta limpia. V anima la mano durante 0,9 s y despeja
-solamente un ovalo central. Repetir V no limpia los bordes; nuevos impactos
+Una pasada 2D dibuja manchas verdes y motas naranjas con opacidad limitada al 70 %;
+desaparece por completo del render cuando la lente esta limpia. V anima la mano
+durante 0,9 s y despeja parcialmente un ovalo central: conserva un velo visible
+del 18-28 % de la mancha original incluso por donde pasa la mano. Repetir V no limpia los bordes; nuevos impactos
 vuelven a manchar el centro. F sobre un lavabo de pedestal, fregadero de cocina
 o lavadero fotografico lava toda la lente durante 2,4 s. Hay que permanecer a
 menos de 2,2 m y sin una pared de por medio. Alejarse o cambiar de camara
 interrumpe la limpieza; el vomito recibido durante ella conserva suciedad nueva.
 La camara colocada en el suelo no se puede limpiar a distancia y un impacto
 contra el avatar separado de ella no ensucia esa lente remota.
+Al ensuciarse aparece "V  LIMPIAR LA CAMARA"; tras la pasada cambia a "BUSCA UNA
+FORMA DE LAVAR LA CAMARA". El aviso se oculta durante la animacion, con la camara
+colocada, fuera del juego activo y al lavar. Su temporizador se detiene al quedar
+limpia. Los avisos son del HUD; no se incorporan a las cintas.
 
 El viewport del grabador comparte el material, por lo que la suciedad queda
 incorporada en los fotogramas JPEG. Limpiar despues no altera cintas guardadas.
 
-`tools/validate_crawler_vomit.gd` pasa 55 comprobaciones: desbloqueo por dano real,
+`tools/validate_crawler_vomit.gd` pasa 83 comprobaciones: desbloqueo por dano real,
 tiempos, seguimiento lateral y cabeza alineada en las tres superficies, salud
 intacta, suciedad, obstaculos, saltos posteriores, enfriamiento, bordes de charcos
-y desactivacion. `tools/validate_camera_lens_grime.gd` pasa 37 comprobaciones de
+y desactivacion, seguimiento sobre bancos y a traves de envolventes de trepa,
+impactos en pared y manchas que siguen una puerta. `tools/validate_camera_lens_grime.gd` pasa 42 comprobaciones de
 acumulacion, V, F en los tres lavabos, interrupciones, nuevos impactos y camara
-remota. La prueba tambien pasa con Vulkan y entrada V por el viewport real.
+remota y avisos. Con Vulkan pasa 44: ademas mide el alfa renderizado para verificar
+el limite del 70 % y el residuo central tras V, con entrada por el viewport real.
+`tools/validate_vomit_church_tracking.gd` pasa 8 comprobaciones en el nivel completo,
+con la vieja sobre los escalones reales de la iglesia y el jugador moviendose
+a ambos lados mientras sigue funcionando la fisica y la animacion normales.
+`tools/validate_vomit_chaotic_spray.gd` pasa 48 comprobaciones: recorridos completos
+alrededor de la vieja en suelo/techo, ambos extremos desde pared, con pasos de
+30/60/120 FPS, cuerpo fijo, oscilacion caotica acotada, alineacion de la boca,
+impactos desde las cuatro zonas, expansion desde el grosor inicial y roces del
+chorro ancho bloqueados correctamente por paredes.
+`tools/validate_vomit_continuous_stream.gd` pasa 28 comprobaciones: impacto real
+a 13,5 m con pasos de 30/60/120 FPS, frente con tiempo de viaje, extremo a 14 m,
+anchura progresiva, topologia cerrada, boca unida, salud intacta, limites del
+efecto y recorte frontal/lateral. Comprueba tambien que la cola del chorro no
+reaparezca tras una pared cuando termina la expulsion.
 `tools/validate_lens_recording.gd` pasa 6 comprobaciones con dos cintas capturadas
 en el nivel completo. La regresion del salto y el arranque del nivel pasan.
 `tools/render_crawler_vomit.gd` genera `tools/output/crawler_vomit.png`.
+Con `-- --long` genera `tools/output/crawler_vomit_long.png`, con el recorrido
+largo visible desde suelo, pared y techo.
+Con `-- --rear` genera `tools/output/crawler_vomit_rear.png` para revisar la boca
+y el cuello al seguir al jugador por detras sin desplazar el cuerpo.
 `tools/render_camera_lens_grime.gd` genera `tools/output/camera_lens_grime.png`.
+`tools/render_vomit_surface_stains.gd` genera `tools/output/vomit_surface_stains.png`.
 
 ```powershell
 ..\godot.exe --headless --fixed-fps 60 --path . --log-file tools/output/vomit_validation.log --script tools/validate_crawler_vomit.gd --quit-after 5000

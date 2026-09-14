@@ -15,6 +15,9 @@ var _rig_visible := false
 var _wash_station: Node3D
 var _washing := false
 var _new_splatter := 0.0
+var _has_wiped := false
+var hint: Label
+var _hint_timer: Timer
 
 func _ready() -> void:
 	player = get_parent() as CharacterBody3D
@@ -24,8 +27,42 @@ func _ready() -> void:
 	lens_material.shader = preload("res://shaders/camera_lens_grime.gdshader")
 	overlay = _make_overlay(self)
 	overlay.hide()
+	_create_hint()
 	set_process(false)
 	set_physics_process(false)
+
+func _create_hint() -> void:
+	var canvas := CanvasLayer.new()
+	canvas.layer = 103
+	canvas.name = "LensCleaningHint"
+	add_child(canvas)
+	hint = Label.new()
+	hint.name = "CleaningHint"
+	canvas.add_child(hint)
+	hint.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
+	hint.offset_left = -420.0
+	hint.offset_right = 420.0
+	hint.offset_top = -88.0
+	hint.offset_bottom = -59.0
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hint.add_theme_font_override("font", player.interaction_prompt.get_theme_font("font"))
+	hint.add_theme_font_size_override("font_size", 12)
+	hint.add_theme_color_override("font_color", Color(0.9, 0.93, 0.86, 0.95))
+	hint.add_theme_color_override("font_outline_color", Color(0.015, 0.02, 0.01, 0.95))
+	hint.add_theme_constant_override("outline_size", 3)
+	hint.hide()
+	_hint_timer = Timer.new()
+	_hint_timer.wait_time = 0.15
+	_hint_timer.timeout.connect(_update_hint)
+	add_child(_hint_timer)
+
+func _update_hint() -> void:
+	hint.text = "BUSCA UNA FORMA DE LAVAR LA CAMARA" if _has_wiped else "V  LIMPIAR LA CAMARA"
+	hint.visible = dirt > 0.001 and not busy and not player.is_camera_on_ground() and not player._monster_restart_pending and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
+	if dirt <= 0.001:
+		_hint_timer.stop()
 
 func _make_overlay(parent: Node) -> ColorRect:
 	var rect := ColorRect.new()
@@ -65,6 +102,8 @@ func _refresh() -> void:
 			_recorded_rects.remove_at(i)
 		else:
 			_recorded_rects[i].visible = overlay.visible
+	if dirt > 0.001 and _hint_timer.is_stopped(): _hint_timer.start()
+	_update_hint()
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if not event is InputEventKey or not event.pressed or event.echo: return
@@ -94,6 +133,7 @@ func _wash_reachable(station: Node3D) -> bool:
 
 func _begin_clean(wash: bool, station: Node3D) -> void:
 	busy = true
+	_update_hint()
 	_washing = wash
 	_wash_station = station
 	_new_splatter = 0.0
@@ -132,8 +172,10 @@ func _finish_clean() -> void:
 	if _washing:
 		dirt = clampf(_new_splatter, 0.0, 1.0)
 		central_clear = 0.0
+		_has_wiped = false
 	else:
 		central_clear = clampf(1.0 - _new_splatter * 3.0, 0.0, 1.0)
+		_has_wiped = true
 	_end_animation()
 	_refresh()
 

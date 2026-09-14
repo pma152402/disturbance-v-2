@@ -24,7 +24,7 @@ const LOCOMOTION_GAIT := preload("res://player/locomotion_gait.gd")
 @export var bob_vertical_amount := 0.06
 @export var bob_horizontal_amount := 0.032
 @export var bob_roll_degrees := 0.9
-@export var sprint_bob_multiplier := 1.38
+@export var sprint_bob_multiplier := 2.8
 ## Escala del movimiento de la lente; 0 elimina el balanceo automatico.
 @export_range(0.0, 2.0, 0.05) var camera_motion_strength := 1.0
 @export_range(0.0, 2.0, 0.05) var camera_inertia_strength := 1.0
@@ -162,6 +162,9 @@ var _camera_acceleration := Vector3.ZERO
 var _camera_turn_rate := Vector2.ZERO
 var _camera_breath_phase := 0.0
 var _camera_exertion := 0.0
+var _camera_organic_time := 0.0
+var _camera_last_contact := -1
+var _camera_sprint_pose := 0.0
 var _camera_landing_impact := 0.0
 var _camera_lean_position := 0.0
 var _camera_lean_roll := 0.0
@@ -1005,21 +1008,53 @@ func _update_camera_motion(delta: float, _input_vector: Vector2, _is_sprinting: 
 		precision_weight = 0.0
 	var strength := camera_motion_strength * precision_weight
 	var gait := _camera_gait_weight * stance_weight * lerpf(1.0, sprint_bob_multiplier, sprint_blend)
-	# Un ciclo lateral por cada dos pasos; dos apoyos verticales suaves por ciclo.
-	# El segundo armonico da compresion y recuperacion sin las esquinas de abs(sin).
+	_camera_organic_time += delta
+	# Variaciones continuas entre apoyos: una misma pierna no repite exactamente
+	# el mismo gesto. La fase compartida con el avatar y los pasos sigue intacta.
+	var step_variation := _camera_organic_noise(_bob_phase / PI, 2.7)
+	var grip_drift := Vector3(
+		_camera_organic_noise(_camera_organic_time * 1.25, 8.1),
+		_camera_organic_noise(_camera_organic_time * 1.65, 21.4),
+		_camera_organic_noise(_camera_organic_time * 0.9, 43.2)
+	)
+	var step_weight := 1.0 + step_variation * lerpf(0.12, 0.24, sprint_blend)
 	var side := sin(_bob_phase)
-	var lift := -cos(_bob_phase * 2.0) * 0.38 - cos(_bob_phase * 4.0) * 0.06
+	var step_phase := fposmod(_bob_phase, PI) / PI
+	# Compresion corta tras apoyar, subida mas larga y caida del siguiente pie.
+	# Esta curva asimetrica sustituye el rebote vertical de un pendulo perfecto.
+	var lift: float
+	if step_phase < 0.16:
+		lift = lerpf(-0.22, -0.55, smoothstep(0.0, 0.16, step_phase))
+	elif step_phase < 0.60:
+		lift = lerpf(-0.55, 0.48, smoothstep(0.16, 0.60, step_phase))
+	else:
+		lift = lerpf(0.48, -0.22, smoothstep(0.60, 1.0, step_phase))
 	var gait_position := Vector3(
-		side * bob_horizontal_amount * 0.65,
-		lift * bob_vertical_amount * (1.0 + 0.045 * side),
-		sin(_bob_phase * 2.0) * bob_vertical_amount * 0.09
-	) * gait
-	var target_motion := gait_position
+		(side * 0.82 + sin(_bob_phase * 3.0 + 0.3) * 0.10) * bob_horizontal_amount,
+		lift * bob_vertical_amount * (1.0 + 0.09 * side),
+		sin(_bob_phase * 2.0 - 0.5) * bob_vertical_amount * lerpf(0.12, 0.26, sprint_blend)
+	) * gait * step_weight
+	# La mano conserva la zancada expresiva; la lente absorbe especialmente el
+	# golpe vertical para que correr no sacuda continuamente el horizonte.
+	var target_motion := gait_position * Vector3(0.72, 0.5, 0.5)
 	var target_angles := Vector3(
-		sin(_bob_phase * 2.0 - 0.35) * deg_to_rad(0.16),
-		sin(_bob_phase - 0.2) * deg_to_rad(0.10),
-		-side * deg_to_rad(bob_roll_degrees) * 0.42
-	) * gait
+		(sin(_bob_phase * 2.0 - 0.5) + lift * 0.4) * deg_to_rad(lerpf(0.25, 0.72, sprint_blend)),
+		sin(_bob_phase - 0.35) * deg_to_rad(lerpf(0.16, 0.35, sprint_blend)),
+		-(side + step_variation * 0.18) * deg_to_rad(bob_roll_degrees) * 0.80
+	) * gait * step_weight * Vector3(0.32, 0.6, 0.4)
+	# El brazo baja y adelanta ligeramente la camara al correr; al frenar recupera
+	# el encuadre mientras el cuerpo todavia termina de absorber la zancada.
+	_camera_sprint_pose = lerpf(_camera_sprint_pose, sprint_blend * _camera_gait_weight, 1.0 - exp(-delta * 4.5))
+	target_motion += Vector3(0.006, -0.018, 0.015) * _camera_sprint_pose
+	target_angles.x -= deg_to_rad(0.55) * _camera_sprint_pose
+	target_motion += grip_drift * lerpf(0.0015, 0.006, sprint_blend) * _camera_gait_weight
+	target_angles += Vector3(grip_drift.y, grip_drift.z * 0.55, grip_drift.x) * deg_to_rad(0.14) * _camera_sprint_pose
+	var contact := int(floor(_bob_phase / PI))
+	if is_walking and _camera_last_contact >= 0 and contact != _camera_last_contact:
+		var impact := lerpf(0.02, 0.08, sprint_blend) * _camera_gait_weight * stance_weight * step_weight * strength
+		_camera_motion_velocity.y -= impact
+		_camera_angular_velocity.x -= impact * 0.12
+	_camera_last_contact = contact
 
 	# Inercia limitada al acelerar/frenar y al girar: la direccion del raton
 	# permanece inmediata; solo la lente y las manos absorben un leve retraso.
@@ -1033,23 +1068,43 @@ func _update_camera_motion(delta: float, _input_vector: Vector2, _is_sprinting: 
 	_camera_previous_yaw = global_rotation.y
 	_camera_previous_pitch = _look_pitch
 	_camera_turn_rate = _camera_turn_rate.lerp(Vector2(yaw_rate, pitch_rate), 1.0 - exp(-12.0 * delta))
-	var inertia_position := Vector3(-local_acceleration.x * 0.0012, 0.0, -local_acceleration.z * 0.0016)
-	inertia_position.x += _camera_turn_rate.x * 0.003
+	var inertia_position := Vector3(-local_acceleration.x * 0.0018, 0.0, -local_acceleration.z * 0.0025)
+	inertia_position.x += _camera_turn_rate.x * 0.0045
 	var inertia_angles := Vector3(
-		-local_acceleration.z * 0.0008 - _camera_turn_rate.y * 0.002,
-		-_camera_turn_rate.x * 0.0015,
-		local_acceleration.x * 0.0007 + _camera_turn_rate.x * 0.003
+		-local_acceleration.z * 0.0018 - _camera_turn_rate.y * 0.004,
+		-_camera_turn_rate.x * 0.003,
+		local_acceleration.x * 0.0011 + _camera_turn_rate.x * 0.005
 	)
 	target_motion += inertia_position * camera_inertia_strength
-	target_angles += inertia_angles * camera_inertia_strength
+	target_angles += inertia_angles * camera_inertia_strength * 0.65
 
-	# Respiracion continua y lenta, con recuperacion gradual despues de correr.
-	var exertion_target := sprint_blend if is_walking else 0.0
-	_camera_exertion = lerpf(_camera_exertion, exertion_target, 1.0 - exp(-delta * (1.8 if exertion_target > _camera_exertion else 0.3)))
-	_camera_breath_phase = fmod(_camera_breath_phase + delta * lerpf(1.55, 2.5, _camera_exertion), TAU * 2.0)
-	var breath := camera_breathing_strength * lerpf(1.0, 1.55, _camera_exertion) * lerpf(1.0, 0.35, _camera_gait_weight)
-	target_motion += Vector3(sin(_camera_breath_phase * 0.5) * 0.0007, sin(_camera_breath_phase) * 0.0018, 0.0) * breath
-	target_angles.x += sin(_camera_breath_phase - 0.4) * deg_to_rad(0.045) * breath
+	# Inhalacion rapida, breve pausa y exhalacion lenta. El cansancio real mantiene
+	# el pecho y la mano en movimiento despues del sprint, tambien al grabar.
+	var stamina_fatigue := 1.0 - clampf(_stamina / maxf(max_stamina, 1.0), 0.0, 1.0)
+	var exertion_target := maxf(sprint_blend * _camera_gait_weight, stamina_fatigue * 0.70)
+	_camera_exertion = lerpf(_camera_exertion, exertion_target, 1.0 - exp(-delta * (0.85 if exertion_target > _camera_exertion else 0.13)))
+	var breath_irregularity := 1.0 + _camera_organic_noise(_camera_organic_time * 0.37, 65.3) * 0.13
+	_camera_breath_phase = fmod(_camera_breath_phase + delta * lerpf(1.65, 4.3, _camera_exertion) * breath_irregularity, TAU)
+	var breath_cycle := _camera_breath_phase / TAU
+	var chest: float
+	if breath_cycle < 0.36:
+		chest = lerpf(-1.0, 1.0, smoothstep(0.0, 0.36, breath_cycle))
+	elif breath_cycle < 0.44:
+		chest = 1.0
+	else:
+		chest = lerpf(1.0, -1.0, smoothstep(0.44, 1.0, breath_cycle))
+	var breath := camera_breathing_strength * lerpf(1.0, 0.8, _camera_gait_weight)
+	var breath_position := Vector3(
+		sin(_camera_breath_phase - 0.6) * lerpf(0.0015, 0.006, _camera_exertion),
+		chest * lerpf(0.0035, 0.021, _camera_exertion),
+		sin(_camera_breath_phase - 0.4) * lerpf(0.001, 0.009, _camera_exertion)
+	) * breath
+	target_motion += breath_position
+	target_angles += Vector3(
+		-chest * deg_to_rad(lerpf(0.08, 0.38, _camera_exertion)),
+		grip_drift.x * deg_to_rad(0.16) * _camera_exertion,
+		sin(_camera_breath_phase - 0.8) * deg_to_rad(lerpf(0.025, 0.12, _camera_exertion))
+	) * breath
 
 	if _camera_landing_impact > 0.0:
 		_camera_motion_velocity.y -= _camera_landing_impact * 1.35 * strength
@@ -1071,26 +1126,36 @@ func _update_camera_motion(delta: float, _input_vector: Vector2, _is_sprinting: 
 		_is_aiming_hand = false
 		_hand_yaw = lerpf(_hand_yaw, 0.0, 1.0 - exp(-delta * hand_return_speed))
 		_hand_pitch = lerpf(_hand_pitch, 0.0, 1.0 - exp(-delta * hand_return_speed))
-	var hand_bob_position := (-gait_position * 0.38 + inertia_position * camera_inertia_strength * 0.6) * strength
+	var hand_bob_position := (-gait_position * 0.48 + breath_position * 0.5 + inertia_position * camera_inertia_strength * 0.8) * strength
 	hand_rig.position = hand_rig.position.lerp(hand_bob_position, 1.0 - exp(-delta * 12.0))
 	var right_vertical_bob := Vector3(hand_bob_position.x * 0.2, hand_bob_position.y * 0.65, hand_bob_position.z * 0.4)
 	right_hand_rig.position = right_hand_rig.position.lerp(right_vertical_bob, 1.0 - exp(-delta * 10.0))
-	var target_hand_rotation := Vector3(_hand_pitch, _hand_yaw, -_camera_angular_offset.z * 0.45)
+	var target_hand_rotation := Vector3(_hand_pitch - _camera_angular_offset.x * 0.28, _hand_yaw, -_camera_angular_offset.z * 0.55)
 	hand_rig.rotation = hand_rig.rotation.lerp(target_hand_rotation, 1.0 - exp(-delta * 12.0))
 	var right_hand_target_rotation := target_hand_rotation if _held_item == &"candle" else Vector3.ZERO
 	right_hand_rig.rotation = right_hand_rig.rotation.lerp(right_hand_target_rotation, 1.0 - exp(-delta * 12.0))
 
 
+func _camera_organic_noise(time: float, channel: float) -> float:
+	# Ruido interpolado de baja frecuencia: sin tirones aleatorios por frame ni
+	# consumo del generador aleatorio que usan enemigos, objetos y sonidos.
+	var sample_index := floorf(time)
+	var blend := smoothstep(0.0, 1.0, time - sample_index)
+	var a := fposmod(sin(sample_index * 127.1 + channel * 311.7) * 43758.5453, 1.0)
+	var b := fposmod(sin((sample_index + 1.0) * 127.1 + channel * 311.7) * 43758.5453, 1.0)
+	return lerpf(a, b, blend) * 2.0 - 1.0
+
+
 func _update_camera_springs(target_position: Vector3, target_rotation: Vector3, delta: float) -> void:
 	# Solucion exacta de un muelle criticamente amortiguado: estable incluso con
 	# frames largos, conserva la velocidad al cambiar de objetivo y no rebota.
-	var position_omega := 22.0
+	var position_omega := 32.0
 	var offset := _camera_motion_offset - target_position
 	var impulse := _camera_motion_velocity + offset * position_omega
 	var decay := exp(-position_omega * delta)
 	_camera_motion_offset = target_position + (offset + impulse * delta) * decay
 	_camera_motion_velocity = (_camera_motion_velocity - impulse * position_omega * delta) * decay
-	var rotation_omega := 18.0
+	var rotation_omega := 20.0
 	var angle_offset := _camera_angular_offset - target_rotation
 	var angular_impulse := _camera_angular_velocity + angle_offset * rotation_omega
 	var angular_decay := exp(-rotation_omega * delta)

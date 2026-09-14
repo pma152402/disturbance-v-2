@@ -87,6 +87,9 @@ func _update_rain_position() -> void:
 
 
 func _prepare_optimized_rain() -> void:
+	# Las gotas nunca participan en mapas de sombras, incluso si una instancia
+	# de Weather conserva un override antiguo del emisor.
+	rain_emitter.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	var source_material := rain_emitter.process_material as ParticleProcessMaterial
 	if source_material != null:
 		_rain_process_material = source_material.duplicate() as ParticleProcessMaterial

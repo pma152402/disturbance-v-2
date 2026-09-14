@@ -231,7 +231,7 @@
 [ext_resource type="PackedScene" path="res://environment/recording_only_components/recording_only_pen_circle.tscn" id="263_41wsf"]
 [ext_resource type="PackedScene" path="res://house_props/exterior_basement_access.tscn" id="295_ane1u"]
 [ext_resource type="PackedScene" path="res://systems/boiler_basement_render_component.tscn" id="boiler_basement_render_gate"]
-[ext_resource type="PackedScene" path="res://house_props/camera_tripod.tscn" id="camera_tripod"]
+[ext_resource type="PackedScene" uid="uid://ckc60g3ju5e36" path="res://house_props/camera_tripod.tscn" id="camera_tripod"]
 [ext_resource type="PackedScene" uid="uid://bsf6603n8vvtj" path="res://house_props/candle_offering_table.tscn" id="candle_offering_table"]
 [ext_resource type="PackedScene" path="res://geometry/corridor_stair_ramps.tscn" id="corridor_ramps"]
 [ext_resource type="PackedScene" path="res://house_props/hoarder_writing_desk.tscn" id="office_0"]
@@ -7560,4 +7560,4 @@ target_roots = Array[NodePath]([NodePath("SchoolCompletion/TopStaffWing"), NodeP
 transform = Transform3D(0.9393727, 0, 0.3428978, 0, 1, 0, -0.3428978, 0, 0.9393727, 3.15, 0, 13.15)
 
 [node name="CameraTripod2" parent="." unique_id=1152250241 instance=ExtResource("camera_tripod")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.562008, 0.155, 6.7094655)
+transform = Transform3D(1, 0, 0, 0, -0.017155701, 0.99985296, 0, -0.99985296, -0.017155701, 2.562008, 0.09422088, 4.972377)

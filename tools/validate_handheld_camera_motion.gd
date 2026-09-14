@@ -5,6 +5,7 @@ var failures := 0
 var maximum_offset := 0.0
 var maximum_frame_change := 0.0
 var last_offset := Vector3.ZERO
+var vertical_samples: Array[float] = []
 
 
 func _initialize() -> void:
@@ -51,11 +52,16 @@ func _run() -> void:
 	player.set_physics_process(false)
 	await _advance(60)
 	_check(player.is_on_floor(), "El jugador no alcanza el suelo de prueba")
+	vertical_samples.clear()
 	Input.action_press(&"move_forward")
 	await _advance(150)
 	_check(maximum_offset > 0.008, "Andar no produce movimiento perceptible")
+	var walk_range := _vertical_range()
+	vertical_samples.clear()
 	Input.action_press(&"sprint")
 	await _advance(120)
+	var sprint_range := _vertical_range()
+	_check(sprint_range > walk_range * 1.8, "Correr no se distingue claramente de caminar")
 	# Giro rapido conservando el movimiento real y su aceleracion lateral.
 	for frame in 30:
 		player.rotate_y(0.04)
@@ -65,10 +71,18 @@ func _run() -> void:
 	await _advance(120)
 	var camera := player.get("camera") as Camera3D
 	var rest := player.get("_camera_rest_position") as Vector3
-	_check(camera.position.distance_to(rest) < 0.005, "La camara no se estabiliza al parar")
-	_check(camera.rotation.length() < deg_to_rad(0.2), "Queda inclinacion residual al parar")
-	_check(maximum_offset < 0.09, "La marcha desplaza excesivamente la lente")
-	_check(maximum_frame_change < 0.025, "La marcha o el giro producen un salto brusco")
+	_check(float(player.get("_camera_gait_weight")) < 0.001, "Las zancadas siguen activas tras detenerse")
+	var exertion_after_run := float(player.get("_camera_exertion"))
+	vertical_samples.clear()
+	await _advance(120)
+	var recovery_range := _vertical_range()
+	_check(recovery_range > 0.008, "La respiracion no mueve el encuadre despues de correr")
+	_check(maximum_offset < 0.15, "La carrera desplaza excesivamente la lente")
+	_check(maximum_frame_change < 0.04, "La carrera o el giro producen un salto brusco")
+	await _advance(1200)
+	_check(float(player.get("_camera_exertion")) < exertion_after_run * 0.20, "El personaje no recupera el aliento")
+	_check(camera.position.distance_to(rest) < 0.007, "La camara no recupera el movimiento de reposo")
+	_check(camera.rotation.length() < deg_to_rad(0.25), "Queda inclinacion residual despues de recuperar el aliento")
 
 	# Caida real: el impulso debe aparecer al tocar el suelo, nunca en el aire.
 	player.position.y += 1.2
@@ -93,6 +107,7 @@ func _run() -> void:
 	_check((player.get("_camera_motion_offset") as Vector3).is_finite(), "El muelle falla con un frame largo")
 	_check((player.get("_camera_motion_velocity") as Vector3).length() < 0.001, "El muelle conserva energia tras asentarse")
 	print("HANDHELD CAMERA: failures=%d, max_offset=%.4fm, max_frame_change=%.4fm, landing_dip=%.4fm" % [failures, maximum_offset, maximum_frame_change, landing_dip])
+	print("GAIT AND BREATH: walking_range=%.4fm, sprint_range=%.4fm, recovery_breath_range=%.4fm" % [walk_range, sprint_range, recovery_range])
 	current_scene = null
 	world.queue_free()
 	await process_frame
@@ -107,6 +122,17 @@ func _advance(frames: int) -> void:
 		maximum_offset = maxf(maximum_offset, offset.length())
 		maximum_frame_change = maxf(maximum_frame_change, offset.distance_to(last_offset))
 		last_offset = offset
+		vertical_samples.append(offset.y)
+
+
+func _vertical_range() -> float:
+	var minimum := INF
+	var maximum := -INF
+	# Excluir el arranque: medir la oscilacion sostenida, no solo el cambio de pose.
+	for index in range(30, vertical_samples.size()):
+		minimum = minf(minimum, vertical_samples[index])
+		maximum = maxf(maximum, vertical_samples[index])
+	return maximum - minimum
 
 
 func _check(condition: bool, message: String) -> void:

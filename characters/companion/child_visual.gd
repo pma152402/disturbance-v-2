@@ -29,6 +29,7 @@ const SELFIE_ITEM_SIZES := {
 }
 
 @onready var body: Node3D = $Body
+@onready var waist: MeshInstance3D = $Body/Waist
 @onready var head: Node3D = $Body/Head
 @onready var left_arm: Node3D = $Body/LeftArm
 @onready var right_arm: Node3D = $Body/RightArm
@@ -87,7 +88,7 @@ func set_two_hand_tool(tool: Node3D) -> void:
 func _ready() -> void:
 	_root_rest_rotation = rotation
 	for joint: Node3D in [
-		body, head, left_arm, right_arm, left_forearm, right_forearm, left_hand, right_hand,
+		body, waist, head, left_arm, right_arm, left_forearm, right_forearm, left_hand, right_hand,
 		left_leg, right_leg, left_knee, right_knee, backpack,
 	]:
 		_rest[joint] = joint.transform
@@ -193,13 +194,29 @@ func update_player_animation(
 		_blend_crawl_leg(right_leg, right_knee, -step, prone)
 
 	var idle_breath := sin(_time * 1.65) * 0.006 * (1.0 - _motion_blend)
-	var torso_pitch := crouch * 0.38 + _run_blend * 0.18 * _gait_direction.z + _acceleration_lean.x
+	var torso_pitch := crouch * 0.38 + _run_blend * 0.38 * _gait_direction.z + _acceleration_lean.x
 	var torso_roll := -transfer * 0.025 - _turn_blend * 0.014 * grounded_motion - strafe * 0.045 + _acceleration_lean.z
+	# La flexión necesaria para apoyar los pies no debe bajar todo el torso al
+	# arrancar. El pecho conserva su altura media, con un balanceo centrado en
+	# reposo; Ctrl/gateo sí mantienen su descenso intencionado.
+	var upright_bob := -cos(_step_phase * 2.0) * lerpf(0.012, 0.018, _run_blend) * grounded_motion
+	var lean_height := (_rest[head] as Transform3D).origin.y * (1.0 - cos(torso_pitch))
+	var torso_position := pelvis
+	torso_position.y = lerpf(-0.006 + upright_bob + lean_height - _landing_compression * 0.045, pelvis.y, crouch)
 	_apply_joint(
 		body,
-		pelvis.lerp(Vector3(step * 0.018 * _motion_blend, -0.54, 0.12), prone) + Vector3.UP * idle_breath,
+		torso_position.lerp(Vector3(step * 0.018 * _motion_blend, -0.54, 0.12), prone) + Vector3.UP * idle_breath,
 		Vector3(lerpf(torso_pitch, 1.18, prone), -hip_yaw * 0.7, torso_roll)
 	)
+	# El rig usa piezas separadas: el faldón del pantalón debe seguir conectado
+	# a las caderas al estabilizar el pecho. Conserva fijo su borde superior.
+	var waist_rest := _rest[waist] as Transform3D
+	var waist_bounds := waist.get_aabb()
+	var waist_height := waist_bounds.size.y * waist_rest.basis.y.length()
+	var waist_extension := maxf(torso_position.y - pelvis.y, 0.0) * (1.0 - prone)
+	var waist_stretch := 1.0 + waist_extension / maxf(waist_height, 0.001)
+	waist.transform.basis = waist_rest.basis.scaled_local(Vector3(1.0, waist_stretch, 1.0))
+	waist.position = waist_rest.origin - waist_rest.basis.y * waist_bounds.end.y * (waist_stretch - 1.0)
 	_apply_joint(
 		head,
 		Vector3(0.0, sin(_time * 1.2) * 0.004 * (1.0 - _motion_blend), prone * 0.025),
@@ -392,8 +409,20 @@ func _apply_air_pose(vertical_speed: float) -> void:
 	_add_joint_rotation(right_leg, Vector3(0.28 + rising * 0.08, 0.0, 0.04) * _air_blend)
 	_add_joint_rotation(left_knee, Vector3(0.48, 0.0, 0.0) * _air_blend)
 	_add_joint_rotation(right_knee, Vector3(0.72, 0.0, 0.0) * _air_blend)
-	_add_joint_rotation(left_arm, Vector3(-0.18, 0.0, -0.12) * _air_blend)
-	_add_joint_rotation(right_arm, Vector3(-0.18, 0.0, 0.12) * _air_blend)
+	# Eleva ambos brazos al despegar y conserva la apertura durante la caída.
+	# Mezcla desde la pose de marcha/objeto: sumar el giro a la linterna podía
+	# llevar el brazo por detrás de la cabeza. _air_blend suaviza el aterrizaje.
+	var arm_raise := lerpf(1.85, 2.2, maxf(rising, 0.0))
+	_blend_air_joint(left_arm, Vector3(-arm_raise, -0.08, -0.22))
+	_blend_air_joint(right_arm, Vector3(-arm_raise, 0.08, 0.22))
+	_blend_air_joint(left_forearm, Vector3(-0.38, 0.0, 0.0))
+	_blend_air_joint(right_forearm, Vector3(-0.38, 0.0, 0.0))
+
+
+func _blend_air_joint(joint: Node3D, rotation_offset: Vector3) -> void:
+	var grounded_pose := joint.transform
+	_apply_joint(joint, Vector3.ZERO, rotation_offset)
+	joint.transform = grounded_pose.interpolate_with(joint.transform, _air_blend)
 
 
 func _apply_death_pose() -> void:

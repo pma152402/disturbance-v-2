@@ -92,7 +92,7 @@ func run() -> void:
 				player.position.x += -1.1 if attachment == 1 else 1.1
 				moved_target = true
 			if total > 3.5 and not followed_target:
-				check(attack.aim_direction.dot(attack._aim_at(attack._target_point())) > 0.99, "Jet did not follow lateral movement")
+				check(attack.tracking_direction.dot(attack._aim_at(attack._target_point())) > 0.99, "Jet tracking centre did not follow lateral movement")
 				check(visual._head.global_basis.z.normalized().dot(attack.aim_direction) > 0.97, "Head and jet aim diverged")
 				followed_target = true
 			var phase: int = attack.phase
@@ -135,6 +135,47 @@ func run() -> void:
 		print("VOMIT escape attachment=", attachment, " jumps=", actor.surface.spider_jump_count - before_jumps, " aborts=", actor.surface.spider_aborts, " remaining=", actor._spider_chain_remaining, " position=", actor.global_position)
 		check(actor.surface.spider_jump_count - before_jumps >= 2, "Vomit recovery did not execute several checked jumps")
 		attack.effects.clear()
+	# A low pew obscures the physical body, not the mouth. Repeat with the
+	# church's authored quarter-turn to catch world/local aiming mistakes.
+	for yaw in [0.0, -PI * 0.5]:
+		actor.transform = Transform3D(Basis(Vector3.UP, yaw), Vector3.ZERO)
+		actor.surface.phase = actor.surface.Phase.GROUND
+		actor.surface.normal = Vector3.UP
+		actor.current_state = actor.State.CHASE
+		actor._prey = player
+		actor._sight_confirmed = true
+		actor._spider_chain_remaining = 0
+		actor.surface.spider_settling = 0.0
+		player.position = actor.transform * Vector3(0, 0.9, 3.5)
+		visual._reset_contacts()
+		for i in 30: visual._physics_process(1.0 / 60.0)
+		var pew := box(Vector3(4.5, 0.92, 0.16), actor.transform * Vector3(0, 0.46, 1.6))
+		pew.basis = actor.basis
+		var proxy := box(Vector3(5, 3.8, 0.16), actor.transform * Vector3(0, 1.9, 2.5))
+		proxy.basis = actor.basis
+		proxy.collision_layer = 1 << 19
+		await physics_frame
+		await physics_frame
+		check(not actor.surface._ray(actor.surface._center(), attack._target_point()).is_empty(), "Pew/proxy regression fixture does not obstruct old body ray")
+		check(attack._clear_target(attack._target_point()), "Low pew or climbing proxy blinds visible mouth")
+		attack._begin()
+		attack.effects.set_physics_process(false)
+		var held: Transform3D = actor.global_transform
+		for side in [-1.0, 1.0]:
+			player.position = actor.transform * Vector3(side * 1.4, 0.9, 3.5)
+			for i in 100:
+				actor._physics_process(1.0 / 60.0)
+				visual._physics_process(1.0 / 60.0)
+				attack.effects._physics_process(1.0 / 60.0)
+				await physics_frame
+			var actual: Vector3 = visual._head.global_basis.z.normalized()
+			check(attack.tracking_direction.dot(attack._aim_at(attack._target_point())) > 0.99 and actual.dot(attack.tracking_direction) > 0.94, "Rotated chaotic jet loses moving player above a pew")
+			check(actor.global_transform.is_equal_approx(held), "Tracking rotates or translates planted body")
+			var jet_slot: int = posmod(attack.effects._cursor - 1, attack.effects.JET_CAPACITY)
+			check(attack.effects._velocities[jet_slot].normalized().dot(actual) > 0.96, "Physical liquid does not follow animated head")
+		attack.cancel()
+		pew.free()
+		proxy.free()
 	# Wall blocks acquiring a target. It also intercepts in-flight droplets.
 	actor.transform = Transform3D.IDENTITY
 	actor.surface.phase = actor.surface.Phase.GROUND
@@ -163,6 +204,14 @@ func run() -> void:
 		await physics_frame
 	check(player._monster_hits == 1, "Droplets dealt damage through a wall")
 	check(player.get_camera_lens_grime().dirt == 0.0, "Droplets stained the lens through a wall")
+	check(attack.effects.puddles.supports.has(blocker.get_instance_id()), "Wall hit did not leave a persistent stain")
+	var remembered: Vector3 = attack._last_aim
+	var seen_position: Vector3 = actor._evidence_position
+	player.position.x += 1.0
+	attack.step(0.1)
+	check(attack._last_aim.distance_to(remembered) > 0.8, "Active stream froze its aim behind cover")
+	check(actor._evidence_position.is_equal_approx(seen_position), "Spray tracking incorrectly updates ordinary visual memory through walls")
+	player.position.x -= 1.0
 	blocker.free()
 	attack.cancel()
 	attack.cooldown = 0.02
@@ -188,6 +237,32 @@ func run() -> void:
 	var before_edge: int = puddles.deposited_hits
 	puddles.deposit(Vector3(-3.77, 1, -4), Vector3.UP, ledge)
 	check(puddles.deposited_hits <= before_edge + 1 and puddles.positions.size() <= puddles.CAPACITY, "Puddle pool unbounded")
+	# Orientations parallel to FORWARD used to produce a degenerate basis.
+	for normal: Vector3 in [Vector3.FORWARD, Vector3.BACK, Vector3.LEFT, Vector3.RIGHT, Vector3.DOWN]:
+		var frame: Basis = puddles._surface_frame(normal)
+		check(absf(frame.determinant() - 1.0) < 0.001 and frame.y.dot(normal) > 0.99, "Surface stain basis is degenerate")
+	var movable := AnimatableBody3D.new()
+	movable.sync_to_physics = false
+	var movable_shape := CollisionShape3D.new()
+	movable_shape.shape = BoxShape3D.new()
+	movable_shape.shape.size = Vector3(2, 2, 0.2)
+	movable.add_child(movable_shape)
+	world.add_child(movable)
+	movable.position = Vector3(-4, 1, 5)
+	await physics_frame
+	await physics_frame
+	puddles.deposit(Vector3(-4, 1, 4.9), Vector3.FORWARD, movable)
+	var moving_index: int = puddles.supports.find(movable.get_instance_id())
+	check(moving_index >= 0, "Moving door did not accept stain")
+	if moving_index >= 0:
+		movable.rotate_y(0.6)
+		movable.position.x += 0.5
+		puddles._physics_process(0.016)
+		check(puddles.positions[moving_index].distance_to(movable.to_global(Vector3(0, 0, -0.1))) < 0.002, "Stain floats when door moves")
+		check(puddles.normals[moving_index].dot(movable.global_basis * Vector3.FORWARD) > 0.99, "Stain normal fails to follow door")
+	movable.free()
+	puddles._physics_process(0.016)
+	check(moving_index < 0 or puddles.ages[moving_index] >= puddles.LIFETIME, "Stain survives removal of its support")
 	for i in 190: puddles._age_puddles()
 	check(puddles.timer.is_stopped() and not puddles.batch.visible, "Dry puddles retain work or visible geometry")
 	print("CRAWLER VOMIT: failures=", failures, " checks=", checks)
