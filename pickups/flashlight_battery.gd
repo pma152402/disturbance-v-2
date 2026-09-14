@@ -20,6 +20,8 @@ func interact(player: Node = null) -> bool:
 	var installed := player.has_method(&"install_flashlight_battery") and bool(player.call(&"install_flashlight_battery"))
 	if not installed and not player.add_tool(item_id):
 		return false
+	if player.has_method(&"play_pickup_sound"):
+		player.call(&"play_pickup_sound", item_id)
 	_collected = true
 	collision_layer = 0
 	var tween := create_tween().set_parallel(true)

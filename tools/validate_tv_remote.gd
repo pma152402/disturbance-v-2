@@ -20,6 +20,9 @@ func _run_validation() -> void:
 	assert(not collision.disabled, "La colision del mando esta desactivada")
 	assert(remote.interact(player), "El mando no se pudo recoger")
 	assert(player.is_holding_item_type(&"tv_remote"), "El mando no quedo equipado")
+	var remote_audio := player.get_node_or_null("RemoteButtonSound") as AudioStreamPlayer
+	assert(remote_audio != null, "El mando equipado necesita su reproductor de botones")
+	assert(GameplaySoundFactory.make_tv_remote_button(&"channel").get_length() > 0.08, "El boton de canal debe tener ataque y retorno")
 
 	var dropped := remote_scene.instantiate() as RigidBody3D
 	root.add_child(dropped)

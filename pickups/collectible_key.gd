@@ -47,6 +47,8 @@ func interact(player: Node = null) -> bool:
 		return false
 	if not player.add_key(key_id, key_name):
 		return false
+	if player.has_method(&"play_pickup_sound"):
+		player.call(&"play_pickup_sound", &"key")
 	_collected = true
 	_set_interaction_enabled(false)
 	var tween := create_tween().set_parallel(true)

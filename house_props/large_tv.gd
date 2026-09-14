@@ -5,6 +5,11 @@ const GRID_COLUMNS := 3
 const GRID_ROWS := 3
 const FRAME_COUNT := GRID_COLUMNS * GRID_ROWS
 const SCREEN_LIGHT_ENERGY := 0.65
+const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
+const CRT_POWER_ON_SOUND := preload("res://sounds/objects/tv_crt_power_on.wav")
+const CRT_POWER_OFF_SOUND := preload("res://sounds/objects/tv_crt_power_off.wav")
+const CHANNEL_ROTARY_SOUND := preload("res://sounds/objects/tv_channel_rotary_real.mp3")
+const VOLUME_ROTARY_SOUND := preload("res://sounds/objects/tv_volume_rotary_real.mp3")
 
 @export_range(0.2, 5.0, 0.05, "suffix:s") var frame_duration := 1.5
 
@@ -22,10 +27,13 @@ var _frame := 0
 var _frame_time := 0.0
 var _volume_level := 5
 var _volume_direction := 1
+var _power_audio: AudioStreamPlayer3D
+var _control_audio: AudioStreamPlayer3D
 
 
 func _ready() -> void:
 	add_to_group(&"televisions")
+	_prepare_power_audio()
 	_load_programs()
 	_prepare_screen_material()
 	_show_powered_off_screen()
@@ -84,17 +92,22 @@ func toggle_power() -> bool:
 		_show_current_program()
 	else:
 		_show_powered_off_screen()
+	_play_power_sound(_is_on)
 	_update_control_positions()
 	return true
 
 
-func next_channel() -> bool:
+func next_channel(from_remote: bool = false) -> bool:
 	if not _is_on or _programs.is_empty():
 		return false
 	_channel = (_channel + 1) % _programs.size()
 	_frame = 0
 	_frame_time = 0.0
 	_show_current_program()
+	if from_remote:
+		_play_control_sound(GameplaySounds.make_crt_remote_channel_response(), 0.99, 1.01)
+	else:
+		_play_control_sound(CHANNEL_ROTARY_SOUND, 0.99, 1.01)
 	_update_control_positions()
 	return true
 
@@ -109,10 +122,12 @@ func step_volume() -> bool:
 	return adjust_volume(_volume_direction)
 
 
-func adjust_volume(amount: int) -> bool:
+func adjust_volume(amount: int, from_remote: bool = false) -> bool:
 	if not _is_on or amount == 0:
 		return false
 	_volume_level = clampi(_volume_level + signi(amount), 0, 10)
+	if not from_remote:
+		_play_control_sound(VOLUME_ROTARY_SOUND, 0.985, 1.015)
 	_update_control_positions()
 	return true
 
@@ -148,6 +163,37 @@ func _prepare_screen_material() -> void:
 	_screen_material = screen.material_override.duplicate() as ShaderMaterial
 	screen.material_override = _screen_material
 	_screen_material.set_shader_parameter(&"powered_on", false)
+
+
+func _prepare_power_audio() -> void:
+	_power_audio = AudioStreamPlayer3D.new()
+	_power_audio.name = "PowerAudio"
+	_power_audio.max_distance = 14.0
+	_power_audio.unit_size = 2.2
+	_power_audio.volume_db = -3.5
+	add_child(_power_audio)
+	_control_audio = AudioStreamPlayer3D.new()
+	_control_audio.name = "ControlAudio"
+	_control_audio.max_distance = 10.0
+	_control_audio.unit_size = 1.8
+	_control_audio.volume_db = -5.0
+	add_child(_control_audio)
+
+
+func _play_power_sound(powered_on: bool) -> void:
+	_power_audio.stream = (
+		CRT_POWER_ON_SOUND
+		if powered_on
+		else CRT_POWER_OFF_SOUND
+	)
+	_power_audio.pitch_scale = randf_range(0.985, 1.015)
+	_power_audio.play()
+
+
+func _play_control_sound(stream: AudioStream, minimum_pitch: float, maximum_pitch: float) -> void:
+	_control_audio.stream = stream
+	_control_audio.pitch_scale = randf_range(minimum_pitch, maximum_pitch)
+	_control_audio.play()
 
 
 func _show_powered_off_screen() -> void:

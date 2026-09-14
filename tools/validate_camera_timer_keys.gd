@@ -32,6 +32,20 @@ func _run() -> void:
 		_fail("El temporizador no está centrado en la cámara")
 		return
 
+	# R debe conservar su semantica directa REC/STOP, independientemente del
+	# temporizador opcional de T y de los sonidos del menu.
+	var r_event := InputEventKey.new()
+	r_event.physical_keycode = KEY_R
+	r_event.pressed = true
+	player.call(&"_input", r_event)
+	if not bool(recorder.get("_is_recording")) or timer_label.visible:
+		_fail("R no inicia la grabacion directa")
+		return
+	player.call(&"_input", r_event)
+	if bool(recorder.get("_is_recording")):
+		_fail("R no detiene la grabacion directa")
+		return
+
 	var t_event := InputEventKey.new()
 	t_event.physical_keycode = KEY_T
 	t_event.pressed = true
@@ -110,7 +124,7 @@ func _run() -> void:
 		_fail("Y no reinicia la escena desde el archivo de cámara")
 		return
 
-	print("OK: T inicia el temporizador 5-4-3-2-1, graba al acabar y Y reinicia la escena")
+	print("OK: R controla REC/STOP, T inicia 5-4-3-2-1 y Y reinicia la escena")
 	quit(0)
 
 
