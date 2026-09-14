@@ -7,6 +7,7 @@ const CameraInterfaceFrame := preload("res://systems/camera_interface_frame.gd")
 const CameraArchiveControlsBracket := preload("res://systems/camera_archive_controls_bracket.gd")
 const CameraContextAlertsScene := preload("res://systems/camera_context_alerts.tscn")
 const EmptyArchiveCassette := preload("res://systems/camera_empty_archive_cassette.gd")
+const CameraMenuSoundBank := preload("res://sounds/camera_menu_sound_bank.gd")
 const TAPE_SLOT_NAMES := ["CINTA A 01", "CINTA A 02", "CINTA B 03", "CINTA B 04"]
 const MODE_CAMERA := 0
 const MODE_ARCHIVE := 1
@@ -43,6 +44,9 @@ const CAMERA_TIMER_FONT_SIZE := 560
 
 @export_category("Conexión AV / IO (debug)")
 @export var debug_external_recorder_connected := true
+
+@export_category("Sonido del menu de camara")
+@export_range(-30.0, 0.0, 0.5) var camera_menu_volume_db := -11.0
 
 var _recording_bright := true
 var _recording_blink_timer: Timer
@@ -138,6 +142,8 @@ var _tapes_spent := 0
 var _camera_timer_label: Label
 var _camera_timer_remaining := 0.0
 var _camera_timer_displayed_second := 0
+var _camera_menu_audio_players: Array[AudioStreamPlayer] = []
+var _camera_menu_audio_cursor := 0
 
 
 func _ready() -> void:
@@ -149,6 +155,7 @@ func _ready() -> void:
 	recording_dot.visible = true
 	recording_dot.modulate.a = 0.22
 	_update_recording_identifiers()
+	_setup_camera_menu_audio()
 	_build_playback_interface()
 	_build_camera_timer()
 	_context_alerts = CameraContextAlertsScene.instantiate() as Control
@@ -173,6 +180,46 @@ func _ready() -> void:
 	# Prime the extra viewport's render pipelines during scene startup, before
 	# the player presses REC. No tape, HUD state or recorded time is changed.
 	_prewarm_recorder.call_deferred()
+	_prewarm_camera_menu_sounds.call_deferred()
+
+
+func _setup_camera_menu_audio() -> void:
+	# Un pequeño pool evita cortar el retorno de un boton al pulsar otro deprisa.
+	for index in 4:
+		var player := AudioStreamPlayer.new()
+		player.name = "CameraMenuAudio%02d" % (index + 1)
+		player.process_mode = Node.PROCESS_MODE_ALWAYS
+		player.volume_db = camera_menu_volume_db
+		add_child(player)
+		_camera_menu_audio_players.append(player)
+
+
+func _prewarm_camera_menu_sounds() -> void:
+	for sound_kind: StringName in [
+		&"power_on", &"power_off", &"mode", &"cursor", &"adjust", &"confirm",
+		&"timer_arm", &"timer_tick", &"record_start", &"record_stop",
+		&"transport_play", &"transport_pause", &"tape_seek", &"tape_lock", &"delete", &"error",
+	]:
+		CameraMenuSoundBank.make(sound_kind)
+
+
+func _play_camera_menu_sound(sound_kind: StringName, pitch := 1.0) -> void:
+	if _camera_menu_audio_players.is_empty():
+		return
+	var chosen := -1
+	for offset in _camera_menu_audio_players.size():
+		var candidate := (_camera_menu_audio_cursor + offset) % _camera_menu_audio_players.size()
+		if not _camera_menu_audio_players[candidate].playing:
+			chosen = candidate
+			break
+	if chosen < 0:
+		chosen = _camera_menu_audio_cursor
+	var player := _camera_menu_audio_players[chosen]
+	player.stream = CameraMenuSoundBank.make(sound_kind)
+	player.pitch_scale = pitch
+	player.volume_db = camera_menu_volume_db + linear_to_db(maxf(_speaker_volume, 0.001))
+	player.play()
+	_camera_menu_audio_cursor = (chosen + 1) % _camera_menu_audio_players.size()
 
 
 func _process(delta: float) -> void:
@@ -228,11 +275,13 @@ func _build_camera_timer() -> void:
 
 func start_camera_timer() -> void:
 	if _playback_open or _is_recording or _camera_controls_unavailable():
+		_play_camera_menu_sound(&"error")
 		return
 	_camera_timer_remaining = CAMERA_TIMER_SECONDS
 	_camera_timer_displayed_second = int(ceil(_camera_timer_remaining))
 	_camera_timer_label.text = str(_camera_timer_displayed_second)
 	_camera_timer_label.visible = true
+	_play_camera_menu_sound(&"timer_arm")
 
 
 func _update_camera_timer(delta: float) -> bool:
@@ -250,6 +299,7 @@ func _update_camera_timer(delta: float) -> bool:
 	if displayed_second != _camera_timer_displayed_second:
 		_camera_timer_displayed_second = displayed_second
 		_camera_timer_label.text = str(displayed_second)
+		_play_camera_menu_sound(&"timer_tick", 0.94 + float(CAMERA_TIMER_SECONDS - displayed_second) * 0.035)
 	return false
 
 
@@ -270,16 +320,20 @@ func _input(event: InputEvent) -> void:
 		if _delete_armed:
 			if key == KEY_W or key == KEY_S or key == KEY_UP or key == KEY_DOWN:
 				_delete_selection = 1 - _delete_selection
+				_play_camera_menu_sound(&"cursor", 0.94 if _delete_selection == 0 else 1.04)
 				_refresh_delete_confirmation()
 			elif key == KEY_SPACE or key == KEY_ENTER or key == KEY_KP_ENTER:
 				if _delete_selection == 0:
 					_delete_selected_clip()
 				else:
+					_play_camera_menu_sound(&"confirm", 0.9)
 					_set_delete_confirmation(false)
 			elif key == KEY_ESCAPE or key == KEY_TAB:
 				_set_delete_confirmation(false)
 				if key == KEY_TAB:
 					_begin_mode_transition(MODE_CAMERA)
+				else:
+					_play_camera_menu_sound(&"cursor", 0.86)
 			get_viewport().set_input_as_handled()
 			return
 		match key:
@@ -339,9 +393,17 @@ func _input(event: InputEvent) -> void:
 
 func toggle_recording() -> void:
 	if _camera_controls_unavailable():
+		_play_camera_menu_sound(&"error")
 		return
 	if _playback_open:
+		_play_camera_menu_sound(&"error")
 		return
+	# R es una orden REC/STOP directa. Si habia un autodisparador armado con T,
+	# lo anula para que no quede una cuenta atras superpuesta a la grabacion.
+	if _camera_timer_remaining > 0.0:
+		_camera_timer_remaining = 0.0
+		_camera_timer_displayed_second = 0
+		_camera_timer_label.visible = false
 	if _is_recording:
 		stop_recording()
 	else:
@@ -358,11 +420,13 @@ func _start_recording(allow_placed_camera: bool) -> void:
 	if not allow_placed_camera and _camera_controls_unavailable():
 		return
 	if not _tape_inserted:
+		_play_camera_menu_sound(&"error")
 		return
 	if _saved_clips.size() >= maximum_saved_clips:
 		_context_alerts.set_storage_usage(_saved_clips.size(), maximum_saved_clips)
 		_update_storage_readout_state()
 		_context_alerts.notify_no_space()
+		_play_camera_menu_sound(&"error")
 		return
 	_ensure_low_resolution_recorder()
 	_recorder_destroy_pending = false
@@ -380,12 +444,14 @@ func _start_recording(allow_placed_camera: bool) -> void:
 	recording_label.visible = true
 	recording_dot.modulate.a = 1.0
 	recording_dot.visible = true
+	_play_camera_menu_sound(&"record_start")
 	_schedule_recording_blink()
 
 
 func stop_recording() -> void:
 	if not _is_recording:
 		return
+	_play_camera_menu_sound(&"record_stop")
 	var observation_summary := {
 		"duration_seconds": _recording_elapsed_seconds,
 		"camera_frames": _current_clip_camera_frames.duplicate(true),
@@ -465,6 +531,12 @@ func step_camera_menu(direction: int) -> void:
 
 
 func _begin_mode_transition(target_mode: int) -> void:
+	if target_mode == MODE_CAMERA:
+		_play_camera_menu_sound(&"power_off")
+	elif _active_mode == MODE_CAMERA:
+		_play_camera_menu_sound(&"power_on")
+	else:
+		_play_camera_menu_sound(&"mode", 1.0 + float(target_mode - _active_mode) * 0.035)
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	_set_delete_confirmation(false)
 	_playback_running = false
@@ -767,20 +839,27 @@ func _update_storage_readout_state() -> void:
 
 func _step_frame(direction: int) -> void:
 	if _saved_clips.is_empty():
+		_play_camera_menu_sound(&"error")
 		return
 	_playback_running = false
 	var clip: Array = _saved_clips[_selected_clip]
-	_selected_frame = clampi(_selected_frame + direction, 0, clip.size() - 1)
+	var previous_frame := _selected_frame
+	_selected_frame = clampi(previous_frame + direction, 0, clip.size() - 1)
+	if _selected_frame != previous_frame:
+		_play_camera_menu_sound(&"adjust", 0.94 if direction < 0 else 1.06)
 	_refresh_playback()
 
 
 func _step_clip(direction: int) -> void:
 	if _saved_clips.size() < 2 or _tape_loading:
+		if not _tape_loading:
+			_play_camera_menu_sound(&"error")
 		return
 	_pending_clip = wrapi(_selected_clip + direction, 0, _saved_clips.size())
 	if _pending_clip == _selected_clip:
 		return
 	_playback_running = false
+	_play_camera_menu_sound(&"tape_seek", 0.94 if direction < 0 else 1.06)
 	_tape_loading = true
 	_tape_load_timer = randf_range(1.5, 3.5)
 	_playback_image.visible = false
@@ -797,25 +876,33 @@ func _finish_tape_loading() -> void:
 	_selected_frame = 0
 	_playback_frame_timer = playback_frame_seconds
 	_playback_image.visible = true
+	_play_camera_menu_sound(&"tape_lock")
 	_refresh_playback()
 
 
 func _toggle_playback_running() -> void:
 	if _saved_clips.is_empty():
+		_play_camera_menu_sound(&"error")
 		return
 	_playback_running = not _playback_running
+	_play_camera_menu_sound(&"transport_play" if _playback_running else &"transport_pause")
 	_playback_frame_timer = playback_frame_seconds
 	_refresh_playback()
 
 
 func _set_delete_confirmation(enabled: bool) -> void:
+	var was_armed := _delete_armed
 	_delete_armed = enabled and not _saved_clips.is_empty() and not _tape_loading
 	_delete_confirmation_backdrop.visible = _playback_open and _delete_armed
 	_delete_confirmation.visible = _playback_open and _delete_armed
 	if _delete_armed:
+		if not was_armed:
+			_play_camera_menu_sound(&"confirm", 0.88)
 		_playback_running = false
 		_delete_selection = 0
 		_refresh_delete_confirmation()
+	elif enabled:
+		_play_camera_menu_sound(&"error")
 
 
 func _refresh_delete_confirmation() -> void:
@@ -832,6 +919,7 @@ func _refresh_delete_confirmation() -> void:
 func _delete_selected_clip() -> void:
 	if not _delete_armed or _saved_clips.is_empty():
 		return
+	_play_camera_menu_sound(&"delete")
 	_saved_clips.remove_at(_selected_clip)
 	if _selected_clip < _saved_clip_observations.size():
 		_saved_clip_observations.remove_at(_selected_clip)
@@ -1390,10 +1478,12 @@ func _build_settings_menu(camera_font: Font) -> void:
 
 func _step_setting(direction: int) -> void:
 	_settings_selection = wrapi(_settings_selection + direction, 0, 7)
+	_play_camera_menu_sound(&"cursor", 0.94 if direction < 0 else 1.04)
 	_refresh_settings_menu()
 
 
 func _adjust_setting(direction: int, toggle := false) -> void:
+	var before: Variant = _current_setting_value()
 	match _settings_selection:
 		0: _camera_brightness = clampf(_camera_brightness + direction * 0.1, 0.5, 1.5)
 		1: _camera_zoom = clampf(_camera_zoom + direction * 0.1, 1.0, 2.0)
@@ -1402,8 +1492,24 @@ func _adjust_setting(direction: int, toggle := false) -> void:
 		4: _show_camera_datetime = not _show_camera_datetime if toggle or direction != 0 else _show_camera_datetime
 		5: _speaker_volume = clampf(_speaker_volume + direction * 0.1, 0.0, 1.0)
 		6: _microphone_sensitivity = clampf(_microphone_sensitivity + direction * 0.1, 0.0, 1.0)
+	if _current_setting_value() == before:
+		_play_camera_menu_sound(&"error")
+	else:
+		_play_camera_menu_sound(&"adjust", 0.94 if direction < 0 else 1.06)
 	_apply_camera_settings()
 	_refresh_settings_menu()
+
+
+func _current_setting_value() -> Variant:
+	match _settings_selection:
+		0: return _camera_brightness
+		1: return _camera_zoom
+		2: return _night_mode
+		3: return _fake_stabilization
+		4: return _show_camera_datetime
+		5: return _speaker_volume
+		6: return _microphone_sensitivity
+		_: return null
 
 
 func _refresh_settings_menu() -> void:
@@ -1454,6 +1560,7 @@ func _step_avio_option(direction: int) -> void:
 	_avio_scan_armed = false
 	_avio_scan_result = ""
 	_avio_selection = wrapi(_avio_selection + direction, 0, 4)
+	_play_camera_menu_sound(&"cursor", 0.94 if direction < 0 else 1.04)
 	_avio_status.text = "Q / E · ◀ / ▶  CAMBIAR MENU     W / S  SELECCIONAR     ESPACIO  ACEPTAR     TAB / ESC  CAMARA"
 	_refresh_avio_menu()
 
@@ -1466,34 +1573,47 @@ func _activate_avio_option() -> void:
 	match _avio_selection:
 		0:
 			if not _tape_inserted:
+				_play_camera_menu_sound(&"error")
 				_avio_scan_result = "NO HAY NINGUNA CINTA INSERTADA"
 				_avio_status.text = _avio_scan_result
+			elif not _player_can_store_cassette():
+				_play_camera_menu_sound(&"error")
+				_avio_scan_result = "NO HAY ESPACIO PARA SACAR LA CINTA"
 			else:
+				_play_camera_menu_sound(&"tape_seek", 0.88)
 				_eject_inserted_tape()
 		1:
 			if _tape_inserted:
+				_play_camera_menu_sound(&"error")
 				_avio_scan_result = "YA HAY UNA CINTA INSERTADA"
 			elif not _player_has_inventory_cassette():
+				_play_camera_menu_sound(&"error")
 				_avio_scan_result = "NO LLEVAS NINGUNA CINTA"
 			elif not _avio_scan_armed:
+				_play_camera_menu_sound(&"confirm")
 				_avio_scan_armed = true
 				_avio_scan_result = ""
 			else:
+				_play_camera_menu_sound(&"tape_lock", 0.9)
 				_insert_inventory_cassette()
 		2:
 			# La transferencia física aún no forma parte del flujo de AV / IO.
 			# La opción se muestra como referencia, pero no puede activarse.
-			pass
+			_play_camera_menu_sound(&"error")
 		3:
 			if not _tape_inserted:
+				_play_camera_menu_sound(&"error")
 				_avio_status.text = "INSERTA UNA CINTA"
 			elif _saved_clips.is_empty():
+				_play_camera_menu_sound(&"error")
 				_avio_erase_armed = false
 				_avio_status.text = "LA CINTA ESTA VACIA"
 			elif not _avio_erase_armed:
+				_play_camera_menu_sound(&"confirm", 0.88)
 				_avio_erase_armed = true
 				_avio_status.text = "CONFIRMA PARA VACIAR LA CINTA"
 			else:
+				_play_camera_menu_sound(&"delete", 0.86)
 				_clear_archive()
 				_avio_erase_armed = false
 				_avio_status.text = "CINTA VACIADA"

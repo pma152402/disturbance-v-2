@@ -8,6 +8,12 @@ static var _can_impact_cache: AudioStreamWAV
 static var _glass_break_cache: AudioStreamWAV
 static var _door_open_cache: AudioStreamWAV
 static var _door_close_cache: AudioStreamWAV
+static var _crt_power_on_cache: AudioStreamWAV
+static var _crt_power_off_cache: AudioStreamWAV
+static var _crt_channel_change_cache: AudioStreamWAV
+static var _crt_volume_detent_cache: AudioStreamWAV
+static var _crt_remote_channel_response_cache: AudioStreamWAV
+static var _tv_remote_button_cache: Dictionary = {}
 static var _surface_footstep_cache: Dictionary = {}
 
 const FOOTSTEP_VARIANTS := 4
@@ -248,6 +254,190 @@ static func make_door_close() -> AudioStreamWAV:
 		samples[index] = clampf(wood_thud * 0.52 + frame_hit * 0.24 + latch * 0.3, -1.0, 1.0)
 	_door_close_cache = _stream_from_samples(samples)
 	return _door_close_cache
+
+
+static func make_crt_power_on() -> AudioStreamWAV:
+	if _crt_power_on_cache != null:
+		return _crt_power_on_cache
+	var duration := 0.92
+	var sample_count := int(MIX_RATE * duration)
+	var samples := PackedFloat32Array()
+	samples.resize(sample_count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 19840317
+	var filtered_noise := 0.0
+	for index: int in sample_count:
+		var time := float(index) / MIX_RATE
+		filtered_noise = lerpf(filtered_noise, rng.randf_range(-1.0, 1.0), 0.34)
+		# Interruptor mecanico, seguido por el golpe grave de la bobina de
+		# desmagnetizacion y el siseo que aparece al calentarse el tubo.
+		var click := sin(TAU * 1120.0 * time) * exp(-time * 115.0)
+		var degauss_time := maxf(time - 0.018, 0.0)
+		var degauss_phase := TAU * (69.0 * degauss_time - 23.0 * degauss_time * degauss_time)
+		var degauss := sin(degauss_phase) * exp(-degauss_time * 7.4)
+		var warmup := 1.0 - exp(-time * 9.0)
+		var static_noise := filtered_noise * warmup * exp(-time * 3.8)
+		# El silbido real de linea queda por encima del limite de 22 kHz de la
+		# fabrica. Esta componente mas baja conserva su lectura sin ser molesta.
+		var flyback := sin(TAU * 7600.0 * time) * warmup * exp(-time * 2.5)
+		var mains_hum := sin(TAU * 50.0 * time) * warmup * exp(-time * 2.2)
+		var sample := click * 0.23 + degauss * 0.54 + static_noise * 0.23 + flyback * 0.045 + mains_hum * 0.08
+		samples[index] = clampf(sample * minf(time / 0.001, 1.0), -1.0, 1.0)
+	_crt_power_on_cache = _stream_from_samples(samples)
+	return _crt_power_on_cache
+
+
+static func make_crt_power_off() -> AudioStreamWAV:
+	if _crt_power_off_cache != null:
+		return _crt_power_off_cache
+	var duration := 0.58
+	var sample_count := int(MIX_RATE * duration)
+	var samples := PackedFloat32Array()
+	samples.resize(sample_count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 19840318
+	var filtered_noise := 0.0
+	for index: int in sample_count:
+		var time := float(index) / MIX_RATE
+		filtered_noise = lerpf(filtered_noise, rng.randf_range(-1.0, 1.0), 0.28)
+		var click := sin(TAU * 860.0 * time) * exp(-time * 105.0)
+		var collapse_time := maxf(time - 0.012, 0.0)
+		var collapse_phase := TAU * (170.0 * collapse_time - 125.0 * collapse_time * collapse_time)
+		var collapse := sin(collapse_phase) * exp(-collapse_time * 10.0)
+		var discharge := filtered_noise * exp(-time * 8.0)
+		var flyback_frequency := maxf(7600.0 - time * 10500.0, 620.0)
+		var flyback := sin(TAU * flyback_frequency * time) * exp(-time * 8.5)
+		var tail_time := maxf(time - 0.19, 0.0)
+		var cabinet_tick := sin(TAU * 1450.0 * tail_time) * exp(-tail_time * 75.0)
+		if time < 0.19:
+			cabinet_tick = 0.0
+		var sample := click * 0.28 + collapse * 0.43 + discharge * 0.2 + flyback * 0.055 + cabinet_tick * 0.12
+		samples[index] = clampf(sample * minf(time / 0.001, 1.0), -1.0, 1.0)
+	_crt_power_off_cache = _stream_from_samples(samples)
+	return _crt_power_off_cache
+
+
+static func make_crt_channel_change() -> AudioStreamWAV:
+	if _crt_channel_change_cache != null:
+		return _crt_channel_change_cache
+	var duration := 0.31
+	var sample_count := int(MIX_RATE * duration)
+	var samples := PackedFloat32Array()
+	samples.resize(sample_count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 19840319
+	var filtered_noise := 0.0
+	for index: int in sample_count:
+		var time := float(index) / MIX_RATE
+		filtered_noise = lerpf(filtered_noise, rng.randf_range(-1.0, 1.0), 0.42)
+		# El selector rotativo mueve un contacto grande: golpe de baquelita,
+		# rebote metalico y una rafaga muy corta al perder la sintonia.
+		var clunk := sin(TAU * (205.0 - time * 160.0) * time) * exp(-time * 31.0)
+		var contact := sin(TAU * 1320.0 * time) * exp(-time * 92.0)
+		var rebound_time := maxf(time - 0.048, 0.0)
+		var rebound := sin(TAU * 720.0 * rebound_time) * exp(-rebound_time * 75.0)
+		if time < 0.048:
+			rebound = 0.0
+		var tuning_burst := filtered_noise * exp(-time * 15.0)
+		var electrical_tick := sin(TAU * 5200.0 * time) * exp(-time * 48.0)
+		var sample := clunk * 0.48 + contact * 0.25 + rebound * 0.18 + tuning_burst * 0.22 + electrical_tick * 0.045
+		samples[index] = clampf(sample * minf(time / 0.001, 1.0), -1.0, 1.0)
+	_crt_channel_change_cache = _stream_from_samples(samples)
+	return _crt_channel_change_cache
+
+
+static func make_crt_volume_detent() -> AudioStreamWAV:
+	if _crt_volume_detent_cache != null:
+		return _crt_volume_detent_cache
+	var duration := 0.14
+	var sample_count := int(MIX_RATE * duration)
+	var samples := PackedFloat32Array()
+	samples.resize(sample_count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 19840320
+	for index: int in sample_count:
+		var time := float(index) / MIX_RATE
+		# Clic pequeno y seco del dentado de la rueda, sin la rafaga electrica
+		# reservada al selector de canal.
+		var detent := sin(TAU * 1540.0 * time) * exp(-time * 105.0)
+		var knob_body := sin(TAU * 310.0 * time) * exp(-time * 55.0)
+		var spring_time := maxf(time - 0.022, 0.0)
+		var spring := sin(TAU * 980.0 * spring_time) * exp(-spring_time * 110.0)
+		if time < 0.022:
+			spring = 0.0
+		var grit := rng.randf_range(-1.0, 1.0) * exp(-time * 125.0)
+		var sample := detent * 0.44 + knob_body * 0.27 + spring * 0.24 + grit * 0.09
+		samples[index] = clampf(sample * minf(time / 0.0008, 1.0), -1.0, 1.0)
+	_crt_volume_detent_cache = _stream_from_samples(samples)
+	return _crt_volume_detent_cache
+
+
+static func make_crt_remote_channel_response() -> AudioStreamWAV:
+	if _crt_remote_channel_response_cache != null:
+		return _crt_remote_channel_response_cache
+	var duration := 0.19
+	var sample_count := int(MIX_RATE * duration)
+	var samples := PackedFloat32Array()
+	samples.resize(sample_count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 19840321
+	var filtered_noise := 0.0
+	for index: int in sample_count:
+		var time := float(index) / MIX_RATE
+		filtered_noise = lerpf(filtered_noise, rng.randf_range(-1.0, 1.0), 0.48)
+		# Al usar infrarrojos no gira el selector de la carcasa: solo se oye
+		# el corte electronico de sintonia y la entrada del canal nuevo.
+		var tuning_burst := filtered_noise * exp(-time * 21.0)
+		var lock_tone := sin(TAU * 4200.0 * time) * exp(-time * 45.0)
+		var relay_body := sin(TAU * 185.0 * time) * exp(-time * 54.0)
+		var sample := tuning_burst * 0.31 + lock_tone * 0.055 + relay_body * 0.16
+		samples[index] = clampf(sample * minf(time / 0.0008, 1.0), -1.0, 1.0)
+	_crt_remote_channel_response_cache = _stream_from_samples(samples)
+	return _crt_remote_channel_response_cache
+
+
+static func make_tv_remote_button(button_kind: StringName) -> AudioStreamWAV:
+	if _tv_remote_button_cache.has(button_kind):
+		return _tv_remote_button_cache[button_kind] as AudioStreamWAV
+	var duration := 0.10
+	var impact_hz := 1280.0
+	var body_hz := 270.0
+	var return_delay := 0.031
+	var gain := 0.72
+	match button_kind:
+		&"power":
+			duration = 0.13
+			impact_hz = 920.0
+			body_hz = 220.0
+			return_delay = 0.041
+			gain = 0.82
+		&"volume":
+			duration = 0.085
+			impact_hz = 1580.0
+			body_hz = 340.0
+			return_delay = 0.024
+			gain = 0.62
+	var sample_count := int(MIX_RATE * duration)
+	var samples := PackedFloat32Array()
+	samples.resize(sample_count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash("tv_remote:%s" % button_kind)
+	for index: int in sample_count:
+		var time := float(index) / MIX_RATE
+		# Dos impactos apagados de una membrana de goma: fondo de carrera y
+		# retorno. El cuerpo de plastico aporta el golpe grave cercano.
+		var press := sin(TAU * impact_hz * time) * exp(-time * 115.0)
+		var body := sin(TAU * body_hz * time) * exp(-time * 62.0)
+		var release_time := maxf(time - return_delay, 0.0)
+		var release := sin(TAU * impact_hz * 0.78 * release_time) * exp(-release_time * 135.0)
+		if time < return_delay:
+			release = 0.0
+		var plastic := rng.randf_range(-1.0, 1.0) * exp(-time * 145.0)
+		var sample := press * 0.38 + body * 0.28 + release * 0.24 + plastic * 0.07
+		samples[index] = clampf(sample * gain * minf(time / 0.0007, 1.0), -1.0, 1.0)
+	var stream := _stream_from_samples(samples)
+	_tv_remote_button_cache[button_kind] = stream
+	return stream
 
 
 static func _stream_from_samples(samples: PackedFloat32Array) -> AudioStreamWAV:
