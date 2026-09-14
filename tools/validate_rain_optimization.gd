@@ -10,21 +10,16 @@ func _init() -> void:
 
 	var emitter := weather.get_node("Rain/NorthRain") as GPUParticles3D
 	var material := emitter.process_material as ParticleProcessMaterial
-	assert(emitter.amount == 720, "La lluvia debe conservar densidad de tormenta con un presupuesto reducido.")
+	assert(emitter.amount == 480, "La lluvia debe usar el presupuesto reducido de 480 gotas.")
+	assert(material.spread == 0.0, "Las gotas no deben desviarse hacia dentro de los tejados.")
 	assert(material.emission_box_extents == Vector3(14.0, 0.5, 14.0), "El emisor debe ser compacto.")
-	assert(emitter.visibility_aabb.size == Vector3(32.0, 50.0, 32.0), "El volumen visible sigue siendo demasiado grande.")
-
-	weather.call("_set_rain_outdoors", false)
-	assert(emitter.emitting, "La lluvia exterior debe seguir visible desde las ventanas.")
-	assert(material.collision_mode == 0, "La colision GPU debe apagarse en interiores.")
-	assert(material.emission_box_extents == Vector3(8.0, 0.5, 8.0), "La lluvia vista desde ventanas debe usar un volumen aun menor.")
+	assert(emitter.visibility_aabb.size.x <= 44.0 and emitter.visibility_aabb.size.z <= 44.0, "El margen visible debe seguir siendo local.")
+	assert(emitter.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF, "Las gotas nunca deben proyectar sombras.")
+	assert(not emitter.local_coords, "Las gotas ya emitidas no deben arrastrarse con el jugador.")
+	assert(emitter.emitting, "La lluvia debe seguir activa tanto dentro como fuera.")
+	assert(material.collision_mode == ParticleProcessMaterial.COLLISION_HIDE_ON_CONTACT, "Las cubiertas deben eliminar las gotas tambien en interiores.")
 	for child in weather.get_node("Rain").get_children():
 		if child is GPUParticlesCollision3D:
-			assert(child.cull_mask == 0 and not child.visible, "Los colisionadores deben apagarse en interiores.")
-
-	weather.call("_set_rain_outdoors", true)
-	assert(emitter.emitting, "La lluvia debe reanudarse en exteriores.")
-	assert(material.collision_mode != 0, "La colision GPU debe reactivarse en exteriores.")
-	assert(material.emission_box_extents == Vector3(14.0, 0.5, 14.0), "El volumen exterior debe restaurarse.")
+			assert(child.visible and (child.cull_mask & emitter.layers) != 0, "Las cubiertas deben bloquear el emisor local.")
 	print("RAIN_OPTIMIZATION_VALIDATION: PASS")
 	quit(0)

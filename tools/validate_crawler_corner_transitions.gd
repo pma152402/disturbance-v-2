@@ -53,7 +53,10 @@ func run() -> void:
 	var maximum_step := 0.0
 	for frame in 480:
 		var before: Vector3 = actor.surface._center()
+		var previous_state: String = str([actor.surface.phase, actor.surface.corner_active, actor.surface._corner_stage, actor.surface.collision_guard.recoveries])
 		actor.surface.step(1.0 / 60.0, actor._evidence_position, true)
+		if "--trace" in OS.get_cmdline_user_args() and previous_state != str([actor.surface.phase, actor.surface.corner_active, actor.surface._corner_stage, actor.surface.collision_guard.recoveries]):
+			print("CORNER frame=", frame, " previous=", previous_state, " current=", [actor.surface.phase, actor.surface.corner_active, actor.surface._corner_stage, actor.surface.collision_guard.recoveries], " center=", actor.surface._center(), " up=", actor.basis.y, " normal=", actor.surface.normal, " face=", actor.surface._corner_face_position, " face_normal=", actor.surface._corner_face_normal)
 		visual._physics_process(1.0 / 60.0)
 		maximum_step = maxf(maximum_step, before.distance_to(actor.surface._center()))
 		became_wall = became_wall or actor.surface.phase == actor.surface.Phase.WALL

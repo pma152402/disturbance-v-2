@@ -353,6 +353,9 @@ func start_recording() -> void:
 
 
 func _start_recording(allow_placed_camera: bool) -> void:
+	var repairing_player := get_tree().get_first_node_in_group(&"player")
+	if is_instance_valid(repairing_player) and repairing_player.has_method(&"is_camera_repair_active") and repairing_player.is_camera_repair_active():
+		return
 	if _is_recording or _playback_open:
 		return
 	if not allow_placed_camera and _camera_controls_unavailable():
@@ -909,6 +912,7 @@ func _recording_camera_state() -> Dictionary:
 		"v_offset": _recording_camera.v_offset,
 		"frustum_offset": _recording_camera.frustum_offset,
 		"exclude_player": bool(_recording_camera.get_meta(&"observer_exclude_player", true)),
+		"lens_grime": preload("res://systems/camera_lens_visibility.gd").capture(get_tree()),
 	}
 
 
@@ -1674,7 +1678,15 @@ func _end_camera_observation_recording() -> Dictionary:
 
 func _camera_controls_unavailable() -> bool:
 	var player := get_tree().get_first_node_in_group(&"player")
+	if is_instance_valid(player) and player.has_method(&"is_camera_repair_active") and player.is_camera_repair_active():
+		return true
 	return is_instance_valid(player) and player.has_method(&"is_camera_on_ground") and bool(player.call(&"is_camera_on_ground"))
+
+
+func power_off_for_repair() -> void:
+	stop_recording()
+	_camera_timer_remaining = 0.0
+	_camera_timer_label.hide()
 
 
 func _player_has_inventory_cassette() -> bool:

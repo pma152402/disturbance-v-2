@@ -12,6 +12,13 @@ const FIXED_SCENES := [
 	"metal_wall_shelves", "empty_bird_cage", "wood_and_fabric_folding_screen",
 	"manual_three_step_guardrail", "only_three_section", "node_tubo",
 ]
+# Decoración auditada del recorrido de aparición a lavadora. Estas agrupaciones
+# conservan también las sombras de cada pieza, sin aplicar la poda de herrajes.
+const EXACT_FIXED_SCENES := [
+	"dirty_laundry_basket", "wall_towel_holder", "old_dress_mannequin",
+	"retro_dish_drying_rack", "detailed_wood_fired_oven", "shoe_dresser",
+]
+static var exact_batching_enabled := true
 const RENDER_PROPERTIES := [
 	"layers", "cast_shadow", "gi_mode", "material_override", "material_overlay",
 	"transparency", "visibility_range_begin", "visibility_range_begin_margin",
@@ -35,6 +42,9 @@ static func optimize_static_children(parent: Node) -> Dictionary:
 
 static func _visit(node: Node, result: Dictionary) -> void:
 	var scene_name := node.scene_file_path.get_file().get_basename()
+	if exact_batching_enabled and scene_name in EXACT_FIXED_SCENES and _is_static_tree(node):
+		_batch_parents(node, result, true)
+		return
 	if scene_name in FIXED_SCENES and _is_static_tree(node):
 		_batch_parents(node, result)
 		return
@@ -53,10 +63,10 @@ static func _is_static_tree(node: Node) -> bool:
 	return true
 
 
-static func _batch_parents(parent: Node, result: Dictionary) -> void:
+static func _batch_parents(parent: Node, result: Dictionary, preserve_shadows := false) -> void:
 	var groups: Dictionary = {}
 	for child in parent.get_children():
-		_batch_parents(child, result)
+		_batch_parents(child, result, preserve_shadows)
 		if child is not MeshInstance3D or child.get_child_count() != 0:
 			continue
 		var source := child as MeshInstance3D
@@ -87,6 +97,8 @@ static func _batch_parents(parent: Node, result: Dictionary) -> void:
 		var first := group[0] as MeshInstance3D
 		var batch := MultiMeshInstance3D.new()
 		batch.name = "StaticDecorBatch_%s" % first.name
+		if preserve_shadows:
+			batch.set_meta(&"preserve_authored_shadows", true)
 		for property in RENDER_PROPERTIES:
 			batch.set(property, first.get(property))
 		var mesh := first.mesh

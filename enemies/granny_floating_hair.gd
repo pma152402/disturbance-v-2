@@ -42,7 +42,9 @@ func _follow_head() -> void:
 	# del GLB. Así los parámetros del pelo permanecen expresados en metros.
 	# Uniform sizing preserves the root envelope, strand length and animated
 	# displacement together, without inheriting the imported rig's scale.
-	global_transform = Transform3D(_head.global_basis.orthonormalized().scaled(Vector3.ONE * head_size_multiplier), _head.global_position)
+	var actor := get_parent() as Node3D
+	var actor_scale := actor.global_basis.get_scale().abs().y if actor != null else 1.0
+	global_transform = Transform3D(_head.global_basis.orthonormalized().scaled(Vector3.ONE * head_size_multiplier * actor_scale), _head.global_position)
 
 
 func _build_hair_mesh() -> ArrayMesh:

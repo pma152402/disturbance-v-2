@@ -5,14 +5,16 @@ const COOLDOWN := 90.0
 const WINDUP_SECONDS := 0.65
 const DRIP_SECONDS := 3.0
 const MAX_RANGE := 14.0
-const AIM_TURN_SPEED := 7.5
+const AIM_TURN_SPEED := 2.6
+const AIM_RESPONSE := 4.0
+const AIM_SAMPLE_SECONDS := 0.24
 const MAX_HEAD_YAW := PI
 const MAX_HEAD_PITCH := PI * 0.499
 var phase := Phase.IDLE
 var unlocked := false
 var cooldown := 0.0
 var elapsed := 0.0
-var spray_duration := 9.0
+var spray_duration := 6.0
 var aim_direction := Vector3.BACK
 var _lens_contact_cooldown := 0.0
 var completed_bursts := 0
@@ -27,6 +29,7 @@ var head_roll := 0.0
 var _aim_height_offset := Vector3.ZERO
 var _aim_clock := 0.0
 var _chaos_seed := 0.0
+var _aim_sample_timer := 0.0
 
 func setup(actor: CharacterBody3D, animator: Node3D) -> void:
 	brain = actor
@@ -78,13 +81,15 @@ func step(delta: float) -> bool:
 			brain._evidence_age = 0.0
 			brain._sight_confirmed = true
 	if phase != Phase.DRIP:
-		# Active spraying relentlessly follows the player, including a circle
-		# behind the planted creature. Visibility only updates normal AI memory;
-		# actual projectile collision still stops the liquid at walls and doors.
-		_last_aim = _target_point() + _aim_height_offset
-		var lead: Vector3 = brain._player.velocity.limit_length(6.0) * 0.07
-		var desired := _aim_at(_last_aim + lead)
-		tracking_direction = _turn_toward(tracking_direction, desired, delta * AIM_TURN_SPEED)
+		# Keep following, but leave time to dodge: sample the target periodically,
+		# then turn with inertia, without predicting the player's next position.
+		_aim_sample_timer -= delta
+		if _aim_sample_timer <= 0.0:
+			_aim_sample_timer = AIM_SAMPLE_SECONDS
+			_last_aim = _target_point() + _aim_height_offset
+		var desired := _aim_at(_last_aim)
+		var turn := minf(delta * AIM_TURN_SPEED, tracking_direction.angle_to(desired) * (1.0 - exp(-AIM_RESPONSE * delta)))
+		tracking_direction = _turn_toward(tracking_direction, desired, turn)
 		var chaotic := _chaotic_direction(tracking_direction)
 		aim_direction = _turn_toward(aim_direction, chaotic, delta * 10.0)
 	brain.gaze_position = effects.mouth_position() + aim_direction * 4.0
@@ -132,13 +137,14 @@ func _begin() -> void:
 	phase = Phase.WINDUP
 	elapsed = 0.0
 	cooldown = COOLDOWN
-	spray_duration = randf_range(6.0, 12.0)
+	spray_duration = randf_range(3.0, 9.0)
 	_lens_contact_cooldown = 0.0
 	_stationary_transform = brain.global_transform
 	_last_aim = _visible_target()
 	if not _last_aim.is_finite(): _last_aim = _target_point()
 	_aim_height_offset = _last_aim - _target_point()
 	_aim_clock = 0.0
+	_aim_sample_timer = AIM_SAMPLE_SECONDS
 	_chaos_seed = randf_range(0.0, TAU)
 	head_roll = 0.0
 	aim_direction = _aim_at(_last_aim)

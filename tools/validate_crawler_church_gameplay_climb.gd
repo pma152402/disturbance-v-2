@@ -43,7 +43,9 @@ func run() -> void:
 	var maximum_step := 0.0
 	for frame in 300:
 		var before: Vector3 = actor.surface._center()
+		var before_state: String = str([actor.surface.phase, actor.surface.corner_active, actor.surface._corner_stage])
 		await physics_frame
+		if "--trace" in OS.get_cmdline_user_args() and before_state != str([actor.surface.phase, actor.surface.corner_active, actor.surface._corner_stage]): print("GAMEPLAY RAIL frame=", frame, " before=", before_state, " after=", [actor.surface.phase, actor.surface.corner_active, actor.surface._corner_stage], " center=", actor.surface._center(), " normal=", actor.surface.normal, " up=", actor.basis.y, " commit=", actor.surface._horizontal_commit_remaining, " jumps=", actor.surface.spider_jump_count)
 		maximum_step = maxf(maximum_step, before.distance_to(actor.surface._center()))
 		gripped_face = gripped_face or actor.surface.phase == actor.surface.Phase.WALL
 		reached_cap = reached_cap or (actor.surface.phase == actor.surface.Phase.CEILING and actor.surface.normal.y > 0.65 and actor.surface.corner_transitions >= 2)

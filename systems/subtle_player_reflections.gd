@@ -38,7 +38,17 @@ func _discover() -> void:
 
 func _on_node_added(node: Node) -> void:
 	if node is MeshInstance3D:
-		call_deferred(&"_register_surface", node)
+		# El agrupador puede liberar la malla antes de ejecutar el diferido.
+		# Un ID no retiene un Object muerto ni falla al convertir el argumento.
+		call_deferred(&"_register_surface_by_id", node.get_instance_id())
+
+
+func _register_surface_by_id(instance_id: int) -> void:
+	if not is_instance_id_valid(instance_id):
+		return
+	var node := instance_from_id(instance_id) as Node
+	if node != null:
+		_register_surface(node)
 
 
 func _register_surface(node: Node) -> void:
@@ -132,6 +142,9 @@ func _process(delta: float) -> void:
 
 func _select_surfaces(camera: Camera3D) -> void:
 	var candidates: Array[Dictionary] = []
+	# Todos los cristales se evalúan en la misma selección. Obtener el frustum
+	# una vez evita reconstruir sus seis planos para cada superficie cercana.
+	var camera_frustum := camera.get_frustum()
 	for surface in surfaces:
 		var source := surface.source as MeshInstance3D
 		if not _surface_visible(source):
@@ -150,7 +163,7 @@ func _select_surfaces(camera: Camera3D) -> void:
 			continue
 		var radius := (source.get_aabb().size * source.global_basis.get_scale().abs()).length() * 0.5
 		var in_frustum := true
-		for plane in camera.get_frustum():
+		for plane in camera_frustum:
 			if plane.distance_to(center) > radius:
 				in_frustum = false
 				break

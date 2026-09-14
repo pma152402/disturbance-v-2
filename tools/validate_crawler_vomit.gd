@@ -78,7 +78,7 @@ func run() -> void:
 		check(attack.can_begin(), "Cannot vomit on attachment " + str(attachment))
 		attack._begin()
 		attack.effects.set_physics_process(false)
-		check(attack.spray_duration >= 6 and attack.spray_duration <= 12, "Spray duration outside 6-12 seconds")
+		check(attack.spray_duration >= 3 and attack.spray_duration <= 9, "Spray duration outside 3-9 seconds")
 		var fixed: Transform3D = actor.global_transform
 		var spray_time := 0.0
 		var drip_time := 0.0
@@ -208,7 +208,7 @@ func run() -> void:
 	var remembered: Vector3 = attack._last_aim
 	var seen_position: Vector3 = actor._evidence_position
 	player.position.x += 1.0
-	attack.step(0.1)
+	for i in 20: attack.step(1.0 / 60.0)
 	check(attack._last_aim.distance_to(remembered) > 0.8, "Active stream froze its aim behind cover")
 	check(actor._evidence_position.is_equal_approx(seen_position), "Spray tracking incorrectly updates ordinary visual memory through walls")
 	player.position.x -= 1.0

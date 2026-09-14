@@ -3,9 +3,8 @@ extends Node3D
 const CAPACITY := 80
 const JET_CAPACITY := 56
 const THROAT_RADIUS := 0.105
-# The former balls + outward spread covered about 1.8 m at their far end.
-# A 1.95 m joined cross-section adds a little width across twice the distance.
-const END_RADIUS := 1.95
+# Narrower continuous jet: visible width and contact radius share this profile.
+const END_RADIUS := 1.10
 const JET_SPEED := 14.5
 const JET_RATE := 18.0 # Only the small orange/dark chunks need particles now.
 const DRIP_RATE := 11.0

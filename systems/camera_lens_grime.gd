@@ -84,6 +84,22 @@ func attach_recording_view(viewport: SubViewport) -> void:
 	rect.visible = dirt > 0.001
 	_recorded_rects.append(rect)
 
+func get_observer_state() -> Dictionary:
+	return {
+		"dirt": dirt,
+		"central_clear": central_clear,
+		"wiping": _observer_uniform(&"wiping", false),
+		"wipe_progress": _observer_uniform(&"wipe_progress", 0.0),
+		"wash_progress": _observer_uniform(&"wash_progress", 0.0),
+		"maximum_opacity": _observer_uniform(&"maximum_opacity", 0.70),
+	}
+
+
+func _observer_uniform(parameter: StringName, fallback: Variant) -> Variant:
+	var value: Variant = lens_material.get_shader_parameter(parameter)
+	return fallback if value == null else value
+
+
 func add_splatter(amount: float) -> void:
 	amount = maxf(0.0, amount)
 	if player.is_camera_on_ground() or bool(player.get("_monster_restart_pending")):
@@ -112,7 +128,16 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		if wipe(): get_viewport().set_input_as_handled()
 
 func _can_clean() -> bool:
+	if player.is_camera_repair_active(): return false
 	return not busy and dirt > 0.001 and not player.is_camera_on_ground() and not player._monster_restart_pending and not player._skill_check_active and not player.is_two_hand_interaction_active()
+
+
+func replace_lens() -> void:
+	dirt = 0.0
+	central_clear = 0.0
+	_new_splatter = 0.0
+	_has_wiped = false
+	_refresh()
 
 func wipe() -> bool:
 	if not _can_clean() or central_clear >= 0.99: return false

@@ -12,6 +12,7 @@ height = 1.4
 script = ExtResource("2")
 editor_description = "Variante independiente: torso corto, piernas visibles, marcha a cuatro patas y trepado. La vieja de la iglesia se conserva en church_grandmother.tscn."
 climb_speed = 1.55
+max_turn_speed_degrees = 540.0
 evidence_memory_seconds = 6.0
 starts_waiting_covered_eyes = false
 obstacle_jump_enabled = false

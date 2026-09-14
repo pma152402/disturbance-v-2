@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" path="res://systems/camera_keyring_hud.tscn" id="19_keyring_hud"]
 [ext_resource type="PackedScene" path="res://systems/camera_observer.tscn" id="20_camera_observer"]
 [ext_resource type="Script" path="res://systems/subtle_player_reflections.gd" id="21_player_reflections"]
+[ext_resource type="PackedScene" path="res://enemies/shadow_crawler.tscn" id="22_shadow_crawler"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_storm"]
 panorama = ExtResource("5_storm_panorama")
@@ -245,12 +246,16 @@ starts_with_flashlight = true
 starts_with_flashlight_battery = true
 debug_all_keys = true
 
+[node name="BlackEnteAtSpawn" parent="." instance=ExtResource("22_shadow_crawler")]
+editor_description = "Black Ente: silencioso e inofensivo, dos metros delante del spawn. Se transforma quieto durante 4 s de mirada fija y después huye a 15 m/s. La luz lo deshace."
+position = Vector3(1.1196177, 1.3244749, 6.0996444)
+
 [node name="MonsterGrandmother" parent="." unique_id=889727421 instance=ExtResource("12_monster_grandmother")]
 process_mode = 4
 transform = Transform3D(-0.24663237, 0, -0.9691091, 0, 1, 0, 0.9691091, 0, -0.24663237, 10.15, 4.35, 8.65)
 
 [node name="ImportedGrandmotherGroundFloor" parent="." unique_id=1485663130 instance=ExtResource("15_imported_grandmother")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.0501447, 1.0776441, -36.835663)
+transform = Transform3D(0, 0, 0.88, 0, 0.88, 0, -0.88, 0, 0, 3.0501447, 1.0776441, -36.835663)
 dark_sight_distance = 6.5
 recognition_seconds = 0.52
 evidence_memory_seconds = 6.0

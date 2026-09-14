@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://enemies/grandmother_crawler.tscn" id="1"]
+[ext_resource type="Script" path="res://enemies/shadow_crawler.gd" id="2"]
+[ext_resource type="Script" path="res://enemies/shadow_crawler_animator.gd" id="3"]
+
+[node name="BlackEnte" instance=ExtResource("1")]
+script = ExtResource("2")
+editor_description = "Black Ente: silencioso e inofensivo. Permanece quieto durante 4 s de mirada fija, abre la boca, estira los brazos y agranda las pupilas; después huye a 15 m/s hacia un destino lejano. La luz lo disuelve."
+dark_sight_distance = 14.0
+can_climb = false
+spider_jump_enabled = false
+obstacle_jump_enabled = false
+
+[node name="EditableVisual" parent="." index="8"]
+script = ExtResource("3")

@@ -277,6 +277,8 @@ const PlungerPickupScene := preload("res://house_props/toilet_plunger.tscn")
 const CrowbarPickupScene := preload("res://house_props/crowbar_pickup.tscn")
 const ScrewdriverPickupScene := preload("res://house_props/flathead_screwdriver.tscn")
 const GameplaySounds := preload("res://sounds/gameplay_sound_factory.gd")
+const RepairKitScene := preload("res://house_props/camera_repair_kit.tscn")
+var camera_repair: Node
 const INVENTORY_ITEM_NAMES := {
 	&"flashlight": "LINTERNA",
 	&"can": "LATA",
@@ -293,6 +295,7 @@ const INVENTORY_ITEM_NAMES := {
 	&"cassette": "CINTA",
 	&"panel_fuse_good": "FUSIBLE BUENO",
 	&"panel_fuse_broken": "FUSIBLE ROTO",
+	&"repair_kit": "KIT DE REPARACION",
 }
 
 
@@ -300,6 +303,9 @@ func _ready() -> void:
 	var lens := preload("res://systems/camera_lens_grime.gd").new()
 	lens.name = "CameraLensGrime"
 	add_child(lens)
+	camera_repair = preload("res://systems/camera_repair.gd").new()
+	camera_repair.name = "CameraRepair"
+	add_child(camera_repair)
 	add_to_group(&"player")
 	_avatar_last_yaw = global_rotation.y
 	player_avatar.call(&"set_hidden_from_player_camera", true)
@@ -380,6 +386,15 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if is_camera_repair_active():
+		if event is InputEventKey and event.pressed and (event.keycode == KEY_ESCAPE or event.physical_keycode == KEY_ESCAPE):
+			camera_repair.cancel()
+		get_viewport().set_input_as_handled()
+		return
+	if _held_item == &"repair_kit" and event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		camera_repair.start()
+		get_viewport().set_input_as_handled()
+		return
 	if is_camera_on_ground():
 		if event is InputEventKey:
 			var camera_key: int = event.physical_keycode if event.physical_keycode != 0 else event.keycode
@@ -737,6 +752,15 @@ func _physics_process(delta: float) -> void:
 	_update_zoom_sound(delta)
 	_update_interaction_focus_dot(delta)
 	_monster_hit_cooldown = maxf(0.0, _monster_hit_cooldown - delta)
+	if is_camera_repair_active():
+		velocity.x = move_toward(velocity.x, 0.0, 18.0 * delta)
+		velocity.z = move_toward(velocity.z, 0.0, 18.0 * delta)
+		if not is_on_floor(): velocity.y -= _gravity * delta
+		move_and_slide()
+		_update_camera_motion(delta, Vector2.ZERO, false)
+		_update_footsteps(delta, Vector2.ZERO, false)
+		camera.fov = 75.0
+		return
 	_update_stance_transition(delta)
 	head.rotation.x = _look_pitch
 	head.rotation.y = 0.0
@@ -1250,6 +1274,7 @@ func _show_inventory_temporarily() -> void:
 
 
 func _hide_all_held_visuals() -> void:
+	if is_instance_valid(camera_repair): camera_repair.held_visual.hide()
 	_set_candle_placement_mode(false)
 	_set_note_reading(false, true)
 	_set_recipe_book_reading(false, true)
@@ -1339,6 +1364,7 @@ func _set_recipe_book_reading(active: bool, immediate := false) -> void:
 
 
 func _equip_inventory_slot(slot_index: int) -> bool:
+	if is_camera_repair_active(): return false
 	if slot_index < 0 or slot_index >= _inventory_slots.size():
 		return false
 	if is_instance_valid(_tripod_camera_preview):
@@ -1366,6 +1392,7 @@ func _equip_inventory_slot(slot_index: int) -> bool:
 		_held_item = item_type
 		right_hand.visible = true
 		match item_type:
+			&"repair_kit": camera_repair.held_visual.show()
 			&"can": held_can.visible = true
 			&"bottle": held_bottle.visible = true
 			&"plunger": held_plunger.visible = true
@@ -1805,6 +1832,13 @@ func _try_interact(pressed_key: Key) -> bool:
 
 
 func _update_interaction_prompt() -> void:
+	if _held_item == &"repair_kit" and not is_camera_repair_active():
+		note_controls_prompt.visible = true
+		note_controls_prompt.text = "LMB  REPARAR CAMARA (11 s)    G  SOLTAR" if camera_repair.can_start() else ("CAMARA INTACTA    G  SOLTAR" if not camera_repair.needs_repair() else "DETENTE Y LIBERA LAS MANOS PARA REPARAR")
+		var repair_target := _get_interactable()
+		interaction_prompt.text = str(repair_target.get_interaction_text(self)) if repair_target != null else ""
+		interaction_prompt.visible = not interaction_prompt.text.is_empty()
+		return
 	note_controls_prompt.visible = false
 	interaction_prompt.offset_top = 76.0
 	interaction_prompt.offset_bottom = 121.0
@@ -1918,6 +1952,9 @@ func _update_interaction_prompt() -> void:
 
 
 func pick_up_item(item_type: StringName) -> bool:
+	if is_camera_repair_active(): return false
+	if item_type == &"repair_kit":
+		return _store_inventory_item(item_type, {}, true)
 	if item_type not in [&"can", &"bottle"] or not _store_inventory_item(item_type):
 		return false
 	var held_visual := held_can if item_type == &"can" else held_bottle
@@ -2716,6 +2753,7 @@ func install_flashlight_battery() -> bool:
 
 
 func _drop_selected_inventory_item() -> void:
+	if is_camera_repair_active(): return
 	if _selected_inventory_slot < 0 or _selected_inventory_slot >= _inventory_slots.size():
 		return
 	var item_type := _inventory_slots[_selected_inventory_slot]
@@ -2737,7 +2775,13 @@ func _drop_selected_inventory_item() -> void:
 		forward = forward.normalized()
 	var drop_position := global_position + forward * 0.7 + Vector3.UP * 0.12
 
-	if item_type == &"note":
+	if item_type == &"repair_kit":
+		var dropped_kit := RepairKitScene.instantiate() as RigidBody3D
+		scene_root.add_child(dropped_kit)
+		dropped_kit.global_position = camera.global_position + forward * 0.6 + Vector3.DOWN * 0.18
+		dropped_kit.global_rotation.y = rotation.y
+		dropped_kit.set_dropped(velocity * 0.15 + forward * 0.3)
+	elif item_type == &"note":
 		var dropped_note := DroppedNoteScene.instantiate() as RigidBody3D
 		scene_root.add_child(dropped_note)
 		if dropped_note.has_method(&"configure_note"):
@@ -3161,6 +3205,7 @@ func _try_spend_stamina(cost: float) -> bool:
 func receive_monster_attack(attacker: Node3D) -> void:
 	if _monster_hit_cooldown > 0.0 or _monster_restart_pending:
 		return
+	if is_camera_repair_active(): camera_repair.cancel()
 	_monster_hit_cooldown = 1.15
 	_monster_hits += 1
 	# Notify only accepted damage: blocked hits must not unlock enemy abilities.
@@ -3187,11 +3232,17 @@ func receive_monster_attack(attacker: Node3D) -> void:
 func get_camera_lens_grime() -> Node:
 	return get_node("CameraLensGrime")
 
+
+func is_camera_repair_active() -> bool:
+	return is_instance_valid(camera_repair) and camera_repair.active
+
 func receive_camera_splatter(amount: float) -> void:
+	if amount > 0.0 and is_camera_repair_active(): camera_repair.cancel()
 	get_camera_lens_grime().add_splatter(amount)
 
 
 func _begin_death_sequence(attacker: Node3D) -> void:
+	if is_camera_repair_active(): camera_repair.cancel()
 	_death_elapsed = 0.0
 	_camera_retrieval_active = false
 	_cancel_tripod_camera_preview()

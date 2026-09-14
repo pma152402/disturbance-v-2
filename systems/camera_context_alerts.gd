@@ -47,10 +47,11 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_blink_elapsed += delta
-	for kind in _cooldowns.keys():
+	for kind in _cooldowns:
 		_cooldowns[kind] = maxf(float(_cooldowns[kind]) - delta, 0.0)
 	if not _camera_active:
 		visible = false
+		_update_processing_state()
 		return
 	if _remaining > 0.0 and _active_kind != AlertKind.NO_CONNECTION:
 		_remaining -= delta
@@ -59,6 +60,18 @@ func _process(delta: float) -> void:
 			_active_kind = -1
 	_update_alert_pulse()
 	_evaluate_persistent_conditions()
+	_update_processing_state()
+
+
+func _update_processing_state() -> void:
+	# Los avisos permanentes no se animan. Los temporales y sus cooldowns
+	# conservan el mismo reloj; una nueva condición despierta el componente.
+	var needs_update := _camera_active and _remaining > 0.0 and _active_kind != AlertKind.NO_CONNECTION
+	for kind in _cooldowns:
+		if float(_cooldowns[kind]) > 0.0:
+			needs_update = true
+			break
+	set_process(needs_update)
 
 
 func _update_alert_pulse() -> void:
@@ -71,14 +84,22 @@ func _update_alert_pulse() -> void:
 
 
 func set_camera_active(active: bool) -> void:
+	if _camera_active == active:
+		return
 	_camera_active = active
 	if not active:
 		visible = false
+	set_process(true)
 
 
 func set_storage_usage(used: int, capacity: int) -> void:
-	_storage_used = maxi(used, 0)
-	_storage_capacity = maxi(capacity, 1)
+	var next_used := maxi(used, 0)
+	var next_capacity := maxi(capacity, 1)
+	if next_used == _storage_used and next_capacity == _storage_capacity:
+		return
+	_storage_used = next_used
+	_storage_capacity = next_capacity
+	set_process(true)
 
 
 func notify_object_out_of_range() -> void:
@@ -143,3 +164,4 @@ func _show_if_valid(kind: AlertKind, condition: bool) -> void:
 	_remaining = display_seconds
 	_cooldowns[kind] = repeat_cooldown_seconds
 	visible = true
+	set_process(true)

@@ -18,6 +18,9 @@ var _uvs := PackedVector2Array()
 var _skin_indices := PackedInt32Array()
 var _cloth_indices := PackedInt32Array()
 var _last_points := PackedVector3Array()
+var _radii := PackedFloat32Array([0.48, 0.43, 0.34, 0.29, 0.28, 0.275, 0.24, 0.19, 0.17])
+var _cosines := PackedFloat64Array()
+var _sines := PackedFloat64Array()
 
 func configure(upper: Node3D, joint: Node3D, hand: Node3D, torso: MeshInstance3D, skin: Material) -> void:
 	shoulder = upper
@@ -36,6 +39,17 @@ func configure(upper: Node3D, joint: Node3D, hand: Node3D, torso: MeshInstance3D
 	_vertices.resize(RINGS * SIDES)
 	_normals.resize(RINGS * SIDES)
 	_uvs.resize(RINGS * SIDES)
+	# Las secciones conservan UV y ángulos durante toda la animación.
+	# Float64 evita redondear los resultados de sin/cos antes de usarlos.
+	_cosines.resize(SIDES)
+	_sines.resize(SIDES)
+	for side in SIDES:
+		var angle := TAU * float(side) / SIDES
+		_cosines[side] = cos(angle)
+		_sines[side] = sin(angle)
+	for ring in RINGS:
+		for side in SIDES:
+			_uvs[ring * SIDES + side] = Vector2(float(side) / SIDES, float(ring) / (RINGS - 1))
 	for ring in RINGS - 1:
 		for side in SIDES:
 			var a := ring * SIDES + side
@@ -67,7 +81,6 @@ func update_surface() -> void:
 		return
 	_last_points = points
 	_last_thickness_scale = thickness_scale
-	var radii := PackedFloat32Array([0.48, 0.43, 0.34, 0.29, 0.28, 0.275, 0.24, 0.19, 0.17])
 	var radial := Vector3.FORWARD
 	for ring in RINGS:
 		var before := points[maxi(0, ring - 1)]
@@ -78,15 +91,14 @@ func update_surface() -> void:
 			radial = tangent.cross(Vector3.UP if absf(tangent.y) < 0.9 else Vector3.RIGHT)
 		radial = radial.normalized()
 		var second := tangent.cross(radial).normalized()
+		# El estrechamiento es común a todo el anillo, no a cada vértice.
+		var taper := lerpf(1.0, thickness_scale, 1.0 if ring in [2, 3, 4, 5, 6] else 0.45 if ring == 1 else 0.0)
 		for side in SIDES:
-			var angle := TAU * float(side) / SIDES
-			var normal := radial * cos(angle) + second * sin(angle)
+			var normal := radial * _cosines[side] + second * _sines[side]
 			var index := ring * SIDES + side
 			# Preserve the torso mount and palm closure; taper only the limb shaft.
-			var taper := lerpf(1.0, thickness_scale, 1.0 if ring in [2, 3, 4, 5, 6] else 0.45 if ring == 1 else 0.0)
-			_vertices[index] = points[ring] + normal * radii[ring] * taper
+			_vertices[index] = points[ring] + normal * _radii[ring] * taper
 			_normals[index] = normal
-			_uvs[index] = Vector2(float(side) / SIDES, float(ring) / (RINGS - 1))
 	var arrays := []
 	arrays.resize(Mesh.ARRAY_MAX)
 	arrays[Mesh.ARRAY_VERTEX] = _vertices

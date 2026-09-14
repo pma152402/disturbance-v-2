@@ -8,9 +8,10 @@ extends Node3D
 @export var lightning_sky_boost := 0.72
 @export_category("Optimizacion de lluvia")
 @export_range(0.1, 1.0, 0.05) var rain_follow_interval := 0.25
-@export_range(5.0, 40.0, 1.0) var shelter_check_height := 28.0
-@export_range(4.0, 12.0, 0.5) var indoor_window_rain_radius := 8.0
-@export_range(1.0, 10.0, 0.5) var indoor_anchor_refresh_distance := 4.0
+## Semiancho del volumen local. Cubre ambos lados de las ventanas a la vez.
+@export_range(10.0, 24.0, 1.0) var local_rain_radius := 14.0
+@export_range(20.0, 40.0, 1.0) var minimum_rain_height := 24.0
+@export_range(240, 720, 60) var rain_particle_budget := 480
 
 @onready var storm_light: DirectionalLight3D = $OvercastLight
 @onready var ground_flash: OmniLight3D = $InteriorLightning/GroundFloorFlash
@@ -26,12 +27,9 @@ var _world_environment: WorldEnvironment
 var _base_ambient_energy := 0.0
 var _base_background_energy := 0.0
 var _rain_process_material: ParticleProcessMaterial
-var _outdoor_collision_mode := 0
-var _rain_colliders: Array[GPUParticlesCollision3D] = []
-var _rain_collider_masks: Dictionary = {}
-var _rain_is_outdoors := true
-var _window_rain_anchor := Vector3.ZERO
-var _window_anchor_origin := Vector3(INF, INF, INF)
+var _rain_follow_initialized := false
+var _rain_roofs: Array[AABB] = []
+var _rain_roofs_cached := false
 var _benchmark_frozen := false
 var _flash_strength := 0.0:
 	set(value):
@@ -77,125 +75,88 @@ func _update_rain_position() -> void:
 			_player = scene_root.find_child("Player", true, false) as Node3D
 	if is_instance_valid(_player):
 		var player_position := _player.global_position
-		var outdoors := not _is_player_sheltered()
-		_set_rain_outdoors(outdoors)
-		if outdoors:
-			rain_emitter.global_position = Vector3(player_position.x, player_position.y + 15.0, player_position.z)
-		else:
-			_update_window_rain_anchor(player_position)
-			rain_emitter.global_position = Vector3(_window_rain_anchor.x, player_position.y + 15.0, _window_rain_anchor.z)
+		var target := Vector3(player_position.x, maxf(minimum_rain_height, player_position.y + 20.0), player_position.z)
+		# No recrear la textura por movimientos diminutos ni por girar la cabeza.
+		if _rain_follow_initialized and rain_emitter.global_position.distance_to(target) < 0.5:
+			return
+		var teleported := rain_emitter.global_position.distance_to(target) > local_rain_radius
+		rain_emitter.global_position = target
+		_update_uncovered_emission_points()
+		# Las gotas existentes conservan sus coordenadas mundiales. Andar o girar
+		# no reinicia la tormenta; solo rellenamos el volumen tras un teletransporte.
+		if not _rain_follow_initialized or teleported:
+			rain_emitter.restart()
+		_rain_follow_initialized = true
+
+
+func _update_uncovered_emission_points() -> void:
+	if _rain_process_material == null:
+		return
+	if not _rain_roofs_cached:
+		var scene_root := get_tree().current_scene
+		if scene_root == null:
+			scene_root = self
+		for node in scene_root.find_children("*", "GPUParticlesCollisionBox3D", true, false):
+			var roof := node as GPUParticlesCollisionBox3D
+			if roof.is_visible_in_tree() and (roof.cull_mask & rain_emitter.layers) != 0:
+				_rain_roofs.append(roof.global_transform * AABB(-roof.size * 0.5, roof.size))
+		_rain_roofs_cached = true
+	# Distribuir el presupuesto solo sobre cielo abierto: ninguna gota nace en
+	# columnas cubiertas. Caida vertical + colisiones como segunda proteccion.
+	var points := PackedVector3Array()
+	var cells := ceili(local_rain_radius / 2.0)
+	for x in range(-cells, cells + 1):
+		for z in range(-cells, cells + 1):
+			var point := Vector3(float(x) * 2.0, 0.0, float(z) * 2.0)
+			var world_point := rain_emitter.global_position + point
+			var covered := false
+			for roof in _rain_roofs:
+				# Margen de medio metro para el ancho visual de las gotas y los aleros.
+				if world_point.x >= roof.position.x - 0.5 and world_point.x <= roof.end.x + 0.5 and world_point.z >= roof.position.z - 0.5 and world_point.z <= roof.end.z + 0.5 and world_point.y > roof.position.y:
+					covered = true
+					break
+			if not covered:
+				points.append(point)
+	rain_emitter.emitting = not points.is_empty()
+	if points.is_empty():
+		return
+	var point_image := Image.create(points.size(), 1, false, Image.FORMAT_RGBF)
+	for index in points.size():
+		var point := points[index]
+		point_image.set_pixel(index, 0, Color(point.x, point.y, point.z))
+	_rain_process_material.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_POINTS
+	_rain_process_material.emission_point_count = points.size()
+	_rain_process_material.emission_point_texture = ImageTexture.create_from_image(point_image)
 
 
 func _prepare_optimized_rain() -> void:
 	# Las gotas nunca participan en mapas de sombras, incluso si una instancia
 	# de Weather conserva un override antiguo del emisor.
 	rain_emitter.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	rain_emitter.local_coords = false
+	rain_emitter.amount = rain_particle_budget
+	rain_emitter.emitting = true
+	# Margen para las gotas ya emitidas que quedan detras al correr y para su
+	# caida completa. Un solo AABB local, no un volumen que cubra todo el mapa.
+	var margin := local_rain_radius + 8.0
+	rain_emitter.visibility_aabb = AABB(Vector3(-margin, -62.0, -margin), Vector3(margin * 2.0, 65.0, margin * 2.0))
 	var source_material := rain_emitter.process_material as ParticleProcessMaterial
 	if source_material != null:
 		_rain_process_material = source_material.duplicate() as ParticleProcessMaterial
 		rain_emitter.process_material = _rain_process_material
-		_outdoor_collision_mode = _rain_process_material.collision_mode
+		_rain_process_material.emission_box_extents = Vector3(local_rain_radius, 0.5, local_rain_radius)
+		_rain_process_material.spread = 0.0
+		_rain_process_material.collision_mode = ParticleProcessMaterial.COLLISION_HIDE_ON_CONTACT
+	# La lluvia sigue alrededor del jugador incluso bajo techo: los volumenes
+	# de cubierta deben continuar matando las gotas que entran en los edificios.
 	for child in $Rain.get_children():
 		if child is GPUParticlesCollision3D:
-			var collider := child as GPUParticlesCollision3D
-			_rain_colliders.append(collider)
-			_rain_collider_masks[collider] = collider.cull_mask
-
-
-func _is_player_sheltered() -> bool:
-	if not is_instance_valid(_player) or get_world_3d() == null:
-		return false
-	# Sotanos y tuneles siempre se consideran interiores, incluso si alguna losa
-	# de colision tiene una junta por la que pudiera escaparse el rayo vertical.
-	if _player.global_position.y < -0.35:
-		return true
-	var origin := _player.global_position + Vector3.UP * 0.2
-	var query := PhysicsRayQueryParameters3D.create(
-		origin,
-		origin + Vector3.UP * shelter_check_height,
-		1
-	)
-	query.collide_with_areas = false
-	if _player is CollisionObject3D:
-		query.exclude = [(_player as CollisionObject3D).get_rid()]
-	return not get_world_3d().direct_space_state.intersect_ray(query).is_empty()
-
-
-func _update_window_rain_anchor(player_position: Vector3) -> void:
-	var flat_distance := Vector2(
-		player_position.x - _window_anchor_origin.x,
-		player_position.z - _window_anchor_origin.z
-	).length()
-	if is_finite(flat_distance) and flat_distance < indoor_anchor_refresh_distance:
-		return
-	_window_anchor_origin = player_position
-	_window_rain_anchor = _find_nearest_open_sky_anchor(player_position)
-
-
-func _find_nearest_open_sky_anchor(origin: Vector3) -> Vector3:
-	var directions := [
-		Vector3.FORWARD, Vector3.RIGHT, Vector3.BACK, Vector3.LEFT,
-		(Vector3.FORWARD + Vector3.RIGHT).normalized(),
-		(Vector3.BACK + Vector3.RIGHT).normalized(),
-		(Vector3.BACK + Vector3.LEFT).normalized(),
-		(Vector3.FORWARD + Vector3.LEFT).normalized(),
-	]
-	for radius: float in [8.0, 12.0, 18.0, 25.0, 32.0]:
-		for direction: Vector3 in directions:
-			var candidate: Vector3 = origin + direction * radius
-			if _rain_patch_has_open_sky(candidate):
-				return candidate
-	# El escenario completo cabe holgadamente en este margen; solo se usa si la
-	# busqueda radial encuentra una cubierta excepcionalmente grande.
-	return origin + Vector3(36.0, 0.0, 0.0)
-
-
-func _rain_patch_has_open_sky(center: Vector3) -> bool:
-	var clearance := indoor_window_rain_radius * 0.82
-	var samples := [
-		center,
-		center + Vector3(clearance, 0.0, clearance),
-		center + Vector3(clearance, 0.0, -clearance),
-		center + Vector3(-clearance, 0.0, clearance),
-		center + Vector3(-clearance, 0.0, -clearance),
-	]
-	for sample: Vector3 in samples:
-		var start: Vector3 = sample + Vector3.UP * 0.2
-		var query := PhysicsRayQueryParameters3D.create(
-			start,
-			start + Vector3.UP * shelter_check_height,
-			1
-		)
-		query.collide_with_areas = false
-		if not get_world_3d().direct_space_state.intersect_ray(query).is_empty():
-			return false
-	return true
-
-
-func _set_rain_outdoors(outdoors: bool) -> void:
-	if outdoors == _rain_is_outdoors:
-		return
-	_rain_is_outdoors = outdoors
-	if _rain_process_material != null:
-		# Cero desactiva el muestreo de colision en el shader de particulas.
-		_rain_process_material.collision_mode = _outdoor_collision_mode if outdoors else 0
-		_rain_process_material.emission_box_extents = (
-			Vector3(14.0, 0.5, 14.0)
-			if outdoors
-			else Vector3(indoor_window_rain_radius, 0.5, indoor_window_rain_radius)
-		)
-	for collider in _rain_colliders:
-		if is_instance_valid(collider):
-			collider.visible = outdoors
-			collider.cull_mask = int(_rain_collider_masks.get(collider, 0xFFFFFFFF)) if outdoors else 0
-	# En interiores el emisor permanece activo fuera del edificio para que la
-	# tormenta siga viendose a traves de ventanas sin hacer llover en la habitacion.
-	rain_emitter.emitting = true
-	rain_emitter.restart()
+			child.visible = true
+			child.cull_mask |= rain_emitter.layers
 
 
 func is_rain_collision_active() -> bool:
-	return _rain_is_outdoors
+	return _rain_process_material != null and _rain_process_material.collision_mode == ParticleProcessMaterial.COLLISION_HIDE_ON_CONTACT
 
 
 func set_benchmark_frozen(frozen: bool) -> void:

@@ -1,5 +1,42 @@
 # Herramientas del proyecto
 
+- Segunda pasada de FPS: [PERFORMANCE_FOLLOWUP_2026-09-14](../docs/PERFORMANCE_FOLLOWUP_2026-09-14.md).
+  `benchmark_ground_floor_systems.gd` aísla sombras; `-- --scripts` aísla IA,
+  animaciones y lluvia. `benchmark_ground_floor_candidates.gd` compara candidatos;
+  `-- --only=sun_two_splits`, `three_local_shadows`, `static_merge` o
+  `candidate_baseline` permite procesos independientes. Requieren GPU y una sola
+  partida abierta. No modifican recursos ni la configuración del juego normal.
+  `static_geometry_merge_probe.gd` es un prototipo restaurable de agrupación;
+  `validate_static_geometry_merge_probe.gd` verifica su geometría en headless.
+
+- `benchmark_ground_floor_gameplay.gd`: recorre aparición → lavadora con jugador,
+  cámara, IA y física reales, a la resolución de la ventana. Compara madera
+  puesta/oculta/restaurada; `-- --batching` compara la nueva agrupación estática.
+  Guarda tiempos por fotograma, trayectorias y capturas en `output/`.
+  `validate_ground_floor_batching.gd`: verifica geometría, materiales, sombras,
+  CSG, colisiones y exclusiones, más la integración en la partida. Requiere GPU.
+
+- Auditoría del 14 de septiembre: resultados medidos, cambios conservadores y
+  sistemas propuestos en [PERFORMANCE_AUDIT_2026-09-14](../docs/PERFORMANCE_AUDIT_2026-09-14.md).
+  `benchmark_house_plank_floor.gd` compara suelo original, oculto y material simple
+  dentro de la misma escena. `-- --all` combina cuatro vistas y sombras en una sola
+  carga con la cámara del jugador. `-- --lit` usa la linterna real; `-- --close` mira
+  directamente la tarima; `-- --shadows` aísla sombras sólo en el diagnóstico.
+  `run_optimization_check.ps1 -Script res://tools/<script>.gd` ejecuta las pruebas
+  con timeout y logs, sin cerrar otros procesos de Godot.
+- `validate_procedural_mesh_cache.gd`: GPU real; equivalencia byte por byte de
+  mallas, invalidación de caché y cuatro pasadas A/B de CPU.
+  `validate_shadow_idle_processing.gd`: selección y transiciones de sombras
+  idénticas a 30/60/120 FPS, incluyendo reposo. `validate_idle_secondary_systems.gd`:
+  reactivación y tiempos de alertas, TV, spinner y trípode. Estas dos últimas
+  funcionan en headless. El inventario de rendimiento distingue ahora mallas
+  visibles en árbol y scripts que pueden procesar de sus flags locales.
+
+- `validate_house_plank_floor.gd`: verifica la capa desmontable de tablones,
+  sus recortes, colisiones originales y huecos. `render_house_plank_floor.gd`
+  revisa la integracion en el salon real. Detalles en
+  [HOUSE_PLANK_FLOOR](../docs/HOUSE_PLANK_FLOOR.md).
+
 - `generate_catacombs.py`: regenera `church_catacombs.tscn`. La casa lo carga
   al iniciar el minijuego de BoardedLabyrinthAccess (entrada de la iglesia),
   junto con su navegacion. No se instancia al arrancar ni en el editor.

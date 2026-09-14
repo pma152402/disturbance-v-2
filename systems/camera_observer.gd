@@ -4,6 +4,8 @@ signal observations_changed(observations: Array[Dictionary])
 signal recording_summary_ready(summary: Dictionary)
 
 const MAX_LIGHT_SOURCES_PER_TARGET := 4
+const LensVisibility := preload("res://systems/camera_lens_visibility.gd")
+const LENS_BLOCKING_OPACITY := 0.45
 const ObservableComponent := preload("res://systems/camera_observable.gd")
 const DISABLED_READOUT_COLOR := Color(0.48, 0.52, 0.49, 0.96)
 const VISUAL_OCCLUDER_NAME_HINTS := [
@@ -165,7 +167,8 @@ func analyze_recorded_frame(camera_state: Dictionary) -> Array[Dictionary]:
 	_analysis_camera.v_offset = float(camera_state.get("v_offset", 0.0))
 	_analysis_camera.frustum_offset = camera_state.get("frustum_offset", Vector2.ZERO) as Vector2
 	_analysis_camera.set_meta(&"observer_exclude_player", bool(camera_state.get("exclude_player", true)))
-	_sample_camera(_analysis_camera)
+	# Old frames without lens metadata remain clean; never use today's grime.
+	_sample_camera(_analysis_camera, camera_state.get("lens_grime", {}) as Dictionary)
 	return get_current_observations()
 
 
@@ -308,7 +311,7 @@ func _refresh_registry() -> void:
 		_player_rids.append(player.get_rid())
 
 
-func _sample_camera(camera_override: Camera3D = null) -> void:
+func _sample_camera(camera_override: Camera3D = null, recorded_grime: Dictionary = {}) -> void:
 	var camera := camera_override if is_instance_valid(camera_override) else get_viewport().get_camera_3d()
 	if camera == null or not camera.is_inside_tree():
 		_set_observations([])
@@ -318,6 +321,7 @@ func _sample_camera(camera_override: Camera3D = null) -> void:
 		_set_observations([])
 		return
 	var frustum := camera.get_frustum()
+	var lens_state := recorded_grime if is_instance_valid(camera_override) else LensVisibility.capture(get_tree())
 	var candidates: Array[Dictionary] = []
 	for observable: Node in _observables:
 		if not is_instance_valid(observable):
@@ -419,6 +423,11 @@ func _sample_camera(camera_override: Camera3D = null) -> void:
 	_visual_query_cache.clear()
 	_visual_sample_active = true
 	for candidate: Dictionary in candidates:
+		var uv := (candidate["screen_position"] as Vector2) / viewport_size
+		var lens_opacity := LensVisibility.opacity_at(uv, lens_state)
+		if lens_opacity >= LENS_BLOCKING_OPACITY:
+			continue
+		candidate["strength"] = float(candidate["strength"]) * (1.0 - lens_opacity)
 		var needs_los := bool(candidate.get("require_line_of_sight", true))
 		if needs_los:
 			if checked >= maximum_visibility_checks:

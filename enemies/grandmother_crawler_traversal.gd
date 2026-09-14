@@ -5,7 +5,10 @@ const SPIDER_MAX_JUMP_DISTANCE := 5.0
 const SPIDER_PREFERRED_JUMP_DISTANCE := 3.6
 const SPIDER_SUPPORT_OFFSET := 0.82
 const SPIDER_FOOTPRINT_RADIUS := 0.42
+const ATTACHMENT_REACH := 1.8
+const CORNER_SPEED := 6.6
 const JumpPlanner := preload("res://enemies/crawler_jump_planner.gd")
+var collision_guard := preload("res://enemies/crawler_collision_guard.gd").new()
 var _spider_plan: Dictionary = {}
 var _spider_recent: Array[Vector3] = []
 var _spider_recent_timer := 0.0
@@ -25,6 +28,9 @@ var pounce_aim := Vector3.ZERO
 var pounce_velocity := Vector3.ZERO
 var pounce_time := 0.0
 var pounce_hit := false
+var pounce_flight_duration := 0.6
+var _pounce_from_rotation := Quaternion.IDENTITY
+var _pounce_to_rotation := Quaternion.IDENTITY
 var landing_recovery := 0.0
 var _rejected: Array[Vector3] = []
 var _reject_seconds := 0.0
@@ -59,18 +65,99 @@ var spider_flight_duration := 0.0
 var spider_hit := false
 var spider_jump_cooldown := 0.0
 var spider_jump_count := 0
+var wants_to_travel := false
+
+func support_offset() -> float:
+	return SPIDER_SUPPORT_OFFSET * brain.global_basis.get_scale().abs().y
+
+func _body_clearance() -> float:
+	return 0.78 * brain.global_basis.get_scale().abs().y
 
 func spider_busy() -> bool:
 	return spider_winding_up or spider_leaping or _spider_retreating or spider_settling > 0.0
 
+func ensure_body_clear() -> bool:
+	if collision_guard.recover(self): return true
+	# Correcting an external nudge does not remove a valid architectural grip.
+	# Pause until the capsule clears, retaining adhesion rather than starting a
+	# seven-metre fall for a centimetre of overlap against the church vault.
+	if phase in [Phase.WALL, Phase.CEILING] and not spider_busy() and not pouncing:
+		if not _attachment_support(_center(), normal, ATTACHMENT_REACH).is_empty():
+			return false
+	# An external push invalidates a saved curve or fixed vomiting transform.
+	spider_winding_up = false
+	spider_leaping = false
+	_spider_retreating = false
+	spider_settling = 0.0
+	corner_active = false
+	pouncing = false
+	winding_up = false
+	_release_remaining = 0.0
+	phase = Phase.DROP
+	brain.on_spider_jump_aborted()
+	if is_instance_valid(brain.vomit) and brain.vomit.stationary(): brain.vomit.cancel()
+	return false
+
+func _attachment_support(center: Vector3, up: Vector3, reach: float) -> Dictionary:
+	var hit := _ray(center, center - up * reach)
+	if _structural(hit) and hit.normal.dot(up) > 0.8: return hit
+	# Only retry on a missing centre contact. Paired probes bridge tiny panel
+	# seams, while requiring support on BOTH sides prevents floating past edges.
+	var forward := JumpPlanner.aligned_basis(up, brain.global_basis.z).z
+	var side := up.cross(forward).normalized()
+	for tangent in [forward, side]:
+		var a := _ray(center + tangent * 0.16, center + tangent * 0.16 - up * reach)
+		if not _structural(a) or a.normal.dot(up) < 0.8: continue
+		var b := _ray(center - tangent * 0.16, center - tangent * 0.16 - up * reach)
+		if not _structural(b) or b.normal.dot(up) < 0.8: continue
+		if a.normal.dot(b.normal) > 0.95 and absf((Vector3(a.position) - Vector3(b.position)).dot(up)) < 0.08:
+			return a
+	return {}
+
+func _sweep_motion(motion: Vector3) -> Dictionary:
+	return collision_guard.sweep(self, motion)
+
+func _orient(up: Vector3, forward: Vector3, delta: float) -> bool:
+	return collision_guard.orient(self, up, forward, delta)
+
+func _land_on_floor(facing: Vector3) -> bool:
+	var basis := JumpPlanner.aligned_basis(Vector3.UP, facing).scaled(brain.global_basis.get_scale())
+	if not collision_guard.rotate_to(self, basis): return false
+	phase = Phase.GROUND
+	normal = Vector3.UP
+	brain.velocity = Vector3.ZERO
+	cooldown = 2.0
+	landing_recovery = 0.38
+	spider_settling = 0.18
+	brain._target_refresh_timer = 0.0
+	return true
+
+func _drop(delta: float) -> void:
+	var facing := brain.global_basis.z.slide(Vector3.UP)
+	if facing.length_squared() < 0.01: facing = wall_normal.slide(Vector3.UP)
+	var upright := _orient(Vector3.UP, facing, delta * 2.0)
+	if not upright:
+		# A capsule lying against the floor needs room ABOVE it to stand. The
+		# previous downward release kept it trapped and eventually crossed floors.
+		brain.velocity = Vector3.UP * 1.4 + wall_normal.slide(Vector3.UP).limit_length(1.0) * 0.45
+	elif brain.global_basis.y.normalized().y < 0.995:
+		brain.velocity = wall_normal.slide(Vector3.UP).limit_length(1.0) * 0.4
+	else:
+		brain.velocity = Vector3(0, maxf(brain.velocity.y - 12.0 * delta, -10.0), 0)
+	var contact := _sweep_motion(brain.velocity * delta)
+	if not contact.is_empty() and not contact.get("recovering", false) and contact.normal.y > 0.7 and brain.global_basis.y.normalized().y > 0.995:
+		_land_on_floor(facing)
+
 func begin_spider_jump(target: Dictionary, attack: bool = false, reason: String = "reposition") -> bool:
 	if spider_busy() or pouncing or winding_up or corner_active or target.is_empty() or spider_jump_cooldown > 0.0:
+		return false
+	if phase in [Phase.WALL, Phase.CEILING] and not _launch_support_exists(normal):
 		return false
 	var point := Vector3(target.get("position", Vector3.ZERO))
 	var target_normal := Vector3(target.get("normal", Vector3.UP)).normalized()
 	if not point.is_finite() or not target_normal.is_finite():
 		return false
-	var landing_center := point if attack else point + target_normal * SPIDER_SUPPORT_OFFSET
+	var landing_center := point if attack else point + target_normal * support_offset()
 	var jump_distance := _center().distance_to(landing_center)
 	if not attack and (jump_distance < SPIDER_MIN_JUMP_DISTANCE or jump_distance > SPIDER_MAX_JUMP_DISTANCE):
 		return false
@@ -119,7 +206,7 @@ func find_spider_jump_target(preferred_direction: Vector3 = Vector3.ZERO) -> Dic
 		if not _spider_surface_allowed(hit):
 			continue
 		var hit_normal := Vector3(hit.normal).normalized()
-		var landing_center := Vector3(hit.position) + hit_normal * SPIDER_SUPPORT_OFFSET
+		var landing_center := Vector3(hit.position) + hit_normal * support_offset()
 		var distance := center.distance_to(landing_center)
 		if distance < SPIDER_MIN_JUMP_DISTANCE or distance > SPIDER_MAX_JUMP_DISTANCE:
 			continue
@@ -132,7 +219,7 @@ func find_spider_jump_target(preferred_direction: Vector3 = Vector3.ZERO) -> Dic
 		if preferred.length_squared() > 0.01:
 			score += direction.dot(preferred) * 1.8
 		if hit_normal.y < -0.65:
-			score += 0.2
+			score += 2.5 if normal.y < -0.65 and active() else 0.2
 		if hit_normal.dot(normal) > 0.92:
 			score += 0.25
 		candidates.append({"position": Vector3(hit.position), "normal": hit_normal, "collider": hit.collider, "direction": direction, "score": score})
@@ -159,11 +246,12 @@ func find_spider_jump_target(preferred_direction: Vector3 = Vector3.ZERO) -> Dic
 			if not _spider_landing_is_safe(Vector3(plane_hit.position), hit_normal, _spider_landing_facing(plane_hit.position, hit_normal)):
 				continue
 			var score := tangent.dot(preferred) * 1.8 - absf(float(distance) - SPIDER_PREFERRED_JUMP_DISTANCE) * 0.5 + 0.25
+			if support_normal.y < -0.65: score += 2.5
 			candidates.append({"position": Vector3(plane_hit.position), "normal": hit_normal, "collider": plane_hit.collider, "direction": tangent, "score": score})
 	candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.score > b.score)
 	var checked := 0
 	for candidate in candidates:
-		var point: Vector3 = candidate.position + candidate.normal * SPIDER_SUPPORT_OFFSET
+		var point: Vector3 = candidate.position + candidate.normal * support_offset()
 		if _center().distance_to(point) > SPIDER_MAX_JUMP_DISTANCE or _center().distance_to(point) < SPIDER_MIN_JUMP_DISTANCE:
 			continue
 		var repeated := false
@@ -221,10 +309,11 @@ func _spider_landing_is_safe(point: Vector3, landing_normal: Vector3, preferred_
 	for offset in [Vector3.ZERO, forward * 0.75, -forward * 0.96,
 		forward * 0.67 + side * 0.43, forward * 0.67 - side * 0.43,
 		-forward * 0.88 + side * 0.29, -forward * 0.88 - side * 0.29]:
-		var probe := _ray(point + offset + landing_normal * 0.32, point + offset - landing_normal * 0.28)
+		var scaled_offset: Vector3 = offset * brain.global_basis.get_scale().abs().y
+		var probe := _ray(point + scaled_offset + landing_normal * 0.32, point + scaled_offset - landing_normal * 0.28)
 		if not _spider_surface_allowed(probe) or Vector3(probe.normal).normalized().dot(landing_normal) < 0.86:
 			return false
-	return _spider_pose_is_clear(point + landing_normal * SPIDER_SUPPORT_OFFSET, landing_normal, forward)
+	return _spider_pose_is_clear(point + landing_normal * support_offset(), landing_normal, forward)
 
 func _spider_pose_is_clear(center: Vector3, landing_normal: Vector3, forward: Vector3) -> bool:
 	forward = forward.slide(landing_normal).normalized()
@@ -233,11 +322,11 @@ func _spider_pose_is_clear(center: Vector3, landing_normal: Vector3, forward: Ve
 	var basis := Basis(landing_normal.cross(forward).normalized(), landing_normal, forward).orthonormalized()
 	var query := PhysicsShapeQueryParameters3D.new()
 	query.shape = collision.shape
-	query.transform = Transform3D(basis, center)
+	query.transform = Transform3D(basis.scaled(brain.global_basis.get_scale()), center)
 	query.collision_mask = brain.collision_mask | SURFACE_SUPPORT_LAYER
 	query.exclude = [brain.get_rid()]
 	query.margin = 0.015
-	return brain.get_world_3d().direct_space_state.intersect_shape(query, 1).is_empty()
+	return not collision_guard.overlaps(self, query)
 
 func reject_entry(point: Vector3) -> void:
 	_rejected.append(point)
@@ -304,6 +393,8 @@ func consider(delta: float, evidence: Vector3, motivated: bool) -> void:
 	brain.velocity = Vector3.ZERO
 
 func step(delta: float, evidence: Vector3, memory_valid: bool) -> void:
+	wants_to_travel = false
+	if not ensure_body_clear(): return
 	elapsed += delta
 	landing_recovery = maxf(0, landing_recovery - delta)
 	spider_jump_cooldown = maxf(0.0, spider_jump_cooldown - delta)
@@ -317,6 +408,9 @@ func step(delta: float, evidence: Vector3, memory_valid: bool) -> void:
 		return
 	if spider_settling > 0.0:
 		spider_settling = maxf(0.0, spider_settling - delta)
+		if not _launch_support_exists(brain.global_basis.y.normalized()):
+			spider_settling = 0.0
+			phase = Phase.DROP
 		brain.velocity = Vector3.ZERO
 		return
 	if _release_remaining > 0.0:
@@ -342,13 +436,12 @@ func step(delta: float, evidence: Vector3, memory_valid: bool) -> void:
 	else:
 		_transition_stall = 0.0
 	if corner_active:
+		wants_to_travel = true
 		if _corner_kind == 0:
 			_step_ceiling_wall_corner(delta)
 		else:
 			_step_wall_horizontal_corner(delta)
 		return
-	if phase == Phase.WALL and elapsed > 18.0:
-		phase = Phase.DROP
 	if phase == Phase.DROP:
 		winding_up = false
 		if pouncing:
@@ -363,9 +456,9 @@ func step(delta: float, evidence: Vector3, memory_valid: bool) -> void:
 	# A church balustrade is 1.08 m above its adjoining balcony. While crossing
 	# its cap, retain support on the lower slab instead of treating that step as
 	# empty air halfway through the climb.
-	var support_distance := 2.2 if _horizontal_commit_remaining > 0.0 else 1.8
-	var support := _ray(center, center - normal * support_distance)
-	if not _structural(support) or support.normal.dot(normal) < 0.8:
+	var support_distance := 2.2 if _horizontal_commit_remaining > 0.0 else ATTACHMENT_REACH
+	var support := _attachment_support(center, normal, support_distance)
+	if support.is_empty():
 		if phase == Phase.WALL and _wall_to_horizontal(Vector3.UP * wall_travel_sign, delta):
 			return
 		phase = Phase.DROP
@@ -381,15 +474,20 @@ func step(delta: float, evidence: Vector3, memory_valid: bool) -> void:
 		if wall_travel_sign > 0.0 and wall_transition_lockout <= 0.0 and _structural(roof) and roof.normal.y < -0.65:
 			phase = Phase.CEILING
 			normal = roof.normal
+			# Clear the wall before pursuing sideways. Otherwise the forward probe
+			# selects that same wall while the body is still turning onto the roof.
+			_horizontal_commit_direction = wall_normal.slide(normal).normalized()
+			_horizontal_commit_remaining = 0.65
+			wall_transition_lockout = 0.65
 			corner_transitions += 1
 			return
 	else:
 		ceiling_elapsed += delta
 		var distance := (evidence - center).slide(Vector3.UP).length()
-		if not memory_valid or distance < 1.5:
+		if _horizontal_commit_remaining <= 0.0 and (not memory_valid or distance < 1.5):
 			direction = Vector3.ZERO
 		# Acquire once and lock the attack destination before leaving the roof.
-		if not winding_up and ceiling_elapsed > 1.2 and distance < 4.5 and center.y - evidence.y > 1.8 and brain.global_basis.y.dot(normal) > 0.98 and brain.call("can_ceiling_pounce"):
+		if not winding_up and ceiling_elapsed > 1.2 and distance < 4.5 and center.y - evidence.y > 1.8 and brain.global_basis.y.normalized().dot(normal) > 0.98 and brain.call("can_ceiling_pounce"):
 			winding_up = true
 			windup_time = 0.0
 			pounce_aim = evidence + Vector3.UP * 0.85 + Vector3(brain.get("_evidence_velocity")) * 0.2
@@ -399,16 +497,26 @@ func step(delta: float, evidence: Vector3, memory_valid: bool) -> void:
 			if windup_time >= 0.55:
 				_begin_pounce()
 				return
+		if (normal.y > 0.65 or wall_transition_lockout <= 0.0) and brain.global_basis.y.normalized().dot(normal) > 0.98 and direction.length_squared() > 0.01 and _try_concave_wall(center, direction):
+			return
 		# Look beyond a complete church rail (24 cm deep). A shorter probe can
 		# mistake the underside of the balustrade for more ceiling and drive the
 		# capsule straight into its fascia instead of recognizing the corner.
-		var next := _ray(center + direction * 0.92, center + direction * 0.92 - normal * support_distance)
-		if not _structural(next) or next.normal.dot(normal) < 0.8:
+		var next := _attachment_support(center + direction * 0.92, normal, support_distance)
+		if next.is_empty():
 			if direction.length_squared() > 0.01 and _ceiling_to_wall(direction, support, delta):
 				return
 			# A free edge with no solid vertical face is a perch, not empty air.
 			direction = Vector3.ZERO
-	var correction: Vector3 = (support.position + normal * 0.78 - center) * 4.0
+	wants_to_travel = direction.length_squared() > 0.01
+	# Offset probes must correct only distance to the plane, never pull the body
+	# sideways toward whichever shoulder ray happened to find a panel first.
+	var plane_distance: float = (Vector3(support.position) - center).dot(normal)
+	if _horizontal_commit_remaining > 0.0 and normal.y > 0.65:
+		# Cross the rail before descending to the lower balcony. Following the
+		# lower support immediately drove the capsule's rear into the rail cap.
+		plane_distance = maxf(plane_distance, (_corner_face_position - center).dot(normal))
+	var correction: Vector3 = normal * (plane_distance + _body_clearance()) * 4.0
 	var travel_speed: float = brain.get_surface_hunt_speed(memory_valid)
 	var motion := direction * travel_speed + correction.limit_length(1.8)
 	var facing := direction if direction.length_squared() > 0.01 else brain.global_basis.z.slide(normal).normalized()
@@ -416,20 +524,46 @@ func step(delta: float, evidence: Vector3, memory_valid: bool) -> void:
 		motion = normal * 0.65
 	brain.velocity = motion
 	var hit := _sweep_motion(motion * delta)
-	if not hit.is_empty() and elapsed > 2.0:
-		if phase == Phase.WALL:
-			phase = Phase.DROP
-		else:
-			brain.velocity = Vector3.ZERO
+	if not hit.is_empty():
+		# A blocked advance is still supported. Let the corner/escape controller
+		# choose another route instead of letting go on every wall collision.
+		brain.velocity = Vector3.ZERO
+
+func _try_concave_wall(center: Vector3, direction: Vector3) -> bool:
+	# On the balcony side of a rail, its inner face is in front of the body.
+	# The convex-edge probe starts beyond the rail and sees the opposite face;
+	# accepting that face attempted to walk through the entire balustrade.
+	var face := _ray(center, center + direction * 0.95)
+	if not _structural(face) or absf(face.normal.y) > 0.2 or face.normal.dot(direction) > -0.6: return false
+	var above: Vector3 = face.position + face.normal * 0.12 + Vector3.UP * 0.35
+	var continuation := _ray(above, above - face.normal * 0.3)
+	if not _structural(continuation) or continuation.normal.dot(face.normal) < 0.9:
+		# Near the top of a rail there is no face another 35 cm above. Its
+		# continuous lower face is sufficient to climb the last part onto the cap.
+		var below: Vector3 = face.position + face.normal * 0.12 + Vector3.DOWN * 0.35
+		continuation = _ray(below, below - face.normal * 0.3)
+		if not _structural(continuation) or continuation.normal.dot(face.normal) < 0.9: return false
+	normal = face.normal.normalized()
+	wall_normal = normal
+	wall_travel_sign = 1.0
+	phase = Phase.WALL
+	elapsed = 0.0
+	wall_transition_lockout = 0.3
+	corner_transitions += 1
+	brain.velocity = Vector3.ZERO
+	return true
 
 func _step_spider_windup(delta: float) -> void:
+	if not _launch_support_exists(spider_launch_normal):
+		_abort_spider_leap(spider_launch_normal)
+		return
 	spider_windup_time += delta
 	brain.velocity = Vector3.ZERO
 	if spider_windup_time < 0.42:
 		return
 	# Furniture or the player can enter the arc during anticipation. Revalidate
 	# before takeoff while she can still cancel on her original support.
-	var point := spider_target_position if spider_jump_attack else spider_target_position - spider_target_normal * SPIDER_SUPPORT_OFFSET
+	var point := spider_target_position if spider_jump_attack else spider_target_position - spider_target_normal * support_offset()
 	var fresh := JumpPlanner.build(self, point, spider_target_normal, _spider_plan.facing, spider_jump_attack)
 	if fresh.is_empty() or (not spider_jump_attack and not _spider_landing_is_safe(point, spider_target_normal, _spider_plan.facing)):
 		_cancel_spider_on_support()
@@ -485,6 +619,9 @@ func _remember_spider_point(point: Vector3) -> void:
 	_spider_recent_timer = 10.0
 
 func _cancel_spider_on_support() -> void:
+	if not _launch_support_exists(spider_launch_normal):
+		_abort_spider_leap(spider_launch_normal)
+		return
 	spider_winding_up = false
 	spider_leaping = false
 	normal = spider_launch_normal
@@ -492,6 +629,11 @@ func _cancel_spider_on_support() -> void:
 	spider_jump_cooldown = 0.8
 	_remember_spider_point(spider_target_position)
 	brain.call("on_spider_jump_aborted")
+
+func _launch_support_exists(up: Vector3) -> bool:
+	# Match climbing reach through anticipation, chained jumps and settling.
+	# The shorter grounded probe still detects a platform removed underfoot.
+	return not _attachment_support(_center(), up, ATTACHMENT_REACH if up.y < 0.65 else 1.15).is_empty()
 
 func _start_spider_retreat() -> void:
 	spider_leaping = false
@@ -537,13 +679,29 @@ func _abort_spider_leap(obstacle_normal: Vector3 = Vector3.ZERO) -> void:
 		brain.call("on_spider_jump_aborted")
 
 func recover_blocked_transition() -> void:
+	# If a connected corner still supports the current orientation, recover on
+	# that surface first. A following escape jump can then choose a new route.
+	var up := brain.global_basis.y.normalized()
+	var support := _attachment_support(_center(), up, ATTACHMENT_REACH)
+	if phase in [Phase.WALL, Phase.CEILING] and up.y < 0.65 and not support.is_empty():
+		corner_active = false
+		winding_up = false
+		normal = support.normal.normalized()
+		phase = Phase.CEILING if normal.y < -0.65 else Phase.WALL
+		wall_normal = normal
+		elapsed = 0.0
+		_release_remaining = 0.0
+		brain.velocity = Vector3.ZERO
+		brain.call("on_spider_jump_aborted")
+		return
 	# A stalled corner/drop was previously exempt from every watchdog. Release
 	# along a capsule-tested direction, then let the normal upright drop resume.
 	corner_active = false
 	pouncing = false
 	winding_up = false
 	phase = Phase.DROP
-	var directions: Array[Vector3] = [normal, wall_normal, Vector3.UP, brain.global_basis.x, -brain.global_basis.x, brain.global_basis.z, -brain.global_basis.z]
+	_release_remaining = 0.0
+	var directions: Array[Vector3] = [Vector3.UP, wall_normal, normal, brain.global_basis.x, -brain.global_basis.x, brain.global_basis.z, -brain.global_basis.z]
 	for direction in directions:
 		if direction.length_squared() < 0.01:
 			continue
@@ -551,6 +709,9 @@ func recover_blocked_transition() -> void:
 		query.motion = direction.normalized() * 0.45
 		if brain.get_world_3d().direct_space_state.cast_motion(query)[0] < 0.98:
 			continue
+		var destination := collision.global_transform
+		destination.origin += query.motion
+		if collision_guard.penetrates(self, destination): continue
 		_release_direction = direction.normalized()
 		_release_remaining = 0.34
 		wall_normal = _release_direction
@@ -565,13 +726,18 @@ func _finish_spider_landing(landing_normal: Vector3, facing: Vector3) -> bool:
 	# The landing is only committed once the real capsule can assume a feet-first
 	# pose. If a dynamic obstacle entered the destination, abort into an upright
 	# drop instead of setting a surface phase while the model is lying sideways.
-	var point := _center() - landing_normal * SPIDER_SUPPORT_OFFSET
+	var point := _center() - landing_normal * support_offset()
 	if not _spider_landing_is_safe(point, landing_normal, facing):
 		return false
 	if brain.global_basis.y.normalized().dot(landing_normal) < 0.995:
 		return false
 	if brain.global_basis.z.normalized().dot(facing) < 0.995:
 		return false
+	if landing_normal.y > 0.65:
+		# Ground navigation expects an upright capsule. Check that final pose
+		# around its centre too, including slightly inclined landing surfaces.
+		var upright := JumpPlanner.aligned_basis(Vector3.UP, facing).scaled(brain.global_basis.get_scale())
+		if not collision_guard.rotate_to(self, upright): return false
 	spider_leaping = false
 	spider_winding_up = false
 	spider_jump_cooldown = 4.5 if spider_jump_attack else 3.0
@@ -585,7 +751,6 @@ func _finish_spider_landing(landing_normal: Vector3, facing: Vector3) -> bool:
 	brain.velocity = Vector3.ZERO
 	if landing_normal.y > 0.65:
 		phase = Phase.GROUND
-		brain.rotation = Vector3(0.0, atan2(facing.x, facing.z), 0.0)
 	elif landing_normal.y < -0.65:
 		phase = Phase.CEILING
 	else:
@@ -630,6 +795,9 @@ func _ceiling_to_wall(direction: Vector3, ceiling_support: Dictionary, delta: fl
 	if continues_upper:
 		outer_offset = maxf(outer_offset, (Vector3(upper.position) - Vector3(face.position)).dot(wall_normal))
 	_corner_face_position = Vector3(face.position) + wall_normal * outer_offset
+	var clearance_pose := collision.global_transform
+	clearance_pose.origin = _corner_face_position + normal * _body_clearance() + wall_normal * _body_clearance()
+	if not JumpPlanner.clear_segment(self, collision.global_transform, clearance_pose): return false
 	_corner_face_normal = wall_normal
 	_corner_old_normal = normal
 	_corner_travel_sign = -1.0 if continues_lower else 1.0
@@ -646,8 +814,8 @@ func _step_ceiling_wall_corner(delta: float) -> void:
 	# avoids both capsule penetration and a visible one-frame teleport.
 	var target: Vector3
 	if _corner_stage == 0:
-		target = _corner_face_position + _corner_old_normal * 0.78 + _corner_face_normal * 0.78
-		var motion := (target - _center()).limit_length(0.08)
+		target = _corner_face_position + _corner_old_normal * _body_clearance() + _corner_face_normal * _body_clearance()
+		var motion := (target - _center()).limit_length(CORNER_SPEED * delta)
 		brain.velocity = motion / maxf(delta, 0.001)
 		_sweep_motion(motion)
 		if _center().distance_to(target) < 0.06:
@@ -658,11 +826,11 @@ func _step_ceiling_wall_corner(delta: float) -> void:
 	if not _orient(normal, facing, delta * 2.2):
 		brain.velocity = Vector3.ZERO
 		return
-	target = _corner_face_position + normal * 0.78 + facing * 0.18
-	var motion := (target - _center()).limit_length(0.08)
+	target = _corner_face_position + normal * _body_clearance() + facing * 0.18
+	var motion := (target - _center()).limit_length(CORNER_SPEED * delta)
 	brain.velocity = motion / maxf(delta, 0.001)
 	_sweep_motion(motion)
-	if _center().distance_to(target) < 0.07:
+	if _center().distance_to(target) < 0.07 and brain.global_basis.y.normalized().dot(normal) > 0.985:
 		phase = Phase.WALL
 		wall_travel_sign = _corner_travel_sign
 		wall_transition_lockout = 0.55
@@ -671,7 +839,9 @@ func _step_ceiling_wall_corner(delta: float) -> void:
 		brain.velocity = Vector3.ZERO
 
 func _wall_to_horizontal(direction: Vector3, delta: float) -> bool:
-	if wall_transition_lockout > 0.0 or _last_support_position == Vector3.ZERO:
+	# Reaching the physical end of a wall overrides the anti-oscillation timer;
+	# the faster transition can reach a narrow rail cap before that timer ends.
+	if _last_support_position == Vector3.ZERO:
 		return false
 	var along := direction.normalized()
 	# Move the probe through the edge and cast back along the direction of
@@ -702,9 +872,9 @@ func _step_wall_horizontal_corner(delta: float) -> void:
 	# Clear the end of the wall before rotating the capsule onto the horizontal
 	# plane. Completing the phase early would cast the next support ray from
 	# inside the rail cap and make the crawler fall.
-	var target := _corner_face_position + _corner_old_normal * 0.78 + _corner_face_normal * 0.78
+	var target := _corner_face_position + _corner_old_normal * _body_clearance() + _corner_face_normal * _body_clearance()
 	if _corner_stage == 0:
-		var motion := (target - _center()).limit_length(0.08)
+		var motion := (target - _center()).limit_length(CORNER_SPEED * delta)
 		brain.velocity = motion / maxf(delta, 0.001)
 		_sweep_motion(motion)
 		if _center().distance_to(target) < 0.06:
@@ -719,8 +889,8 @@ func _step_wall_horizontal_corner(delta: float) -> void:
 		return
 	# Once horizontal, move over the narrow cap. Keeping the old wall offset
 	# would leave the support ray outside the balustrade and cause an immediate fall.
-	target = _corner_face_position + _corner_face_normal * 0.78 + _corner_across * 0.04
-	var motion := (target - _center()).limit_length(0.08)
+	target = _corner_face_position + _corner_face_normal * _body_clearance() + _corner_across * 0.04
+	var motion := (target - _center()).limit_length(CORNER_SPEED * delta)
 	brain.velocity = motion / maxf(delta, 0.001)
 	_sweep_motion(motion)
 	if _center().distance_to(target) < 0.06:
@@ -742,6 +912,9 @@ func _begin_pounce() -> void:
 	var offset := pounce_aim - _center()
 	var height := maxf(-offset.y, 0.1)
 	var flight := clampf((-1.8 + sqrt(1.8 * 1.8 + 24.0 * height)) / 12.0, 0.2, 1.6)
+	pounce_flight_duration = flight
+	_pounce_from_rotation = brain.global_basis.orthonormalized().get_rotation_quaternion()
+	_pounce_to_rotation = JumpPlanner.aligned_basis(Vector3.UP, offset.slide(Vector3.UP)).get_rotation_quaternion()
 	pounce_velocity = (offset.slide(Vector3.UP) / flight).limit_length(5.5) + Vector3.DOWN * 1.8
 
 func _step_pounce(delta: float) -> void:
@@ -750,7 +923,14 @@ func _step_pounce(delta: float) -> void:
 	var facing := pounce_velocity.slide(Vector3.UP).normalized()
 	if facing.length_squared() < 0.01:
 		facing = brain.global_basis.z.slide(Vector3.UP).normalized()
-	_orient(Vector3.UP, facing, delta * 1.8)
+	# Finish the somersault during the first part of the dive, instead of an
+	# exponential turn that still had not finished when a low balcony hit ground.
+	var turn := smoothstep(0.0, maxf(0.16, pounce_flight_duration * 0.58), pounce_time)
+	var pose := Basis(_pounce_from_rotation.slerp(_pounce_to_rotation, turn)).scaled(brain.global_basis.get_scale())
+	if not collision_guard.rotate_to(self, pose):
+		pouncing = false
+		brain.velocity = Vector3.ZERO
+		return
 	pounce_velocity.y = maxf(-18.0, pounce_velocity.y - 12.0 * delta)
 	brain.velocity = pounce_velocity
 	var hit := _sweep_motion(pounce_velocity * delta)
@@ -769,11 +949,8 @@ func _step_pounce(delta: float) -> void:
 			return
 		pouncing = false
 		brain.velocity = Vector3.ZERO
-		if hit.normal.y > 0.7 and brain.global_basis.y.y > 0.98:
-			phase = Phase.GROUND
-			brain.rotation = Vector3(0, atan2(facing.x, facing.z), 0)
-			cooldown = 2.0
-			landing_recovery = 0.35
+		if hit.normal.y > 0.7 and brain.global_basis.y.normalized().y > 0.995:
+			_land_on_floor(facing)
 		else:
 			wall_normal = hit.normal.slide(Vector3.UP).normalized()
 	if pounce_time > 3.0:

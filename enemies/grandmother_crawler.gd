@@ -13,7 +13,7 @@ var _surface_sense_timer := 0.0
 @export_group("Spider jumps")
 @export var spider_jump_enabled := true
 @export_range(3.0, 10.0, 0.25) var spider_stuck_seconds := 4.0
-@export_range(1, 6, 1) var spider_max_consecutive_jumps := 6
+@export_range(1, 3, 1) var spider_max_consecutive_jumps := 3
 @export_range(0.4, 2.0, 0.05) var spider_moving_stuck_seconds := 0.8
 var _spider_stuck_elapsed := 0.0
 var _spider_stuck_origin := Vector3.ZERO
@@ -92,7 +92,12 @@ func get_surface_hunt_speed(memory_valid: bool) -> float:
 		return maxf(climb_speed, chase_speed * 0.72)
 	return climb_speed
 
+func _turn_toward(target_yaw: float, delta: float, responsiveness: float) -> void:
+	# This agile variant keeps the original creature's controller untouched.
+	super._turn_toward(target_yaw, delta, responsiveness * 2.4)
+
 func _physics_process(delta: float) -> void:
+	if not surface.ensure_body_clear(): return
 	_update_camera_stalking(delta)
 	if is_instance_valid(vomit) and vomit.step(delta):
 		return
@@ -310,20 +315,30 @@ func _init() -> void:
 
 func _ready() -> void:
 	super._ready()
+	# El agente usa metros de mundo, mientras la cápsula hereda la escala.
+	var body_scale := global_basis.get_scale().abs().y
+	navigation_agent.height *= body_scale
+	navigation_agent.radius *= body_scale
 	var visual := get_node("EditableVisual")
 	_camera_frame_points.assign([visual._head, visual._left_shoulder, visual._right_shoulder,
 		visual._left_elbow, visual._right_elbow, visual._left_wrist, visual._right_wrist])
 	_camera_frame_points.append_array(visual.hips)
 	_camera_frame_points.append_array(visual.knees)
 	_camera_frame_points.append_array(visual.ankles)
-	visual.shadow_coat = preload("res://enemies/crawler_shadow_coat.gd").new()
+	visual.shadow_coat = _create_shadow_coat()
 	visual.shadow_coat.configure(self, visual)
 	surface.cooldown = 1.0
 	_spider_stuck_origin = global_position
+	_setup_vomit(visual)
+
+func _setup_vomit(visual: Node3D) -> void:
 	vomit = preload("res://enemies/crawler_vomit_attack.gd").new()
 	vomit.name = "VomitAttack"
 	add_child(vomit)
 	vomit.setup(self, visual)
+
+func _create_shadow_coat() -> RefCounted:
+	return preload("res://enemies/crawler_shadow_coat.gd").new()
 
 func _update_spider_jump_behavior(delta: float) -> void:
 	if not spider_jump_enabled or remain_still or (dormant_until_door_opens and not _dormant_released):
@@ -358,7 +373,9 @@ func _update_spider_jump_behavior(delta: float) -> void:
 		_spider_chain_remaining = 0
 		_spider_chain_reason = "stuck"
 		_resume_after_escape()
-	var trying_to_advance := _was_trying_to_move and current_state not in [State.ATTACK, State.EAT]
+	# Ground movement intent stays cached while attached. Using it up here
+	# mistook every deliberate perch for a blocked chase and jumped every 0.8 s.
+	var trying_to_advance: bool = surface.wants_to_travel if surface.active() else _was_trying_to_move and current_state not in [State.ATTACK, State.EAT]
 	# La pausa de un ataque no es tiempo bloqueada al volver a caminar.
 	# Cada cambio entre espera y avance inicia su propio intervalo de muestra.
 	if trying_to_advance != _spider_was_advancing:
@@ -480,6 +497,9 @@ func on_spider_jump_aborted() -> void:
 	_spider_best_goal_distance = INF
 	_spider_stuck_origin = surface._center()
 	_spider_retry_timer = 1.0
+	_has_ceiling_goal = false
+	_ceiling_route_timer = maxf(_ceiling_route_timer, 1.0)
+	_target_refresh_timer = 0.0
 
 func _has_clear_line_to(point: Vector3, target: Node) -> bool:
 	# Sight originates at this creature's actual low head.

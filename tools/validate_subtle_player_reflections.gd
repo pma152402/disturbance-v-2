@@ -222,10 +222,42 @@ func _run() -> void:
 	glass.queue_free()
 	await _frames(2)
 	_check(controller.surfaces.size() == remaining - 1, "Descargar cristal limpia su registro y reflejo")
+	await _validate_registration_lifecycle(world, controller)
 	print("REFLEJOS SUTILES: ", "FALLO" if _failed else "OK: superficies, posturas, limites, oclusion y reposo")
 	world.queue_free()
 	await process_frame
 	quit(1 if _failed else 0)
+
+
+func _validate_registration_lifecycle(world: Node3D, controller: Node) -> void:
+	var previous_count: int = controller.surfaces.size()
+	var transient_parent := Node3D.new()
+	transient_parent.name = "WindowGlass_transient"
+	world.add_child(transient_parent)
+	var transient := MeshInstance3D.new()
+	transient.mesh = BoxMesh.new()
+	transient_parent.add_child(transient)
+	var transient_id := transient.get_instance_id()
+	# Reproduce el agrupado de geometría: alta y liberación antes del diferido.
+	transient_parent.free()
+	await _frames(2)
+	_check(controller.surfaces.size() == previous_count and not controller._registered.has(transient_id), "El registro diferido debe ignorar una malla ya liberada")
+	var persistent_parent := Node3D.new()
+	persistent_parent.name = "WindowGlass_persistent"
+	world.add_child(persistent_parent)
+	var persistent := MeshInstance3D.new()
+	persistent_parent.add_child(persistent)
+	# La geometría puede configurarse después de node_added, antes del diferido.
+	persistent.mesh = BoxMesh.new()
+	var persistent_id := persistent.get_instance_id()
+	await _frames(2)
+	_check(controller.surfaces.size() == previous_count + 1 and controller._registered.has(persistent_id), "Una malla persistente debe registrarse normalmente tras el alta")
+	_check(persistent_parent.get_node_or_null("SubtlePlayerReflection") != null, "El alta diferida debe crear el reflejo de la nueva ventana")
+	controller._register_surface(persistent)
+	_check(controller.surfaces.size() == previous_count + 1, "El registro directo debe conservar su deduplicación")
+	persistent_parent.free()
+	await _frames(2)
+	_check(controller.surfaces.size() == previous_count and not controller._registered.has(persistent_id), "Liberar la malla persistente debe limpiar registro y reflejo")
 
 
 func _active(controller: Node) -> int:

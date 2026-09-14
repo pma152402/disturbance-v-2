@@ -28,7 +28,7 @@ Las orientaciones de muñeca se guardan en el espacio local de la criatura. La r
 
 La trepadora dispone de un salto de emergencia entre suelo, paredes y techo, limitado a cinco metros entre centros corporales. La búsqueda favorece recorridos de 3,6 metros y comprueba alternativas de 1,2, 2,4 y 4,8 metros: conserva salidas cortas para espacios estrechos. El planificador comprueba la cápsula y su rotación a lo largo de toda la curva; el controlador ejecuta esa misma curva con subpasos. Primero prueba arcos bajos y solo los eleva para librar obstáculos. Se comprime durante 0,42 segundos, vuelve a validar el recorrido antes de despegar y vuela entre 0,28 y 0,68 segundos según la longitud del arco. La rotación termina antes de alcanzar el destino. La IA no utiliza este salto al patrullar, perseguir ni atacar con normalidad.
 
-Si el centro físico permanece en el mismo punto durante cuatro segundos de espera, prepara de uno a seis saltos, con 0,28 segundos de apoyo entre ellos. Si está intentando caminar, el bloqueo se detecta a los 0,8 segundos; dar vueltas sin progresar hacia el siguiente tramo de la ruta se detecta a los 1,5 segundos. Una pausa de ataque no acumula atasco para la marcha siguiente, y alejarse de la presa siguiendo un desvío válido o trepando tampoco cuenta como órbita. Cada destino se valida de nuevo y la cadena termina antes si recupera una persecución cercana o se queda sin destinos seguros. Recuerda durante diez segundos los lugares recién visitados o fallidos para evitar idas y vueltas. Los bancos, muebles, bordes estrechos y destinos sin espacio para la cápsula completa quedan descartados. Un objeto que entra durante la preparación cancela el salto; si entra en vuelo, intenta retroceder por las posiciones ya recorridas y comprobadas. Si tampoco puede retroceder, busca espacio para recuperar la vertical. Los estados de giro y caída tienen su propio detector de inmovilidad: ya no están excluidos indefinidamente de la recuperación.
+Si el centro físico permanece en el mismo punto durante cuatro segundos de espera, prepara de uno a tres saltos, con 0,28 segundos de apoyo entre ellos. Si está intentando caminar, el bloqueo se detecta a los 0,8 segundos; dar vueltas sin progresar hacia el siguiente tramo de la ruta se detecta a los 1,5 segundos. Una pausa de ataque no acumula atasco para la marcha siguiente, y alejarse de la presa siguiendo un desvío válido o trepando tampoco cuenta como órbita. Cada destino se valida de nuevo y la cadena termina antes si recupera una persecución cercana o se queda sin destinos seguros. Recuerda durante diez segundos los lugares recién visitados o fallidos para evitar idas y vueltas. Los bancos, muebles, bordes estrechos y destinos sin espacio para la cápsula completa quedan descartados. Un objeto que entra durante la preparación cancela el salto; si entra en vuelo, intenta retroceder por las posiciones ya recorridas y comprobadas. Si tampoco puede retroceder, busca espacio para recuperar la vertical. Los estados de giro y caída tienen su propio detector de inmovilidad: ya no están excluidos indefinidamente de la recuperación.
 
 El giro termina al 60% del vuelo y los cuatro apoyos están desplegados al 88%, antes del contacto. Selección de destino, despegue y aterrizaje usan la misma orientación de la huella, comprobando las cuatro esquinas de manos y pies además del centro y los extremos longitudinales. Solo se confirma la recepción con el cuerpo y su rumbo alineados. La variante trepadora desactiva explícitamente el salto bípedo heredado en su escena para que no compita con este controlador.
 
@@ -40,6 +40,90 @@ La persecución a pie adquiere prioridad al confirmar al jugador a menos de seis
 
 Al ver al jugador debajo, prepara una emboscada durante 0.55 segundos, fija el destino y salta con una trayectoria balística y colisión barrida. Se puede esquivar después de la preparación: no corrige el destino en el aire. Aplica como máximo un impacto, exige contacto/proximidad y una línea despejada desde su cuerpo. Después de aterrizar puede perseguir en el suelo; a los 2 segundos vuelve a priorizar una subida. El rig comprime el torso antes del salto, extiende las manos en el aire y amortigua el aterrizaje.
 
+La revision de fisicas incorpora `crawler_collision_guard.gd`, exclusivo de esta
+variante. Una penetracion inicial de 2,5 cm hacia un suelo de 4 cm hacia que
+`cast_motion` ignorase ese suelo y continuase descendiendo. Ahora resuelve primero
+los contactos con correcciones de hasta 8 cm, cancela el vuelo o la ruta obsoletos
+y comprueba tanto el barrido como el volumen final. Los encuentros a pie con el
+jugador siguen bajo `move_and_slide`, evitando que una colision entre personajes
+interrumpa repetidamente el ataque. Los giros comprueban posiciones intermedias
+cada cinco grados: dos capsulas finales libres no garantizan un giro libre.
+La correccion final de aterrizaje tambien conserva el centro y comprueba el volumen.
+
+La emboscada termina de girar al 58% del tiempo estimado de vuelo y abre manos y
+pies al 76%; el salto de reposicion conserva sus limites del 60% y 88%. Una caida
+con el cuerpo de lado busca espacio hacia arriba para incorporarse. Si desaparece
+el apoyo durante la preparacion, la retirada o la pausa de aterrizaje, pasa a una
+caida con colisiones. Desde el interior del balcon reconoce la cara cercana de la
+barandilla y no intenta alcanzar su cara exterior atravesandola. Los movimientos
+para librar esquinas se comprueban antes de aceptar la transicion.
+
+La animacion mezcla apoyo, recogida de extremidades, extension y recepcion, sin
+cambiar instantaneamente a la pose recogida ni mantener una pose distinta para
+las manos. Suprime el balanceo de marcha en vuelo y amortigua con una compresion
+progresiva del torso. Conserva las cadenas IK y las superficies continuas.
+
+`tools/validate_crawler_physics_recovery.gd` pasa 61 comprobaciones: penetraciones
+iniciales contra suelo/pared/techo, giro obstaculizado en su punto intermedio,
+emboscadas desde 1,9/3,2/6,8 m con pasos de 20/30/60/120 FPS, manos y pies preparados,
+un salto de tiempo de 250 ms y retirada del apoyo. La primera reproduccion dio
+14 fallos en 39 comprobaciones; esos casos pasan con la correccion. Tambien pasan
+las regresiones de saltos, esquinas, persecucion y escapes en la iglesia, trepa,
+emboscadas desde techo alto, simetria de brazos, recuperacion y vomito. La prueba
+de persecucion de 60 s registra 0,58 s de bloqueo maximo y ningun desvio hacia una
+pared con el jugador cercano; el coste medio de la logica fue aproximadamente
+137 microsegundos por paso en esa prueba sin render, no una medida de FPS.
+`tools/render_crawler_spider_jump.gd -- --dive` genera la secuencia de emboscada
+en `tools/output/grandmother_crawler_ceiling_dive.png`; sin el argumento muestra
+el salto de suelo a techo en `tools/output/grandmother_crawler_spider_jump.png`.
+
+## Agarre al techo y giros rapidos
+
+La escalada y la preparacion de saltos usan el mismo alcance de apoyo (1,8 m).
+Antes, la escalada aceptaba la boveda pero la preparacion buscaba solo a 1,15 m:
+cancelaba el salto y entraba en caida pese a conservar un techo valido. La prueba
+anterior terminaba al llegar al techo y no detectaba esta regresion. Ahora el
+salto comprueba el apoyo antes de cambiar de estado, y la recepcion lo conserva.
+
+Un roce corregible tampoco cancela el agarre. Dos pares de rayos auxiliares,
+solo cuando falla el central, permiten cruzar juntas estrechas con apoyo a ambos
+lados. No sostienen a la criatura sobre un hueco abierto. Los bloqueos y el tiempo
+en pared ya no fuerzan caidas con apoyo valido. Al superar un balaustre mantiene
+la altura del pasamanos hasta librarlo y despues baja al balcon.
+
+Las cajas inclinadas con escala desigual de la iglesia producian falsos contactos.
+Se comprueba la distancia real entre capsula y caja para esos candidatos, usando
+una envolvente conservadora si hay deformacion de ejes. El resto de colisiones
+mantiene la comprobacion habitual. El refinamiento detecta tambien capsulas
+completamente encerradas, sin depender de que exista un par de contactos.
+
+La respuesta de orientacion pasa de 4 a 12 por segundo; el giro terrestre admite
+540 grados/s en esta variante. Una media vuelta, hasta quedar a menos de diez
+grados del destino, tarda 0,24-0,27 s en techo y 0,38-0,40 s en suelo, comprobado
+a 20/30/60/120 pasos por segundo. Los movimientos de esquina usan 6,6 m/s y delta,
+en vez de una distancia fija por fotograma. Cada giro sigue comprobando el volumen
+de la capsula en pasos de cinco grados.
+
+La espera deliberada en techo cuenta cuatro segundos, sin heredar el intento de
+caminar del suelo que disparaba recolocaciones cada 0,8 s. Al recolocarse arriba
+favorece otros apoyos en techo. Conserva saltos de escape, emboscadas, vomito y
+la prioridad de perseguir al jugador cercano por el suelo.
+
+Validacion de esta correccion:
+
+- `validate_crawler_ceiling_attachment.gd`: 22 comprobaciones de apoyo, juntas,
+  roce, retirada del techo, temporizacion, destinos y velocidad de giro.
+- `validate_crawler_scaled_box_contacts.gd`: 963 comparaciones contra cajas
+  equivalentes sin escala y pruebas de contencion completa.
+- `audit_crawler_ceiling_runtime.gd`: dos recorridos de 60 s en el nivel completo,
+  con saltos habilitados; cero caidas involuntarias. Con `-- --patrol`, recorre
+  mas de 25 m por la boveda ademas de sus saltos y cambios de superficie.
+- Regresiones: 61 comprobaciones de recuperacion fisica, 1115 muestras de saltos,
+  balaustres reales y juego completo, emboscadas, puertas, simetria y vomito.
+- Persecucion real de 60 s: bloqueo maximo 0,55 s, sin abandonar al jugador cercano
+  para buscar una pared. La logica medida sin render estuvo entre 0,13 y 0,18 ms
+  por paso en los recorridos de techo/persecucion; no representa los FPS del juego.
+
 Para volver a la original en el juego, cambiar el recurso `15_imported_grandmother` de `levels/test.tscn` a `res://enemies/church_grandmother.tscn`. Su memoria anterior era de 4.5 segundos; la trepadora usa 6 segundos para completar recorridos más largos.
 
 ## Vomito a presion
@@ -50,7 +134,7 @@ el dano; un golpe rechazado por invulnerabilidad no lo desbloquea. En una partid
 sin golpes previos, el jugador tiene entonces dos vidas restantes.
 
 `crawler_vomit_attack.gd` controla la secuencia: anticipacion corporal de 0,65 s,
-chorro durante un tiempo aleatorio entre 6 y 12 s, tres segundos inmovil goteando y
+chorro durante un tiempo aleatorio entre 3 y 9 s, tres segundos inmovil goteando y
 una cadena de 2 o 3 saltos con el planificador existente. Estos saltos no se
 cancelan simplemente por tener al jugador cerca; siguen comprobando la capsula,
 el recorrido y el apoyo de destino. Si no hay una trayectoria segura, se retoma
@@ -61,16 +145,17 @@ Hay un minimo de 90 segundos entre comienzos de ataque. No puede iniciarse
 durante otro golpe, comida, salto, caida, cambio de esquina o cruce de puerta.
 Necesita apoyo real, jugador visible y un objetivo a un maximo de catorce metros para
 iniciarse. Funciona en suelo, pared y techo, manteniendo el cuerpo fijo. Durante
-la expulsion sigue la posicion actual del jugador cada paso fisico, incluso al
+la expulsion toma la posicion del jugador cada 0,24 s y gira con inercia, incluso al
 rodearla o pasar tras una cobertura. Esto no actualiza la memoria visual de la
 IA normal a traves de paredes; la colision del liquido sigue bloqueando impactos.
-El giro central alcanza 7,5 rad/s, sin el antiguo limite lateral de 80 grados.
+El giro central se limita a 2,6 rad/s y tiene respuesta de 4/s, dejando margen
+para esquivarla, sin el antiguo limite lateral de 80 grados.
 Una combinacion de oscilaciones irregulares agrega barridos y sacudidas de unos
 18 grados alrededor de la direccion perseguida, mas inclinaciones laterales de
 la cabeza. Esta eleva ligeramente la boca al mirar atras para librar los hombros;
 el cuello generado mantiene conectadas ambas piezas. El giro opuesto de 180
-grados dispone de un eje de rotacion estable. Compensa la caida por gravedad y
-anticipa 0,07 s de movimiento del jugador.
+grados dispone de un eje de rotacion estable. Compensa la caida por gravedad,
+pero ya no anticipa el movimiento del jugador.
 La visibilidad sale de la boca y prueba torso/cabeza si un banco tapa parte del
 jugador. Las envolventes exclusivas de trepa no bloquean la vision ni la salida
 del chorro. El tramo corto cuerpo-boca sigue impidiendo disparar con la cabeza
@@ -93,8 +178,8 @@ se vacia desde su ultimo origen, respetando el punto de impacto para que la cola
 no reaparezca al otro lado de una pared.
 `crawler_vomit_stream.gd` dibuja esa trayectoria como una unica malla opaca cerrada,
 con hasta 48 secciones de ocho vertices, bordes unidos y estrias de flujo animadas.
-El radio inicial es 0,105 m y aumenta gradualmente hasta 1,95 m: ligeramente mayor
-que la envolvente anterior de bolas mas dispersion (aproximadamente 1,8 m).
+El radio inicial es 0,105 m y aumenta gradualmente hasta 1,10 m. El extremo es
+un 44% mas estrecho que antes; la malla y los impactos utilizan ese mismo radio.
 La colision central detiene el chorro y cada borde se recorta contra el escenario.
 Reutiliza la consulta de los bordes y los indices cuando no cambia el numero de
 secciones. El roce ancho con la capsula tambien mancha, comprobando antes que

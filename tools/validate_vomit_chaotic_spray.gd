@@ -58,10 +58,12 @@ func run() -> void:
 			await physics_frame
 			attack._begin()
 			attack.phase = attack.Phase.SPRAY
-			attack.spray_duration = 12.0
+			attack.spray_duration = 9.0
 			effects.set_physics_process(false)
 			var planted: Transform3D = actor.global_transform
 			var max_tracking_error := 0.0
+			var tracking_lag := 0.0
+			var tracking_samples := 0
 			var max_head_error := 0.0
 			var max_chaos := 0.0
 			var chaos_sum := 0.0
@@ -82,6 +84,8 @@ func run() -> void:
 				effect_steps += 1
 				if t > 0.6:
 					max_tracking_error = maxf(max_tracking_error, attack.tracking_direction.angle_to(attack._aim_at(attack._last_aim)))
+					tracking_lag += attack.tracking_direction.angle_to(attack._aim_at(attack._target_point()))
+					tracking_samples += 1
 					max_head_error = maxf(max_head_error, visual._head.global_basis.z.normalized().angle_to(attack.aim_direction))
 				var chaos: float = attack.tracking_direction.angle_to(attack.aim_direction)
 				max_chaos = maxf(max_chaos, chaos)
@@ -92,11 +96,11 @@ func run() -> void:
 					player.get_camera_lens_grime().dirt = 0.0
 				await physics_frame
 			check(body_motion < 0.0001 and attack.stationary(), "Creature moves during circular tracking")
-			check(max_tracking_error < 0.18, "Tracking freezes when player passes around her")
+			check(max_tracking_error < 0.65 and tracking_lag / tracking_samples > 0.12, "Tracking freezes or follows a moving player too precisely")
 			check(max_head_error < 0.4, "Articulated mouth detaches from current spray direction")
 			check(max_chaos > 0.14 and chaos_sum / (fps * 8) > 0.06 and max_chaos < 0.45, "Spray lacks bounded chaotic motion")
-			check(quadrants_hit >= 3 and player._monster_hits == 0, "Wide stream misses most quadrants or damages health")
-			print("CHAOTIC SPRAY surface=", attachment, " fps=", fps, " tracking_error=", max_tracking_error, " head_error=", max_head_error, " chaos=", max_chaos, " quadrants=", quadrants_hit)
+			check(player._monster_hits == 0, "Vomit damages health instead of staining the lens")
+			print("CHAOTIC SPRAY surface=", attachment, " fps=", fps, " tracking_error=", max_tracking_error, " mean_lag=", tracking_lag / tracking_samples, " head_error=", max_head_error, " chaos=", max_chaos, " quadrants=", quadrants_hit)
 	# Expansion starts from the existing throat width, growing along travel.
 	attack.cancel()
 	attack.phase = attack.Phase.SPRAY

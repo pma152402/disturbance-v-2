@@ -1,6 +1,12 @@
 extends Node3D
 ## Cached light registry; bounded visibility probes at 10 Hz, never GPU readback.
 var exposure := 0.0
+var room_exposure := 0.0
+var flashlight_exposure := 0.0
+var flashlight_core_exposure := 0.0
+# Radius of the bright plateau in both flashlight projector gradients.
+const FLASHLIGHT_CORE_RADIUS := 0.385
+var light_away_direction := Vector3.ZERO
 var _actor: CharacterBody3D
 var _visual: Node3D
 var _lights: Array[Light3D] = []
@@ -28,7 +34,16 @@ func update(delta: float, immediate: bool = false) -> void:
 		exposure = sample_exposure()
 
 func sample_exposure() -> float:
-	var points: Array[Vector3] = [_visual._head.global_position, _actor.surface._center()]
+	var sample := sample_at_offset(Vector3.ZERO)
+	room_exposure = sample.room
+	flashlight_exposure = sample.beam
+	flashlight_core_exposure = sample.beam_core
+	light_away_direction = sample.away
+	return sample.exposure
+
+func sample_at_offset(offset: Vector3) -> Dictionary:
+	# Read-only prediction for shelter selection; never replace live exposure.
+	var points: Array[Vector3] = [_visual._head.global_position + offset, _actor.surface._center() + offset]
 	var candidates: Array[Dictionary] = []
 	for i in range(_lights.size() - 1, -1, -1):
 		var light := _lights[i]
@@ -46,6 +61,9 @@ func sample_exposure() -> float:
 	candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.potential > b.potential)
 	var room := 0.0
 	var beam := 0.0
+	var beam_core := 0.0
+	var strongest := 0.0
+	var away := Vector3.ZERO
 	for i in mini(6, candidates.size()):
 		var light: Light3D = candidates[i].light
 		var visible_strength := 0.0
@@ -59,11 +77,28 @@ func sample_exposure() -> float:
 			var query := PhysicsRayQueryParameters3D.create(points[j], end, _actor.collision_mask | (1 << 19), [_actor.get_rid()])
 			if _actor.get_world_3d().direct_space_state.intersect_ray(query).is_empty():
 				visible_strength = maxf(visible_strength, candidates[i].strengths[j])
+				if _is_flashlight(light) and _inside_flashlight_core(light, points[j]):
+					beam_core = maxf(beam_core, candidates[i].strengths[j])
 		if _is_flashlight(light):
 			beam = maxf(beam, visible_strength)
 		else:
 			room += visible_strength * 0.40
-	return clampf(maxf(beam, minf(room, 0.55)), 0.0, 1.0)
+		if visible_strength > strongest:
+			strongest = visible_strength
+			away = -light.global_basis.z if light is DirectionalLight3D else (points[1] - light.global_position).normalized()
+	room = minf(room, 0.55)
+	beam = clampf(beam, 0.0, 1.0)
+	return {"room": room, "beam": beam, "beam_core": clampf(beam_core, 0.0, 1.0), "exposure": maxf(beam, room), "away": away}
+
+func _inside_flashlight_core(light: SpotLight3D, point: Vector3) -> bool:
+	var offset := point - light.global_position
+	var forward := -light.global_basis.z.normalized()
+	var depth := offset.dot(forward)
+	if depth <= 0.0:
+		return false
+	# Projector radius is measured on its image plane, not as a fraction of angle.
+	var radius := depth * tan(deg_to_rad(light.spot_angle)) * FLASHLIGHT_CORE_RADIUS
+	return offset.slide(forward).length_squared() <= radius * radius
 
 func _is_flashlight(light: Light3D) -> bool:
 	if not light is SpotLight3D:

@@ -28,18 +28,29 @@ static func query_for(surface: RefCounted, pose: Transform3D) -> PhysicsShapeQue
 
 static func clear_segment(surface: RefCounted, from: Transform3D, to: Transform3D) -> bool:
 	var space: PhysicsDirectSpaceState3D = surface.brain.get_world_3d().direct_space_state
+	if surface.collision_guard.penetrates(surface, from): return false
+	var start := from.basis.orthonormalized().get_rotation_quaternion()
+	var end := to.basis.orthonormalized().get_rotation_quaternion()
+	var steps := maxi(1, int(ceil(start.angle_to(end) / (PI / 36.0))))
+	var previous := from
 	var query := query_for(surface, to)
-	if not space.intersect_shape(query, 1).is_empty():
-		return false
-	query.transform = from
-	query.motion = to.origin - from.origin
-	if query.motion.length_squared() > 0.0000001 and space.cast_motion(query)[0] < 0.999:
-		return false
+	# A full inversion has identical end capsules, but the intermediate sweep
+	# can intersect a beam. Validate rotation as well as centre translation.
+	for i in range(1, steps + 1):
+		var weight := float(i) / steps
+		var next := Transform3D(Basis(start.slerp(end, weight)).scaled(from.basis.get_scale().lerp(to.basis.get_scale(), weight)), from.origin.lerp(to.origin, weight))
+		query.transform = next
+		query.motion = Vector3.ZERO
+		if surface.collision_guard.overlaps(surface, query): return false
+		query.transform = previous
+		query.motion = next.origin - previous.origin
+		if query.motion.length_squared() > 0.0000001 and space.cast_motion(query)[0] < 0.999: return false
+		previous = next
 	return true
 
 static func build(surface: RefCounted, point: Vector3, target_normal: Vector3, facing: Vector3, attack: bool = false) -> Dictionary:
 	var start: Vector3 = surface._center()
-	var end: Vector3 = point if attack else point + target_normal * surface.SPIDER_SUPPORT_OFFSET
+	var end: Vector3 = point if attack else point + target_normal * surface.support_offset()
 	var launch: Vector3 = surface.brain.global_basis.y.normalized()
 	var distance := start.distance_to(end)
 	var rotation_from: Quaternion = surface.brain.global_basis.orthonormalized().get_rotation_quaternion()

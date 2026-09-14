@@ -88,7 +88,7 @@ func run() -> void:
 	effects.set_physics_process(false)
 	for i in 90: effects._physics_process(1.0 / 60.0)
 	check(absf(effects._stream_points[-1].distance_to(origin) - 14.0) < 0.01, "Pool/time cap silently shortens the 14 m jet")
-	check(absf(effects._stream_radii[0] - 0.105) < 0.001 and effects._stream_radii[-1] > 1.85 and effects._stream_radii[-1] < 2.05, "Throat/end expansion changed disproportionately")
+	check(absf(effects._stream_radii[0] - 0.105) < 0.001 and effects._stream_radii[-1] > 1.05 and effects._stream_radii[-1] < 1.15, "Jet does not retain its mouth attachment and narrower end")
 	var mesh: ArrayMesh = effects.stream.mesh
 	var arrays := mesh.surface_get_arrays(0)
 	var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]

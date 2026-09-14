@@ -148,9 +148,12 @@ func run() -> void:
 	var perch_frames := 0
 	for frame in 1500:
 		var before: Vector3 = actor.surface._center()
+		var was_falling: bool = actor.surface.phase == actor.surface.Phase.DROP
 		actor.surface.step(1.0 / 60.0, clue, true)
 		var after: Vector3 = actor.surface._center()
-		check(before.distance_to(after) < 0.16, "Teleport during surface transition")
+		# Manual release uses a 10 m/s terminal fall (16.67 cm at 60 Hz).
+		# Keep the stricter bound for supported travel and corner transitions.
+		check(before.distance_to(after) < (10.0 / 60.0 + 0.001 if was_falling else 0.16), "Teleport during surface transition")
 		ceiling = ceiling or actor.surface.phase == 2
 		inverted = inverted or actor.basis.y.y < -0.85
 		if actor.surface.phase == 2 and actor.basis.y.y < -0.85:

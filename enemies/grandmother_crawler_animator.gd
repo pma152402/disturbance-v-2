@@ -111,7 +111,7 @@ func _ready() -> void:
 func _reset_contacts() -> void:
 	_settling = false
 	for i in 4:
-		anchors[i] = _support(_body.global_transform * REST_CONTACTS[i])
+		anchors[i] = _support(_body.global_transform * _rest_contact(i))
 		releases[i] = anchors[i]
 		landings[i] = anchors[i]
 		contacts[i] = anchors[i]
@@ -122,7 +122,7 @@ func _support(point: Vector3) -> Vector3:
 	var query := PhysicsRayQueryParameters3D.create(point + up * 0.4, point - up * 0.5, _body.collision_mask | (1 << 19), [_body.get_rid()])
 	var hit := _body.get_world_3d().direct_space_state.intersect_ray(query)
 	if not hit.is_empty() and hit.normal.dot(up) > 0.55:
-		return hit.position + up * 0.065
+		return hit.position + up * 0.065 * _body.global_basis.get_scale().abs().y
 	return point
 
 func _physics_process(delta: float) -> void:
@@ -134,12 +134,13 @@ func _physics_process(delta: float) -> void:
 	var travel := (_body.global_position - _last_origin).slide(up)
 	var distance := travel.length()
 	var turning := _last_basis.z.angle_to(_body.global_basis.z)
-	var changing_surface := _last_basis.y.dot(up) < 0.9995
+	var changing_surface := _last_basis.y.normalized().dot(up) < 0.9995
+	var airborne: bool = _church.surface.spider_leaping or _church.surface.pouncing or (_church.surface.phase == _church.surface.Phase.DROP and not _church.surface.spider_winding_up)
 	if distance > 0.6 or changing_surface:
 		_reset_contacts()
 		distance = 0.0
-	_speed_blend = lerpf(_speed_blend, clampf(distance / maxf(delta, 0.001) / 2.2, 0.0, 1.0), 1.0 - exp(-8.0 * delta))
-	_travel_phase += distance / 0.65 + turning * 0.15
+	_speed_blend = lerpf(_speed_blend, 0.0 if airborne else clampf(distance / maxf(delta, 0.001) / 2.2, 0.0, 1.0), 1.0 - exp(-8.0 * delta))
+	if not airborne: _travel_phase += distance / 0.65 + turning * 0.15
 	_last_origin = _body.global_position
 	_last_basis = _body.global_basis
 	var attack := _church.current_state == STATE_ATTACK and not _church.surface.active()
@@ -152,11 +153,15 @@ func _physics_process(delta: float) -> void:
 		rear_target = -0.62 * smoothstep(0.0, 0.42, _church.surface.spider_windup_time)
 	elif _church.surface.spider_leaping:
 		var landing_blend := _jump_landing_blend()
-		rear_target = lerpf(-0.24, -0.1, landing_blend)
+		var extension := smoothstep(0.0, 0.22, _flight_progress())
+		rear_target = lerpf(lerpf(-0.62, 0.10, extension), -0.10, landing_blend)
+	elif _church.surface.pouncing:
+		rear_target = lerpf(-0.32, -0.08, _jump_landing_blend())
 	elif _church.surface.winding_up:
 		rear_target = -0.40 * smoothstep(0.0, 0.55, _church.surface.windup_time)
 	elif _church.surface.landing_recovery > 0:
-		rear_target = -0.45 * (_church.surface.landing_recovery / 0.35)
+		var absorption := clampf(1.0 - _church.surface.landing_recovery / 0.38, 0.0, 1.0)
+		rear_target = -0.44 * sin(PI * pow(absorption, 0.7))
 	if _church.current_state == STATE_EAT:
 		rear_target = 0.2
 	if vomiting:
@@ -168,9 +173,10 @@ func _physics_process(delta: float) -> void:
 			rear_target = -0.10
 	_rear = lerpf(_rear, rear_target, 1.0 - exp(-12.0 * delta))
 	var breath := sin(_church._idle_clock * 1.7) * 0.006
-	var bob := sin(_travel_phase * TAU * 2.0) * _speed_blend * 0.016
-	var pelvis := Vector3(0, 1.09 + breath + bob + _rear * 0.12, -0.60)
-	var chest := Vector3(0, 0.95 + breath - bob + _rear * 0.34, 0.36 - _rear * 0.10)
+	var bob := 0.0 if airborne else sin(_travel_phase * TAU * 2.0) * _speed_blend * 0.016
+	var landmarks := _body_landmarks(breath, bob)
+	var pelvis: Vector3 = landmarks[0]
+	var chest: Vector3 = landmarks[1]
 	var neck := chest + Vector3(0, 0.09, 0.085)
 	_head.position = (neck + Vector3(0, 0.055, 0.035) * head_scale_multiplier) / MODEL_SCALE
 	var attention := _body.global_basis.inverse() * (_church.get_attention_position() - _head.global_position)
@@ -189,8 +195,8 @@ func _physics_process(delta: float) -> void:
 	_head.scale = _base_head_scale * head_scale_multiplier
 	if _crawler_hair != null:
 		_crawler_hair.head_size_multiplier = head_scale_multiplier
-	_left_shoulder.position = (chest + Vector3(0.285, 0, -0.035)) / MODEL_SCALE
-	_right_shoulder.position = (chest + Vector3(-0.285, 0, -0.035)) / MODEL_SCALE
+	_left_shoulder.position = (chest + _shoulder_offset(1.0)) / MODEL_SCALE
+	_right_shoulder.position = (chest + _shoulder_offset(-1.0)) / MODEL_SCALE
 	# The elongated blouse remains continuous between the chest and pelvis.
 	torso.build(PackedVector3Array([pelvis + Vector3(0, -0.015, -0.10), pelvis, pelvis.lerp(chest, 0.32) + Vector3(0, 0.04, 0), pelvis.lerp(chest, 0.65) + Vector3(0, 0.035, 0), chest, neck]), PackedVector2Array([Vector2(0.18, 0.13), Vector2(0.25, 0.17), Vector2(0.20, 0.15), Vector2(0.26, 0.20), Vector2(0.30, 0.20), Vector2(0.085, 0.080)]), _cloth)
 	var head_mount := anatomy.to_local(_head.to_global(Vector3(0, 0.15, 0.08)))
@@ -204,12 +210,8 @@ func _physics_process(delta: float) -> void:
 		var wrist: Node3D = _left_wrist if i == 0 else _right_wrist
 		var palm: MeshInstance3D = _left_palm if i == 0 else _right_palm
 		var palm_target := contacts[i]
-		if _church.surface.spider_leaping:
-			var flight_spread := sin(clampf(_church.surface.spider_flight_time / maxf(_church.surface.spider_flight_duration, 0.1), 0.0, 1.0) * PI)
-			var tucked_hand := _body.global_transform * Vector3(side * (0.36 + flight_spread * 0.16), 0.30 + flight_spread * 0.15, 0.48)
-			palm_target = tucked_hand.lerp(contacts[i], _jump_landing_blend())
-		elif _church.surface.pouncing:
-			palm_target = _body.global_transform * Vector3(side * 0.38, 0.44, 0.82)
+		# Hands and feet use the same staged flight contacts. No second hand-only
+		# override may keep the palms tucked while the rest of the rig lands.
 		if _church.current_state == STATE_EAT:
 			var meal := _church.get("_eating_target") as Node3D
 			var meal_point := _body.global_transform * Vector3(side * 0.16, 0.18, 0.6)
@@ -225,18 +227,41 @@ func _physics_process(delta: float) -> void:
 			palm_target = palm_target.lerp(load_point.lerp(hit_point, strike), windup * (1.0 - recovery))
 		# Rotate the complete hand about its anatomical wrist. Keep its heel
 		# embedded in the continuous forearm even while rearing to strike.
-		var hand_basis := _body.global_basis * Basis(Vector3.RIGHT, -PI * 0.5) * _palm_rest[i]
+		var hand_basis := _hand_basis(i)
 		wrist.global_basis = hand_basis.scaled(wrist.global_basis.get_scale())
 		var target := _correct_wrist_target_for_palm(wrist, palm, palm_target)
 		_pose_arm_ik(shoulder, elbow, wrist, _base_left_shoulder if i == 0 else _base_right_shoulder, _base_left_elbow if i == 0 else _base_right_elbow, _left_upper_rest_direction if i == 0 else _right_upper_rest_direction, _left_lower_rest_direction if i == 0 else _right_lower_rest_direction, target, side, 1.0, 1.0, _body.global_basis * Vector3(side, 0.35, -0.65))
 		wrist.global_basis = hand_basis.scaled(wrist.global_basis.get_scale())
 	for i in 2:
-		_continuous_arms[i].mount = (chest + Vector3(0.20 if i == 0 else -0.20, 0, -0.035)) / MODEL_SCALE
+		_continuous_arms[i].mount = (chest + _arm_mount_offset(1.0 if i == 0 else -1.0)) / MODEL_SCALE
 		_continuous_arms[i].update_surface()
 
+func _body_landmarks(breath: float, bob: float) -> Array[Vector3]:
+	return [Vector3(0, 1.09 + breath + bob + _rear * 0.12, -0.60), Vector3(0, 0.95 + breath - bob + _rear * 0.34, 0.36 - _rear * 0.10)]
+
+func _shoulder_offset(side: float) -> Vector3:
+	return Vector3(side * 0.285, 0, -0.035)
+
+func _arm_mount_offset(side: float) -> Vector3:
+	return Vector3(side * 0.20, 0, -0.035)
+
+func _rest_contact(index: int) -> Vector3:
+	return REST_CONTACTS[index]
+
+func _hand_basis(index: int) -> Basis:
+	# La escala de muñeca se aplica después; no multiplicarla otra vez por frame.
+	return _body.global_basis.orthonormalized() * Basis(Vector3.RIGHT, -PI * 0.5) * _palm_rest[index]
+
+func _leg_pole(side: float) -> Vector3:
+	return Vector3(side * 0.85, 0.1, 0.6)
+
 func _jump_landing_blend() -> float:
-	var progress := clampf(_church.surface.spider_flight_time / maxf(_church.surface.spider_flight_duration, 0.1), 0.0, 1.0)
-	return smoothstep(0.58, 0.88, progress)
+	return smoothstep(0.42, 0.76, _flight_progress()) if _church.surface.pouncing else smoothstep(0.58, 0.88, _flight_progress())
+
+func _flight_progress() -> float:
+	if _church.surface.pouncing:
+		return clampf(_church.surface.pounce_time / maxf(_church.surface.pounce_flight_duration, 0.1), 0.0, 1.0)
+	return clampf(_church.surface.spider_flight_time / maxf(_church.surface.spider_flight_duration, 0.1), 0.0, 1.0)
 
 
 func _update_contacts(travel: Vector3, _delta: float) -> void:
@@ -254,12 +279,14 @@ func _update_contacts(travel: Vector3, _delta: float) -> void:
 		var phase := fposmod(_travel_phase + OFFSETS[i], 1.0)
 		var nominal: Vector3 = _body.global_transform * REST_CONTACTS[i]
 		var swing := phase >= 0.68
-		if _church.surface.spider_leaping:
+		if _church.surface.spider_leaping or _church.surface.pouncing:
 			var side := 1.0 if i % 2 == 0 else -1.0
 			var tucked := Vector3(side * 0.40, 0.34, 0.42) if i < 2 else Vector3(side * 0.24, 0.34, -0.22)
 			# Abrir las cuatro extremidades antes del contacto: mantenerlas recogidas
 			# hasta aterrizar hacía que el torso pareciese caer primero de espaldas.
-			contacts[i] = _body.global_transform * tucked.lerp(REST_CONTACTS[i], _jump_landing_blend())
+			var lift := smoothstep(0.0, 0.18, _flight_progress())
+			var flight_pose: Vector3 = REST_CONTACTS[i].lerp(tucked, lift).lerp(REST_CONTACTS[i], _jump_landing_blend())
+			contacts[i] = _body.global_transform * flight_pose
 			anchors[i] = contacts[i]
 			swinging[i] = false
 			continue
@@ -275,12 +302,12 @@ func _update_contacts(travel: Vector3, _delta: float) -> void:
 			continue
 		if swing and not swinging[i]:
 			releases[i] = anchors[i]
-			landings[i] = _support(nominal + travel.normalized() * (0.23 if i < 2 else 0.38))
+			landings[i] = _support(nominal + travel.normalized() * (0.23 if i < 2 else 0.38) * _body.global_basis.get_scale().abs().y)
 		if not swing and swinging[i]:
 			anchors[i] = landings[i]
 		# A sudden turn/transition can make an old world anchor unreachable.
 		# Release it locally rather than stretching bones or dragging a hand.
-		if anchors[i].distance_to(nominal) > 0.38:
+		if anchors[i].distance_to(nominal) > 0.38 * _body.global_basis.get_scale().abs().y:
 			anchors[i] = anchors[i].lerp(_support(nominal), 0.3)
 		swinging[i] = swing
 		if swing:
@@ -293,7 +320,7 @@ func _pose_leg(index: int, hip: Vector3, foot: Vector3, side: float) -> void:
 	var direction := (foot - hip).normalized()
 	var length := clampf(hip.distance_to(foot), 0.08, LEG_SEGMENT_LENGTH * 2.0 - 0.02)
 	var along := length * 0.5
-	var pole := Vector3(side * 0.85, 0.1, 0.6).slide(direction).normalized()
+	var pole := _leg_pole(side).slide(direction).normalized()
 	var knee := hip + direction * along + pole * sqrt(maxf(0, LEG_SEGMENT_LENGTH * LEG_SEGMENT_LENGTH - along * along))
 	foot = hip + direction * length
 	hips[index].position = hip

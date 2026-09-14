@@ -199,7 +199,7 @@ func run() -> void:
 			break
 		await physics_frame
 	var completed_chain: int = actor.surface.spider_jump_count - chain_start_count
-	check(planned_chain >= 1 and planned_chain <= 6, "El atasco no planificó una cadena de uno a seis saltos")
+	check(planned_chain >= 1 and planned_chain <= 3, "El atasco no planificó una cadena de uno a tres saltos")
 	check(completed_chain >= 1 and completed_chain <= planned_chain, "La cadena superó el número de saltos planificado")
 	check(actor._spider_last_landing_alignment > 0.995, "A chained jump landed without its feet toward the support")
 	# Furniture and narrow surfaces may block a flight but cannot be destinations.

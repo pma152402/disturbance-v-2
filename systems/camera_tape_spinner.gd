@@ -8,7 +8,13 @@ var _phase := 0.0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	set_process(true)
+	visibility_changed.connect(_update_processing_state)
+	_update_processing_state()
+
+
+func _update_processing_state() -> void:
+	# La fase ya se detenía al ocultarlo; evita también el callback vacío.
+	set_process(visible)
 
 
 func _process(delta: float) -> void:

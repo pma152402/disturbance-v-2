@@ -17,6 +17,8 @@ var _shadow_capable := {}
 var _authored_shadow_opacity := {}
 var _shadow_targets := {}
 var _selected_shadow_lights := {}
+var _fading_shadow_lights: Array[Light3D] = []
+var _settled_shadow_opacity := {}
 
 static func install(branch: Node, distance_culling := true) -> Dictionary:
 	var controller := new()
@@ -57,6 +59,8 @@ static func install(branch: Node, distance_culling := true) -> Dictionary:
 		# A hanging lamp already has a downward spot shadow (one render pass).
 		# Its omni shadow would add six redundant cubemap faces every frame.
 		controller._shadow_capable[light] = light.shadow_enabled and not has_spot_shadow
+		if bool(controller._shadow_capable[light]):
+			controller._fading_shadow_lights.append(light)
 		controller._authored_shadow_opacity[light] = light.shadow_opacity
 		controller._shadow_targets[light] = 0.0
 		if has_spot_shadow:
@@ -65,7 +69,7 @@ static func install(branch: Node, distance_culling := true) -> Dictionary:
 			light.distance_fade_enabled = true
 			light.distance_fade_begin = minf(light.distance_fade_begin if light.distance_fade_begin > 0 else 24.0, 24.0)
 			light.distance_fade_length = maxf(light.distance_fade_length, 6.0)
-	controller.set_process(true)
+	controller.set_process(not controller._fading_shadow_lights.is_empty())
 	var update_timer := Timer.new()
 	update_timer.name = "ShadowBudgetTimer"
 	update_timer.wait_time = UPDATE_INTERVAL
@@ -82,8 +86,12 @@ static func install(branch: Node, distance_culling := true) -> Dictionary:
 	}
 
 func _process(delta: float) -> void:
-	for light in _lights:
+	# Solo las transiciones necesitan trabajo por frame. El temporizador conserva
+	# la seleccion original; una luz estable no vuelve a enviar su opacidad.
+	for index in range(_fading_shadow_lights.size() - 1, -1, -1):
+		var light := _fading_shadow_lights[index]
 		if not is_instance_valid(light) or not bool(_shadow_capable.get(light, false)):
+			_fading_shadow_lights.remove_at(index)
 			continue
 		var target := float(_shadow_targets.get(light, 0.0))
 		if target > 0.0 and not light.shadow_enabled:
@@ -95,6 +103,12 @@ func _process(delta: float) -> void:
 		if target <= 0.0 and next_opacity <= 0.001 and light.shadow_enabled:
 			light.shadow_opacity = 0.0
 			light.shadow_enabled = false
+		if next_opacity == target or (target <= 0.0 and not light.shadow_enabled and light.shadow_opacity == 0.0):
+			# El motor almacena float32. Guardar el valor devuelto evita despertar
+			# indefinidamente por el redondeo de un objetivo calculado en float64.
+			_settled_shadow_opacity[light] = light.shadow_opacity
+			_fading_shadow_lights.remove_at(index)
+	set_process(not _fading_shadow_lights.is_empty())
 
 
 func _update_shadow_budget(snap := false) -> void:
@@ -136,10 +150,19 @@ func _update_shadow_budget(snap := false) -> void:
 			var distance := float(selected[light])
 			var distance_opacity := 1.0 - smoothstep(shadow_fade_start, shadow_end, distance)
 			target = float(_authored_shadow_opacity.get(light, 1.0)) * distance_opacity
+		var previous_target := float(_shadow_targets.get(light, 0.0))
 		_shadow_targets[light] = target
 		if snap:
 			light.shadow_opacity = target
 			light.shadow_enabled = target > 0.0
+			_settled_shadow_opacity[light] = light.shadow_opacity
+		elif bool(_shadow_capable.get(light, false)) and not _fading_shadow_lights.has(light):
+			var settled_opacity := float(_settled_shadow_opacity.get(light, light.shadow_opacity))
+			if previous_target != target or light.shadow_opacity != settled_opacity or light.shadow_enabled != (target > 0.0):
+				_fading_shadow_lights.append(light)
+	if snap:
+		_fading_shadow_lights.clear()
+	set_process(not _fading_shadow_lights.is_empty())
 
 
 func _shadow_end_distance(light: Light3D) -> float:
@@ -164,6 +187,8 @@ func _has_moving_parent(node: Node) -> bool:
 	return false
 
 func _is_shadowless_multimesh_detail(multi: MultiMeshInstance3D) -> bool:
+	if bool(multi.get_meta(&"preserve_authored_shadows", false)):
+		return false
 	if multi.multimesh != null and multi.multimesh.mesh != null:
 		# Repeated sub-half-metre hardware is visible in the colour pass but does
 		# not justify redrawing every instance into the directional shadow map.

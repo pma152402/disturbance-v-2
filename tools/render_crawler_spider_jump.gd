@@ -20,6 +20,7 @@ func add_box(parent: Node, size: Vector3, point: Vector3, material: Material) ->
 	body.position = point
 
 func run() -> void:
+	var dive := "--dive" in OS.get_cmdline_user_args()
 	var viewport := SubViewport.new()
 	viewport.size = Vector2i(640, 480)
 	viewport.world_3d = World3D.new()
@@ -56,11 +57,20 @@ func run() -> void:
 	visual.set_physics_process(false)
 	await physics_frame
 	await physics_frame
-	actor.surface.begin_spider_jump({"position": Vector3(0, 4.0, 0), "normal": Vector3.DOWN}, false, "render")
+	if dive:
+		actor.global_transform = Transform3D(Basis(Vector3.BACK, PI), Vector3(0, 3.88, 0))
+		actor.surface.phase = actor.surface.Phase.CEILING
+		actor.surface.normal = Vector3.DOWN
+		actor.surface.winding_up = true
+		actor.surface.windup_time = 0.0
+		actor.surface.pounce_aim = Vector3(1.1, 0.85, 1.4)
+		visual._reset_contacts()
+	else:
+		actor.surface.begin_spider_jump({"position": Vector3(0, 4.0, 0), "normal": Vector3.DOWN}, false, "render")
 	var sheet := Image.create(1920, 960, false, Image.FORMAT_RGBA8)
-	var captures := [1, 15, 27, 32, 40, 52]
+	var captures := [0, 24, 37, 47, 58, 82] if dive else [1, 15, 27, 32, 40, 52]
 	var capture_index := 0
-	for frame in 55:
+	for frame in (90 if dive else 55):
 		actor.surface.step(1.0 / 60.0, Vector3.ZERO, true)
 		actor._idle_clock += 1.0 / 60.0
 		visual._physics_process(1.0 / 60.0)
@@ -71,7 +81,7 @@ func run() -> void:
 			image.convert(Image.FORMAT_RGBA8)
 			sheet.blit_rect(image, Rect2i(0, 0, 640, 480), Vector2i((capture_index % 3) * 640, (capture_index / 3) * 480))
 			capture_index += 1
-	sheet.save_png("res://tools/output/grandmother_crawler_spider_jump.png")
+	sheet.save_png("res://tools/output/grandmother_crawler_ceiling_dive.png" if dive else "res://tools/output/grandmother_crawler_spider_jump.png")
 	print("SPIDER JUMP RENDER PASS captures=", capture_index)
 	viewport.queue_free()
 	await process_frame

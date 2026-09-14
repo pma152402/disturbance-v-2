@@ -30,6 +30,7 @@ func _ready() -> void:
 	_prepare_screen_material()
 	_show_powered_off_screen()
 	_update_control_positions()
+	set_process(false)
 
 
 func _process(delta: float) -> void:
@@ -76,6 +77,7 @@ func toggle_power() -> bool:
 	if _programs.is_empty():
 		return false
 	_is_on = not _is_on
+	set_process(_is_on)
 	_frame = 0
 	_frame_time = 0.0
 	if _is_on:

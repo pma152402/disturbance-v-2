@@ -46,6 +46,7 @@ var _camera_preview_material: StandardMaterial3D
 func _ready() -> void:
 	_deployed = starts_deployed
 	_apply_pose_immediately()
+	set_physics_process(_pickup_lock_timer > 0.0 and not Engine.is_editor_hint())
 	if Engine.is_editor_hint():
 		return
 	latch_sound.stream = preload("res://sounds/gameplay_sound_factory.gd").make_switch_click()
@@ -53,6 +54,9 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_pickup_lock_timer = maxf(0.0, _pickup_lock_timer - delta)
+	if _pickup_lock_timer <= 0.0:
+		# Solo duerme este contador. El RigidBody conserva gravedad y colisiones.
+		set_physics_process(false)
 
 
 func get_interaction_key() -> Key:
@@ -117,6 +121,7 @@ func set_dropped(data: Dictionary, initial_velocity := Vector3.ZERO) -> void:
 	linear_velocity = initial_velocity
 	angular_velocity = Vector3(randf_range(-0.65, 0.65), randf_range(-0.45, 0.45), randf_range(-0.65, 0.65))
 	_pickup_lock_timer = 0.5
+	set_physics_process(true)
 
 
 func can_mount_camera() -> bool:

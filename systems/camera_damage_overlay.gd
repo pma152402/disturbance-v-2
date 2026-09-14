@@ -60,6 +60,7 @@ extends CanvasLayer
 @onready var impact_flash: ColorRect = $ImpactFlash
 
 var _damage_level := 0
+var _repaired_at_level := 0
 var _fade_tween: Tween
 
 
@@ -72,6 +73,8 @@ func set_damage_level(hit_count: int, animate := true) -> void:
 	if next_level == _damage_level and is_instance_valid(cracks):
 		return
 	_damage_level = next_level
+	if next_level == 0:
+		_repaired_at_level = 0
 	_refresh_texture()
 	if animate and _damage_level > 0:
 		_play_impact_reveal()
@@ -83,6 +86,24 @@ func get_damage_level() -> int:
 
 func clear_damage(animate := false) -> void:
 	set_damage_level(0, animate)
+
+
+func get_lens_damage_level() -> int:
+	return 3 if _damage_level == 3 else maxi(0, _damage_level - _repaired_at_level)
+
+
+func repair_lens() -> void:
+	restore_lens_damage(0)
+
+
+func restore_lens_damage(level: int) -> void:
+	# Lens condition is independent from player health and blood.
+	_repaired_at_level = maxi(0, _damage_level - level)
+	if is_instance_valid(_fade_tween):
+		_fade_tween.kill()
+	offset = Vector2.ZERO
+	impact_flash.color.a = 0.0
+	_refresh_texture()
 
 
 func _refresh_texture() -> void:
@@ -101,6 +122,11 @@ func _refresh_texture() -> void:
 		_:
 			cracks.texture = null
 			blood.texture = null
+	match get_lens_damage_level():
+		1: cracks.texture = first_hit_texture
+		2: cracks.texture = second_hit_texture
+		3: cracks.texture = fatal_hit_texture
+		_: cracks.texture = null
 	cracks.visible = cracks.texture != null
 	cracks.modulate.a = overlay_opacity
 	blood.visible = blood.texture != null
@@ -148,11 +174,12 @@ func _apply_crack_brightness() -> void:
 	var brightness := fatal_hit_brightness
 	var shadow_lift := fatal_hit_shadow_lift
 	var alpha_boost := 1.0
-	var white_mix := 0.10 if _damage_level == 3 else 0.0
-	var tint_mix := 0.12 if _damage_level == 3 else 0.0
+	var lens_level := get_lens_damage_level()
+	var white_mix := 0.10 if lens_level == 3 else 0.0
+	var tint_mix := 0.12 if lens_level == 3 else 0.0
 	var edge_thickness := 1.0
 	var postfilter_readability := fatal_hit_postfilter_readability
-	if _damage_level == 1:
+	if lens_level == 1:
 		brightness = first_hit_brightness
 		shadow_lift = first_hit_shadow_lift
 		alpha_boost = first_hit_alpha_boost
@@ -160,7 +187,7 @@ func _apply_crack_brightness() -> void:
 		tint_mix = 0.96
 		edge_thickness = 6.0
 		postfilter_readability = first_hit_postfilter_readability
-	elif _damage_level == 2:
+	elif lens_level == 2:
 		brightness = second_hit_brightness
 		shadow_lift = second_hit_shadow_lift
 		alpha_boost = second_hit_alpha_boost

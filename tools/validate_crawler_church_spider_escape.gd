@@ -44,8 +44,8 @@ func run() -> void:
 	actor._update_spider_jump_behavior(1.0 / 60.0)
 	check(actor.surface.spider_winding_up, "Real church aisle offered no safe short escape jump")
 	# Stress the longest permitted chain in the narrowest furnished area.
-	actor._spider_chain_remaining = 5
-	var planned := 6
+	actor._spider_chain_remaining = 2
+	var planned := 3
 	var last_count := count_before
 	var longest_jump := 0.0
 	var peak_step := 0.0
@@ -63,9 +63,9 @@ func run() -> void:
 			break
 		await physics_frame
 	var completed: int = actor.surface.spider_jump_count - count_before
-	check(actor.spider_max_consecutive_jumps == 6, "El máximo configurado no es de seis saltos")
-	check(completed >= 1 and completed <= 6, "La cadena no respetó el máximo de seis saltos")
-	check(completed == planned, "La cadena de seis saltos no pudo completarse en la iglesia")
+	check(actor.spider_max_consecutive_jumps == 3, "El máximo configurado no es de tres saltos")
+	check(completed >= 1 and completed <= 3, "La cadena no respetó el máximo de tres saltos")
+	check(completed == planned, "La cadena de tres saltos no pudo completarse en la iglesia")
 	check(longest_jump <= actor.surface.SPIDER_MAX_JUMP_DISTANCE + 0.01, "Real church escape exceeded the configured jump limit")
 	check(actor.surface.phase != actor.surface.Phase.DROP, "Real church escape ended falling or wedged against a collision")
 	check(actor.global_basis.y.normalized().dot(actor.surface.normal.normalized()) > 0.995, "Real church escape landed back-first")
