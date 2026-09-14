@@ -32,6 +32,7 @@ var _gaze_timer := 0.0
 var stalking: RefCounted
 var _stance_collision: CollisionShape3D
 var _stance_query := PhysicsShapeQueryParameters3D.new()
+var _phase_player: PhysicsBody3D
 
 func _enter_tree() -> void:
 	# Remove before children initialize: no hair mesh, animation or shader work.
@@ -64,6 +65,20 @@ func _ready() -> void:
 	_stance_query.collision_mask = collision_mask | (1 << 19)
 	_stance_query.exclude = [get_rid()]
 	_stance_query.margin = 0.01
+	_sync_player_phasing()
+
+func _sync_player_phasing() -> void:
+	var player := get_tree().get_first_node_in_group(&"player") as PhysicsBody3D
+	if player == _phase_player:
+		return
+	if is_instance_valid(_phase_player):
+		remove_collision_exception_with(_phase_player)
+		_phase_player.remove_collision_exception_with(self)
+	_phase_player = player
+	if is_instance_valid(_phase_player):
+		# Pair-specific and reciprocal: neither body blocks the other.
+		add_collision_exception_with(_phase_player)
+		_phase_player.add_collision_exception_with(self)
 
 func _setup_vomit(_visual: Node3D) -> void:
 	# Do not construct/register ranged effects for this harmless variant.
@@ -135,9 +150,17 @@ func _make_footstep_sound() -> AudioStreamWAV:
 func _make_chase_voice() -> AudioStreamWAV:
 	return null
 
+func _update_door_traversal(delta: float) -> void:
+	var normal_cross_speed := door_cross_speed
+	if stalking != null and stalking.sprint_remaining > 0.0:
+		door_cross_speed = retreat_speed * stare_escape_speed_multiplier
+	super._update_door_traversal(delta)
+	door_cross_speed = normal_cross_speed
+
 func _physics_process(delta: float) -> void:
 	if _dissolved:
 		return
+	_sync_player_phasing()
 	var sensor: Node3D = _shadow_visual.shadow_coat.light_sensor
 	sensor.update(delta)
 	_apply_light_damage(delta, sensor.room_exposure, sensor.flashlight_core_exposure)
@@ -156,6 +179,7 @@ func _physics_process(delta: float) -> void:
 		stalking.step(delta)
 
 func _update_upright_stance(delta: float) -> void:
+	_stance_query.exclude = _movement_probe_exclusions()
 	_stance_query.transform = global_transform * Transform3D(Basis.IDENTITY, Vector3(0, 1.78, 0))
 	var upright := get_world_3d().direct_space_state.intersect_shape(_stance_query, 1).is_empty()
 	# Bend knees under a lintel, keeping the torso vertical and hands off the floor.

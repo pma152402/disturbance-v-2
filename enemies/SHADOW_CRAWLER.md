@@ -11,6 +11,10 @@ Torso y piernas tienen aproximadamente la mitad del grosor anterior, hombros
 más estrechos, manos proporcionadas y brazos finos con uniones continuas.
 Es siempre inofensivo y silencioso: no inicia golpes ni tiene vómito. No genera los sonidos
 de respiración, pasos o voz de la abuela, ni altera el audio de otros enemigos.
+Puede atravesar al jugador en ambos sentidos mediante excepciones de colisión
+exclusivas de esa pareja, también durante el sprint. Los barridos de seguridad
+y la comprobación de postura respetan esa excepción; paredes, suelo y puertas
+siguen siendo sólidos. La abuela conserva sus colisiones con el jugador.
 
 `shadow_crawler_stalking.gd` sustituye la persecución por observación, acecho lento
 y retirada. Mantiene unos 7,5 m; solo se acerca a 0,65 m/s cuando queda fuera de
@@ -21,32 +25,45 @@ Al perder la memoria de la posición del jugador deja de acercarse. Se retira
 por rutas del suelo y vuelve a planificarlas si se bloquea.
 Las distancias y velocidades se ajustan en «Acecho huidizo» del Inspector.
 
-Mirarlo fijamente durante 4 segundos continuos activa una huida de hasta 3,2 segundos
+Mirarlo fijamente durante 4 segundos continuos activa una huida hasta un destino lejano
 a seis veces su velocidad normal de retirada: 15 m/s por defecto, el doble del
 sprint anterior. Cuenta solo
 la cabeza o el torso a un máximo de 4 m de la cámara activa y dentro de 7,5° de
 su centro, sin obstáculos. Mirarlo desde el fondo del pasillo no activa la carga.
-Apartar la mirada, alejarse fuera del radio o perder visibilidad reinicia el contador.
+Antes de completar la apertura, apartar la mirada, alejarse fuera del radio o perder
+visibilidad reinicia el contador. Una vez abierta del todo (3,75 s), el arranque
+queda asegurado: los últimos 0,25 s se completan aunque se aparte la mirada.
 El radio se ajusta en «Huida al mirarlo fijamente», independientemente de la
 distancia de detección de luz. Durante la carga
 aparece una sonrisa dentada que se extiende desde el centro hasta ambas mejillas.
 Durante toda la carga permanece quieto, incluso si estaba retirándose o cruzando
 una puerta; conserva gravedad, colisiones y daño por luz. La boca se abre ampliamente,
 el torso se encorva hacia delante, estira ambos brazos y las pupilas negras crecen
-hasta ocupar casi todo el ojo. Los ojos aumentan un 45 % de tamaño durante la carga.
+hasta ocupar gran parte del ojo, dejando un borde blanco visible; se redujo el radio
+de la pupila de 0,232 a 0,205. Los ojos aumentan un 45 % de tamaño durante la carga.
 La transformación queda completamente abierta durante los últimos 0,25 s antes
 de arrancar, al cumplirse los cuatro segundos.
 La sonrisa sobresale de la piel y de los dientes originales también al abrirse;
 al romper la mirada se apaga en un tercio de segundo. Mantiene la sonrisa durante
 la carrera, gira rápidamente hacia la ruta y alcanza su velocidad máxima en 0,1 s.
-Busca un destino a 24 m, con alternativas más cercanas si no hay espacio; lo mantiene
-hasta llegar o encontrar un bloqueo. Favorece cobertura y sombra, respeta suelo,
+Busca un destino a 24 m en las 16 direcciones, con alternativas más cercanas si
+no hay espacio. Puede salir lateralmente o avanzar primero hacia el observador
+para abandonar un callejón. Conserva su propia ruta de navegación para doblar
+esquinas, independientemente del destino que actualiza la percepción. Lo mantiene
+hasta llegar o encontrar un bloqueo. Un destino vacío o el tiempo transcurrido
+no dan la huida por completada: vuelve a buscar y termina al llegar a una zona
+al menos 8 m alejada del inicio. Cancela cruces de puertas anteriores al arrancar
+y mantiene la velocidad de sprint en los nuevos cruces cuando están despejados.
+Favorece sombra y respeta suelo,
 puertas y colisiones. Durante el sprint libera los brazos para acompañar la carrera.
 El tiempo y multiplicador se ajustan en «Huida al mirarlo fijamente». No añade
 daño ni audio. La sonrisa sigue la superficie de la cara y se disuelve con ella.
 `tools/validate_black_ente_stare.gd` comprueba continuidad a 30/60/120 Hz, paredes,
 interrupción de la mirada, sonrisa, destino y velocidad física de la huida.
 `tools/render_black_ente_smile.gd` muestra su progresión durante los cuatro segundos.
+`tools/validate_black_ente_escape_routes.gd` comprueba salidas bloqueadas, callejones,
+esquinas, navegación y el arranque después de la apertura completa.
+`tools/validate_black_ente_level_escape.gd` comprueba la huida desde el spawn del nivel real.
 
 Intenta sostener la mirada al jugador visible, incluso retirándose hacia atrás
 o de lado. Cabeza y cuerpo giran coordinados, con límites de giro del cuello.

@@ -18,7 +18,12 @@ func query(surface: RefCounted, pose: Transform3D, inner: bool = false) -> Physi
 	_query.shape = _inner if inner else shape
 	_query.transform = pose
 	_query.collision_mask = surface.brain.collision_mask | surface.SURFACE_SUPPORT_LAYER
-	_query.exclude = [surface.brain.get_rid()]
+	var excluded: Array[RID] = [surface.brain.get_rid()]
+	# Manual shape queries must honor the same body exceptions as move_and_slide.
+	for body in surface.brain.get_collision_exceptions():
+		if is_instance_valid(body):
+			excluded.append(body.get_rid())
+	_query.exclude = excluded
 	_query.motion = Vector3.ZERO
 	_query.margin = 0.0 if inner else 0.002
 	return _query

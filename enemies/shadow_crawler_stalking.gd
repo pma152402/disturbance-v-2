@@ -13,10 +13,35 @@ var _stare_camera_id := 0
 var _sprint_threat := Vector3.ZERO
 var _sprint_progress := Vector3.ZERO
 var _sprint_stall := 0.0
+var _sprint_origin := Vector3.ZERO
+var _sprint_path := PackedVector3Array()
+var _sprint_path_index := 0
+
+func _begin_sprint(threat: Vector3) -> void:
+	_sprint_threat = threat
+	stare_elapsed = 0.0
+	sprint_remaining = 3.2
+	sprint_count += 1
+	_sprint_stall = 0.0
+	_sprint_origin = brain.global_position
+	_sprint_progress = brain.global_position
+	_sprint_path.clear()
+	_goal_timer = 0.0
+	mode = Mode.SPRINT
+	brain._steering_timer = 0.0
+	if brain._door_traversal_active:
+		brain._end_door_traversal(false)
 
 func update_stare(delta: float) -> void:
 	if brain.remain_still or sprint_remaining > 0.0 or not brain.is_visible_in_tree():
 		stare_elapsed = 0.0
+		return
+	# Once the mouth is fully open, the final pose must always launch, even if
+	# its moving head leaves the reticle during the last quarter second.
+	if stare_elapsed >= maxf(0.1, brain.stare_escape_seconds - 0.25):
+		stare_elapsed += maxf(delta, 0.0)
+		if stare_elapsed + 0.000001 >= brain.stare_escape_seconds:
+			_begin_sprint(_sprint_threat)
 		return
 	var camera: Camera3D = brain.get_viewport().get_camera_3d()
 	if camera == null:
@@ -40,16 +65,10 @@ func update_stare(delta: float) -> void:
 			focused = true
 			break
 	stare_elapsed = stare_elapsed + maxf(delta, 0.0) if focused else 0.0
-	if stare_elapsed + 0.000001 >= brain.stare_escape_seconds:
+	if focused:
 		_sprint_threat = camera.global_position
-		stare_elapsed = 0.0
-		sprint_remaining = 3.2
-		sprint_count += 1
-		_sprint_stall = 0.0
-		_sprint_progress = brain.global_position
-		_goal_timer = 0.0
-		mode = Mode.SPRINT
-		brain._steering_timer = 0.0
+	if stare_elapsed + 0.000001 >= brain.stare_escape_seconds:
+		_begin_sprint(camera.global_position)
 
 func hold_charge(delta: float) -> void:
 	# Stop locomotion immediately, including an existing retreat/door route.
@@ -66,10 +85,12 @@ func hold_charge(delta: float) -> void:
 func _decide_sprint(delta: float) -> bool:
 	if sprint_remaining <= 0.0:
 		return false
-	sprint_remaining = maxf(0.0, sprint_remaining - delta)
 	mode = Mode.SPRINT
-	if brain.global_position.distance_to(_sprint_progress) > 0.15:
-		_sprint_progress = brain.global_position
+	var moved := brain.global_position.distance_to(_sprint_progress)
+	_sprint_progress = brain.global_position
+	if moved > 0.01:
+		# A blocked route cannot consume the sprint without ever running.
+		sprint_remaining = maxf(0.05, sprint_remaining - delta)
 		_sprint_stall = 0.0
 	else:
 		_sprint_stall += delta
@@ -77,22 +98,65 @@ func _decide_sprint(delta: float) -> bool:
 		_goal_timer = 0.0
 		_sprint_stall = 0.0
 		brain._steering_timer = 0.0
-	if _goal_timer <= 0.0:
-		_goal_timer = 3.2
-		var away := (brain.global_position - _sprint_threat).slide(Vector3.UP).normalized()
-		if away.length_squared() < 0.01:
-			away = -brain.global_basis.z
-		for distance in [24.0, 20.0, 16.0, 12.0, 9.0, 6.0, 3.5]:
-			goal = _choose_retreat_goal(away, distance, _sprint_threat)
-			if goal.distance_to(brain.global_position) > 1.0:
-				break
-	elif goal.distance_to(brain.global_position) < 0.7:
+	var far_enough := brain.global_position.distance_to(_sprint_origin) >= 8.0
+	var arrived := not _sprint_path.is_empty() and goal.distance_to(brain.global_position) < 0.7
+	if far_enough and arrived:
 		sprint_remaining = 0.0
 		mode = Mode.WATCH
 		goal = brain.global_position
 		brain.velocity.x = 0.0
 		brain.velocity.z = 0.0
+		return true
+	if arrived:
+		_goal_timer = 0.0
+	if _goal_timer <= 0.0:
+		_choose_sprint_goal()
+		_goal_timer = 0.25 if _sprint_path.is_empty() else INF
 	return true
+
+func _choose_sprint_goal() -> void:
+	brain._refresh_navigation_state()
+	var origin: Vector3 = brain.global_position
+	var away := (origin - _sprint_threat).slide(Vector3.UP).normalized()
+	if away.length_squared() < 0.01:
+		away = -brain.global_basis.z
+	var best_score := -INF
+	_sprint_path.clear()
+	_sprint_path_index = 1
+	goal = origin
+	# Include lateral exits and routes that initially approach the observer to
+	# get out of a dead end. Navigation may turn corners before moving away.
+	for distance in [24.0, 16.0, 9.0, 4.0, 1.5]:
+		for index in 16:
+			var direction := away.rotated(Vector3.UP, float(index) * TAU / 16.0)
+			var candidate: Vector3 = origin + direction * distance
+			var path := PackedVector3Array()
+			if brain._navigation_available:
+				candidate = brain._snap_to_navigation(candidate)
+				if absf(candidate.y - origin.y) > 1.0:
+					continue
+				path = NavigationServer3D.map_get_path(brain.get_world_3d().navigation_map, origin, candidate, true, brain.navigation_agent.navigation_layers)
+				if path.size() < 2 or path[-1].distance_to(candidate) > 0.5:
+					continue
+			elif brain._can_walk_directly_to(candidate):
+				path = PackedVector3Array([origin, candidate])
+			else:
+				continue
+			var displacement := candidate.distance_to(origin)
+			if displacement < 1.0:
+				continue
+			var support: Dictionary = brain.surface._ray(candidate + Vector3.UP * 0.4, candidate + Vector3.DOWN * 0.6)
+			if support.is_empty() or support.normal.y < 0.7:
+				continue
+			var score := displacement * 0.8 + candidate.distance_to(_sprint_threat) * 0.6
+			var light: Dictionary = brain._shadow_visual.shadow_coat.light_sensor.sample_at_offset(candidate - origin)
+			score -= float(light.exposure) * 8.0
+			if score > best_score:
+				best_score = score
+				goal = candidate
+				_sprint_path = path
+		if not _sprint_path.is_empty() and goal.distance_to(origin) >= 8.0:
+			break
 
 func _init(actor: CharacterBody3D) -> void:
 	brain = actor
@@ -208,7 +272,12 @@ func _choose_retreat_goal(away: Vector3, travel_distance: float = 3.5, threat: V
 
 func _move(delta: float) -> void:
 	var next := goal
-	if mode != Mode.WATCH and brain._navigation_available:
+	if mode == Mode.SPRINT:
+		# Keep the selected escape path independent of perception's nav target.
+		while _sprint_path_index < _sprint_path.size() - 1 and brain.global_position.distance_to(_sprint_path[_sprint_path_index]) < 0.55:
+			_sprint_path_index += 1
+		next = _sprint_path[_sprint_path_index] if _sprint_path_index < _sprint_path.size() else brain.global_position
+	elif mode != Mode.WATCH and brain._navigation_available:
 		if brain.navigation_agent.target_position.distance_to(goal) > 0.25:
 			brain.navigation_agent.target_position = goal
 		var path_point: Vector3 = brain.navigation_agent.get_next_path_position()

@@ -8,6 +8,7 @@ const OCCLUSION_BUILDER := preload("res://systems/runtime_occlusion_builder.gd")
 const SECTOR_ACTIVITY_OPTIMIZER := preload("res://systems/runtime_sector_activity_optimizer.gd")
 const SKIP_WALL_BAND_GROUP := &"skip_wall_band"
 const FULL_STARTUP_VISIBILITY := preload("res://systems/full_startup_visibility.gd")
+const SHADOW_PIPELINE := preload("res://systems/runtime_shadow_pipeline.gd")
 
 ## Keep church, courtyard props and exterior visible through distant windows.
 ## Basement remains door-gated and the labyrinth remains loaded on demand.
@@ -42,8 +43,15 @@ func _ready() -> void:
 
 func _apply_full_startup_visibility() -> void:
 	var result := FULL_STARTUP_VISIBILITY.apply(get_parent())
+	var shadow_pipeline := SHADOW_PIPELINE.install(get_parent(), self)
+	var shadow_sources := 0
+	var shadow_batches := 0
+	for scope: Dictionary in shadow_pipeline.shadow_scopes:
+		shadow_sources += int(scope.stats.sources)
+		shadow_batches += int(scope.stats.batches)
 	print("Full startup visibility: ", result.geometry, " distance-limited meshes restored; ",
-		result.lights, " light fades removed; automatic box occlusion disabled.")
+		result.lights, " light fades removed; ", shadow_sources, " static shadow sources in ",
+		shadow_batches, " batches; ", shadow_pipeline.occlusion.occluders, " exact occluders.")
 
 
 func ensure_church_catacombs() -> bool:

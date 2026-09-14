@@ -1,5 +1,17 @@
 # Herramientas del proyecto
 
+- Sistema de agrupado exclusivo de sombras + oclusión real:
+  [SHADOW_PIPELINE_EXPERIMENT_2026-09-14](../docs/SHADOW_PIPELINE_EXPERIMENT_2026-09-14.md).
+  Integrado en `systems/runtime_shadow_pipeline.gd` y el arranque de House.
+  `preview_shadow_pipeline.gd` abre una partida libre y **F7** alterna con la
+  referencia; `-- --smoke` verifica activación/restauración y termina.
+  `benchmark_shadow_pipeline.gd -- --only=combined` mide el recorrido; también
+  admite `pipeline_baseline`, `shadow_batch`, `exact_occlusion`, `pipeline_repeat`.
+  `validate_shadow_pipeline_visual.gd -- --only=combined` compara imágenes A/B/A.
+  `validate_static_shadow_batch_probe.gd` y `validate_static_occluder_probe.gd`
+  validan geometría y exclusiones en headless. Conserva cuatro divisiones del
+  sol, la linterna, materiales visibles y colisiones.
+
 - Segunda pasada de FPS: [PERFORMANCE_FOLLOWUP_2026-09-14](../docs/PERFORMANCE_FOLLOWUP_2026-09-14.md).
   `benchmark_ground_floor_systems.gd` aísla sombras; `-- --scripts` aísla IA,
   animaciones y lluvia. `benchmark_ground_floor_candidates.gd` compara candidatos;

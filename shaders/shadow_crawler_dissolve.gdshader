@@ -22,7 +22,7 @@ void fragment() {
 		discard;
 	}
 	// Paint the pupil on the curved eye itself so it cannot float over the rim.
-	float pupil = step(length(local_position.xy), 0.232 * pupil_dilation) * step(0.0, local_position.z) * step(0.001, pupil_dilation);
+	float pupil = step(length(local_position.xy), 0.205 * pupil_dilation) * step(0.0, local_position.z) * step(0.001, pupil_dilation);
 	float white_eye = eye_glow * (1.0 - pupil);
 	ALBEDO = mix(vec3(0.009, 0.011, 0.014), vec3(eye_brightness), white_eye);
 	EMISSION = vec3(white_eye * eye_brightness * 1.2);

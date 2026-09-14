@@ -13,7 +13,11 @@ func _run() -> void:
 		await process_frame
 	var house := current_scene.get_node("House")
 	_check(house.full_startup_visibility, "Full startup visibility is disabled")
-	_check(not root.use_occlusion_culling, "Automatic occlusion still hides window views")
+	var shadow_pipeline := current_scene.get_node_or_null("RuntimeShadowPipeline")
+	_check(shadow_pipeline != null and shadow_pipeline.inventory().enabled, "Exact shadow pipeline missing at startup")
+	_check(root.use_occlusion_culling, "Verified exact occlusion is not enabled")
+	if shadow_pipeline != null:
+		_check(int(shadow_pipeline.inventory().occlusion.occluders) == 256, "Unexpected exact occluder count")
 	_check(house.get_node_or_null("RuntimeOccluders") == null, "Automatic box occluders were installed")
 	_check(house.get_node_or_null("SchoolUpperFloor") != null, "School missing at startup")
 	_check(house.get_node_or_null("SchoolCompletion") != null, "School third floor and staff rooms missing at startup")
